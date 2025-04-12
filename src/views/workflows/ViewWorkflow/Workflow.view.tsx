@@ -254,7 +254,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                 </Form.Item>
 
                 <Row gutter={16} style={{ width: '100%' }}>
-                  <Col span={12}>
+                  <Col span={24}>
                     <Form.Item
                       label={intl.formatMessage({
                         defaultMessage: 'Workflow Mode',
@@ -300,7 +300,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                       />
                     </Form.Item>
                   </Col>
-                  <Col span={12}>
+                  <Col span={24}>
                     {typeWatch === 'trigger' && (
                       <Form.Item
                         label={
@@ -335,6 +335,12 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                                 defaultMessage: 'Offender',
                               }),
                               value: Model.Offender,
+                            },
+                            {
+                              label: intl.formatMessage({
+                                defaultMessage: 'Activity',
+                              }),
+                              value: Model.Todo,
                             },
                           ]}
                         />
@@ -907,7 +913,9 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                                             <Typography.Text>
                                               {question}
                                             </Typography.Text>
-                                            {type === AnswerType.Select && (
+                                            {(type === AnswerType.Select ||
+                                              type ===
+                                                AnswerType.SelectSingle) && (
                                               <Select
                                                 mode="multiple"
                                                 onChange={(
@@ -1056,6 +1064,8 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                                               </div>
                                             )}
                                             {type !== AnswerType.Select &&
+                                              type !==
+                                                AnswerType.SelectSingle &&
                                               type !== AnswerType.Boolean &&
                                               type !== AnswerType.Number && (
                                                 <Input
@@ -1237,6 +1247,350 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                               </Form.Item>
                             </Col>
                           </Row>
+                        </div>
+                      </>
+                    )}
+                    {modelSelected === Model.Todo && (
+                      <>
+                        <Divider style={{ marginBottom: 0, marginTop: 0 }} />
+                        <div>
+                          <Row style={{ padding: 20 }} wrap={false}>
+                            <Col flex={1}>
+                              <Typography.Title
+                                level={4}
+                                style={{
+                                  alignItems: 'center',
+                                  display: 'flex',
+                                  paddingTop: 8,
+                                }}
+                              >
+                                <FormattedMessage defaultMessage="Question Answers" />
+                              </Typography.Title>
+                              <Typography.Text type="secondary">
+                                <FormattedMessage defaultMessage="Only trigger the workflow custom questions on the activity has specified answers." />
+                              </Typography.Text>
+                            </Col>
+                            <Col>
+                              <Form.Item
+                                name="questionChecked"
+                                valuePropName="checked"
+                              >
+                                <Switch />
+                              </Form.Item>
+                            </Col>
+                          </Row>
+                          {questionsSelected && (
+                            <div className={classes.cardBody}>
+                              <Form.Item
+                                label={
+                                  <FormattedMessage defaultMessage="If any or all the selected questions are present and answered" />
+                                }
+                                name="questionMethod"
+                                rules={[
+                                  {
+                                    message: intl.formatMessage({
+                                      defaultMessage: 'Please select an option',
+                                    }),
+                                    required: true,
+                                  },
+                                ]}
+                              >
+                                <Radio.Group
+                                  optionType="button"
+                                  options={[
+                                    {
+                                      label: intl.formatMessage({
+                                        defaultMessage: 'Any',
+                                      }),
+                                      value: 'any',
+                                    },
+                                    {
+                                      label: intl.formatMessage({
+                                        defaultMessage: 'All',
+                                      }),
+                                      value: 'all',
+                                    },
+                                  ]}
+                                />
+                              </Form.Item>
+                              <Form.Item
+                                label={
+                                  <FormattedMessage defaultMessage="Select a question to check" />
+                                }
+                                name="qs"
+                                style={{ width: '50%' }}
+                              >
+                                <Col>
+                                  <Select
+                                    onChange={(value) => {
+                                      const question = taskQuestions.find(
+                                        ({ id }) => id === value
+                                      );
+                                      if (question) {
+                                        setSelectedQuestions([
+                                          ...selectedQuestions,
+                                          question,
+                                        ]);
+                                      }
+                                      setAvailableQuestions(
+                                        availableQuestions.filter(
+                                          ({ id }) => id !== value
+                                        )
+                                      );
+                                    }}
+                                    options={availableQuestions.map(
+                                      ({ id, question }) => ({
+                                        label: question,
+                                        value: id,
+                                      })
+                                    )}
+                                    placeholder={intl.formatMessage({
+                                      defaultMessage:
+                                        'Select a question from the list...',
+                                    })}
+                                    style={{ width: '100%' }}
+                                    value={null}
+                                  />
+                                </Col>
+                              </Form.Item>
+                              {selectedQuestions &&
+                                selectedQuestions.length > 0 && (
+                                  <Form.Item
+                                    label={
+                                      <FormattedMessage defaultMessage="Checked Questions" />
+                                    }
+                                    name="placeholder"
+                                  >
+                                    {selectedQuestions.map(
+                                      ({
+                                        answer,
+                                        id,
+                                        options,
+                                        overUnder,
+                                        question,
+                                        type,
+                                      }) => (
+                                        <Row
+                                          align="bottom"
+                                          gutter={8}
+                                          key={id}
+                                          style={{ marginTop: 12 }}
+                                          wrap={false}
+                                        >
+                                          <Col flex={1}>
+                                            <Typography.Text>
+                                              {question}
+                                            </Typography.Text>
+                                            {(type === AnswerType.Select ||
+                                              type ===
+                                                AnswerType.SelectSingle) && (
+                                              <Select
+                                                mode="multiple"
+                                                onChange={(
+                                                  value: string | string[]
+                                                ) => {
+                                                  setSelectedQuestions(
+                                                    (prevState) =>
+                                                      prevState.map((q) => {
+                                                        if (q.id === id) {
+                                                          return {
+                                                            ...q,
+                                                            answer: value,
+                                                          };
+                                                        }
+                                                        return q;
+                                                      })
+                                                  );
+                                                }}
+                                                options={options.map(
+                                                  ({ label, value }) => ({
+                                                    label,
+                                                    value,
+                                                  })
+                                                )}
+                                                value={answer}
+                                              />
+                                            )}
+                                            {type === AnswerType.Boolean && (
+                                              <div style={{ marginTop: 8 }}>
+                                                <Radio.Group
+                                                  onChange={(e) => {
+                                                    setSelectedQuestions(
+                                                      (prevState) =>
+                                                        prevState.map((q) => {
+                                                          if (q.id === id) {
+                                                            return {
+                                                              ...q,
+                                                              answer: e.target
+                                                                .value as string,
+                                                            };
+                                                          }
+                                                          return q;
+                                                        })
+                                                    );
+                                                  }}
+                                                  optionType="button"
+                                                  options={[
+                                                    {
+                                                      label: intl.formatMessage(
+                                                        {
+                                                          defaultMessage: 'Yes',
+                                                        }
+                                                      ),
+                                                      value: 'true',
+                                                    },
+                                                    {
+                                                      label: intl.formatMessage(
+                                                        {
+                                                          defaultMessage: 'No',
+                                                        }
+                                                      ),
+                                                      value: 'false',
+                                                    },
+                                                  ]}
+                                                  value={answer}
+                                                />
+                                              </div>
+                                            )}
+                                            {type === AnswerType.Number && (
+                                              <div style={{ marginTop: 8 }}>
+                                                <InputNumber
+                                                  min={0}
+                                                  onChange={(
+                                                    value:
+                                                      | null
+                                                      | number
+                                                      | string
+                                                  ) => {
+                                                    setSelectedQuestions(
+                                                      (prevState) =>
+                                                        prevState.map((q) => {
+                                                          if (
+                                                            q.id === id &&
+                                                            value
+                                                          ) {
+                                                            return {
+                                                              ...q,
+                                                              answer:
+                                                                typeof value ===
+                                                                'number'
+                                                                  ? value.toString()
+                                                                  : value,
+                                                            };
+                                                          }
+                                                          return q;
+                                                        })
+                                                    );
+                                                  }}
+                                                  style={{ width: '50%' }}
+                                                  value={
+                                                    Array.isArray(answer)
+                                                      ? answer[0]
+                                                      : answer || 0
+                                                  }
+                                                />
+                                                <Radio.Group
+                                                  onChange={(e) => {
+                                                    setSelectedQuestions(
+                                                      (prevState) =>
+                                                        prevState.map((q) => {
+                                                          if (q.id === id) {
+                                                            return {
+                                                              ...q,
+                                                              overUnder: e
+                                                                .target
+                                                                .value as OverUnder,
+                                                            };
+                                                          }
+                                                          return q;
+                                                        })
+                                                    );
+                                                  }}
+                                                  optionType="button"
+                                                  options={[
+                                                    {
+                                                      label: intl.formatMessage(
+                                                        {
+                                                          defaultMessage:
+                                                            'Over',
+                                                        }
+                                                      ),
+                                                      value: 'over',
+                                                    },
+                                                    {
+                                                      label: intl.formatMessage(
+                                                        {
+                                                          defaultMessage:
+                                                            'Under',
+                                                        }
+                                                      ),
+                                                      value: 'under',
+                                                    },
+                                                  ]}
+                                                  value={overUnder}
+                                                />
+                                              </div>
+                                            )}
+                                            {type !== AnswerType.Select &&
+                                              type !==
+                                                AnswerType.SelectSingle &&
+                                              type !== AnswerType.Boolean &&
+                                              type !== AnswerType.Number && (
+                                                <Input
+                                                  onChange={(e) => {
+                                                    setSelectedQuestions(
+                                                      (prevState) =>
+                                                        prevState.map((q) => {
+                                                          if (q.id === id) {
+                                                            return {
+                                                              ...q,
+                                                              answer:
+                                                                e.target.value,
+                                                            };
+                                                          }
+                                                          return q;
+                                                        })
+                                                    );
+                                                  }}
+                                                  value={answer}
+                                                />
+                                              )}
+                                          </Col>
+                                          <Col
+                                            style={{
+                                              alignItems: 'center',
+                                              display: 'flex',
+                                            }}
+                                          >
+                                            <Button
+                                              onClick={() => {
+                                                const q =
+                                                  selectedQuestions.find(
+                                                    ({ id: qid }) => id === qid
+                                                  );
+                                                if (q) {
+                                                  setAvailableQuestions([
+                                                    ...availableQuestions,
+                                                    q,
+                                                  ]);
+                                                }
+                                                setSelectedQuestions(
+                                                  selectedQuestions.filter(
+                                                    ({ id: qid }) => id !== qid
+                                                  )
+                                                );
+                                              }}
+                                            >
+                                              <FormattedMessage defaultMessage="Remove" />
+                                            </Button>
+                                          </Col>
+                                        </Row>
+                                      )
+                                    )}
+                                  </Form.Item>
+                                )}
+                            </div>
+                          )}
                         </div>
                       </>
                     )}

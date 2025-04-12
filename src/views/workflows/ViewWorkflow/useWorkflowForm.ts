@@ -469,8 +469,12 @@ const useWorkflowForm = (): Return => {
   }, [tableData]);
 
   useEffect(() => {
-    setAvailableQuestions(questions);
-  }, [questions]);
+    if (modelSelected === Model.Todo) {
+      setAvailableQuestions(taskQuestions);
+    } else {
+      setAvailableQuestions(questions);
+    }
+  }, [questions, modelSelected]);
 
   const createNewQuestion = (id: string, q: string) => {
     setNewQuestion(false);
