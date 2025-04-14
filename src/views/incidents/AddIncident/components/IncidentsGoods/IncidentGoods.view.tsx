@@ -60,6 +60,30 @@ const IncidentGoods = ({
 }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
+  // eslint-disable-next-line unicorn/no-array-reduce
+  const summary = goods?.reduce(
+    (acc, item) => {
+      if (!acc.recoveredValue) {
+        acc.recoveredValue = 0;
+      }
+      if (!acc.value) {
+        acc.value = 0;
+      }
+      const quantity = item.quantity || 1;
+      const recoveredQuantity = item.recoveredQuantity || 0;
+      if (item.recoveredValue) {
+        acc.recoveredValue += item.recoveredValue * recoveredQuantity;
+      }
+      if (item.value) {
+        acc.value += item.value * quantity;
+      }
+      if (item.value && !item.recoveredValue) {
+        acc.recoveredValue += item.value * recoveredQuantity;
+      }
+      return acc;
+    },
+    { recoveredValue: 0, value: 0 }
+  );
 
   return (
     <Card className={classes.card}>
@@ -549,6 +573,38 @@ const IncidentGoods = ({
             </Col>
           </Row>
         </div>
+      )}
+      {goods?.length > 0 && (
+        <Row>
+          <Col span={20} />
+          <Col>
+            <Title level={5} style={{ marginBottom: 0 }}>
+              <FormattedMessage defaultMessage="Total Value" />
+            </Title>
+            {intl.formatNumber(summary.value || 0, {
+              currency: 'GBP',
+              style: 'currency',
+            })}
+            <Title level={5} style={{ marginBottom: 0 }}>
+              <FormattedMessage defaultMessage="Total Loss" />
+            </Title>
+            {intl.formatNumber(
+              (summary.value || 0) - (summary?.recoveredValue || 0),
+              {
+                currency: 'GBP',
+                style: 'currency',
+              }
+            )}
+
+            <Title level={5} style={{ marginBottom: 0 }}>
+              <FormattedMessage defaultMessage="Total Recovered Value" />
+            </Title>
+            {intl.formatNumber(summary.recoveredValue || 0, {
+              currency: 'GBP',
+              style: 'currency',
+            })}
+          </Col>
+        </Row>
       )}
     </Card>
   );

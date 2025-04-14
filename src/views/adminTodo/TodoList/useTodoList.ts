@@ -75,7 +75,11 @@ interface Return {
   userData: { label: string; value: string }[];
 }
 
-const useAdminTodos = (): Return => {
+const useAdminTodos = ({
+  defaultOpen,
+}: {
+  defaultOpen?: null | string;
+}): Return => {
   const schemeId = useAtomValue(currentSchemeIdAtom);
   const permissions = useAtomValue(currentPermissionsAtom);
   const userId = useAtomValue(userIdAtom);
@@ -92,7 +96,9 @@ const useAdminTodos = (): Return => {
   );
   const [pageSize, setPageSize] = useState(20);
   const [page, setPage] = useState(1);
-  const [selectedTodo, setSelectedTodo] = useState<null | string>(null);
+  const [selectedTodo, setSelectedTodo] = useState<null | string>(
+    defaultOpen || null
+  );
   const [selectedTemplate, setSelectedTemplate] = useState<ListData | null>(
     null
   );

@@ -173,8 +173,8 @@ const useSchemeDetail = (): Return => {
       variables: {
         data: {
           activityAssignToUser: { set: data.activityAssignToUser },
-          autoApproveIncidents: { set: data.autoApproveOffenders },
-          autoApproveOffenders: { set: data.autoApproveIncidents },
+          autoApproveIncidents: { set: data.autoApproveIncidents },
+          autoApproveOffenders: { set: data.autoApproveOffenders },
           autoPopulateDescription: { set: data.autoPopulateDescription },
           darkLogo: {
             ...(darkImageChange && darkFileList.length > 0

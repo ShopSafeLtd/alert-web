@@ -1,9 +1,12 @@
 import React from 'react';
+import { useParams } from 'react-router-dom';
 
 import View from './TodoList.view';
 import useAdminTodos from './useTodoList';
 
 const AdminTodos = (): JSX.Element => {
+  const id = useParams().id || '';
+
   const {
     addTodo,
     canDelete,
@@ -34,7 +37,7 @@ const AdminTodos = (): JSX.Element => {
     toggleAllUsers,
     updateTodoList,
     userData,
-  } = useAdminTodos();
+  } = useAdminTodos({ defaultOpen: id });
 
   return (
     <View

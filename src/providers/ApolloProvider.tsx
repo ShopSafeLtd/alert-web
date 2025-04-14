@@ -1,29 +1,55 @@
 /* eslint-disable @typescript-eslint/no-unused-vars,@typescript-eslint/no-unsafe-assignment,@typescript-eslint/restrict-template-expressions,@typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return */
+import type { FetchResult, Operation } from '@apollo/client';
+import type { ClientOptions } from 'graphql-sse';
+
 import { PublicRoutes } from '#/App';
 import { useTokenContext } from '#/context/token-context';
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { cache } from '#/providers/cache';
 import { useStoreState } from '#/state';
-import { ApolloClient, ApolloProvider, split } from '@apollo/client';
+import {
+  ApolloClient,
+  ApolloLink,
+  ApolloProvider,
+  Observable,
+  split,
+} from '@apollo/client';
 import { BatchHttpLink } from '@apollo/client/link/batch-http';
 import { setContext } from '@apollo/client/link/context';
 import { onError } from '@apollo/client/link/error';
 import { createPersistedQueryLink } from '@apollo/client/link/persisted-queries';
-import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { useAuth } from '@clerk/clerk-react';
 import * as Sentry from '@sentry/react';
 import { SentryLink } from 'apollo-link-sentry';
 import { sha256 } from 'crypto-hash';
-import { createClient } from 'graphql-ws';
+import { print } from 'graphql';
+import { createClient } from 'graphql-sse';
 import { useAtomValue } from 'jotai/index';
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { useLocation } from 'react-router-dom';
 
 interface Props {
   children: React.ReactNode;
+}
+
+// Function-based version of SSELink (no classes)
+export function createSSELink(options: ClientOptions): ApolloLink {
+  const client = createClient(options);
+  return new ApolloLink(
+    (operation: Operation) =>
+      new Observable<FetchResult>((sink) =>
+        client.subscribe<FetchResult>(
+          { ...operation, query: print(operation.query) },
+          {
+            complete: sink.complete.bind(sink),
+            error: sink.error.bind(sink),
+            next: sink.next.bind(sink),
+          }
+        )
+      )
+  );
 }
 
 const Apollo = ({ children }: Props): JSX.Element => {
@@ -71,47 +97,15 @@ const Apollo = ({ children }: Props): JSX.Element => {
     uri: import.meta.env.VITE_GRAPHQL_URL,
   });
 
-  let activeSocket: WebSocket;
-  let timedOut: number;
-
-  const wsLink = new GraphQLWsLink(
-    createClient({
-      connectionParams: () => ({
-        authorization: `Bearer ${token}`,
-      }),
-      keepAlive: 10_000,
-      lazy: true,
-      on: {
-        closed: () => {
-          clearTimeout(timedOut);
-        },
-        // eslint-disable-next-line no-return-assign
-        connected: (socket) => (activeSocket = socket as WebSocket),
-        error: (error) => {
-          console.error(`WebSocket error: ${error}`);
-        },
-        ping: (received) => {
-          if (!received) {
-            timedOut = window.setTimeout(() => {
-              if (activeSocket.readyState === WebSocket.OPEN) {
-                // Graceful disconnection
-                activeSocket.close(4408, 'Request Timeout');
-              }
-            }, 5000);
-          }
-        },
-        pong: (received) => {
-          if (received) {
-            clearTimeout(timedOut);
-          } else {
-            console.error('Pong not received');
-          }
-        },
-      },
-      url: import.meta.env.VITE_GRAPHQL_WS_URL,
-    })
-  );
-
+  const sseLink = createSSELink({
+    headers: () => ({
+      'X-GraphQL-Event-Stream-Token': `Bearer ${token}`,
+      authorization: `Bearer ${token}`,
+      currentScheme: currentScheme ?? null,
+      language: localLang,
+    }),
+    url: import.meta.env.VITE_GRAPHQL_WS_URL,
+  });
   const sentryLink = new SentryLink(/* See options */);
 
   // const httpLink = createUploadLink({
@@ -228,7 +222,7 @@ const Apollo = ({ children }: Props): JSX.Element => {
       const { kind, operation } = getMainDefinition(query);
       return kind === 'OperationDefinition' && operation === 'subscription';
     },
-    wsLink,
+    sseLink,
     authHttp
   );
 

@@ -10,7 +10,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Card, Col, List, Row, Typography } from 'antd';
 import WatermarkSlide from 'components/images/WatermartkSlide.view';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useIntl } from 'react-intl';
 import FormatCalendar from 'utils/format-calendar-24h';
 import Lightbox from 'yet-another-react-lightbox';
@@ -58,6 +58,35 @@ const ViewArticleView = ({
   const classes = useStyles();
 
   const intl = useIntl();
+
+  useEffect(() => {
+    if (!componentRef?.current) return;
+    const node = componentRef.current;
+    const imageNodes = [...node.querySelectorAll('img')];
+    const allImageUrls = imageNodes.map((img) => img.src);
+
+    const handleImageClick = (event: Event) => {
+      const target = event.currentTarget as HTMLImageElement;
+      const clickedUrl = target.src;
+      const clickedIndex = allImageUrls.indexOf(clickedUrl);
+      openLightbox(
+        allImageUrls.map((url) => ({
+          src: url,
+        })),
+        clickedIndex
+      );
+    };
+
+    for (const img of imageNodes) {
+      img.addEventListener('click', handleImageClick);
+    }
+    return () => {
+      for (const img of imageNodes) {
+        img.removeEventListener('click', handleImageClick);
+      }
+    };
+  }, [componentRef, data, openLightbox]);
+
   return (
     <>
       <div className={classes.viewArticle}>
