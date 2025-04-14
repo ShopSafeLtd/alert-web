@@ -35,6 +35,7 @@ export interface FormData {
   origOptions: string[];
   origQuestion: string;
   required: boolean;
+  roles: string[];
   tooltip?: string;
   type: AnswerType;
 }
@@ -83,6 +84,7 @@ const useUpdateQuestion = ({
     origOptions: [],
     origQuestion: '',
     required: false,
+    roles: [],
     type: AnswerType.String,
   });
   const currentSchemeId = useAtomValue(currentSchemeIdAtom);
@@ -142,6 +144,10 @@ const useUpdateQuestion = ({
         origOptions: formatOption(),
         origQuestion: questionData.question?.question || '',
         required,
+        roles:
+          questionData.question?.tags
+            ?.find((tag) => tag.id === tagQId)
+            ?.roles.map((role) => role.id) || [],
         tooltip:
           questionData.question.tags.find((tag) => tag.id === tagQId)
             ?.tooltip ?? undefined,
@@ -159,6 +165,10 @@ const useUpdateQuestion = ({
         origOptions: formatOption(),
         origQuestion: questionData.question?.question || '',
         required,
+        roles:
+          questionData.question?.tags
+            ?.find((tag) => tag.id === tagQId)
+            ?.roles.map((role) => role.id) || [],
         tooltip:
           questionData.question.tags.find((tag) => tag.id === tagQId)
             ?.tooltip ?? undefined,
@@ -216,6 +226,7 @@ const useUpdateQuestion = ({
           origOptions: data.origOptions,
           origQuestion: data.origQuestion,
           questionId,
+          roles: values.roles,
           tag: {
             id: tagQId,
             req: values.required,

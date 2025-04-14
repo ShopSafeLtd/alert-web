@@ -1,0 +1,20 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA256
+
+Contact: mailto:security@shopsafe.io
+Expires: 2026-04-13T12:00:00.000Z
+Encryption: https://app.shopsafe.io/pgp-key.txt
+-----BEGIN PGP SIGNATURE-----
+
+iQGzBAEBCAAdFiEED7m+1UE9YODYMe+9cdwIsTaSqHIFAmf7tAoACgkQcdwIsTaS
+qHLGxwv+LexHbEi7lxY2NlhallAHFq9JvZFE5Od28gz/omPqM2id15FwRZetsAoF
+xumLoJQCuszgwbexmSTgcDpYb1qCIki5cnitDrVCh2EpH0geGHTijQvY3+UKnqEZ
+pTMhp4bKW1NXIjo2cjleECqvNMEoGBGBMwemxwraiPzzE7gXKDDVfnvk4czzi4Gm
+VKDRuvLIM2oYLpRFE/TQnUUvnbbWe1+0aAV07fs19zi1uep99rNbyd0t6JC8uf5j
+qoiN3NBntIyKbwpkWlsgjhLhSgk4BUME/0Dbm1mclkOPLxjakEo10BfV8vcmmJlN
+H5j0au1Nqmq8ZTqVBJ5AVZWxbj8G+M2Tv2vlwP4MEL88M3ssn3MIt6H2I09Mp3sn
+jwAEWJIHKASrUfLf2BtNmfeTFkFWIHMOE3689lIi+Z9V4yWB2B10hkQBWEdfR9Oq
+0ZnMhf9IVRy2xfauxf9xyVu9c+GDHo9o5LCcGcakO15fGz8c2cDFyOiitncl0g8P
+WpfikJ5T
+=yS3R
+-----END PGP SIGNATURE-----

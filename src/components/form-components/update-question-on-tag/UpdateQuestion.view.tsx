@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access,unicorn/no-useless-promise-resolve-reject,consistent-return,@typescript-eslint/no-unsafe-call */
 import type { FormInstance } from 'antd';
 
+import RoleSelect from '#/components/form-components/Roles/RoleSelect';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import {
   Button,
   Card,
@@ -14,6 +16,7 @@ import {
   Row,
   Select,
 } from 'antd';
+import { useAtomValue } from 'jotai/index';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
@@ -50,6 +53,8 @@ const UpdateQuestionView = ({
   const opt = data.newOptions || [];
   const intl = useIntl();
   const dependentOn = Form.useWatch('dependentOn', form);
+  const currentSchemeId = useAtomValue(currentSchemeIdAtom);
+
   const generateFormItem = () => {
     const dependentQuestion = tagQuestions.find(
       (q) => q.tagQuestionId === dependentOn
@@ -282,6 +287,18 @@ const UpdateQuestionView = ({
           <Select mode="multiple" options={brands} showSearch />
         </Form.Item>
       </Card>
+
+      <Card loading={loading}>
+        <Form.Item
+          label={intl.formatMessage({
+            defaultMessage: 'Roles',
+          })}
+          name="roles"
+        >
+          <RoleSelect multi schemeId={currentSchemeId} />
+        </Form.Item>
+      </Card>
+
       <Form.Item>
         <Row gutter={10} justify="end" style={{ marginTop: 10 }}>
           <Col>
