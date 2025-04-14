@@ -1,40 +1,58 @@
 const downloadImage = async (imageSrc: string, imageName: string) => {
-  const imageBlob = await fetch(imageSrc)
-    .then((res) => res.arrayBuffer())
-    .then((buffer) => new Blob([buffer]));
+  try {
+    const response = await fetch(imageSrc);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch the image. Status: ${response.status}`);
+    }
 
-  const link = document.createElement('a');
-  link.href = URL.createObjectURL(imageBlob);
-  const parts = imageSrc.split('?')[0].split('.');
-  const imageType = parts.at(-1);
-  const fileName = `${imageName}.${imageType}`;
+    const contentType = response.headers.get('content-type') || '';
+    const imageBlob = await response.blob();
 
-  link.download = fileName;
-  document.body.append(link);
-  link.click();
-  link.remove();
+    let downloadBlob = imageBlob;
+    let extension = contentType.split('/')[1] || 'jpg';
 
-  // try {
-  //   const response = await fetch(imageSrc);
-  //   if (!response.ok) {
-  //     throw new Error(`Failed to fetch the image. Status: ${response.status}`);
-  //   }
-  //   const contentType = response.headers.get('content-type');
-  //   const imageBlob = await response.blob();
-  //   const imageUrl = URL.createObjectURL(imageBlob);
+    if (extension === 'webp') {
+      try {
+        const bitmap = await createImageBitmap(imageBlob);
+        const canvas = document.createElement('canvas');
+        canvas.width = bitmap.width;
+        canvas.height = bitmap.height;
+        const ctx = canvas.getContext('2d');
+        ctx?.drawImage(bitmap, 0, 0);
+        const jpegDataUrl = canvas.toDataURL('image/jpeg');
+        const byteString = atob(jpegDataUrl.split(',')[1]);
+        const mimeString = jpegDataUrl
+          .split(',')[0]
+          .split(':')[1]
+          .split(';')[0];
+        const ab = new ArrayBuffer(byteString.length);
+        const ia = new Uint8Array(ab);
+        for (let i = 0; i < byteString.length; i++) {
+          ia[i] = <number>byteString.codePointAt(i);
+        }
+        downloadBlob = new Blob([ab], { type: mimeString });
+        extension = 'jpeg';
+      } catch (conversionError) {
+        console.warn(
+          'Failed to convert webp to jpeg. Falling back to original blob.',
+          conversionError
+        );
+        downloadBlob = imageBlob;
+        extension = 'webp';
+      }
+    }
 
-  //   const extension = contentType?.split('/')[1] || 'jpg';
-  //   const fileName = `${imageName}.${extension}`;
-  //   const link = document.createElement('a');
-  //   link.href = imageUrl;
-  //   link.download = fileName;
+    const fileName = `${imageName}.${extension}`;
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(downloadBlob);
+    link.download = fileName;
 
-  //   document.body.append(link);
-  //   link.click();
-  //   link.remove();
-  // } catch (error) {
-  //   console.error('Error:', error);
-  // }
+    document.body.append(link);
+    link.click();
+    link.remove();
+  } catch (error) {
+    console.error('Error downloading image:', error);
+  }
 };
 
 export default downloadImage;
