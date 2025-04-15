@@ -6,8 +6,8 @@ import SettingsHome from '#/views/settings/settings-home/SettingsHome.view';
 import { Col, Row } from 'antd';
 import { PermissionMethod, PermissionModel } from 'graphql/types';
 import React, { Suspense, lazy, useState } from 'react';
-import { Route, Routes } from 'react-router';
-import { Navigate } from 'react-router-dom';
+import { Routes } from 'react-router';
+import { Navigate, Route } from 'react-router-dom';
 
 import CustomStockImport from '../../../views/settings/data-import/custom-stock-import/StockImport.container';
 
@@ -294,7 +294,7 @@ const SchemeSettings = (): JSX.Element => {
                 <PermissionCheckWrapper
                   permission={[
                     {
-                      method: PermissionMethod.Write,
+                      method: PermissionMethod.Read,
                       model: PermissionModel.ChatGroups,
                     },
                   ]}

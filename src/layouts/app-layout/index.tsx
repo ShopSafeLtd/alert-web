@@ -1,4 +1,5 @@
 import LoadingScreen from '#/components/layout-components/LoadingScreen';
+import Loading from '#/components/shared-components/AntD/Loading';
 import {
   SIDE_NAV_COLLAPSED_WIDTH,
   SIDE_NAV_WIDTH,
@@ -19,7 +20,7 @@ import navigationConfig from 'configs/NavigationConfig';
 import { useAtomValue } from 'jotai/index';
 import AppViews from 'navigation/app-views/router';
 import { usePostHog } from 'posthog-js/react';
-import React, { useEffect } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import { useThemeSwitcher } from 'react-css-theme-switcher/src';
 import { useLocation } from 'react-router-dom';
 import { NavType, useStoreState } from 'state';
@@ -107,36 +108,38 @@ const AppLayout = (): JSX.Element => {
 
   return (
     <ScreenSizeUnsupported>
-      <GroupsProvider>
-        <Layout>
-          <Layout className="app-container">
-            {isNavSide && !isMobile && !onboardingRoute ? (
-              <SideNav routeInfo={currentRouteInfo} />
-            ) : null}
-            <Layout
-              className=""
-              style={{
-                paddingLeft: onboardingRoute ? 0 : getLayoutGutter(),
-              }}
-            >
-              <div
-                className={'app-content'}
+      <Suspense fallback={<Loading cover="content" />}>
+        <GroupsProvider>
+          <Layout>
+            <Layout className="app-container">
+              {isNavSide && !isMobile && !onboardingRoute ? (
+                <SideNav routeInfo={currentRouteInfo} />
+              ) : null}
+              <Layout
+                className=""
                 style={{
-                  padding:
-                    location.pathname.includes('settings') || onboardingRoute
-                      ? 0
-                      : undefined,
+                  paddingLeft: onboardingRoute ? 0 : getLayoutGutter(),
                 }}
               >
-                <Content>
-                  <AppViews />
-                </Content>
-              </div>
+                <div
+                  className={'app-content'}
+                  style={{
+                    padding:
+                      location.pathname.includes('settings') || onboardingRoute
+                        ? 0
+                        : undefined,
+                  }}
+                >
+                  <Content>
+                    <AppViews />
+                  </Content>
+                </div>
+              </Layout>
             </Layout>
+            {isMobile && <MobileNav routeInfo={currentRouteInfo} />}
           </Layout>
-          {isMobile && <MobileNav routeInfo={currentRouteInfo} />}
-        </Layout>
-      </GroupsProvider>
+        </GroupsProvider>
+      </Suspense>
     </ScreenSizeUnsupported>
   );
 };
