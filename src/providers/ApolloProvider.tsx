@@ -54,7 +54,7 @@ export function createSSELink(options: ClientOptions): ApolloLink {
 
 const defaultHeaders = {
   type: 'clerk',
-  'x-graphql-client-name': 'native',
+  'x-graphql-client-name': 'web',
   'x-graphql-client-version': '1.1.0',
 };
 
