@@ -52,6 +52,12 @@ export function createSSELink(options: ClientOptions): ApolloLink {
   );
 }
 
+const defaultHeaders = {
+  type: 'clerk',
+  'x-graphql-client-name': 'native',
+  'x-graphql-client-version': '1.1.0',
+};
+
 const Apollo = ({ children }: Props): JSX.Element => {
   const navigate = useNavigate();
   const { isSignedIn } = useAuth();
@@ -88,9 +94,6 @@ const Apollo = ({ children }: Props): JSX.Element => {
   const currentScheme = useAtomValue(currentSchemeIdAtom);
   const localLang = useStoreState((state) => state.theme.locale);
 
-  const defaultHeaders = {
-    type: 'clerk',
-  };
   const httpLink = new BatchHttpLink({
     batchInterval: 50, // Wait no more than 50ms after first batched operation
     batchMax: 8, // No more than 8 operations per batch
@@ -99,6 +102,7 @@ const Apollo = ({ children }: Props): JSX.Element => {
 
   const sseLink = createSSELink({
     headers: () => ({
+      ...defaultHeaders,
       'X-GraphQL-Event-Stream-Token': `Bearer ${token}`,
       authorization: `Bearer ${token}`,
       currentScheme: currentScheme ?? null,
