@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment */
-import type { FeedItemsQuery } from 'graphql/feedItems/queries/__generated__/feed-items.generated';
+import type { FeedItem } from '#/components/feedItems/FeedItemSection/types/FeedItem';
 
 import {
   faClock,
@@ -21,12 +21,9 @@ import useStyles from './investigationFeed.styles';
 const { Paragraph, Text, Title } = Typography;
 const { confirm } = Modal;
 
-interface Props {
+interface Props extends FeedItem {
   adminRights: boolean;
-  feedItem:
-    | Exclude<FeedItemsQuery['listFeedItems'], null | undefined>['feedItems'][0]
-    | null
-    | undefined;
+
   isNewImage?: boolean;
   isNewInvestigation?: boolean;
   onDeleteFeedItem: (value: string) => void;
@@ -36,13 +33,15 @@ interface Props {
 
 const InvestigationFeed = ({
   adminRights,
-  feedItem,
+  feedItem: initNode,
   isNewImage,
   isNewInvestigation,
   onDeleteFeedItem,
   openLightbox,
   saving,
 }: Props): JSX.Element => {
+  const { node: feedItem } = initNode || {};
+
   const {
     description,
     id,

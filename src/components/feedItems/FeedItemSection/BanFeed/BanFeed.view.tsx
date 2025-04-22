@@ -1,4 +1,4 @@
-import type { FeedItemsQuery } from 'graphql/feedItems/queries/__generated__/feed-items.generated';
+import type { FeedItem } from '#/components/feedItems/FeedItemSection/types/FeedItem';
 
 import { formatBanType } from '#/types/enums/ban-type';
 import {
@@ -19,12 +19,9 @@ import useStyles from './BanFeed.styles';
 const { Text, Title } = Typography;
 const { confirm } = Modal;
 
-interface Props {
+interface Props extends FeedItem {
   adminRights: boolean;
-  feedItem:
-    | Exclude<FeedItemsQuery['listFeedItems'], null | undefined>['feedItems'][0]
-    | null
-    | undefined;
+
   onDeleteFeedItem: (value: string) => void;
   openLightbox: (elements: { src: string }[], index: number) => void;
   saving: boolean;
@@ -32,12 +29,14 @@ interface Props {
 
 const BanFeed = ({
   adminRights,
-  feedItem,
+  feedItem: initNode,
+
   onDeleteFeedItem,
   openLightbox,
   saving,
 }: Props): JSX.Element => {
   // const offender?.imagesRef = useRef<CarouselRef>(null);
+  const { node: feedItem } = initNode || {};
 
   const { feedImage, location, offender, title, type } = feedItem?.ban || {};
   const intl = useIntl();

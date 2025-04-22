@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment */
 
-import type { FeedItemsQuery } from 'graphql/feedItems/queries/__generated__/feed-items.generated';
+import type { FeedItem } from '#/components/feedItems/FeedItemSection/types/FeedItem';
 
 import {
   faCar,
@@ -24,12 +24,9 @@ import useStyles from './VehicleFeed.styles';
 const { Text, Title } = Typography;
 const { confirm } = Modal;
 
-interface Props {
+interface Props extends FeedItem {
   adminRights: boolean;
-  feedItem:
-    | Exclude<FeedItemsQuery['listFeedItems'], null | undefined>['feedItems'][0]
-    | null
-    | undefined;
+
   isNewImage?: boolean;
   isNewVehicle?: boolean;
   onDeleteFeedItem: (value: string) => void;
@@ -39,13 +36,15 @@ interface Props {
 
 const VehicleFeed = ({
   adminRights,
-  feedItem,
+  feedItem: initNode,
   isNewImage,
   isNewVehicle,
   onDeleteFeedItem,
   openLightbox,
   saving,
 }: Props): JSX.Element => {
+  const { node: feedItem } = initNode || {};
+
   // const imagesRef = useRef<CarouselRef>(null);
   const {
     colour,
