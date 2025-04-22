@@ -19,6 +19,7 @@ import UserIncidentCountGraph from '#/components/reports/components/UserIncident
 import TotalUserSessionsGraph from '#/components/reports/components/UserSessionsGraph/TotalUserSessionsGraph';
 import Graph from '#/components/reports/graphs/graph';
 import ActivitiesGraphView from '#/views/reports/performance/ActivitesGraph/ActivitiesGraph';
+import ActivitiesTable from '#/views/reports/performance/ActivitesTable/ActivitiesTable';
 import ActivitySummary from '#/views/reports/performance/ActivitiesReports/summary/ActivitySummary';
 import {
   faBan,
@@ -188,7 +189,6 @@ const PerformanceReportLayout = ({
               filters={filters}
               isPrinting={isPrinting}
               metaData={generateDefaultMetaData(key, 'bar', metadata)}
-              onNavigate={() => navigate('/app/reports/user-engagement')}
               removeItem={() => removeItem(key)}
               setMetaData={(value: MetaData) => {
                 const updatedMetadata = metadata.map((item) => {
@@ -199,6 +199,7 @@ const PerformanceReportLayout = ({
                   }
                   return item;
                 }) satisfies MetaData[];
+                console.log(value, updatedMetadata);
                 setMetadata(updatedMetadata);
               }}
             />
@@ -218,6 +219,51 @@ const PerformanceReportLayout = ({
               editMode={editMode}
               filters={filters}
               removeItem={removeItem}
+            />
+          </Card>
+        );
+      }
+      case 'activitiesTable': {
+        return (
+          <Card
+            bodyStyle={{ overflow: 'auto' }}
+            className="no-break"
+            key="activitiesTable"
+            loading={loading}
+            style={{ height: calculateHeight('activitiesTable') }}
+          >
+            <Button
+              className="cancelDrag card-remove no-print"
+              hidden={!editMode}
+              icon={<FontAwesomeIcon color="red" icon={faTrash} size="lg" />}
+              onClick={() => removeItem('activitiesTable')}
+              shape="circle"
+              size="small"
+              type="text"
+            />
+            <Title level={4}>
+              {intl.formatMessage({
+                defaultMessage: 'Activity Table',
+              })}
+            </Title>
+            <ActivitiesTable
+              editMode={editMode}
+              filters={filters}
+              isPrinting={isPrinting}
+              metaData={generateDefaultMetaData(key, 'bar', metadata)}
+              removeItem={() => removeItem(key)}
+              setMetaData={(value: MetaData) => {
+                const updatedMetadata = metadata.map((item) => {
+                  if (item.key === key) {
+                    return (
+                      value || generateDefaultMetaData(key, 'bar', metadata)
+                    );
+                  }
+                  return item;
+                }) satisfies MetaData[];
+                console.log(value, updatedMetadata);
+                setMetadata(updatedMetadata);
+              }}
             />
           </Card>
         );

@@ -22,6 +22,7 @@ import { useIntl } from 'react-intl';
 import 'react-resizable/css/styles.css';
 import { useParams } from 'react-router-dom';
 
+import type { AllowedValue } from '../types';
 import type { Props } from './hooks/types';
 
 import AddLogo from '../../../components/reports/addLogo';
@@ -436,7 +437,16 @@ const PerformanceReport = ({
                     ]);
                     setMetadata([
                       ...metadata,
-                      { key: item.i, type: item.reportItemTypes[0] },
+                      {
+                        key: item.item.allowDuplicates
+                          ? (`${item.item.i}_${
+                              layout
+                                .map(({ i }) => i)
+                                .filter((i) => i.includes(item.item.i)).length
+                            }` as AllowedValue)
+                          : item.i,
+                        type: item.reportItemTypes[0],
+                      },
                     ]);
                   },
                   reportItemTypes: item.reportItemTypes,
