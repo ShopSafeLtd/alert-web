@@ -22,8 +22,8 @@ const FeedItemCol = () => {
     variables: { search },
   } = useDashboardContext();
   const { data, fetchMoreScroll, loading, onDeleteFeedItem } = useFeedItems();
-  const total = data?.listFeedItems?.total || 0;
-  const feedItems = data?.listFeedItems?.feedItems.length || 0;
+  const total = data?.feedRelay?.pageInfo.hasNextPage;
+  const feedItems = data?.feedRelay?.edges;
   return (
     <Col
       style={{
@@ -42,14 +42,14 @@ const FeedItemCol = () => {
             <FeedItemSkeletonCard key={index} />
           ))}
         </div>
-      ) : data?.listFeedItems?.total ? (
+      ) : feedItems?.length ? (
         <DashboardInfiniteScroll
-          dataLength={feedItems}
-          hasMore={feedItems < total}
+          dataLength={feedItems?.length || 0}
+          hasMore={!!total}
           id="feed-scroll"
           next={() => fetchMoreScroll()}
         >
-          {data.listFeedItems?.feedItems.map((feedItem) => (
+          {feedItems.map(({ node: feedItem }) => (
             <Card
               bodyStyle={{
                 borderRadius: 10,

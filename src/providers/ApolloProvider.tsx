@@ -11,10 +11,10 @@ import {
   ApolloClient,
   ApolloLink,
   ApolloProvider,
+  HttpLink,
   Observable,
   split,
 } from '@apollo/client';
-import { BatchHttpLink } from '@apollo/client/link/batch-http';
 import { setContext } from '@apollo/client/link/context';
 import { onError } from '@apollo/client/link/error';
 import { createPersistedQueryLink } from '@apollo/client/link/persisted-queries';
@@ -94,9 +94,7 @@ const Apollo = ({ children }: Props): JSX.Element => {
   const currentScheme = useAtomValue(currentSchemeIdAtom);
   const localLang = useStoreState((state) => state.theme.locale);
 
-  const httpLink = new BatchHttpLink({
-    batchInterval: 50, // Wait no more than 50ms after first batched operation
-    batchMax: 8, // No more than 8 operations per batch
+  const httpLink = new HttpLink({
     uri: import.meta.env.VITE_GRAPHQL_URL,
   });
 
