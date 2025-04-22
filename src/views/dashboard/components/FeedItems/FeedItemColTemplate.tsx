@@ -1,10 +1,11 @@
-import FeedItemSkeletonCard from '#/components/feedItems/FeedItemSection/FeedItemSkeletonCard';
-import React from 'react';
-import { Button, Col, Typography } from 'antd';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/pro-light-svg-icons';
-import { useIntl } from 'react-intl';
 import type { AvailableDashboardElements } from '#/state/dashboard-model';
+
+import FeedItemSkeletonCard from '#/components/feedItems/FeedItemSection/FeedItemSkeletonCard';
+import { faTrash } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Col, Typography } from 'antd';
+import React from 'react';
+import { useIntl } from 'react-intl';
 
 const FeedItemCol = ({
   removeItem,
@@ -19,10 +20,10 @@ const FeedItemCol = ({
       }}
     >
       <Button
-        type="primary"
-        style={{ position: 'absolute', top: 10, right: 10, zIndex: 10 }}
-        onClick={() => removeItem('feedItemCol')}
         icon={<FontAwesomeIcon icon={faTrash} />}
+        onClick={() => removeItem('feedItemCol')}
+        style={{ position: 'absolute', right: 10, top: 10, zIndex: 10 }}
+        type="primary"
       />
       <Typography.Title>
         {intl.formatMessage({

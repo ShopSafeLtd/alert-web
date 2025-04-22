@@ -72,6 +72,7 @@ const useFeedItems = (): Return => {
   };
 
   const queryVariables: FeedItemsQueryVariables = {
+    first: 10,
     groupsWhere2: {
       users: {
         some: {
@@ -86,7 +87,6 @@ const useFeedItems = (): Return => {
     },
     schemeId,
     search,
-    take: 10,
     where: {
       AND:
         gallery.includes('NOT APPROVED') ||
@@ -180,23 +180,18 @@ const useFeedItems = (): Return => {
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) return prev;
         return {
-          listFeedItems: {
-            ...fetchMoreResult.listFeedItems,
-            feedItems: [
-              ...(prev.listFeedItems?.feedItems || []),
-              ...(fetchMoreResult.listFeedItems?.feedItems || []),
+          feedRelay: {
+            ...fetchMoreResult.feedRelay,
+            edges: [
+              ...(prev.feedRelay?.edges || []),
+              ...(fetchMoreResult.feedRelay?.edges || []),
             ],
-            total:
-              prev.listFeedItems?.total ||
-              fetchMoreResult?.listFeedItems?.total ||
-              0,
           },
         };
       },
       variables: {
         ...queryVariables,
-
-        skip: data?.listFeedItems?.feedItems?.length || 0,
+        after: data?.feedRelay?.pageInfo?.endCursor,
       },
     });
   };
@@ -213,15 +208,15 @@ const useFeedItems = (): Return => {
     });
 
     if (existingData === null) return;
-    if (existingData?.listFeedItems?.feedItems === undefined) return;
+    if (existingData?.feedRelay?.edges === undefined) return;
 
     store.writeQuery<FeedItemsQuery>({
       data: {
         __typename: 'Query',
-        listFeedItems: {
-          ...existingData.listFeedItems,
-          feedItems: existingData.listFeedItems?.feedItems.filter(
-            ({ id }) => id !== res?.deleteFeedItem?.id
+        feedRelay: {
+          ...existingData.feedRelay,
+          edges: existingData.feedRelay?.edges.filter(
+            ({ node: { id } }) => id !== res?.deleteFeedItem?.id
           ),
         },
       },

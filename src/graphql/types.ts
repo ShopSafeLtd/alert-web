@@ -13904,6 +13904,7 @@ export type Query = {
   documentsNoFolder: QueryDocumentsNoFolderConnection;
   feedItem: FeedItem;
   feedItems: Array<FeedItem>;
+  feedRelay: QueryFeedRelayConnection;
   folder: Folder;
   folders: QueryFoldersConnection;
   goodsTypes: Array<GoodsType>;
@@ -14472,6 +14473,19 @@ export type QueryFeedItemsArgs = {
   orderBy?: InputMaybe<Array<FeedItemOrderByWithRelationInput>>;
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<FeedItemWhereInput>;
+};
+
+
+export type QueryFeedRelayArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  groups?: InputMaybe<Array<Scalars['String']>>;
+  last?: InputMaybe<Scalars['Int']>;
+  order?: InputMaybe<FeedItemOrderByWithRelationInput>;
+  schemeId: Scalars['String'];
+  search?: InputMaybe<Scalars['String']>;
   where?: InputMaybe<FeedItemWhereInput>;
 };
 
@@ -15640,6 +15654,18 @@ export type QueryDocumentsNoFolderConnectionEdge = {
   __typename?: 'QueryDocumentsNoFolderConnectionEdge';
   cursor: Scalars['String'];
   node: Document;
+};
+
+export type QueryFeedRelayConnection = {
+  __typename?: 'QueryFeedRelayConnection';
+  edges: Array<QueryFeedRelayConnectionEdge>;
+  pageInfo: PageInfo;
+};
+
+export type QueryFeedRelayConnectionEdge = {
+  __typename?: 'QueryFeedRelayConnectionEdge';
+  cursor: Scalars['String'];
+  node: FeedItem;
 };
 
 export type QueryFoldersConnection = {

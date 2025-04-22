@@ -61,16 +61,13 @@ export default defineConfig((configEnv) => {
     },
     build: {
       outDir: 'build',
-      sourcemap: 'hidden',
+      sourcemap: 'hidden' as const,
       minify: 'esbuild',
       rollupOptions: {
         output: {
           manualChunks(id) {
             if (id.includes('node_modules')) {
               const knownVendors = new Set([
-                'react',
-                'react-dom',
-                'apollo',
                 'lodash',
                 'mapbox-gl',
                 '@deck.gl/core',
