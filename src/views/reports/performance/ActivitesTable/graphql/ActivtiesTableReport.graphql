@@ -1,0 +1,27 @@
+query ActivitiesTableReport(
+    $where: TodoRelayWhereInput!
+    $orderBy: [TodoOrderByWithRelationInput!]
+) {
+    todoRelay(where: $where, orderBy: $orderBy) {
+        edges {
+            node {
+                id
+                name
+                dueDate
+                createdAt
+                completed
+                type
+                completedDate
+                business {
+                    id
+                    name
+                }
+                assignedUsers {
+                    id
+                    fullName
+                }
+            }
+
+        }
+    }
+}

@@ -1,15 +1,15 @@
-import type { AgChartOptions, AgChartTheme } from 'ag-charts-community';
+import type { AgChartTheme, AgGaugeOptions } from 'ag-charts-community';
 import type { GridOptions } from 'ag-grid-charts-enterprise';
 
 import colours from '#/components/reports/graphs/colours';
 import { useStoreState } from '#/state';
-import { AgCharts } from 'ag-charts-react';
+import { AgGauge } from 'ag-charts-react';
 import { AgGridReact } from 'ag-grid-react';
 import { Drawer, Empty, Typography } from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
 
-const Graph = ({
+const Gauge = ({
   emptyLabel,
   graphOptions,
   gridOptions,
@@ -18,7 +18,7 @@ const Graph = ({
   loading,
 }: {
   emptyLabel: string;
-  graphOptions: AgChartOptions;
+  graphOptions: AgGaugeOptions;
   gridOptions: {
     columnDefs: GridOptions['columnDefs'];
     rowData: GridOptions['rowData'];
@@ -44,7 +44,7 @@ const Graph = ({
   }, []);
 
   const theme: AgChartTheme = (graphOptions.theme as AgChartTheme) ?? {};
-  const options: AgChartOptions = {
+  const options: AgGaugeOptions = {
     background: {
       fill: 'transparent',
     },
@@ -57,9 +57,6 @@ const Graph = ({
       ],
     },
     height,
-    legend: {
-      position: 'top',
-    },
     ...graphOptions,
     theme: {
       baseTheme: darkMode && !isPrinting ? 'ag-default-dark' : 'ag-default',
@@ -88,7 +85,7 @@ const Graph = ({
     >
       <Typography.Title level={4}>{label}</Typography.Title>
       {loading ? (
-        <AgCharts options={options} />
+        <AgGauge options={options} />
       ) : (
         <Empty description={emptyLabel} />
       )}
@@ -113,4 +110,4 @@ const Graph = ({
   );
 };
 
-export default Graph;
+export default Gauge;
