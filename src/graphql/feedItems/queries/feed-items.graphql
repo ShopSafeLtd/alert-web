@@ -3,151 +3,154 @@ query FeedItems(
   $search: String
   $order: FeedItemOrderByWithRelationInput
   $where: FeedItemWhereInput
-  $take: Int
-  $skip: Int
+  $first: Int
   $after: String
   $groups: [String!]
   $groupsWhere2: GroupWhereInput
 ) {
-  listFeedItems(
+  feedRelay(
     where: $where
     schemeId: $schemeId
     search: $search
     order: $order
-    take: $take
-    skip: $skip
     after: $after
     groups: $groups
+    first: $first
   ) {
-    feedItems {
-      type
-      ban {
-        title
+    edges {
+      node {
         type
-        location
-        feedImage {
-          ...FeedImage
+        ban {
+          title
+          type
+          location
+          feedImage {
+            ...FeedImage
+          }
+          offender {
+            id
+            name
+          }
         }
+        article {
+          id
+          title
+          createdBy {
+            fullName
+          }
+          image {
+            id
+            url
+            optimised
+            position
+            rotation
+          }
+          previewText
+          priority
+        }
+        articleId
+        createdAt
+        updatedAt
+        message
+        model
+        crimeGroupId
+        crimeGroup {
+          totalOffenders
+          totalIncidents
+          alias
+          id
+          reference
+          latestUpdate {
+            ...FeedUpdate
+          }
+        }
+        vehicleId
+        vehicle {
+          totalOffenders
+          registration
+          reference
+          model
+          make
+          id
+          colour
+          feedImage {
+            ...FeedImage
+          }
+          latestUpdate {
+            ...FeedUpdate
+          }
+        }
+        investigationId
+        investigation {
+          id
+          name
+          reference
+          totalOffenders
+          totalIncidents
+          description
+          updatedAt
+          latestUpdate {
+            ...FeedUpdate
+          }
+        }
+        groups(where: $groupsWhere2) {
+          id
+          name
+        }
+        id
+        incident {
+          id
+          subject
+          reference
+          description
+          latestUpdate {
+            ...FeedUpdate
+          }
+          approved
+          business {
+            id
+            name
+          }
+          feedImage {
+            ...FeedImage
+          }
+        }
+        incidentId
         offender {
           id
+          totalIncidents
+          latestIncident {
+            id
+            dateAgo
+            reportedBusinessName
+          }
+          reference
+          updatedAt
+          height
+          dateOfBirth
+          dateSource
+          hair
           name
-        }
-      }
-      article {
-        id
-        title
-        createdBy {
-          fullName
-        }
-        image {
-          id
-          url
-          optimised
-          position
-          rotation
-        }
-        previewText
-        priority
-      }
-      articleId
-      createdAt
-      updatedAt
-      message
-      model
-      crimeGroupId
-      crimeGroup {
-        totalOffenders
-        totalIncidents
-        alias
-        id
-        reference
-        latestUpdate {
-          ...FeedUpdate
-        }
-      }
-      vehicleId
-      vehicle {
-        totalOffenders
-        registration
-        reference
-        model
-        make
-        id
-        colour
-        feedImage {
-          ...FeedImage
-        }
-        latestUpdate {
-          ...FeedUpdate
-        }
-      }
-      investigationId
-      investigation {
-        id
-        name
-        reference
-        totalOffenders
-        totalIncidents
-        description
-        updatedAt
-        latestUpdate {
-          ...FeedUpdate
-        }
-      }
-      groups(where: $groupsWhere2) {
-        id
-        name
-      }
-      id
-      incident {
-        id
-        subject
-        reference
-        description
-        latestUpdate {
-          ...FeedUpdate
-        }
-        approved
-        business {
-          id
-          name
-        }
-        feedImage {
-          ...FeedImage
-        }
-      }
-      incidentId
-      offender {
-        id
-        totalIncidents
-        latestIncident {
-          id
-          dateAgo
-          reportedBusinessName
-        }
-        reference
-        updatedAt
-        height
-        dateOfBirth
-        dateSource
-        hair
-        name
-        peculiarities
-        race
-        approved
-        subscribed
-        uploaded
-        active
-        latestUpdate {
-          ...FeedUpdate
-        }
+          peculiarities
+          race
+          approved
+          subscribed
+          uploaded
+          active
+          latestUpdate {
+            ...FeedUpdate
+          }
 
-        feedImage {
-          ...FeedImage
+          feedImage {
+            ...FeedImage
+          }
         }
+        offenderId
       }
-      offenderId
     }
-    total
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
   }
 }

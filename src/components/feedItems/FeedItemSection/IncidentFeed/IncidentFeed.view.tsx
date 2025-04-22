@@ -1,4 +1,4 @@
-import type { FeedItemsQuery } from 'graphql/feedItems/queries/__generated__/feed-items.generated';
+import type { FeedItem } from '#/components/feedItems/FeedItemSection/types/FeedItem';
 
 import {
   faClock,
@@ -19,12 +19,9 @@ import useStyles from './IncidentFeed.styles';
 const { Paragraph, Text, Title } = Typography;
 const { confirm } = Modal;
 
-interface Props {
+interface Props extends FeedItem {
   adminRights: boolean;
-  feedItem:
-    | Exclude<FeedItemsQuery['listFeedItems'], null | undefined>['feedItems'][0]
-    | null
-    | undefined;
+
   isNewImage?: boolean;
   isNewIncident?: boolean;
   onDeleteFeedItem: (value: string) => void;
