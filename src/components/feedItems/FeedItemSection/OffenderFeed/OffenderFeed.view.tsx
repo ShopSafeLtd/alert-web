@@ -31,7 +31,7 @@ interface Props extends FeedItem {
 
 const OffenderFeed = ({
   adminRights,
-  feedItem: initNode,
+  feedItem,
   isNewImage,
   isNewOffender,
   onDeleteFeedItem,
@@ -39,7 +39,6 @@ const OffenderFeed = ({
   saving,
 }: Props): JSX.Element => {
   // const imagesRef = useRef<CarouselRef>(null);
-  const { node: feedItem } = initNode || {};
 
   const {
     // age,

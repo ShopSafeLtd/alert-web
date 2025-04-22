@@ -29,14 +29,13 @@ interface Props extends FeedItem {
 
 const BanFeed = ({
   adminRights,
-  feedItem: initNode,
+  feedItem,
 
   onDeleteFeedItem,
   openLightbox,
   saving,
 }: Props): JSX.Element => {
   // const offender?.imagesRef = useRef<CarouselRef>(null);
-  const { node: feedItem } = initNode || {};
 
   const { feedImage, location, offender, title, type } = feedItem?.ban || {};
   const intl = useIntl();

@@ -30,14 +30,12 @@ interface Props extends FeedItem {
 
 const ArticleFeed = ({
   adminRights,
-  feedItem: initNode,
+  feedItem,
   onDeleteFeedItem,
   openLightbox,
   saving,
 }: Props): JSX.Element => {
   // const imagesRef = useRef<CarouselRef>(null);
-
-  const { node: feedItem } = initNode || {};
 
   const { createdBy, id, image, previewText, priority, title } =
     feedItem?.article || {};

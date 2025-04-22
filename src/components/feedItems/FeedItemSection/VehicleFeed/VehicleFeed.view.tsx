@@ -36,15 +36,13 @@ interface Props extends FeedItem {
 
 const VehicleFeed = ({
   adminRights,
-  feedItem: initNode,
+  feedItem,
   isNewImage,
   isNewVehicle,
   onDeleteFeedItem,
   openLightbox,
   saving,
 }: Props): JSX.Element => {
-  const { node: feedItem } = initNode || {};
-
   // const imagesRef = useRef<CarouselRef>(null);
   const {
     colour,

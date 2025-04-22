@@ -31,15 +31,13 @@ interface Props extends FeedItem {
 
 const IncidentFeed = ({
   adminRights,
-  feedItem: initNode,
+  feedItem,
   isNewImage,
   isNewIncident,
   onDeleteFeedItem,
   openLightbox,
   saving,
 }: Props): JSX.Element => {
-  const { node: feedItem } = initNode || {};
-
   const {
     business,
     description,
