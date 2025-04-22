@@ -60,6 +60,7 @@ export type ReportItemTypes =
   | 'donut'
   | 'graph'
   | 'heatmap'
+  | 'linear-gauge'
   | 'logo'
   | 'map'
   | 'pageBreak'
@@ -114,12 +115,13 @@ export const LayoutToReadable: {
     reportViews: ['summary'],
   },
   {
-    allowDuplicates: false,
+    allowDuplicates: true,
     description: (
       <FormattedMessage defaultMessage="Graph component showing open/closed activities in Alert." />
     ),
     i: 'activityGraph',
     item: {
+      allowDuplicates: true,
       h: 4,
       i: 'activityGraph',
       minH: 4,
@@ -131,6 +133,26 @@ export const LayoutToReadable: {
     },
     readable: 'Activity Graph',
     reportItemTypes: ['summary'],
+    reportViews: ['summary'],
+  },
+  {
+    allowDuplicates: false,
+    description: (
+      <FormattedMessage defaultMessage="Table showing a list of activities in Alert including the date, time, type, status and description. By default ordered by date to show the most recent activities. Can be ordered by all columns to highlight the most important activities." />
+    ),
+    i: 'activitiesTable',
+    item: {
+      h: 13,
+      i: 'activitiesTable',
+      minH: 4,
+      moved: false,
+      static: false,
+      w: 2,
+      x: 0,
+      y: 0,
+    },
+    readable: 'Activity Table',
+    reportItemTypes: ['table'],
     reportViews: ['summary'],
   },
   {
@@ -892,8 +914,10 @@ export type Elements = {
 export interface MetaData {
   columns?: string[];
   data?: { [i: string]: unknown };
+  filters?: { [i: string]: unknown };
   graphOptions?: { [i: string]: unknown };
   key: MetaDataAllowedValue;
+  label?: string;
   propId?: string;
   type: MetaDataItemTypes;
   urls?: string[];

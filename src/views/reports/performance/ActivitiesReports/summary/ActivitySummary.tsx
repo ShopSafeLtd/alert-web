@@ -19,7 +19,7 @@ const { Title } = Typography;
 const ActivitySummary = ({ editMode, filters, removeItem }: Props) => {
   const intl = useIntl();
   const classes = useStyles();
-  const { data } = useActivitySummaryQuery({
+  const { data, loading } = useActivitySummaryQuery({
     variables: {
       where: {
         createdAt: filters.dateRange,
@@ -29,7 +29,6 @@ const ActivitySummary = ({ editMode, filters, removeItem }: Props) => {
       },
     },
   });
-  const loading = !!data?.activitySummary.completed;
   return (
     <div>
       <Button

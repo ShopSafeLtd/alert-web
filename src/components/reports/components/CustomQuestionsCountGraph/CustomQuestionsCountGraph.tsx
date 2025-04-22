@@ -52,8 +52,6 @@ const CustomQuestionsCountGraph = ({
     skip: !selectOpen,
   });
 
-  console.log(metaData);
-
   return (
     <>
       <Button
@@ -62,14 +60,12 @@ const CustomQuestionsCountGraph = ({
         icon={<FontAwesomeIcon icon={faPieChart} size="lg" />}
         onClick={() => {
           const updatedMetadata = fullMetadata.map((item) => {
-            console.log(item.key, metaDataKey);
             if (item.key === metaDataKey) {
               if (item.type === 'donut') return { ...item, type: 'pie' };
               return { ...item, type: 'donut' };
             }
             return item;
           }) satisfies MetaData[];
-          console.log(updatedMetadata);
           setMetadata(updatedMetadata);
         }}
         shape="circle"

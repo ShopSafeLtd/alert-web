@@ -3032,9 +3032,11 @@ export type CreateCustomGalleryOnOffenderInput = {
 export type CreateDocument = {
   crimeGroupId?: InputMaybe<Scalars['String']>;
   fileType: Scalars['String'];
+  folderId?: InputMaybe<Scalars['String']>;
   incidentId?: InputMaybe<Scalars['String']>;
   investigationId?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
+  newFolder?: InputMaybe<UpsertFolder>;
   offenderId?: InputMaybe<Scalars['String']>;
   origFileName: Scalars['String'];
   schemeId?: InputMaybe<Scalars['String']>;
@@ -3049,8 +3051,10 @@ export type CreateDocument = {
 export type CreateDocuments = {
   crimeGroupId?: InputMaybe<Scalars['String']>;
   documents?: InputMaybe<Array<CreateListDocument>>;
+  folderId?: InputMaybe<Scalars['String']>;
   incidentId?: InputMaybe<Scalars['String']>;
   investigationId?: InputMaybe<Scalars['String']>;
+  newFolder?: InputMaybe<UpsertFolder>;
   offenderId?: InputMaybe<Scalars['String']>;
   schemeId?: InputMaybe<Scalars['String']>;
   tags?: InputMaybe<Array<Scalars['String']>>;
@@ -4685,6 +4689,8 @@ export type Document = {
   createdAt: Scalars['Date'];
   description?: Maybe<Scalars['String']>;
   fileType?: Maybe<FileType>;
+  folder?: Maybe<Folder>;
+  folderId?: Maybe<Scalars['String']>;
   hash?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   investigation: Array<Investigation>;
@@ -4809,6 +4815,8 @@ export type DocumentWhereInput = {
   description?: InputMaybe<StringNullableFilter>;
   fileType?: InputMaybe<EnumFileTypeNullableFilter>;
   fileTypeLit?: InputMaybe<StringNullableFilter>;
+  folder?: InputMaybe<FolderWhereInput>;
+  folderId?: InputMaybe<StringNullableFilter>;
   hash?: InputMaybe<StringNullableFilter>;
   id?: InputMaybe<StringFilter>;
   incidents?: InputMaybe<IncidentListRelationFilter>;
@@ -6261,6 +6269,118 @@ export type FlowWhereInput = {
   investigationId?: InputMaybe<StringFilter>;
   name?: InputMaybe<StringFilter>;
   nodes?: InputMaybe<FlowNodeListRelationFilter>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
+};
+
+export type Folder = {
+  __typename?: 'Folder';
+  childFolders: Array<Folder>;
+  createdAt: Scalars['Date'];
+  createdBy: User;
+  createdById: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+  documents: Array<Document>;
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  parentFolder?: Maybe<Folder>;
+  parentFolderId?: Maybe<Scalars['String']>;
+  scheme: Scheme;
+  schemeId?: Maybe<Scalars['String']>;
+  updatedAt: Scalars['Date'];
+};
+
+
+export type FolderChildFoldersArgs = {
+  cursor?: InputMaybe<FolderWhereUniqueInput>;
+  distinct?: InputMaybe<FolderScalarFieldEnum>;
+  orderBy?: InputMaybe<FolderOrderByWithRelationInput>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<FolderWhereInput>;
+};
+
+
+export type FolderDocumentsArgs = {
+  cursor?: InputMaybe<DocumentWhereUniqueInput>;
+  distinct?: InputMaybe<Array<DocumentScalarFieldEnum>>;
+  orderBy?: InputMaybe<Array<DocumentOrderByWithRelationInput>>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<DocumentWhereInput>;
+};
+
+export type FolderListRelationFilter = {
+  every?: InputMaybe<FolderWhereInput>;
+  none?: InputMaybe<FolderWhereInput>;
+  some?: InputMaybe<FolderWhereInput>;
+};
+
+export type FolderOrderByRelationAggregateInput = {
+  _count?: InputMaybe<SortOrder>;
+};
+
+export type FolderOrderByWithRelationInput = {
+  childFolders?: InputMaybe<FolderOrderByRelationAggregateInput>;
+  createdAt?: InputMaybe<SortOrder>;
+  createdBy?: InputMaybe<UserOrderByWithRelationInput>;
+  createdById?: InputMaybe<SortOrder>;
+  description?: InputMaybe<SortOrder>;
+  documents?: InputMaybe<DocumentOrderByRelationAggregateInput>;
+  id?: InputMaybe<SortOrder>;
+  name?: InputMaybe<SortOrder>;
+  parentFolder?: InputMaybe<FolderOrderByWithRelationInput>;
+  parentFolderId?: InputMaybe<SortOrder>;
+  scheme?: InputMaybe<SchemeOrderByWithRelationInput>;
+  schemeId?: InputMaybe<SortOrder>;
+  updatedAt?: InputMaybe<SortOrder>;
+};
+
+export enum FolderScalarFieldEnum {
+  CreatedAt = 'createdAt',
+  CreatedById = 'createdById',
+  Description = 'description',
+  Id = 'id',
+  Name = 'name',
+  ParentFolderId = 'parentFolderId',
+  SchemeId = 'schemeId',
+  UpdatedAt = 'updatedAt'
+}
+
+export type FolderWhereInput = {
+  AND?: InputMaybe<Array<FolderWhereInput>>;
+  NOT?: InputMaybe<Array<FolderWhereInput>>;
+  OR?: InputMaybe<Array<FolderWhereInput>>;
+  childFolders?: InputMaybe<FolderListRelationFilter>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  createdBy?: InputMaybe<UserWhereInput>;
+  createdById?: InputMaybe<StringFilter>;
+  description?: InputMaybe<StringFilter>;
+  documents?: InputMaybe<DocumentListRelationFilter>;
+  id?: InputMaybe<StringFilter>;
+  name?: InputMaybe<StringFilter>;
+  parentFolderId?: InputMaybe<StringNullableFilter>;
+  scheme?: InputMaybe<SchemeWhereInput>;
+  schemeId?: InputMaybe<StringNullableFilter>;
+  search?: InputMaybe<Array<FolderWhereInput>>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
+};
+
+export type FolderWhereUniqueInput = {
+  AND?: InputMaybe<Array<FolderWhereInput>>;
+  NOT?: InputMaybe<Array<FolderWhereInput>>;
+  OR?: InputMaybe<Array<FolderWhereInput>>;
+  childFolders?: InputMaybe<FolderListRelationFilter>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  createdBy?: InputMaybe<UserWhereInput>;
+  createdById?: InputMaybe<StringFilter>;
+  description?: InputMaybe<StringFilter>;
+  documents?: InputMaybe<DocumentListRelationFilter>;
+  id?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<StringFilter>;
+  parentFolder?: InputMaybe<FolderWhereInput>;
+  parentFolderId?: InputMaybe<StringNullableFilter>;
+  scheme?: InputMaybe<SchemeWhereInput>;
+  schemeId?: InputMaybe<StringNullableFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
 };
 
@@ -10268,6 +10388,7 @@ export type Mutation = {
   deleteExpired: SystemTask;
   deleteFace: RekFace;
   deleteFeedItem: FeedItem;
+  deleteFolder: Folder;
   deleteGroup: Group;
   deleteIncident: Incident;
   deleteInvestigation: Investigation;
@@ -10367,7 +10488,9 @@ export type Mutation = {
   updateDashboardTemplate: Dashboard;
   updateDemDevice: DemDevice;
   updateDemGroup: DemGroup;
+  updateDocument: Document;
   updateFlow: Flow;
+  updateFolder: Folder;
   updateGroup: Group;
   updateIncident: Incident;
   updateIncidentBusiness: Incident;
@@ -10402,6 +10525,7 @@ export type Mutation = {
   upsertContact: Contact;
   upsertDemDevice: DemDevice;
   upsertDemGroup: DemGroup;
+  upsertFolder: Folder;
   upsertIncidentForm: IncidentForm;
   upsertPermission: CustomRole;
   upsertShoe: Shoe;
@@ -10829,6 +10953,11 @@ export type MutationDeleteFaceArgs = {
 
 
 export type MutationDeleteFeedItemArgs = {
+  where: UniqueId;
+};
+
+
+export type MutationDeleteFolderArgs = {
   where: UniqueId;
 };
 
@@ -11289,8 +11418,20 @@ export type MutationUpdateDemGroupArgs = {
 };
 
 
+export type MutationUpdateDocumentArgs = {
+  data: UniqueId;
+  where: UniqueId;
+};
+
+
 export type MutationUpdateFlowArgs = {
   data: UpdateFlowData;
+  where: UniqueId;
+};
+
+
+export type MutationUpdateFolderArgs = {
+  data: UpdateFolder;
   where: UniqueId;
 };
 
@@ -11477,6 +11618,11 @@ export type MutationUpsertDemDeviceArgs = {
 
 export type MutationUpsertDemGroupArgs = {
   data: UpsertDemGroup;
+};
+
+
+export type MutationUpsertFolderArgs = {
+  data: UpsertFolder;
 };
 
 
@@ -13594,6 +13740,7 @@ export enum PermissionModel {
   Dem = 'DEM',
   Documents = 'DOCUMENTS',
   Evidence = 'EVIDENCE',
+  Folders = 'FOLDERS',
   GeneralSettings = 'GENERAL_SETTINGS',
   Groups = 'GROUPS',
   Incidents = 'INCIDENTS',
@@ -13754,8 +13901,11 @@ export type Query = {
   demGroup: DemGroup;
   demGroups: QueryDemGroupsConnection;
   documents: QueryDocumentsConnection;
+  documentsNoFolder: QueryDocumentsNoFolderConnection;
   feedItem: FeedItem;
   feedItems: Array<FeedItem>;
+  folder: Folder;
+  folders: QueryFoldersConnection;
   goodsTypes: Array<GoodsType>;
   group: Group;
   groups: Array<Group>;
@@ -14298,6 +14448,19 @@ export type QueryDocumentsArgs = {
 };
 
 
+export type QueryDocumentsNoFolderArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  cursor?: InputMaybe<DocumentWhereUniqueInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<DocumentOrderByWithRelationInput>>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<DocumentWhereInput>;
+};
+
+
 export type QueryFeedItemArgs = {
   where: FeedItemWhereUniqueInput;
 };
@@ -14310,6 +14473,23 @@ export type QueryFeedItemsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<FeedItemWhereInput>;
+};
+
+
+export type QueryFolderArgs = {
+  where: FolderWhereUniqueInput;
+};
+
+
+export type QueryFoldersArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<FolderOrderByWithRelationInput>>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<FolderWhereInput>;
 };
 
 
@@ -15447,6 +15627,32 @@ export type QueryDocumentsConnectionEdge = {
   __typename?: 'QueryDocumentsConnectionEdge';
   cursor: Scalars['String'];
   node: Document;
+};
+
+export type QueryDocumentsNoFolderConnection = {
+  __typename?: 'QueryDocumentsNoFolderConnection';
+  edges: Array<QueryDocumentsNoFolderConnectionEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type QueryDocumentsNoFolderConnectionEdge = {
+  __typename?: 'QueryDocumentsNoFolderConnectionEdge';
+  cursor: Scalars['String'];
+  node: Document;
+};
+
+export type QueryFoldersConnection = {
+  __typename?: 'QueryFoldersConnection';
+  edges: Array<QueryFoldersConnectionEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type QueryFoldersConnectionEdge = {
+  __typename?: 'QueryFoldersConnectionEdge';
+  cursor: Scalars['String'];
+  node: Folder;
 };
 
 export type QueryIncidentItemsConnection = {
@@ -16916,6 +17122,7 @@ export type Scheme = {
   reportIcons: Array<Image>;
   reportOnly: Scalars['Boolean'];
   reportTemplates: Array<ReportTemplate>;
+  requireActivityAuthorised: Scalars['Boolean'];
   requireSiteNumberForUsers: Scalars['Boolean'];
   restrictIncidentAccess: Scalars['Boolean'];
   roles: Array<CustomRole>;
@@ -17495,6 +17702,7 @@ export type SchemeOrderByWithRelationInput = {
   reportIcons?: InputMaybe<ImageOrderByRelationAggregateInput>;
   reportOnly?: InputMaybe<SortOrder>;
   reportTemplates?: InputMaybe<ReportTemplateOrderByRelationAggregateInput>;
+  requireActivityAuthorised?: InputMaybe<SortOrder>;
   requireSiteNumberForUsers?: InputMaybe<SortOrder>;
   restrictIncidentAccess?: InputMaybe<SortOrder>;
   schemeTags?: InputMaybe<TagOrderByRelationAggregateInput>;
@@ -17556,6 +17764,7 @@ export enum SchemeScalarFieldEnum {
   OffenderRetention = 'offenderRetention',
   OneSelectedIncidentTypeOnly = 'oneSelectedIncidentTypeOnly',
   ReportOnly = 'reportOnly',
+  RequireActivityAuthorised = 'requireActivityAuthorised',
   RequireSiteNumberForUsers = 'requireSiteNumberForUsers',
   RestrictIncidentAccess = 'restrictIncidentAccess',
   TaskTimeTracking = 'taskTimeTracking',
@@ -17616,6 +17825,7 @@ export type SchemeUpdateInput = {
   offenderRetention?: InputMaybe<SetIntHelper>;
   oneSelectedIncidentTypeOnly?: InputMaybe<SetBooleanHelper>;
   reportOnly?: InputMaybe<SetBooleanHelper>;
+  requireActivityAuthorised?: InputMaybe<SetBooleanHelper>;
   requireSiteNumberForUsers?: InputMaybe<SetBooleanHelper>;
   restrictIncidentAccess?: InputMaybe<SetBooleanHelper>;
   taskTimeTracking?: InputMaybe<Scalars['Boolean']>;
@@ -17699,6 +17909,7 @@ export type SchemeWhereInput = {
   reportIcons?: InputMaybe<ImageListRelationFilter>;
   reportOnly?: InputMaybe<BoolFilter>;
   reportTemplates?: InputMaybe<ReportTemplateListRelationFilter>;
+  requireActivityAuthorised?: InputMaybe<BoolFilter>;
   requireSiteNumberForUsers?: InputMaybe<BoolFilter>;
   restrictIncidentAccess?: InputMaybe<BoolFilter>;
   schemeTags?: InputMaybe<TagListRelationFilter>;
@@ -17793,6 +18004,7 @@ export type SchemeWhereUniqueInput = {
   reportIcons?: InputMaybe<ImageListRelationFilter>;
   reportOnly?: InputMaybe<BoolFilter>;
   reportTemplates?: InputMaybe<ReportTemplateListRelationFilter>;
+  requireActivityAuthorised?: InputMaybe<BoolFilter>;
   requireSiteNumberForUsers?: InputMaybe<BoolFilter>;
   restrictIncidentAccess?: InputMaybe<BoolFilter>;
   schemeTags?: InputMaybe<TagListRelationFilter>;
@@ -19780,6 +19992,8 @@ export type TodoGroupsArgs = {
 
 export type TodoCreateInput = {
   assignedUsers?: InputMaybe<ConnectOnlyArrayHelper>;
+  authorised?: InputMaybe<Scalars['Boolean']>;
+  authorisedUsers?: InputMaybe<ConnectOnlyArrayHelper>;
   business?: InputMaybe<ConnectHelper>;
   completed?: InputMaybe<Scalars['Boolean']>;
   createdBy?: InputMaybe<ConnectHelper>;
@@ -19815,6 +20029,7 @@ export type TodoOrderByRelationAggregateInput = {
 export type TodoOrderByWithRelationInput = {
   answers?: InputMaybe<AnswerOrderByRelationAggregateInput>;
   assignedUsers?: InputMaybe<UserOrderByRelationAggregateInput>;
+  authorised?: InputMaybe<SortOrder>;
   business?: InputMaybe<BusinessOrderByWithRelationInput>;
   businessId?: InputMaybe<SortOrder>;
   chat?: InputMaybe<ChatOrderByWithRelationInput>;
@@ -19859,6 +20074,7 @@ export type TodoRelayWhereInput = {
 };
 
 export enum TodoScalarFieldEnum {
+  Authorised = 'authorised',
   BusinessId = 'businessId',
   ChatId = 'chatId',
   Completed = 'completed',
@@ -19884,6 +20100,7 @@ export type TodoScalarWhereInput = {
   AND?: InputMaybe<Array<TodoScalarWhereInput>>;
   NOT?: InputMaybe<Array<TodoScalarWhereInput>>;
   OR?: InputMaybe<Array<TodoScalarWhereInput>>;
+  authorised?: InputMaybe<BoolNullableFilter>;
   businessId?: InputMaybe<StringNullableFilter>;
   chatId?: InputMaybe<StringNullableFilter>;
   completed?: InputMaybe<BoolNullableFilter>;
@@ -19909,6 +20126,7 @@ export type TodoScalarWhereWithAggregatesInput = {
   AND?: InputMaybe<Array<TodoScalarWhereWithAggregatesInput>>;
   NOT?: InputMaybe<Array<TodoScalarWhereWithAggregatesInput>>;
   OR?: InputMaybe<Array<TodoScalarWhereWithAggregatesInput>>;
+  authorised?: InputMaybe<BoolNullableWithAggregatesFilter>;
   businessId?: InputMaybe<StringNullableWithAggregatesFilter>;
   chatId?: InputMaybe<StringNullableWithAggregatesFilter>;
   completed?: InputMaybe<BoolNullableWithAggregatesFilter>;
@@ -19952,6 +20170,8 @@ export enum TodoType {
 export type TodoUpdateInput = {
   answers?: InputMaybe<AnswerUpdateManyWithoutTodoNestedInput>;
   assignedUsers?: InputMaybe<RelationSet>;
+  authorised?: InputMaybe<NullableSetBooleanHelper>;
+  authorisedUsers?: InputMaybe<RelationSet>;
   businessId?: InputMaybe<Scalars['String']>;
   completed?: InputMaybe<NullableSetBooleanHelper>;
   completedBy?: InputMaybe<ConnectHelper>;
@@ -19980,6 +20200,7 @@ export type TodoWhereInput = {
   OR?: InputMaybe<Array<TodoWhereInput>>;
   answers?: InputMaybe<AnswerListRelationFilter>;
   assignedUsers?: InputMaybe<UserListRelationFilter>;
+  authorised?: InputMaybe<BoolNullableFilter>;
   business?: InputMaybe<BusinessWhereInput>;
   businessId?: InputMaybe<StringNullableFilter>;
   chat?: InputMaybe<ChatWhereInput>;
@@ -20021,6 +20242,7 @@ export type TodoWhereUniqueInput = {
   OR?: InputMaybe<Array<TodoWhereInput>>;
   answers?: InputMaybe<AnswerListRelationFilter>;
   assignedUsers?: InputMaybe<UserListRelationFilter>;
+  authorised?: InputMaybe<BoolNullableFilter>;
   business?: InputMaybe<BusinessWhereInput>;
   businessId?: InputMaybe<StringNullableFilter>;
   chat?: InputMaybe<ChatWhereInput>;
@@ -20284,6 +20506,12 @@ export type UpdateFlowNodeData = {
   positionY: Scalars['Int'];
   type: Scalars['String'];
   width: Scalars['Int'];
+};
+
+export type UpdateFolder = {
+  description?: InputMaybe<SetStringHelper>;
+  name?: InputMaybe<SetStringHelper>;
+  parentTagId?: InputMaybe<Scalars['String']>;
 };
 
 export enum UpdateIcon {
@@ -20673,6 +20901,14 @@ export type UpsertDemGroup = {
   groupId?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
+};
+
+export type UpsertFolder = {
+  dataType?: InputMaybe<Model>;
+  description: Scalars['String'];
+  folderId?: InputMaybe<Scalars['String']>;
+  name: Scalars['String'];
+  parentId?: InputMaybe<Scalars['String']>;
 };
 
 export type UpsertIncidentFormInput = {
