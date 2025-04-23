@@ -6,15 +6,18 @@ const defaultOptions = {} as const;
 export type ActivitiesTableReportQueryVariables = Types.Exact<{
   where: Types.TodoRelayWhereInput;
   orderBy?: Types.InputMaybe<Array<Types.TodoOrderByWithRelationInput> | Types.TodoOrderByWithRelationInput>;
+  take?: Types.InputMaybe<Types.Scalars['Int']>;
+  skip?: Types.InputMaybe<Types.Scalars['Int']>;
 }>;
 
 
-export type ActivitiesTableReportQuery = { __typename?: 'Query', todoRelay: { __typename?: 'QueryTodoRelayConnection', edges: Array<{ __typename?: 'QueryTodoRelayConnectionEdge', node: { __typename?: 'Todo', id: string, name?: string | null, dueDate?: Date | null, createdAt: Date, completed?: boolean | null, type?: Types.TodoType | null, completedDate?: Date | null, business?: { __typename?: 'Business', id: string, name: string } | null, assignedUsers: Array<{ __typename?: 'User', id: string, fullName: string }> } }> } };
+export type ActivitiesTableReportQuery = { __typename?: 'Query', todoRelay: { __typename?: 'QueryTodoRelayConnection', totalCount: number, edges: Array<{ __typename?: 'QueryTodoRelayConnectionEdge', node: { __typename?: 'Todo', id: string, name?: string | null, dueDate?: Date | null, createdAt: Date, completed?: boolean | null, type?: Types.TodoType | null, completedDate?: Date | null, business?: { __typename?: 'Business', id: string, name: string } | null, assignedUsers: Array<{ __typename?: 'User', id: string, fullName: string }> } }> } };
 
 
 export const ActivitiesTableReportDocument = gql`
-    query ActivitiesTableReport($where: TodoRelayWhereInput!, $orderBy: [TodoOrderByWithRelationInput!]) {
-  todoRelay(where: $where, orderBy: $orderBy) {
+    query ActivitiesTableReport($where: TodoRelayWhereInput!, $orderBy: [TodoOrderByWithRelationInput!], $take: Int, $skip: Int) {
+  todoRelay(where: $where, orderBy: $orderBy, take: $take, skip: $skip) {
+    totalCount
     edges {
       node {
         id
