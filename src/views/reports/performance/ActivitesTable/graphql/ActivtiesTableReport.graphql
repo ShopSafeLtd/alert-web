@@ -1,8 +1,11 @@
 query ActivitiesTableReport(
     $where: TodoRelayWhereInput!
     $orderBy: [TodoOrderByWithRelationInput!]
+    $take: Int
+    $skip: Int
 ) {
-    todoRelay(where: $where, orderBy: $orderBy) {
+    todoRelay(where: $where, orderBy: $orderBy, take: $take, skip: $skip) {
+        totalCount
         edges {
             node {
                 id

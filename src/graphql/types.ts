@@ -20092,6 +20092,7 @@ export type TodoOrderByWithRelationInput = {
 
 export type TodoRelayWhereInput = {
   assignedUsers?: InputMaybe<Array<Scalars['String']>>;
+  createdAt?: InputMaybe<DateRangeInput>;
   groupIds?: InputMaybe<Array<Scalars['String']>>;
   schemeIds?: InputMaybe<Array<Scalars['String']>>;
   search?: InputMaybe<Scalars['String']>;

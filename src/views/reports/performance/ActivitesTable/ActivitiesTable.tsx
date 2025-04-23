@@ -1,7 +1,11 @@
 import type { FilterProps } from '#/views/reports/performance/layout/PerformanceReportLayout';
 import type { MetaData } from '#/views/reports/types';
+import type {
+  GridReadyEvent,
+  PaginationChangedEvent,
+} from 'ag-grid-charts-enterprise';
 
-import { useActivitiesTableReportQuery } from '#/views/reports/performance/ActivitesTable/graphql/__generated__/ActivtiesTableReport.generated';
+import { useActivitiesTableReportLazyQuery } from '#/views/reports/performance/ActivitesTable/graphql/__generated__/ActivtiesTableReport.generated';
 import {
   faBarsProgress,
   faChartBar,
@@ -15,6 +19,15 @@ import { Button, Col, Row } from 'antd';
 import dayjs from 'dayjs';
 import { TodoStatusInput, TodoUserModeInput } from 'graphql/types';
 import React, { useState } from 'react';
+
+interface TData {
+  assignedUsers: string;
+  business?: null | string;
+  completedDate: string;
+  createdDate: string;
+  dueDate: string;
+  name?: null | string;
+}
 
 interface Props {
   editMode: boolean;
@@ -33,11 +46,19 @@ const ActivitiesTable = ({
   setMetaData,
 }: Props) => {
   const [settingOpen, setSettingsOpen] = useState(false);
+  const [pageSize, setPageSize] = useState(100);
+  const [page, setPage] = useState(1);
 
   const toggleSettingsOpen = () => setSettingsOpen(!settingOpen);
+  const onPaginationChanged = (event: PaginationChangedEvent<TData>) => {
+    if (event.newPageSize) setPageSize(event.api.paginationGetPageSize());
+    if (event.newPage) setPage(event.api.paginationGetCurrentPage());
+  };
 
-  const { data } = useActivitiesTableReportQuery({
+  const [getData] = useActivitiesTableReportLazyQuery({
     variables: {
+      skip: (page - 1) * pageSize,
+      take: pageSize,
       where: {
         // createdAt: filters.dateRange,
         groupIds:
@@ -50,6 +71,36 @@ const ActivitiesTable = ({
       },
     },
   });
+
+  const onGridReady = (params: GridReadyEvent<TData>) => {
+    params.api.setGridOption('serverSideDatasource', {
+      getRows: (rowParams) => {
+        getData()
+          .then(({ data }) => {
+            rowParams.success({
+              rowCount: data?.todoRelay.totalCount,
+              rowData:
+                data?.todoRelay.edges.map(({ node }) => ({
+                  assignedUsers: node.assignedUsers
+                    .map((item) => item.fullName)
+                    .toString(),
+                  business: node.business?.name ?? '',
+                  completedDate: node.completedDate
+                    ? dayjs(node.completedDate).format('DD/MM/YYYY')
+                    : '',
+                  createdDate: dayjs(node.createdAt).format('DD/MM/YYYY'),
+                  dueDate: dayjs(node.dueDate).format('DD/MM/YYYY'),
+                  name: node.name,
+                })) ?? [],
+            });
+          })
+          .catch((error) => {
+            rowParams.fail();
+            console.error('Error loading data:', error);
+          });
+      },
+    });
+  };
 
   return (
     <>
@@ -72,7 +123,6 @@ const ActivitiesTable = ({
               hidden={!editMode}
               icon={<FontAwesomeIcon icon={faBarsProgress} size="lg" />}
               onClick={() => {
-                console.log({ ...metaData, type: 'linear-gauge' });
                 if (metaData && setMetaData) {
                   setMetaData({ ...metaData, type: 'linear-gauge' });
                 }
@@ -132,8 +182,11 @@ const ActivitiesTable = ({
         <div />
       )}
 
-      <div className="ag-theme-quartz-auto-dark" style={{ height: 500 }}>
-        <AgGridReact
+      <div
+        className="ag-theme-quartz-auto-dark"
+        style={{ height: 800, marginTop: 20 }}
+      >
+        <AgGridReact<TData>
           columnDefs={[
             { field: 'name' },
             { field: 'business' },
@@ -142,18 +195,12 @@ const ActivitiesTable = ({
             { field: 'completedDate' },
             { field: 'assignedUsers' },
           ]}
-          rowData={data?.todoRelay.edges.map(({ node }) => ({
-            assignedUsers: node.assignedUsers
-              .map((item) => item.fullName)
-              .toString(),
-            business: node.business?.name ?? '',
-            completedDate: node.completedDate
-              ? dayjs(node.completedDate).format('DD/MM/YYYY')
-              : '',
-            createdDate: dayjs(node.createdAt).format('DD/MM/YYYY'),
-            dueDate: dayjs(node.dueDate).format('DD/MM/YYYY'),
-            name: node.name,
-          }))}
+          onGridReady={onGridReady}
+          onPaginationChanged={onPaginationChanged}
+          pagination
+          paginationPageSize={100}
+          paginationPageSizeSelector={[20, 50, 100, 200, 400]}
+          rowModelType="serverSide"
         />
       </div>
     </>
