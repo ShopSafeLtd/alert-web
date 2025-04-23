@@ -106,7 +106,6 @@ const ActivitiesGraphView = ({
               hidden={!editMode}
               icon={<FontAwesomeIcon icon={faBarsProgress} size="lg" />}
               onClick={() => {
-                console.log({ ...metaData, type: 'linear-gauge' });
                 if (metaData && setMetaData) {
                   setMetaData({ ...metaData, type: 'linear-gauge' });
                 }
