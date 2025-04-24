@@ -1,8 +1,10 @@
 import type { SearchOffenderReportsQuery } from '#/views/reports/offender-profile/Search/__generated__/search-offender-report.generated';
 
 import ReportsSideMenu from '#/components/reports/ReportsSideMenu/ReportsSideMenu.view';
+import { currencyAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { Button, Col, Row, Skeleton, Table, Tag, Typography } from 'antd';
 import WatermarkImage from 'components/images/WatermarkImage.view';
+import { useAtomValue } from 'jotai/index';
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useParams } from 'react-router-dom';
@@ -35,6 +37,8 @@ const OffenderProfile = ({
   const intl = useIntl();
   const [collapsed, setCollapsed] = useState(false);
   const { reportId } = useParams();
+  const currency = useAtomValue(currencyAtom);
+
   return (
     <Row wrap={false}>
       <Col style={{ width: collapsed ? 0 : undefined }}>
@@ -108,7 +112,7 @@ const OffenderProfile = ({
                 key: 'totalValue',
                 render: (value: number) =>
                   intl.formatNumber(value || 0, {
-                    currency: 'GBP',
+                    currency,
                     style: 'currency',
                   }),
                 title: intl.formatMessage({

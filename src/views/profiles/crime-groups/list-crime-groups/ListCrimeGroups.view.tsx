@@ -4,6 +4,7 @@ import type { SortOrder } from 'graphql/types';
 import type { CrimeGroupFilters } from 'state/data-model';
 import type { DateType } from 'types/DataType';
 
+import { currencyAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { faFilter, faPlus } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Col, Drawer, Input, Row, Table, Tooltip } from 'antd';
@@ -11,6 +12,7 @@ import CrimeGroupFilter from 'components/crimeGroups/CrimeGroupFilter';
 import AddInvestigation from 'components/form-components/Investigation/AddInvestigation';
 import CheckTags from 'components/form-components/check-tags/CheckTags.view';
 import dayjs from 'dayjs';
+import { useAtomValue } from 'jotai';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
@@ -70,6 +72,7 @@ const ListCrimeGroups = ({
       value: 'MY_GROUPS',
     },
   ];
+  const currency = useAtomValue(currencyAtom);
 
   return (
     <div className={classes.page}>
@@ -153,7 +156,7 @@ const ListCrimeGroups = ({
             key: 'totalValue',
             render: (value: number | undefined) =>
               intl.formatNumber(value || 0, {
-                currency: 'GBP',
+                currency,
                 style: 'currency',
               }),
             title: intl.formatMessage({
@@ -165,7 +168,7 @@ const ListCrimeGroups = ({
             key: 'totalRecoveredValue',
             render: (value: number | undefined) =>
               intl.formatNumber(value || 0, {
-                currency: 'GBP',
+                currency,
                 style: 'currency',
               }),
             title: intl.formatMessage({

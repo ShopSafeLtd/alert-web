@@ -5,6 +5,7 @@ import type { ListCustomGalleriesQuery } from 'graphql/customGallery/queries/__g
 import type { RecycleOffenderMutation } from 'graphql/offenders/mutations/__generated__/recycle-offender.generated';
 import type { OffenderFilters } from 'state/data-model';
 
+import { currencyAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import {
   faChevronDown,
   faFilter,
@@ -35,6 +36,7 @@ import CompactSkeletonCard from 'components/offenders/OffenderCard/OffenderSkele
 import OffenderFilter from 'components/offenders/OffenderFilter';
 import OffenderSkeletonCard from 'components/offenders/OffenderSkeletonCard/OffenderSkeletonCard.view';
 import { PermissionMethod, PermissionModel } from 'graphql/types';
+import { useAtomValue } from 'jotai';
 import React from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useIntl } from 'react-intl';
@@ -96,6 +98,7 @@ const OffenderFeed = ({
   const classes = useStyles();
   const { compactView, customGalleries, gallery, search } = variables;
   const navigate = useNavigate();
+  const currency = useAtomValue(currencyAtom);
 
   const galleryOptions = [
     {
@@ -491,7 +494,7 @@ const OffenderFeed = ({
                   render: (value: number) => (
                     <Typography.Text ellipsis>
                       {intl.formatNumber(value || 0, {
-                        currency: 'GBP',
+                        currency,
                         style: 'currency',
                       })}
                     </Typography.Text>

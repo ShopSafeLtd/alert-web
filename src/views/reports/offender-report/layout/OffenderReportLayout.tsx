@@ -6,6 +6,7 @@ import type {
 import type { OffenderReportQuery } from 'graphql/reports/queries/__generated__/offender-report.generated';
 import type RGL from 'react-grid-layout';
 
+import { currencyAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import publicOffenderDob from '#/utils/public-offender-dob';
 import {
   faCalendar,
@@ -39,6 +40,7 @@ import {
 } from 'components/reports/tableColumns';
 import dayjs from 'dayjs';
 import { Age, Build, Gender, Race } from 'graphql/types';
+import { useAtomValue } from 'jotai';
 import React, { useMemo } from 'react';
 import { useIntl } from 'react-intl';
 import { getAge, getBuild, getEthnicity, getSex, shouldPrint } from 'utils';
@@ -94,6 +96,8 @@ const OffenderReportLayout = ({
     }px`;
   };
   const intl = useIntl();
+  const currency = useAtomValue(currencyAtom);
+
   const components: Elements = {
     crimeTypesByBusinessRadial: (
       <Card
@@ -694,7 +698,7 @@ const OffenderReportLayout = ({
                 data?.offenderReport?.lossTotals?.totalLostValue
                   ? intl.formatNumber(
                       data?.offenderReport?.lossTotals?.totalLostValue || 0,
-                      { currency: 'GBP', style: 'currency' }
+                      { currency, style: 'currency' }
                     )
                   : intl.formatMessage({
                       defaultMessage: 'No Losses',
@@ -718,7 +722,7 @@ const OffenderReportLayout = ({
                   ? intl.formatNumber(
                       data?.offenderReport?.lossTotals?.totalRecoveredValue ||
                         0,
-                      { currency: 'GBP', style: 'currency' }
+                      { currency, style: 'currency' }
                     )
                   : intl.formatMessage({
                       defaultMessage: 'No Recoveries',
@@ -755,7 +759,7 @@ const OffenderReportLayout = ({
               value={intl.formatNumber(
                 data?.offenderReport?.lossTotals?.averagePerIncident || 0,
                 {
-                  currency: 'GBP',
+                  currency,
                   style: 'currency',
                 }
               )}

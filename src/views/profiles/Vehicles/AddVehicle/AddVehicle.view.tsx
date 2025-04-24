@@ -10,6 +10,7 @@ import type {
 } from 'types/DataType';
 
 import PermissionCheckWrapper from '#/components/PermissionCheck/PermissionCheckWrapper';
+import { currencyAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import hasRolePermission from '#/utils/has-role-permission';
 import {
   faEdit,
@@ -46,6 +47,7 @@ import WatermarkImage from 'components/images/WatermarkImage.view';
 import IncidentTable from 'components/tables/IncidentTable';
 import OffenderTable from 'components/tables/OffenderTable';
 import { PermissionMethod, PermissionModel } from 'graphql/types';
+import { useAtomValue } from 'jotai';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
@@ -137,6 +139,8 @@ const AddVehicle = ({
 }: Props): JSX.Element => {
   const classes = useStyles();
   const intl = useIntl();
+  const currency = useAtomValue(currencyAtom);
+
   return (
     <div className={classes.page}>
       <Form<FormData> form={form} layout="vertical" onFinish={onSubmit}>
@@ -499,7 +503,7 @@ const AddVehicle = ({
                               // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
                               render: (value) =>
                                 intl.formatNumber(value || 0, {
-                                  currency: 'GBP',
+                                  currency,
                                   style: 'currency',
                                 }),
                               title: intl.formatMessage({
@@ -512,7 +516,7 @@ const AddVehicle = ({
                               // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
                               render: (value) =>
                                 intl.formatNumber(value || 0, {
-                                  currency: 'GBP',
+                                  currency,
                                   style: 'currency',
                                 }),
                               title: intl.formatMessage({

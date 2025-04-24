@@ -1,4 +1,7 @@
-import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import {
+  currencyAtom,
+  currentSchemeAtom,
+} from '#/providers/SchemeProvider/SchemeProvider';
 import hasRolePermission from '#/utils/has-role-permission';
 import {
   faEye,
@@ -83,6 +86,7 @@ const IncidentTable = ({
         model: PermissionModel.Incidents,
       },
     });
+  const currency = useAtomValue(currencyAtom);
 
   return (
     <Table
@@ -134,7 +138,7 @@ const IncidentTable = ({
           key: 'loss',
           render: (value: number) =>
             intl.formatNumber(value || 0, {
-              currency: 'GBP',
+              currency,
               style: 'currency',
             }),
           title: intl.formatMessage({

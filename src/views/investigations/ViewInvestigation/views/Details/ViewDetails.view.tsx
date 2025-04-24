@@ -7,6 +7,7 @@ import type {
   VehicleData,
 } from 'types/DataType';
 
+import { currencyAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import {
   faMagnifyingGlass,
   faPenToSquare,
@@ -39,6 +40,7 @@ import IncidentTable from 'components/tables/IncidentTable';
 import OffenderTable from 'components/tables/OffenderTable/OffenderTable.view';
 import VehicleTable from 'components/tables/VehicleTable';
 import { InvestigationStatus } from 'graphql/types';
+import { useAtomValue } from 'jotai';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router';
@@ -176,6 +178,8 @@ const ViewInvestigation = ({
   const classes = useStyles();
   const navigate = useNavigate();
   const intl = useIntl();
+  const currency = useAtomValue(currencyAtom);
+
   return (
     <>
       <TabContent>
@@ -252,7 +256,7 @@ const ViewInvestigation = ({
                       value={intl.formatNumber(
                         data?.investigation?.totalValue || 0,
                         {
-                          currency: 'GBP',
+                          currency,
                           style: 'currency',
                         }
                       )}
@@ -266,7 +270,7 @@ const ViewInvestigation = ({
                       value={intl.formatNumber(
                         data?.investigation?.totalRecoveredValue || 0,
                         {
-                          currency: 'GBP',
+                          currency,
                           style: 'currency',
                         }
                       )}

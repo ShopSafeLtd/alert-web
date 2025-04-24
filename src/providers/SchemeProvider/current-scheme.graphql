@@ -28,6 +28,7 @@ query CurrentSchemeProvider($where: UserSchemeWhereUniqueInput!) {
             }
         }
         scheme {
+            currency
             activityAssignToUser
             autoPopulateDescription
             defaultPublicOffenderDOB

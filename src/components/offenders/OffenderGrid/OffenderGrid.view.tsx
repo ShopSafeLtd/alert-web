@@ -3,11 +3,13 @@ import type { Theme } from 'configs/ThemeConfig';
 import type { Age, Build, Gender, ImagePosition, Race } from 'graphql/types';
 import type { OffenderData } from 'types/DataType';
 
+import { currencyAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { faEdit, faTrash } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Col, Row, Skeleton, Typography } from 'antd';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import dayjs from 'dayjs';
+import { useAtomValue } from 'jotai';
 import React, { useEffect, useRef, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { createUseStyles } from 'react-jss';
@@ -181,6 +183,7 @@ interface OffenderCardProps {
 const OffenderCard = ({ offender, onOpenOffender }: OffenderCardProps) => {
   const classes = useStyles();
   const intl = useIntl();
+  const currency = useAtomValue(currencyAtom);
 
   const ref = useRef<HTMLDivElement>(null);
 
@@ -261,7 +264,7 @@ const OffenderCard = ({ offender, onOpenOffender }: OffenderCardProps) => {
                   defaultMessage: 'Loss:',
                 })}
                 {intl.formatNumber(offender.totalValue || 0, {
-                  currency: 'GBP',
+                  currency,
                   style: 'currency',
                 })}
               </Typography.Text>
@@ -323,6 +326,7 @@ const OffenderOverlay = ({
     }
   }, [position]);
 
+  const currency = useAtomValue(currencyAtom);
   return open && offender ? (
     <div className={classes.offenderOverlayContainer} ref={ref}>
       <div
@@ -470,7 +474,7 @@ const OffenderOverlay = ({
               <Col>
                 <Typography.Text ellipsis>
                   {intl.formatNumber(offender.totalValue || 0, {
-                    currency: 'GBP',
+                    currency,
                     style: 'currency',
                   })}
                 </Typography.Text>

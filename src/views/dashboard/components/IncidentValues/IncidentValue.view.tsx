@@ -1,4 +1,6 @@
+import { currencyAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { Card, Statistic } from 'antd';
+import { useAtomValue } from 'jotai';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
@@ -10,14 +12,16 @@ const IncidentValue = ({
   loading: boolean;
 }) => {
   const intl = useIntl();
+  const currency = useAtomValue(currencyAtom);
+
   return (
     <Card style={{ height: '100%' }}>
       <Statistic
+        loading={loading}
         title={intl.formatMessage({
           defaultMessage: 'Total Value Lost',
         })}
-        value={intl.formatNumber(data, { style: 'currency', currency: 'GBP' })}
-        loading={loading}
+        value={intl.formatNumber(data, { currency, style: 'currency' })}
       />
     </Card>
   );

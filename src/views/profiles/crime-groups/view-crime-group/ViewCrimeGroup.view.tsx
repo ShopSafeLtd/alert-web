@@ -10,6 +10,7 @@ import type { VehicleData } from 'types/DataType';
 
 import AddDocuments from '#/components/form-components/documents/AddDocuments';
 import AddExistingOffender from '#/components/form-components/offender/AddExistingOffender';
+import { currencyAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import useReportPrint from '#/utils/reportPrint/usePrintReports';
 import {
   faBell,
@@ -51,6 +52,7 @@ import EvidenceTable from 'components/tables/EvidenceTable';
 import IncidentTable from 'components/tables/IncidentTable';
 import InvestigationTable from 'components/tables/InvestigationTable';
 import VehicleTable from 'components/tables/VehicleTable';
+import { useAtomValue } from 'jotai';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import { ProfileUpdatedModel } from 'types/enums/profile-update-type';
@@ -181,6 +183,7 @@ const ViewCrimeGroup = ({
   const classes = useStyles();
   const intl = useIntl();
   const { componentRef, handlePrint, isPrinting } = useReportPrint();
+  const currency = useAtomValue(currencyAtom);
 
   // const optionMenuItems = [
   //   {
@@ -393,7 +396,7 @@ const ViewCrimeGroup = ({
                       value={intl.formatNumber(
                         data?.crimeGroup?.totalValue || 0,
                         {
-                          currency: 'GBP',
+                          currency,
                           style: 'currency',
                         }
                       )}
@@ -407,7 +410,7 @@ const ViewCrimeGroup = ({
                       value={intl.formatNumber(
                         data?.crimeGroup?.totalRecoveredValue || 0,
                         {
-                          currency: 'GBP',
+                          currency,
                           style: 'currency',
                         }
                       )}
