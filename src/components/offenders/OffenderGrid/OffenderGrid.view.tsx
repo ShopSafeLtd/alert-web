@@ -326,6 +326,7 @@ const OffenderOverlay = ({
     }
   }, [position]);
 
+  const currency = useAtomValue(currencyAtom);
   return open && offender ? (
     <div className={classes.offenderOverlayContainer} ref={ref}>
       <div
