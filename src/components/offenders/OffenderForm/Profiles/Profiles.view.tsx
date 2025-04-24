@@ -2,6 +2,7 @@
 import type { ListVehiclesQuery } from 'graphql/vehicles/queries/__generated__/list-vehicles.generated';
 import type { CrimeGroupData, VehicleData } from 'types/DataType';
 
+import { currencyAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import {
   faMagnifyingGlass,
   faPlus,
@@ -20,6 +21,7 @@ import {
   Table,
   Typography,
 } from 'antd';
+import { useAtomValue } from 'jotai';
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 
@@ -65,6 +67,7 @@ const Profiles = ({
   };
 
   const intl = useIntl();
+  const currency = useAtomValue(currencyAtom);
 
   return (
     <div style={{ width: '100%' }}>
@@ -323,7 +326,7 @@ const Profiles = ({
                         render: (value) =>
                           // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
                           intl.formatNumber(value || 0, {
-                            currency: 'GBP',
+                            currency,
                             style: 'currency',
                           }),
                         title: intl.formatMessage({
@@ -336,7 +339,7 @@ const Profiles = ({
                         render: (value) =>
                           // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
                           intl.formatNumber(value || 0, {
-                            currency: 'GBP',
+                            currency,
                             style: 'currency',
                           }),
                         title: intl.formatMessage({

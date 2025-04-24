@@ -5,6 +5,7 @@ import type { ListGoodsTypesQuery } from 'graphql/goods-types/queries/__generate
 import StockItemSelect, {
   type StockItemValue,
 } from '#/components/form-components/StockItemSelect/StockItemSelect.view';
+import { currencyAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { faPlus, faTrash } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -21,6 +22,7 @@ import {
 } from 'antd';
 import Input from 'antd/es/input/Input';
 import { GoodsMode } from 'graphql/types';
+import { useAtomValue } from 'jotai';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
@@ -60,6 +62,8 @@ const IncidentGoods = ({
 }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
+  const currency = useAtomValue(currencyAtom);
+
   // eslint-disable-next-line unicorn/no-array-reduce
   const summary = goods?.reduce(
     (acc, item) => {
@@ -582,7 +586,7 @@ const IncidentGoods = ({
               <FormattedMessage defaultMessage="Total Value" />
             </Title>
             {intl.formatNumber(summary.value || 0, {
-              currency: 'GBP',
+              currency,
               style: 'currency',
             })}
             <Title level={5} style={{ marginBottom: 0 }}>
@@ -591,7 +595,7 @@ const IncidentGoods = ({
             {intl.formatNumber(
               (summary.value || 0) - (summary?.recoveredValue || 0),
               {
-                currency: 'GBP',
+                currency,
                 style: 'currency',
               }
             )}
@@ -600,7 +604,7 @@ const IncidentGoods = ({
               <FormattedMessage defaultMessage="Total Recovered Value" />
             </Title>
             {intl.formatNumber(summary.recoveredValue || 0, {
-              currency: 'GBP',
+              currency,
               style: 'currency',
             })}
           </Col>

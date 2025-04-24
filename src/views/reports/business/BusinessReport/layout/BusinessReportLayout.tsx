@@ -5,6 +5,7 @@ import type {
 import type { TargetedBusinessReportQuery } from 'graphql/reports/queries/__generated__/business-report.generated';
 import type RGL from 'react-grid-layout';
 
+import { currencyAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import {
   faCalendar,
   faChartBar,
@@ -23,6 +24,7 @@ import {
   IncidentsColumns,
   TargetGoodsColumns,
 } from 'components/reports/tableColumns';
+import { useAtomValue } from 'jotai';
 import React, { useMemo } from 'react';
 import { useIntl } from 'react-intl';
 
@@ -72,8 +74,10 @@ const BusinessReport = ({
       rowHeight * targetH + margin[1] * (targetH - 1) - (offset || 0)
     }px`;
   };
+  const currency = useAtomValue(currencyAtom);
 
   const intl = useIntl();
+
   const components: Elements = {
     crimeTypesDonut: (
       <Card
@@ -679,7 +683,7 @@ const BusinessReport = ({
                   ? intl.formatNumber(
                       data?.businessReport?.lossTotals?.totalLostValue || 0,
                       {
-                        currency: 'GBP',
+                        currency,
                         style: 'currency',
                       }
                     )
@@ -706,7 +710,7 @@ const BusinessReport = ({
                       data?.businessReport?.lossTotals?.totalRecoveredValue ||
                         0,
                       {
-                        currency: 'GBP',
+                        currency,
                         style: 'currency',
                       }
                     )
@@ -745,7 +749,7 @@ const BusinessReport = ({
               value={intl.formatNumber(
                 data?.businessReport?.lossTotals?.averagePerIncident || 0,
                 {
-                  currency: 'GBP',
+                  currency,
                   style: 'currency',
                 }
               )}

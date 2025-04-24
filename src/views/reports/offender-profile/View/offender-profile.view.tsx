@@ -1,6 +1,7 @@
 import type { OffenderProfileQuery } from 'graphql/reports/queries/__generated__/offender-profile.generated';
 
 import ReportsSideMenu from '#/components/reports/ReportsSideMenu/ReportsSideMenu.view';
+import { currencyAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import publicOffenderDob from '#/utils/public-offender-dob';
 import { faDownload } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -23,6 +24,7 @@ import WatermarkImage from 'components/images/WatermarkImage.view';
 import OffenderSideList from 'components/offenders/OffenderSideList';
 import dayjs from 'dayjs';
 import { Age, Build, Gender, Race } from 'graphql/types';
+import { useAtomValue } from 'jotai';
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useStoreState } from 'state';
@@ -50,6 +52,7 @@ const OffenderProfile = ({
   const publicOffenderDOB = publicOffenderDob();
   const intl = useIntl();
   const [collapsed, setCollapsed] = useState(true);
+  const currency = useAtomValue(currencyAtom);
 
   return (
     <Row wrap={false}>
@@ -264,7 +267,7 @@ const OffenderProfile = ({
                         value={intl.formatNumber(
                           offenderProfileData?.offender?.totalValue || 0,
                           {
-                            currency: 'GBP',
+                            currency,
                             style: 'currency',
                           }
                         )}
@@ -281,7 +284,7 @@ const OffenderProfile = ({
                           offenderProfileData?.offender?.totalRecoveredValue ||
                             0,
                           {
-                            currency: 'GBP',
+                            currency,
                             style: 'currency',
                           }
                         )}
@@ -483,7 +486,7 @@ const OffenderProfile = ({
                         key: 'value',
                         render: (value: string) =>
                           intl.formatNumber(Number.parseInt(value || '0', 10), {
-                            currency: 'GBP',
+                            currency,
                             style: 'currency',
                           }),
                         title: intl.formatMessage({
@@ -495,7 +498,7 @@ const OffenderProfile = ({
                         key: 'recoveredValue',
                         render: (value: string) =>
                           intl.formatNumber(Number.parseInt(value || '0', 10), {
-                            currency: 'GBP',
+                            currency,
                             style: 'currency',
                           }),
                         title: intl.formatMessage({
@@ -753,7 +756,7 @@ const OffenderProfile = ({
                         key: 'lost',
                         render: (value: number) =>
                           intl.formatNumber(value || 0, {
-                            currency: 'GBP',
+                            currency,
                             style: 'currency',
                           }),
                         title: intl.formatMessage({
@@ -765,7 +768,7 @@ const OffenderProfile = ({
                         key: 'recovered',
                         render: (value: number) =>
                           intl.formatNumber(value || 0, {
-                            currency: 'GBP',
+                            currency,
                             style: 'currency',
                           }),
                         title: intl.formatMessage({
@@ -777,7 +780,7 @@ const OffenderProfile = ({
                         key: 'successRate',
                         render: (value: number) =>
                           intl.formatNumber(value || 0, {
-                            currency: 'GBP',
+                            currency,
                             style: 'currency',
                           }),
                         title: intl.formatMessage({
@@ -789,7 +792,7 @@ const OffenderProfile = ({
                         key: 'avgLost',
                         render: (value: number) =>
                           intl.formatNumber(value || 0, {
-                            currency: 'GBP',
+                            currency,
                             style: 'currency',
                           }),
                         title: intl.formatMessage({

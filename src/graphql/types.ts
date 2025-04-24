@@ -3937,6 +3937,35 @@ export enum CsvType {
   Vehicle = 'VEHICLE'
 }
 
+export enum Currency {
+  Aud = 'AUD',
+  Brl = 'BRL',
+  Cad = 'CAD',
+  Chf = 'CHF',
+  Cny = 'CNY',
+  Dkk = 'DKK',
+  Eur = 'EUR',
+  Gbp = 'GBP',
+  Hkd = 'HKD',
+  Idr = 'IDR',
+  Inr = 'INR',
+  Jpy = 'JPY',
+  Krw = 'KRW',
+  Mxn = 'MXN',
+  Myr = 'MYR',
+  Nok = 'NOK',
+  Nzd = 'NZD',
+  Php = 'PHP',
+  Rub = 'RUB',
+  Sek = 'SEK',
+  Sgd = 'SGD',
+  Thb = 'THB',
+  Try = 'TRY',
+  Usd = 'USD',
+  Vnd = 'VND',
+  Zar = 'ZAR'
+}
+
 export type CustomGallery = {
   __typename?: 'CustomGallery';
   createdAt: Scalars['Date'];
@@ -17083,6 +17112,7 @@ export type Scheme = {
   creationBreakdown: CreationBreakdown;
   crimeGroups: Array<CrimeGroup>;
   csvImports: Array<CsvImport>;
+  currency: Currency;
   currentTerms?: Maybe<TermsAndCondition>;
   customGalleries: Array<CustomGallery>;
   customTranslations: Array<Scalars['JSON']>;

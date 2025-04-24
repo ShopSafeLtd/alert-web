@@ -19,6 +19,7 @@ import PermissionCheckWrapper from '#/components/PermissionCheck/PermissionCheck
 import ShareData from '#/components/form-components/ShareData/ShareData';
 import AddDocuments from '#/components/form-components/documents/AddDocuments';
 import IncidentTable from '#/components/tables/IncidentTable';
+import { currencyAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import useReportPrint from '#/utils/reportPrint/usePrintReports';
 import AiDetailsView from '#/views/profiles/offenders/ViewOffender/components/AiDetails.view';
 import OffenderAiDrawer from '#/views/profiles/offenders/ViewOffender/components/AiDrawer/AiDrawer.view';
@@ -102,6 +103,7 @@ import InvestigationTable from 'components/tables/InvestigationTable';
 import VehicleTable from 'components/tables/VehicleTable';
 import dayjs from 'dayjs';
 import { BanType, PermissionMethod, PermissionModel } from 'graphql/types';
+import { useAtomValue } from 'jotai';
 import React, { type Dispatch } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router';
@@ -384,7 +386,7 @@ const ViewOffender = ({
   const classes = useStyles();
   const navigate = useNavigate();
   const { componentRef, handlePrint, isPrinting } = useReportPrint();
-
+  const currency = useAtomValue(currencyAtom);
   const expandedRowRender = (record: TableItem) => (
     <Text style={{ fontSize: 14, margin: 0, padding: 0 }}>
       {intl.formatMessage(
@@ -1599,7 +1601,7 @@ const ViewOffender = ({
                                     ban.fineValue === 0
                                       ? ''
                                       : intl.formatNumber(ban.fineValue || 0, {
-                                          currency: 'GBP',
+                                          currency,
                                           style: 'currency',
                                         }),
                                   key: ban.id,

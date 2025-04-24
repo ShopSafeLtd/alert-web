@@ -6,7 +6,7 @@ import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import { useStoreActions } from '#/state';
 import { defaultAdminLayout, defaultUserLayout } from '#/state/dashboard-model';
 import { LocalStorageKeys } from '#/types';
-import { GoodsMode, Role } from 'graphql/types';
+import { Currency, GoodsMode, Role } from 'graphql/types';
 import { atom, useAtomValue, useSetAtom } from 'jotai/index';
 import { useEffect } from 'react';
 
@@ -17,8 +17,42 @@ export const CURRENT_SCHEME = 'CURRENT_USER_SCHEME_ID';
 interface Props {
   children: JSX.Element;
 }
-
+export const CurrencyCodeMap: Record<Currency, string> = {
+  [Currency.Aud]: 'AUD',
+  [Currency.Brl]: 'BRL',
+  [Currency.Cad]: 'CAD',
+  [Currency.Chf]: 'CHF',
+  [Currency.Cny]: 'CNY',
+  [Currency.Dkk]: 'DKK',
+  [Currency.Eur]: 'EUR',
+  [Currency.Gbp]: 'GBP',
+  [Currency.Hkd]: 'HKD',
+  [Currency.Idr]: 'IDR',
+  [Currency.Inr]: 'INR',
+  [Currency.Jpy]: 'JPY',
+  [Currency.Krw]: 'KRW',
+  [Currency.Mxn]: 'MXN',
+  [Currency.Myr]: 'MYR',
+  [Currency.Nok]: 'NOK',
+  [Currency.Nzd]: 'NZD',
+  [Currency.Php]: 'PHP',
+  [Currency.Rub]: 'RUB',
+  [Currency.Sek]: 'SEK',
+  [Currency.Sgd]: 'SGD',
+  [Currency.Thb]: 'THB',
+  [Currency.Try]: 'TRY',
+  [Currency.Usd]: 'USD',
+  [Currency.Vnd]: 'VND',
+  [Currency.Zar]: 'ZAR',
+};
 export const settingSchemeAtom = atom(true);
+export const currencyAtom = atom((get) => {
+  const { scheme } = get(currentUserSchemeAtom);
+  const currencyEnum = scheme?.currency as Currency | undefined;
+
+  return currencyEnum ? CurrencyCodeMap[currencyEnum] : 'GBP'; // fallback if needed
+});
+
 export const stateIsSetAtom = atom(false);
 export const currentUserSchemeIdAtom = atom<null | string>(null);
 export const defaultCurrentUserSchemeAtom: UserSchemeState = {
@@ -35,6 +69,7 @@ export const defaultCurrentUserSchemeAtom: UserSchemeState = {
     allowTodoTemplateOverride: true,
     autoPopulateDescription: false,
     connectedToSchemes: [],
+    currency: Currency.Gbp,
     darkLogo: null,
     defaultPublicOffenderDOB: false,
     disableGalleryOnNative: false,

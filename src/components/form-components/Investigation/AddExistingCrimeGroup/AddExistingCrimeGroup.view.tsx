@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call,@typescript-eslint/restrict-template-expressions,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-argument */
 import type { ListCrimeGroupsQuery } from 'graphql/crime-groups/queries/__generated__/list-crime-groups.generated';
 
+import { currencyAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { Button, Col, Input, Row, Table } from 'antd';
+import { useAtomValue } from 'jotai';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
@@ -27,6 +29,7 @@ const AddExistingCrimeGroup = ({
   setSearch,
 }: Props): JSX.Element => {
   const intl = useIntl();
+  const currency = useAtomValue(currencyAtom);
 
   return (
     <div className="add-existing-offender">
@@ -78,7 +81,7 @@ const AddExistingCrimeGroup = ({
             key: 'totalValue',
             render: (value) =>
               intl.formatNumber(value || 0, {
-                currency: 'GBP',
+                currency,
                 style: 'currency',
               }),
             title: intl.formatMessage({
@@ -90,7 +93,7 @@ const AddExistingCrimeGroup = ({
             key: 'totalRecoveredValue',
             render: (value) =>
               intl.formatNumber(value || 0, {
-                currency: 'GBP',
+                currency,
                 style: 'currency',
               }),
             title: intl.formatMessage({

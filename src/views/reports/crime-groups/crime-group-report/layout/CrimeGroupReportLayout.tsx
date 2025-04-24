@@ -7,6 +7,7 @@ import type {
 import type { CrimeGroupReportQuery } from 'graphql/reports/queries/__generated__/crime-group-report.generated';
 import type RGL from 'react-grid-layout';
 
+import { currencyAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import {
   faCalendar,
   faChartBar,
@@ -33,6 +34,7 @@ import {
   TargetGoodsColumns,
   TargetedBusinessColumns,
 } from 'components/reports/tableColumns';
+import { useAtomValue } from 'jotai/index';
 import React, { useMemo } from 'react';
 import { useIntl } from 'react-intl';
 import { shouldPrint } from 'utils';
@@ -86,6 +88,9 @@ const CrimeGroupReport = ({
       rowHeight * targetH + margin[1] * (targetH - 1) - (offset || 0)
     }px`;
   };
+
+  const currency = useAtomValue(currencyAtom);
+
   const intl = useIntl();
   const components: Elements = {
     crimeTypesByOffender: (
@@ -586,7 +591,7 @@ const CrimeGroupReport = ({
                   ? intl.formatNumber(
                       data?.crimeGroupReport?.lossTotals?.totalLostValue || 0,
                       {
-                        currency: 'GBP',
+                        currency,
                         style: 'currency',
                       }
                     )
@@ -613,7 +618,7 @@ const CrimeGroupReport = ({
                       data?.crimeGroupReport?.lossTotals?.totalRecoveredValue ||
                         0,
                       {
-                        currency: 'GBP',
+                        currency,
                         style: 'currency',
                       }
                     )
@@ -652,7 +657,7 @@ const CrimeGroupReport = ({
               value={intl.formatNumber(
                 data?.crimeGroupReport?.lossTotals?.averagePerIncident || 0,
                 {
-                  currency: 'GBP',
+                  currency,
                   style: 'currency',
                 }
               )}
