@@ -1,7 +1,9 @@
 import type { ListCrimeGroupsQuery } from 'graphql/crime-groups/queries/__generated__/list-crime-groups.generated';
 
 import ReportsSideMenu from '#/components/reports/ReportsSideMenu/ReportsSideMenu.view';
+import { currencyAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { Col, Input, Row, Table } from 'antd';
+import { useAtomValue } from 'jotai';
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { Link, useParams } from 'react-router-dom';
@@ -20,6 +22,7 @@ const ListCrimeGroups = ({ data, loading, search, setSearch }: Props) => {
   const intl = useIntl();
   const [collapsed, setCollapsed] = useState(false);
   const { reportId } = useParams();
+  const currency = useAtomValue(currencyAtom);
 
   return (
     <Row>
@@ -89,7 +92,7 @@ const ListCrimeGroups = ({ data, loading, search, setSearch }: Props) => {
               key: 'totalValue',
               render: (value: number | undefined) =>
                 intl.formatNumber(value || 0, {
-                  currency: 'GBP',
+                  currency,
                   style: 'currency',
                 }),
 
@@ -102,7 +105,7 @@ const ListCrimeGroups = ({ data, loading, search, setSearch }: Props) => {
               key: 'totalRecoveredValue',
               render: (value: number | undefined) =>
                 intl.formatNumber(value || 0, {
-                  currency: 'GBP',
+                  currency,
                   style: 'currency',
                 }),
               title: intl.formatMessage({

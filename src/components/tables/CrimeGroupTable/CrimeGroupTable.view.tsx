@@ -1,5 +1,6 @@
 import type { CrimeGroupCardData } from 'types/DataType';
 
+import { currencyAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import {
   faEye,
   faPenToSquare,
@@ -7,6 +8,7 @@ import {
 } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Col, Popconfirm, Row, Table, Tooltip, Typography } from 'antd';
+import { useAtomValue } from 'jotai';
 import React from 'react';
 // import type { ColumnsType } from 'antd/es/table/interface';
 import { FormattedMessage, useIntl } from 'react-intl';
@@ -121,6 +123,7 @@ const CrimeGroupTable = ({
   const classes = useStyles();
 
   const intl = useIntl();
+  const currency = useAtomValue(currencyAtom);
 
   return (
     // <Table<CrimeGroupsTable>
@@ -165,7 +168,7 @@ const CrimeGroupTable = ({
           key: 'totalValue',
           render: (value: number) =>
             intl.formatNumber(value || 0, {
-              currency: 'GBP',
+              currency,
               style: 'currency',
             }),
           title: <FormattedMessage defaultMessage="Total Value" />,

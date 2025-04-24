@@ -26,6 +26,7 @@ import type { CustomQuestion, Image, LocationData } from 'types/DataType';
 import { useGroupsContext } from '#/context/groups-context';
 import { sessionIdAtom } from '#/hooks/useManageSession';
 import {
+  currencyAtom,
   currentPermissionsAtom,
   currentSchemeAtom,
   currentSchemeBusinessesAtom,
@@ -267,6 +268,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
         model: PermissionModel.Incidents,
       },
     });
+  const currency = useAtomValue(currencyAtom);
 
   const formBusiness = Form.useWatch('business', form);
 
@@ -1233,7 +1235,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
                         (a, b) => (a || 0) + (b || 0)
                       ) || 0,
                       {
-                        currency: 'GBP',
+                        currency,
                         style: 'currency',
                       }
                     )
@@ -1247,7 +1249,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
                   ? intl.formatNumber(
                       goodsWithValue.reduce((a, b) => (a || 0) + (b || 0)) || 0,
                       {
-                        currency: 'GBP',
+                        currency,
                         style: 'currency',
                       }
                     )

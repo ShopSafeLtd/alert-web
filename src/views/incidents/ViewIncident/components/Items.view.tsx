@@ -5,7 +5,10 @@ import type { UpdateIncidentGoodsMutation } from 'graphql/incidents/mutations/up
 
 import AddGoods from '#/components/form-components/incident/goods/AddGoods';
 import EditGoods from '#/components/form-components/incident/goods/EditGoods';
-import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import {
+  currencyAtom,
+  currentSchemeAtom,
+} from '#/providers/SchemeProvider/SchemeProvider';
 import {
   ProfileUpdatedModel,
   ProfileUpdatedType,
@@ -62,6 +65,7 @@ const Items = ({
   const goodsMode = useAtomValue(currentSchemeAtom)?.goodsMode;
   const [editGoodsData, setEditGoodsData] = useState<GoodsData | null>(null);
   const [addGoods, setAddGoods] = useState(false);
+  const currency = useAtomValue(currencyAtom);
 
   const [updateIncidentGoods] = useUpdateIncidentGoodsMutation({
     onError: () => {
@@ -299,7 +303,7 @@ const Items = ({
                       key: 'value',
                       render: (value: number) =>
                         intl.formatNumber(value, {
-                          currency: 'GBP',
+                          currency,
                           style: 'currency',
                         }),
                       title: intl.formatMessage({
@@ -311,7 +315,7 @@ const Items = ({
                       key: 'recoveredValue',
                       render: (value: number) =>
                         intl.formatNumber(value, {
-                          currency: 'GBP',
+                          currency,
                           style: 'currency',
                         }),
                       title: intl.formatMessage({
@@ -323,7 +327,7 @@ const Items = ({
                       key: 'itemTotal',
                       render: (value: number) =>
                         intl.formatNumber(value, {
-                          currency: 'GBP',
+                          currency,
                           style: 'currency',
                         }),
                       title: intl.formatMessage({
@@ -430,7 +434,7 @@ const Items = ({
                       key: 'value',
                       render: (value: number) =>
                         intl.formatNumber(value, {
-                          currency: 'GBP',
+                          currency,
                           style: 'currency',
                         }),
                       title: intl.formatMessage({
@@ -456,7 +460,7 @@ const Items = ({
                       key: 'itemTotal',
                       render: (value: number) =>
                         intl.formatNumber(value, {
-                          currency: 'GBP',
+                          currency,
                           style: 'currency',
                         }),
                       title: intl.formatMessage({
@@ -513,19 +517,19 @@ const Items = ({
                   </Table.Summary.Cell>
                   <Table.Summary.Cell index={3}>
                     {intl.formatNumber(value, {
-                      currency: 'GBP',
+                      currency,
                       style: 'currency',
                     })}
                   </Table.Summary.Cell>
                   <Table.Summary.Cell index={4}>
                     {intl.formatNumber(totalRecoveredValue, {
-                      currency: 'GBP',
+                      currency,
                       style: 'currency',
                     })}
                   </Table.Summary.Cell>
                   <Table.Summary.Cell index={5}>
                     {intl.formatNumber(totalValue, {
-                      currency: 'GBP',
+                      currency,
                       style: 'currency',
                     })}
                   </Table.Summary.Cell>
@@ -546,7 +550,7 @@ const Items = ({
                   </Table.Summary.Cell>
                   <Table.Summary.Cell index={5}>
                     {intl.formatNumber(totalValue, {
-                      currency: 'GBP',
+                      currency,
                       style: 'currency',
                     })}
                   </Table.Summary.Cell>

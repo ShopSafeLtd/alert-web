@@ -2,9 +2,11 @@ import type { BusinessLossRecoveredGraphQueryVariables } from '#/components/repo
 import type { AgChartOptions } from 'ag-charts-community';
 
 import { useBusinessLossRecoveredGraphQuery } from '#/components/reports/components/BusinessLossRecoveredGraph/__generated__/BusinessLossRecoveredGraph.generated';
+import { currencyAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { faTrash } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button } from 'antd';
+import { useAtomValue } from 'jotai';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
@@ -30,6 +32,7 @@ const BusinessLossRecoveredGraph = ({
   const { data } = useBusinessLossRecoveredGraphQuery({
     variables,
   });
+  const currency = useAtomValue(currencyAtom);
 
   const options: AgChartOptions = {
     annotations: {
@@ -177,7 +180,7 @@ const BusinessLossRecoveredGraph = ({
               field: 'value',
               valueFormatter: ({ value }: { value: number }) =>
                 intl.formatNumber(value || 0, {
-                  currency: 'GBP',
+                  currency,
                   style: 'currency',
                 }),
             },
@@ -185,7 +188,7 @@ const BusinessLossRecoveredGraph = ({
               field: 'loss',
               valueFormatter: ({ value }: { value: number }) =>
                 intl.formatNumber(value || 0, {
-                  currency: 'GBP',
+                  currency,
                   style: 'currency',
                 }),
             },

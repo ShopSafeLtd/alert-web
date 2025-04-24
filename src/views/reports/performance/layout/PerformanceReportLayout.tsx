@@ -18,6 +18,7 @@ import TargetedBusinessTable from '#/components/reports/components/TargetedBusin
 import UserIncidentCountGraph from '#/components/reports/components/UserIncidentCountGraph/UserIncidentCountGraph';
 import TotalUserSessionsGraph from '#/components/reports/components/UserSessionsGraph/TotalUserSessionsGraph';
 import Graph from '#/components/reports/graphs/graph';
+import { currencyAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import ActivitiesGraphView from '#/views/reports/performance/ActivitesGraph/ActivitiesGraph';
 import ActivitiesTable from '#/views/reports/performance/ActivitesTable/ActivitiesTable';
 import ActivitySummary from '#/views/reports/performance/ActivitiesReports/summary/ActivitySummary';
@@ -64,6 +65,7 @@ import {
   TargetGoodsColumns,
 } from 'components/reports/tableColumns';
 import { LanguageCode } from 'graphql/types';
+import { useAtomValue } from 'jotai';
 import React, { useMemo } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router';
@@ -163,6 +165,7 @@ const PerformanceReportLayout = ({
       rowHeight * targetH + margin[1] * (targetH - 1) - (offset || 0)
     }px`;
   };
+  const currency = useAtomValue(currencyAtom);
 
   const intl = useIntl();
   const navigate = useNavigate();
@@ -945,7 +948,7 @@ const PerformanceReportLayout = ({
                       ? intl.formatNumber(
                           data?.performanceReport?.lossTotals?.totalLostValue ||
                             0,
-                          { currency: 'GBP', style: 'currency' }
+                          { currency, style: 'currency' }
                         )
                       : intl.formatMessage({
                           defaultMessage: '--',
@@ -969,7 +972,7 @@ const PerformanceReportLayout = ({
                       ? intl.formatNumber(
                           data?.performanceReport?.lossTotals
                             ?.totalRecoveredValue || 0,
-                          { currency: 'GBP', style: 'currency' }
+                          { currency, style: 'currency' }
                         )
                       : intl.formatMessage({
                           defaultMessage: '--',
@@ -995,7 +998,7 @@ const PerformanceReportLayout = ({
                             ?.totalLostValue || 0) -
                             (data?.performanceReport?.lossTotals
                               ?.totalRecoveredValue || 0),
-                          { currency: 'GBP', style: 'currency' }
+                          { currency, style: 'currency' }
                         )
                       : intl.formatMessage({
                           defaultMessage: '--',
@@ -1033,7 +1036,7 @@ const PerformanceReportLayout = ({
                     data?.performanceReport?.lossTotals?.averagePerIncident ||
                       0,
                     {
-                      currency: 'GBP',
+                      currency,
                       style: 'currency',
                     }
                   )}
@@ -1053,7 +1056,7 @@ const PerformanceReportLayout = ({
                     data?.performanceReport?.lossTotals
                       ?.averageLossPerIncident || 0,
                     {
-                      currency: 'GBP',
+                      currency,
                       style: 'currency',
                     }
                   )}
@@ -1634,7 +1637,7 @@ const PerformanceReportLayout = ({
                       sectorLabel: {
                         formatter: ({ value }: { value: number }) =>
                           intl.formatNumber(value || 0, {
-                            currency: 'GBP',
+                            currency,
                             style: 'currency',
                           }),
                       },
@@ -1657,7 +1660,7 @@ const PerformanceReportLayout = ({
                       field: 'count',
                       valueFormatter: ({ value }: { value: number }) =>
                         intl.formatNumber(value || 0, {
-                          currency: 'GBP',
+                          currency,
                           style: 'currency',
                         }),
                     },
@@ -1707,7 +1710,7 @@ const PerformanceReportLayout = ({
                       cellRenderer: (value) =>
                         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
                         intl.formatNumber(value || 0, {
-                          currency: 'GBP',
+                          currency,
                           style: 'currency',
                         }),
                       field: 'count',

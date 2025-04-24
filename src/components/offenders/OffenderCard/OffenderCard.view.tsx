@@ -2,6 +2,7 @@ import type { CarouselRef } from 'antd/lib/carousel';
 import type { OffenderCardFragment } from 'graphql/fragments/__generated__/offender-card.generated';
 import type { EditFeedImage } from 'types/DataType';
 
+import { currencyAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import hasRolePermission from '#/utils/has-role-permission';
 import {
   faEdit,
@@ -44,6 +45,7 @@ import KnowOffender from 'components/form-components/offender/KnowOffender';
 import SkeletonImage from 'components/images/SkeletonImage.view';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import { PermissionMethod, PermissionModel } from 'graphql/types';
+import { useAtomValue } from 'jotai';
 import React, { useRef } from 'react';
 import { useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
@@ -98,6 +100,7 @@ const OffenderCard = ({
   const classes = useStyles();
   const imagesRef = useRef<CarouselRef>(null);
   const intl = useIntl();
+  const currency = useAtomValue(currencyAtom);
 
   const menuItems = [
     {
@@ -376,7 +379,7 @@ const OffenderCard = ({
                         <Col>
                           <Text>
                             {intl.formatNumber(offender.totalValue ?? 0, {
-                              currency: 'GBP',
+                              currency,
                               style: 'currency',
                             })}
                           </Text>
@@ -703,7 +706,7 @@ const OffenderCard = ({
                         <Col>
                           <Text>
                             {intl.formatNumber(offender.totalValue ?? 0, {
-                              currency: 'GBP',
+                              currency,
                               style: 'currency',
                             })}
                           </Text>
