@@ -1,8 +1,10 @@
 import type { ListGoodsTypesQuery } from '#/graphql/goods-types/queries/__generated__/list-goods-types.generated';
 import type { GoodsData } from 'types/DataType';
 
+import { currencySymbolAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { Button, Col, Form, Input, InputNumber, Row, Select } from 'antd';
 import { GoodsMode } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
@@ -30,7 +32,7 @@ const EditGoods = ({
 
   const value = Form.useWatch('value', form);
   const quantity = Form.useWatch('quantity', form);
-
+  const { prefix } = useAtomValue(currencySymbolAtom);
   return (
     <Form<GoodsData>
       initialValues={{
@@ -105,8 +107,7 @@ const EditGoods = ({
                 disabled={saving}
                 min={0}
                 precision={2}
-                // TODO change
-                prefix="£"
+                prefix={prefix}
                 style={{ width: '100%' }}
               />
             </Form.Item>
@@ -134,8 +135,7 @@ const EditGoods = ({
                 max={value ?? undefined}
                 min={0}
                 precision={2}
-                // TODO change
-                prefix="£"
+                prefix={prefix}
                 style={{ width: '100%' }}
               />
             </Form.Item>
@@ -210,8 +210,7 @@ const EditGoods = ({
                 disabled={saving}
                 min={0}
                 precision={2}
-                // TODO change
-                prefix="£"
+                prefix={prefix}
                 style={{ width: '100%' }}
               />
             </Form.Item>
@@ -239,8 +238,7 @@ const EditGoods = ({
                 max={value ?? undefined}
                 min={0}
                 precision={2}
-                // TODO change
-                prefix="£"
+                prefix={prefix}
                 style={{ width: '100%' }}
               />
             </Form.Item>
