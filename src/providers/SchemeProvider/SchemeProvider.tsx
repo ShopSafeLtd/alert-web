@@ -45,12 +45,52 @@ export const CurrencyCodeMap: Record<Currency, string> = {
   [Currency.Vnd]: 'VND',
   [Currency.Zar]: 'ZAR',
 };
+
+export const CurrencySymbolMap: Record<
+  Currency,
+  { prefix: string; suffix: string }
+> = {
+  [Currency.Aud]: { prefix: 'A$', suffix: '' },
+  [Currency.Brl]: { prefix: 'R$', suffix: '' },
+  [Currency.Cad]: { prefix: 'C$', suffix: '' },
+  [Currency.Chf]: { prefix: 'CHF', suffix: '' },
+  [Currency.Cny]: { prefix: '¥', suffix: 'RMB' },
+  [Currency.Dkk]: { prefix: 'kr', suffix: ' DKK' },
+  [Currency.Eur]: { prefix: '€', suffix: '' },
+  [Currency.Gbp]: { prefix: '£', suffix: '' },
+  [Currency.Hkd]: { prefix: 'HK$', suffix: '' },
+  [Currency.Idr]: { prefix: 'Rp', suffix: '' },
+  [Currency.Inr]: { prefix: '₹', suffix: '' },
+  [Currency.Jpy]: { prefix: '¥', suffix: '' },
+  [Currency.Krw]: { prefix: '₩', suffix: '' },
+  [Currency.Mxn]: { prefix: '$', suffix: ' MXN' },
+  [Currency.Myr]: { prefix: 'RM', suffix: '' },
+  [Currency.Nok]: { prefix: 'kr', suffix: ' NOK' },
+  [Currency.Nzd]: { prefix: 'NZ$', suffix: '' },
+  [Currency.Php]: { prefix: '₱', suffix: '' },
+  [Currency.Rub]: { prefix: '₽', suffix: '' },
+  [Currency.Sek]: { prefix: 'kr', suffix: ' SEK' },
+  [Currency.Sgd]: { prefix: 'S$', suffix: '' },
+  [Currency.Thb]: { prefix: '฿', suffix: '' },
+  [Currency.Try]: { prefix: '₺', suffix: '' },
+  [Currency.Usd]: { prefix: '$', suffix: '' },
+  [Currency.Vnd]: { prefix: '₫', suffix: '' },
+  [Currency.Zar]: { prefix: 'R', suffix: '' },
+};
+
 export const settingSchemeAtom = atom(true);
 export const currencyAtom = atom((get) => {
   const { scheme } = get(currentUserSchemeAtom);
-  const currencyEnum = scheme?.currency as Currency | undefined;
+  const currencyEnum = scheme?.currency || Currency.Gbp;
 
-  return currencyEnum ? CurrencyCodeMap[currencyEnum] : 'GBP'; // fallback if needed
+  return CurrencyCodeMap[currencyEnum];
+});
+
+export const currencySymbolAtom = atom((get) => {
+  const { scheme } = get(currentUserSchemeAtom);
+  const currencyEnum = scheme?.currency || Currency.Gbp;
+
+  return CurrencySymbolMap[currencyEnum];
 });
 
 export const stateIsSetAtom = atom(false);

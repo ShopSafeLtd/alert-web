@@ -6,7 +6,10 @@ import BusinessesSelect from '#/components/form-components/BusinessesSelect/Busi
 import RoleSelect from '#/components/form-components/Roles/RoleSelect';
 import UsersManySelect from '#/components/form-components/UsersSelect/UsersSelectFetchMore.view';
 import DatePicker from '#/components/util-components/DatePicker';
-import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import {
+  currencySymbolAtom,
+  currentSchemeIdAtom,
+} from '#/providers/SchemeProvider/SchemeProvider';
 import {
   Button,
   Card,
@@ -148,6 +151,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
   const typeWatch = Form.useWatch('workflowMode', form);
   const workflowTypeWatch = Form.useWatch('workflowType', form);
   const schemeId = useAtomValue(currentSchemeIdAtom);
+  const { prefix } = useAtomValue(currencySymbolAtom);
 
   if (loading)
     return (
@@ -581,7 +585,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                               >
                                 <InputNumber
                                   min={0}
-                                  prefix="£"
+                                  prefix={prefix}
                                   style={{ width: '100%' }}
                                 />
                               </Form.Item>
@@ -625,7 +629,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                               >
                                 <InputNumber
                                   min={0}
-                                  prefix="£"
+                                  prefix={prefix}
                                   style={{ width: '100%' }}
                                 />
                               </Form.Item>
