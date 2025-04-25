@@ -5,7 +5,10 @@ import type { ListGoodsTypesQuery } from 'graphql/goods-types/queries/__generate
 import StockItemSelect, {
   type StockItemValue,
 } from '#/components/form-components/StockItemSelect/StockItemSelect.view';
-import { currencyAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import {
+  currencyAtom,
+  currencySymbolAtom,
+} from '#/providers/SchemeProvider/SchemeProvider';
 import { faPlus, faTrash } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -88,6 +91,7 @@ const IncidentGoods = ({
     },
     { recoveredValue: 0, value: 0 }
   );
+  const { prefix } = useAtomValue(currencySymbolAtom);
 
   return (
     <Card className={classes.card}>
@@ -293,8 +297,7 @@ const IncidentGoods = ({
                           <InputNumber
                             min={0}
                             precision={2}
-                            // TODO fix
-                            prefix="£"
+                            prefix={prefix}
                             style={{ width: 150 }}
                           />
                         </Form.Item>
@@ -327,8 +330,7 @@ const IncidentGoods = ({
                             max={goods[index]?.value ?? undefined}
                             min={0}
                             precision={2}
-                            // TODO fix
-                            prefix="£"
+                            prefix={prefix}
                             style={{ width: 150 }}
                           />
                         </Form.Item>
@@ -415,8 +417,8 @@ const IncidentGoods = ({
                         >
                           <InputNumber
                             min={0}
-                            // prefix="£"
                             precision={2}
+                            prefix={prefix}
                             style={{ width: 150 }}
                           />
                         </Form.Item>

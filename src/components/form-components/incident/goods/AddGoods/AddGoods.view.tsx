@@ -4,9 +4,11 @@ import type { GoodsData } from 'types/DataType';
 import StockItemSelect, {
   type StockItemValue,
 } from '#/components/form-components/StockItemSelect/StockItemSelect.view';
+import { currencySymbolAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { Button, Col, Form, InputNumber, Row, Select } from 'antd';
 import Input from 'antd/es/input/Input';
 import { GoodsMode } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
@@ -38,7 +40,7 @@ const AddGoods = ({
   };
 
   const stockItem = Form.useWatch<string | undefined>('stockItemId', form);
-
+  const { prefix } = useAtomValue(currencySymbolAtom);
   return (
     <Form<GoodsData> form={form} layout="vertical" onFinish={onSubmit}>
       {goodsMode === GoodsMode.Generic && (
@@ -97,8 +99,7 @@ const AddGoods = ({
               <InputNumber
                 min={0}
                 precision={2}
-                // TODO change
-                prefix="£"
+                prefix={prefix}
                 style={{ width: '100%' }}
               />
             </Form.Item>
@@ -124,8 +125,7 @@ const AddGoods = ({
               <InputNumber
                 min={0}
                 precision={2}
-                // TODO change
-                prefix="£"
+                prefix={prefix}
                 style={{ width: '100%' }}
               />
             </Form.Item>
@@ -217,8 +217,8 @@ const AddGoods = ({
               <InputNumber
                 disabled={stockItem === undefined}
                 min={0}
-                // prefix="£"
                 precision={2}
+                prefix={prefix}
                 style={{ width: 150 }}
               />
             </Form.Item>
