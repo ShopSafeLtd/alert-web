@@ -60,7 +60,7 @@ const ActivitiesTable = ({
       skip: (page - 1) * pageSize,
       take: pageSize,
       where: {
-        // createdAt: filters.dateRange,
+        createdAt: filters.dateRange,
         groupIds:
           filters.selectedGroups.length > 0
             ? filters.selectedGroups
