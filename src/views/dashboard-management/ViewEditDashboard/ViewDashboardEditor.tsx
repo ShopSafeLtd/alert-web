@@ -351,52 +351,7 @@ const ViewDashboardEditor = () => {
       </div>
     );
   return (
-    <div
-      className="feed-container"
-      style={{
-        height: '100vh',
-        // overflow: 'hidden',
-        padding: 15,
-        paddingTop: 0,
-      }}
-    >
-      {marquee ? (
-        <Marquee autoFill>
-          {marquee}
-          <div style={{ width: 200 }} />
-        </Marquee>
-      ) : null}
-      <DashboardSelectorDrawer
-        droppingItem={droppingItem}
-        layout={layout}
-        setDroppingItem={setDroppingItem}
-      />
-      <ReactGridLayout
-        autoSize={true}
-        containerPadding={[0, 0]}
-        droppingItem={droppingItem}
-        isBounded={true}
-        isDraggable
-        isDroppable
-        isResizable
-        layout={layout}
-        margin={[0, 0]}
-        onDrop={onDrop}
-        onLayoutChange={(e) =>
-          setLayout(
-            e as ({
-              i: AvailableDashboardElements;
-            } & RGL.Layout)[]
-          )
-        }
-        rowHeight={generateHeight()}
-        // style={{ height: '100vh' }}
-      >
-        {Object.values(layoutItems).map((l) => {
-          if (layout.some(({ i }) => i === l.key)) return l;
-          return null;
-        })}
-      </ReactGridLayout>
+    <>
       <Button
         onClick={() => navigate('/app/manage-dashboard')}
         style={{
@@ -439,37 +394,84 @@ const ViewDashboardEditor = () => {
           defaultMessage: 'Edit/Add banner',
         })}
       </Button>
-
-      <Drawer
-        closeIcon={null}
-        extra={
-          <Space>
-            <Button onClick={onClose} type="primary">
-              {intl.formatMessage({ defaultMessage: 'Close' })}
-            </Button>
-          </Space>
-        }
-        mask={false}
-        onClose={onClose}
-        open={open}
-        placement="left"
-        title={intl.formatMessage({
-          defaultMessage: 'Dashboard Banner',
-        })}
-        width={400}
+      <div
+        className="feed-container"
+        style={{
+          height: '100vh',
+          overflowX: 'hidden',
+          padding: 15,
+          paddingTop: 0,
+        }}
       >
-        {intl.formatMessage({
-          defaultMessage: 'Banner Text:',
-        })}
-
-        <Input
-          allowClear
-          onChange={(e) => setMarquee(e.target.value ?? '')}
-          style={{ marginTop: 10 }}
-          value={marquee ?? ''}
+        {marquee ? (
+          <Marquee autoFill>
+            {marquee}
+            <div style={{ width: 200 }} />
+          </Marquee>
+        ) : null}
+        <DashboardSelectorDrawer
+          droppingItem={droppingItem}
+          layout={layout}
+          setDroppingItem={setDroppingItem}
         />
-      </Drawer>
-    </div>
+        <ReactGridLayout
+          autoSize={true}
+          containerPadding={[0, 0]}
+          droppingItem={droppingItem}
+          isBounded={true}
+          isDraggable
+          isDroppable
+          isResizable
+          layout={layout}
+          margin={[0, 0]}
+          onDrop={onDrop}
+          onLayoutChange={(e) =>
+            setLayout(
+              e as ({
+                i: AvailableDashboardElements;
+              } & RGL.Layout)[]
+            )
+          }
+          rowHeight={generateHeight()}
+          // style={{ height: '100vh' }}
+        >
+          {Object.values(layoutItems).map((l) => {
+            if (layout.some(({ i }) => i === l.key)) return l;
+            return null;
+          })}
+        </ReactGridLayout>
+
+        <Drawer
+          closeIcon={null}
+          extra={
+            <Space>
+              <Button onClick={onClose} type="primary">
+                {intl.formatMessage({ defaultMessage: 'Close' })}
+              </Button>
+            </Space>
+          }
+          mask={false}
+          onClose={onClose}
+          open={open}
+          placement="left"
+          title={intl.formatMessage({
+            defaultMessage: 'Dashboard Banner',
+          })}
+          width={400}
+        >
+          {intl.formatMessage({
+            defaultMessage: 'Banner Text:',
+          })}
+
+          <Input
+            allowClear
+            onChange={(e) => setMarquee(e.target.value ?? '')}
+            style={{ marginTop: 10 }}
+            value={marquee ?? ''}
+          />
+        </Drawer>
+      </div>
+    </>
   );
 };
 
