@@ -49,13 +49,14 @@ interface Props {
 
 interface Return {
   addQuestion: boolean;
-
+  editQuestion: null | string;
   form: FormInstance<FormData>;
   onSubmit: (value: FormData) => void;
   saving: boolean;
   selectedIds?: string[];
   selectedQuestions: { id: string; question: string }[];
   setAddQuestion: (value: boolean) => void;
+  setEditQuestion: (value: null | string) => void;
   setSelectedIds: (value: string[]) => void;
   setSelectedQuestions: (value: { id: string; question: string }[]) => void;
   updateQs: (id: string, question: string) => void;
@@ -73,6 +74,7 @@ const useCreateActivityTemplate = ({
   const [saving, setSaving] = useState(false);
   const [addQuestion, setAddQuestion] = useState(false);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [editQuestion, setEditQuestion] = useState<null | string>(null);
 
   const [selectedQuestions, setSelectedQuestions] = useState<
     { id: string; question: string }[]
@@ -217,12 +219,14 @@ const useCreateActivityTemplate = ({
 
   return {
     addQuestion,
+    editQuestion,
     form,
     onSubmit,
     saving,
     selectedIds,
     selectedQuestions,
     setAddQuestion,
+    setEditQuestion,
     setSelectedIds,
     setSelectedQuestions,
     updateQs,
