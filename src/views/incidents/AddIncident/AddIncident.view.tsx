@@ -15,7 +15,7 @@ import { IncidentFormField } from 'graphql/types';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
-import type { FormData } from './useAddIncident';
+import type { FormData, IncidentFormState } from './useAddIncident';
 
 import useStyles from './AddIncident.styles';
 import IncidentCustom from './components/IncidentCustom/IncidentCustom.view';
@@ -34,7 +34,7 @@ interface Props {
   generatingStatement: boolean;
   goodsMode: string;
   goodsVisible: boolean;
-  incidentForm: IncidentFormField[];
+  incidentForm: IncidentFormState;
   incidentTagsData: ListIncidentTagsQuery | undefined;
   incidentTagsLoading: boolean;
   knowGoods: () => void;
@@ -48,7 +48,6 @@ interface Props {
   primaryImage: string;
   reportOnly: boolean;
   saving: boolean;
-
   setPoliceReporting: (value: boolean) => void;
   setPrimaryImage: (value: string) => void;
   showSiteNumber: boolean;
@@ -122,21 +121,21 @@ const AddIncident = ({
         {incidentForm
           // if police reporting is enabled and details exists, move it above police for better UX
           .flatMap((field) => {
-            if (field === IncidentFormField.Police && policeReporting) {
-              const detailsIndex = incidentForm.indexOf(
-                IncidentFormField.Details
-              );
+            if (field.type === IncidentFormField.Police && policeReporting) {
+              const detailsIndex = incidentForm
+                .map((t) => t.type)
+                .indexOf(IncidentFormField.Details);
               return detailsIndex === -1
                 ? field
-                : [IncidentFormField.Details, field];
+                : [{ type: IncidentFormField.Details }, field];
             }
-            if (field === IncidentFormField.Details && policeReporting) {
+            if (field.type === IncidentFormField.Details && policeReporting) {
               return [];
             }
             return field;
           })
           .map((field) => {
-            switch (field) {
+            switch (field.type) {
               case IncidentFormField.Types: {
                 return (
                   <IncidentTypes
@@ -144,6 +143,9 @@ const AddIncident = ({
                     incidentForm={incidentForm}
                     incidentTagsData={incidentTagsData}
                     incidentTagsLoading={incidentTagsLoading}
+                    involvedMetadata={
+                      incidentForm.find((f) => f.type === 'INVOLVED')?.metadata
+                    }
                     setPoliceReporting={setPoliceReporting}
                     tagsData={tagsData}
                   />
@@ -176,15 +178,15 @@ const AddIncident = ({
                   <Card className={classes.card}>
                     <Profiles
                       form={form}
-                      hasVictims={incidentForm.includes(
-                        IncidentFormField.Victims
-                      )}
+                      hasVictims={incidentForm
+                        .map((f) => f.type)
+                        .includes(IncidentFormField.Victims)}
                       // hasVehicles={incidentForm.includes(
                       //   IncidentFormField.Vehicles
                       // )}
-                      hasWitnesses={incidentForm.includes(
-                        IncidentFormField.Witnesses
-                      )}
+                      hasWitnesses={incidentForm
+                        .map((f) => f.type)
+                        .includes(IncidentFormField.Witnesses)}
                       saving={saving}
                     />
                   </Card>

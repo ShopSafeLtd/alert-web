@@ -66,6 +66,11 @@ import Mixpanel from 'utils/mixpanel';
 const { useForm } = Form;
 const { confirm } = Modal;
 
+export type IncidentFormState = {
+  metadata?: { [key: string]: string }[];
+  type: IncidentFormField;
+}[];
+
 export interface OffenderData {
   age?: Age | null;
   alias?: null | string[];
@@ -227,7 +232,7 @@ interface Return {
   generatingStatement: boolean;
   goodsMode: GoodsMode;
   goodsVisible: boolean;
-  incidentForm: IncidentFormField[];
+  incidentForm: IncidentFormState;
   incidentTagsData: ListIncidentTagsQuery | undefined;
   incidentTagsLoading: boolean;
   isTheft: boolean;
@@ -306,8 +311,8 @@ const useAddIncident = ({ investigationId }: Props): Return => {
   const [descriptionPristine, setDescriptionPristine] = useState(true);
   const [saving, setSaving] = useState(false);
   // eslint-disable-next-line array-bracket-newline
-  const [incidentForm, setIncidentForm] = useState<IncidentFormField[]>([
-    IncidentFormField.Types,
+  const [incidentForm, setIncidentForm] = useState<IncidentFormState>([
+    { type: IncidentFormField.Types },
     // eslint-disable-next-line array-bracket-newline
   ]);
   const [customQuestions, setCustomQuestions] = useState<CustomQuestion[]>([]);
@@ -1313,33 +1318,29 @@ const useAddIncident = ({ investigationId }: Props): Return => {
   useEffect(() => {
     if (formTags) {
       if (formTags.length === 0) {
-        setIncidentForm([IncidentFormField.Types]);
+        setIncidentForm([{ type: IncidentFormField.Types }]);
       } else {
-        const sections = [
-          ...new Set(
-            formTags
-              .map((value) =>
-                incidentTagsData?.listIncidentTags.find(
-                  (item) => item.value === value
-                )
-              )
-              .flatMap((item) => item?.incidentForm)
-              .map((item) => item?.type)
-          ),
-        ];
+        const sections = formTags
+          .map((value) =>
+            incidentTagsData?.listIncidentTags.find(
+              (item) => item.value === value
+            )
+          )
+          .flatMap((item) => item?.incidentForm)
+          .map((item) => ({ metadata: item?.metadata, type: item?.type }));
 
         if (sections.length > 0) {
-          setIncidentForm(sections as IncidentFormField[]);
+          setIncidentForm(sections as IncidentFormState);
         } else {
           setIncidentForm([
-            IncidentFormField.Types,
-            IncidentFormField.Involved,
-            IncidentFormField.Where,
-            IncidentFormField.Images,
-            IncidentFormField.Offenders,
-            IncidentFormField.Police,
-            IncidentFormField.Details,
-            IncidentFormField.Groups,
+            { type: IncidentFormField.Types },
+            { type: IncidentFormField.Involved },
+            { type: IncidentFormField.Where },
+            { type: IncidentFormField.Images },
+            { type: IncidentFormField.Offenders },
+            { type: IncidentFormField.Police },
+            { type: IncidentFormField.Details },
+            { type: IncidentFormField.Groups },
           ]);
         }
       }
