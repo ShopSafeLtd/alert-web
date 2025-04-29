@@ -20007,6 +20007,7 @@ export type TimeTakenWhereUniqueInput = {
 
 export type Todo = {
   __typename?: 'Todo';
+  actions?: Maybe<Array<Action>>;
   answers?: Maybe<Array<Answer>>;
   assignedUsers: Array<User>;
   authorised?: Maybe<Scalars['Boolean']>;
