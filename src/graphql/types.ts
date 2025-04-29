@@ -6418,7 +6418,7 @@ export type FormField = {
   createdAt: Scalars['Date'];
   id: Scalars['ID'];
   incidentForm: IncidentForm;
-  metadata: Scalars['JSON'];
+  metadata?: Maybe<Scalars['JSON']>;
   position: Scalars['Int'];
   tooltip?: Maybe<Scalars['String']>;
   type: IncidentFormField;
@@ -7754,7 +7754,7 @@ export type IncidentFormListRelationFilter = {
 
 export type IncidentFormOnTag = {
   __typename?: 'IncidentFormOnTag';
-  metadata: Scalars['JSON'];
+  metadata?: Maybe<Scalars['JSON']>;
   position: Scalars['Int'];
   type: IncidentFormField;
 };
@@ -10535,6 +10535,7 @@ export type Mutation = {
   updateOneStatementTemplate: StatementTemplate;
   updateOneWorkflow: Workflow;
   updatePassword: User;
+  updateQuestionOnActivity: Question;
   updateQuestionOnTag: TagQuestion;
   updateReportGroup: ReportGroup;
   /** Only use this to update the layout of template, provide all the layout data as it will delete all old data and recreate */
@@ -11535,6 +11536,11 @@ export type MutationUpdateOneWorkflowArgs = {
 
 export type MutationUpdatePasswordArgs = {
   data: UpdatePasswordData;
+};
+
+
+export type MutationUpdateQuestionOnActivityArgs = {
+  data: UpdateQuestionOnActivityInput;
 };
 
 
@@ -20654,6 +20660,14 @@ export type UpdatePasswordData = {
   currentPassword: Scalars['String'];
   id: Scalars['String'];
   newPassword: Scalars['String'];
+};
+
+export type UpdateQuestionOnActivityInput = {
+  newOptions?: InputMaybe<Array<Scalars['String']>>;
+  newQuestion?: InputMaybe<Scalars['String']>;
+  origOptions?: InputMaybe<Array<Scalars['String']>>;
+  origQuestion: Scalars['String'];
+  questionId: Scalars['String'];
 };
 
 export type UpdateQuestionOnTagInput = {
