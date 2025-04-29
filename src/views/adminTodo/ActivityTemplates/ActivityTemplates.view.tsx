@@ -240,7 +240,7 @@ const ActivityTemplatesView = ({
         onClose={() => onClose()}
         open={activityTemplateForm}
         title={intl.formatMessage({
-          defaultMessage: 'Create Activity Template',
+          defaultMessage: ' Activity Template',
         })}
         width={800}
       >

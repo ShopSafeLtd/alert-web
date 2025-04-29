@@ -1,0 +1,9 @@
+mutation UpdateQuestionOnActivity($data: UpdateQuestionOnActivityInput!) {
+  updateQuestionOnActivity(data: $data) {
+    question
+    id
+    optionsFormatted
+    type
+    options
+  }
+}
