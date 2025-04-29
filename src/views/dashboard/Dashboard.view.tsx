@@ -146,16 +146,9 @@ const DashboardComponents: Map<AvailableDashboardElements, JSX.Element> =
           margin: 10,
           padding: 10,
         }}
-      >
-        <SearchRow />
-      </div>,
+      />,
     ],
-    [
-      'searchRow',
-      <div key="searchRow">
-        <SearchRow />
-      </div>,
-    ],
+    ['searchRow', <div key="searchRow" />],
     [
       'targetedGoods',
       <div
@@ -217,14 +210,23 @@ const FeedItem = (): JSX.Element => {
     <div
       className="feed-container"
       style={{
-        height: '100vh',
-        overflow: 'hidden',
+        // height: '100vh',
+        overflowX: 'hidden',
         padding: 5,
         paddingTop: 0,
       }}
     >
-      <Marquee />
-
+      <div
+        style={{
+          marginBottom: 10,
+          position: 'sticky',
+          top: 0,
+          zIndex: 100,
+        }}
+      >
+        <Marquee />
+        <SearchRow />
+      </div>
       <ReactGridLayout
         autoSize
         containerPadding={[0, 0]}

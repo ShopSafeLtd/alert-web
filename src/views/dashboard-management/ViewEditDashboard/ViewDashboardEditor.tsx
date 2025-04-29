@@ -355,7 +355,7 @@ const ViewDashboardEditor = () => {
       className="feed-container"
       style={{
         height: '100vh',
-        overflow: 'hidden',
+        // overflow: 'hidden',
         padding: 15,
         paddingTop: 0,
       }}
@@ -372,7 +372,7 @@ const ViewDashboardEditor = () => {
         setDroppingItem={setDroppingItem}
       />
       <ReactGridLayout
-        autoSize={false}
+        autoSize={true}
         containerPadding={[0, 0]}
         droppingItem={droppingItem}
         isBounded={true}
@@ -390,7 +390,7 @@ const ViewDashboardEditor = () => {
           )
         }
         rowHeight={generateHeight()}
-        style={{ height: '100vh' }}
+        // style={{ height: '100vh' }}
       >
         {Object.values(layoutItems).map((l) => {
           if (layout.some(({ i }) => i === l.key)) return l;
