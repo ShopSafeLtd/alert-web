@@ -29,6 +29,7 @@ import TimeOfDay from '../../dashboard/components/TimeOfDay/TimeOfDayTemplate.vi
 const ViewDashboardEditor = () => {
   const { id: DashboardId } = useParams();
   const { data: initData, loading } = useDashboardTemplateQuery({
+    fetchPolicy: 'network-only',
     variables: {
       where: {
         id: DashboardId || '',
@@ -183,17 +184,35 @@ const ViewDashboardEditor = () => {
   };
   const layoutItems: { [key in AvailableDashboardElements]: JSX.Element } = {
     activeOffender: (
-      <div key="activeOffender">
+      <div
+        key="activeOffender"
+        style={{
+          overflow: 'hidden',
+          padding: 15,
+        }}
+      >
         <ActiveOffendersTemplate removeItem={removeItem} />
       </div>
     ),
     adminTodos: (
-      <div key="adminTodos">
+      <div
+        key="adminTodos"
+        style={{
+          overflow: 'hidden',
+          padding: 15,
+        }}
+      >
         <AdminTodosTemplate removeItem={removeItem} />
       </div>
     ),
     articlesSection: (
-      <div key="articlesSection">
+      <div
+        key="articlesSection"
+        style={{
+          overflow: 'hidden',
+          padding: 15,
+        }}
+      >
         <ArticlesSection
           removeItem={removeItem}
           w={layout.find(({ i }) => i === 'articlesSection')?.w ?? 0}
@@ -201,32 +220,68 @@ const ViewDashboardEditor = () => {
       </div>
     ),
     dayOfWeekBar: (
-      <div key="dayOfWeekBar">
+      <div
+        key="dayOfWeekBar"
+        style={{
+          overflow: 'hidden',
+          padding: 15,
+        }}
+      >
         <DayOfWeekBar removeItem={removeItem} />
       </div>
     ),
     feedItemCol: (
-      <div key="feedItemCol">
+      <div
+        key="feedItemCol"
+        style={{
+          overflow: 'hidden',
+          padding: 15,
+        }}
+      >
         <FeedItemCol removeItem={removeItem} />
       </div>
     ),
     incidentCount: (
-      <div key="incidentCount">
+      <div
+        key="incidentCount"
+        style={{
+          overflow: 'hidden',
+          padding: 15,
+        }}
+      >
         <IncidentCount removeItem={removeItem} />
       </div>
     ),
     incidentValue: (
-      <div key="incidentValue">
+      <div
+        key="incidentValue"
+        style={{
+          overflow: 'hidden',
+          padding: 15,
+        }}
+      >
         <IncidentValue removeItem={removeItem} />
       </div>
     ),
     latestIncident: (
-      <div key="latestIncident">
+      <div
+        key="latestIncident"
+        style={{
+          overflow: 'hidden',
+          padding: 15,
+        }}
+      >
         <LatestIncident removeItem={removeItem} />
       </div>
     ),
     latestIncidents: (
-      <div key="latestIncidents">
+      <div
+        key="latestIncidents"
+        style={{
+          overflow: 'hidden',
+          padding: 15,
+        }}
+      >
         <LatestIncidentsTemplate removeItem={removeItem} />
       </div>
     ),
@@ -236,12 +291,24 @@ const ViewDashboardEditor = () => {
       </div>
     ),
     targetedGoods: (
-      <div key="targetedGoods">
+      <div
+        key="targetedGoods"
+        style={{
+          overflow: 'hidden',
+          padding: 15,
+        }}
+      >
         <TargetedGoodsGraph removeItem={removeItem} />
       </div>
     ),
     timeOfDayBar: (
-      <div key="timeOfDayBar">
+      <div
+        key="timeOfDayBar"
+        style={{
+          overflow: 'hidden',
+          padding: 15,
+        }}
+      >
         <TimeOfDay removeItem={removeItem} />
       </div>
     ),
@@ -269,6 +336,7 @@ const ViewDashboardEditor = () => {
     setLayout(lay.map((i) => ({ ...i, minH: 2, minW: 2 })));
     setDroppingItem(undefined);
   };
+
   if (loading)
     return (
       <div
@@ -304,15 +372,15 @@ const ViewDashboardEditor = () => {
         setDroppingItem={setDroppingItem}
       />
       <ReactGridLayout
-        autoSize
+        autoSize={false}
         containerPadding={[0, 0]}
         droppingItem={droppingItem}
-        isBounded
+        isBounded={true}
         isDraggable
         isDroppable
         isResizable
         layout={layout}
-        margin={[8, 8]}
+        margin={[0, 0]}
         onDrop={onDrop}
         onLayoutChange={(e) =>
           setLayout(

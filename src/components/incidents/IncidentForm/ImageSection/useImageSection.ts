@@ -1,7 +1,10 @@
 /* eslint-disable no-param-reassign */
 import type { FormInstance, UploadFile, UploadProps } from 'antd';
 import type { UploadChangeParam } from 'antd/lib/upload';
-import type { FormData } from 'views/incidents/AddIncident/useAddIncident';
+import type {
+  FormData,
+  IncidentFormState,
+} from 'views/incidents/AddIncident/useAddIncident';
 
 import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { Form } from 'antd';
@@ -79,7 +82,7 @@ export interface StateImageData extends UploadFile<ImageResponseType[]> {
 
 interface Props {
   form: FormInstance<FormData>;
-  incidentForm: IncidentFormField[];
+  incidentForm: IncidentFormState;
   onChange?: (data: StateImageData[]) => void;
   value?: StateImageData[];
 }
@@ -147,7 +150,7 @@ const useImageSection = ({ form, incidentForm, onChange }: Props): Return => {
       if (
         image &&
         facialDetection &&
-        incidentForm.includes(IncidentFormField.Offenders) &&
+        incidentForm.map((f) => f.type).includes(IncidentFormField.Offenders) &&
         image.faces &&
         image.faces.length > 0
       ) {

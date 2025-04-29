@@ -32,61 +32,121 @@ const DashboardComponents: Map<AvailableDashboardElements, JSX.Element> =
   new Map([
     [
       'activeOffender',
-      <div key="activeOffender">
+      <div
+        key="activeOffender"
+        style={{
+          margin: 10,
+          padding: 10,
+        }}
+      >
         <ActiveOffenders />
       </div>,
     ],
     [
       'adminTodos',
-      <div key="adminTodos">
+      <div
+        key="adminTodos"
+        style={{
+          margin: 10,
+          padding: 10,
+        }}
+      >
         <AdminTodos />
       </div>,
     ],
     [
       'articlesSection',
-      <div key="articlesSection">
+      <div
+        key="articlesSection"
+        style={{
+          margin: 10,
+          padding: 10,
+        }}
+      >
         <ArticlesSection />
       </div>,
     ],
     [
       'dayOfWeekBar',
-      <div key="dayOfWeekBar">
+      <div
+        key="dayOfWeekBar"
+        style={{
+          margin: 10,
+          padding: 10,
+        }}
+      >
         <DayOfWeek />
       </div>,
     ],
     [
       'feedItemCol',
-      <div key="feedItemCol">
+      <div
+        key="feedItemCol"
+        style={{
+          margin: 10,
+          padding: 10,
+        }}
+      >
         <FeedItemCol />
       </div>,
     ],
     [
       'incidentCount',
-      <div key="incidentCount">
+      <div
+        key="incidentCount"
+        style={{
+          margin: 10,
+          padding: 10,
+        }}
+      >
         <IncidentCount />
       </div>,
     ],
     [
       'incidentValue',
-      <div key="incidentValue">
+      <div
+        key="incidentValue"
+        style={{
+          margin: 10,
+          padding: 10,
+        }}
+      >
         <IncidentValues />
       </div>,
     ],
     [
       'latestIncident',
-      <div key="latestIncident">
+      <div
+        key="latestIncident"
+        style={{
+          margin: 10,
+          padding: 10,
+        }}
+      >
         <LatestIncident />
       </div>,
     ],
     [
       'latestIncidents',
-      <div key="latestIncidents">
+      <div
+        key="latestIncidents"
+        style={{
+          margin: 10,
+          padding: 10,
+        }}
+      >
         <LatestIncidents />
       </div>,
     ],
     [
       'searchRow',
-      <div key="searchRow">
+      <div
+        key="searchRow"
+        style={{
+          margin: 10,
+          padding: 10,
+        }}
+      >
         <SearchRow />
       </div>,
     ],
@@ -98,13 +158,25 @@ const DashboardComponents: Map<AvailableDashboardElements, JSX.Element> =
     ],
     [
       'targetedGoods',
-      <div key="targetedGoods">
+      <div
+        key="targetedGoods"
+        style={{
+          margin: 10,
+          padding: 10,
+        }}
+      >
         <TargetedGoodsContainer />
       </div>,
     ],
     [
       'timeOfDayBar',
-      <div key="timeOfDayBar">
+      <div
+        key="timeOfDayBar"
+        style={{
+          margin: 10,
+          padding: 10,
+        }}
+      >
         <TimeOfDay />
       </div>,
     ],
@@ -147,7 +219,7 @@ const FeedItem = (): JSX.Element => {
       style={{
         height: '100vh',
         overflow: 'hidden',
-        padding: 15,
+        padding: 5,
         paddingTop: 0,
       }}
     >
@@ -159,7 +231,7 @@ const FeedItem = (): JSX.Element => {
         isDraggable={false}
         isResizable={false}
         layout={layout}
-        margin={[8, 8]}
+        margin={[0, 0]}
         rowHeight={generateHeight()}
         style={{
           height: marqueeString ? '90%' : '98%',

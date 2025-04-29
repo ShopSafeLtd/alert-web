@@ -501,7 +501,7 @@ export const roleItems: {
       <FormattedMessage defaultMessage="Allows the user to manage their settings like notification controls, name, email, phone number etc." />
     ),
     icon: faUserCog,
-    key: PermissionModel.Vehicles,
+    key: PermissionModel.UserSettings,
     methods: [
       {
         key: PermissionMethod.Read,

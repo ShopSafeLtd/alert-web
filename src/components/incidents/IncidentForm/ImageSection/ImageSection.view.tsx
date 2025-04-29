@@ -1,5 +1,4 @@
 import type { FormInstance } from 'antd';
-import type { IncidentFormField } from 'graphql/types';
 
 import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import hasRolePermission from '#/utils/has-role-permission';
@@ -33,7 +32,10 @@ import { useAtomValue } from 'jotai/index';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
-import type { FormData } from '../../../../views/incidents/AddIncident/useAddIncident';
+import type {
+  FormData,
+  IncidentFormState,
+} from '../../../../views/incidents/AddIncident/useAddIncident';
 import type { StateImageData } from './useImageSection';
 
 import { compressImage } from '../../../../utils/compress-images';
@@ -44,13 +46,11 @@ const { Paragraph, Title } = Typography;
 interface Props {
   disabled: boolean;
   form: FormInstance<FormData>;
-  incidentForm: IncidentFormField[];
+  incidentForm: IncidentFormState;
   onChange?: (data: StateImageData[]) => void;
   primaryImage: string;
   setPrimaryImage: (value: string) => void;
   value?: StateImageData[];
-  // fileList: UploadFile[];
-  // documentUploadProps: UploadProps;
 }
 
 const ImageSection = ({
