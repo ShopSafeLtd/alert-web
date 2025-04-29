@@ -200,9 +200,11 @@ const FeedItem = (): JSX.Element => {
 
   const layoutWithComponents = useMemo(
     () =>
-      layout?.map((item) =>
-        DashboardComponents.get(item.i as AvailableDashboardElements)
-      ) ?? [],
+      layout
+        ?.filter((item) => item.i !== 'searchRow')
+        .map((item) =>
+          DashboardComponents.get(item.i as AvailableDashboardElements)
+        ) ?? [],
     [layout]
   );
 
@@ -232,7 +234,12 @@ const FeedItem = (): JSX.Element => {
         containerPadding={[0, 0]}
         isDraggable={false}
         isResizable={false}
-        layout={layout}
+        layout={layout
+          .filter((item) => item.i !== 'searchRow')
+          .map((item) => ({
+            ...item,
+            y: item.y - 2,
+          }))}
         margin={[0, 0]}
         rowHeight={generateHeight()}
         style={{
