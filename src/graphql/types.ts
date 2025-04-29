@@ -6418,6 +6418,7 @@ export type FormField = {
   createdAt: Scalars['Date'];
   id: Scalars['ID'];
   incidentForm: IncidentForm;
+  metadata: Scalars['JSON'];
   position: Scalars['Int'];
   tooltip?: Maybe<Scalars['String']>;
   type: IncidentFormField;
@@ -7753,6 +7754,7 @@ export type IncidentFormListRelationFilter = {
 
 export type IncidentFormOnTag = {
   __typename?: 'IncidentFormOnTag';
+  metadata: Scalars['JSON'];
   position: Scalars['Int'];
   type: IncidentFormField;
 };

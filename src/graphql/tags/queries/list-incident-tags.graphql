@@ -4,6 +4,7 @@ query ListIncidentTags($where: IncidentTagsInput!) {
     incidentForm {
       position
       type
+      metadata
     }
     label
     parentId
