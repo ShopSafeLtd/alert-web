@@ -1,0 +1,10 @@
+mutation RejectStockRequest ($where: UniqueId!) {
+    rejectStockRemovalRequest(where: $where) {
+        id
+        status
+        user {
+            id
+            fullName
+        }
+    }
+}

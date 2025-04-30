@@ -1,0 +1,21 @@
+query StockRemovalRequests($where: StockRemovalRequestsWhere!, $orderBy: [StockRemovalRequestsOrderBy!], $take: Int, $skip: Int) {
+    stockRemovalRequests (where: $where, orderBy: $orderBy, take: $take, skip: $skip) {
+        edges {
+            node {
+                id
+                createdAt
+                title
+                status
+                reference
+                approvers {
+                    status
+                    user {
+                        id
+                        fullName
+                    }
+                }
+            }
+        }
+        totalCount
+    }
+}

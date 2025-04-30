@@ -1,0 +1,9 @@
+mutation CreateStockRemovalRequest($data: CreateStockRemovalRequestInput!) {
+    createStockRemovalRequest(data: $data) {
+        id
+        status
+        reference
+        title,
+        createdAt
+    }
+}

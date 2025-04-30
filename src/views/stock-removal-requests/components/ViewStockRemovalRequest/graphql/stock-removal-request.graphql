@@ -1,0 +1,28 @@
+query stockRemovalRequest($where: UniqueId!) {
+    stockRemovalRequest (where: $where) {
+        id
+        createdAt
+        title
+        description
+        status
+        reference
+        items {
+            id
+            name
+            requestedQuantity
+            pickedQuantity
+        }
+        business {
+            id
+            name
+        }
+        approvers {
+            status
+            id
+            user {
+                id
+                fullName
+            }
+        }
+    }
+}
