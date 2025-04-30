@@ -3368,6 +3368,25 @@ export type CreateSimpleLocationEnvelope = {
   create?: InputMaybe<Array<SimpleLocation>>;
 };
 
+export type CreateStockRemovalItemInput = {
+  itemId: Scalars['String'];
+  quantity: Scalars['Int'];
+};
+
+export type CreateStockRemovalRequestApproverInput = {
+  approverId: Array<Scalars['String']>;
+  stockRemovalRequestId: Scalars['String'];
+};
+
+export type CreateStockRemovalRequestInput = {
+  approverIds: Array<Scalars['String']>;
+  businessId: Scalars['String'];
+  description?: InputMaybe<Scalars['String']>;
+  items: Array<CreateStockRemovalItemInput>;
+  schemeId: Scalars['String'];
+  title: Scalars['String'];
+};
+
 export type CreateTermsInput = {
   content: Scalars['String'];
   schemeId: Scalars['String'];
@@ -10327,6 +10346,7 @@ export enum Model {
   Scheme = 'SCHEME',
   Send = 'SEND',
   SingleShoe = 'SINGLE_SHOE',
+  StockRemovalRequest = 'STOCK_REMOVAL_REQUEST',
   Tag = 'TAG',
   Todo = 'TODO',
   Update = 'UPDATE',
@@ -10346,6 +10366,7 @@ export type Mutation = {
   approveAiSuggestion: AiSuggestion;
   approveIncident: Incident;
   approveOffender: Offender;
+  approveStockRemovalRequest: StockRemovalRequestApproval;
   closeInvestigation: Investigation;
   completeChecklist: ActiveChecklist;
   copyEvidenceOnInvestigation: Document;
@@ -10389,6 +10410,8 @@ export type Mutation = {
   createScheme: Scheme;
   createSession: Session;
   createSharingConfig: SharingConfig;
+  createStockRemovalRequest: StockRemovalRequest;
+  createStockRemovalRequestApprover: StockRemovalRequest;
   createTag: Tag;
   createTermsAndConditions: TermsAndCondition;
   createTimes: Array<Incident>;
@@ -10434,6 +10457,8 @@ export type Mutation = {
   deleteRole: CustomRole;
   deleteSharingConfig: SharingConfig;
   deleteShoe: Shoe;
+  deleteStockRemovalRequest: StockRemovalRequest;
+  deleteStockRemovalRequestApproval: StockRemovalRequestApproval;
   deleteTag: Tag;
   deleteTodo: Todo;
   deleteUpdate: Update;
@@ -10471,6 +10496,7 @@ export type Mutation = {
   recycleUnusedImages: SystemTask;
   refreshAuth: RefreshAuth;
   registerPushToken: ExpoPushToken;
+  rejectStockRemovalRequest: StockRemovalRequestApproval;
   removeQuestionFromTag: TagQuestion;
   removeUserFromBusiness: Business;
   reopenInvestigation: Investigation;
@@ -10543,6 +10569,7 @@ export type Mutation = {
   updateScheme: Scheme;
   updateSharingConfig: SharingConfig;
   updateShoe: Shoe;
+  updateStockRemovalRequest: StockRemovalRequest;
   updateTag: Tag;
   updateTagQs: Array<TagQuestion>;
   updateTodo: Todo;
@@ -10619,6 +10646,11 @@ export type MutationApproveIncidentArgs = {
 
 export type MutationApproveOffenderArgs = {
   data: ApproveIncidentData;
+  where: UniqueId;
+};
+
+
+export type MutationApproveStockRemovalRequestArgs = {
   where: UniqueId;
 };
 
@@ -10837,6 +10869,16 @@ export type MutationCreateSessionArgs = {
 
 export type MutationCreateSharingConfigArgs = {
   data: SharingConfigCreateInput;
+};
+
+
+export type MutationCreateStockRemovalRequestArgs = {
+  data: CreateStockRemovalRequestInput;
+};
+
+
+export type MutationCreateStockRemovalRequestApproverArgs = {
+  data: CreateStockRemovalRequestApproverInput;
 };
 
 
@@ -11064,6 +11106,16 @@ export type MutationDeleteShoeArgs = {
 };
 
 
+export type MutationDeleteStockRemovalRequestArgs = {
+  where: UniqueId;
+};
+
+
+export type MutationDeleteStockRemovalRequestApprovalArgs = {
+  where: UniqueId;
+};
+
+
 export type MutationDeleteTagArgs = {
   where: UniqueId;
 };
@@ -11234,6 +11286,11 @@ export type MutationRefreshAuthArgs = {
 
 export type MutationRegisterPushTokenArgs = {
   data: RegisterPushTokenData;
+};
+
+
+export type MutationRejectStockRemovalRequestArgs = {
+  where: UniqueId;
 };
 
 
@@ -11575,6 +11632,12 @@ export type MutationUpdateSharingConfigArgs = {
 
 export type MutationUpdateShoeArgs = {
   data: UpdateShoe;
+  where: UniqueId;
+};
+
+
+export type MutationUpdateStockRemovalRequestArgs = {
+  data: UpdateStockRemovalRequestInput;
   where: UniqueId;
 };
 
@@ -13793,6 +13856,7 @@ export enum PermissionModel {
   SharingSettings = 'SHARING_SETTINGS',
   SingleShoe = 'SINGLE_SHOE',
   StatementTemplates = 'STATEMENT_TEMPLATES',
+  StockRemovalRequests = 'STOCK_REMOVAL_REQUESTS',
   Tasks = 'TASKS',
   TaskSettings = 'TASK_SETTINGS',
   Terms = 'TERMS',
@@ -14042,6 +14106,8 @@ export type Query = {
   statementTemplate: StatementTemplate;
   statementTemplates: Array<StatementTemplate>;
   stockItemsRelay: QueryStockItemsRelayConnection;
+  stockRemovalRequest: StockRemovalRequest;
+  stockRemovalRequests: QueryStockRemovalRequestsConnection;
   tableReport: ReportTemplate;
   tag: Tag;
   tags: Array<Tag>;
@@ -15281,6 +15347,25 @@ export type QueryStockItemsRelayArgs = {
 };
 
 
+export type QueryStockRemovalRequestArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where: UniqueId;
+};
+
+
+export type QueryStockRemovalRequestsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<StockRemovalRequestsOrderBy>>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where: StockRemovalRequestsWhere;
+};
+
+
 export type QueryTableReportArgs = {
   where: UniqueId;
 };
@@ -15886,6 +15971,19 @@ export type QueryStockItemsRelayConnectionEdge = {
   __typename?: 'QueryStockItemsRelayConnectionEdge';
   cursor: Scalars['String'];
   node: StockItem;
+};
+
+export type QueryStockRemovalRequestsConnection = {
+  __typename?: 'QueryStockRemovalRequestsConnection';
+  edges: Array<QueryStockRemovalRequestsConnectionEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type QueryStockRemovalRequestsConnectionEdge = {
+  __typename?: 'QueryStockRemovalRequestsConnectionEdge';
+  cursor: Scalars['String'];
+  node: StockRemovalRequest;
 };
 
 export type QueryTodoRelayConnection = {
@@ -18920,6 +19018,69 @@ export type StockItemsWhereInput = {
   updatedAt?: InputMaybe<DateTimeFilter>;
 };
 
+export type StockRemovalItem = {
+  __typename?: 'StockRemovalItem';
+  barcode?: Maybe<Scalars['String']>;
+  brand?: Maybe<Scalars['String']>;
+  createdAt: Scalars['Date'];
+  id: Scalars['ID'];
+  name?: Maybe<Scalars['String']>;
+  pickedQuantity?: Maybe<Scalars['Int']>;
+  requestedQuantity?: Maybe<Scalars['Int']>;
+  sku?: Maybe<Scalars['String']>;
+  stockItem: StockItem;
+  updatedAt: Scalars['Date'];
+  value?: Maybe<Scalars['Float']>;
+};
+
+export type StockRemovalRequest = {
+  __typename?: 'StockRemovalRequest';
+  actions: Array<Action>;
+  approvers: Array<StockRemovalRequestApproval>;
+  business: Business;
+  createdAt: Scalars['Date'];
+  createdBy: User;
+  description?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  items: Array<StockRemovalItem>;
+  reference?: Maybe<Scalars['Int']>;
+  scheme: Scheme;
+  status: StockRemovalRequestStatus;
+  title: Scalars['String'];
+};
+
+export type StockRemovalRequestApproval = {
+  __typename?: 'StockRemovalRequestApproval';
+  createdAt: Scalars['Date'];
+  id: Scalars['ID'];
+  status: StockRemovalRequestApprovalStatus;
+  user: User;
+};
+
+export enum StockRemovalRequestApprovalStatus {
+  Approved = 'APPROVED',
+  Open = 'OPEN',
+  Rejected = 'REJECTED'
+}
+
+export enum StockRemovalRequestStatus {
+  Closed = 'CLOSED',
+  Open = 'OPEN',
+  PendingApproval = 'PENDING_APPROVAL'
+}
+
+export type StockRemovalRequestsOrderBy = {
+  createdAt?: InputMaybe<SortOrder>;
+};
+
+export type StockRemovalRequestsWhere = {
+  businessIds?: InputMaybe<Array<Scalars['String']>>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  schemeId: Scalars['String'];
+  search?: InputMaybe<Scalars['String']>;
+  status?: InputMaybe<Array<StockRemovalRequestStatus>>;
+};
+
 export type StringArrayConditionInput = {
   anyAll: AnyAll;
   ids: Array<Scalars['String']>;
@@ -20768,6 +20929,22 @@ export type UpdateSimpleLocationOnOffender = {
   disconnect?: InputMaybe<Array<UniqueId>>;
   update?: InputMaybe<Array<LocationUpdate>>;
   upsert?: InputMaybe<Array<LocationUpsert>>;
+};
+
+export type UpdateStockRemovalItemInput = {
+  id: Scalars['String'];
+  quantity: Scalars['Int'];
+};
+
+export type UpdateStockRemovalRequestInput = {
+  approverIds?: InputMaybe<Array<Scalars['String']>>;
+  businessId?: InputMaybe<Scalars['String']>;
+  createItems?: InputMaybe<Array<CreateStockRemovalItemInput>>;
+  deleteItems?: InputMaybe<Array<Scalars['String']>>;
+  description?: InputMaybe<Scalars['String']>;
+  schemeId?: InputMaybe<Scalars['String']>;
+  title?: InputMaybe<Scalars['String']>;
+  updateItems?: InputMaybe<Array<UpdateStockRemovalItemInput>>;
 };
 
 export type UpdateTagQuestionInput = {
