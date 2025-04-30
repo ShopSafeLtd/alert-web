@@ -4,6 +4,7 @@ import {
   faAperture,
   faBolt,
   faBoot,
+  faBoxCheck,
   faBuilding,
   faCar,
   faCheckCircle,
@@ -532,6 +533,33 @@ export const roleItems: {
       },
     ],
     title: <FormattedMessage defaultMessage="Vision" />,
+  },
+  {
+    description: (
+      <FormattedMessage defaultMessage="Manage stock removal requests across the organisation and view the status of existing requests." />
+    ),
+    disabled: false,
+    icon: faBoxCheck,
+    key: PermissionModel.StockRemovalRequests,
+    methods: [
+      {
+        key: PermissionMethod.Read,
+        name: <FormattedMessage defaultMessage="View" />,
+      },
+      {
+        key: PermissionMethod.Write,
+        name: <FormattedMessage defaultMessage="Create" />,
+      },
+      {
+        key: PermissionMethod.Edit,
+        name: <FormattedMessage defaultMessage="Edit" />,
+      },
+      {
+        key: PermissionMethod.Delete,
+        name: <FormattedMessage defaultMessage="Delete" />,
+      },
+    ],
+    title: <FormattedMessage defaultMessage="Stock Removal Requests" />,
   },
 ];
 export const settings = [

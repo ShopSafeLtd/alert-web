@@ -32,6 +32,9 @@ const SingleShoeSystem = lazy(() => import('./singleShoeSystem/router'));
 const AiCentre = lazy(() => import('./suggestions/router'));
 const VisionCentre = lazy(() => import('./vision/router'));
 const Businesses = lazy(() => import('./businesses/router'));
+const StockRemovalRequests = lazy(
+  () => import('./stock-removal-requests/router')
+);
 
 export const AppViews = (): JSX.Element => {
   const { isLoaded } = useAuthClerk();
@@ -126,6 +129,11 @@ export const AppViews = (): JSX.Element => {
             path="businesses/*"
           />
           <Route element={<VisionCentre />} key="vision" path="vision/*" />
+          <Route
+            element={<StockRemovalRequests />}
+            key="stockRemovalRequests"
+            path="stock-removal-requests/*"
+          />
         </Routes>
       )}
     </Suspense>

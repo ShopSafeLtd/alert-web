@@ -6,6 +6,7 @@ import {
   faAperture,
   faBolt,
   faBoot,
+  faBoxCheck,
   faBuildings,
   faCalendarCheck,
   faCar,
@@ -425,6 +426,24 @@ const navigationConfig: NavItem[] = [
     permission: [
       {
         model: PermissionModel.SingleShoe,
+        method: PermissionMethod.Read,
+      },
+    ],
+    submenu: [],
+  },
+  {
+    key: 'stockRemovalRequests',
+    path: `${APP_PREFIX_PATH}/stock-removal-requests`,
+    title: 'Stock Removal Requests',
+    icon: faBoxCheck,
+    breadcrumb: true,
+    intl: defineMessage({
+      id: 'Stock Removal',
+      defaultMessage: 'Stock Removal',
+    }),
+    permission: [
+      {
+        model: PermissionModel.StockRemovalRequests,
         method: PermissionMethod.Read,
       },
     ],
