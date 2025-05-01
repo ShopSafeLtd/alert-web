@@ -1,4 +1,3 @@
-import type { Dayjs } from 'dayjs';
 import type { BanData } from 'types/DataType';
 
 import {
@@ -10,6 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Card, Col, Drawer, Empty, Row, Table, Typography } from 'antd';
 import AddExclusion from 'components/form-components/offender/exclusion/AddExclusion';
 import EditExclusion from 'components/form-components/offender/exclusion/EditExclusion';
+import dayjs from 'dayjs';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
@@ -137,15 +137,15 @@ const OffenderExclusions = ({
                 dataIndex: 'months',
                 key: 'months',
                 title: intl.formatMessage({
-                  defaultMessage: 'Duration',
+                  defaultMessage: 'Months',
                 }),
               },
               {
                 dataIndex: 'startDate',
                 key: 'startDate',
                 // eslint-disable-next-line
-                render: (value: Dayjs) =>
-                  value ? value.format('DD/MM/YYYY') : undefined,
+                render: (value: Date) =>
+                  value ? dayjs(value).format('DD/MM/YYYY') : undefined,
                 title: intl.formatMessage({
                   defaultMessage: 'Start Date',
                 }),
@@ -154,8 +154,8 @@ const OffenderExclusions = ({
                 dataIndex: 'endDate',
                 key: 'endDate',
                 // eslint-disable-next-line
-                render: (value: Dayjs) =>
-                  value ? value.format('DD/MM/YYYY') : undefined,
+                render: (value: Date) =>
+                  value ? dayjs(value).format('DD/MM/YYYY') : undefined,
                 title: intl.formatMessage({
                   defaultMessage: 'End Date',
                 }),
