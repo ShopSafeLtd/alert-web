@@ -1,5 +1,6 @@
 import CSVReader from '#/components/CSVReader/CSVReader';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 import React from 'react';
 
 import type { MySafetyCSVData } from './MySafetyCSV.types';
@@ -7,7 +8,7 @@ import type { MySafetyCSVData } from './MySafetyCSV.types';
 interface Props {
   onChange?: (value: MySafetyCSVData[]) => void;
 }
-
+dayjs.extend(utc);
 const MySafetyCSV = ({ onChange }: Props) => {
   const onFileLoad = (data: string[][]) => {
     if (onChange)
