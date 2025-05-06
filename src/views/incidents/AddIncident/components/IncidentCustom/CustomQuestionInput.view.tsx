@@ -91,7 +91,7 @@ const StringSelect = ({
 
 interface Props {
   disabled: boolean;
-  form: FormInstance<FormData>;
+  form?: FormInstance<FormData>;
   onChange?: (value: string) => void;
   question: CustomQuestion;
   value?: string;
@@ -121,12 +121,12 @@ const CustomQuestionInput = ({
               }),
               type: 'info',
             });
-            form.setFieldsValue({
+            form?.setFieldsValue({
               tags: action.setValues,
             });
           }
           if (action.type === 'INVOLVED_SET') {
-            form.setFieldsValue({
+            form?.setFieldsValue({
               involvedTags: action.setValues,
             });
           }
