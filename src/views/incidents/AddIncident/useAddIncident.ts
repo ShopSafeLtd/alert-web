@@ -21,7 +21,12 @@ import type {
   Race,
 } from 'graphql/types';
 import type React from 'react';
-import type { CustomQuestion, Image, LocationData } from 'types/DataType';
+import type {
+  CustomQuestion,
+  CustomQuestionAction,
+  Image,
+  LocationData,
+} from 'types/DataType';
 
 import { useGroupsContext } from '#/context/groups-context';
 import { sessionIdAtom } from '#/hooks/useManageSession';
@@ -145,7 +150,7 @@ export interface FormData {
   groups?: string[];
   hasVictims: boolean;
   images?: StateImageData[];
-  involvedTags?: [];
+  involvedTags?: string[];
   offenders: StateOffenderData[] | null;
   policeCCTVEmail?: string;
   policeDay?: boolean;
@@ -1350,6 +1355,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
         );
         if (tag?.questions) {
           const tagQuestions = tag.questions.map((question) => ({
+            actions: (question.actions as CustomQuestionAction[]) ?? [],
             answerType: question?.answerType || AnswerType.String,
             dependentOnAnswerValue: question?.dependentOnAnswerValue || null,
             dependentOnBrandIds: question?.dependentOnBrandIds || [],

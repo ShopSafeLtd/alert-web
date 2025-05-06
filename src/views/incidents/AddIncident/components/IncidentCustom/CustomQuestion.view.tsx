@@ -1,165 +1,21 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access,@typescript-eslint/ban-ts-comment,@typescript-eslint/no-base-to-string */
+import type { FormData } from '#/views/incidents/AddIncident/useAddIncident';
 import type { CustomQuestion } from 'types/DataType';
 
-import DatePicker from '#/components/util-components/DatePicker';
-// todo check data.tostring types
-import { Col, Form, Input, InputNumber, Radio, Row } from 'antd';
-import dayjs from 'dayjs';
-import { AnswerType } from 'graphql/types';
+import CustomQuestionInput from '#/views/incidents/AddIncident/components/IncidentCustom/CustomQuestionInput.view';
+import { Col, Form, type FormInstance, Row } from 'antd';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
-import CheckTags from '../../../../../components/form-components/check-tags/CheckTags.view';
-
-interface StringInputProps {
-  disabled: boolean;
-  onChange?: (value: string) => void;
-  value?: string;
-}
-
-const StringInputNumber = ({ disabled, onChange, value }: StringInputProps) => {
-  const covertToString = (data: null | number) => {
-    if (onChange) onChange(data ? data.toString() : '');
-  };
-
-  return (
-    <InputNumber
-      disabled={disabled}
-      onChange={covertToString}
-      style={{ minWidth: 200 }}
-      value={value ? Number(value) : undefined}
-    />
-  );
-};
-
-const StringDate = ({ disabled, onChange, value }: StringInputProps) => {
-  const covertToString = (data: Date | null) => {
-    if (onChange) onChange(data ? data.toString() : '');
-  };
-
-  return (
-    <DatePicker
-      disabled={disabled}
-      format="DD/MM/YYYY"
-      onChange={covertToString}
-      style={{ minWidth: 150 }}
-      value={value ? dayjs(value).toDate() : undefined}
-    />
-  );
-};
-
-const StringTime = ({ disabled, onChange, value }: StringInputProps) => {
-  const covertToString = (data: Date | null) => {
-    if (onChange) onChange(data ? data.toString() : '');
-  };
-
-  return (
-    <DatePicker.TimePicker
-      disabled={disabled}
-      onChange={covertToString}
-      style={{ minWidth: 150 }}
-      value={value ? dayjs(value).toDate() : null}
-    />
-  );
-};
-
-interface SelectInputProps extends StringInputProps {
-  options: { label: string; value: string }[];
-  radioAnswer?: boolean;
-}
-
-const StringSelect = ({
-  disabled,
-  onChange,
-  options,
-  radioAnswer,
-  value,
-}: SelectInputProps) => {
-  const covertToString = (data: string[]) => {
-    if (onChange) onChange(data.toString());
-  };
-
-  return (
-    <CheckTags
-      disabled={disabled}
-      mode={radioAnswer ? 'radio' : 'check'}
-      onChange={covertToString}
-      options={options}
-      value={value ? value.split(',') : []}
-    />
-  );
-};
-
 interface Props {
   disabled: boolean;
+  form?: FormInstance<FormData>;
   questions: CustomQuestion[];
   radioAnswer?: boolean;
 }
 
-const CustomQuestions = ({ disabled, questions, radioAnswer }: Props) => {
+const CustomQuestions = ({ disabled, form, questions }: Props) => {
   const intl = useIntl();
-
-  const getFieldType = (question: CustomQuestion, type: AnswerType) => {
-    switch (type) {
-      case AnswerType.String: {
-        return (
-          <Input.TextArea
-            disabled={disabled}
-            rows={1}
-            style={{ maxWidth: '50%' }}
-          />
-        );
-      }
-      case AnswerType.Date: {
-        return <StringDate disabled={disabled} />;
-      }
-
-      case AnswerType.Time: {
-        return <StringTime disabled={disabled} />;
-      }
-      case AnswerType.Boolean: {
-        return (
-          <Radio.Group
-            disabled={disabled}
-            optionType="button"
-            options={[
-              {
-                label: intl.formatMessage({
-                  defaultMessage: 'Yes',
-                }),
-                value: 'true',
-              },
-              {
-                label: intl.formatMessage({
-                  defaultMessage: 'No',
-                }),
-                value: 'false',
-              },
-            ]}
-          />
-        );
-      }
-      case AnswerType.Number: {
-        return <StringInputNumber disabled={disabled} />;
-      }
-      case AnswerType.Select: {
-        return <StringSelect disabled={disabled} options={question.options} />;
-      }
-      case AnswerType.SelectSingle: {
-        return (
-          <StringSelect
-            disabled={disabled}
-            options={question.options}
-            radioAnswer
-          />
-        );
-      }
-
-      default: {
-        return null;
-      }
-    }
-  };
 
   return (
     <Row>
@@ -200,7 +56,11 @@ const CustomQuestions = ({ disabled, questions, radioAnswer }: Props) => {
                       ]}
                       tooltip={question.tooltip}
                     >
-                      {getFieldType(question, question.answerType)}
+                      <CustomQuestionInput
+                        disabled={disabled}
+                        form={form}
+                        question={question}
+                      />
                     </Form.Item>
                   ) : null;
                 }}
@@ -210,137 +70,25 @@ const CustomQuestions = ({ disabled, questions, radioAnswer }: Props) => {
         }
         return (
           <Col key={question.questionId} span={24}>
-            {question.answerType === AnswerType.String && (
-              <Form.Item
-                label={question.label}
-                name={question.questionId}
-                rules={[
-                  {
-                    message: intl.formatMessage({
-                      defaultMessage: 'This field is required.',
-                    }),
-                    required: question.required,
-                  },
-                ]}
-                tooltip={question.tooltip}
-              >
-                <Input.TextArea
-                  disabled={disabled}
-                  rows={1}
-                  style={{ maxWidth: '50%' }}
-                />
-              </Form.Item>
-            )}
-            {question.answerType === AnswerType.Date && (
-              <Form.Item
-                label={question.label}
-                name={question.questionId}
-                rules={[
-                  {
-                    message: intl.formatMessage({
-                      defaultMessage: 'This field is required.',
-                    }),
-                    required: question.required,
-                  },
-                ]}
-                tooltip={question.tooltip}
-              >
-                <StringDate disabled={disabled} />
-              </Form.Item>
-            )}
-            {question.answerType === AnswerType.Time && (
-              <Form.Item
-                label={question.label}
-                name={question.questionId}
-                rules={[
-                  {
-                    message: intl.formatMessage({
-                      defaultMessage: 'This field is required.',
-                    }),
-                    required: question.required,
-                  },
-                ]}
-                tooltip={question.tooltip}
-              >
-                <StringTime disabled={disabled} />
-              </Form.Item>
-            )}
-            {question.answerType === AnswerType.Boolean && (
-              <Form.Item
-                label={question.label}
-                name={question.questionId}
-                rules={[
-                  {
-                    message: intl.formatMessage({
-                      defaultMessage: 'This field is required.',
-                    }),
-                    required: question.required,
-                  },
-                ]}
-                tooltip={question.tooltip}
-              >
-                <Radio.Group
-                  disabled={disabled}
-                  optionType="button"
-                  options={[
-                    {
-                      label: intl.formatMessage({
-                        defaultMessage: 'Yes',
-                      }),
-                      value: 'true',
-                    },
-                    {
-                      label: intl.formatMessage({
-                        defaultMessage: 'No',
-                      }),
-                      value: 'false',
-                    },
-                  ]}
-                />
-              </Form.Item>
-            )}
-            {question.answerType === AnswerType.Number && (
-              <Form.Item
-                label={question.label}
-                name={question.questionId}
-                rules={[
-                  {
-                    message: intl.formatMessage({
-                      defaultMessage: 'This field is required.',
-                    }),
-                    required: question.required,
-                  },
-                ]}
-                tooltip={question.tooltip}
-              >
-                <StringInputNumber disabled={disabled} />
-              </Form.Item>
-            )}
-            {(question.answerType === AnswerType.Select ||
-              question.answerType === AnswerType.SelectSingle) && (
-              <Form.Item
-                label={question.label}
-                name={question.questionId}
-                rules={[
-                  {
-                    message: intl.formatMessage({
-                      defaultMessage: 'This field is required.',
-                    }),
-                    required: question.required,
-                  },
-                ]}
-                tooltip={question.tooltip}
-              >
-                <StringSelect
-                  disabled={disabled}
-                  options={question.options}
-                  radioAnswer={
-                    radioAnswer ||
-                    question.answerType === AnswerType.SelectSingle
-                  }
-                />
-              </Form.Item>
-            )}
+            <Form.Item
+              label={question.label}
+              name={question.questionId}
+              rules={[
+                {
+                  message: intl.formatMessage({
+                    defaultMessage: 'This field is required.',
+                  }),
+                  required: question.required,
+                },
+              ]}
+              tooltip={question.tooltip}
+            >
+              <CustomQuestionInput
+                disabled={disabled}
+                form={form}
+                question={question}
+              />
+            </Form.Item>
           </Col>
         );
       })}

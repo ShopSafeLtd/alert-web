@@ -398,7 +398,14 @@ export interface NewTagData {
   schemes: string[];
 }
 
+export interface CustomQuestionAction {
+  conditionValues: string[];
+  setValues: string[];
+  type: 'INVOLVED_SET' | 'TAG_SET';
+}
+
 export interface CustomQuestion {
+  actions: CustomQuestionAction[];
   answerType: AnswerType;
   dependentOnAnswerValue?: null | string;
   dependentOnBrandIds?: string[];

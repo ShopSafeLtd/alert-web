@@ -227,7 +227,11 @@ const AddIncident = ({
               }
               case IncidentFormField.Custom: {
                 return (
-                  <IncidentCustom questions={customQuestions} saving={saving} />
+                  <IncidentCustom
+                    form={form}
+                    questions={customQuestions}
+                    saving={saving}
+                  />
                 );
               }
               case IncidentFormField.Cctv: {
