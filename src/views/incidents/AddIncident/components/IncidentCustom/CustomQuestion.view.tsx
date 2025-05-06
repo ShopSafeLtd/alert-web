@@ -9,7 +9,7 @@ import { useIntl } from 'react-intl';
 
 interface Props {
   disabled: boolean;
-  form: FormInstance<FormData>;
+  form?: FormInstance<FormData>;
   questions: CustomQuestion[];
   radioAnswer?: boolean;
 }
