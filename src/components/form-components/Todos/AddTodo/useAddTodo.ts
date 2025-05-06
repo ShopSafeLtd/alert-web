@@ -169,6 +169,7 @@ const useAddTodo = ({
 
       setQuestions(
         templateQuestions.map((question) => ({
+          actions: [],
           answerType: question.type,
           label: question.questionFormatted,
           options: question.optionsFormFormatted || [],
