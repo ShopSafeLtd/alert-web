@@ -3374,7 +3374,7 @@ export type CreateStockRemovalItemInput = {
 };
 
 export type CreateStockRemovalRequestApproverInput = {
-  approverId: Array<Scalars['String']>;
+  approverId: Scalars['String'];
   stockRemovalRequestId: Scalars['String'];
 };
 
@@ -7773,6 +7773,7 @@ export type IncidentFormListRelationFilter = {
 
 export type IncidentFormOnTag = {
   __typename?: 'IncidentFormOnTag';
+  conditions?: Maybe<Array<Scalars['JSON']>>;
   metadata?: Maybe<Scalars['JSON']>;
   position: Scalars['Int'];
   type: IncidentFormField;
@@ -8143,6 +8144,7 @@ export enum IncidentPriority {
 
 export type IncidentQuestions = {
   __typename?: 'IncidentQuestions';
+  actions: Array<Scalars['JSON']>;
   answerType: AnswerType;
   dependentOnAnswerValue?: Maybe<Scalars['String']>;
   dependentOnBrandIds?: Maybe<Array<Scalars['String']>>;
@@ -19499,6 +19501,7 @@ export type TagOrderWhereUniqueInput = {
 
 export type TagQuestion = {
   __typename?: 'TagQuestion';
+  actions: Array<Scalars['JSON']>;
   answers: Array<Answer>;
   createdAt: Scalars['Date'];
   dependentBrands: Array<Scalars['String']>;
