@@ -1,3 +1,4 @@
+import type { FormData } from '#/views/incidents/AddIncident/types/formData';
 import type { FormInstance } from 'antd';
 import type { StockItemValue } from 'components/form-components/StockItemSearch/StockItemSearch.view';
 import type { ListGoodsTypesQuery } from 'graphql/goods-types/queries/__generated__/list-goods-types.generated';
@@ -8,8 +9,6 @@ import { useListBusinessesDivisionQuery } from 'graphql/businesses/queries/__gen
 import { useListGoodsTypesQuery } from 'graphql/goods-types/queries/__generated__/list-goods-types.generated';
 import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
-
-import type { FormData } from '../../useAddIncident';
 
 interface Return {
   division: string | undefined;

@@ -16,6 +16,7 @@ interface Props {
   incidentTagsData: ListIncidentTagsQuery | undefined;
   incidentTagsLoading: boolean;
   incidentTypeTooltip?: null | string;
+
   involvedMetadata?: { [key: string]: string }[];
   oneSelectedIncidentTypeOnly: boolean;
   tags: { label: string; tooltip: string; type: TagType; value: string }[];
@@ -27,6 +28,7 @@ const IncidentTypes = ({
   incidentTagsData,
   incidentTagsLoading,
   incidentTypeTooltip,
+
   involvedMetadata,
   oneSelectedIncidentTypeOnly,
   tags,
@@ -34,10 +36,6 @@ const IncidentTypes = ({
 }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
-
-  console.log(
-    involvedMetadata?.at(0)?.mode === 'SINGLE_SELECT' ? 'radio' : 'check'
-  );
 
   return (
     <Card className={classes.card}>
@@ -74,6 +72,7 @@ const IncidentTypes = ({
             required: true,
           },
         ]}
+        shouldUpdate
         tooltip={
           incidentTypeTooltip ||
           intl.formatMessage({

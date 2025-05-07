@@ -1,3 +1,4 @@
+import type { FormData } from '#/views/incidents/AddIncident/types/formData';
 import type { FormInstance } from 'antd';
 
 import MG11Sign from '#/components/form-components/MG11Sign/MG11Sign';
@@ -17,8 +18,6 @@ import {
 import { PoliceResponseTime } from 'graphql/types';
 import React from 'react';
 import { useIntl } from 'react-intl';
-
-import type { FormData } from '../../useAddIncident';
 
 import useStyles from '../../AddIncident.styles';
 

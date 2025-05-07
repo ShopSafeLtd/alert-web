@@ -1,10 +1,10 @@
+import type { FormData } from '#/views/incidents/AddIncident/types/formData';
 import type { FormInstance } from 'antd';
 
 import { Col, Divider, Drawer, Form, Row, Typography } from 'antd';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
-import type { FormData } from '../../../../../views/incidents/AddIncident/useAddIncident';
 import type { StateOffenderData } from './useOffenders';
 
 import CountButton from '../../../../form-components/count-buttons/CountButton.view';
@@ -76,7 +76,6 @@ const Offenders = ({
     value,
   });
   const images = Form.useWatch('images', form);
-
   return (
     <>
       {offenders.length > 0 ? (
@@ -192,39 +191,32 @@ const Offenders = ({
       <Drawer
         onClose={toggleAddExistingOpen}
         open={addExistingOpen}
-        title={intl.formatMessage({
-          defaultMessage: 'Add Existing Offenders',
-        })}
+        title={
+          addExistingOpen
+            ? intl.formatMessage({
+                defaultMessage: 'Add Existing Offenders',
+              })
+            : matchExistingOpen
+              ? intl.formatMessage({
+                  defaultMessage: 'Search & Match Offender',
+                })
+              : ''
+        }
         width="1000"
         zIndex={1001}
       >
         {addExistingOpen ? (
           <AddExistingOffender
             offenderIds={offenders.map(({ id }) => id)}
-            onClose={toggleAddExistingOpen}
-            update={(data) => onAddOffenders([data], true, false)}
-          />
-        ) : (
-          <div />
-        )}
-      </Drawer>
-
-      <Drawer
-        onClose={() => setMatchExistingOpen(null)}
-        open={!!matchExistingOpen}
-        title={intl.formatMessage({
-          defaultMessage: 'Search & Match Offender',
-        })}
-        width="1000"
-        zIndex={1001}
-      >
-        {matchExistingOpen ? (
-          <AddExistingOffender
-            offenderIds={offenders.map(({ id }) => id)}
-            onClose={() => setMatchExistingOpen(null)}
-            update={(data) => {
-              onMatchOffender(data);
+            onClose={() => {
+              toggleAddExistingOpen();
+              setMatchExistingOpen(null);
             }}
+            update={(data) =>
+              addExistingOpen
+                ? onAddOffenders([data], true, false)
+                : onMatchOffender(data)
+            }
           />
         ) : (
           <div />
@@ -242,7 +234,11 @@ const Offenders = ({
         {updateOpen ? (
           <SimpleEditOffender
             data={updateOpen}
-            images={images?.map((el) => ({ ...el, id: `${Math.random()}` }))}
+            images={images?.map((el) => ({
+              ...el,
+              id:
+                (el.isExisting && el.id) || el.id ? el.id : `${Math.random()}`,
+            }))}
             incidentBusinessId={incidentBusinessId}
             onClose={() => setUpdateOpen(null)}
             onEditOffender={(values) => onUpdateOffender(values)}

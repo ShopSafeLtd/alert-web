@@ -1,6 +1,9 @@
+import type { FormData } from '#/views/incidents/AddIncident/types/formData';
+import type { IncidentFormState } from '#/views/incidents/AddIncident/useAddIncident';
 import type { FormInstance } from 'antd';
 
 import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import { compressImage } from '#/utils/compress-images';
 import hasRolePermission from '#/utils/has-role-permission';
 import {
   faEdit,
@@ -32,13 +35,8 @@ import { useAtomValue } from 'jotai/index';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
-import type {
-  FormData,
-  IncidentFormState,
-} from '../../../../views/incidents/AddIncident/useAddIncident';
 import type { StateImageData } from './useImageSection';
 
-import { compressImage } from '../../../../utils/compress-images';
 import useImageSection from './useImageSection';
 
 const { Paragraph, Title } = Typography;

@@ -1,12 +1,25 @@
 /* eslint-disable react/jsx-props-no-spreading,@typescript-eslint/no-unsafe-member-access,formatjs/no-literal-string-in-jsx */
+import type { FormData } from '#/views/incidents/AddIncident/types/formData';
+import type { IncidentFormState } from '#/views/incidents/AddIncident/useAddIncident';
 import type { FormInstance } from 'antd';
 import type { AddressesQuery } from 'graphql/incidents/queries/__generated__/address.generated';
 import type { ListIncidentTagsQuery } from 'graphql/tags/queries/__generated__/list-incident-tags.generated';
 import type { TagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
 import type { CustomQuestion, LocationData } from 'types/DataType';
 
+import Loading from '#/components/shared-components/AntD/Loading';
 import IncidentCCTV from '#/views/incidents/AddIncident/components/IncidentCCTV/IncidentCCTV.view';
-import { Button, Card, Col, Drawer, Form, Modal, PageHeader, Row } from 'antd';
+import {
+  Button,
+  Card,
+  Col,
+  Drawer,
+  Form,
+  Modal,
+  PageHeader,
+  Row,
+  Typography,
+} from 'antd';
 import AddLocation from 'components/form-components/addresses/AddLocation';
 import ImageSection from 'components/incidents/IncidentForm/ImageSection';
 import IncidentDetails from 'components/incidents/IncidentForm/IncidentDetails';
@@ -14,8 +27,6 @@ import Profiles from 'components/incidents/IncidentForm/Profiles';
 import { IncidentFormField } from 'graphql/types';
 import React from 'react';
 import { useIntl } from 'react-intl';
-
-import type { FormData, IncidentFormState } from './useAddIncident';
 
 import useStyles from './AddIncident.styles';
 import IncidentCustom from './components/IncidentCustom/IncidentCustom.view';
@@ -25,17 +36,21 @@ import IncidentTypes from './components/IncidentTypes/IncidentTypes.container';
 import IncidentWhere from './components/IncidentWhere/IncidentWhere.container';
 import IncidentGoods from './components/IncidentsGoods/IncidentGoods.container';
 
+const { Paragraph } = Typography;
+
 interface Props {
   addNewAddress: boolean;
 
   customQuestions: CustomQuestion[];
   dontKnowGoods: () => void;
+  draftLoading: boolean;
   form: FormInstance<FormData>;
   generatingStatement: boolean;
   goodsMode: string;
   goodsVisible: boolean;
   incidentForm: IncidentFormState;
   incidentTagsData: ListIncidentTagsQuery | undefined;
+
   incidentTagsLoading: boolean;
   knowGoods: () => void;
   newAddressData: LocationData | undefined;
@@ -51,6 +66,7 @@ interface Props {
   setPoliceReporting: (value: boolean) => void;
   setPrimaryImage: (value: string) => void;
   showSiteNumber: boolean;
+  submitDraft: () => void;
   tagsData: TagsQuery | undefined;
   toggleAddNewAddress: () => void;
   updateNewAddressData: (value: LocationData | undefined) => void;
@@ -58,9 +74,9 @@ interface Props {
 
 const AddIncident = ({
   addNewAddress,
-
   customQuestions,
   dontKnowGoods,
+  draftLoading,
   form,
   generatingStatement,
   goodsMode,
@@ -68,6 +84,7 @@ const AddIncident = ({
   incidentForm,
   incidentTagsData,
   incidentTagsLoading,
+
   knowGoods,
   newAddressData,
   onSubmit,
@@ -77,16 +94,39 @@ const AddIncident = ({
   primaryImage,
   reportOnly,
   saving,
-
   setPoliceReporting,
   setPrimaryImage,
   showSiteNumber,
+  submitDraft,
   tagsData,
   toggleAddNewAddress,
   updateNewAddressData,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const intl = useIntl();
+  if (draftLoading) {
+    return (
+      <div className="page-view">
+        <PageHeader
+          onBack={reportOnly ? undefined : () => window.history.back()}
+          title={intl.formatMessage({
+            defaultMessage: 'Add Incident',
+          })}
+        />
+        <div
+          style={{
+            alignItems: 'center',
+            display: 'flex',
+            flexDirection: 'column',
+            height: '80vh',
+            justifyContent: 'center',
+          }}
+        >
+          <Loading />
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="page-view">
       <PageHeader
@@ -173,6 +213,33 @@ const AddIncident = ({
                   />
                 );
               }
+              case IncidentFormField.Draft: {
+                const metadata = field.metadata?.[0];
+                const { draftButton, draftDescription, draftTitle } =
+                  metadata || {
+                    draftButton: intl.formatMessage({
+                      defaultMessage: 'Save Draft',
+                    }),
+                    draftDescription: '',
+                    draftTitle: '',
+                  };
+
+                return (
+                  <Card className={classes.card} title={draftTitle}>
+                    <Paragraph
+                      italic
+                      style={{ marginBottom: 10, marginLeft: 5 }}
+                      type="secondary"
+                    >
+                      {draftDescription}
+                    </Paragraph>
+
+                    <Button onClick={() => submitDraft()} type="primary">
+                      {draftButton}
+                    </Button>
+                  </Card>
+                );
+              }
               case IncidentFormField.Offenders: {
                 return (
                   <Card className={classes.card}>
@@ -227,7 +294,11 @@ const AddIncident = ({
               }
               case IncidentFormField.Custom: {
                 return (
-                  <IncidentCustom questions={customQuestions} saving={saving} />
+                  <IncidentCustom
+                    form={form}
+                    questions={customQuestions}
+                    saving={saving}
+                  />
                 );
               }
               case IncidentFormField.Cctv: {

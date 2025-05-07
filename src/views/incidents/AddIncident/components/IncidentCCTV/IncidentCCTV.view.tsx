@@ -1,4 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
+import type { FormData } from '#/views/incidents/AddIncident/types/formData';
 import type { FormInstance } from 'antd';
 
 import { faTrash } from '@fortawesome/pro-light-svg-icons';
@@ -18,8 +19,6 @@ import {
 } from 'antd';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
-
-import type { FormData } from '../../useAddIncident';
 
 import useStyles from '../../AddIncident.styles';
 

@@ -1,59 +1,62 @@
+import type { FormData } from '#/views/incidents/AddIncident/types/formData';
+import type { FormInstance } from 'antd';
+
+import { Col, Divider, Drawer, Form, Row, Typography } from 'antd';
+import AddVehicle from 'components/form-components/Vehicle/AddVehicleSimple';
+import EditVehicle from 'components/form-components/Vehicle/EditVehicleSimple/EditVehicleSimple.container';
+import CountButton from 'components/form-components/count-buttons/CountButton.view';
+import CounterButton from 'components/form-components/count-buttons/CounterButton.view';
+import LinkVehicle from 'components/form-components/linkOptions/LinkVehicle';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
-import type { FormInstance } from 'antd';
-import { Col, Divider, Drawer, Row, Typography, Form } from 'antd';
-import CounterButton from 'components/form-components/count-buttons/CounterButton.view';
-import CountButton from 'components/form-components/count-buttons/CountButton.view';
-import LinkVehicle from 'components/form-components/linkOptions/LinkVehicle';
-import EditVehicle from 'components/form-components/Vehicle/EditVehicleSimple/EditVehicleSimple.container';
-import AddVehicle from 'components/form-components/Vehicle/AddVehicleSimple';
-import type { FormData } from 'views/incidents/AddIncident/useAddIncident';
+
 import type { StateVehicleData } from './useVehicles';
-import useVehicles from './useVehicles';
+
 import useStyles from '../Profiles.styles';
 import VehicleProfile from './VehicleProfile.view';
+import useVehicles from './useVehicles';
 
 const { Paragraph } = Typography;
 
 interface Props {
-  value?: StateVehicleData[];
+  addExistingOpen: boolean;
+  addNewOpen: boolean;
+  form: FormInstance<FormData>;
   onChange?: (value: StateVehicleData[]) => void;
   saving: boolean;
-  toggleAddNewOpen: () => void;
-  addNewOpen: boolean;
   toggleAddExistingOpen: () => void;
-  addExistingOpen: boolean;
-  form: FormInstance<FormData>;
+  toggleAddNewOpen: () => void;
+  value?: StateVehicleData[];
 }
 
 const Vehicles = ({
-  value,
+  addExistingOpen,
+  addNewOpen,
+  form,
   onChange,
   saving,
-  toggleAddNewOpen,
-  addNewOpen,
   toggleAddExistingOpen,
-  addExistingOpen,
-  form,
+  toggleAddNewOpen,
+  value,
 }: Props) => {
   const {
-    vehicles,
-    toggleNoVehicles,
+    matchExistingOpen,
     noVehicles,
     onAddBlankVehicles,
     onAddVehicles,
+    onImagesUploadedInForm,
+    onMatchVehicle,
     onRemoveVehicle,
-    matchExistingOpen,
+    onUpdateVehicle,
     setMatchExistingOpen,
     setUpdateOpen,
-    onUpdateVehicle,
+    toggleNoVehicles,
     updateOpen,
-    onMatchVehicle,
-    onImagesUploadedInForm,
+    vehicles,
   } = useVehicles({
-    value,
-    onChange,
     form,
+    onChange,
+    value,
   });
   const classes = useStyles();
   const intl = useIntl();
@@ -71,28 +74,20 @@ const Vehicles = ({
           <Row gutter={8}>
             <Col>
               <CountButton
-                tooltip={intl.formatMessage({
-                  defaultMessage: "Don't add any vehicles to this incident",
-                })}
+                onClick={toggleNoVehicles}
+                selected={noVehicles}
                 text={intl.formatMessage({
                   defaultMessage: 'None',
                 })}
-                onClick={toggleNoVehicles}
-                selected={noVehicles}
+                tooltip={intl.formatMessage({
+                  defaultMessage: "Don't add any vehicles to this incident",
+                })}
               />
             </Col>
             {[1, 2, 3, 4].map((count) => (
               <Col key={count}>
                 <CountButton
-                  tooltip={intl.formatMessage(
-                    {
-                      defaultMessage:
-                        'Add {count} {count, plural, one {vehicle} other {vehicles}} to the incident',
-                    },
-                    {
-                      count,
-                    }
-                  )}
+                  onClick={() => onAddBlankVehicles(count)}
                   text={intl.formatMessage(
                     {
                       defaultMessage:
@@ -102,16 +97,24 @@ const Vehicles = ({
                       count,
                     }
                   )}
-                  onClick={() => onAddBlankVehicles(count)}
+                  tooltip={intl.formatMessage(
+                    {
+                      defaultMessage:
+                        'Add {count} {count, plural, one {vehicle} other {vehicles}} to the incident',
+                    },
+                    {
+                      count,
+                    }
+                  )}
                 />
               </Col>
             ))}
             <Col>
               <CounterButton
-                onClick={onAddBlankVehicles}
                 dataName={intl.formatMessage({
                   defaultMessage: 'Vehicles',
                 })}
+                onClick={onAddBlankVehicles}
               />
             </Col>
           </Row>
@@ -128,11 +131,11 @@ const Vehicles = ({
             {vehicles.map((vehicle) => (
               <Col key={vehicle.id}>
                 <VehicleProfile
-                  saving={saving}
-                  vehicle={vehicle}
                   onRemoveVehicle={onRemoveVehicle}
-                  setUpdateOpen={setUpdateOpen}
+                  saving={saving}
                   setMatchExistingOpen={setMatchExistingOpen}
+                  setUpdateOpen={setUpdateOpen}
+                  vehicle={vehicle}
                 />
               </Col>
             ))}
@@ -141,86 +144,86 @@ const Vehicles = ({
       ) : null}
 
       <Drawer
+        bodyStyle={{ overflow: 'hidden' }}
+        onClose={toggleAddExistingOpen}
+        open={addExistingOpen}
         title={intl.formatMessage({
           defaultMessage: 'Add Existing Vehicles',
         })}
-        open={addExistingOpen}
         width="800"
-        onClose={toggleAddExistingOpen}
-        bodyStyle={{ overflow: 'hidden' }}
         zIndex={1001}
       >
         {addExistingOpen ? (
           <LinkVehicle
+            onClose={toggleAddExistingOpen}
             update={(data) => onAddVehicles([data], true)}
             vehicleIds={vehicles.map(({ id }) => id)}
-            onClose={toggleAddExistingOpen}
           />
         ) : (
           <div />
         )}
       </Drawer>
       <Drawer
+        bodyStyle={{ overflow: 'hidden' }}
+        onClose={() => setMatchExistingOpen(null)}
+        open={!!matchExistingOpen}
         title={intl.formatMessage({
           defaultMessage: 'Search & Match Vehicle',
         })}
-        open={!!matchExistingOpen}
         width="800"
-        onClose={() => setMatchExistingOpen(null)}
         zIndex={1001}
-        bodyStyle={{ overflow: 'hidden' }}
       >
         {matchExistingOpen ? (
           <LinkVehicle
+            onClose={() => setMatchExistingOpen(null)}
             update={onMatchVehicle}
             vehicleIds={vehicles.map(({ id }) => id)}
-            onClose={() => setMatchExistingOpen(null)}
           />
         ) : (
           <div />
         )}
       </Drawer>
       <Drawer
+        onClose={() => setUpdateOpen(null)}
+        open={!!updateOpen}
         title={intl.formatMessage({
           defaultMessage: 'Update Vehicle',
         })}
-        open={!!updateOpen}
         width="800"
-        onClose={() => setUpdateOpen(null)}
         zIndex={1001}
       >
         {updateOpen ? (
           <EditVehicle
+            editData={updateOpen}
+            images={images}
+            onClose={() => setUpdateOpen(null)}
+            onImagesUploaded={onImagesUploadedInForm}
             update={(data) => {
               onUpdateVehicle(data);
             }}
-            onClose={() => setUpdateOpen(null)}
-            editData={updateOpen}
-            images={images}
-            onImagesUploaded={onImagesUploadedInForm}
           />
         ) : (
           <div />
         )}
       </Drawer>
       <Drawer
+        onClose={toggleAddNewOpen}
+        open={addNewOpen}
         title={intl.formatMessage({
           defaultMessage: 'Add New Vehicle',
         })}
-        open={addNewOpen}
         width="700"
         zIndex={999}
-        onClose={toggleAddNewOpen}
       >
         {addNewOpen ? (
           <AddVehicle
+            images={images}
+            onClose={toggleAddNewOpen}
+            onImagesUploaded={onImagesUploadedInForm}
             update={(data) => {
               onAddVehicles([data], false);
               toggleAddNewOpen();
             }}
-            onClose={toggleAddNewOpen}
-            images={images}
-            onImagesUploaded={onImagesUploadedInForm}
           />
         ) : (
           <div />

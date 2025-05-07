@@ -1,10 +1,8 @@
 /* eslint-disable no-param-reassign */
+import type { FormData } from '#/views/incidents/AddIncident/types/formData';
 import type { FormInstance, UploadFile, UploadProps } from 'antd';
 import type { UploadChangeParam } from 'antd/lib/upload';
-import type {
-  FormData,
-  IncidentFormState,
-} from 'views/incidents/AddIncident/useAddIncident';
+import type { IncidentFormState } from 'views/incidents/AddIncident/useAddIncident';
 
 import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { Form } from 'antd';
@@ -72,6 +70,8 @@ export interface ImageResponseType {
 }
 
 export interface StateImageData extends UploadFile<ImageResponseType[]> {
+  id?: string;
+  isExisting?: boolean;
   isFace?: boolean;
   policeImage?: boolean;
   position?: ImagePosition;
@@ -105,21 +105,25 @@ const useImageSection = ({ form, incidentForm, onChange }: Props): Return => {
   const facialDetection =
     useAtomValue(currentSchemeAtom)?.facialDetection ?? true;
   const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const [initial, setInitial] = useState(true);
 
   useEffect(() => {
-    if (formImages && formImages !== images) {
+    if (formImages && formImages !== images && initial) {
       setImages(formImages);
+      setInitial(false);
     }
-  }, [formImages]);
+  }, [formImages, images]);
 
   useEffect(() => {
-    if (onChange && formImages?.length !== images.length) {
+    if (onChange && formImages?.length !== images.length && initial) {
       onChange(images);
     }
-  }, [images]);
+  }, [formImages?.length, images, onChange]);
 
   useEffect(() => {
-    form.setFieldValue('images', images);
+    if (images.length > 0) {
+      form.setFieldValue('images', images);
+    }
   }, [form, images]);
 
   const onImageChange = (info: UploadChangeParam<StateImageData>) => {

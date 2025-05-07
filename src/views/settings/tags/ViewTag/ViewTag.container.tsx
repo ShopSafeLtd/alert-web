@@ -9,6 +9,7 @@ const AddCrimeType = (): JSX.Element => {
     data,
     deleteConfirm,
     deleteQuestion,
+    draftState,
     editIncidentType,
     incidentFormFields,
     incidentFormLayout,
@@ -21,6 +22,7 @@ const AddCrimeType = (): JSX.Element => {
     saveQOrder,
     saving,
     selectedQuestion,
+    setDraftState,
     setEditIncidentType,
     setIncidentFormLayout,
     setIncidentFormLayoutChanged,
@@ -28,6 +30,7 @@ const AddCrimeType = (): JSX.Element => {
     setQuestionLayoutChanged,
     setQuestionsLayout,
     setSelectedQuestion,
+    showDraft,
     toggleAddQuestion,
     toggleField,
     updateQuestionOnTag,
@@ -40,6 +43,7 @@ const AddCrimeType = (): JSX.Element => {
       data={data}
       deleteConfirm={deleteConfirm}
       deleteQuestion={deleteQuestion}
+      draftState={draftState}
       editIncidentType={editIncidentType}
       incidentFormFields={incidentFormFields}
       incidentFormLayout={incidentFormLayout}
@@ -52,6 +56,7 @@ const AddCrimeType = (): JSX.Element => {
       saveQOrder={saveQOrder}
       saving={saving}
       selectedQuestion={selectedQuestion}
+      setDraftState={setDraftState}
       setEditIncidentType={setEditIncidentType}
       setIncidentFormLayout={setIncidentFormLayout}
       setIncidentFormLayoutChanged={setIncidentFormLayoutChanged}
@@ -59,6 +64,7 @@ const AddCrimeType = (): JSX.Element => {
       setQuestionLayoutChanged={setQuestionLayoutChanged}
       setQuestionsLayout={setQuestionsLayout}
       setSelectedQuestion={setSelectedQuestion}
+      showDraft={showDraft}
       toggleAddQuestion={toggleAddQuestion}
       toggleField={toggleField}
       updateQuestionOnTag={updateQuestionOnTag}

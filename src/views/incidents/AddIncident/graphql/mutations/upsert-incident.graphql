@@ -1,0 +1,61 @@
+mutation UpsertIncident($data: UpsertIncidentData!) {
+    upsertIncident(data: $data) {
+        id
+        subject
+        description
+        dayTime
+        date
+        time
+        value
+        recoveredValue
+        policeReported
+        policeRef
+        policeInvolved
+        crimeTypes {
+            id
+            name
+        }
+        approved
+        location {
+            id
+            full
+        }
+        createdBy {
+            id
+            fullName
+            businesses {
+                fullName
+                id
+                name
+            }
+        }
+        images {
+            id
+            optimised
+            url
+            position
+            rotation
+        }
+        groups {
+            id
+            name
+        }
+        vehicles {
+            ...Vehicles
+            images {
+                ...Images
+            }
+        }
+        offenders {
+            ...Offenders
+            images {
+                ...Images
+                isFace
+            }
+            tags {
+                id
+                name
+            }
+        }
+    }
+}

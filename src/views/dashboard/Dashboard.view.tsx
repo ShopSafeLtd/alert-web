@@ -17,6 +17,7 @@ import {
   AdminTodos,
   ArticlesSection,
   DayOfWeek,
+  DraftIncidents,
   FeedItemCol,
   IncidentCount,
   IncidentValues,
@@ -76,6 +77,18 @@ const DashboardComponents: Map<AvailableDashboardElements, JSX.Element> =
         }}
       >
         <DayOfWeek />
+      </div>,
+    ],
+    [
+      'draftIncidents',
+      <div
+        key="draftIncidents"
+        style={{
+          margin: 10,
+          padding: 10,
+        }}
+      >
+        <DraftIncidents />
       </div>,
     ],
     [

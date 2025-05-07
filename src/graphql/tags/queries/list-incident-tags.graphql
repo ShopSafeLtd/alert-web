@@ -5,6 +5,7 @@ query ListIncidentTags($where: IncidentTagsInput!) {
       position
       type
       metadata
+      conditions
     }
     label
     parentId
@@ -21,6 +22,7 @@ query ListIncidentTags($where: IncidentTagsInput!) {
       dependentOnAnswerValue
       dependentOnBrandIds
       tooltip
+      actions
       options {
         label
         value

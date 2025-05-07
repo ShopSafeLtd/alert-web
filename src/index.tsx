@@ -113,6 +113,13 @@ interface Props {
 
 const ClerkWithRouting = ({ children }: Props) => {
   const navigate = useNavigate();
+
+  const satelliteHosts = ['app.jdshield.com'];
+  const satelliteTopLevelDomain = {
+    'app.jdshield.com': 'jdshield.com',
+  };
+  const isSatellite = satelliteHosts.includes(window.location.host);
+  const primarySignInUrl = 'https://app.shopsafe.io/sign-in';
   // const [clerk, setClerk] = useState<ClerkProp | null>(null);
   //
   // useEffect(() => {
@@ -154,6 +161,24 @@ const ClerkWithRouting = ({ children }: Props) => {
   // }, []);
   //
   // if (!clerk) return <LoadingScreen />;
+  if (isSatellite) {
+    return (
+      <ClerkProvider
+        allowedRedirectOrigins={satelliteHosts}
+        domain={(url) =>
+          (satelliteTopLevelDomain[url.host] as string) || url.host
+        }
+        isSatellite={true}
+        localization={getLocal()}
+        publishableKey={PUBLISHABLE_KEY}
+        routerPush={(to) => navigate(to)}
+        routerReplace={(to) => navigate(to, { replace: true })}
+        signInUrl={primarySignInUrl}
+      >
+        {children}
+      </ClerkProvider>
+    );
+  }
   return (
     <ClerkProvider
       localization={getLocal()}

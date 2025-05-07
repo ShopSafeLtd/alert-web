@@ -1,8 +1,7 @@
+import type { FormData } from '#/views/incidents/AddIncident/types/formData';
 import type { FormInstance } from 'antd';
 
 import React from 'react';
-
-import type { FormData } from '../../useAddIncident';
 
 import View from './IncidentGoods.view';
 import useIncidentGoods from './useIncidentGoods';

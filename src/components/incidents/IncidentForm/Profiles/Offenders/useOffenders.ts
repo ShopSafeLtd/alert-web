@@ -1,8 +1,8 @@
+import type { FormData } from '#/views/incidents/AddIncident/types/formData';
 import type { FormInstance } from 'antd';
-import type { UploadChangeParam } from 'antd/lib/upload';
+import type { RcFile, UploadChangeParam } from 'antd/lib/upload';
 import type { IdSource } from 'graphql/types';
 import type { AddressData, BlurFaceData } from 'types/DataType';
-import type { FormData } from 'views/incidents/AddIncident/useAddIncident';
 
 import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { Form } from 'antd';
@@ -55,8 +55,10 @@ interface ImageType {
   };
   fileName?: null | string;
   id: string;
+  isExisting?: boolean;
   new?: boolean;
   optimised?: null | string | undefined;
+  originFileObj?: RcFile;
   type?: null | string;
   url?: null | string | undefined;
 }
