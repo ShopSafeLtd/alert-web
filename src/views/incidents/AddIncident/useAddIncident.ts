@@ -311,6 +311,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
   const [primaryImage, setPrimaryImage] = useState<string>('');
   const [policeReporting, setPoliceReporting] = useState(false);
   const [generatingStatement, setGeneratingStatement] = useState(false);
+  const [formDataVersion, setFormDataVersion] = useState(0);
 
   const [isTheft] = useState(false);
   const [descriptionPristine, setDescriptionPristine] = useState(true);
@@ -1158,6 +1159,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
   const autoPopulateDescription =
     useAtomValue(currentSchemeAtom)?.autoPopulateDescription;
   const onValuesChange = (changedValues: FormData, values: FormData) => {
+    setFormDataVersion(formDataVersion + 1);
     if (changedValues.description) {
       setDescriptionPristine(false);
     }
@@ -1325,6 +1327,14 @@ const useAddIncident = ({ investigationId }: Props): Return => {
       if (formTags.length === 0) {
         setIncidentForm([{ type: IncidentFormField.Types }]);
       } else {
+        console.log(
+          'sections',
+          formTags.map((value) =>
+            incidentTagsData?.listIncidentTags.find(
+              (item) => item.value === value
+            )
+          )
+        );
         const sections = formTags
           .map((value) =>
             incidentTagsData?.listIncidentTags.find(
@@ -1332,6 +1342,31 @@ const useAddIncident = ({ investigationId }: Props): Return => {
             )
           )
           .flatMap((item) => item?.incidentForm)
+          .filter((item) => {
+            if (item?.conditions && item.conditions.length > 0) {
+              const conditions = item.conditions as {
+                conditionValues: string[];
+                questionId: string;
+                type: 'CUSTOM_QUESTION';
+              }[];
+              console.log(conditions);
+
+              const checkedConditions = conditions.map((condition) => {
+                if (condition.type === 'CUSTOM_QUESTION') {
+                  const questionValue = form.getFieldValue(
+                    condition.questionId
+                  ) as string;
+                  console.log(questionValue, condition.conditionValues);
+                  return condition.conditionValues.includes(questionValue);
+                }
+
+                return true;
+              });
+
+              return checkedConditions.includes(true);
+            }
+            return true;
+          })
           .map((item) => ({ metadata: item?.metadata, type: item?.type }));
 
         if (sections.length > 0) {
@@ -1387,7 +1422,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
         }
       }
     }
-  }, [formTags, incidentTagsData, brands]);
+  }, [formTags, incidentTagsData, brands, formDataVersion]);
 
   return {
     addNewAddress,
