@@ -114,7 +114,10 @@ interface Props {
 const ClerkWithRouting = ({ children }: Props) => {
   const navigate = useNavigate();
 
-  const satelliteHosts = ['app.jdshield.com']; // add more if needed
+  const satelliteHosts = ['app.jdshield.com'];
+  const satelliteTopLevelDomain = {
+    'app.jdshield.com': 'jdshield.com',
+  };
   const isSatellite = satelliteHosts.includes(window.location.host);
   const primarySignInUrl = 'https://app.shopsafe.io/sign-in';
   // const [clerk, setClerk] = useState<ClerkProp | null>(null);
@@ -162,7 +165,9 @@ const ClerkWithRouting = ({ children }: Props) => {
     return (
       <ClerkProvider
         allowedRedirectOrigins={satelliteHosts}
-        domain={(url) => url.host}
+        domain={(url) =>
+          (satelliteTopLevelDomain[url.host] as string) || url.host
+        }
         isSatellite={true}
         localization={getLocal()}
         publishableKey={PUBLISHABLE_KEY}
