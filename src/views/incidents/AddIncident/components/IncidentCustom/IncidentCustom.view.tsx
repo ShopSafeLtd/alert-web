@@ -1,4 +1,4 @@
-import type { FormData } from '#/views/incidents/AddIncident/useAddIncident';
+import type { FormData } from '#/views/incidents/AddIncident/types/formData';
 import type { CustomQuestion } from 'types/DataType';
 
 import { Card, Col, type FormInstance, Row, Typography } from 'antd';

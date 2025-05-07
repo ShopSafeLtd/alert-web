@@ -1,7 +1,5 @@
-import type {
-  FormData,
-  IncidentFormState,
-} from '#/views/incidents/AddIncident/useAddIncident';
+import type { FormData } from '#/views/incidents/AddIncident/types/formData';
+import type { IncidentFormState } from '#/views/incidents/AddIncident/useAddIncident';
 import type { FormInstance } from 'antd';
 import type { ListIncidentTagsQuery } from 'graphql/tags/queries/__generated__/list-incident-tags.generated';
 import type { TagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
@@ -16,6 +14,7 @@ interface Props {
   incidentForm: IncidentFormState;
   incidentTagsData: ListIncidentTagsQuery | undefined;
   incidentTagsLoading: boolean;
+
   involvedMetadata?: { [key: string]: string }[];
   setPoliceReporting: (value: boolean) => void;
   tagsData: TagsQuery | undefined;
@@ -26,6 +25,7 @@ const IncidentTypes = ({
   incidentForm,
   incidentTagsData: initIncidentTagsData,
   incidentTagsLoading,
+
   involvedMetadata,
   setPoliceReporting,
   tagsData,

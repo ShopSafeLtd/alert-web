@@ -28,6 +28,7 @@ query CurrentSchemeProvider($where: UserSchemeWhereUniqueInput!) {
             }
         }
         scheme {
+            draftIncidents
             currency
             activityAssignToUser
             autoPopulateDescription

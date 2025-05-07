@@ -1,0 +1,118 @@
+query IncidentDraftDetails($where: IncidentWhereUniqueInput!) {
+  incident(where: $where) {
+    business {
+      id
+      name
+    }
+    evidence {
+      id
+      url
+        name
+    }
+    answers {
+      answer
+      id
+      tagQuestion {
+        id
+        question {
+          id
+        }
+      }
+    }
+      cctvRecords {
+          id
+          aheadBehind
+          cameraNumber
+          correctTime
+          description
+          endTime
+          incorrectBy
+          showFace
+          showIncident
+          startTime
+      }
+    date
+    id
+    description
+    images {
+      id
+      url
+      position
+      policeImage
+      rotation
+    }
+    impactTags {
+      id
+      name
+    }
+    involvedTags {
+      id
+      name
+    }
+    motiveTags {
+      id
+      name
+    }
+    vehicles {
+      id
+      make
+      model
+      colour
+      registration
+      images {
+        id
+        url
+        position
+        policeImage
+      }
+    }
+    offenders {
+      id
+      name
+      images {
+        id
+        url
+        position
+        policeImage
+      }
+      age
+      build
+      gender
+      height
+      name
+      race
+    }
+    groups {
+      id
+      name
+    }
+    crimeGroups {
+      id
+    }
+    crimeTypes {
+      id
+      name
+    }
+    subject
+    location {
+      id
+    }
+    incidentItems {
+      id
+      name
+      goodsType {
+        name
+        id
+      }
+      quantity
+      recoveredQuantity
+      recoveredValue
+      value
+      sku
+      stockItem {
+        id
+      }
+      value
+    }
+  }
+}

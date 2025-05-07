@@ -10,7 +10,7 @@ export type ViewTagQueryVariables = Types.Exact<{
 }>;
 
 
-export type ViewTagQuery = { __typename?: 'Query', listTags: { __typename?: 'ListTags', tags: Array<{ __typename?: 'Tag', id: string, name: string, parentTag?: { __typename?: 'Tag', id: string } | null }> }, tag: { __typename?: 'Tag', id: string, name: string, description: string, parentTag?: { __typename?: 'Tag', id: string, name: string } | null, incidentForm?: { __typename?: 'IncidentForm', id: string, fields: Array<{ __typename?: 'FormField', id: string, position: number, type: Types.IncidentFormField }> } | null, tagQuestions: Array<{ __typename?: 'TagQuestion', req: boolean, priority: number, dependentQuestions: Array<{ [key: string]: any }>, id: string, question: { __typename?: 'Question', questionFormatted: string, type: Types.AnswerType, id: string, optionsFormatted?: Array<string> | null } }> } };
+export type ViewTagQuery = { __typename?: 'Query', listTags: { __typename?: 'ListTags', tags: Array<{ __typename?: 'Tag', id: string, name: string, parentTag?: { __typename?: 'Tag', id: string } | null }> }, tag: { __typename?: 'Tag', id: string, name: string, description: string, parentTag?: { __typename?: 'Tag', id: string, name: string } | null, incidentForm?: { __typename?: 'IncidentForm', id: string, fields: Array<{ __typename?: 'FormField', id: string, position: number, type: Types.IncidentFormField, metadata?: { [key: string]: any } | null }> } | null, tagQuestions: Array<{ __typename?: 'TagQuestion', req: boolean, priority: number, dependentQuestions: Array<{ [key: string]: any }>, id: string, question: { __typename?: 'Question', questionFormatted: string, type: Types.AnswerType, id: string, optionsFormatted?: Array<string> | null } }> } };
 
 
 export const ViewTagDocument = gql`
@@ -38,6 +38,7 @@ export const ViewTagDocument = gql`
         id
         position
         type
+        metadata
       }
     }
     tagQuestions(where: $tagQuestionsWhere) {

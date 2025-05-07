@@ -87,6 +87,7 @@ export interface ImageData {
   file?: StateImageData;
   fileName?: null | string;
   id?: string;
+  isExisting?: boolean;
   isFace?: boolean;
   new?: boolean;
   optimised?: null | string | undefined;
@@ -119,6 +120,7 @@ export interface ImageValue {
   file?: StateImageData;
   fileName?: null | string;
   id: string;
+  isExisting?: boolean;
   new?: boolean;
   optimised?: null | string | undefined;
   policeImage?: boolean | null | undefined;
@@ -332,7 +334,7 @@ const ImageSelectAnalyse = ({
     if (selected.some(({ id }) => id === image.uid)) {
       setSelected(selected.filter(({ id }) => id !== image.uid));
     } else {
-      if (facialRec && !image.isFace) {
+      if (facialRec && !image.isFace && !image.isExisting) {
         const imgResponse = image.response;
         setFacesUploading(image.uid || '');
 
@@ -343,23 +345,40 @@ const ImageSelectAnalyse = ({
         ) {
           setUploadFaces(imgResponse[0].faces);
         } else {
-          void getFacesFromUrl(image.url || '').then((res) =>
-            setUploadFaces(res)
-          );
+          try {
+            void getFacesFromUrl(image.url || '')
+              .then((res) => setUploadFaces(res))
+              .catch(() => {
+                // eslint-disable-next-line no-console
+                console.error('Error fetching faces from URL');
+              });
+          } catch {
+            // eslint-disable-next-line no-console
+            console.error('Error fetching faces from URL');
+          }
         }
       }
-      setSelected([
-        ...selected,
-        {
-          boundingBox: image.boundingBox,
-          id: image.uid,
-          optimised: image.url,
-          url: image.url,
-        },
-      ]);
+
+      const imageToAdd = image.isExisting
+        ? {
+            boundingBox: image.boundingBox,
+            id: image.uid,
+            isExisting: image.isExisting,
+            optimised: image.url,
+            url: image.url,
+            ...image,
+          }
+        : {
+            ...image,
+            boundingBox: image.boundingBox,
+            id: image.uid,
+            isExisting: image.isExisting,
+            optimised: image.url,
+            url: image.url,
+          };
+      setSelected([...selected, imageToAdd]);
     }
   };
-
   return (
     <div>
       <Upload

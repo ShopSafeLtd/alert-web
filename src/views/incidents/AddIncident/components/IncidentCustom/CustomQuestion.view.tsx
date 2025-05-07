@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access,@typescript-eslint/ban-ts-comment,@typescript-eslint/no-base-to-string */
-import type { FormData } from '#/views/incidents/AddIncident/useAddIncident';
+
+import type { FormData } from '#/views/incidents/AddIncident/types/formData';
 import type { CustomQuestion } from 'types/DataType';
 
 import CustomQuestionInput from '#/views/incidents/AddIncident/components/IncidentCustom/CustomQuestionInput.view';
@@ -20,6 +21,7 @@ const CustomQuestions = ({ disabled, form, questions }: Props) => {
   return (
     <Row>
       {questions.map((question) => {
+        console.log({ qid: question.questionId });
         if (
           question.dependentOnQuestionId !== null &&
           question.dependentOnQuestionId

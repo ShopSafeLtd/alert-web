@@ -1,4 +1,4 @@
-import type { FormData } from '#/views/incidents/AddIncident/useAddIncident';
+import type { FormData } from '#/views/incidents/AddIncident/types/formData';
 import type { CustomQuestion } from 'types/DataType';
 
 import DatePicker from '#/components/util-components/DatePicker';
@@ -84,7 +84,7 @@ const StringSelect = ({
       mode={radioAnswer ? 'radio' : 'check'}
       onChange={covertToString}
       options={options}
-      value={value ? value.split(',') : []}
+      value={value ? value.split(',').map((item) => item.trim()) : []}
     />
   );
 };

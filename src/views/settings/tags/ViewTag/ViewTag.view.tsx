@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access,formatjs/no-literal-string-in-jsx,@typescript-eslint/no-unsafe-assignment */
 import type { ExtendedLayout } from '#/views/reports/types';
 import type { ViewTagQuery } from '#/views/settings/tags/ViewTag/graphql/__generated__/view-tag.generated';
+import type { Dispatch, SetStateAction } from 'react';
 
 import { margin, rowHeight } from '#/components/reports/utils/utils';
 import {
@@ -16,6 +17,7 @@ import {
   Checkbox,
   Col,
   Drawer,
+  Input,
   PageHeader,
   Row,
   Select,
@@ -73,6 +75,11 @@ interface Props {
   data: ViewTagQuery | undefined;
   deleteConfirm: (value: string) => void;
   deleteQuestion: (questionId: string) => void;
+  draftState: {
+    draftButton: string;
+    draftDescription: string;
+    draftTitle: string;
+  };
   editIncidentType: string;
   incidentFormFields: IncidentFormFieldState;
   incidentFormLayout: ExtendedLayout[];
@@ -85,6 +92,13 @@ interface Props {
   saveQOrder: () => void;
   saving: boolean;
   selectedQuestion: null | string;
+  setDraftState: Dispatch<
+    SetStateAction<{
+      draftButton: string;
+      draftDescription: string;
+      draftTitle: string;
+    }>
+  >;
   setEditIncidentType: (value: string) => void;
   setIncidentFormLayout: (value: ExtendedLayout[]) => void;
   setIncidentFormLayoutChanged: (value: boolean) => void;
@@ -92,6 +106,7 @@ interface Props {
   setQuestionLayoutChanged: (value: boolean) => void;
   setQuestionsLayout: (value: ExtendedLayout[]) => void;
   setSelectedQuestion: (value: null | string) => void;
+  showDraft: boolean;
   toggleAddQuestion: () => void;
   toggleField: (field: IncidentFormField) => void;
   updateQuestionOnTag: (
@@ -111,6 +126,7 @@ const ViewTag = ({
   data,
   deleteConfirm,
   deleteQuestion,
+  draftState,
   editIncidentType,
   incidentFormFields,
   incidentFormLayout,
@@ -123,6 +139,7 @@ const ViewTag = ({
   saveQOrder,
   saving,
   selectedQuestion,
+  setDraftState,
   setEditIncidentType,
   setIncidentFormLayout,
   setIncidentFormLayoutChanged,
@@ -130,6 +147,7 @@ const ViewTag = ({
   setQuestionLayoutChanged,
   setQuestionsLayout,
   setSelectedQuestion,
+  showDraft,
   toggleAddQuestion,
   toggleField,
   updateQuestionOnTag,
@@ -244,6 +262,91 @@ const ViewTag = ({
         </Card>
       </div>
     ),
+    draft:
+      showDraft && !loading ? (
+        <div
+          key="draft"
+          style={{
+            cursor: 'grab',
+          }}
+        >
+          <Card
+            style={{ marginBottom: 0, outline: '1px solid #ccc' }}
+            title={<FormattedMessage defaultMessage="Save as draft" />}
+          >
+            <Row gutter={[16, 16]}>
+              <Col flex={1}>
+                <FormattedMessage defaultMessage="Draft" />
+              </Col>
+              <Col>
+                <Tooltip
+                  title={intl.formatMessage({
+                    defaultMessage: 'Hide/Show field on form',
+                  })}
+                >
+                  <Checkbox
+                    checked={incidentFormFields.DRAFT}
+                    onChange={() => {
+                      toggleField(IncidentFormField.Draft);
+                    }}
+                  />
+                </Tooltip>
+              </Col>
+
+              {/* Draft Title Input */}
+              <Col span={24}>
+                <Input
+                  addonBefore={intl.formatMessage({
+                    defaultMessage: 'Draft Title',
+                  })}
+                  defaultValue={draftState.draftTitle}
+                  onChange={(e) =>
+                    setDraftState((prev) => ({
+                      ...prev,
+                      draftTitle: e.target.value,
+                    }))
+                  }
+                  placeholder="Draft Title"
+                />
+              </Col>
+
+              {/* Draft Description Input */}
+              <Col span={24}>
+                <Input
+                  addonBefore={intl.formatMessage({
+                    defaultMessage: 'Draft Description',
+                  })}
+                  defaultValue={draftState.draftDescription}
+                  onChange={(e) =>
+                    setDraftState((prev) => ({
+                      ...prev,
+                      draftDescription: e.target.value,
+                    }))
+                  }
+                  placeholder="Draft Description"
+                />
+              </Col>
+
+              {/* Draft Button Label Input */}
+              <Col span={24}>
+                <Input
+                  addonBefore={intl.formatMessage({
+                    defaultMessage: 'Draft Button',
+                  })}
+                  defaultValue={draftState.draftButton}
+                  onChange={(e) =>
+                    setDraftState((prev) => ({
+                      ...prev,
+                      draftButton: e.target.value,
+                    }))
+                  }
+                  placeholder="Draft Button Label"
+                />
+              </Col>
+            </Row>
+          </Card>
+        </div>
+      ) : undefined,
     goods: (
       <div
         key="goods"

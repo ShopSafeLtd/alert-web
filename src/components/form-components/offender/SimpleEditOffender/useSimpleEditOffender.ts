@@ -153,6 +153,7 @@ const useEditOffender = ({
     setSaving(true);
 
     const imageData = value.images.map((item) => ({
+      ...item,
       blurFaces:
         item.blurFaces && item.blurFaces.length > 0
           ? item.blurFaces

@@ -2355,13 +2355,22 @@ export type BusinessWhereUniqueInput = {
   users?: InputMaybe<UserListRelationFilter>;
 };
 
+export type CctvCreateUpdate = {
+  createUpdate?: InputMaybe<Array<UpsertIncidentCctvRecord>>;
+  remove?: InputMaybe<Array<Scalars['String']>>;
+};
+
 export type CctvRecord = {
   __typename?: 'CctvRecord';
+  aheadBehind?: Maybe<Scalars['String']>;
   cameraNumber: Scalars['String'];
+  correctTime?: Maybe<Scalars['Boolean']>;
   createdAt: Scalars['Date'];
+  description?: Maybe<Scalars['String']>;
   endTime: Scalars['Date'];
   id: Scalars['String'];
   incident: Incident;
+  incorrectBy?: Maybe<Scalars['Int']>;
   showFace: Scalars['Boolean'];
   showIncident: Scalars['Boolean'];
   startTime: Scalars['Date'];
@@ -2761,6 +2770,11 @@ export type ConnectImageToIncident = {
 
 export type ConnectOnlyArrayHelper = {
   connect: Array<UniqueId>;
+};
+
+export type ConnectRemove = {
+  connect: Array<Scalars['String']>;
+  remove: Array<Scalars['String']>;
 };
 
 export type ConnectSetHelper = {
@@ -4793,6 +4807,13 @@ export type DocumentTagsArgs = {
   where?: InputMaybe<TagWhereInput>;
 };
 
+export type DocumentIncidentCreate = {
+  fileType: Scalars['String'];
+  name: Scalars['String'];
+  origFileName: Scalars['String'];
+  url: Scalars['String'];
+};
+
 export type DocumentListRelationFilter = {
   every?: InputMaybe<DocumentWhereInput>;
   none?: InputMaybe<DocumentWhereInput>;
@@ -4912,6 +4933,11 @@ export type DocumentWhereUniqueInput = {
   updatedAt?: InputMaybe<DateTimeFilter>;
   url?: InputMaybe<StringFilter>;
   vehicles?: InputMaybe<VehicleListRelationFilter>;
+};
+
+export type DocumentsCreateRemove = {
+  create?: InputMaybe<Array<DocumentIncidentCreate>>;
+  remove: Array<Scalars['String']>;
 };
 
 export type EnableSchemeRekognotionInput = {
@@ -7247,6 +7273,19 @@ export type ImageWhereUniqueInput = {
   vehicles?: InputMaybe<VehicleListRelationFilter>;
 };
 
+export type ImagesOnModelUpsert = {
+  connect?: InputMaybe<Array<Scalars['String']>>;
+  createConnect?: InputMaybe<Array<Scalars['String']>>;
+  new?: InputMaybe<Array<IncidentImageCreate>>;
+  removed?: InputMaybe<Array<Scalars['String']>>;
+};
+
+export type ImagesUpsert = {
+  create?: InputMaybe<Array<IncidentImageCreate>>;
+  remove?: InputMaybe<Array<Scalars['String']>>;
+  update?: InputMaybe<Array<IncidentImageUpdate>>;
+};
+
 export type ImportDemEvidence = {
   id: Scalars['String'];
   name: Scalars['String'];
@@ -7403,6 +7442,7 @@ export type Incident = {
   deleted: Scalars['Boolean'];
   description: Scalars['String'];
   descriptionTranslations: Array<Scalars['JSON']>;
+  draft: Scalars['Boolean'];
   evidence: Array<Document>;
   feedImage?: Maybe<Image>;
   geoLat?: Maybe<Scalars['String']>;
@@ -7737,6 +7777,7 @@ export enum IncidentFormField {
   Cctv = 'CCTV',
   Custom = 'CUSTOM',
   Details = 'DETAILS',
+  Draft = 'DRAFT',
   Goods = 'GOODS',
   Groups = 'GROUPS',
   Images = 'IMAGES',
@@ -7754,9 +7795,16 @@ export enum IncidentFormField {
 }
 
 export type IncidentFormFieldsInput = {
+  metadata?: InputMaybe<IncidentFormFieldsMetadataInput>;
   position: Scalars['Int'];
   tooltip?: InputMaybe<Scalars['String']>;
   type: IncidentFormField;
+};
+
+export type IncidentFormFieldsMetadataInput = {
+  draftButton?: InputMaybe<Scalars['String']>;
+  draftDescription?: InputMaybe<Scalars['String']>;
+  draftTitle?: InputMaybe<Scalars['String']>;
 };
 
 export type IncidentFormInput = {
@@ -7838,6 +7886,30 @@ export type IncidentFormWhereUniqueInput = {
   scheme?: InputMaybe<SchemeListRelationFilter>;
   tags?: InputMaybe<TagListRelationFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
+};
+
+export type IncidentImageCreate = {
+  filename: Scalars['String'];
+  id?: InputMaybe<Scalars['String']>;
+  indexFaces?: InputMaybe<Scalars['Boolean']>;
+  isFace?: InputMaybe<Scalars['Boolean']>;
+  mimetype: Scalars['String'];
+  policeImage?: InputMaybe<Scalars['Boolean']>;
+  position?: InputMaybe<Scalars['String']>;
+  primary?: InputMaybe<Scalars['Boolean']>;
+  rotation?: InputMaybe<Scalars['Int']>;
+  totalFaces?: InputMaybe<Scalars['Int']>;
+  url: Scalars['String'];
+};
+
+export type IncidentImageUpdate = {
+  id: Scalars['String'];
+  isFace?: InputMaybe<Scalars['Boolean']>;
+  policeImage?: InputMaybe<Scalars['Boolean']>;
+  position?: InputMaybe<Scalars['String']>;
+  primary?: InputMaybe<Scalars['Boolean']>;
+  rotation?: InputMaybe<Scalars['Int']>;
+  totalFaces?: InputMaybe<Scalars['Int']>;
 };
 
 export type IncidentItem = {
@@ -10587,6 +10659,7 @@ export type Mutation = {
   upsertDemDevice: DemDevice;
   upsertDemGroup: DemGroup;
   upsertFolder: Folder;
+  upsertIncident: Incident;
   upsertIncidentForm: IncidentForm;
   upsertPermission: CustomRole;
   upsertShoe: Shoe;
@@ -11725,6 +11798,11 @@ export type MutationUpsertDemGroupArgs = {
 
 export type MutationUpsertFolderArgs = {
   data: UpsertFolder;
+};
+
+
+export type MutationUpsertIncidentArgs = {
+  data: UpsertIncidentData;
 };
 
 
@@ -13697,6 +13775,13 @@ export type OffenderWhereUniqueInput = {
   updates?: InputMaybe<UpdateListRelationFilter>;
   uploaded?: InputMaybe<BoolNullableFilter>;
   vehicles?: InputMaybe<VehicleListRelationFilter>;
+};
+
+export type OffendersIncidentUpsertInput = {
+  connect?: InputMaybe<Array<Scalars['String']>>;
+  new?: InputMaybe<Array<UpsertIncidentOffender>>;
+  removed?: InputMaybe<Array<Scalars['String']>>;
+  update?: InputMaybe<Array<UpsertIncidentOffender>>;
 };
 
 export enum OnboardSteps {
@@ -17239,6 +17324,7 @@ export type Scheme = {
   defaultSubscribedOffenderOnly: Scalars['Boolean'];
   disableGalleryOnNative: Scalars['Boolean'];
   documents: Array<Document>;
+  draftIncidents: Scalars['Boolean'];
   facialDetection: Scalars['Boolean'];
   facialRecognition: Scalars['Boolean'];
   facialRedaction: Scalars['Boolean'];
@@ -21165,9 +21251,94 @@ export type UpsertFolder = {
   parentId?: InputMaybe<Scalars['String']>;
 };
 
+export type UpsertIncidentCctvRecord = {
+  aheadBehind?: InputMaybe<Scalars['String']>;
+  cameraNumber: Scalars['String'];
+  correctTime?: InputMaybe<Scalars['Boolean']>;
+  description?: InputMaybe<Scalars['String']>;
+  endTime: Scalars['Date'];
+  id?: InputMaybe<Scalars['String']>;
+  incorrectBy?: InputMaybe<Scalars['Int']>;
+  showFace: Scalars['Boolean'];
+  showIncident: Scalars['Boolean'];
+  startTime: Scalars['Date'];
+};
+
+export type UpsertIncidentData = {
+  answers?: InputMaybe<Array<AnswersInput>>;
+  business?: InputMaybe<Scalars['String']>;
+  cctvRecords?: InputMaybe<CctvCreateUpdate>;
+  crimeTypes: ConnectRemove;
+  date: Scalars['Date'];
+  description: Scalars['String'];
+  documents?: InputMaybe<DocumentsCreateRemove>;
+  draft?: InputMaybe<Scalars['Boolean']>;
+  groups: ConnectRemove;
+  id?: InputMaybe<Scalars['String']>;
+  images?: InputMaybe<ImagesUpsert>;
+  items?: InputMaybe<Array<CreateIncidentItemInput>>;
+  offenders?: InputMaybe<OffendersIncidentUpsertInput>;
+  policeCCTVEmail?: InputMaybe<Scalars['String']>;
+  policeDay?: InputMaybe<Scalars['Boolean']>;
+  policeDistanceFromIncident?: InputMaybe<Scalars['String']>;
+  policeIncidentDuration?: InputMaybe<Scalars['String']>;
+  policeInside?: InputMaybe<Scalars['Boolean']>;
+  policeInvolved?: InputMaybe<Scalars['Boolean']>;
+  policeItemsLocation?: InputMaybe<Array<Scalars['String']>>;
+  policeItemsMO?: InputMaybe<Array<Scalars['String']>>;
+  policeKnownBefore?: InputMaybe<Scalars['Boolean']>;
+  policeMG11?: InputMaybe<Scalars['Boolean']>;
+  policeNo?: InputMaybe<Scalars['String']>;
+  policeObstructions?: InputMaybe<Scalars['String']>;
+  policeObstructionsDetails?: InputMaybe<Scalars['String']>;
+  policeReasonRemember?: InputMaybe<Scalars['String']>;
+  policeRef?: InputMaybe<Scalars['String']>;
+  policeReported?: InputMaybe<Scalars['Boolean']>;
+  policeResponse?: InputMaybe<PoliceResponseTime>;
+  policeSign?: InputMaybe<Scalars['String']>;
+  policeStatement?: InputMaybe<Scalars['String']>;
+  policeTimePassed?: InputMaybe<Scalars['String']>;
+  policeWillingCourt?: InputMaybe<Scalars['Boolean']>;
+  policeWitnessAddress?: InputMaybe<Scalars['String']>;
+  policeWitnessAtTime?: InputMaybe<Scalars['Boolean']>;
+  policeWitnessEmail?: InputMaybe<Scalars['String']>;
+  policeWitnessEthnicity?: InputMaybe<Scalars['String']>;
+  policeWitnessGender?: InputMaybe<Scalars['String']>;
+  policeWitnessLength?: InputMaybe<Scalars['String']>;
+  policeWitnessMobileNo?: InputMaybe<Scalars['String']>;
+  policeWitnessName?: InputMaybe<Scalars['String']>;
+  policeWitnessPlaceOfBirth?: InputMaybe<Scalars['String']>;
+  policeWitnessPostcode?: InputMaybe<Scalars['String']>;
+  policeWitnessWorkNo?: InputMaybe<Scalars['String']>;
+  sessionId?: InputMaybe<Scalars['String']>;
+  subject?: InputMaybe<Scalars['String']>;
+  vehicles?: InputMaybe<VehiclesUpsertIncident>;
+};
+
 export type UpsertIncidentFormInput = {
   formFields: Array<IncidentFormFieldsInput>;
   tagId: Scalars['String'];
+};
+
+export type UpsertIncidentOffender = {
+  address?: InputMaybe<CreateIncidentOffenderAddress>;
+  age?: InputMaybe<Age>;
+  alias?: InputMaybe<Array<Scalars['String']>>;
+  build?: InputMaybe<Build>;
+  comment?: InputMaybe<Scalars['String']>;
+  dateOfBirth?: InputMaybe<Scalars['Date']>;
+  dateSource?: InputMaybe<Scalars['String']>;
+  gender?: InputMaybe<Gender>;
+  groups?: InputMaybe<ConnectOnlyArrayHelper>;
+  hair?: InputMaybe<Scalars['String']>;
+  height?: InputMaybe<Height>;
+  id?: InputMaybe<Scalars['String']>;
+  idSource?: InputMaybe<IdSource>;
+  idVerified?: InputMaybe<Scalars['Boolean']>;
+  images?: InputMaybe<ImagesOnModelUpsert>;
+  name?: InputMaybe<Scalars['String']>;
+  peculiarities?: InputMaybe<Scalars['String']>;
+  race?: InputMaybe<Race>;
 };
 
 export type UpsertRole = {
@@ -23128,6 +23299,21 @@ export type VehicleWhereUniqueInput = {
   todos?: InputMaybe<TodoListRelationFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
   updates?: InputMaybe<UpdateListRelationFilter>;
+};
+
+export type VehiclesUpsert = {
+  colour?: InputMaybe<Scalars['String']>;
+  localId?: InputMaybe<Scalars['String']>;
+  make?: InputMaybe<Scalars['String']>;
+  model?: InputMaybe<Scalars['String']>;
+  registration?: InputMaybe<Scalars['String']>;
+};
+
+export type VehiclesUpsertIncident = {
+  connect?: InputMaybe<Array<Scalars['String']>>;
+  new?: InputMaybe<Array<VehiclesUpsert>>;
+  removed?: InputMaybe<Array<Scalars['String']>>;
+  updated?: InputMaybe<Array<VehiclesUpsert>>;
 };
 
 export type Victim = {
