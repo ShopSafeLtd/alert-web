@@ -7,6 +7,7 @@ import ActiveOffendersTemplate from '#/views/dashboard/components/ActiveOffender
 import AdminTodosTemplate from '#/views/dashboard/components/AdminTodos/AdminTodosTemplate';
 import ArticlesSection from '#/views/dashboard/components/ArticlesSection/ArticlesSectionTemplate';
 import DayOfWeekBar from '#/views/dashboard/components/DayOfWeek/DayOfWeekGraphTemplate';
+import DraftIncidentsTemplate from '#/views/dashboard/components/DraftIncidents/DraftIncidentsTemplate';
 import FeedItemCol from '#/views/dashboard/components/FeedItems/FeedItemColTemplate';
 import IncidentCount from '#/views/dashboard/components/IncidentCount/IncidentCountTemplate.view';
 import IncidentValue from '#/views/dashboard/components/IncidentValues/IncidentValueTemplate.view';
@@ -304,6 +305,30 @@ const DashboardSelectorDrawer = ({
               unselectable="on"
             >
               <LatestIncidentsTemplate removeItem={removeItem} />
+            </div>
+            <Divider
+              style={{ marginBottom: 10, marginTop: 10 }}
+              type="horizontal"
+            />
+          </Col>
+          <Col hidden={usedKeys.has('draftIncidents')} span={24}>
+            <div
+              className="droppable-element"
+              draggable
+              key="draftIncidents"
+              onDragEnd={() => setDroppingItem(undefined)}
+              onDragStart={(e) => {
+                setDroppingItem({
+                  h: 3,
+                  i: 'draftIncidents',
+                  w: 3,
+                });
+                e.dataTransfer.setData('text/plain', '');
+              }}
+              style={dragStyle}
+              unselectable="on"
+            >
+              <DraftIncidentsTemplate removeItem={removeItem} />
             </div>
             <Divider
               style={{ marginBottom: 10, marginTop: 10 }}

@@ -6,6 +6,7 @@ import ActiveOffendersTemplate from '#/views/dashboard/components/ActiveOffender
 import AdminTodosTemplate from '#/views/dashboard/components/AdminTodos/AdminTodosTemplate';
 import ArticlesSection from '#/views/dashboard/components/ArticlesSection/ArticlesSectionTemplate';
 import DayOfWeekBar from '#/views/dashboard/components/DayOfWeek/DayOfWeekGraphTemplate';
+import DraftIncidentsTemplate from '#/views/dashboard/components/DraftIncidents/DraftIncidentsTemplate';
 import FeedItemCol from '#/views/dashboard/components/FeedItems/FeedItemColTemplate';
 import IncidentCount from '#/views/dashboard/components/IncidentCount/IncidentCountTemplate.view';
 import IncidentValue from '#/views/dashboard/components/IncidentValues/IncidentValueTemplate.view';
@@ -230,6 +231,17 @@ const ViewDashboardEditor = () => {
         <DayOfWeekBar removeItem={removeItem} />
       </div>
     ),
+    draftIncidents: (
+      <div
+        key="draftIncidents"
+        style={{
+          overflow: 'hidden',
+          padding: 15,
+        }}
+      >
+        <DraftIncidentsTemplate removeItem={removeItem} />
+      </div>
+    ),
     feedItemCol: (
       <div
         key="feedItemCol"
@@ -252,6 +264,7 @@ const ViewDashboardEditor = () => {
         <IncidentCount removeItem={removeItem} />
       </div>
     ),
+
     incidentValue: (
       <div
         key="incidentValue"

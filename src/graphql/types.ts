@@ -4207,6 +4207,7 @@ export type DashboardCreateInput = {
 export type DashboardInput = {
   approvedOnly?: InputMaybe<Scalars['Boolean']>;
   dateRange: DateRangeInput;
+  draft?: InputMaybe<Scalars['Boolean']>;
   following?: InputMaybe<Scalars['Boolean']>;
   groupIds?: InputMaybe<Array<Scalars['String']>>;
   myData?: InputMaybe<Scalars['Boolean']>;
@@ -8367,6 +8368,7 @@ export type IncidentWhereInput = {
   dayOfWeek?: InputMaybe<IntNullableFilter>;
   deleted?: InputMaybe<BoolFilter>;
   description?: InputMaybe<StringFilter>;
+  draft?: InputMaybe<BoolFilter>;
   evidence?: InputMaybe<DocumentListRelationFilter>;
   feedItems?: InputMaybe<FeedItemListRelationFilter>;
   geoLat?: InputMaybe<StringNullableFilter>;
