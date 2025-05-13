@@ -8,30 +8,13 @@ export type UpdateTodoMentionMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateTodoMentionMutation = { __typename?: 'Mutation', updateTodoMention: Array<{ __typename?: 'Todo', description?: string | null, dueDate?: Date | null, completedDate?: Date | null, completed?: boolean | null, id: string, name?: string | null, createdBy?: { __typename?: 'User', id: string, fullName: string } | null, completedBy?: { __typename?: 'User', id: string, fullName: string } | null, assignedUsers: Array<{ __typename?: 'User', id: string, fullName: string }> }> };
+export type UpdateTodoMentionMutation = { __typename?: 'Mutation', updateTodoMention: Array<{ __typename?: 'Todo', id: string }> };
 
 
 export const UpdateTodoMentionDocument = gql`
     mutation UpdateTodoMention($where: UpdateTodoMention!) {
   updateTodoMention(where: $where) {
-    description
-    dueDate
-    completedDate
-    completed
     id
-    name
-    createdBy {
-      id
-      fullName
-    }
-    completedBy {
-      id
-      fullName
-    }
-    assignedUsers {
-      id
-      fullName
-    }
   }
 }
     `;

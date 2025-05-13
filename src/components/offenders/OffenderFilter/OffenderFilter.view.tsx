@@ -132,24 +132,24 @@ const OffenderFilter = ({
                 defaultMessage: 'Oldest First',
               })}
             </Select.Option>
-            <Select.Option value={OffenderSort.incidentValueDesc}>
+            <Select.Option value={OffenderSort.noIncidentDesc}>
               {intl.formatMessage({
                 defaultMessage: 'Most Incidents First',
               })}
             </Select.Option>
-            <Select.Option value={OffenderSort.incidentValueAsc}>
+            <Select.Option value={OffenderSort.noIncidentAsc}>
               {intl.formatMessage({
                 defaultMessage: 'Least Incidents First',
               })}
             </Select.Option>
 
-            <Select.Option value={OffenderSort.noIncidentDesc}>
+            <Select.Option value={OffenderSort.incidentValueDesc}>
               {intl.formatMessage({
                 defaultMessage: 'Highest Loss First',
               })}
             </Select.Option>
 
-            <Select.Option value={OffenderSort.noIncidentAsc}>
+            <Select.Option value={OffenderSort.incidentValueAsc}>
               {intl.formatMessage({
                 defaultMessage: 'Lowest Loss First',
               })}

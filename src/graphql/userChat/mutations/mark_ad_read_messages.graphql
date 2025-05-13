@@ -1,58 +1,5 @@
 mutation markAsReadMessages($userChatId: String!) {
   markAsReadMessages(userChatId: $userChatId) {
     id
-    newMessages
-    mentioned
-    updatedAt
-    createdAt
-    user {
-      id
-      fullName
-      firstLetter
-    }
-    chat {
-      id
-      name
-      firstLetter
-      totalMembers
-      messages {
-        id
-        content
-        createdAt
-        from {
-          id
-          fullName
-          origFirstLetter
-          origName
-        }
-        images {
-          id
-          url
-          optimised
-          position
-          rotation
-        }
-        vehicles {
-          id
-          reference
-        }
-        crimeGroups {
-          id
-          reference
-        }
-        incidents {
-          id
-          subject
-        }
-        offenders {
-          id
-          name
-        }
-        articles {
-          id
-          title
-        }
-      }
-    }
   }
 }
