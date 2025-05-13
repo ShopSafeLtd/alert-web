@@ -217,14 +217,24 @@ const ActivitiesGraphView = ({
             direction: 'horizontal',
             label: {
               enabled: true,
+              formatter: (value: { value: number }) =>
+                `${value.value.toFixed(0)}%`,
               placement: 'inside-center',
             },
             scale: {
+              label: {
+                enabled: true,
+                formatter: (value: { value: number }) =>
+                  `${value.value.toFixed(0)}%`,
+              },
               max: 100,
               min: 0,
             },
             tooltip: {
               enabled: true,
+              renderer: (value) => ({
+                content: `${value.value}%`,
+              }),
             },
             type: 'linear-gauge',
             value: calcCompletedPercentage(),
