@@ -62,8 +62,10 @@ const useMySafety = (): Return => {
                 emergencyServicesAttend: item.emergencyServicesAttend,
                 estimatedValue: item.estimatedValue,
                 incidentID: item.incidentID,
+                offenderNameNickname: item.officerName ?? '',
                 site: item.site,
                 specificArea: item.specificArea,
+                timeOccurred: item.timeOccurred,
                 wereWeaponsUsed: item.wereWeaponsUsed,
               })),
             scheme: {
