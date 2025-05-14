@@ -11822,6 +11822,11 @@ export type MutationUpsertShoeArgs = {
   data: UpsertShoe;
 };
 
+export enum MySafetyAboutThePersonSubmittingTheReport {
+  Colleague = 'Colleague',
+  Other = 'Other'
+}
+
 export type MySafetyImportDataInput = {
   groups: Array<UniqueId>;
   incidents: Array<MySafetyImportIncidents>;
@@ -11829,19 +11834,63 @@ export type MySafetyImportDataInput = {
 };
 
 export type MySafetyImportIncidents = {
-  actualValue?: InputMaybe<Scalars['Float']>;
-  createdByName: Scalars['String'];
+  aboutThePersonSubmittingTheReport?: InputMaybe<MySafetyAboutThePersonSubmittingTheReport>;
+  crimeEstimatedValueOfLoss?: InputMaybe<Scalars['String']>;
+  crimeLossType?: InputMaybe<Array<Scalars['String']>>;
+  crimeLossTypeOther?: InputMaybe<Scalars['String']>;
   crimeReferenceNumber?: InputMaybe<Scalars['String']>;
   crimeType: Array<Scalars['String']>;
-  dateOccurred: Scalars['Date'];
-  description: Scalars['String'];
-  emergencyServicesAttend?: InputMaybe<Scalars['Boolean']>;
-  estimatedValue: Scalars['Float'];
-  incidentID: Scalars['String'];
+  crimeWasTheWeaponUsedResultingInAnInjury?: InputMaybe<MySafetyYesNo>;
+  crimeWeaponsPresent?: InputMaybe<MySafetyYesNo>;
+  crimeWereAnyWeaponsSeenOrThreatened?: InputMaybe<MySafetyYesNo>;
+  dateOccurred: Scalars['DateTime'];
+  doYouKnowTheRegistration?: InputMaybe<MySafetyYesNo>;
+  firstName?: InputMaybe<Scalars['String']>;
+  howDidItHappen?: InputMaybe<Scalars['String']>;
+  incidentID?: InputMaybe<Scalars['String']>;
+  offenderNameNickname: Scalars['String'];
+  offenders?: InputMaybe<Array<MySafetyImportOffender>>;
+  pleaseProvideDetails?: InputMaybe<Scalars['String']>;
   site: Scalars['String'];
-  specificArea: Scalars['String'];
-  wereWeaponsUsed?: InputMaybe<Scalars['Boolean']>;
+  siteAddress?: InputMaybe<Scalars['String']>;
+  surname?: InputMaybe<Scalars['String']>;
+  timeOccurred: Scalars['DateTime'];
+  vehicleColour?: InputMaybe<Scalars['String']>;
+  vehicleMake?: InputMaybe<Scalars['String']>;
+  vehicleRegistration?: InputMaybe<Scalars['String']>;
+  vehicleType?: InputMaybe<Scalars['String']>;
+  wasAVehicleWasInvolved?: InputMaybe<MySafetyYesNo>;
+  wasThereAnyThreatOfViolenceMade?: InputMaybe<MySafetyYesNo>;
+  whoWereTheOffenders?: InputMaybe<MySafetyWhoWereTheOffenders>;
 };
+
+export type MySafetyImportOffender = {
+  additionalDetails?: InputMaybe<Scalars['String']>;
+  suspectApproxAge?: InputMaybe<Scalars['String']>;
+  suspectBuild?: InputMaybe<Scalars['String']>;
+  suspectClothes?: InputMaybe<Scalars['String']>;
+  suspectEthnicity?: InputMaybe<Scalars['String']>;
+  suspectFacialHair?: InputMaybe<Scalars['String']>;
+  suspectGender?: InputMaybe<Scalars['String']>;
+  suspectHWMetricOrIMp?: InputMaybe<Scalars['String']>;
+  suspectHair?: InputMaybe<Scalars['String']>;
+  suspectHeightImp?: InputMaybe<Scalars['String']>;
+  suspectHeightMet?: InputMaybe<Scalars['String']>;
+  suspectNotableDetails?: InputMaybe<Scalars['String']>;
+  suspectTattoos?: InputMaybe<Scalars['String']>;
+  suspectWeightImp?: InputMaybe<Scalars['String']>;
+  suspectWeightMet?: InputMaybe<Scalars['String']>;
+};
+
+export enum MySafetyWhoWereTheOffenders {
+  Adults = 'Adults',
+  Youths = 'Youths'
+}
+
+export enum MySafetyYesNo {
+  No = 'No',
+  Yes = 'Yes'
+}
 
 export type NestedBoolFilter = {
   equals?: InputMaybe<Scalars['Boolean']>;
@@ -15164,6 +15213,14 @@ export type QueryLoginEventsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<LoginEventWhereInput>;
+};
+
+
+export type QueryMentionableUsersArgs = {
+  chatId?: InputMaybe<Scalars['String']>;
+  search?: InputMaybe<Scalars['String']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
 };
 
 

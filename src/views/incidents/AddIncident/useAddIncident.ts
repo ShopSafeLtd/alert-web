@@ -550,16 +550,21 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
 
   // mutation
   const [createIncident] = useCreateIncidentMutation({
-    onCompleted: () => {
+    onCompleted: (result) => {
       setSaving(false);
       Mixpanel.track('Successfully create incident');
       notification.success({
         description: intl.formatMessage({
-          defaultMessage: 'The Incident has been added!',
+          defaultMessage: 'Your new incident has been successfully created.',
         }),
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Added!',
-        }),
+        message: intl.formatMessage(
+          {
+            defaultMessage: 'Incident {var1} created',
+          },
+          {
+            var1: result.createIncident.reference,
+          }
+        ),
         placement: 'bottomRight',
       });
       if (investigationId) {
