@@ -4,7 +4,6 @@ import viteTsconfigPaths from 'vite-tsconfig-paths';
 import envCompatible from 'vite-plugin-env-compatible';
 // import removeConsole from 'vite-plugin-remove-console';
 import { sentryVitePlugin } from '@sentry/vite-plugin';
-
 // local host launch fix
 import dns from 'node:dns';
 
@@ -13,6 +12,9 @@ import { visualizer } from 'rollup-plugin-visualizer';
 import { analyzer } from 'vite-bundle-analyzer';
 import removeConsole from 'vite-plugin-remove-console';
 import compression from 'vite-plugin-compression2';
+
+// Build timestamp for cache-busting
+const buildTimestamp = Date.now().toString();
 
 dns.setDefaultResultOrder('verbatim');
 const pathResolve = (pathStr: string) => {
@@ -65,9 +67,9 @@ export default defineConfig((configEnv) => {
       minify: 'esbuild',
       rollupOptions: {
         output: {
-          chunkFileNames: 'assets/js/[name].[hash].js',
-          entryFileNames: 'assets/js/[name].[hash].js',
-          assetFileNames: 'assets/[ext]/[name].[hash].[ext]',
+          chunkFileNames: `assets/js/[name].${buildTimestamp}.js`,
+          entryFileNames: `assets/js/[name].${buildTimestamp}.js`,
+          assetFileNames: `assets/[ext]/[name].${buildTimestamp}.[ext]`,
         },
       },
       assetsInlineLimit: 4096,
