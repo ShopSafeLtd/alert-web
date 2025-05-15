@@ -67,9 +67,9 @@ export default defineConfig((configEnv) => {
       minify: 'esbuild',
       rollupOptions: {
         output: {
-          chunkFileNames: `assets/js/[name].${buildTimestamp}.js`,
-          entryFileNames: `assets/js/[name].${buildTimestamp}.js`,
-          assetFileNames: `assets/[ext]/[name].${buildTimestamp}.[ext]`,
+          chunkFileNames: `assets/js/[name].${buildTimestamp}.[hash].js`,
+          entryFileNames: `assets/js/[name].${buildTimestamp}.[hash].js`,
+          assetFileNames: `assets/[ext]/[name].${buildTimestamp}.[hash].[ext]`,
         },
       },
       assetsInlineLimit: 4096,
