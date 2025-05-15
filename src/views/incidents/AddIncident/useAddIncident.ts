@@ -2,18 +2,22 @@
 import type { FormData } from '#/views/incidents/AddIncident/types/formData';
 import type { MutationUpdaterFn } from '@apollo/client';
 import type { FormInstance } from 'antd';
+import { Form, Modal, notification } from 'antd';
 import type { CreateIncidentMutation } from 'graphql/incidents/mutations/__generated__/crreate-incident.generated';
+import { useCreateIncidentMutation } from 'graphql/incidents/mutations/__generated__/crreate-incident.generated';
 import type { AddressesQuery } from 'graphql/incidents/queries/__generated__/address.generated';
+import { useAddressesQuery } from 'graphql/incidents/queries/__generated__/address.generated';
 import type { ListIncidentsQuery } from 'graphql/incidents/queries/__generated__/list-incidents.generated';
+import { ListIncidentsDocument } from 'graphql/incidents/queries/__generated__/list-incidents.generated';
 import type { ViewInvestigationQuery } from 'graphql/investigations/queries/__generated__/view-investigation.generated';
+import { ViewInvestigationDocument } from 'graphql/investigations/queries/__generated__/view-investigation.generated';
 import type { ListIncidentTagsQuery } from 'graphql/tags/queries/__generated__/list-incident-tags.generated';
+import { useListIncidentTagsQuery } from 'graphql/tags/queries/__generated__/list-incident-tags.generated';
 import type { TagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
+import { useTagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
 import type { CreateIncidentData } from 'graphql/types';
-import type {
-  CustomQuestion,
-  CustomQuestionAction,
-  LocationData,
-} from 'types/DataType';
+import { AnswerType, GoodsMode, IncidentFormField, Model, PermissionMethod, PermissionModel } from 'graphql/types';
+import type { CustomQuestion, CustomQuestionAction, LocationData } from 'types/DataType';
 
 import { useGroupsContext } from '#/context/groups-context';
 import { sessionIdAtom } from '#/hooks/useManageSession';
@@ -28,33 +32,24 @@ import {
 import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import hasPermission from '#/utils/has-permission';
 import hasRolePermission from '#/utils/has-role-permission';
-import { useGenerateStatementBodyMutation } from '#/views/incidents/AddIncident/graphql/__generated__/generateStatementBody.generated';
-import { useUpsertIncidentMutation } from '#/views/incidents/AddIncident/graphql/mutations/__generated__/upsert-incident.generated';
-import { useIncidentDraftDetailsQuery } from '#/views/incidents/AddIncident/graphql/queries/__generated__/edit-incident-draft.generated';
+import {
+  useGenerateStatementBodyMutation,
+} from '#/views/incidents/AddIncident/graphql/__generated__/generateStatementBody.generated';
+import {
+  useUpsertIncidentMutation,
+} from '#/views/incidents/AddIncident/graphql/mutations/__generated__/upsert-incident.generated';
+import {
+  useIncidentDraftDetailsQuery,
+} from '#/views/incidents/AddIncident/graphql/queries/__generated__/edit-incident-draft.generated';
 import generateInitData from '#/views/incidents/AddIncident/helpers/generate-init-data';
 import upsertIncident from '#/views/incidents/AddIncident/helpers/upsert-incident';
-import { Form, Modal, notification } from 'antd';
 import dayjs from 'dayjs';
 import { useBusinessBrandsLazyQuery } from 'graphql/businesses/queries/__generated__/business-brands.generated';
 import { useListGoodsTypesQuery } from 'graphql/goods-types/queries/__generated__/list-goods-types.generated';
-import { useCreateIncidentMutation } from 'graphql/incidents/mutations/__generated__/crreate-incident.generated';
-import { useAddressesQuery } from 'graphql/incidents/queries/__generated__/address.generated';
-import { ListIncidentsDocument } from 'graphql/incidents/queries/__generated__/list-incidents.generated';
-import { ViewInvestigationDocument } from 'graphql/investigations/queries/__generated__/view-investigation.generated';
-import { useListIncidentTagsQuery } from 'graphql/tags/queries/__generated__/list-incident-tags.generated';
-import { useTagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
-import {
-  AnswerType,
-  GoodsMode,
-  IncidentFormField,
-  Model,
-  PermissionMethod,
-  PermissionModel,
-} from 'graphql/types';
 // noinspection ES6PreferShortImport
 import { useAtomValue } from 'jotai/index';
 import { debounce } from 'lodash-es';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
 import { useStoreActions, useStoreState } from 'state';
@@ -77,6 +72,7 @@ interface Return {
   addNewAddress: boolean;
   addressLoading: boolean;
   brands: string[];
+  continueDraft: () => void;
   customQuestions: CustomQuestion[];
   dontKnowGoods: () => void;
   draftLoading: boolean;
@@ -84,6 +80,7 @@ interface Return {
   generatingStatement: boolean;
   goodsMode: GoodsMode;
   goodsVisible: boolean;
+  hidePostDraftSections: boolean;
   incidentForm: IncidentFormState;
   incidentTagsData: ListIncidentTagsQuery | undefined;
   incidentTagsLoading: boolean;
@@ -111,6 +108,7 @@ interface Return {
 
 const useAddIncident = ({ id, investigationId }: Props): Return => {
   const [form] = useForm<FormData>();
+  const [hidePostDraftSections, setHidePostDraftSections] = useState(false);
 
   const intl = useIntl();
   const isAdmin = useAtomValue(isAdminAtom);
@@ -555,10 +553,16 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
       Mixpanel.track('Successfully create incident');
       notification.success({
         description: intl.formatMessage({
-          defaultMessage: 'The Incident has been added!',
+          defaultMessage: 'Your new incident has been successfully created.',
         }),
-        duration: null,
-        message: `Incident ${result.createIncident.reference} created`,
+        message: intl.formatMessage(
+          {
+            defaultMessage: 'Incident {var1} created',
+          },
+          {
+            var1: result.createIncident.reference,
+          }
+        ),
         placement: 'bottomRight',
       });
       if (investigationId) {
@@ -620,7 +624,8 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
       setGoodsVisible(true);
     }
     console.log(formData);
-    form.setFieldsValue(formData);
+    form.setFieldsValue({ ...formData, draftSkip: 'true' });
+    setHidePostDraftSections(false);
   }, [draftData]);
 
   const [upsertIncidentM] = useUpsertIncidentMutation({
@@ -1117,8 +1122,17 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
   };
 
   const submitDraft = () => {
-    const formValues = form.getFieldsValue();
-    void onSubmit(formValues, true);
+    form.validateFields().then(
+      () => {
+        setSaving(true);
+        const formValues = form.getFieldsValue();
+        void onSubmit(formValues, true);
+        setSaving(false);
+      },
+      () => {
+        setSaving(false);
+      }
+    );
   };
   const autoPopulateDescription =
     useAtomValue(currentSchemeAtom)?.autoPopulateDescription;
@@ -1185,13 +1199,13 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
       const goodsWithRecoveredValue =
         values.goods && values.goods.length > 0
           ? values.goods
-              .filter(
-                (item) =>
-                  item.goodsType !== undefined &&
-                  item.recoveredValue !== undefined &&
-                  item.value !== undefined
-              )
-              .map((item) => item.value)
+            .filter(
+              (item) =>
+                item.goodsType !== undefined &&
+                item.recoveredValue !== undefined &&
+                item.value ,!== undefined
+            )
+            .map((item) => item.value)
           : [];
 
       form.setFieldsValue({
@@ -1207,14 +1221,14 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
               recovered:
                 goodsWithRecoveredValue.length > 0
                   ? intl.formatNumber(
-                      goodsWithRecoveredValue.reduce(
-                        (a, b) => (a || 0) + (b || 0)
-                      ) || 0,
-                      {
-                        currency,
-                        style: 'currency',
-                      }
-                    )
+                    goodsWithRecoveredValue.reduce(
+                      (a, b) => (a || 0) + (b || 0),
+                    ) || 0,
+                    {
+                      currency,
+                      style: 'currency',
+                    },
+                  )
                   : '',
               tags: tags
                 .map((tag, index) => `${index > 0 ? ' ' : ''}${tag}`)
@@ -1223,12 +1237,12 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
               totalLoss:
                 goodsWithValue.length > 0
                   ? intl.formatNumber(
-                      goodsWithValue.reduce((a, b) => (a || 0) + (b || 0)) || 0,
-                      {
-                        currency,
-                        style: 'currency',
-                      }
-                    )
+                    goodsWithValue.reduce((a, b) => (a || 0) + (b || 0)) || 0,
+                    {
+                      currency,
+                      style: 'currency',
+                    },
+                  )
                   : '',
             }
           ) + (offenders.length > 0 ? offendersText : ''),
@@ -1387,11 +1401,31 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
       }
     }
   }, [formTags, incidentTagsData, brands, formDataVersion]);
+  const hasDraft = useMemo(
+    () => incidentForm.some((item) => item.type === IncidentFormField.Draft),
+    [incidentForm],
+  );
+  useEffect(() => {
+    if (id) {
+      setHidePostDraftSections(false);
+      return;
+    }
+    if (!hasDraft) {
+      setHidePostDraftSections(false);
+    } else if (!hidePostDraftSections) {
+      setHidePostDraftSections(true);
+    }
+  }, [incidentForm, hasDraft, id]);
 
+  const continueDraft = () => {
+    setHidePostDraftSections(false);
+    form.setFieldValue('draftSkip', true);
+  };
   return {
     addNewAddress,
     addressLoading,
     brands,
+    continueDraft,
     customQuestions,
     dontKnowGoods,
     draftLoading,
@@ -1399,9 +1433,10 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
     generatingStatement,
     goodsMode,
     goodsVisible,
+    hidePostDraftSections,
     incidentForm,
-    incidentTagsData,
 
+    incidentTagsData,
     incidentTagsLoading,
     isTheft,
     knowGoods,
