@@ -18,6 +18,7 @@ import {
   Modal,
   PageHeader,
   Row,
+  Space,
   Typography,
 } from 'antd';
 import AddLocation from 'components/form-components/addresses/AddLocation';
@@ -41,6 +42,7 @@ const { Paragraph } = Typography;
 interface Props {
   addNewAddress: boolean;
 
+  continueDraft: () => void;
   customQuestions: CustomQuestion[];
   dontKnowGoods: () => void;
   draftLoading: boolean;
@@ -48,9 +50,10 @@ interface Props {
   generatingStatement: boolean;
   goodsMode: string;
   goodsVisible: boolean;
+  hidePostDraftSections: boolean;
+
   incidentForm: IncidentFormState;
   incidentTagsData: ListIncidentTagsQuery | undefined;
-
   incidentTagsLoading: boolean;
   knowGoods: () => void;
   newAddressData: LocationData | undefined;
@@ -74,6 +77,7 @@ interface Props {
 
 const AddIncident = ({
   addNewAddress,
+  continueDraft,
   customQuestions,
   dontKnowGoods,
   draftLoading,
@@ -81,10 +85,10 @@ const AddIncident = ({
   generatingStatement,
   goodsMode,
   goodsVisible,
+  hidePostDraftSections,
   incidentForm,
   incidentTagsData,
   incidentTagsLoading,
-
   knowGoods,
   newAddressData,
   onSubmit,
@@ -104,6 +108,31 @@ const AddIncident = ({
 }: Props): JSX.Element => {
   const classes = useStyles();
   const intl = useIntl();
+
+  const reorderedAndTrimmedForm = (() => {
+    const reordered = incidentForm.flatMap((field) => {
+      if (field.type === IncidentFormField.Police && policeReporting) {
+        const detailsIndex = incidentForm.findIndex(
+          (t) => t.type === IncidentFormField.Details
+        );
+        return detailsIndex === -1
+          ? [field]
+          : [{ type: IncidentFormField.Details }, field];
+      }
+      if (field.type === IncidentFormField.Details && policeReporting) {
+        return [];
+      }
+      return [field];
+    });
+
+    if (!hidePostDraftSections) return reordered;
+
+    const draftIndex = reordered.findIndex(
+      (f) => f.type === IncidentFormField.Draft
+    );
+    return draftIndex === -1 ? reordered : reordered.slice(0, draftIndex + 1);
+  })();
+
   if (draftLoading) {
     return (
       <div className="page-view">
@@ -158,163 +187,157 @@ const AddIncident = ({
         }}
         onValuesChange={onValuesChange}
       >
-        {incidentForm
-          // if police reporting is enabled and details exists, move it above police for better UX
-          .flatMap((field) => {
-            if (field.type === IncidentFormField.Police && policeReporting) {
-              const detailsIndex = incidentForm
-                .map((t) => t.type)
-                .indexOf(IncidentFormField.Details);
-              return detailsIndex === -1
-                ? field
-                : [{ type: IncidentFormField.Details }, field];
+        {reorderedAndTrimmedForm.map((field) => {
+          switch (field.type) {
+            case IncidentFormField.Types: {
+              return (
+                <IncidentTypes
+                  form={form}
+                  incidentForm={incidentForm}
+                  incidentTagsData={incidentTagsData}
+                  incidentTagsLoading={incidentTagsLoading}
+                  involvedMetadata={
+                    incidentForm.find((f) => f.type === 'INVOLVED')?.metadata
+                  }
+                  setPoliceReporting={setPoliceReporting}
+                  tagsData={tagsData}
+                />
+              );
             }
-            if (field.type === IncidentFormField.Details && policeReporting) {
-              return [];
+            case IncidentFormField.Where: {
+              return (
+                <IncidentWhere
+                  newAddressData={newAddressData}
+                  saving={saving}
+                  showSiteNumber={showSiteNumber}
+                  toggleAddNewAddress={toggleAddNewAddress}
+                  updateNewAddressData={updateNewAddressData}
+                />
+              );
             }
-            return field;
-          })
-          .map((field) => {
-            switch (field.type) {
-              case IncidentFormField.Types: {
-                return (
-                  <IncidentTypes
-                    form={form}
-                    incidentForm={incidentForm}
-                    incidentTagsData={incidentTagsData}
-                    incidentTagsLoading={incidentTagsLoading}
-                    involvedMetadata={
-                      incidentForm.find((f) => f.type === 'INVOLVED')?.metadata
-                    }
-                    setPoliceReporting={setPoliceReporting}
-                    tagsData={tagsData}
-                  />
-                );
-              }
-              case IncidentFormField.Where: {
-                return (
-                  <IncidentWhere
-                    newAddressData={newAddressData}
-                    saving={saving}
-                    showSiteNumber={showSiteNumber}
-                    toggleAddNewAddress={toggleAddNewAddress}
-                    updateNewAddressData={updateNewAddressData}
-                  />
-                );
-              }
-              case IncidentFormField.Goods: {
-                return (
-                  <IncidentGoods
-                    dontKnowGoods={dontKnowGoods}
-                    form={form}
-                    goodsMode={goodsMode}
-                    goodsVisible={goodsVisible}
-                    knowGoods={knowGoods}
-                  />
-                );
-              }
-              case IncidentFormField.Draft: {
-                const metadata = field.metadata?.[0];
-                const { draftButton, draftDescription, draftTitle } =
-                  metadata || {
-                    draftButton: intl.formatMessage({
-                      defaultMessage: 'Save Draft',
-                    }),
-                    draftDescription: '',
-                    draftTitle: '',
-                  };
+            case IncidentFormField.Goods: {
+              return (
+                <IncidentGoods
+                  dontKnowGoods={dontKnowGoods}
+                  form={form}
+                  goodsMode={goodsMode}
+                  goodsVisible={goodsVisible}
+                  knowGoods={knowGoods}
+                />
+              );
+            }
+            case IncidentFormField.Draft: {
+              const metadata = field.metadata?.[0];
+              const { draftButton, draftDescription, draftTitle } =
+                metadata || {
+                  draftButton: intl.formatMessage({
+                    defaultMessage: 'Save Draft',
+                  }),
+                  draftDescription: '',
+                  draftTitle: '',
+                };
 
-                return (
-                  <Card className={classes.card} title={draftTitle}>
-                    <Paragraph
-                      italic
-                      style={{ marginBottom: 10, marginLeft: 5 }}
-                      type="secondary"
-                    >
-                      {draftDescription}
-                    </Paragraph>
-
+              if (!hidePostDraftSections) {
+                return null;
+              }
+              return (
+                <Card className={classes.card} title={draftTitle}>
+                  <Paragraph
+                    italic
+                    style={{ marginBottom: 10, marginLeft: 5 }}
+                    type="secondary"
+                  >
+                    {draftDescription}
+                  </Paragraph>
+                  <Space>
                     <Button onClick={() => submitDraft()} type="primary">
                       {draftButton}
                     </Button>
-                  </Card>
-                );
-              }
-              case IncidentFormField.Offenders: {
-                return (
-                  <Card className={classes.card}>
-                    <Profiles
-                      form={form}
-                      hasVictims={incidentForm
-                        .map((f) => f.type)
-                        .includes(IncidentFormField.Victims)}
-                      // hasVehicles={incidentForm.includes(
-                      //   IncidentFormField.Vehicles
-                      // )}
-                      hasWitnesses={incidentForm
-                        .map((f) => f.type)
-                        .includes(IncidentFormField.Witnesses)}
-                      saving={saving}
-                    />
-                  </Card>
-                );
-              }
-              case IncidentFormField.Images: {
-                return (
-                  <Card className={classes.card}>
-                    <ImageSection
-                      disabled={saving}
-                      form={form}
-                      incidentForm={incidentForm}
-                      primaryImage={primaryImage}
-                      setPrimaryImage={setPrimaryImage}
-                    />
-                  </Card>
-                );
-              }
-              case IncidentFormField.Details: {
-                return (
-                  <Card className={classes.card}>
-                    <IncidentDetails saving={saving} />
-                  </Card>
-                );
-              }
-              case IncidentFormField.Police: {
-                return (
-                  <IncidentPolice
-                    form={form}
-                    generatingStatement={generatingStatement}
-                    policeReporting={policeReporting}
-                    saving={saving}
-                  />
-                );
-              }
-              case IncidentFormField.Groups: {
-                return <IncidentGroups saving={saving} />;
-              }
-              case IncidentFormField.Custom: {
-                return (
-                  <IncidentCustom
-                    form={form}
-                    questions={customQuestions}
-                    saving={saving}
-                  />
-                );
-              }
-              case IncidentFormField.Cctv: {
-                return (
-                  <IncidentCCTV
-                    form={form}
-                    policeReporting={policeReporting}
-                    saving={saving}
-                  />
-                );
-              }
-              default: {
-                return <div />;
-              }
+
+                    <Button onClick={continueDraft} type="primary">
+                      {intl.formatMessage({
+                        defaultMessage: 'Continue to Report',
+                      })}
+                    </Button>
+                  </Space>
+                </Card>
+              );
             }
-          })}
+            case IncidentFormField.Offenders: {
+              return (
+                <Card className={classes.card}>
+                  <Profiles
+                    form={form}
+                    hasVictims={incidentForm
+                      .map((f) => f.type)
+                      .includes(IncidentFormField.Victims)}
+                    // hasVehicles={incidentForm.includes(
+                    //   IncidentFormField.Vehicles
+                    // )}
+                    hasWitnesses={incidentForm
+                      .map((f) => f.type)
+                      .includes(IncidentFormField.Witnesses)}
+                    saving={saving}
+                  />
+                </Card>
+              );
+            }
+            case IncidentFormField.Images: {
+              return (
+                <Card className={classes.card}>
+                  <ImageSection
+                    disabled={saving}
+                    form={form}
+                    incidentForm={incidentForm}
+                    primaryImage={primaryImage}
+                    setPrimaryImage={setPrimaryImage}
+                  />
+                </Card>
+              );
+            }
+            case IncidentFormField.Details: {
+              return (
+                <Card className={classes.card}>
+                  <IncidentDetails saving={saving} />
+                </Card>
+              );
+            }
+            case IncidentFormField.Police: {
+              return (
+                <IncidentPolice
+                  form={form}
+                  generatingStatement={generatingStatement}
+                  policeReporting={policeReporting}
+                  saving={saving}
+                />
+              );
+            }
+            case IncidentFormField.Groups: {
+              return <IncidentGroups saving={saving} />;
+            }
+            case IncidentFormField.Custom: {
+              return (
+                <IncidentCustom
+                  form={form}
+                  questions={customQuestions}
+                  saving={saving}
+                />
+              );
+            }
+            case IncidentFormField.Cctv: {
+              return (
+                <IncidentCCTV
+                  form={form}
+                  policeReporting={policeReporting}
+                  saving={saving}
+                />
+              );
+            }
+            default: {
+              return <div />;
+            }
+          }
+        })}
 
         {/* Buttons */}
         <Form.Item>

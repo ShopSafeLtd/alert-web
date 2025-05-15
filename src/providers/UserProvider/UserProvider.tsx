@@ -7,7 +7,7 @@ import Mixpanel from '#/utils/mixpanel';
 import { useUser } from '@clerk/clerk-react';
 import * as Sentry from '@sentry/react';
 import { atom, useAtomValue, useSetAtom } from 'jotai';
-import { useRef } from 'react';
+import React, { useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router';
 
 import {
@@ -97,7 +97,7 @@ const UserProvider = ({ children }: Props) => {
   const navigate = useNavigate();
   const { setScheme } = useSchemeProvider();
   const { isLoaded, isSignedIn } = useUser();
-  const { getToken } = useTokenContext();
+  const { getToken, token } = useTokenContext();
 
   const currentSchemeId = useAtomValue(currentUserSchemeIdAtom);
   const setCurrentUser = useSetAtom(currentUserAtom);
@@ -105,9 +105,10 @@ const UserProvider = ({ children }: Props) => {
 
   const expired = useStoreActions((actions) => actions.auth.expired);
 
-  void useCurrentUserProviderQuery({
-    onCompleted: (data) => {
-      console.log('testing');
+  const onCompleted = useCallback(
+    (data: CurrentUserProviderQuery) => {
+      if (hasFetched.current) return;
+      // existing onCompleted logic:
       if (!data.currentUser) {
         if (!isLoaded && isSignedIn) {
           expired();
@@ -116,9 +117,7 @@ const UserProvider = ({ children }: Props) => {
           navigate('/sign-in');
         }
       }
-
       hasFetched.current = true;
-
       if (currentSchemeId === null && data.currentUser?.schemes[0]) {
         const currentScheme = localStorage.getItem(CURRENT_SCHEME);
         if (currentScheme) {
@@ -127,35 +126,51 @@ const UserProvider = ({ children }: Props) => {
           void setScheme(data.currentUser.schemes[0].id);
         }
       }
-
       if (data.currentUser) {
-        Mixpanel.identify(data.currentUser?.id);
+        Mixpanel.identify(data.currentUser.id);
         Mixpanel.people.set({
-          businessId: data.currentUser?.businesses[0]?.id || '',
-          businessName: data.currentUser?.businesses[0]?.name || '',
+          businessId: data.currentUser.businesses[0]?.id || '',
+          businessName: data.currentUser.businesses[0]?.name || '',
           name: data.currentUser.fullName || '',
         });
         Sentry.setUser({
-          email: data.currentUser?.email ?? '',
-          id: data.currentUser?.id,
+          email: data.currentUser.email ?? '',
+          id: data.currentUser.id,
           username: data.currentUser.fullName,
         });
       }
-
       void setCurrentUser(data.currentUser);
       void setNewUser(data.currentUser?.newUser ?? false);
     },
-    onError: () => {
-      if (!isLoaded && isSignedIn) {
-        expired();
-        void getToken();
-      } else if (!isLoaded && !isSignedIn) {
-        navigate('/sign-in');
-      }
-    },
+    [
+      expired,
+      getToken,
+      isLoaded,
+      isSignedIn,
+      navigate,
+      currentSchemeId,
+      setScheme,
+      setCurrentUser,
+      setNewUser,
+    ]
+  );
+
+  const onError = useCallback(() => {
+    if (!isLoaded && isSignedIn) {
+      expired();
+      void getToken();
+    } else if (!isLoaded && !isSignedIn) {
+      navigate('/sign-in');
+    }
+  }, [expired, getToken, isLoaded, isSignedIn, navigate]);
+
+  useCurrentUserProviderQuery({
+    onCompleted,
+    onError,
+    skip: !token || hasFetched.current,
   });
 
   return children;
 };
 
-export default UserProvider;
+export default React.memo(UserProvider);

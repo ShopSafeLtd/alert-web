@@ -2,7 +2,6 @@
 import type { FetchResult, Operation } from '@apollo/client';
 import type { ClientOptions } from 'graphql-sse';
 
-import { PublicRoutes } from '#/App';
 import { useTokenContext } from '#/context/token-context';
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { cache } from '#/providers/cache';
@@ -26,7 +25,7 @@ import { sha256 } from 'crypto-hash';
 import { print } from 'graphql';
 import { createClient } from 'graphql-sse';
 import { useAtomValue } from 'jotai/index';
-import React, { useEffect } from 'react';
+import React, { useMemo } from 'react';
 import { useNavigate } from 'react-router';
 import { useLocation } from 'react-router-dom';
 
@@ -62,177 +61,138 @@ const Apollo = ({ children }: Props): JSX.Element => {
   const navigate = useNavigate();
   const { isSignedIn } = useAuth();
 
-  const { getToken, setToken, token } = useTokenContext();
+  const { getToken } = useTokenContext();
 
   const location = useLocation();
   const currentRoute = location.pathname;
-  useEffect(() => {
-    async function getSetToken() {
-      const isPublicRoute = currentRoute
-        ? PublicRoutes.some((route) => currentRoute.startsWith(route))
-        : false;
-
-      if (currentRoute && isPublicRoute) return;
-      const t = await getToken(true);
-      if (!t && !isSignedIn) {
-        if (currentRoute && isPublicRoute) return;
-
-        navigate(
-          currentRoute && currentRoute.includes('sign-in')
-            ? '/sign-in'
-            : `/sign-in?rd=${currentRoute}`
-        );
-      }
-      setToken(t);
-    }
-
-    if (!token) {
-      void getSetToken();
-    }
-  }, [token]);
 
   const currentScheme = useAtomValue(currentSchemeIdAtom);
   const localLang = useStoreState((state) => state.theme.locale);
 
-  const httpLink = new HttpLink({
-    uri: import.meta.env.VITE_GRAPHQL_URL,
-  });
+  const client = useMemo(() => {
+    // HTTP transport
+    const httpLink = new HttpLink({
+      uri: import.meta.env.VITE_GRAPHQL_URL,
+    });
 
-  const sseLink = createSSELink({
-    headers: () => ({
-      ...defaultHeaders,
-      'X-GraphQL-Event-Stream-Token': `Bearer ${token}`,
-      authorization: `Bearer ${token}`,
-      currentScheme: currentScheme ?? null,
-      language: localLang,
-    }),
-    url: import.meta.env.VITE_GRAPHQL_WS_URL,
-  });
-  const sentryLink = new SentryLink(/* See options */);
+    // Error reporting
+    const errorLink = onError(
+      ({ forward, graphQLErrors, networkError, operation }) => {
+        if (graphQLErrors)
+          // eslint-disable-next-line no-restricted-syntax
+          for (const {
+            extensions,
+            locations,
+            message,
+            path,
+          } of graphQLErrors) {
+            const lowerCaseMessage = message.toLowerCase();
 
-  // const httpLink = createUploadLink({
-  //   // uri: "https://alert-api-dev.azurewebsites.net/graphql",
-  //   // uri: "https://alert-api-dev-development.azurewebsites.net/graphql",
-  //   // uri: 'http://localhost:4000/graphql',
-  //   // uri: 'https://alert-dev-api.herokuapp.com/graphql',
-  //   uri: import.meta.env.VITE_GRAPHQL_URL,
-  // });
-
-  // TODO: Add error handling
-  const errorLink = onError(
-    ({ forward, graphQLErrors, networkError, operation }) => {
-      if (graphQLErrors)
-        // eslint-disable-next-line no-restricted-syntax
-        for (const { extensions, locations, message, path } of graphQLErrors) {
-          const lowerCaseMessage = message.toLowerCase();
-
-          if (
-            lowerCaseMessage.includes('user_context') ||
-            extensions?.code === '401'
-          ) {
-            const oldHeaders = operation.getContext().headers;
-            void getToken(true).then((t) => {
-              operation.setContext({
-                headers: {
-                  ...oldHeaders,
-                  authorization: `bearer ${t}`,
-                },
+            if (
+              lowerCaseMessage.includes('user_context') ||
+              extensions?.code === '401'
+            ) {
+              const oldHeaders = operation.getContext().headers;
+              void getToken().then((t) => {
+                operation.setContext({
+                  headers: {
+                    ...oldHeaders,
+                    authorization: `bearer ${t}`,
+                  },
+                });
+                // Retry the request, returning the new observable
+                return forward(operation);
               });
-              // Retry the request, returning the new observable
-              return forward(operation);
-            });
+            }
+            if (
+              !lowerCaseMessage.startsWith('not auth') &&
+              !lowerCaseMessage.startsWith('user_context_error')
+            ) {
+              Sentry.captureMessage(
+                `[GraphQL error]: Message: ${message}, Location: ${JSON.stringify(
+                  locations
+                )}, Path: ${path}`
+              );
+            }
           }
-          if (
-            !lowerCaseMessage.startsWith('not auth') &&
-            !lowerCaseMessage.startsWith('user_context_error')
-          ) {
-            Sentry.captureMessage(
-              `[GraphQL error]: Message: ${message}, Location: ${JSON.stringify(
-                locations
-              )}, Path: ${path}`
-            );
+
+        if (networkError) {
+          console.error(`[Network error]: ${networkError}`);
+          if ('statusCode' in networkError) {
+            console.log(`Status code: ${networkError.statusCode}`);
           }
-        }
+          if ('bodyText' in networkError) {
+            console.log(`Body: ${networkError.bodyText}`);
+          }
 
-      if (networkError) {
-        console.error(`[Network error]: ${networkError}`);
-        if ('statusCode' in networkError) {
-          console.log(`Status code: ${networkError.statusCode}`);
+          Sentry.captureException(networkError);
         }
-        if ('bodyText' in networkError) {
-          console.log(`Body: ${networkError.bodyText}`);
-        }
-
-        Sentry.captureException(networkError);
       }
-    }
-  );
+    );
 
-  const middlewareLink = setContext((_, { headers, ...context }) => {
-    const initAuth = headers?.Authorization;
-    if (token) {
-      try {
+    // Async auth link: inject fresh token per request
+    const authLink = setContext(async (_, { headers, ...context }) => {
+      const t = await getToken();
+      return {
+        ...context,
+        headers: {
+          ...headers,
+          ...defaultHeaders,
+          Authorization: t ? `Bearer ${t}` : `Bearer ""`,
+          currentScheme: currentScheme ?? null,
+          language: localLang,
+        },
+        http: { includeExtensions: true, includeQuery: false },
+      };
+    });
+
+    // Persisted queries
+    const persistedQueryLink = createPersistedQueryLink({ sha256 });
+
+    // SSE transport with dynamic headers
+    const sseLink = createSSELink({
+      headers: async () => {
+        const t = await getToken();
         return {
-          ...context,
-          headers: {
-            ...headers,
-            ...defaultHeaders,
-            Authorization: initAuth ?? `Bearer ${token}`,
-            currentScheme: currentScheme ?? null,
-            language: localLang,
-          },
-          http: { includeExtensions: true, includeQuery: false },
+          ...defaultHeaders,
+          'X-GraphQL-Event-Stream-Token': `Bearer ${t}`,
+          authorization: `Bearer ${t}`,
+          currentScheme: currentScheme ?? null,
+          language: localLang,
         };
-      } catch (error) {
-        if (error instanceof Error) {
-          console.error(error.message);
-        }
-      }
-    }
-    return {
-      ...context,
-      headers: {
-        ...headers,
-        ...defaultHeaders,
-        // eslint-disable-next-line quotes
-        Authorization: initAuth ?? `Bearer ""`,
-        currentScheme: currentScheme ?? null,
-        language: localLang,
       },
-      http: { includeExtensions: true, includeQuery: false },
-    };
-  });
+      url: import.meta.env.VITE_GRAPHQL_WS_URL,
+    });
+    const sentryLink = new SentryLink();
 
-  const persistedQueryLink = createPersistedQueryLink({
-    sha256,
-  });
+    // Compose links: subscriptions vs HTTP
+    const authHttp = sentryLink
+      // eslint-disable-next-line unicorn/prefer-spread
+      .concat(errorLink)
+      // eslint-disable-next-line unicorn/prefer-spread
+      .concat(authLink)
+      // eslint-disable-next-line unicorn/prefer-spread
+      .concat(persistedQueryLink)
+      // eslint-disable-next-line unicorn/prefer-spread
+      .concat(httpLink);
 
-  const authHttp = sentryLink
-    // eslint-disable-next-line unicorn/prefer-spread
-    .concat(errorLink)
-    // eslint-disable-next-line unicorn/prefer-spread
-    .concat(middlewareLink)
-    // eslint-disable-next-line unicorn/prefer-spread
-    .concat(persistedQueryLink)
-    // eslint-disable-next-line unicorn/prefer-spread
-    .concat(httpLink);
+    const splitLink = split(
+      ({ query }) => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        const { kind, operation } = getMainDefinition(query);
+        return kind === 'OperationDefinition' && operation === 'subscription';
+      },
+      sseLink,
+      authHttp
+    );
 
-  const link = split(
-    ({ query }) => {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      const { kind, operation } = getMainDefinition(query);
-      return kind === 'OperationDefinition' && operation === 'subscription';
-    },
-    sseLink,
-    authHttp
-  );
-
-  const client = new ApolloClient({
-    cache,
-    connectToDevTools: true,
-    link,
-  });
+    return new ApolloClient({
+      cache,
+      connectToDevTools: true,
+      link: splitLink,
+    });
+  }, [getToken, currentScheme, localLang]);
 
   return <ApolloProvider client={client}>{children}</ApolloProvider>;
 };

@@ -375,8 +375,8 @@ const upsertIncident = (
         ?.map(({ id: removeId }) => removeId),
     },
     crimeTypes: tagsFormatted,
-    date: formData.date,
-    description: formData.description,
+    date: formData.date || new Date(),
+    description: formData.description || ' ',
     documents: documentsFormatted,
     groups: {
       connect:

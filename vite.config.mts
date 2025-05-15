@@ -38,7 +38,7 @@ export default defineConfig((configEnv) => {
         threshold: 1024,
         deleteOriginalAssets: false,
       }),
-      visualizer({ open: true }) as PluginOption,
+      mode !== 'production' && (visualizer({ open: true }) as PluginOption),
       mode !== 'production' &&
         analyzer({
           analyzerMode: 'static',
@@ -65,36 +65,9 @@ export default defineConfig((configEnv) => {
       minify: 'esbuild',
       rollupOptions: {
         output: {
-          manualChunks(id) {
-            if (id.includes('node_modules')) {
-              const knownVendors = new Set([
-                'lodash',
-                'mapbox-gl',
-                '@deck.gl/core',
-                '@nivo/bar',
-                'tinymce',
-                'ag-grid-community',
-                'ag-grid-enterprise',
-                'ag-charts-enterprise',
-                'ag-charts-community',
-                'ag-charts-react',
-                'ag-grid-charts-enterprise',
-              ]);
-
-              const parts = id.split('node_modules/')[1].split('/');
-              const name = parts[0].startsWith('@')
-                ? `${parts[0]}/${parts[1]}`
-                : parts[0];
-
-              if (knownVendors.has(name)) {
-                return `vendor-${name}`;
-              }
-            }
-          },
-          // // Optimize chunk naming for better caching
-          // chunkFileNames: 'assets/js/[name]-[hash].js',
-          // entryFileNames: 'assets/js/[name]-[hash].js',
-          // assetFileNames: 'assets/[ext]/[name]-[hash].[ext]',
+          chunkFileNames: 'assets/js/[name].[hash].js',
+          entryFileNames: 'assets/js/[name].[hash].js',
+          assetFileNames: 'assets/[ext]/[name].[hash].[ext]',
         },
       },
       assetsInlineLimit: 4096,

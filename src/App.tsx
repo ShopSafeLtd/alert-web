@@ -63,9 +63,30 @@ const options: Partial<PostHogConfig> = {
   },
   ui_host: import.meta.env.VITE_PUBLIC_POSTHOG_HOST,
 };
+
+const ignoreErrorsPartial = [
+  '401',
+  'received status code 401',
+  'ResizeObserver loop limit exceeded',
+  'ResizeObserver loop completed with undelivered notifications',
+  'AG Charts',
+  "Cannot read properties of undefined (reading 'get')",
+];
+
 if (import.meta.env.PROD) {
   mixpanel.init(import.meta.env.VITE_MIXPANEL_TOKEN);
   Sentry.init({
+    beforeSend: (event) => {
+      if (event.message) {
+        const lcError = event.message.toLowerCase();
+        if (
+          ignoreErrorsPartial.some((t) => lcError.includes(t.toLowerCase()))
+        ) {
+          return null;
+        }
+      }
+      return event;
+    },
     dsn: import.meta.env.VITE_SENTRY_DSN,
     ignoreErrors: [
       'ResizeObserver loop limit exceeded',

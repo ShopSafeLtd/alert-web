@@ -13,8 +13,9 @@ const MarqueeComponent = () => {
       style={{
         WebkitBackdropFilter: 'blur(10px)',
         backdropFilter: 'blur(10px)',
-        backgroundColor: currentTheme === 'dark' ? '#283142' : '#FFF',
+        backgroundColor: currentTheme === 'dark' ? '#FFF' : '#283142',
         borderRadius: 6,
+        color: currentTheme === 'dark' ? '#283142' : '#FFF',
         marginBottom: 8,
         marginTop: 8,
         paddingBottom: 6,
