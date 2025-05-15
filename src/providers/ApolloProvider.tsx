@@ -78,8 +78,7 @@ const Apollo = ({ children }: Props): JSX.Element => {
     // Error reporting
     const errorLink = onError(
       ({ forward, graphQLErrors, networkError, operation }) => {
-        if (graphQLErrors)
-          // eslint-disable-next-line no-restricted-syntax
+        if (graphQLErrors) {
           for (const {
             extensions,
             locations,
@@ -93,15 +92,37 @@ const Apollo = ({ children }: Props): JSX.Element => {
               extensions?.code === '401'
             ) {
               const oldHeaders = operation.getContext().headers;
-              void getToken().then((t) => {
-                operation.setContext({
-                  headers: {
-                    ...oldHeaders,
-                    authorization: `bearer ${t}`,
-                  },
-                });
-                // Retry the request, returning the new observable
-                return forward(operation);
+              return new Observable<FetchResult>((observer) => {
+                getToken(true)
+                  .then((t) => {
+                    if (!t && !isSignedIn) {
+                      navigate(
+                        currentRoute && currentRoute.includes('sign-in')
+                          ? '/sign-in'
+                          : `/sign-in?rd=${currentRoute}`
+                      );
+                      observer.complete();
+                      return;
+                    }
+                    operation.setContext({
+                      headers: {
+                        ...oldHeaders,
+                        authorization: `Bearer ${t}`,
+                      },
+                    });
+                    const subscriber = forward(operation).subscribe({
+                      complete: () => observer.complete(),
+                      error: (err) => observer.error(err),
+                      next: (result) => observer.next(result),
+                    });
+                    // Cleanup function
+                    return () => {
+                      if (subscriber.unsubscribe) subscriber.unsubscribe();
+                    };
+                  })
+                  .catch((error) => {
+                    observer.error(error);
+                  });
               });
             }
             if (
@@ -115,6 +136,7 @@ const Apollo = ({ children }: Props): JSX.Element => {
               );
             }
           }
+        }
 
         if (networkError) {
           console.error(`[Network error]: ${networkError}`);
@@ -124,7 +146,13 @@ const Apollo = ({ children }: Props): JSX.Element => {
           if ('bodyText' in networkError) {
             console.log(`Body: ${networkError.bodyText}`);
           }
-
+          if ('statusCode' in networkError && networkError.statusCode === 401) {
+            navigate(
+              currentRoute && currentRoute.includes('sign-in')
+                ? '/sign-in'
+                : `/sign-in?rd=${currentRoute}`
+            );
+          }
           Sentry.captureException(networkError);
         }
       }
