@@ -304,6 +304,10 @@ const CreateEditArticleView = ({
                   file_picker_callback: filePickerCallback,
                   file_picker_types: 'file, image, media',
                   images_upload_handler: imagesUploadHandler,
+                  // @ts-expect-error prop issue
+                  license_key: 'gpl',
+                  licenseKey: 'gpl',
+
                   menubar: 'file edit view insert format tools table',
                   min_height: 500,
                   plugins: [
@@ -318,7 +322,7 @@ const CreateEditArticleView = ({
                     'image',
                     'link',
                     'media',
-                    'template',
+
                     'table',
                     'charmap',
                     'pagebreak',

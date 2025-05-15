@@ -52,7 +52,8 @@ const pdfFilePickerCallback = (callback: (content: string) => void): void => {
           const dataUrl = canvas.toDataURL('image/png');
           // Append an image element for this page.
           // Note the data-pdf attribute which marks this image as PDF generated.
-          htmlContent += `<img src="${dataUrl}" alt="Page ${i}" data-pdf="true" width="${viewport.width}px" height="auto" />`;
+          htmlContent += `<img src="${dataUrl}" alt="Page ${i}" data-pdf="true" width="700px"     style="max-width: 100%; height: auto;"
+   />`;
         }
       }
       htmlContent += `</div>`;

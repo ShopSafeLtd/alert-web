@@ -54,7 +54,7 @@ import {
 // noinspection ES6PreferShortImport
 import { useAtomValue } from 'jotai/index';
 import { debounce } from 'lodash-es';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
 import { useStoreActions, useStoreState } from 'state';
@@ -77,6 +77,7 @@ interface Return {
   addNewAddress: boolean;
   addressLoading: boolean;
   brands: string[];
+  continueDraft: () => void;
   customQuestions: CustomQuestion[];
   dontKnowGoods: () => void;
   draftLoading: boolean;
@@ -84,6 +85,7 @@ interface Return {
   generatingStatement: boolean;
   goodsMode: GoodsMode;
   goodsVisible: boolean;
+  hidePostDraftSections: boolean;
   incidentForm: IncidentFormState;
   incidentTagsData: ListIncidentTagsQuery | undefined;
   incidentTagsLoading: boolean;
@@ -111,6 +113,7 @@ interface Return {
 
 const useAddIncident = ({ id, investigationId }: Props): Return => {
   const [form] = useForm<FormData>();
+  const [hidePostDraftSections, setHidePostDraftSections] = useState(false);
 
   const intl = useIntl();
   const isAdmin = useAtomValue(isAdminAtom);
@@ -626,7 +629,8 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
       setGoodsVisible(true);
     }
     console.log(formData);
-    form.setFieldsValue(formData);
+    form.setFieldsValue({ ...formData, draftSkip: 'true' });
+    setHidePostDraftSections(false);
   }, [draftData]);
 
   const [upsertIncidentM] = useUpsertIncidentMutation({
@@ -1123,8 +1127,17 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
   };
 
   const submitDraft = () => {
-    const formValues = form.getFieldsValue();
-    void onSubmit(formValues, true);
+    form.validateFields().then(
+      () => {
+        setSaving(true);
+        const formValues = form.getFieldsValue();
+        void onSubmit(formValues, true);
+        setSaving(false);
+      },
+      () => {
+        setSaving(false);
+      }
+    );
   };
   const autoPopulateDescription =
     useAtomValue(currentSchemeAtom)?.autoPopulateDescription;
@@ -1393,11 +1406,31 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
       }
     }
   }, [formTags, incidentTagsData, brands, formDataVersion]);
+  const hasDraft = useMemo(
+    () => incidentForm.some((item) => item.type === IncidentFormField.Draft),
+    [incidentForm]
+  );
+  useEffect(() => {
+    if (id) {
+      setHidePostDraftSections(false);
+      return;
+    }
+    if (!hasDraft) {
+      setHidePostDraftSections(false);
+    } else if (!hidePostDraftSections) {
+      setHidePostDraftSections(true);
+    }
+  }, [incidentForm, hasDraft, id]);
 
+  const continueDraft = () => {
+    setHidePostDraftSections(false);
+    form.setFieldValue('draftSkip', true);
+  };
   return {
     addNewAddress,
     addressLoading,
     brands,
+    continueDraft,
     customQuestions,
     dontKnowGoods,
     draftLoading,
@@ -1405,9 +1438,10 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
     generatingStatement,
     goodsMode,
     goodsVisible,
+    hidePostDraftSections,
     incidentForm,
-    incidentTagsData,
 
+    incidentTagsData,
     incidentTagsLoading,
     isTheft,
     knowGoods,

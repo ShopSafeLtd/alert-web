@@ -4,9 +4,11 @@ import { useAuth } from '@clerk/clerk-react';
 import jwtDecode from 'jwt-decode';
 import React, {
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from 'react';
 
@@ -37,55 +39,62 @@ export const TokenProvider: React.FC<{
   const { getToken: getClerkToken, isLoaded, isSignedIn } = useAuth();
 
   const [token, setToken] = useState<null | string>(null);
-  const [expiredToken, setExpiredToken] = useState<null | string>(null);
-  const [expireAt, setExpireAt] = useState<null | number>(null);
+  const [_, setExpireAt] = useState<null | number>(null);
 
-  const getToken = (force?: boolean) =>
-    getClerkToken({
-      leewayInSeconds: 1800,
-      skipCache: force,
-      template: 'shopsafe',
-    });
+  const fetchToken = useCallback(
+    (force?: boolean) =>
+      getClerkToken({
+        leewayInSeconds: 1800,
+        skipCache: force,
+        template: 'shopsafe',
+      }),
+    [getClerkToken]
+  );
 
+  // Initial token fetch once user is loaded and signed in
   useEffect(() => {
-    if (token && (!expireAt || token !== expiredToken)) {
-      const decoded = jwtDecode<JwtPayload>(token);
-      if (decoded) {
-        setExpireAt(decoded.exp);
-        setExpiredToken(token);
+    if (!token && isLoaded && isSignedIn) {
+      fetchToken(true)
+        .then((t) => setToken(t))
+        .catch(() => setToken(null));
+    }
+  }, [isLoaded, isSignedIn, fetchToken, token]);
+
+  // Decode token and schedule a refresh before expiry
+  const refreshTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => {
+    if (!token) return;
+    const decoded = jwtDecode<JwtPayload>(token);
+    const expiresAtMs = decoded.exp * 1000;
+    setExpireAt(decoded.exp);
+
+    // Clear any existing timer
+    if (refreshTimeout.current) {
+      clearTimeout(refreshTimeout.current);
+    }
+
+    // Schedule a refresh 2 minutes before expiry
+    const refreshIn = expiresAtMs - Date.now() - 2 * 60 * 1000;
+    refreshTimeout.current = setTimeout(
+      () => {
+        fetchToken(true)
+          .then((t) => setToken(t))
+          .catch(() => setToken(null));
+      },
+      Math.max(refreshIn, 0)
+    );
+
+    return () => {
+      if (refreshTimeout.current) {
+        clearTimeout(refreshTimeout.current);
       }
-    }
-    if (!token && !expireAt && isLoaded && isSignedIn) {
-      void getToken(true).then(
-        (t) => {
-          setToken(t);
-        },
-        () => {
-          setToken(null);
-        }
-      );
-    }
-  }, [token, isLoaded, isSignedIn, expireAt]);
+    };
+  }, [token, fetchToken]);
 
-  const value = useMemo(() => ({ getToken, setToken, token }), [token]);
-
-  // handle token expiration
-  useEffect(() => {
-    async function getSetToken() {
-      const t = await getToken();
-      setToken(t);
-    }
-    if (expireAt) {
-      const interval = setInterval(() => {
-        const now = Date.now() / 1000;
-        if (now >= expireAt) {
-          void getSetToken();
-        }
-      }, 1000);
-
-      return () => clearInterval(interval);
-    }
-  }, [expireAt]);
+  const value = useMemo(
+    () => ({ getToken: fetchToken, setToken, token }),
+    [fetchToken, token]
+  );
 
   return (
     <TokenContext.Provider value={value}>{children}</TokenContext.Provider>

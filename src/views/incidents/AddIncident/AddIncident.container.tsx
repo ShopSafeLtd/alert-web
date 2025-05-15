@@ -13,6 +13,7 @@ const AddIncident = ({
 
   const {
     addNewAddress,
+    continueDraft,
     customQuestions,
     dontKnowGoods,
     draftLoading,
@@ -20,6 +21,7 @@ const AddIncident = ({
     generatingStatement,
     goodsMode,
     goodsVisible,
+    hidePostDraftSections,
     incidentForm,
     incidentTagsData,
     incidentTagsLoading,
@@ -45,6 +47,7 @@ const AddIncident = ({
     <div>
       <View
         addNewAddress={addNewAddress}
+        continueDraft={continueDraft}
         customQuestions={customQuestions}
         dontKnowGoods={dontKnowGoods}
         draftLoading={draftLoading}
@@ -52,6 +55,7 @@ const AddIncident = ({
         generatingStatement={generatingStatement}
         goodsMode={goodsMode}
         goodsVisible={goodsVisible}
+        hidePostDraftSections={hidePostDraftSections}
         incidentForm={incidentForm}
         incidentTagsData={incidentTagsData}
         incidentTagsLoading={incidentTagsLoading}
