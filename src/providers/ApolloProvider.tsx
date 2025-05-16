@@ -217,7 +217,7 @@ const Apollo = ({ children }: Props): JSX.Element => {
 
     return new ApolloClient({
       cache,
-      connectToDevTools: true,
+      connectToDevTools: !import.meta.env.PROD,
       link: splitLink,
     });
   }, [getToken, currentScheme, localLang]);

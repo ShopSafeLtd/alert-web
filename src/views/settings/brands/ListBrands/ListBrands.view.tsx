@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import type { UpsertBrandMutation } from '#/views/settings/brands/graphql/mutations/__generated__/upsert-brand.generated';
+import type { BrandsQuery } from '#/views/settings/brands/graphql/queries/__generated__/brands.generated';
 import type { MutationUpdaterFn } from '@apollo/client';
 
 import AddBrand from '#/components/form-components/brands/AddBrand';
@@ -10,41 +11,17 @@ import {
   faTrash,
 } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  Button,
-  Col,
-  Drawer,
-  Input,
-  Modal,
-  Row,
-  Table,
-  Tag,
-  Tooltip,
-} from 'antd';
+import { Button, Col, Drawer, Input, Modal, Row, Table, Tooltip } from 'antd';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { Link } from 'react-router-dom';
 
 const { confirm } = Modal;
 
 interface Props {
   addBrand: boolean;
   brandId: string;
-  data:
-    | {
-        node: {
-          businesses: {
-            __typename?: 'Business';
-            id: string;
-            name: string;
-          }[];
-          description?: null | string;
-          id: string;
-          name: string;
-        };
-      }[]
-    | null
-    | undefined;
+  data: BrandsQuery['brands']['edges'] | null | undefined;
+
   loading: boolean;
   onDelete: (value: string) => void;
   saving: boolean;
@@ -69,16 +46,6 @@ const BrandList = ({
   updateNewBrandList,
 }: Props): JSX.Element => {
   const intl = useIntl();
-  const businessIds = new Set(
-    data?.flatMap(({ node: el }) => el.businesses.map(({ id }) => id))
-  );
-  const businessData = data?.flatMap(({ node: el }) => ({
-    text: el?.name || '',
-    value: el?.id || '',
-  }));
-  const businessFilter = [...businessIds]
-    .map((id) => businessData?.find(({ value: el }) => el === id))
-    .map((el) => ({ text: el?.text || '', value: el?.value || '' }));
 
   return (
     <div className="list-view">
@@ -132,20 +99,7 @@ const BrandList = ({
           },
           {
             dataIndex: 'businesses',
-            filters: businessFilter,
             key: 'businesses',
-            onFilter: (
-              value: boolean | number | string,
-              record: { businesses: { id: string; name: string }[] }
-            ) => record.businesses.some(({ id }) => id === value),
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            render: (value: { id: string; name: string }[]) =>
-              value.map(({ id, name }, index) => (
-                <Link to={`/app/businesses/view/${id || ''}`}>
-                  {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
-                  <Tag color="red"> {index === 0 ? name : ` ${name}`}</Tag>
-                </Link>
-              )),
             title: intl.formatMessage({
               defaultMessage: 'Businesses',
             }),
@@ -229,7 +183,7 @@ const BrandList = ({
           },
         ]}
         dataSource={data?.map(({ node: brand }) => ({
-          businesses: brand.businesses,
+          businesses: brand.businessCount,
           description: brand.description || '',
           key: brand.id || '',
           name: brand.name || '',
