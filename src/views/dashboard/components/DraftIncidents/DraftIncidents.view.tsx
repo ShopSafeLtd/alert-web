@@ -96,7 +96,9 @@ const DraftIncidents = ({
                         key={incident.id}
                         to={`/app/incidents/add/draft/${incident.id}`}
                       >
-                        {incident.description.slice(0, 63)}
+                        {incident.description.length > 5
+                          ? incident.description.slice(0, 63)
+                          : incident.referenceStr}
                         {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
                         {incident.description.length > 62 && '...'}
                       </Link>
