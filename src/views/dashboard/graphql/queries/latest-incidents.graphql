@@ -1,11 +1,12 @@
 query LatestIncidents($where: DashboardInput!, $after: String, $first: Int) {
-  latestIncidents(where: $where, after: $after, first: $first){
+  latestIncidents(where: $where, after: $after, first: $first) {
     pageInfo {
       hasNextPage
       endCursor
     }
     edges {
       node {
+        referenceStr
         date
         id
         description
