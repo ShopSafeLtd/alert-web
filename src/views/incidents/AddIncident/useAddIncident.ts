@@ -713,7 +713,6 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
           data: { ...draftFormattedData, draft: true, id: id || undefined },
         },
       });
-      setSaving(false);
       return;
     }
 
@@ -727,7 +726,6 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
             data: { ...draftFormattedData, draft: false, id },
           },
         });
-        setSaving(false);
         return;
       } else {
         const confirmedOffender = data.offenders?.filter(

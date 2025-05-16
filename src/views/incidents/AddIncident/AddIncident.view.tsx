@@ -250,11 +250,19 @@ const AddIncident = ({
                     {draftDescription}
                   </Paragraph>
                   <Space>
-                    <Button onClick={() => submitDraft()} type="primary">
+                    <Button
+                      disabled={saving}
+                      onClick={() => submitDraft()}
+                      type="primary"
+                    >
                       {draftButton}
                     </Button>
 
-                    <Button onClick={continueDraft} type="primary">
+                    <Button
+                      disabled={saving}
+                      onClick={continueDraft}
+                      type="primary"
+                    >
                       {intl.formatMessage({
                         defaultMessage: 'Continue to Report',
                       })}
