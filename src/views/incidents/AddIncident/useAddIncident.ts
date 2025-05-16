@@ -621,7 +621,7 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
     setNewAddressData(address);
 
   useEffect(() => {
-    if (!draftData) return;
+    if (!draftData || !incidentTagsData) return;
 
     const formData = generateInitData(draftData);
 
@@ -629,21 +629,26 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
       setGoodsVisible(true);
     }
     console.log(formData);
-    form.setFieldsValue({ ...formData, draftSkip: 'true' });
+    form.setFieldsValue(formData);
     setHidePostDraftSections(false);
   }, [draftData]);
 
   const [upsertIncidentM] = useUpsertIncidentMutation({
-    onCompleted: () => {
+    onCompleted: (result) => {
       setSaving(false);
       Mixpanel.track('Successfully created incident');
       notification.success({
         description: intl.formatMessage({
-          defaultMessage: 'The Incident has been added!',
+          defaultMessage: 'Your new incident has been successfully created.',
         }),
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Added!',
-        }),
+        message: intl.formatMessage(
+          {
+            defaultMessage: 'Incident {var1} created',
+          },
+          {
+            var1: result.upsertIncident.reference,
+          }
+        ),
         placement: 'bottomRight',
       });
       if (investigationId) {
