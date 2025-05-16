@@ -1888,6 +1888,7 @@ export type BoolWithAggregatesFilter = {
 
 export type Brand = {
   __typename?: 'Brand';
+  businessCount: Scalars['Int'];
   businesses: Array<Business>;
   description?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
