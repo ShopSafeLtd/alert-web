@@ -41,6 +41,7 @@ import React from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router';
+import { OffenderSort } from 'state/data-model';
 import DebouncedInput from 'utils/debounced-input';
 import Lightbox from 'yet-another-react-lightbox';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
@@ -63,6 +64,7 @@ interface Props {
   onNavigate: () => void;
   onSelectCustomGalleries: (values: string) => void;
   openLightbox: (elements: { src: string }[], index: number) => void;
+  order: OffenderSort;
   setCompactView: () => void;
   setGallery: (values: string[]) => void;
   setSearch: (value: string) => void;
@@ -84,6 +86,7 @@ const OffenderFeed = ({
   onNavigate,
   onSelectCustomGalleries,
   openLightbox,
+  order,
   setCompactView,
   setGallery,
   setSearch,
@@ -172,6 +175,7 @@ const OffenderFeed = ({
   //   </Menu>
   // );
 
+  const offenders = [...(data?.listOffendersRelay?.edges || [])];
   return (
     <div
       className="feed-container"
@@ -391,23 +395,39 @@ const OffenderFeed = ({
                   padding: 10,
                 }}
               >
-                {data?.listOffendersRelay?.edges?.map((t) => {
-                  if (!t?.node?.id) return null;
-                  return (
-                    <Col
-                      key={t?.node?.id}
-                      span={compactView ? 6 : 8}
-                      xxl={compactView ? 4 : 6}
-                    >
-                      <OffenderCard
-                        compactView={compactView}
-                        offender={t?.node}
-                        openLightbox={openLightbox}
-                        update={updateOffenderList}
-                      />
-                    </Col>
-                  );
-                })}
+                {offenders
+                  .sort((a, b) => {
+                    if (
+                      order === OffenderSort.incidentValueAsc ||
+                      order === OffenderSort.incidentValueDesc
+                    ) {
+                      const aValue = a?.node?.totalValue ?? 0;
+                      const bValue = b?.node?.totalValue ?? 0;
+
+                      return order === OffenderSort.incidentValueAsc
+                        ? aValue - bValue
+                        : bValue - aValue;
+                    }
+
+                    return 0;
+                  })
+                  .map((t) => {
+                    if (!t?.node?.id) return null;
+                    return (
+                      <Col
+                        key={t?.node?.id}
+                        span={compactView ? 6 : 8}
+                        xxl={compactView ? 4 : 6}
+                      >
+                        <OffenderCard
+                          compactView={compactView}
+                          offender={t?.node}
+                          openLightbox={openLightbox}
+                          update={updateOffenderList}
+                        />
+                      </Col>
+                    );
+                  })}
               </Row>
             </InfiniteScroll>
           ) : (

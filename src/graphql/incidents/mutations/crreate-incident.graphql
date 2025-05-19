@@ -1,6 +1,7 @@
 mutation createIncident($data: CreateIncidentData!) {
   createIncident(data: $data) {
     id
+    reference
     subject
     description
     dayTime

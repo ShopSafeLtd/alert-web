@@ -24,7 +24,7 @@ const SearchRow = () => {
     variables: { gallery },
   } = useDashboardContext();
   return (
-    <Card bodyStyle={{ padding: 10 }} style={{ marginBottom: 10 }}>
+    <Card bodyStyle={{ padding: 10 }}>
       <Row align="middle" gutter={12}>
         <Col span={4} xxl={6}>
           <DebouncedInput

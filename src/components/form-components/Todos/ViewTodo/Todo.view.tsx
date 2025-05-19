@@ -11,9 +11,11 @@ import {
   Divider,
   Form,
   InputNumber,
+  Modal,
   Row,
   Select,
   Skeleton,
+  Table,
   Typography,
   Upload,
 } from 'antd';
@@ -26,6 +28,7 @@ import type { FormData } from './useTodo';
 import CustomQuestions from '../../../../views/incidents/AddIncident/components/IncidentCustom/CustomQuestion.view';
 
 interface Props {
+  actionsOpen: boolean;
   availableUsers: { id: string; name: string; timeTaken: number }[];
   confirmText?: string;
   documentList: UploadFile[];
@@ -41,10 +44,12 @@ interface Props {
   ) => void;
   setUsers: (users: { id: string; name: string; timeTaken: number }[]) => void;
   todo: TodoQuery | undefined;
+  toggleActionsOpen: () => void;
   users: { id: string; name: string; timeTaken: number }[];
 }
 
 const TodoView = ({
+  actionsOpen,
   availableUsers,
   confirmText,
   documentList,
@@ -58,6 +63,7 @@ const TodoView = ({
   setAvailableUsers,
   setUsers,
   todo,
+  toggleActionsOpen,
   users,
 }: Props) => {
   const intl = useIntl();
@@ -251,6 +257,15 @@ const TodoView = ({
         <Divider />
         <Form.Item>
           <Row gutter={16} justify="end" style={{ marginTop: 10 }}>
+            {todo?.todo?.actions && todo.todo.actions.length > 0 && (
+              <Col>
+                <Button onClick={toggleActionsOpen}>
+                  {intl.formatMessage({
+                    defaultMessage: 'Show Activity Log',
+                  })}
+                </Button>
+              </Col>
+            )}
             <Col>
               <Button
                 disabled={saving}
@@ -279,6 +294,35 @@ const TodoView = ({
           </Row>
         </Form.Item>
       </Form>
+
+      <Modal
+        onCancel={toggleActionsOpen}
+        open={actionsOpen}
+        title={<FormattedMessage defaultMessage="Activity Log" />}
+        width="80%"
+      >
+        <Table
+          columns={[
+            {
+              dataIndex: 'createdAt',
+              key: 'createdAt',
+              render: (date: string) => dayjs(date).format('DD/MM/YY'),
+              title: 'Date',
+            },
+            {
+              dataIndex: 'description',
+              key: 'description',
+              title: 'Action Description',
+            },
+          ]}
+          dataSource={
+            todo?.todo.actions?.map((a) => ({
+              createdAt: a.createdAt,
+              description: a.description,
+            })) ?? []
+          }
+        />
+      </Modal>
     </div>
   );
 };

@@ -1,13 +1,10 @@
-import type { FormData } from '#/views/incidents/AddIncident/useAddIncident';
+import type { FormData } from '#/views/incidents/AddIncident/types/formData';
 import type { FormInstance } from 'antd';
 import type { ListIncidentTagsQuery } from 'graphql/tags/queries/__generated__/list-incident-tags.generated';
 import type { TagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
 import type { TagType } from 'graphql/types';
 
-import {
-  currentSchemeAtom,
-  currentSchemeIdAtom,
-} from '#/providers/SchemeProvider/SchemeProvider';
+import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { Form } from 'antd';
 import { useAtomValue } from 'jotai/index';
 import { useEffect, useMemo } from 'react';

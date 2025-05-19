@@ -1,6 +1,7 @@
+import type { FormData } from '#/views/incidents/AddIncident/types/formData';
 import type { CustomQuestion } from 'types/DataType';
 
-import { Card, Col, Row, Typography } from 'antd';
+import { Card, Col, type FormInstance, Row, Typography } from 'antd';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
@@ -10,11 +11,12 @@ import CustomQuestions from './CustomQuestion.view';
 const { Paragraph, Title } = Typography;
 
 interface Props {
+  form: FormInstance<FormData>;
   questions: CustomQuestion[];
   saving: boolean;
 }
 
-const IncidentCustom = ({ questions, saving }: Props) => {
+const IncidentCustom = ({ form, questions, saving }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
 
@@ -40,7 +42,7 @@ const IncidentCustom = ({ questions, saving }: Props) => {
           </Paragraph>
         </Col>
       </Row>
-      <CustomQuestions disabled={saving} questions={questions} />
+      <CustomQuestions disabled={saving} form={form} questions={questions} />
     </Card>
   );
 };

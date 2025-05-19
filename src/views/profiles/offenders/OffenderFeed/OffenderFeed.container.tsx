@@ -15,6 +15,7 @@ const OffenderFeed = (): JSX.Element => {
     // adminRights,
     onSelectCustomGalleries,
     openLightbox,
+    order,
     setCompactView,
     setGallery,
     setSearch,
@@ -39,6 +40,7 @@ const OffenderFeed = (): JSX.Element => {
       // adminRights={adminRights}
       onSelectCustomGalleries={onSelectCustomGalleries}
       openLightbox={openLightbox}
+      order={order}
       setCompactView={setCompactView}
       setGallery={setGallery}
       setSearch={setSearch}

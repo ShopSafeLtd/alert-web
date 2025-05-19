@@ -1,19 +1,21 @@
+import type { FormData } from '#/views/incidents/AddIncident/types/formData';
 import type { FormInstance } from 'antd';
+
 import { Card, Col, Form, Input, Radio, Row, Select, Typography } from 'antd';
+import { PoliceResponseTime } from 'graphql/types';
 import React from 'react';
 import { useIntl } from 'react-intl';
+
 import useStyles from '../../AddIncident.styles';
-import type { FormData } from '../../useAddIncident';
-import { PoliceResponseTime } from 'graphql/types';
 
 const { Title } = Typography;
 
 interface Props {
-  saving: boolean;
   form: FormInstance<FormData>;
+  saving: boolean;
 }
 
-const IncidentPolice = ({ saving, form }: Props) => {
+const IncidentPolice = ({ form, saving }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
 
@@ -23,7 +25,7 @@ const IncidentPolice = ({ saving, form }: Props) => {
     <Card className={classes.card}>
       <Row align="bottom" style={{ marginBottom: 20 }}>
         <Col>
-          <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
+          <Title level={4} style={{ marginBottom: 0, marginLeft: 5 }}>
             {intl.formatMessage({
               defaultMessage: 'Police involvement',
             })}
@@ -33,16 +35,18 @@ const IncidentPolice = ({ saving, form }: Props) => {
       <Row gutter={50}>
         <Col>
           <Form.Item
-            name="policeReported"
-            tooltip={intl.formatMessage({
-              defaultMessage: 'The incident has been reported to the police',
-            })}
             label={intl.formatMessage({
               defaultMessage: 'Was this incident reported to the police?',
             })}
+            name="policeReported"
             required
+            tooltip={intl.formatMessage({
+              defaultMessage: 'The incident has been reported to the police',
+            })}
           >
             <Radio.Group
+              disabled={saving}
+              optionType="button"
               options={[
                 {
                   label: intl.formatMessage({
@@ -57,21 +61,21 @@ const IncidentPolice = ({ saving, form }: Props) => {
                   value: false,
                 },
               ]}
-              optionType="button"
-              disabled={saving}
             />
           </Form.Item>
           {reported && (
             <Form.Item
+              label={intl.formatMessage({
+                defaultMessage: 'Did the police attend this incident?',
+              })}
               name="policeInvolved"
               tooltip={intl.formatMessage({
                 defaultMessage: 'Did the police attend this incident.',
               })}
-              label={intl.formatMessage({
-                defaultMessage: 'Did the police attend this incident?',
-              })}
             >
               <Radio.Group
+                disabled={saving}
+                optionType="button"
                 options={[
                   {
                     label: intl.formatMessage({
@@ -86,8 +90,6 @@ const IncidentPolice = ({ saving, form }: Props) => {
                     value: false,
                   },
                 ]}
-                optionType="button"
-                disabled={saving}
               />
             </Form.Item>
           )}
@@ -96,10 +98,10 @@ const IncidentPolice = ({ saving, form }: Props) => {
         {reported && (
           <Col>
             <Form.Item
-              name="policeRef"
               label={intl.formatMessage({
                 defaultMessage: 'Crime Ref No.',
               })}
+              name="policeRef"
               tooltip={intl.formatMessage({
                 defaultMessage:
                   'The crime reference number provided by the police.',
@@ -108,10 +110,10 @@ const IncidentPolice = ({ saving, form }: Props) => {
               <Input disabled={saving} />
             </Form.Item>
             <Form.Item
-              name="policeNo"
               label={intl.formatMessage({
                 defaultMessage: 'Officer Collar No.',
               })}
+              name="policeNo"
               tooltip={intl.formatMessage({
                 defaultMessage:
                   'The collar number of the officers involved in this incident.',
@@ -124,10 +126,10 @@ const IncidentPolice = ({ saving, form }: Props) => {
         {reported && (
           <Col>
             <Form.Item
-              name="policeResponse"
               label={intl.formatMessage({
                 defaultMessage: 'Police Response Time',
               })}
+              name="policeResponse"
               tooltip={intl.formatMessage({
                 defaultMessage:
                   'The time taken for the police to respond to the incident.',

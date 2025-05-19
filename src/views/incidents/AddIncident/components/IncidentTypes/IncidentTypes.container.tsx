@@ -1,8 +1,8 @@
-import type { FormData } from '#/views/incidents/AddIncident/useAddIncident';
+import type { FormData } from '#/views/incidents/AddIncident/types/formData';
+import type { IncidentFormState } from '#/views/incidents/AddIncident/useAddIncident';
 import type { FormInstance } from 'antd';
 import type { ListIncidentTagsQuery } from 'graphql/tags/queries/__generated__/list-incident-tags.generated';
 import type { TagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
-import type { IncidentFormField } from 'graphql/types';
 
 import React from 'react';
 
@@ -11,9 +11,11 @@ import useIncidentTypes from './useIncidentTypes';
 
 interface Props {
   form: FormInstance<FormData>;
-  incidentForm: IncidentFormField[];
+  incidentForm: IncidentFormState;
   incidentTagsData: ListIncidentTagsQuery | undefined;
   incidentTagsLoading: boolean;
+
+  involvedMetadata?: { [key: string]: string }[];
   setPoliceReporting: (value: boolean) => void;
   tagsData: TagsQuery | undefined;
 }
@@ -23,6 +25,8 @@ const IncidentTypes = ({
   incidentForm,
   incidentTagsData: initIncidentTagsData,
   incidentTagsLoading,
+
+  involvedMetadata,
   setPoliceReporting,
   tagsData,
 }: Props) => {
@@ -45,6 +49,7 @@ const IncidentTypes = ({
       incidentTagsData={incidentTagsData}
       incidentTagsLoading={incidentTagsLoading}
       incidentTypeTooltip={incidentTypeTooltip}
+      involvedMetadata={involvedMetadata}
       oneSelectedIncidentTypeOnly={oneSelectedIncidentTypeOnly}
       tags={tags}
       tagsLoading={tagsLoading}

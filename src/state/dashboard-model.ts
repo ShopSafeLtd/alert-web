@@ -1,13 +1,14 @@
 /* eslint-disable no-param-reassign */
 import type { Action } from 'easy-peasy';
-import { action } from 'easy-peasy';
 import type RGL from 'react-grid-layout';
 
+import { action } from 'easy-peasy';
+
 export type DashboardLayout = {
-  layout: (RGL.Layout & {
+  layout: ({
     i: AvailableDashboardElements;
-  })[];
-  marquee: string | null;
+  } & RGL.Layout)[];
+  marquee: null | string;
 };
 
 export interface SchemeDashboardLayouts {
@@ -17,46 +18,46 @@ export interface SchemeDashboardLayouts {
 export const defaultUserLayout: DashboardLayout = {
   layout: [
     {
-      w: 12,
       h: 2,
-      x: 0,
-      y: 0,
       i: 'searchRow',
       moved: false,
       static: true,
+      w: 12,
+      x: 0,
+      y: 0,
     },
     {
-      w: 4,
       h: 24,
+      i: 'feedItemCol',
+      minH: 4,
+      minW: 4,
+      moved: false,
+      static: true,
+      w: 4,
       x: 0,
       y: 2,
-      i: 'feedItemCol',
-      minW: 4,
-      minH: 4,
-      moved: false,
-      static: true,
     },
     {
-      w: 8,
       h: 19,
+      i: 'articlesSection',
+      minH: 4,
+      minW: 3,
+      moved: false,
+      static: true,
+      w: 8,
       x: 4,
       y: 7,
-      i: 'articlesSection',
-      minW: 3,
-      minH: 4,
-      moved: false,
-      static: true,
     },
     {
-      w: 8,
       h: 5,
-      x: 4,
-      y: 2,
       i: 'activeOffender',
-      minW: 4,
       minH: 4,
+      minW: 4,
       moved: false,
       static: true,
+      w: 8,
+      x: 4,
+      y: 2,
     },
   ],
   marquee: null,
@@ -64,81 +65,81 @@ export const defaultUserLayout: DashboardLayout = {
 export const defaultAdminLayout: DashboardLayout = {
   layout: [
     {
-      w: 12,
       h: 2,
-      x: 0,
-      y: 0,
       i: 'searchRow',
       moved: false,
       static: true,
+      w: 12,
+      x: 0,
+      y: 0,
     },
     {
-      w: 4,
       h: 24,
+      i: 'feedItemCol',
+      minH: 4,
+      minW: 4,
+      moved: false,
+      static: true,
+      w: 4,
       x: 0,
       y: 2,
-      i: 'feedItemCol',
-      minW: 4,
-      minH: 4,
-      moved: false,
-      static: true,
     },
     {
-      w: 5,
       h: 19,
+      i: 'adminTodos',
+      minH: 4,
+      minW: 4,
+      moved: false,
+      static: true,
+      w: 5,
       x: 4,
       y: 7,
-      i: 'adminTodos',
-      minW: 4,
-      minH: 4,
-      moved: false,
-      static: true,
     },
     {
-      w: 3,
       h: 19,
+      i: 'articlesSection',
+      minH: 4,
+      minW: 3,
+      moved: false,
+      static: true,
+      w: 3,
       x: 9,
       y: 7,
-      i: 'articlesSection',
-      minW: 3,
-      minH: 4,
-      moved: false,
-      static: true,
     },
     {
-      w: 8,
       h: 5,
-      x: 4,
-      y: 2,
       i: 'activeOffender',
-      minW: 4,
       minH: 4,
+      minW: 4,
       moved: false,
       static: true,
+      w: 8,
+      x: 4,
+      y: 2,
     },
   ],
   marquee: null,
 };
 
 export interface DashboardModel {
-  startDate: Date;
   endDate: Date;
-  isSet: boolean;
   initialLayout: DashboardLayout;
+  isSet: boolean;
   schemeLayouts: SchemeDashboardLayouts;
-  setStartDate: Action<DashboardModel, Date>;
   setEndDate: Action<DashboardModel, Date>;
   setSchemeLayouts: Action<DashboardModel, SchemeDashboardLayouts>;
+  setStartDate: Action<DashboardModel, Date>;
+  startDate: Date;
 }
 
 const dashboardModel: DashboardModel = {
-  startDate: new Date(
-    new Date(new Date().setMonth(new Date().getMonth() - 1)).setHours(0, 0, 59)
-  ),
   endDate: new Date(new Date().setHours(23, 59, 59, 999)),
-  isSet: false,
   initialLayout: defaultUserLayout,
+  isSet: false,
   schemeLayouts: {},
+  setEndDate: action((state, payload) => {
+    state.endDate = payload;
+  }),
 
   setSchemeLayouts: action((state, payload) => {
     state.schemeLayouts = payload;
@@ -147,23 +148,24 @@ const dashboardModel: DashboardModel = {
   setStartDate: action((state, payload) => {
     state.startDate = payload;
   }),
-  setEndDate: action((state, payload) => {
-    state.endDate = payload;
-  }),
+  startDate: new Date(
+    new Date(new Date().setMonth(new Date().getMonth() - 1)).setHours(0, 0, 59)
+  ),
 };
 
 export default dashboardModel;
 
 export type AvailableDashboardElements =
-  | 'feedItemCol'
+  | 'activeOffender'
   | 'adminTodos'
   | 'articlesSection'
-  | 'searchRow'
-  | 'activeOffender'
   | 'dayOfWeekBar'
-  | 'timeOfDayBar'
+  | 'draftIncidents'
+  | 'feedItemCol'
   | 'incidentCount'
-  | 'latestIncident'
   | 'incidentValue'
+  | 'latestIncident'
+  | 'latestIncidents'
+  | 'searchRow'
   | 'targetedGoods'
-  | 'latestIncidents';
+  | 'timeOfDayBar';

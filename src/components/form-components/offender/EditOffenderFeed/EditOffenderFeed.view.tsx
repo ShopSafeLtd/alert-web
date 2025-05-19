@@ -48,7 +48,7 @@ const EditOffender = ({
   const [form] = Form.useForm<FormData>();
   const ageCheck = Form.useWatch('ageCheck', form);
   const idVerified = Form.useWatch('idVerified', form);
-
+  const incidentsCount = (data?.offender?.totalIncidents || 0) > 0;
   return (
     <div className="list-view">
       {loading ? (
@@ -276,15 +276,19 @@ const EditOffender = ({
                     defaultMessage: 'Justification',
                   })}
                   name="justification"
-                  rules={[
-                    {
-                      message: intl.formatMessage({
-                        defaultMessage:
-                          'Please enter a justification for the offender.',
-                      }),
-                      required: needJustification,
-                    },
-                  ]}
+                  rules={
+                    incidentsCount
+                      ? undefined
+                      : [
+                          {
+                            message: intl.formatMessage({
+                              defaultMessage:
+                                'Please enter a justification for the offender.',
+                            }),
+                            required: needJustification,
+                          },
+                        ]
+                  }
                   tooltip={intl.formatMessage({
                     defaultMessage:
                       // eslint-disable-next-line

@@ -21,6 +21,7 @@ export interface FormData {
   [key: string]: boolean | number | string | undefined;
 }
 interface Return {
+  actionsOpen: boolean;
   availableUsers: { id: string; name: string; timeTaken: number }[];
   documentList: UploadFile[];
   documentUploadProps?: UploadProps;
@@ -33,6 +34,7 @@ interface Return {
   ) => void;
   setUsers: (users: { id: string; name: string; timeTaken: number }[]) => void;
   todo: TodoQuery | undefined;
+  toggleActionsOpen: () => void;
   users: { id: string; name: string; timeTaken: number }[];
 }
 
@@ -52,6 +54,7 @@ const useTodo = ({
   const [form] = useForm();
 
   const [saving, setSaving] = useState(false);
+  const [actionsOpen, setActionsOpen] = useState(false);
   const [users, setUsers] = useState<
     { id: string; name: string; timeTaken: number }[]
   >([]);
@@ -306,7 +309,13 @@ const useTodo = ({
     multiple: true,
     onChange: handleChange,
   };
+
+  const toggleActionsOpen = () => {
+    setActionsOpen(!actionsOpen);
+  };
+
   return {
+    actionsOpen,
     availableUsers,
     documentList,
     documentUploadProps,
@@ -317,6 +326,7 @@ const useTodo = ({
     setAvailableUsers,
     setUsers,
     todo,
+    toggleActionsOpen,
     users,
   };
 };

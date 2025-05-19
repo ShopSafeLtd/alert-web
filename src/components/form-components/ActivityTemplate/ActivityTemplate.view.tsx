@@ -1,6 +1,7 @@
 import type { FormInstance } from 'antd';
 
-import { faTrash } from '@fortawesome/pro-light-svg-icons';
+import UpdateQuestionContainer from '#/components/form-components/update-question-on-activity/UpdateQuestion.container';
+import { faEdit, faTrash } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Col, Drawer, Form, Input, InputNumber, Row } from 'antd';
 import React from 'react';
@@ -12,6 +13,7 @@ import CreateQuestionContainer from '../createQuestion/CreateQuestion.container'
 
 interface Props {
   addQuestion: boolean;
+  editQuestion: null | string;
   form: FormInstance<FormData>;
   onClose: () => void;
   onSubmit: (value: FormData) => void;
@@ -19,6 +21,7 @@ interface Props {
   selectedIds?: string[];
   selectedQuestions: { id: string; question: string }[];
   setAddQuestion: (value: boolean) => void;
+  setEditQuestion: (value: null | string) => void;
   setSelectedIds: (value: string[]) => void;
   setSelectedQuestions: (value: { id: string; question: string }[]) => void;
   update: (id: string, question: string) => void;
@@ -26,6 +29,7 @@ interface Props {
 
 const AddTodo = ({
   addQuestion,
+  editQuestion,
   form,
   onClose,
   onSubmit,
@@ -33,6 +37,7 @@ const AddTodo = ({
   selectedIds,
   selectedQuestions,
   setAddQuestion,
+  setEditQuestion,
   setSelectedIds,
   setSelectedQuestions,
   update,
@@ -105,9 +110,18 @@ const AddTodo = ({
               name="questions"
             >
               {selectedQuestions.map((question) => (
-                <Row>
+                <Row gutter={8}>
                   <Col flex={1}>
                     <p>{question.question}</p>
+                  </Col>
+                  <Col>
+                    <Button
+                      icon={<FontAwesomeIcon icon={faEdit} />}
+                      onClick={() => {
+                        setEditQuestion(question.id);
+                      }}
+                      size="small"
+                    />
                   </Col>
                   <Col>
                     <Button
@@ -174,6 +188,24 @@ const AddTodo = ({
           />
         ) : (
           <div />
+        )}
+      </Drawer>
+      <Drawer
+        onClose={() => setEditQuestion(null)}
+        open={editQuestion !== null}
+        title={intl.formatMessage({
+          defaultMessage: 'Add/Create Question',
+        })}
+        width="800"
+      >
+        {editQuestion === null ? (
+          <div />
+        ) : (
+          <UpdateQuestionContainer
+            onClose={() => setEditQuestion(null)}
+            questionId={editQuestion}
+            required
+          />
         )}
       </Drawer>
     </>

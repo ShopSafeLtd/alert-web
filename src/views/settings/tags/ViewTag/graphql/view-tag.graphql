@@ -27,6 +27,7 @@ query ViewTag(
         id
         position
         type
+          metadata
       }
     }
     tagQuestions(where: $tagQuestionsWhere) {

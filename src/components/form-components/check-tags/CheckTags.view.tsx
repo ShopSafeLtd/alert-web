@@ -24,6 +24,7 @@ interface Option {
 interface Props {
   className?: string;
   disabled?: boolean;
+
   loading?: boolean;
   mode?: Mode;
   noGutter?: boolean;
@@ -36,6 +37,7 @@ interface Props {
 const CheckTags = ({
   className,
   disabled = false,
+
   loading = false,
   mode: modeProp,
   noGutter,
@@ -53,8 +55,6 @@ const CheckTags = ({
   const [primaryValue, setPrimaryValue] = useState<Option | null>(null);
   const [secondaryValue, setSecondaryValue] = useState<Option | null>(null);
   const [tertiaryValue, setTertiaryValue] = useState<Option | null>(null);
-
-  // Determine if options have children
 
   useEffect(() => {
     const hasChildren = options
@@ -92,13 +92,6 @@ const CheckTags = ({
       }
     }
   }, [modeProp, hasChildOptions, valueProp, options]);
-
-  // Trigger onChange prop when check values update to update parent form state
-  // useEffect(() => {
-  //   if (onChangeProp) onChangeProp(checkValues);
-  // }, [checkValues]);
-
-  // Handles updating of check state
   const toggleCheckOption = (data: Option) => {
     if (!disabled) {
       if (checkValues.includes(data.value)) {
@@ -112,6 +105,39 @@ const CheckTags = ({
       }
     }
   };
+  useEffect(() => {
+    if (!valueProp || valueProp.length === 0) return;
+
+    if (modeProp === 'check') {
+      setCheckValues(valueProp);
+    }
+
+    const lineages: Option[][] = [];
+
+    for (const id of valueProp) {
+      const selected = options.find((opt): opt is Option => opt.value === id);
+      if (!selected) continue;
+
+      const lineage: Option[] = [];
+      let current: Option | undefined = selected;
+
+      while (current) {
+        lineage.unshift(current);
+        if (!current.parentId) break;
+        current = options.find(
+          (opt): opt is Option => opt.value === current?.parentId
+        );
+      }
+
+      lineages.push(lineage);
+    }
+
+    const flatLineage = lineages.flat();
+
+    setPrimaryValue(flatLineage[0] ?? null);
+    setSecondaryValue(flatLineage[1] ?? null);
+    setTertiaryValue(flatLineage[2] ?? null);
+  }, [valueProp, options, modeProp]);
 
   //
   const setPrimary = (data: Option) => {

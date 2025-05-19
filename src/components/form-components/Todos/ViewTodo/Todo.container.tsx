@@ -22,6 +22,7 @@ const ViewTodo = ({
   updateTodo: (value: boolean, i?: string) => void;
 }) => {
   const {
+    actionsOpen,
     availableUsers,
     documentList,
     documentUploadProps,
@@ -32,6 +33,7 @@ const ViewTodo = ({
     setAvailableUsers,
     setUsers,
     todo,
+    toggleActionsOpen,
     users,
   } = useTodo({
     id,
@@ -42,6 +44,7 @@ const ViewTodo = ({
 
   return (
     <View
+      actionsOpen={actionsOpen}
       availableUsers={availableUsers}
       confirmText={confirmText}
       documentList={documentList}
@@ -55,6 +58,7 @@ const ViewTodo = ({
       setAvailableUsers={setAvailableUsers}
       setUsers={setUsers}
       todo={todo}
+      toggleActionsOpen={toggleActionsOpen}
       users={users}
     />
   );

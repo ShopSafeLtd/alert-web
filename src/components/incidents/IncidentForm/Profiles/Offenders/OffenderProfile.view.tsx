@@ -79,6 +79,7 @@ const OffenderProfile = ({
   const facialDetection =
     useAtomValue(currentSchemeAtom)?.facialDetection ?? true;
   const publicOffenderDOB = publicOffenderDob();
+
   return (
     <>
       <div
@@ -111,7 +112,11 @@ const OffenderProfile = ({
             {/*   /> */}
             {/* )} */}
             {!offender.images[0]?.boundingBox && (
-              <WatermarkImage url={offender.images[0]?.optimised || ''} />
+              <WatermarkImage
+                url={
+                  offender.images[0]?.optimised || offender.images[0]?.url || ''
+                }
+              />
             )}
           </div>
         )}

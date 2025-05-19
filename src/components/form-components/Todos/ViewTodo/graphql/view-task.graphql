@@ -5,6 +5,11 @@ query Todo($where: TodoWhereUniqueInput!) {
       fullName
     }
     name
+    actions {
+      id
+      description
+      createdAt
+    }
     createdAt
     dueDate
     answers {

@@ -37,12 +37,14 @@ const ActivityTemplateForm = ({
 }: Props): JSX.Element => {
   const {
     addQuestion,
+    editQuestion,
     form,
     onSubmit,
     saving,
     selectedIds,
     selectedQuestions,
     setAddQuestion,
+    setEditQuestion,
     setSelectedIds,
     setSelectedQuestions,
     updateQs,
@@ -56,6 +58,7 @@ const ActivityTemplateForm = ({
   return (
     <View
       addQuestion={addQuestion}
+      editQuestion={editQuestion}
       form={form}
       onClose={onClose}
       onSubmit={onSubmit}
@@ -63,6 +66,7 @@ const ActivityTemplateForm = ({
       selectedIds={selectedIds}
       selectedQuestions={selectedQuestions}
       setAddQuestion={setAddQuestion}
+      setEditQuestion={setEditQuestion}
       setSelectedIds={setSelectedIds}
       setSelectedQuestions={setSelectedQuestions}
       update={updateQs}

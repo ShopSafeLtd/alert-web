@@ -1,55 +1,57 @@
-import { useEffect, useState } from 'react';
-import update from 'immutability-helper';
+import type { FormData } from '#/views/incidents/AddIncident/types/formData';
 import type { FormInstance } from 'antd';
+
 import { Form } from 'antd';
-import type { FormData } from 'views/incidents/AddIncident/useAddIncident';
+import update from 'immutability-helper';
+import { useEffect, useState } from 'react';
+
 import type { StateImageData } from '../../ImageSection/useImageSection';
 
 export interface AddVehicleData {
+  colour?: null | string | undefined;
   id: string;
-  make?: string | null | undefined;
-  model?: string | null | undefined;
-  colour?: string | null | undefined;
-  reference?: number | null;
-  registration?: string | null | undefined;
   images?:
     | {
         id: string;
-        optimised?: string | null;
+        optimised?: null | string;
       }[]
     | null;
+  make?: null | string | undefined;
+  model?: null | string | undefined;
+  reference?: null | number;
+  registration?: null | string | undefined;
 }
 
 export interface StateVehicleData extends AddVehicleData {
-  new: boolean;
-  existing: boolean;
-  edited: boolean;
   blank: boolean;
+  edited: boolean;
+  existing: boolean;
+  new: boolean;
 }
 
 interface Props {
-  value?: StateVehicleData[];
-  onChange?: (value: StateVehicleData[]) => void;
   form: FormInstance<FormData>;
+  onChange?: (value: StateVehicleData[]) => void;
+  value?: StateVehicleData[];
 }
 
 interface Return {
-  vehicles: StateVehicleData[];
+  matchExistingOpen: AddVehicleData | null;
   noVehicles: boolean;
-  toggleNoVehicles: () => void;
   onAddBlankVehicles: (count: number) => void;
+  onAddVehicles: (vehicles: AddVehicleData[], existing: boolean) => void;
+  onImagesUploadedInForm: (values: StateImageData[]) => void;
+  onMatchVehicle: (value: AddVehicleData) => void;
   onRemoveVehicle: (id: string) => void;
+  onUpdateVehicle: (data: AddVehicleData) => void;
   setMatchExistingOpen: (value: AddVehicleData | null) => void;
   setUpdateOpen: (value: StateVehicleData | null) => void;
-  matchExistingOpen: AddVehicleData | null;
+  toggleNoVehicles: () => void;
   updateOpen: StateVehicleData | null;
-  onAddVehicles: (vehicles: AddVehicleData[], existing: boolean) => void;
-  onMatchVehicle: (value: AddVehicleData) => void;
-  onUpdateVehicle: (data: AddVehicleData) => void;
-  onImagesUploadedInForm: (values: StateImageData[]) => void;
+  vehicles: StateVehicleData[];
 }
 
-const useVehicles = ({ value, onChange, form }: Props): Return => {
+const useVehicles = ({ form, onChange, value }: Props): Return => {
   const images = Form.useWatch('images', form);
 
   const [pristine, setPristine] = useState(true);
@@ -81,11 +83,11 @@ const useVehicles = ({ value, onChange, form }: Props): Return => {
       ...vehicles,
       ...newData.map((vehicle) => ({
         ...vehicle,
-        images: vehicle.images || [],
+        blank,
         edited: false,
         existing,
+        images: vehicle.images || [],
         new: !existing,
-        blank,
       })),
     ]);
   };
@@ -94,12 +96,12 @@ const useVehicles = ({ value, onChange, form }: Props): Return => {
   };
   const onAddBlankVehicles = (count: number) => {
     const data: AddVehicleData[] = Array.from({ length: count }, () => ({
-      make: '',
-      model: '',
       colour: '',
-      registration: '',
       id: Math.floor(Math.random() * 1000).toString(),
       images: [],
+      make: '',
+      model: '',
+      registration: '',
     }));
     onAddVehicles(data, false, true);
     setNoVehicles(false);
@@ -117,13 +119,13 @@ const useVehicles = ({ value, onChange, form }: Props): Return => {
           [vehicles.findIndex((item) => item.id === data.id)]: {
             $set: {
               ...currentData,
-              images: data.images,
-              registration: data.registration,
-              make: data.make,
-              model: data.model,
+              blank: false,
               colour: data.colour,
               edited: !currentData.new,
-              blank: false,
+              images: data.images,
+              make: data.make,
+              model: data.model,
+              registration: data.registration,
             },
           },
         })
@@ -143,23 +145,23 @@ const useVehicles = ({ value, onChange, form }: Props): Return => {
         update<StateVehicleData[]>(vehicles, {
           [vehicles.findIndex((item) => item.id === matchExistingOpen.id)]: {
             $set: {
-              reference: data.reference,
-              id: data.id,
-              registration: registrationUpdated
-                ? matchExistingOpen?.registration
-                : data.registration,
-              make: makeUpdated ? matchExistingOpen?.make : data.make,
-              model: modelUpdated ? matchExistingOpen?.model : data.model,
+              blank: false,
               colour: colourUpdated ? matchExistingOpen?.colour : data.colour,
-              images: [...newImages, ...existingImages],
-              new: false,
-              existing: true,
               edited:
                 registrationUpdated ||
                 makeUpdated ||
                 modelUpdated ||
                 colourUpdated,
-              blank: false,
+              existing: true,
+              id: data.id,
+              images: [...newImages, ...existingImages],
+              make: makeUpdated ? matchExistingOpen?.make : data.make,
+              model: modelUpdated ? matchExistingOpen?.model : data.model,
+              new: false,
+              reference: data.reference,
+              registration: registrationUpdated
+                ? matchExistingOpen?.registration
+                : data.registration,
             },
           },
         })
@@ -176,19 +178,19 @@ const useVehicles = ({ value, onChange, form }: Props): Return => {
   };
 
   return {
-    vehicles,
+    matchExistingOpen,
     noVehicles,
+    onAddBlankVehicles,
+    onAddVehicles,
+    onImagesUploadedInForm,
+    onMatchVehicle,
     onRemoveVehicle,
+    onUpdateVehicle,
     setMatchExistingOpen,
     setUpdateOpen,
-    onAddBlankVehicles,
     toggleNoVehicles,
     updateOpen,
-    matchExistingOpen,
-    onAddVehicles,
-    onMatchVehicle,
-    onUpdateVehicle,
-    onImagesUploadedInForm,
+    vehicles,
   };
 };
 

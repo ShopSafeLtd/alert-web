@@ -1,3 +1,4 @@
+import type { IncidentFormState } from '#/views/incidents/AddIncident/useAddIncident';
 import type { ListIncidentTagsQuery } from 'graphql/tags/queries/__generated__/list-incident-tags.generated';
 
 import { Card, Col, Form, Row, Typography } from 'antd';
@@ -11,10 +12,12 @@ import useStyles from '../../AddIncident.styles';
 const { Paragraph, Title } = Typography;
 
 interface Props {
-  incidentForm: IncidentFormField[];
+  incidentForm: IncidentFormState;
   incidentTagsData: ListIncidentTagsQuery | undefined;
   incidentTagsLoading: boolean;
   incidentTypeTooltip?: null | string;
+
+  involvedMetadata?: { [key: string]: string }[];
   oneSelectedIncidentTypeOnly: boolean;
   tags: { label: string; tooltip: string; type: TagType; value: string }[];
   tagsLoading: boolean;
@@ -25,6 +28,8 @@ const IncidentTypes = ({
   incidentTagsData,
   incidentTagsLoading,
   incidentTypeTooltip,
+
+  involvedMetadata,
   oneSelectedIncidentTypeOnly,
   tags,
   tagsLoading,
@@ -67,6 +72,7 @@ const IncidentTypes = ({
             required: true,
           },
         ]}
+        shouldUpdate
         tooltip={
           incidentTypeTooltip ||
           intl.formatMessage({
@@ -81,7 +87,7 @@ const IncidentTypes = ({
           options={incidentTagsData?.listIncidentTags || []}
         />
       </Form.Item>
-      {incidentForm.includes(IncidentFormField.Involved) && (
+      {incidentForm.map((f) => f.type).includes(IncidentFormField.Involved) && (
         <Form.Item
           label={intl.formatMessage({
             defaultMessage: 'Did this incident involve any of the following?',
@@ -102,13 +108,18 @@ const IncidentTypes = ({
         >
           <CheckTags
             loading={tagsLoading}
+            mode={
+              involvedMetadata?.at(0)?.mode === 'SINGLE_SELECT'
+                ? 'radio'
+                : 'check'
+            }
             options={tags.filter(
               (item) => item.type === TagType.IncidentInvolved
             )}
           />
         </Form.Item>
       )}
-      {incidentForm.includes(IncidentFormField.Impact) && (
+      {incidentForm.map((f) => f.type).includes(IncidentFormField.Impact) && (
         <Form.Item
           label={intl.formatMessage({
             defaultMessage: 'How did this make you feel?',

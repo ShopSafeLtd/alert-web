@@ -8,7 +8,7 @@ export type EditOffenderQueryVariables = Types.Exact<{
 }>;
 
 
-export type EditOffenderQuery = { __typename?: 'Query', offender: { __typename?: 'Offender', id: string, alias: Array<string>, infoSource?: string | null, knownFor: Array<string>, targetedGoods: Array<string>, justification?: string | null, age?: Types.Age | null, build?: Types.Build | null, height?: Types.Height | null, dateOfBirth?: Date | null, dateSource?: string | null, hair?: string | null, gender?: Types.Gender | null, comment?: string | null, name?: string | null, reference?: number | null, race?: Types.Race | null, peculiarities?: string | null, approved?: boolean | null, idVerified: boolean, idSource?: Types.IdSource | null, customGalleries: Array<{ __typename?: 'CustomGallery', id: string, name: string }>, groups: Array<{ __typename?: 'Group', id: string, name: string }>, tags: Array<{ __typename?: 'Tag', id: string, name: string }> } };
+export type EditOffenderQuery = { __typename?: 'Query', offender: { __typename?: 'Offender', id: string, alias: Array<string>, infoSource?: string | null, knownFor: Array<string>, targetedGoods: Array<string>, justification?: string | null, age?: Types.Age | null, build?: Types.Build | null, height?: Types.Height | null, dateOfBirth?: Date | null, dateSource?: string | null, hair?: string | null, gender?: Types.Gender | null, comment?: string | null, name?: string | null, reference?: number | null, race?: Types.Race | null, peculiarities?: string | null, approved?: boolean | null, idVerified: boolean, totalIncidents: number, idSource?: Types.IdSource | null, customGalleries: Array<{ __typename?: 'CustomGallery', id: string, name: string }>, groups: Array<{ __typename?: 'Group', id: string, name: string }>, tags: Array<{ __typename?: 'Tag', id: string, name: string }> } };
 
 
 export const EditOffenderDocument = gql`
@@ -34,6 +34,7 @@ export const EditOffenderDocument = gql`
     peculiarities
     approved
     idVerified
+    totalIncidents
     idSource
     customGalleries {
       id

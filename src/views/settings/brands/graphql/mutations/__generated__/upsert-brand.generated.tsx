@@ -8,7 +8,7 @@ export type UpsertBrandMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpsertBrandMutation = { __typename?: 'Mutation', upsertBrand: { __typename?: 'Brand', id: string, name: string, description?: string | null, businesses: Array<{ __typename?: 'Business', name: string, id: string }> } };
+export type UpsertBrandMutation = { __typename?: 'Mutation', upsertBrand: { __typename?: 'Brand', id: string, name: string, businessCount: number, description?: string | null } };
 
 
 export const UpsertBrandDocument = gql`
@@ -16,10 +16,7 @@ export const UpsertBrandDocument = gql`
   upsertBrand(data: $data) {
     id
     name
-    businesses {
-      name
-      id
-    }
+    businessCount
     description
   }
 }

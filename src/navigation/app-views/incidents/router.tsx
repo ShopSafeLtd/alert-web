@@ -44,10 +44,23 @@ const Incidents = (): JSX.Element => {
                   model: PermissionModel.Incidents,
                 }}
               >
+                <AddIncident investigation />
+              </PermissionCheckWrapper>
+            }
+            path="add/:id"
+          />
+          <Route
+            element={
+              <PermissionCheckWrapper
+                permission={{
+                  method: PermissionMethod.Write,
+                  model: PermissionModel.Incidents,
+                }}
+              >
                 <AddIncident />
               </PermissionCheckWrapper>
             }
-            path="add/:investigationId"
+            path="add/draft/:id"
           />
           <Route
             element={

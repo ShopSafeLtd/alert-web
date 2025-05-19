@@ -23,21 +23,7 @@ import errorNotification from 'types/mutation_notifications/error_notification';
 interface Return {
   addBrand: boolean;
   brandId: string;
-  data:
-    | {
-        node: {
-          businesses: {
-            __typename?: 'Business';
-            id: string;
-            name: string;
-          }[];
-          description?: null | string;
-          id: string;
-          name: string;
-        };
-      }[]
-    | null
-    | undefined;
+  data: BrandsQuery['brands']['edges'] | null | undefined;
   loading: boolean;
   onDelete: (value: string) => void;
   saving: boolean;

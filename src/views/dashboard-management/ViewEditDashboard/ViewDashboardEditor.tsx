@@ -6,6 +6,7 @@ import ActiveOffendersTemplate from '#/views/dashboard/components/ActiveOffender
 import AdminTodosTemplate from '#/views/dashboard/components/AdminTodos/AdminTodosTemplate';
 import ArticlesSection from '#/views/dashboard/components/ArticlesSection/ArticlesSectionTemplate';
 import DayOfWeekBar from '#/views/dashboard/components/DayOfWeek/DayOfWeekGraphTemplate';
+import DraftIncidentsTemplate from '#/views/dashboard/components/DraftIncidents/DraftIncidentsTemplate';
 import FeedItemCol from '#/views/dashboard/components/FeedItems/FeedItemColTemplate';
 import IncidentCount from '#/views/dashboard/components/IncidentCount/IncidentCountTemplate.view';
 import IncidentValue from '#/views/dashboard/components/IncidentValues/IncidentValueTemplate.view';
@@ -29,6 +30,7 @@ import TimeOfDay from '../../dashboard/components/TimeOfDay/TimeOfDayTemplate.vi
 const ViewDashboardEditor = () => {
   const { id: DashboardId } = useParams();
   const { data: initData, loading } = useDashboardTemplateQuery({
+    fetchPolicy: 'network-only',
     variables: {
       where: {
         id: DashboardId || '',
@@ -183,17 +185,35 @@ const ViewDashboardEditor = () => {
   };
   const layoutItems: { [key in AvailableDashboardElements]: JSX.Element } = {
     activeOffender: (
-      <div key="activeOffender">
+      <div
+        key="activeOffender"
+        style={{
+          overflow: 'hidden',
+          padding: 15,
+        }}
+      >
         <ActiveOffendersTemplate removeItem={removeItem} />
       </div>
     ),
     adminTodos: (
-      <div key="adminTodos">
+      <div
+        key="adminTodos"
+        style={{
+          overflow: 'hidden',
+          padding: 15,
+        }}
+      >
         <AdminTodosTemplate removeItem={removeItem} />
       </div>
     ),
     articlesSection: (
-      <div key="articlesSection">
+      <div
+        key="articlesSection"
+        style={{
+          overflow: 'hidden',
+          padding: 15,
+        }}
+      >
         <ArticlesSection
           removeItem={removeItem}
           w={layout.find(({ i }) => i === 'articlesSection')?.w ?? 0}
@@ -201,32 +221,80 @@ const ViewDashboardEditor = () => {
       </div>
     ),
     dayOfWeekBar: (
-      <div key="dayOfWeekBar">
+      <div
+        key="dayOfWeekBar"
+        style={{
+          overflow: 'hidden',
+          padding: 15,
+        }}
+      >
         <DayOfWeekBar removeItem={removeItem} />
       </div>
     ),
+    draftIncidents: (
+      <div
+        key="draftIncidents"
+        style={{
+          overflow: 'hidden',
+          padding: 15,
+        }}
+      >
+        <DraftIncidentsTemplate removeItem={removeItem} />
+      </div>
+    ),
     feedItemCol: (
-      <div key="feedItemCol">
+      <div
+        key="feedItemCol"
+        style={{
+          overflow: 'hidden',
+          padding: 15,
+        }}
+      >
         <FeedItemCol removeItem={removeItem} />
       </div>
     ),
     incidentCount: (
-      <div key="incidentCount">
+      <div
+        key="incidentCount"
+        style={{
+          overflow: 'hidden',
+          padding: 15,
+        }}
+      >
         <IncidentCount removeItem={removeItem} />
       </div>
     ),
+
     incidentValue: (
-      <div key="incidentValue">
+      <div
+        key="incidentValue"
+        style={{
+          overflow: 'hidden',
+          padding: 15,
+        }}
+      >
         <IncidentValue removeItem={removeItem} />
       </div>
     ),
     latestIncident: (
-      <div key="latestIncident">
+      <div
+        key="latestIncident"
+        style={{
+          overflow: 'hidden',
+          padding: 15,
+        }}
+      >
         <LatestIncident removeItem={removeItem} />
       </div>
     ),
     latestIncidents: (
-      <div key="latestIncidents">
+      <div
+        key="latestIncidents"
+        style={{
+          overflow: 'hidden',
+          padding: 15,
+        }}
+      >
         <LatestIncidentsTemplate removeItem={removeItem} />
       </div>
     ),
@@ -236,12 +304,24 @@ const ViewDashboardEditor = () => {
       </div>
     ),
     targetedGoods: (
-      <div key="targetedGoods">
+      <div
+        key="targetedGoods"
+        style={{
+          overflow: 'hidden',
+          padding: 15,
+        }}
+      >
         <TargetedGoodsGraph removeItem={removeItem} />
       </div>
     ),
     timeOfDayBar: (
-      <div key="timeOfDayBar">
+      <div
+        key="timeOfDayBar"
+        style={{
+          overflow: 'hidden',
+          padding: 15,
+        }}
+      >
         <TimeOfDay removeItem={removeItem} />
       </div>
     ),
@@ -269,6 +349,7 @@ const ViewDashboardEditor = () => {
     setLayout(lay.map((i) => ({ ...i, minH: 2, minW: 2 })));
     setDroppingItem(undefined);
   };
+
   if (loading)
     return (
       <div
@@ -283,52 +364,7 @@ const ViewDashboardEditor = () => {
       </div>
     );
   return (
-    <div
-      className="feed-container"
-      style={{
-        height: '100vh',
-        overflow: 'hidden',
-        padding: 15,
-        paddingTop: 0,
-      }}
-    >
-      {marquee ? (
-        <Marquee autoFill>
-          {marquee}
-          <div style={{ width: 200 }} />
-        </Marquee>
-      ) : null}
-      <DashboardSelectorDrawer
-        droppingItem={droppingItem}
-        layout={layout}
-        setDroppingItem={setDroppingItem}
-      />
-      <ReactGridLayout
-        autoSize
-        containerPadding={[0, 0]}
-        droppingItem={droppingItem}
-        isBounded
-        isDraggable
-        isDroppable
-        isResizable
-        layout={layout}
-        margin={[8, 8]}
-        onDrop={onDrop}
-        onLayoutChange={(e) =>
-          setLayout(
-            e as ({
-              i: AvailableDashboardElements;
-            } & RGL.Layout)[]
-          )
-        }
-        rowHeight={generateHeight()}
-        style={{ height: '100vh' }}
-      >
-        {Object.values(layoutItems).map((l) => {
-          if (layout.some(({ i }) => i === l.key)) return l;
-          return null;
-        })}
-      </ReactGridLayout>
+    <>
       <Button
         onClick={() => navigate('/app/manage-dashboard')}
         style={{
@@ -371,37 +407,84 @@ const ViewDashboardEditor = () => {
           defaultMessage: 'Edit/Add banner',
         })}
       </Button>
-
-      <Drawer
-        closeIcon={null}
-        extra={
-          <Space>
-            <Button onClick={onClose} type="primary">
-              {intl.formatMessage({ defaultMessage: 'Close' })}
-            </Button>
-          </Space>
-        }
-        mask={false}
-        onClose={onClose}
-        open={open}
-        placement="left"
-        title={intl.formatMessage({
-          defaultMessage: 'Dashboard Banner',
-        })}
-        width={400}
+      <div
+        className="feed-container"
+        style={{
+          height: '100vh',
+          overflowX: 'hidden',
+          padding: 15,
+          paddingTop: 0,
+        }}
       >
-        {intl.formatMessage({
-          defaultMessage: 'Banner Text:',
-        })}
-
-        <Input
-          allowClear
-          onChange={(e) => setMarquee(e.target.value ?? '')}
-          style={{ marginTop: 10 }}
-          value={marquee ?? ''}
+        {marquee ? (
+          <Marquee autoFill>
+            {marquee}
+            <div style={{ width: 200 }} />
+          </Marquee>
+        ) : null}
+        <DashboardSelectorDrawer
+          droppingItem={droppingItem}
+          layout={layout}
+          setDroppingItem={setDroppingItem}
         />
-      </Drawer>
-    </div>
+        <ReactGridLayout
+          autoSize={true}
+          containerPadding={[0, 0]}
+          droppingItem={droppingItem}
+          isBounded={true}
+          isDraggable
+          isDroppable
+          isResizable
+          layout={layout}
+          margin={[0, 0]}
+          onDrop={onDrop}
+          onLayoutChange={(e) =>
+            setLayout(
+              e as ({
+                i: AvailableDashboardElements;
+              } & RGL.Layout)[]
+            )
+          }
+          rowHeight={generateHeight()}
+          // style={{ height: '100vh' }}
+        >
+          {Object.values(layoutItems).map((l) => {
+            if (layout.some(({ i }) => i === l.key)) return l;
+            return null;
+          })}
+        </ReactGridLayout>
+
+        <Drawer
+          closeIcon={null}
+          extra={
+            <Space>
+              <Button onClick={onClose} type="primary">
+                {intl.formatMessage({ defaultMessage: 'Close' })}
+              </Button>
+            </Space>
+          }
+          mask={false}
+          onClose={onClose}
+          open={open}
+          placement="left"
+          title={intl.formatMessage({
+            defaultMessage: 'Dashboard Banner',
+          })}
+          width={400}
+        >
+          {intl.formatMessage({
+            defaultMessage: 'Banner Text:',
+          })}
+
+          <Input
+            allowClear
+            onChange={(e) => setMarquee(e.target.value ?? '')}
+            style={{ marginTop: 10 }}
+            value={marquee ?? ''}
+          />
+        </Drawer>
+      </div>
+    </>
   );
 };
 

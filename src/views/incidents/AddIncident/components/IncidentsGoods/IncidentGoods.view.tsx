@@ -580,10 +580,10 @@ const IncidentGoods = ({
           </Row>
         </div>
       )}
-      {goods?.length > 0 && (
-        <Row>
-          <Col span={20} />
-          <Col>
+      {goodsMode === GoodsMode.Specific && goods?.length > 0 && (
+        <Row gutter={16}>
+          <Col style={{ width: 525 }} />
+          <Col style={{ width: 155 }}>
             <Title level={5} style={{ marginBottom: 0 }}>
               <FormattedMessage defaultMessage="Total Value" />
             </Title>
@@ -591,6 +591,8 @@ const IncidentGoods = ({
               currency,
               style: 'currency',
             })}
+          </Col>
+          <Col style={{ width: 155 }}>
             <Title level={5} style={{ marginBottom: 0 }}>
               <FormattedMessage defaultMessage="Total Loss" />
             </Title>
@@ -601,7 +603,8 @@ const IncidentGoods = ({
                 style: 'currency',
               }
             )}
-
+          </Col>
+          <Col>
             <Title level={5} style={{ marginBottom: 0 }}>
               <FormattedMessage defaultMessage="Total Recovered Value" />
             </Title>

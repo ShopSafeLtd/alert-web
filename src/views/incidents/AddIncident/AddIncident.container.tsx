@@ -4,17 +4,24 @@ import { useParams } from 'react-router';
 import View from './AddIncident.view';
 import useAddIncident from './useAddIncident';
 
-const AddIncident = (): JSX.Element => {
-  const investigationId = useParams().investigationId || '';
+const AddIncident = ({
+  investigation = false,
+}: {
+  investigation?: boolean;
+}): JSX.Element => {
+  const id = useParams().id || '';
 
   const {
     addNewAddress,
+    continueDraft,
     customQuestions,
     dontKnowGoods,
+    draftLoading,
     form,
     generatingStatement,
     goodsMode,
     goodsVisible,
+    hidePostDraftSections,
     incidentForm,
     incidentTagsData,
     incidentTagsLoading,
@@ -30,21 +37,25 @@ const AddIncident = (): JSX.Element => {
     setPoliceReporting,
     setPrimaryImage,
     showSiteNumber,
+    submitDraft,
     tagsData,
     toggleAddNewAddress,
     updateNewAddressData,
-  } = useAddIncident({ investigationId });
+  } = useAddIncident({ id, investigationId: investigation ? id : undefined });
 
   return (
     <div>
       <View
         addNewAddress={addNewAddress}
+        continueDraft={continueDraft}
         customQuestions={customQuestions}
         dontKnowGoods={dontKnowGoods}
+        draftLoading={draftLoading}
         form={form}
         generatingStatement={generatingStatement}
         goodsMode={goodsMode}
         goodsVisible={goodsVisible}
+        hidePostDraftSections={hidePostDraftSections}
         incidentForm={incidentForm}
         incidentTagsData={incidentTagsData}
         incidentTagsLoading={incidentTagsLoading}
@@ -60,6 +71,7 @@ const AddIncident = (): JSX.Element => {
         setPoliceReporting={setPoliceReporting}
         setPrimaryImage={setPrimaryImage}
         showSiteNumber={showSiteNumber}
+        submitDraft={submitDraft}
         tagsData={tagsData}
         toggleAddNewAddress={toggleAddNewAddress}
         updateNewAddressData={updateNewAddressData}

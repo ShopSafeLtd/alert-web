@@ -2,6 +2,7 @@
 import type { ExtendedLayout } from '#/views/reports/types';
 import type { ViewTagQuery } from '#/views/settings/tags/ViewTag/graphql/__generated__/view-tag.generated';
 import type { AnswerType } from 'graphql/types';
+import type { Dispatch, SetStateAction } from 'react';
 
 import {
   currentSchemeAtom,
@@ -40,6 +41,11 @@ interface Return {
   data: ViewTagQuery | undefined;
   deleteConfirm: (value: string) => void;
   deleteQuestion: (questionId: string) => void;
+  draftState: {
+    draftButton: string;
+    draftDescription: string;
+    draftTitle: string;
+  };
   editIncidentType: string;
   incidentFormFields: IncidentFormFieldState;
   incidentFormLayout: ExtendedLayout[];
@@ -53,6 +59,13 @@ interface Return {
   saving: boolean;
   schemeId: string;
   selectedQuestion: null | string;
+  setDraftState: Dispatch<
+    SetStateAction<{
+      draftButton: string;
+      draftDescription: string;
+      draftTitle: string;
+    }>
+  >;
   setEditIncidentType: (value: string) => void;
   setIncidentFormLayout: (value: ExtendedLayout[]) => void;
   setIncidentFormLayoutChanged: (value: boolean) => void;
@@ -60,6 +73,7 @@ interface Return {
   setQuestionLayoutChanged: (value: boolean) => void;
   setQuestionsLayout: (value: ExtendedLayout[]) => void;
   setSelectedQuestion: (value: null | string) => void;
+  showDraft: boolean;
   toggleAddQuestion: () => void;
   toggleField: (field: IncidentFormField) => void;
   updateQuestionOnTag: (
@@ -77,6 +91,7 @@ interface Return {
 const fieldToLayoutSet: Record<string, IncidentFormField[]> = {
   cctv: [IncidentFormField.Cctv],
   custom: [IncidentFormField.Custom],
+  draft: [IncidentFormField.Draft],
   goods: [IncidentFormField.Goods],
   groups: [IncidentFormField.Groups],
   images: [IncidentFormField.Images],
@@ -97,6 +112,7 @@ const fieldToLayoutSet: Record<string, IncidentFormField[]> = {
 export type FieldLayout =
   | 'cctv'
   | 'custom'
+  | 'draft'
   | 'goods'
   | 'groups'
   | 'images'
@@ -191,6 +207,15 @@ const useViewTag = (): Return => {
       x: 0,
       y: 8,
     },
+    {
+      h: 8,
+      i: 'draft',
+      moved: false,
+      static: false,
+      w: 1,
+      x: 0,
+      y: 9,
+    },
   ];
 
   function getOrderedKeys(
@@ -214,6 +239,7 @@ const useViewTag = (): Return => {
     [IncidentFormField.Cctv]: false,
     [IncidentFormField.Custom]: true,
     [IncidentFormField.Details]: true,
+    [IncidentFormField.Draft]: false,
     [IncidentFormField.Goods]: true,
     [IncidentFormField.Groups]: true,
     [IncidentFormField.Images]: true,
@@ -246,6 +272,7 @@ const useViewTag = (): Return => {
   const intl = useIntl();
 
   const schemeId = useAtomValue(currentSchemeIdAtom);
+  const showDraft = useAtomValue(currentSchemeAtom)?.draftIncidents || false;
   const schemeName = useAtomValue(currentSchemeAtom)?.name ?? '';
   const [addQuestion, setAddQuestion] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -260,6 +287,12 @@ const useViewTag = (): Return => {
     useState(false);
   const [incidentFormFields, setIncidentFormFields] =
     useState<IncidentFormFieldState>(defaultIncidentFormFieldsTrue);
+
+  const [draftState, setDraftState] = useState({
+    draftButton: 'Save as Draft 2',
+    draftDescription: '',
+    draftTitle: '',
+  });
   const { data, loading, refetch } = useViewTagQuery({
     variables: {
       listWhere: {
@@ -353,6 +386,24 @@ const useViewTag = (): Return => {
           y: highestY + 1 + index,
         }));
       setIncidentFormLayout([...initialLayout, ...newFields]);
+    }
+    if (
+      data?.tag?.incidentForm?.fields?.find(
+        (field) => field.type === IncidentFormField.Draft
+      )?.metadata
+    ) {
+      const found = data?.tag?.incidentForm?.fields?.find(
+        (field) => field.type === IncidentFormField.Draft
+      );
+      setDraftState({
+        draftButton:
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+          (found?.metadata?.draftButton as string) || 'Save as Draft',
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        draftDescription: (found?.metadata?.draftDescription as string) || '',
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        draftTitle: (found?.metadata?.draftTitle as string) || '',
+      });
     }
   }, [data]);
 
@@ -681,10 +732,14 @@ const useViewTag = (): Return => {
     void saveIncidentFormLayout({
       variables: {
         data: {
-          formFields: getTypeArrayWithTagsFirst.map((t, index) => ({
-            position: 1000 - index,
-            type: t.type,
-          })),
+          formFields: getTypeArrayWithTagsFirst.map((t, index) => {
+            const isDraft = t.type === IncidentFormField.Draft;
+            return {
+              metadata: isDraft ? draftState : undefined,
+              position: 1000 - index,
+              type: t.type,
+            };
+          }),
           tagId: id || '',
         },
       },
@@ -749,6 +804,7 @@ const useViewTag = (): Return => {
     data,
     deleteConfirm,
     deleteQuestion,
+    draftState,
     editIncidentType,
     incidentFormFields,
     incidentFormLayout,
@@ -762,6 +818,7 @@ const useViewTag = (): Return => {
     saving,
     schemeId,
     selectedQuestion,
+    setDraftState,
     setEditIncidentType,
     setIncidentFormLayout,
     setIncidentFormLayoutChanged,
@@ -769,6 +826,7 @@ const useViewTag = (): Return => {
     setQuestionLayoutChanged,
     setQuestionsLayout,
     setSelectedQuestion,
+    showDraft,
     toggleAddQuestion,
     toggleField,
     updateQuestionOnTag,
