@@ -53,6 +53,7 @@ interface Return {
   onSelectCustomGalleries: (values: string) => void;
   onSelectGallery: (value: string) => void;
   openLightbox: (elements: { src: string }[], index: number) => void;
+  order: OffenderSort;
   setCompactView: () => void;
   setGallery: (values: string[]) => void;
   setSearch: (value: string) => void;
@@ -534,24 +535,57 @@ const useOffenderFeed = (): Return => {
   };
 
   const fetchMoreScroll = () => {
-    void fetchMore({
-      updateQuery: (prev, { fetchMoreResult }) => {
-        if (!fetchMoreResult) return prev;
-        return {
-          listOffendersRelay: {
-            ...fetchMoreResult.listOffendersRelay,
-            edges: [
-              ...(prev.listOffendersRelay?.edges || []),
-              ...(fetchMoreResult.listOffendersRelay?.edges || []),
-            ],
-          },
-        };
-      },
-      variables: {
-        ...filterVariables,
-        after: data?.listOffendersRelay?.pageInfo?.endCursor,
-      },
-    });
+    if (
+      order === OffenderSort.incidentValueAsc ||
+      order === OffenderSort.incidentValueDesc
+    ) {
+      void fetchMore({
+        updateQuery: (prev, { fetchMoreResult }) => {
+          if (!fetchMoreResult) return prev;
+
+          const combinedEdges = [
+            ...(prev.listOffendersRelay?.edges || []),
+            ...(fetchMoreResult.listOffendersRelay?.edges || []),
+          ];
+
+          const offendersSorted = combinedEdges.sort((a, b) =>
+            order === OffenderSort.incidentValueAsc
+              ? (a.node.totalValue ?? 0) - (b.node.totalValue ?? 0)
+              : (b.node.totalValue ?? 0) - (a.node.totalValue ?? 0)
+          );
+
+          return {
+            listOffendersRelay: {
+              ...fetchMoreResult.listOffendersRelay,
+              edges: offendersSorted,
+            },
+          };
+        },
+        variables: {
+          ...filterVariables,
+          skip: data?.listOffendersRelay?.edges?.length,
+        },
+      });
+    } else {
+      void fetchMore({
+        updateQuery: (prev, { fetchMoreResult }) => {
+          if (!fetchMoreResult) return prev;
+          return {
+            listOffendersRelay: {
+              ...fetchMoreResult.listOffendersRelay,
+              edges: [
+                ...(prev.listOffendersRelay?.edges || []),
+                ...(fetchMoreResult.listOffendersRelay?.edges || []),
+              ],
+            },
+          };
+        },
+        variables: {
+          ...filterVariables,
+          after: data?.listOffendersRelay?.pageInfo?.endCursor,
+        },
+      });
+    }
   };
 
   return {
@@ -568,6 +602,7 @@ const useOffenderFeed = (): Return => {
     onSelectCustomGalleries,
     onSelectGallery,
     openLightbox: triggerLightbox,
+    order,
     setCompactView,
     setGallery,
     setSearch,

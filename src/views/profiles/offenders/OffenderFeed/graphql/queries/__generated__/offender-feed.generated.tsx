@@ -22,6 +22,7 @@ export type ListOffendersRelayQueryVariables = Types.Exact<{
   scheme?: Types.InputMaybe<Types.SchemeWhereUniqueInput>;
   where?: Types.InputMaybe<Types.OffenderWhereInput>;
   orderByValue?: Types.InputMaybe<Types.SortOrder>;
+  skip?: Types.InputMaybe<Types.Scalars['Int']>;
 }>;
 
 
@@ -56,7 +57,7 @@ export type OffenderFeedListQueryHookResult = ReturnType<typeof useOffenderFeedL
 export type OffenderFeedListLazyQueryHookResult = ReturnType<typeof useOffenderFeedListLazyQuery>;
 export type OffenderFeedListQueryResult = Apollo.QueryResult<OffenderFeedListQuery, OffenderFeedListQueryVariables>;
 export const ListOffendersRelayDocument = gql`
-    query ListOffendersRelay($after: String, $first: Int, $order: OffenderOrderByWithRelationInput, $scheme: SchemeWhereUniqueInput, $where: OffenderWhereInput, $orderByValue: SortOrder) {
+    query ListOffendersRelay($after: String, $first: Int, $order: OffenderOrderByWithRelationInput, $scheme: SchemeWhereUniqueInput, $where: OffenderWhereInput, $orderByValue: SortOrder, $skip: Int) {
   listOffendersRelay(
     after: $after
     first: $first
@@ -64,6 +65,7 @@ export const ListOffendersRelayDocument = gql`
     scheme: $scheme
     where: $where
     orderByValue: $orderByValue
+    skip: $skip
   ) {
     pageInfo {
       hasNextPage

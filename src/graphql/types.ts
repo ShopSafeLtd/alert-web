@@ -15139,6 +15139,7 @@ export type QueryListOffendersRelayArgs = {
   order?: InputMaybe<OffenderOrderByWithRelationInput>;
   orderByValue?: InputMaybe<SortOrder>;
   scheme?: InputMaybe<SchemeWhereUniqueInput>;
+  skip?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<OffenderWhereInput>;
 };
 
