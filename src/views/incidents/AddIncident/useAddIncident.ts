@@ -560,6 +560,8 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
         description: intl.formatMessage({
           defaultMessage: 'Your new incident has been successfully created.',
         }),
+        duration: undefined,
+
         message: intl.formatMessage(
           {
             defaultMessage: 'Incident {var1} created',
@@ -641,6 +643,7 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
         description: intl.formatMessage({
           defaultMessage: 'Your new incident has been successfully created.',
         }),
+        duration: undefined,
         message: intl.formatMessage(
           {
             defaultMessage: 'Incident {var1} created',
