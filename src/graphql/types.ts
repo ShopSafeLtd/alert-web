@@ -14235,6 +14235,7 @@ export type Query = {
   role: CustomRole;
   roles: QueryRolesConnection;
   scheme: Scheme;
+  schemeUsersRelay: QuerySchemeUsersRelayConnection;
   schemes: Array<Scheme>;
   searchOffenders: QuerySearchOffendersConnection;
   sharingBusinesses: Array<SharingBusiness>;
@@ -15138,6 +15139,7 @@ export type QueryListOffendersRelayArgs = {
   order?: InputMaybe<OffenderOrderByWithRelationInput>;
   orderByValue?: InputMaybe<SortOrder>;
   scheme?: InputMaybe<SchemeWhereUniqueInput>;
+  skip?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<OffenderWhereInput>;
 };
 
@@ -15406,6 +15408,20 @@ export type QueryRolesArgs = {
 
 export type QuerySchemeArgs = {
   where: SchemeWhereUniqueInput;
+};
+
+
+export type QuerySchemeUsersRelayArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  cursor?: InputMaybe<UserSchemeWhereUniqueInput>;
+  distinct?: InputMaybe<Array<UserSchemeScalarFieldEnum>>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<UserSchemeOrderByWithRelationInput>>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<UserSchemeWhereInput>;
 };
 
 
@@ -16079,6 +16095,19 @@ export type QueryRolesConnectionEdge = {
   __typename?: 'QueryRolesConnectionEdge';
   cursor: Scalars['String'];
   node: CustomRole;
+};
+
+export type QuerySchemeUsersRelayConnection = {
+  __typename?: 'QuerySchemeUsersRelayConnection';
+  edges: Array<QuerySchemeUsersRelayConnectionEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type QuerySchemeUsersRelayConnectionEdge = {
+  __typename?: 'QuerySchemeUsersRelayConnectionEdge';
+  cursor: Scalars['String'];
+  node: UserScheme;
 };
 
 export type QuerySearchOffendersConnection = {
@@ -22410,6 +22439,7 @@ export type UserScheme = {
   __typename?: 'UserScheme';
   createdAt: Scalars['Date'];
   dashboard?: Maybe<Dashboard>;
+  fullName: Scalars['String'];
   id: Scalars['String'];
   isAdmin: Scalars['Boolean'];
   notificationCount: Scalars['Int'];
@@ -22470,6 +22500,7 @@ export type UserSchemeOrderByRelationAggregateInput = {
 
 export type UserSchemeOrderByWithRelationInput = {
   createdAt?: InputMaybe<SortOrder>;
+  fullName?: InputMaybe<SortOrder>;
   id?: InputMaybe<SortOrder>;
   recycled?: InputMaybe<SortOrder>;
   role?: InputMaybe<SortOrder>;
@@ -22521,6 +22552,7 @@ export type UserSchemeWhereInput = {
   NOT?: InputMaybe<Array<UserSchemeWhereInput>>;
   OR?: InputMaybe<Array<UserSchemeWhereInput>>;
   createdAt?: InputMaybe<DateTimeFilter>;
+  fullName?: InputMaybe<StringFilter>;
   id?: InputMaybe<StringFilter>;
   recycled?: InputMaybe<BoolFilter>;
   role?: InputMaybe<EnumRoleFilter>;

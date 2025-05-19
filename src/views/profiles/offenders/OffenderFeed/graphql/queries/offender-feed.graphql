@@ -26,7 +26,7 @@ query ListOffendersRelay(
   $scheme: SchemeWhereUniqueInput
   $where: OffenderWhereInput
   $orderByValue: SortOrder
-
+  $skip: Int
 ) {
   listOffendersRelay(
     after: $after
@@ -35,7 +35,7 @@ query ListOffendersRelay(
     scheme: $scheme
     where: $where
     orderByValue: $orderByValue
-
+    skip: $skip
   ) {
     pageInfo {
       hasNextPage
