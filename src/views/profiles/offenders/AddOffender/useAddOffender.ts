@@ -260,6 +260,7 @@ const useAddOffender = (): Return => {
   };
   const { data: businessData, loading } = useBusinessOffenderSettingsQuery({
     fetchPolicy: 'network-only',
+    skip: !userBusinesses[0]?.id,
     variables: {
       where: {
         id: userBusinesses[0]?.id,

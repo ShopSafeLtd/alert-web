@@ -84,6 +84,7 @@ const useEditOffender = ({ offenderId, onClose }: Props): Return => {
   const { data: businessData, loading: businessLoading } =
     useBusinessOffenderSettingsQuery({
       fetchPolicy: 'network-only',
+      skip: !businessId,
       variables: {
         where: {
           id: businessId,
