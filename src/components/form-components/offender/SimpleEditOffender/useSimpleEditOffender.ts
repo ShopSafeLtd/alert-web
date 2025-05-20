@@ -136,6 +136,7 @@ const useEditOffender = ({
 
   const { data: businessData, loading } = useBusinessOffenderSettingsQuery({
     fetchPolicy: 'network-only',
+    skip: !businessId,
     variables: {
       where: {
         id: businessId,
