@@ -630,7 +630,7 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
     if (formData.goods && formData.goods?.length > 0) {
       setGoodsVisible(true);
     }
-    console.log(formData);
+
     form.setFieldsValue(formData);
     setHidePostDraftSections(false);
   }, [draftData]);
@@ -1316,14 +1316,6 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
       if (formTags.length === 0) {
         setIncidentForm([{ type: IncidentFormField.Types }]);
       } else {
-        console.log(
-          'sections',
-          formTags.map((value) =>
-            incidentTagsData?.listIncidentTags.find(
-              (item) => item.value === value
-            )
-          )
-        );
         const sections = formTags
           .map((value) =>
             incidentTagsData?.listIncidentTags.find(
@@ -1338,14 +1330,13 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
                 questionId: string;
                 type: 'CUSTOM_QUESTION';
               }[];
-              console.log(conditions);
 
               const checkedConditions = conditions.map((condition) => {
                 if (condition.type === 'CUSTOM_QUESTION') {
                   const questionValue = form.getFieldValue(
                     condition.questionId
                   ) as string;
-                  console.log(questionValue, condition.conditionValues);
+
                   return condition.conditionValues.includes(questionValue);
                 }
 
@@ -1417,13 +1408,14 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
     [incidentForm]
   );
   useEffect(() => {
+    const draftSkipped = form.getFieldValue('draftSkip');
     if (id) {
       setHidePostDraftSections(false);
       return;
     }
     if (!hasDraft) {
       setHidePostDraftSections(false);
-    } else if (!hidePostDraftSections) {
+    } else if (!hidePostDraftSections && !draftSkipped) {
       setHidePostDraftSections(true);
     }
   }, [incidentForm, hasDraft, id]);
@@ -1432,6 +1424,7 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
     setHidePostDraftSections(false);
     form.setFieldValue('draftSkip', true);
   };
+
   return {
     addNewAddress,
     addressLoading,
