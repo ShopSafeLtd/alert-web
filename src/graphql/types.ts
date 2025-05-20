@@ -273,52 +273,6 @@ export type ActionWhereInput = {
   vehicleId?: InputMaybe<StringNullableFilter>;
 };
 
-export type ActionWhereUniqueInput = {
-  AND?: InputMaybe<Array<ActionWhereInput>>;
-  Address?: InputMaybe<AddressWhereInput>;
-  Ban?: InputMaybe<BanWhereInput>;
-  Chat?: InputMaybe<ChatWhereInput>;
-  Group?: InputMaybe<GroupWhereInput>;
-  NOT?: InputMaybe<Array<ActionWhereInput>>;
-  OR?: InputMaybe<Array<ActionWhereInput>>;
-  addressId?: InputMaybe<StringNullableFilter>;
-  article?: InputMaybe<ArticleWhereInput>;
-  articleId?: InputMaybe<StringNullableFilter>;
-  banId?: InputMaybe<StringNullableFilter>;
-  business?: InputMaybe<BusinessWhereInput>;
-  businessId?: InputMaybe<StringNullableFilter>;
-  byUser?: InputMaybe<UserWhereInput>;
-  byUserId?: InputMaybe<StringFilter>;
-  chatId?: InputMaybe<StringNullableFilter>;
-  createdAt?: InputMaybe<DateTimeFilter>;
-  crimeGroup?: InputMaybe<CrimeGroupWhereInput>;
-  crimeGroupId?: InputMaybe<StringNullableFilter>;
-  dataType?: InputMaybe<EnumModelFilter>;
-  description?: InputMaybe<StringNullableFilter>;
-  groupId?: InputMaybe<StringNullableFilter>;
-  id?: InputMaybe<Scalars['String']>;
-  imageId?: InputMaybe<StringNullableFilter>;
-  images?: InputMaybe<ImageWhereInput>;
-  inScheme?: InputMaybe<SchemeWhereInput>;
-  inSchemeId?: InputMaybe<StringNullableFilter>;
-  incident?: InputMaybe<IncidentWhereInput>;
-  incidentId?: InputMaybe<StringNullableFilter>;
-  message?: InputMaybe<MessageWhereInput>;
-  messageId?: InputMaybe<StringNullableFilter>;
-  offender?: InputMaybe<OffenderWhereInput>;
-  offenderId?: InputMaybe<StringNullableFilter>;
-  reason?: InputMaybe<StringNullableFilter>;
-  scheme?: InputMaybe<SchemeWhereInput>;
-  schemeId?: InputMaybe<StringNullableFilter>;
-  tag?: InputMaybe<TagWhereInput>;
-  tagId?: InputMaybe<StringNullableFilter>;
-  type?: InputMaybe<EnumActionTypeFilter>;
-  user?: InputMaybe<UserWhereInput>;
-  userId?: InputMaybe<StringNullableFilter>;
-  vehicle?: InputMaybe<VehicleWhereInput>;
-  vehicleId?: InputMaybe<StringNullableFilter>;
-};
-
 export enum ActionableLevelEnum {
   High = 'HIGH',
   Low = 'LOW',
@@ -1992,7 +1946,6 @@ export type Business = {
 
 
 export type BusinessActionsArgs = {
-  cursor?: InputMaybe<ActionWhereUniqueInput>;
   distinct?: InputMaybe<Array<ActionScalarFieldEnum>>;
   orderBy?: InputMaybe<Array<ActionOrderByWithRelationInput>>;
   skip?: InputMaybe<Scalars['Int']>;
@@ -2464,16 +2417,6 @@ export type ChatOrderByWithRelationInput = {
   updatedAt?: InputMaybe<SortOrder>;
   uploaded?: InputMaybe<SortOrder>;
 };
-
-export enum ChatScalarFieldEnum {
-  CreatedAt = 'createdAt',
-  Description = 'description',
-  Id = 'id',
-  Name = 'name',
-  SchemeId = 'schemeId',
-  UpdatedAt = 'updatedAt',
-  Uploaded = 'uploaded'
-}
 
 export type ChatUpdateInput = {
   description?: InputMaybe<SetStringHelper>;
@@ -6691,13 +6634,6 @@ export type GoodsTypeOrderByWithRelationInput = {
   updatedAt?: InputMaybe<SortOrder>;
 };
 
-export enum GoodsTypeScalarFieldEnum {
-  CreatedAt = 'createdAt',
-  Id = 'id',
-  Name = 'name',
-  UpdatedAt = 'updatedAt'
-}
-
 export type GoodsTypeScalarWhereWithAggregatesInput = {
   AND?: InputMaybe<Array<GoodsTypeScalarWhereWithAggregatesInput>>;
   NOT?: InputMaybe<Array<GoodsTypeScalarWhereWithAggregatesInput>>;
@@ -10140,7 +10076,6 @@ export type Message = {
 
 
 export type MessageActionsArgs = {
-  cursor?: InputMaybe<ActionWhereUniqueInput>;
   distinct?: InputMaybe<Array<ActionScalarFieldEnum>>;
   orderBy?: InputMaybe<Array<ActionOrderByWithRelationInput>>;
   skip?: InputMaybe<Scalars['Int']>;
@@ -12913,7 +12848,6 @@ export type Offender = {
 
 
 export type OffenderActionsArgs = {
-  cursor?: InputMaybe<ActionWhereUniqueInput>;
   distinct?: InputMaybe<Array<ActionScalarFieldEnum>>;
   orderBy?: InputMaybe<Array<ActionOrderByWithRelationInput>>;
   skip?: InputMaybe<Scalars['Int']>;
@@ -14286,12 +14220,11 @@ export type Query = {
 
 
 export type QueryActionArgs = {
-  where: ActionWhereUniqueInput;
+  where: UniqueId;
 };
 
 
 export type QueryActionsArgs = {
-  cursor?: InputMaybe<ActionWhereUniqueInput>;
   distinct?: InputMaybe<Array<ActionScalarFieldEnum>>;
   orderBy?: InputMaybe<Array<ActionOrderByWithRelationInput>>;
   skip?: InputMaybe<Scalars['Int']>;
@@ -14338,8 +14271,6 @@ export type QueryAddressArgs = {
 
 
 export type QueryAddressesArgs = {
-  cursor?: InputMaybe<AddressWhereUniqueInput>;
-  distinct?: InputMaybe<Array<AddressScalarFieldEnum>>;
   orderBy?: InputMaybe<Array<AddressOrderByWithRelationInput>>;
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
@@ -14535,8 +14466,6 @@ export type QueryChatMessagesArgs = {
 
 export type QueryChatsArgs = {
   after?: InputMaybe<ChatWhereUniqueInput>;
-  cursor?: InputMaybe<ChatWhereUniqueInput>;
-  distinct?: InputMaybe<Array<ChatScalarFieldEnum>>;
   orderBy?: InputMaybe<Array<ChatOrderByWithRelationInput>>;
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
@@ -14682,7 +14611,6 @@ export type QueryDemGroupsArgs = {
 export type QueryDocumentsArgs = {
   after?: InputMaybe<Scalars['String']>;
   before?: InputMaybe<Scalars['String']>;
-  cursor?: InputMaybe<DocumentWhereUniqueInput>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Array<DocumentOrderByWithRelationInput>>;
@@ -14751,8 +14679,6 @@ export type QueryFoldersArgs = {
 
 
 export type QueryGoodsTypesArgs = {
-  cursor?: InputMaybe<GoodsTypeWhereUniqueInput>;
-  distinct?: InputMaybe<Array<GoodsTypeScalarFieldEnum>>;
   orderBy?: InputMaybe<Array<GoodsTypeOrderByWithRelationInput>>;
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
@@ -14767,8 +14693,6 @@ export type QueryGroupArgs = {
 
 export type QueryGroupsArgs = {
   after?: InputMaybe<GroupWhereUniqueInput>;
-  cursor?: InputMaybe<GroupWhereUniqueInput>;
-  distinct?: InputMaybe<Array<GroupScalarFieldEnum>>;
   orderBy?: InputMaybe<Array<GroupOrderByWithRelationInput>>;
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
@@ -14841,8 +14765,6 @@ export type QueryIncidentTableReportArgs = {
 
 
 export type QueryIncidentsArgs = {
-  cursor?: InputMaybe<IncidentWhereUniqueInput>;
-  distinct?: InputMaybe<Array<IncidentScalarFieldEnum>>;
   orderBy?: InputMaybe<Array<IncidentOrderByWithRelationInput>>;
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
@@ -17491,7 +17413,6 @@ export type Scheme = {
 
 
 export type SchemeActionsArgs = {
-  cursor?: InputMaybe<ActionWhereUniqueInput>;
   distinct?: InputMaybe<Array<ActionScalarFieldEnum>>;
   orderBy?: InputMaybe<Array<ActionOrderByWithRelationInput>>;
   skip?: InputMaybe<Scalars['Int']>;
@@ -17501,7 +17422,6 @@ export type SchemeActionsArgs = {
 
 
 export type SchemeActionsInSchemeArgs = {
-  cursor?: InputMaybe<ActionWhereUniqueInput>;
   distinct?: InputMaybe<Array<ActionScalarFieldEnum>>;
   orderBy?: InputMaybe<Array<ActionOrderByWithRelationInput>>;
   skip?: InputMaybe<Scalars['Int']>;
@@ -19418,7 +19338,6 @@ export type Tag = {
 
 
 export type TagActionsArgs = {
-  cursor?: InputMaybe<ActionWhereUniqueInput>;
   distinct?: InputMaybe<Array<ActionScalarFieldEnum>>;
   orderBy?: InputMaybe<Array<ActionOrderByWithRelationInput>>;
   skip?: InputMaybe<Scalars['Int']>;
@@ -21567,7 +21486,6 @@ export type User = {
 
 
 export type UserActionsArgs = {
-  cursor?: InputMaybe<ActionWhereUniqueInput>;
   distinct?: InputMaybe<Array<ActionScalarFieldEnum>>;
   orderBy?: InputMaybe<Array<ActionOrderByWithRelationInput>>;
   skip?: InputMaybe<Scalars['Int']>;
@@ -21577,7 +21495,6 @@ export type UserActionsArgs = {
 
 
 export type UserActionsByUserArgs = {
-  cursor?: InputMaybe<ActionWhereUniqueInput>;
   distinct?: InputMaybe<Array<ActionScalarFieldEnum>>;
   orderBy?: InputMaybe<Array<ActionOrderByWithRelationInput>>;
   skip?: InputMaybe<Scalars['Int']>;
@@ -22951,7 +22868,6 @@ export type Vehicle = {
 
 
 export type VehicleActionsArgs = {
-  cursor?: InputMaybe<ActionWhereUniqueInput>;
   distinct?: InputMaybe<Array<ActionScalarFieldEnum>>;
   orderBy?: InputMaybe<Array<ActionOrderByWithRelationInput>>;
   skip?: InputMaybe<Scalars['Int']>;

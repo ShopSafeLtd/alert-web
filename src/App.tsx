@@ -17,7 +17,7 @@ import mixpanel from 'mixpanel-browser';
 import Views from 'navigation/router';
 import posthog from 'posthog-js';
 import { PostHogProvider } from 'posthog-js/react';
-import React from 'react';
+import React, { useEffect } from 'react';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
 import {
@@ -99,7 +99,7 @@ if (import.meta.env.PROD) {
       new CaptureConsole(),
       new Sentry.BrowserTracing({
         routingInstrumentation: reactRouterV6Instrumentation(
-          React.useEffect,
+          useEffect,
           useLocation,
           useNavigationType,
           createRoutesFromChildren,

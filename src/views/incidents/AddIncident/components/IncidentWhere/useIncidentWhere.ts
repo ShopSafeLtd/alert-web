@@ -16,6 +16,7 @@ import { QueryMode } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
+
 // TODO use businesses select
 
 interface Props {
@@ -28,6 +29,7 @@ interface Return {
   ) => Promise<{ label: React.ReactNode; value: string }[]>;
 }
 
+// TODO: move to similar as business select
 const useIncidentWhere = ({ showSiteNumber }: Props): Return => {
   const client = useApolloClient();
   const intl = useIntl();
@@ -44,7 +46,7 @@ const useIncidentWhere = ({ showSiteNumber }: Props): Return => {
       .query<SearchBusinessesQuery, SearchBusinessesQueryVariables>({
         query: SearchBusinessesDocument,
         variables: {
-          take: 100,
+          take: 30,
           where: {
             OR: [
               {
@@ -81,7 +83,10 @@ const useIncidentWhere = ({ showSiteNumber }: Props): Return => {
         response.data.listBusinesses.businesses.length > 0
           ? response.data.listBusinesses.businesses.map((item) => ({
               label: item?.name || '',
-              location: item?.locations[0].full || '',
+              location:
+                item?.locations && item?.locations.length > 0
+                  ? item?.locations[0]?.full || ''
+                  : '',
               siteNumber: item?.siteNumber || '',
               value: item?.id || '',
             }))

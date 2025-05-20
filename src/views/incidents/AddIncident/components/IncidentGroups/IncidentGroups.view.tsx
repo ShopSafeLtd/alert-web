@@ -1,17 +1,18 @@
 import { Card, Col, Form, Row, Select, Typography } from 'antd';
 import React from 'react';
 import { useIntl } from 'react-intl';
+
 import useStyles from '../../AddIncident.styles';
 
-const { Title, Paragraph } = Typography;
+const { Paragraph, Title } = Typography;
 
 interface Props {
-  groups: { value: string; label: string }[];
+  groups: { label: string; value: string }[];
   groupsLoading: boolean;
   saving: boolean;
 }
 
-const IncidentGroups = ({ groupsLoading, groups, saving }: Props) => {
+const IncidentGroups = ({ groups, groupsLoading, saving }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
 
@@ -20,7 +21,7 @@ const IncidentGroups = ({ groupsLoading, groups, saving }: Props) => {
       <>
         <Row align="bottom" style={{ marginBottom: 20 }}>
           <Col>
-            <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
+            <Title level={4} style={{ marginBottom: 0, marginLeft: 5 }}>
               {intl.formatMessage({
                 defaultMessage: 'Who is this incident relevant to?',
               })}
@@ -28,9 +29,9 @@ const IncidentGroups = ({ groupsLoading, groups, saving }: Props) => {
           </Col>
           <Col>
             <Paragraph
+              italic
               style={{ marginBottom: 1, marginLeft: 5 }}
               type="secondary"
-              italic
             >
               {intl.formatMessage({
                 defaultMessage:
@@ -43,31 +44,36 @@ const IncidentGroups = ({ groupsLoading, groups, saving }: Props) => {
           <Col span={8}>
             <Form.Item
               name="groups"
-              tooltip={intl.formatMessage({
-                defaultMessage:
-                  'Please select the relevant groups to report this incident to, for GDPR it is important that the data is relevant to the groups.',
-              })}
               rules={[
                 {
-                  required: true,
                   message: intl.formatMessage({
                     defaultMessage:
                       'Please add at least one group that you would like this incident to be visible to.',
                   }),
+                  required: true,
                 },
               ]}
+              tooltip={intl.formatMessage({
+                defaultMessage:
+                  'Please select the relevant groups to report this incident to, for GDPR it is important that the data is relevant to the groups.',
+              })}
             >
               <Select
-                loading={groupsLoading}
                 disabled={saving}
-                mode="multiple"
+                loading={groupsLoading}
                 maxTagCount={3}
+                mode="multiple"
+                optionFilterProp={'label'}
                 placeholder={intl.formatMessage({
                   defaultMessage: 'Select groups...',
                 })}
               >
                 {groups.map((group) => (
-                  <Select.Option key={group.value} value={group.value}>
+                  <Select.Option
+                    key={group.value}
+                    label={group.label}
+                    value={group.value}
+                  >
                     {group.label}
                   </Select.Option>
                 ))}

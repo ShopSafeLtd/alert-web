@@ -103,7 +103,7 @@
     "mixpanel-browser": "^2.46.0",
     "papaparse": "^5.4.1",
     "pdfjs-dist": "^4.10.38",
-    "posthog-js": "^1.198.0",
+    "posthog-js": "^1.245.0",
     "prismjs": "1.27.0",
     "prop-types": "^15.8.1",
     "qr-code-styling": "^1.6.0-rc.0",
