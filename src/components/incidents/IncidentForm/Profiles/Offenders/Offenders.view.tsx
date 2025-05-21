@@ -190,39 +190,45 @@ const Offenders = ({
       </Drawer>
       <Drawer
         onClose={toggleAddExistingOpen}
-        open={addExistingOpen || !!matchExistingOpen}
-        title={
-          addExistingOpen
-            ? intl.formatMessage({
-                defaultMessage: 'Add Existing Offenders',
-              })
-            : matchExistingOpen
-              ? intl.formatMessage({
-                  defaultMessage: 'Search & Match Offender',
-                })
-              : ''
-        }
+        open={addExistingOpen}
+        title={intl.formatMessage({
+          defaultMessage: 'Add Existing Offenders',
+        })}
         width="1000"
         zIndex={1001}
       >
-        {addExistingOpen || !!matchExistingOpen ? (
+        {addExistingOpen ? (
           <AddExistingOffender
             offenderIds={offenders.map(({ id }) => id)}
-            onClose={() => {
-              toggleAddExistingOpen();
-              setMatchExistingOpen(null);
-            }}
-            update={(data) =>
-              addExistingOpen
-                ? onAddOffenders([data], true, false)
-                : onMatchOffender(data)
-            }
+            onClose={toggleAddExistingOpen}
+            update={(data) => onAddOffenders([data], true, false)}
           />
         ) : (
           <div />
         )}
       </Drawer>
 
+      <Drawer
+        onClose={() => setMatchExistingOpen(null)}
+        open={!!matchExistingOpen}
+        title={intl.formatMessage({
+          defaultMessage: 'Search & Match Offender',
+        })}
+        width="1000"
+        zIndex={1001}
+      >
+        {matchExistingOpen ? (
+          <AddExistingOffender
+            offenderIds={offenders.map(({ id }) => id)}
+            onClose={() => setMatchExistingOpen(null)}
+            update={(data) => {
+              onMatchOffender(data);
+            }}
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
       <Drawer
         onClose={() => setUpdateOpen(null)}
         open={!!updateOpen}
