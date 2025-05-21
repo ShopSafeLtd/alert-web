@@ -235,7 +235,7 @@ const ViewIncident = ({
                           <PermissionCheckWrapper
                             permission={{
                               method: PermissionMethod.Read,
-                              model: PermissionModel.Activities,
+                              model: PermissionModel.Tasks,
                             }}
                             unauthorizedElement={<div />}
                           >

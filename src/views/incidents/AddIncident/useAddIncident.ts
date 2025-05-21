@@ -560,8 +560,7 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
         description: intl.formatMessage({
           defaultMessage: 'Your new incident has been successfully created.',
         }),
-        duration: undefined,
-
+        duration: 0,
         message: intl.formatMessage(
           {
             defaultMessage: 'Incident {var1} created',
@@ -643,7 +642,7 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
         description: intl.formatMessage({
           defaultMessage: 'Your new incident has been successfully created.',
         }),
-        duration: undefined,
+        duration: 0,
         message: intl.formatMessage(
           {
             defaultMessage: 'Incident {var1} created',
@@ -1375,6 +1374,7 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
             dependentOnAnswerValue: question?.dependentOnAnswerValue || null,
             dependentOnBrandIds: question?.dependentOnBrandIds || [],
             dependentOnQuestionId: question?.dependentOnQuestionId || null,
+            dependentOnTagIds: question?.dependentOnTagIds || [],
             label: question?.label || '',
             options: question?.options || [],
             questionId: question?.questionId || '',
@@ -1383,20 +1383,51 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
             tooltip: question.tooltip ?? undefined,
             value: '',
           }));
+          const involvedTags: string[] =
+            form.getFieldValue('involvedTags') || ([] as string[]);
+
+          console.log('involvedTags', involvedTags);
+
           if (brands && brands.length > 0) {
-            const filteredQuestions = tagQuestions.filter((question) => {
-              if (question.dependentOnBrandIds.length > 0) {
-                return question.dependentOnBrandIds.some((id) =>
-                  brands.includes(id)
-                );
-              }
-              return true;
-            });
+            console.log('brands', brands);
+            const filteredQuestions = tagQuestions
+              .filter((question) => {
+                if (question.dependentOnBrandIds.length > 0) {
+                  return question.dependentOnBrandIds.some((id) =>
+                    brands.includes(id)
+                  );
+                }
+                return true;
+              })
+              .filter((question) => {
+                console.log('dependentOnTagIds', question.dependentOnTagIds);
+                if (question.dependentOnTagIds.length > 0) {
+                  return question.dependentOnTagIds.some((id) =>
+                    involvedTags.includes(id)
+                  );
+                }
+
+                return true;
+              });
+
             setCustomQuestions(filteredQuestions);
           } else {
-            const filteredQuestions = tagQuestions.filter(
-              (question) => question.dependentOnBrandIds.length === 0
-            );
+            const filteredQuestions = tagQuestions
+              .filter((question) => question.dependentOnBrandIds.length === 0)
+              .filter((question) => {
+                if (question.dependentOnTagIds.length > 0) {
+                  console.log(
+                    question.dependentOnTagIds.some((id) =>
+                      involvedTags.includes(id)
+                    )
+                  );
+                  return question.dependentOnTagIds.some((id) =>
+                    involvedTags.includes(id)
+                  );
+                }
+
+                return true;
+              });
             setCustomQuestions(filteredQuestions);
           }
         }
