@@ -189,27 +189,6 @@ const Offenders = ({
         )}
       </Drawer>
       <Drawer
-        onClose={toggleAddNewOpen}
-        open={addNewOpen}
-        title={intl.formatMessage({
-          defaultMessage: 'Add New Offender',
-        })}
-        width="700"
-        zIndex={999}
-      >
-        {addNewOpen ? (
-          <AddNewOffenderSimple
-            images={images}
-            incidentBusinessId={incidentBusinessId}
-            onAddOffender={(data) => onAddOffenders([data], false, false)}
-            onClose={toggleAddNewOpen}
-            onImagesUploaded={onImagesUploadedInForm}
-          />
-        ) : (
-          <div />
-        )}
-      </Drawer>
-      <Drawer
         onClose={toggleAddExistingOpen}
         open={addExistingOpen}
         title={intl.formatMessage({
