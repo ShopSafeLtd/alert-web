@@ -190,7 +190,7 @@ const Offenders = ({
       </Drawer>
       <Drawer
         onClose={toggleAddExistingOpen}
-        open={addExistingOpen}
+        open={addExistingOpen || !!matchExistingOpen}
         title={
           addExistingOpen
             ? intl.formatMessage({
@@ -205,7 +205,7 @@ const Offenders = ({
         width="1000"
         zIndex={1001}
       >
-        {addExistingOpen ? (
+        {addExistingOpen || !!matchExistingOpen ? (
           <AddExistingOffender
             offenderIds={offenders.map(({ id }) => id)}
             onClose={() => {

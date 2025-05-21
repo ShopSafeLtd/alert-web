@@ -5,6 +5,7 @@ import { dark } from '@clerk/themes';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import { useSearchParams } from 'react-router-dom';
+// import { useSearchParams } from 'react-router-dom';
 
 const LoginView = () => {
   const darkMode = localStorage.getItem('theme') === 'dark';
@@ -22,6 +23,19 @@ const LoginView = () => {
 
   const route = searchParams.get('rd');
   const intl = useIntl();
+
+  const jdshield = 'https://app.jdshield.com/app/dashboard';
+  const rdOverwrite =
+    !window.location.host.includes('jdshield') &&
+    route?.includes('jdshield.com')
+      ? jdshield
+      : route;
+
+  if (window.location.host.includes('jdshield')) {
+    window.location.replace(
+      `https://app.shopsafe.io/sign-in?rd=${encodeURIComponent(jdshield)}`
+    );
+  }
 
   return (
     <RouteWrapper
@@ -68,7 +82,7 @@ const LoginView = () => {
                 termsPageUrl: '/terms',
               },
             }}
-            fallbackRedirectUrl={route}
+            fallbackRedirectUrl={rdOverwrite}
             routing="hash"
           />
         </div>
