@@ -8,7 +8,7 @@ export type QuestionDetailsQueryVariables = Types.Exact<{
 }>;
 
 
-export type QuestionDetailsQuery = { __typename?: 'Query', question: { __typename?: 'Question', id: string, questionFormatted: string, question: string, optionsFormatted?: Array<string> | null, type: Types.AnswerType, options: Array<{ [key: string]: any }>, tags: Array<{ __typename?: 'TagQuestion', id: string, dependentBrands: Array<string>, tooltip?: string | null, roles: Array<{ __typename?: 'CustomRole', id: string }> }> } };
+export type QuestionDetailsQuery = { __typename?: 'Query', question: { __typename?: 'Question', id: string, questionFormatted: string, question: string, optionsFormatted?: Array<string> | null, type: Types.AnswerType, options: Array<{ [key: string]: any }>, tags: Array<{ __typename?: 'TagQuestion', dependentTags: Array<string>, id: string, dependentBrands: Array<string>, tooltip?: string | null, roles: Array<{ __typename?: 'CustomRole', id: string }> }> } };
 
 
 export const QuestionDetailsDocument = gql`
@@ -21,6 +21,7 @@ export const QuestionDetailsDocument = gql`
     type
     options
     tags {
+      dependentTags
       roles {
         id
       }

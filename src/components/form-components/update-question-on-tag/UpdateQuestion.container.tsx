@@ -45,15 +45,16 @@ const UpdateQuestionContainer = ({
   tagQuestions,
   updateQuestionOnTag,
 }: Props) => {
-  const { brands, data, form, loading, onSubmit, saving } = useUpdateQuestion({
-    dependent,
-    onClose,
-    questionId,
-    required,
-    tagQId,
-    tagQuestions,
-    updateQuestionOnTag,
-  });
+  const { brands, data, form, loading, onSubmit, saving, tags } =
+    useUpdateQuestion({
+      dependent,
+      onClose,
+      questionId,
+      required,
+      tagQId,
+      tagQuestions,
+      updateQuestionOnTag,
+    });
   return (
     <View
       brands={brands}
@@ -64,6 +65,7 @@ const UpdateQuestionContainer = ({
       onSubmit={onSubmit}
       saving={saving}
       tagQuestions={tagQuestions}
+      tags={tags}
     />
   );
 };

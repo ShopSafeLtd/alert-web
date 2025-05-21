@@ -20,6 +20,7 @@ query ListIncidentTags($where: IncidentTagsInput!) {
       priority
       dependentOnQuestionId
       dependentOnAnswerValue
+      dependentOnTagIds
       dependentOnBrandIds
       tooltip
       actions

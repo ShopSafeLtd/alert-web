@@ -26,6 +26,8 @@ interface Props {
 }
 
 const CheckTag = ({ active, onClick, option }: Props) => {
+  if (option.value === '4. Push, shove or nudge')
+    console.log('active', option.value, active);
   const classes = useStyles();
   return (
     <Tooltip title={option.tooltip}>

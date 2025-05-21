@@ -24,7 +24,6 @@ interface Option {
 interface Props {
   className?: string;
   disabled?: boolean;
-
   loading?: boolean;
   mode?: Mode;
   noGutter?: boolean;
@@ -37,7 +36,6 @@ interface Props {
 const CheckTags = ({
   className,
   disabled = false,
-
   loading = false,
   mode: modeProp,
   noGutter,
@@ -92,6 +90,7 @@ const CheckTags = ({
       }
     }
   }, [modeProp, hasChildOptions, valueProp, options]);
+
   const toggleCheckOption = (data: Option) => {
     if (!disabled) {
       if (checkValues.includes(data.value)) {
@@ -105,6 +104,7 @@ const CheckTags = ({
       }
     }
   };
+
   useEffect(() => {
     if (!valueProp || valueProp.length === 0) return;
 
@@ -182,6 +182,7 @@ const CheckTags = ({
         {options
           .filter((item) => item.tier === 0 || !hasChildOptions)
           .map((option) => {
+            const radioActive = primaryValue?.value === option.value;
             if (
               option.permissions &&
               !hasRolePermission({ permission: option.permissions })
@@ -198,7 +199,7 @@ const CheckTags = ({
                 )}
                 {mode === 'radio' && (
                   <CheckTag
-                    active={primaryValue?.value === option.value}
+                    active={radioActive}
                     onClick={setPrimary}
                     option={option}
                   />
