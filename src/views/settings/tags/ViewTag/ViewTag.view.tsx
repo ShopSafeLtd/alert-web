@@ -1034,12 +1034,6 @@ const ViewTag = ({
               tagqs?.find((tagq) => tagq.qId === selectedQuestion)?.i || ''
             }
             tagQuestions={tagQsFormatted || []}
-            tags={
-              data?.listTags.tags.map((tag) => ({
-                label: tag.name,
-                value: tag.id,
-              })) ?? []
-            }
             updateQuestionOnTag={updateQuestionOnTag}
           />
         ) : (
