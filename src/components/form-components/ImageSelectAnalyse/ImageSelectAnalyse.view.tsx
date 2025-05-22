@@ -2,6 +2,7 @@ import type { UploadChangeParam } from 'antd/lib/upload';
 import type { Theme } from 'configs/ThemeConfig';
 import type { ImagePosition } from 'graphql/types';
 
+import { getCustomUrls } from '#/providers/ApolloProvider';
 import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import {
   faCheckCircle as faCheckedCircle,
@@ -228,15 +229,12 @@ const ImageSelectAnalyse = ({
     ]);
     setUploadImage(undefined);
   };
+  const { imageAnalyseGo, imageUpload } = getCustomUrls();
 
   return (
     <div>
       <Upload
-        action={
-          facialDetection
-            ? import.meta.env.VITE_APP_IMAGE_ANALYSE_UPLOAD_ENDPOINT_GO
-            : import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT
-        }
+        action={facialDetection ? imageAnalyseGo : imageUpload}
         beforeUpload={async (file) => compressImage(file)}
         onChange={onImageChange}
         showUploadList={false}

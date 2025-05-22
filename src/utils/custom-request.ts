@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { v4 as uuidv4 } from 'uuid';
 import type { RcFile, UploadRequestOption } from 'rc-upload/lib/interface';
+
+import { getCustomUrls } from '#/providers/ApolloProvider';
+import { v4 as uuidv4 } from 'uuid';
 
 const getExtension = (filename: string): string =>
   filename.slice(filename.lastIndexOf('.') - 1 + 2);
@@ -16,10 +18,10 @@ const getExtension = (filename: string): string =>
  * @property {string} blobName - The blob name or filename on the storage server.
  */
 interface UploadResponseBody {
+  blobName: string; // The blob name or filename on the storage.
   file: never; // Original file properties.
   mimetype: string; // The MIME type of the uploaded file.
   url: string; // The SAS (Shared Access Signature) URL for the uploaded file.
-  blobName: string; // The blob name or filename on the storage.
 }
 
 /**
@@ -48,8 +50,8 @@ interface UploadResponseBody {
 
 const customRequest = ({
   file,
-  onSuccess,
   onError,
+  onSuccess,
 }: UploadRequestOption): void => {
   let filename: string;
 
@@ -84,7 +86,9 @@ const customRequest = ({
   const getRequestUrl = (): Promise<string> =>
     new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
-      xhr.open('POST', import.meta.env.VITE_IMAGE_UPLOAD_URL_FETCH, true);
+      const { imageUploadFetch } = getCustomUrls();
+
+      xhr.open('POST', imageUploadFetch, true);
       xhr.setRequestHeader('Content-Type', 'application/json');
       xhr.send(JSON.stringify({ filename }));
 
@@ -115,9 +119,9 @@ const customRequest = ({
           [
             {
               ...file,
+              blobName: filename,
               mimetype: file.type,
               url: uploadXhr.responseURL,
-              blobName: filename,
             },
           ],
           uploadXhr
@@ -137,7 +141,9 @@ const customRequest = ({
         }): Promise<string> =>
           new Promise((resolve, reject) => {
             xhr3.withCredentials = false;
-            xhr3.open('POST', import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT);
+            const { imageUpload } = getCustomUrls();
+
+            xhr3.open('POST', imageUpload);
 
             xhr3.addEventListener('load', () => {
               if (xhr3.status === 403) {
@@ -191,9 +197,9 @@ const customRequest = ({
               [
                 {
                   ...file,
+                  blobName: filename,
                   mimetype: type,
                   url,
-                  blobName: filename,
                 },
               ],
               xhr3

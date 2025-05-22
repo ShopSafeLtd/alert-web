@@ -3,6 +3,7 @@ import type { RcFile, UploadProps } from 'antd/es/upload/interface';
 import type { Image, ImageFaceType } from 'types/DataType';
 
 import FacesSelect from '#/components/form-components/FacesSelect/FacesSelect.view';
+import { getCustomUrls } from '#/providers/ApolloProvider';
 import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import {
   faEdit,
@@ -73,6 +74,7 @@ const OffenderImage = ({
 }: Props): JSX.Element => {
   const intl = useIntl();
   const facialRec = useAtomValue(currentSchemeAtom)?.facialRecognition;
+  const { imageAnalyseGo } = getCustomUrls();
 
   return (
     <>
@@ -106,11 +108,7 @@ const OffenderImage = ({
           <Col style={{ marginLeft: 30 }}>
             <Upload
               accept=".png,.jpeg,.webp"
-              action={
-                facialRec
-                  ? import.meta.env.VITE_APP_IMAGE_ANALYSE_UPLOAD_ENDPOINT_GO
-                  : undefined
-              }
+              action={facialRec ? imageAnalyseGo : undefined}
               beforeUpload={beforeUpload}
               customRequest={facialRec ? undefined : customRequest}
               fileList={fileList}
@@ -185,12 +183,7 @@ const OffenderImage = ({
               >
                 <Upload
                   accept=".png,.jpeg,.webp"
-                  action={
-                    facialRec
-                      ? import.meta.env
-                          .VITE_APP_IMAGE_ANALYSE_UPLOAD_ENDPOINT_GO
-                      : undefined
-                  }
+                  action={facialRec ? imageAnalyseGo : undefined}
                   beforeUpload={beforeUpload}
                   customRequest={facialRec ? undefined : customRequest}
                   fileList={fileList}
