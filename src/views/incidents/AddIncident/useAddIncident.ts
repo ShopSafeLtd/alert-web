@@ -620,9 +620,9 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
 
   const updateNewAddressData = (address: LocationData | undefined) =>
     setNewAddressData(address);
-
+  const [draftSet, setDraftSet] = useState(false);
   useEffect(() => {
-    if (!draftData || !incidentTagsData) return;
+    if (!draftData || !incidentTagsData || draftSet) return;
 
     const formData = generateInitData(draftData);
 
@@ -632,7 +632,8 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
 
     form.setFieldsValue(formData);
     setHidePostDraftSections(false);
-  }, [draftData]);
+    setDraftSet(true);
+  }, [draftData, draftSet, form, incidentTagsData]);
 
   const [upsertIncidentM] = useUpsertIncidentMutation({
     onCompleted: (result) => {

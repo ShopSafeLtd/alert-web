@@ -219,10 +219,12 @@ const useExportIncidents = (): Return => {
         // eslint-disable-next-line no-unsafe-optional-chaining
         const { schemeTags } = filterOptions?.scheme;
 
-        const schemeTagsOptions = schemeTags.map((schemeTag) => ({
-          label: schemeTag.name,
-          value: schemeTag.id,
-        }));
+        const schemeTagsOptions = schemeTags
+          .map((schemeTag) => ({
+            label: schemeTag.name,
+            value: schemeTag.id,
+          }))
+          .sort((a, b) => a.label.localeCompare(b.label));
 
         dispatch({
           payload: {
