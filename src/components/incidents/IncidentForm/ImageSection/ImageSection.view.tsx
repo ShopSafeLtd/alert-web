@@ -2,7 +2,7 @@ import type { FormData } from '#/views/incidents/AddIncident/types/formData';
 import type { IncidentFormState } from '#/views/incidents/AddIncident/useAddIncident';
 import type { FormInstance } from 'antd';
 
-import { getCustomUrls } from '#/providers/ApolloProvider';
+import { getCustomUrls } from '#/providers/GetCustomUrls';
 import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { compressImage } from '#/utils/compress-images';
 import hasRolePermission from '#/utils/has-role-permission';

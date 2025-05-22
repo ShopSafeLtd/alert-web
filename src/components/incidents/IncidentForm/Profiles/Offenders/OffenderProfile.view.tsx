@@ -1,6 +1,6 @@
 import type { UploadChangeParam } from 'antd/lib/upload';
 
-import { getCustomUrls } from '#/providers/ApolloProvider';
+import { getCustomUrls } from '#/providers/GetCustomUrls';
 import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import publicOffenderDob from '#/utils/public-offender-dob';
 import { faTrash } from '@fortawesome/pro-light-svg-icons';

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import type { RcFile, UploadRequestOption } from 'rc-upload/lib/interface';
 
-import { getCustomUrls } from '#/providers/ApolloProvider';
+import { getCustomUrls } from '#/providers/GetCustomUrls';
 import { v4 as uuidv4 } from 'uuid';
 
 const getExtension = (filename: string): string =>

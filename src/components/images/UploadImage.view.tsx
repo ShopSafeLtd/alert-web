@@ -1,7 +1,7 @@
 import type { RcFile, UploadProps } from 'antd/es/upload/interface';
 import type { Image } from 'types/DataType';
 
-import { getCustomUrls } from '#/providers/ApolloProvider';
+import { getCustomUrls } from '#/providers/GetCustomUrls';
 import { faEdit, faTrash } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Card, Col, Form, Popconfirm, Row, Spin, Upload } from 'antd';

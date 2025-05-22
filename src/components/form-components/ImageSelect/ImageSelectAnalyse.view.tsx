@@ -4,7 +4,7 @@ import type { UploadChangeParam } from 'antd/lib/upload';
 import type { Theme } from 'configs/ThemeConfig';
 import type { Age, Gender, ImagePosition } from 'graphql/types';
 
-import { getCustomUrls } from '#/providers/ApolloProvider';
+import { getCustomUrls } from '#/providers/GetCustomUrls';
 import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import getFacesFromUrl from '#/utils/get-faces-from-url';
 import {

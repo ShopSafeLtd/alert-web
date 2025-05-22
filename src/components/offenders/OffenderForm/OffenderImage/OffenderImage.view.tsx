@@ -3,7 +3,7 @@ import type { RcFile, UploadProps } from 'antd/es/upload/interface';
 import type { Image, ImageFaceType } from 'types/DataType';
 
 import FacesSelect from '#/components/form-components/FacesSelect/FacesSelect.view';
-import { getCustomUrls } from '#/providers/ApolloProvider';
+import { getCustomUrls } from '#/providers/GetCustomUrls';
 import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import {
   faEdit,

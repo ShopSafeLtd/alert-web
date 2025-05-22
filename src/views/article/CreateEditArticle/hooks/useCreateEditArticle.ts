@@ -4,7 +4,7 @@ import type { SelectProps, UploadProps } from 'antd';
 import type { UploadFile } from 'antd/es/upload/interface';
 import type { Editor } from 'tinymce';
 
-import { getCustomUrls } from '#/providers/ApolloProvider';
+import { getCustomUrls } from '#/providers/GetCustomUrls';
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import {
   currentUserAtom,

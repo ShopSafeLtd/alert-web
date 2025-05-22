@@ -14,7 +14,7 @@ import type {
 } from 'types/DataType';
 
 import PermissionCheckWrapper from '#/components/PermissionCheck/PermissionCheckWrapper';
-import { getCustomUrls } from '#/providers/ApolloProvider';
+import { getCustomUrls } from '#/providers/GetCustomUrls';
 import {
   faCar,
   faCircleXmark,
