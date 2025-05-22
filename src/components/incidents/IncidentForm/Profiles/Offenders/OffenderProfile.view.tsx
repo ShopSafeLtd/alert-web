@@ -1,5 +1,6 @@
 import type { UploadChangeParam } from 'antd/lib/upload';
 
+import { getCustomUrls } from '#/providers/ApolloProvider';
 import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import publicOffenderDob from '#/utils/public-offender-dob';
 import { faTrash } from '@fortawesome/pro-light-svg-icons';
@@ -79,6 +80,7 @@ const OffenderProfile = ({
   const facialDetection =
     useAtomValue(currentSchemeAtom)?.facialDetection ?? true;
   const publicOffenderDOB = publicOffenderDob();
+  const { imageAnalyseGo, imageUpload } = getCustomUrls();
 
   return (
     <>
@@ -393,12 +395,7 @@ const OffenderProfile = ({
                   <Col>
                     <Upload
                       accept=".png,.jpeg"
-                      action={
-                        facialDetection
-                          ? import.meta.env
-                              .VITE_APP_IMAGE_ANALYSE_UPLOAD_ENDPOINT_GO
-                          : import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT
-                      }
+                      action={facialDetection ? imageAnalyseGo : imageUpload}
                       onChange={(info) =>
                         onChangeOffenderImage(info, offender.id)
                       }

@@ -1,3 +1,4 @@
+import { getCustomUrls } from '#/providers/ApolloProvider';
 import { v4 as uuidv4 } from 'uuid';
 
 export const customRequest = async (blob: Blob): Promise<null | string> => {
@@ -27,7 +28,8 @@ export const customRequest = async (blob: Blob): Promise<null | string> => {
   const getRequestUrl = (): Promise<string> =>
     new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
-      xhr.open('POST', import.meta.env.VITE_IMAGE_UPLOAD_URL_FETCH, true);
+      const { imageUploadFetch } = getCustomUrls();
+      xhr.open('POST', imageUploadFetch, true);
       xhr.setRequestHeader('Content-Type', 'application/json');
       xhr.send(JSON.stringify({ filename }));
 

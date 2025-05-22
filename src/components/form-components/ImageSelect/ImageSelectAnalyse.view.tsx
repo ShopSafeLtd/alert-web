@@ -4,6 +4,7 @@ import type { UploadChangeParam } from 'antd/lib/upload';
 import type { Theme } from 'configs/ThemeConfig';
 import type { Age, Gender, ImagePosition } from 'graphql/types';
 
+import { getCustomUrls } from '#/providers/ApolloProvider';
 import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import getFacesFromUrl from '#/utils/get-faces-from-url';
 import {
@@ -379,14 +380,12 @@ const ImageSelectAnalyse = ({
       setSelected([...selected, imageToAdd]);
     }
   };
+
+  const { imageAnalyseGo, imageUpload } = getCustomUrls();
   return (
     <div>
       <Upload
-        action={
-          facialRec
-            ? import.meta.env.VITE_APP_IMAGE_ANALYSE_UPLOAD_ENDPOINT_GO
-            : import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT
-        }
+        action={facialRec ? imageAnalyseGo : imageUpload}
         // customRequest={customRequest}
         beforeUpload={async (file) => compressImage(file)}
         // listType="picture-card"

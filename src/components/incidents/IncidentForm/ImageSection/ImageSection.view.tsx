@@ -2,6 +2,7 @@ import type { FormData } from '#/views/incidents/AddIncident/types/formData';
 import type { IncidentFormState } from '#/views/incidents/AddIncident/useAddIncident';
 import type { FormInstance } from 'antd';
 
+import { getCustomUrls } from '#/providers/ApolloProvider';
 import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { compressImage } from '#/utils/compress-images';
 import hasRolePermission from '#/utils/has-role-permission';
@@ -86,6 +87,7 @@ const ImageSection = ({
     },
   });
 
+  const { imageAnalyseGo, imageUpload } = getCustomUrls();
   return (
     <div>
       <Row align="middle" style={{ marginBottom: 20 }}>
@@ -114,8 +116,8 @@ const ImageSection = ({
             accept=".png,.jpeg"
             action={
               facialDetection && addOffenderRights
-                ? import.meta.env.VITE_APP_IMAGE_ANALYSE_UPLOAD_ENDPOINT_GO
-                : import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT
+                ? imageAnalyseGo
+                : imageUpload
             }
             beforeUpload={async (file) => compressImage(file)}
             className="incident-form-images-no-offenders"
@@ -207,9 +209,7 @@ const ImageSection = ({
         <Upload
           accept=".png,.jpeg"
           action={
-            facialDetection && addOffenderRights
-              ? import.meta.env.VITE_APP_IMAGE_ANALYSE_UPLOAD_ENDPOINT_GO
-              : import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT
+            facialDetection && addOffenderRights ? imageAnalyseGo : imageUpload
           }
           beforeUpload={async (file) => compressImage(file)}
           className="incident-form-images-no-offenders"

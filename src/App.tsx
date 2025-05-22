@@ -43,7 +43,9 @@ const excludedNetwork = [
   'https://app.shopsafe.io/ingest/',
 ];
 const options: Partial<PostHogConfig> = {
-  api_host: 'https://app.shopsafe.io/ingest',
+  api_host: window?.location.host.includes('jdshield')
+    ? 'https://app.jdshield.com/ingest'
+    : 'https://app.shopsafe.io/ingest',
   disable_surveys: true,
   enable_recording_console_log: true,
   rate_limiting: {

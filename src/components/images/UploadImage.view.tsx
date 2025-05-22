@@ -1,6 +1,7 @@
 import type { RcFile, UploadProps } from 'antd/es/upload/interface';
 import type { Image } from 'types/DataType';
 
+import { getCustomUrls } from '#/providers/ApolloProvider';
 import { faEdit, faTrash } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Card, Col, Form, Popconfirm, Row, Spin, Upload } from 'antd';
@@ -41,7 +42,7 @@ const UploadImage = ({
   uploading,
 }: Props): JSX.Element => {
   const intl = useIntl();
-
+  const { imageAnalyseGo } = getCustomUrls();
   return (
     <>
       <Row>
@@ -61,11 +62,7 @@ const UploadImage = ({
           >
             <Upload
               accept=".png,.jpeg,.webp"
-              action={
-                facialRec
-                  ? import.meta.env.VITE_APP_IMAGE_ANALYSE_UPLOAD_ENDPOINT_GO
-                  : undefined
-              }
+              action={facialRec ? imageAnalyseGo : undefined}
               beforeUpload={beforeUpload}
               className="upload-images"
               customRequest={facialRec ? undefined : customRequest}
