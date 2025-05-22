@@ -60,6 +60,7 @@ export default defineConfig((configEnv) => {
     ],
     define: {
       APP_VERSION: JSON.stringify(process.env.npm_package_version),
+      __BUILD_DATE__: JSON.stringify(new Date().toISOString()),
     },
     build: {
       outDir: 'build',

@@ -58,7 +58,7 @@ const ViewDashboardEditor = () => {
       isDraggable: false,
       isResizable: false,
       maxH: 12,
-      maxW: 2,
+      maxW: 12,
       minH: 2,
       minW: 12,
       moved: false,
@@ -446,7 +446,7 @@ const ViewDashboardEditor = () => {
             )
           }
           rowHeight={generateHeight()}
-          // style={{ height: '100vh' }}
+          style={{ minHeight: '100vh' }}
         >
           {Object.values(layoutItems).map((l) => {
             if (layout.some(({ i }) => i === l.key)) return l;
