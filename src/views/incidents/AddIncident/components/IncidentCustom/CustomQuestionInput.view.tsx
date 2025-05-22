@@ -107,7 +107,7 @@ const CustomQuestionInput = ({
   const intl = useIntl();
 
   useEffect(() => {
-    if (question.actions.length > 0 && value) {
+    if (question.actions?.length > 0 && value) {
       for (const action of question.actions) {
         if (action.conditionValues.includes(value)) {
           if (action.type === 'TAG_SET') {
