@@ -1,9 +1,5 @@
 export const getCustomUrls = () => {
-  const { host } = window?.location || { host: '' };
-  const customHosts = ['jdshield.com'];
-  const isCustomHost = customHosts.some((customHost) =>
-    host.includes(customHost)
-  );
+  const host = window?.location?.host || '';
 
   const defaultUrls = {
     checklistUpload: import.meta.env.VITE_APP_CHECKLIST_UPLOAD_ENDPOINT,
@@ -17,7 +13,7 @@ export const getCustomUrls = () => {
     imageUploadGo: import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT_GO,
   };
 
-  const customHostToUrlMap = {
+  const customHostToUrlMap: Record<string, typeof defaultUrls> = {
     'jdshield.com': {
       checklistUpload: 'https://app.jdshield.com/api/checklist-images',
       csvUpload: 'https://app.jdshield.com/api/csv',
@@ -25,13 +21,15 @@ export const getCustomUrls = () => {
       customWsUrl: 'https://app.jdshield.com/api/graphql/stream',
       faceUrl: 'https://app.jdshield.com/util-api/extract-faces-from-url',
       imageAnalyseGo: 'https://app.jdshield.com/util-api/upload',
-      imageUpload: " 'https://app.jdshield.com/api/images",
+      imageUpload: 'https://app.jdshield.com/api/images',
       imageUploadFetch: 'https://app.jdshield.com/util-api/images',
       imageUploadGo: 'https://app.jdshield.com/util-api/get-upload-url',
     },
   };
 
-  return isCustomHost
-    ? customHostToUrlMap[host as keyof typeof customHostToUrlMap]
-    : defaultUrls;
+  const selectedHost = Object.keys(customHostToUrlMap).find((customHost) =>
+    host.includes(customHost)
+  );
+
+  return selectedHost ? customHostToUrlMap[selectedHost] : defaultUrls;
 };
