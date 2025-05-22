@@ -84,6 +84,7 @@ interface Props {
   incidentFormFields: IncidentFormFieldState;
   incidentFormLayout: ExtendedLayout[];
   incidentFormLayoutChanged: boolean;
+  involvedMode: boolean;
   loading: boolean;
   parentTag: null | string | undefined;
   questionLayoutChanged: boolean;
@@ -109,6 +110,7 @@ interface Props {
   showDraft: boolean;
   toggleAddQuestion: () => void;
   toggleField: (field: IncidentFormField) => void;
+  toggleInvolvedMode: (value: boolean) => void;
   updateQuestionOnTag: (
     question: string,
     tagId: string,
@@ -131,6 +133,7 @@ const ViewTag = ({
   incidentFormFields,
   incidentFormLayout,
   incidentFormLayoutChanged,
+  involvedMode,
   loading,
   parentTag,
   questionLayoutChanged,
@@ -150,9 +153,12 @@ const ViewTag = ({
   showDraft,
   toggleAddQuestion,
   toggleField,
+  toggleInvolvedMode,
   updateQuestionOnTag,
   updateTagParent,
 }: Props): JSX.Element => {
+  console.log('involvedMode view', involvedMode);
+
   const ReactGridLayout = useMemo(() => WidthProvider(RGL), []);
   const intl = useIntl();
 
@@ -621,9 +627,34 @@ const ViewTag = ({
               </Tooltip>
             </Col>
           </Row>
-          <Row>
+          <Row gutter={16}>
             <Col flex={1}>
               <FormattedMessage defaultMessage="Involved" />
+            </Col>
+            <Col>
+              <Tooltip
+                title={intl.formatMessage({
+                  defaultMessage:
+                    'Allow users to select multiple tags or just one',
+                })}
+              >
+                <Row align="middle" gutter={8}>
+                  <Col>
+                    <Typography.Text>
+                      <FormattedMessage defaultMessage="Single Mode:" />
+                    </Typography.Text>
+                  </Col>
+                  <Col>
+                    <Checkbox
+                      checked={involvedMode}
+                      disabled={!incidentFormFields.INVOLVED}
+                      onChange={(event) => {
+                        toggleInvolvedMode(event.target.checked);
+                      }}
+                    />
+                  </Col>
+                </Row>
+              </Tooltip>
             </Col>
             <Col>
               <Tooltip
@@ -683,7 +714,7 @@ const ViewTag = ({
       incidentFormLayout.map(
         (component) => incidentFormElements[component.i as FieldLayout]
       ),
-    [incidentFormLayout, incidentFormFields]
+    [incidentFormLayout, incidentFormFields, involvedMode]
   );
 
   const qElements = useMemo(

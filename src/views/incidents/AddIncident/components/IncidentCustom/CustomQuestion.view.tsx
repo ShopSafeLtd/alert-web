@@ -21,7 +21,6 @@ const CustomQuestions = ({ disabled, form, questions }: Props) => {
   return (
     <Row>
       {questions.map((question) => {
-        console.log({ qid: question.questionId });
         if (
           question.dependentOnQuestionId !== null &&
           question.dependentOnQuestionId

@@ -3,6 +3,7 @@ import type { FormInstance } from 'antd';
 import type { BusinessData, SelectOptions } from 'types/DataType';
 
 import BusinessesSelect from '#/components/form-components/BusinessesSelect/BusinessesSelect.view';
+import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { faPlus } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -19,6 +20,7 @@ import {
 import PhoneInput from 'antd-phone-input';
 import AddBusiness from 'components/form-components/businesses/AddBusiness';
 import { Role } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
@@ -77,6 +79,7 @@ const AddUser = ({
   const intl = useIntl();
   // const [selectedGroups, setSelectedGroups] = useState<string[]>();
   const classes = useStyles();
+  const currentScheme = useAtomValue(currentSchemeAtom);
   // const validator = (_, { valid }) => {
   //   // if (valid(true)) return Promise.resolve(); // strict validation
   //   if (valid()) return Promise.resolve(); // non-strict validation
@@ -276,7 +279,9 @@ const AddUser = ({
                           defaultMessage:
                             'Please select at least one business for the new user.',
                         }),
-                        required: !existingUser,
+                        required:
+                          !existingUser &&
+                          !currentScheme.optionalBusinessOnUsers,
                       },
                     ]}
                   >

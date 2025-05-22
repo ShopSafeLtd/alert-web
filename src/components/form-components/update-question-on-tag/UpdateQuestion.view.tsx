@@ -37,6 +37,7 @@ interface AddQuestionViewProps {
   onSubmit: (value: FormData) => void;
   saving: boolean;
   tagQuestions: TagQuestion[];
+  tags?: { label: string; value: string }[];
 }
 
 const UpdateQuestionView = ({
@@ -48,6 +49,7 @@ const UpdateQuestionView = ({
   onSubmit,
   saving,
   tagQuestions,
+  tags = [],
 }: AddQuestionViewProps) => {
   const answerType = data.type;
   const opt = data.newOptions || [];
@@ -285,6 +287,21 @@ const UpdateQuestionView = ({
           name="dependentBrands"
         >
           <Select mode="multiple" options={brands} showSearch />
+        </Form.Item>
+
+        <Form.Item
+          hidden={tags?.length === 0}
+          label={intl.formatMessage({
+            defaultMessage: 'Dependent Tags',
+          })}
+          name="dependantTags"
+        >
+          <Select
+            mode="multiple"
+            optionFilterProp="label"
+            options={tags}
+            showSearch
+          />
         </Form.Item>
       </Card>
 
