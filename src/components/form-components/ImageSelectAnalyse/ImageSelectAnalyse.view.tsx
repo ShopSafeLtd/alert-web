@@ -2,7 +2,7 @@ import type { UploadChangeParam } from 'antd/lib/upload';
 import type { Theme } from 'configs/ThemeConfig';
 import type { ImagePosition } from 'graphql/types';
 
-import { getCustomUrls } from '#/providers/ApolloProvider';
+import { getCustomUrls } from '#/providers/GetCustomUrls';
 import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import {
   faCheckCircle as faCheckedCircle,
