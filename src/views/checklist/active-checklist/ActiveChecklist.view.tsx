@@ -3,6 +3,7 @@ import type { ActiveChecklistQuery } from '#/views/checklist/graphql/queries/__g
 import type { FormInstance } from 'antd';
 
 import FormattedMessageFixed from '#/components/util-components/FormattedMessageFixed';
+import { getCustomUrls } from '#/providers/ApolloProvider';
 import { PlusOutlined } from '@ant-design/icons';
 import { faFileUpload } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -131,7 +132,7 @@ const ActiveChecklistView = ({
       />
     );
   }
-
+  const { checklistUpload } = getCustomUrls();
   return (
     <div className="page-view">
       <PageHeader
@@ -358,10 +359,7 @@ const ActiveChecklistView = ({
                                                     valuePropName="fileList"
                                                   >
                                                     <Upload
-                                                      action={
-                                                        import.meta.env
-                                                          .VITE_APP_CHECKLIST_UPLOAD_ENDPOINT
-                                                      }
+                                                      action={checklistUpload}
                                                       listType="picture-card"
                                                     >
                                                       <Button type="ghost">

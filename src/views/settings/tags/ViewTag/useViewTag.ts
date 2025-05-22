@@ -50,6 +50,7 @@ interface Return {
   incidentFormFields: IncidentFormFieldState;
   incidentFormLayout: ExtendedLayout[];
   incidentFormLayoutChanged: boolean;
+  involvedMode: boolean;
   loading: boolean;
   parentTag: null | string | undefined;
   questionLayoutChanged: boolean;
@@ -76,6 +77,7 @@ interface Return {
   showDraft: boolean;
   toggleAddQuestion: () => void;
   toggleField: (field: IncidentFormField) => void;
+  toggleInvolvedMode: (value: boolean) => void;
   updateQuestionOnTag: (
     question: string,
     tagId: string,
@@ -276,6 +278,7 @@ const useViewTag = (): Return => {
   const schemeName = useAtomValue(currentSchemeAtom)?.name ?? '';
   const [addQuestion, setAddQuestion] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [involvedMode, setInvolvedMode] = useState(false);
   const [editIncidentType, setEditIncidentType] = useState('');
   const [questionLayoutChanged, setQuestionLayoutChanged] = useState(false);
   const [questionsLayout, setQuestionsLayout] = useState<ExtendedLayout[]>([]);
@@ -326,6 +329,16 @@ const useViewTag = (): Return => {
     window.scrollTo({ behavior: 'smooth', top: 0 });
   }, []);
   useEffect(() => {
+    if (
+      data?.tag.incidentForm?.fields.find(
+        (item) => item.type === IncidentFormField.Involved
+      )?.metadata?.mode === 'SINGLE_SELECT'
+    ) {
+      setInvolvedMode(true);
+    } else {
+      setInvolvedMode(false);
+    }
+
     if (data?.tag?.tagQuestions) {
       // eslint-disable-next-line no-unsafe-optional-chaining
       const dataQs = [...data?.tag?.tagQuestions].filter(Boolean) || [];
@@ -704,10 +717,21 @@ const useViewTag = (): Return => {
       setIncidentFormLayoutChanged(true);
     }
 
+    if (
+      fieldToUpdate === IncidentFormField.Involved &&
+      incidentFormFields.INVOLVED
+    ) {
+      setInvolvedMode(false);
+    }
+
     setIncidentFormFields((prevState) => ({
       ...prevState,
       [fieldToUpdate]: !prevState[fieldToUpdate],
     }));
+  };
+
+  const toggleInvolvedMode = (value: boolean) => {
+    setInvolvedMode(value);
   };
 
   const [saveIncidentFormLayout] = useUpsertIncidentFormMutation();
@@ -733,9 +757,35 @@ const useViewTag = (): Return => {
       variables: {
         data: {
           formFields: getTypeArrayWithTagsFirst.map((t, index) => {
-            const isDraft = t.type === IncidentFormField.Draft;
+            const existing = data?.tag.incidentForm?.fields.find(
+              (existingT) => existingT.type === t.type
+            );
+
+            const getMetaData = () => {
+              const isDraft = t.type === IncidentFormField.Draft;
+              if (isDraft) {
+                return draftState;
+              }
+
+              console.log(t.type === IncidentFormField.Involved, involvedMode);
+              if (t.type === IncidentFormField.Involved && involvedMode)
+                return {
+                  mode: 'SINGLE_SELECT',
+                };
+
+              if (existing?.metadata) return existing.metadata;
+
+              return undefined;
+            };
+
+            const getConditions = () => {
+              if (existing?.conditions) return existing.conditions;
+              return undefined;
+            };
+
             return {
-              metadata: isDraft ? draftState : undefined,
+              conditions: getConditions(),
+              metadata: getMetaData(),
               position: 1000 - index,
               type: t.type,
             };
@@ -809,6 +859,7 @@ const useViewTag = (): Return => {
     incidentFormFields,
     incidentFormLayout,
     incidentFormLayoutChanged,
+    involvedMode,
     loading,
     parentTag,
     questionLayoutChanged,
@@ -829,6 +880,7 @@ const useViewTag = (): Return => {
     showDraft,
     toggleAddQuestion,
     toggleField,
+    toggleInvolvedMode,
     updateQuestionOnTag,
     updateTagParent,
   };

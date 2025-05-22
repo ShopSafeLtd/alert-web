@@ -2,6 +2,7 @@
 import type { LocationData } from 'types/DataType';
 
 import {
+  currentSchemeAtom,
   currentSchemeBusinessesAtom,
   isAdminAtom,
 } from '#/providers/SchemeProvider/SchemeProvider';
@@ -43,6 +44,7 @@ const IncidentWhere = ({
   const isAdmin = useAtomValue(isAdminAtom);
   const currentUser = useAtomValue(currentUserAtom);
   const multipleBusiness = useAtomValue(currentSchemeBusinessesAtom);
+  const currentScheme = useAtomValue(currentSchemeAtom);
 
   const intl = useIntl();
 
@@ -95,6 +97,14 @@ const IncidentWhere = ({
                       {}
                     )}
                     name="business"
+                    rules={[
+                      {
+                        message: intl.formatMessage({
+                          defaultMessage: 'Please select a business',
+                        }),
+                        required: currentScheme.requireBusinessOnIncident,
+                      },
+                    ]}
                   >
                     <DebounceSelect
                       allowClear
@@ -111,23 +121,24 @@ const IncidentWhere = ({
                     />
                   </Form.Item>
                 </Col>
-                {!showSiteNumber && (
-                  <Col>
-                    <Button
-                      icon={
-                        <FontAwesomeIcon
-                          icon={faPlus}
-                          style={{ marginRight: 5 }}
-                        />
-                      }
-                      onClick={toggleAddNewAddress}
-                      style={{ marginLeft: 5, marginTop: 30 }}
-                    >
-                      {intl.formatMessage({
-                        defaultMessage: 'Use An Address',
-                      })}
-                    </Button>
-                    {/* <Dropdown
+                {!currentScheme.requireBusinessOnIncident &&
+                  !showSiteNumber && (
+                    <Col>
+                      <Button
+                        icon={
+                          <FontAwesomeIcon
+                            icon={faPlus}
+                            style={{ marginRight: 5 }}
+                          />
+                        }
+                        onClick={toggleAddNewAddress}
+                        style={{ marginLeft: 5, marginTop: 30 }}
+                      >
+                        {intl.formatMessage({
+                          defaultMessage: 'Use An Address',
+                        })}
+                      </Button>
+                      {/* <Dropdown
                     overlay={
                       <Menu
                         items={[
@@ -174,8 +185,8 @@ const IncidentWhere = ({
                       })}
                     </Button>
                   </Dropdown> */}
-                  </Col>
-                )}
+                    </Col>
+                  )}
               </Row>
             </Col>
           </Row>

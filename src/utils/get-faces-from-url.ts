@@ -1,9 +1,12 @@
 import type { ImageFaceType } from '#/components/incidents/IncidentForm/ImageSection/useImageSection';
 
-const getFacesFromUrl = (url: string): Promise<ImageFaceType[]> =>
-  new Promise((resolve, reject) => {
+import { getCustomUrls } from '#/providers/ApolloProvider';
+
+const getFacesFromUrl = (url: string): Promise<ImageFaceType[]> => {
+  const { faceUrl } = getCustomUrls();
+  return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', import.meta.env.VITE_APP_FACE_URL, true);
+    xhr.open('POST', faceUrl, true);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.send(JSON.stringify({ url }));
 
@@ -23,5 +26,6 @@ const getFacesFromUrl = (url: string): Promise<ImageFaceType[]> =>
     xhr.onerror = () =>
       reject(new Error('Network error during getting faces request.'));
   });
+};
 
 export default getFacesFromUrl;

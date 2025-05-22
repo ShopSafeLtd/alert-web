@@ -28,7 +28,6 @@ const IncidentTypes = ({
   incidentTagsData,
   incidentTagsLoading,
   incidentTypeTooltip,
-
   involvedMetadata,
   oneSelectedIncidentTypeOnly,
   tags,

@@ -93,10 +93,7 @@ export const ClerkWithRouting = ({ children }: Props) => {
     'http://localhost:3004',
   ];
 
-  const isSatellite =
-    window.location.host.includes('jdshield') ||
-    window.location.host.includes('localhost');
-
+  const isSatellite = window.location.host.includes('jdshield');
   if (isSatellite) {
     return (
       <ClerkProvider

@@ -2,6 +2,7 @@
 import type { UploadProps } from 'antd';
 import type { UploadFile } from 'antd/es/upload/interface';
 
+import { getCustomUrls } from '#/providers/ApolloProvider';
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { userIdAtom } from '#/providers/UserProvider/UserProvider';
 import { useAtomValue } from 'jotai/index';
@@ -59,9 +60,11 @@ const useAddLogo = ({ onClose, onSubmit }: Props): Return => {
     type: 'logo',
     uploadedById: currentUserId,
   });
+  const { imageUpload } = getCustomUrls();
+
   const documentUploadProps: UploadProps = {
     accept: 'image/*',
-    action: import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT,
+    action: imageUpload,
     headers: {
       schemeId: currentScheme,
       type: 'logo',

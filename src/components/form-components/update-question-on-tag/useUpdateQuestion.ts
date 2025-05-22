@@ -5,7 +5,8 @@ import { useUpdateQuestionOnTagMutation } from '#/components/form-components/upd
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { useBrandsQuery } from '#/views/settings/brands/graphql/queries/__generated__/brands.generated';
 import { Form, notification } from 'antd';
-import { AnswerType } from 'graphql/types';
+import { useTagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
+import { AnswerType, TagType } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -24,9 +25,11 @@ interface Return {
   loading: boolean;
   onSubmit: (value: FormData) => void;
   saving: boolean;
+  tags: { label: string; value: string }[];
 }
 
 export interface FormData {
+  dependantTags: string[];
   dependentAnswer: number | string;
   dependentBrands: string[];
   dependentOn: string;
@@ -76,6 +79,7 @@ const useUpdateQuestion = ({
   const [form] = useForm<FormData>();
   const [saving, setSaving] = useState(false);
   const [data, setData] = useState<FormData>({
+    dependantTags: [],
     dependentAnswer: '',
     dependentBrands: [],
     dependentOn: '',
@@ -93,6 +97,26 @@ const useUpdateQuestion = ({
     variables: {
       where: {
         id: questionId || '',
+      },
+    },
+  });
+
+  const { data: tagData } = useTagsQuery({
+    variables: {
+      where: {
+        recycled: {
+          equals: false,
+        },
+        schemes: {
+          some: {
+            id: {
+              equals: currentSchemeId,
+            },
+          },
+        },
+        type: {
+          equals: TagType.IncidentInvolved,
+        },
       },
     },
   });
@@ -134,6 +158,9 @@ const useUpdateQuestion = ({
       );
 
       setData({
+        dependantTags:
+          questionData.question.tags.find((tag) => tag.id === tagQId)
+            ?.dependentTags ?? [],
         dependentAnswer: checkExists ? dependent?.dependentAnswer || '' : '',
         dependentBrands:
           questionData.question?.tags?.find((tag) => tag.id === tagQId)
@@ -155,6 +182,9 @@ const useUpdateQuestion = ({
       });
 
       form.setFieldsValue({
+        dependantTags:
+          questionData.question.tags.find((tag) => tag.id === tagQId)
+            ?.dependentTags ?? [],
         dependentAnswer: checkExists ? dependent?.dependentAnswer || '' : '',
         dependentBrands:
           questionData.question?.tags?.find((tag) => tag.id === tagQId)
@@ -221,6 +251,7 @@ const useUpdateQuestion = ({
           dependentAnswer: answerString ?? undefined,
           dependentOnQId: dependentOnTag?.questionId,
           dependentOnTagQId: values.dependentOn ?? undefined,
+          dependentTags: values.dependantTags ?? [],
           newOptions: values.newOptions,
           newQuestion: values.newQuestion,
           origOptions: data.origOptions,
@@ -249,6 +280,8 @@ const useUpdateQuestion = ({
     loading: loading || brandsLoading,
     onSubmit,
     saving,
+    tags:
+      tagData?.tags.map(({ id, name }) => ({ label: name, value: id })) ?? [],
   };
 };
 

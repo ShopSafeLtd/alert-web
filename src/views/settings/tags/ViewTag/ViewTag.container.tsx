@@ -14,6 +14,7 @@ const AddCrimeType = (): JSX.Element => {
     incidentFormFields,
     incidentFormLayout,
     incidentFormLayoutChanged,
+    involvedMode,
     loading,
     parentTag,
     questionLayoutChanged,
@@ -33,6 +34,7 @@ const AddCrimeType = (): JSX.Element => {
     showDraft,
     toggleAddQuestion,
     toggleField,
+    toggleInvolvedMode,
     updateQuestionOnTag,
     updateTagParent,
   } = useViewTag();
@@ -48,6 +50,7 @@ const AddCrimeType = (): JSX.Element => {
       incidentFormFields={incidentFormFields}
       incidentFormLayout={incidentFormLayout}
       incidentFormLayoutChanged={incidentFormLayoutChanged}
+      involvedMode={involvedMode}
       loading={loading}
       parentTag={parentTag}
       questionLayoutChanged={questionLayoutChanged}
@@ -67,6 +70,7 @@ const AddCrimeType = (): JSX.Element => {
       showDraft={showDraft}
       toggleAddQuestion={toggleAddQuestion}
       toggleField={toggleField}
+      toggleInvolvedMode={toggleInvolvedMode}
       updateQuestionOnTag={updateQuestionOnTag}
       updateTagParent={updateTagParent}
     />

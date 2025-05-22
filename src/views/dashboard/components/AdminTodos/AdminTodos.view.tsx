@@ -219,7 +219,7 @@ const AdminTodos = ({
         title={intl.formatMessage({
           defaultMessage: 'New Activity',
         })}
-        width="400"
+        width="800"
       >
         {addTodo ? (
           <AddTodo onClose={toggleAddTodo} update={updateTodoList} />

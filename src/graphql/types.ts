@@ -6405,6 +6405,7 @@ export type FolderWhereUniqueInput = {
 
 export type FormField = {
   __typename?: 'FormField';
+  conditions: Array<Scalars['JSON']>;
   createdAt: Scalars['Date'];
   id: Scalars['ID'];
   incidentForm: IncidentForm;
@@ -7732,7 +7733,14 @@ export enum IncidentFormField {
   Witnesses = 'WITNESSES'
 }
 
+export type IncidentFormFieldsConditionInput = {
+  conditionValues?: InputMaybe<Array<Scalars['String']>>;
+  questionId?: InputMaybe<Scalars['String']>;
+  type?: InputMaybe<Scalars['String']>;
+};
+
 export type IncidentFormFieldsInput = {
+  conditions?: InputMaybe<Array<IncidentFormFieldsConditionInput>>;
   metadata?: InputMaybe<IncidentFormFieldsMetadataInput>;
   position: Scalars['Int'];
   tooltip?: InputMaybe<Scalars['String']>;
@@ -7743,6 +7751,7 @@ export type IncidentFormFieldsMetadataInput = {
   draftButton?: InputMaybe<Scalars['String']>;
   draftDescription?: InputMaybe<Scalars['String']>;
   draftTitle?: InputMaybe<Scalars['String']>;
+  mode?: InputMaybe<Scalars['String']>;
 };
 
 export type IncidentFormInput = {
@@ -8159,6 +8168,7 @@ export type IncidentQuestions = {
   dependentOnAnswerValue?: Maybe<Scalars['String']>;
   dependentOnBrandIds?: Maybe<Array<Scalars['String']>>;
   dependentOnQuestionId?: Maybe<Scalars['String']>;
+  dependentOnTagIds?: Maybe<Array<Scalars['String']>>;
   label: Scalars['String'];
   options: Array<AnswerOption>;
   priority: Scalars['Int'];
@@ -14169,7 +14179,6 @@ export type Query = {
   role: CustomRole;
   roles: QueryRolesConnection;
   scheme: Scheme;
-  schemeUsersRelay: QuerySchemeUsersRelayConnection;
   schemes: Array<Scheme>;
   searchOffenders: QuerySearchOffendersConnection;
   sharingBusinesses: Array<SharingBusiness>;
@@ -15333,20 +15342,6 @@ export type QuerySchemeArgs = {
 };
 
 
-export type QuerySchemeUsersRelayArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  cursor?: InputMaybe<UserSchemeWhereUniqueInput>;
-  distinct?: InputMaybe<Array<UserSchemeScalarFieldEnum>>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Array<UserSchemeOrderByWithRelationInput>>;
-  skip?: InputMaybe<Scalars['Int']>;
-  take?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<UserSchemeWhereInput>;
-};
-
-
 export type QuerySchemesArgs = {
   cursor?: InputMaybe<SchemeWhereUniqueInput>;
   distinct?: InputMaybe<Array<SchemeScalarFieldEnum>>;
@@ -16017,19 +16012,6 @@ export type QueryRolesConnectionEdge = {
   __typename?: 'QueryRolesConnectionEdge';
   cursor: Scalars['String'];
   node: CustomRole;
-};
-
-export type QuerySchemeUsersRelayConnection = {
-  __typename?: 'QuerySchemeUsersRelayConnection';
-  edges: Array<QuerySchemeUsersRelayConnectionEdge>;
-  pageInfo: PageInfo;
-  totalCount: Scalars['Int'];
-};
-
-export type QuerySchemeUsersRelayConnectionEdge = {
-  __typename?: 'QuerySchemeUsersRelayConnectionEdge';
-  cursor: Scalars['String'];
-  node: UserScheme;
 };
 
 export type QuerySearchOffendersConnection = {
@@ -17375,6 +17357,7 @@ export type Scheme = {
   offenders: Array<Offender>;
   offendersCreated: Scalars['Int'];
   oneSelectedIncidentTypeOnly: Scalars['Boolean'];
+  optionalBusinessOnUsers: Scalars['Boolean'];
   policeReporting: Scalars['Boolean'];
   questionGroups: Array<QuestionGroup>;
   questions: Array<Question>;
@@ -17384,6 +17367,7 @@ export type Scheme = {
   reportOnly: Scalars['Boolean'];
   reportTemplates: Array<ReportTemplate>;
   requireActivityAuthorised: Scalars['Boolean'];
+  requireBusinessOnIncident: Scalars['Boolean'];
   requireSiteNumberForUsers: Scalars['Boolean'];
   restrictIncidentAccess: Scalars['Boolean'];
   roles: Array<CustomRole>;
@@ -19600,6 +19584,7 @@ export type TagQuestion = {
   createdAt: Scalars['Date'];
   dependentBrands: Array<Scalars['String']>;
   dependentQuestions: Array<Scalars['JSON']>;
+  dependentTags: Array<Scalars['String']>;
   id: Scalars['String'];
   priority: Scalars['Int'];
   question: Question;
@@ -20934,6 +20919,7 @@ export type UpdateQuestionOnTagInput = {
   dependentAnswer?: InputMaybe<Scalars['String']>;
   dependentOnQId?: InputMaybe<Scalars['String']>;
   dependentOnTagQId?: InputMaybe<Scalars['String']>;
+  dependentTags?: InputMaybe<Array<Scalars['String']>>;
   newOptions?: InputMaybe<Array<Scalars['String']>>;
   newQuestion?: InputMaybe<Scalars['String']>;
   origOptions?: InputMaybe<Array<Scalars['String']>>;

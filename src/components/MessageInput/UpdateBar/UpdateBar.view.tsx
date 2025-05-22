@@ -14,6 +14,7 @@ import type {
 } from 'types/DataType';
 
 import PermissionCheckWrapper from '#/components/PermissionCheck/PermissionCheckWrapper';
+import { getCustomUrls } from '#/providers/ApolloProvider';
 import {
   faCar,
   faCircleXmark,
@@ -169,6 +170,7 @@ const UpdateBar = ({
 }: Props) => {
   const intl = useIntl();
   const classes = useStyles();
+  const { imageUpload } = getCustomUrls();
   return (
     <>
       <Form
@@ -421,7 +423,7 @@ const UpdateBar = ({
           <Col>
             <Upload
               accept=".png,.jpeg,.webp"
-              action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
+              action={imageUpload}
               beforeUpload={beforeUpdateImageUpload}
               fileList={updateFileList}
               onChange={onUpdateImageChange}
