@@ -2,7 +2,7 @@
 import type { UploadProps } from 'antd';
 import type { UploadFile } from 'antd/es/upload/interface';
 
-import { getCustomUrls } from '#/providers/ApolloProvider';
+import { getCustomUrls } from '#/providers/GetCustomUrls';
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { userIdAtom } from '#/providers/UserProvider/UserProvider';
 import { useAtomValue } from 'jotai/index';

@@ -1,6 +1,6 @@
 import type { ImageFaceType } from '#/components/incidents/IncidentForm/ImageSection/useImageSection';
 
-import { getCustomUrls } from '#/providers/ApolloProvider';
+import { getCustomUrls } from '#/providers/GetCustomUrls';
 
 const getFacesFromUrl = (url: string): Promise<ImageFaceType[]> => {
   const { faceUrl } = getCustomUrls();

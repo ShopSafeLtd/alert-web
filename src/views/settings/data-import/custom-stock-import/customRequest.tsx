@@ -1,4 +1,4 @@
-import { getCustomUrls } from '#/providers/ApolloProvider';
+import { getCustomUrls } from '#/providers/GetCustomUrls';
 import { v4 as uuidv4 } from 'uuid';
 
 export const customRequest = async (blob: Blob): Promise<null | string> => {
