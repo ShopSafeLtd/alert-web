@@ -1,4 +1,12 @@
+import Chat from '#/navigation/app-views/chat/router';
+import Documents from '#/navigation/app-views/documents/router';
+import FaceAi from '#/navigation/app-views/face-ai/router';
+import Reports from '#/navigation/app-views/reports/router';
+import Tasks from '#/navigation/app-views/tasks/router';
+import { currentUserSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
+import VisionCentre from '#/views/vision/vision-centre/VisionCentre.view';
+import { User } from '@clerk/clerk-js/dist/types/ui/icons';
 import { useAuth as useAuthClerk } from '@clerk/clerk-react';
 import Loading from 'components/shared-components/AntD/Loading';
 import useManageSession from 'hooks/useManageSession';
@@ -40,6 +48,9 @@ export const AppViews = (): JSX.Element => {
   const { isLoaded } = useAuthClerk();
 
   useManageSession();
+  const noPassword = useAtomValue(currentUserSchemeAtom)?.scheme
+    ?.disablePassword;
+
   const forcePasswordReset = useAtomValue(currentUserAtom)?.forcePasswordReset;
   const isSet = !!useAtomValue(currentUserAtom);
   const newUser = useAtomValue(currentUserAtom)?.newUser;
@@ -60,7 +71,13 @@ export const AppViews = (): JSX.Element => {
         <Routes>
           <Route element={<Navigate to="onboarding" />} index path="*" />
           <Route
-            element={forcePasswordReset ? <PasswordReset /> : <Onboarding />}
+            element={
+              forcePasswordReset && !noPassword ? (
+                <PasswordReset />
+              ) : (
+                <Onboarding />
+              )
+            }
             index
             key="onboarding"
             path="onboarding/*"

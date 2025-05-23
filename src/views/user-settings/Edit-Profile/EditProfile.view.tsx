@@ -2,6 +2,7 @@ import type { CurrentUserQuery } from '#/hooks/user/queries/__generated__/curren
 import type { SelectOptions } from 'types/DataType';
 
 import { EditPasswordButton } from '#/components/Password/OwnPasswordChange.view';
+import { currentUserSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import {
   Button,
   Card,
@@ -15,6 +16,7 @@ import {
   Switch,
   Typography,
 } from 'antd';
+import { useAtomValue } from 'jotai';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
@@ -43,6 +45,8 @@ const EditProfile = ({
   userDefaultGroups,
 }: Props): JSX.Element => {
   const intl = useIntl();
+  const noPassword = useAtomValue(currentUserSchemeAtom)?.scheme
+    ?.disablePassword;
 
   const schemes = data?.currentUser?.schemes.map(({ scheme }) => ({
     label: scheme.name,
@@ -53,7 +57,13 @@ const EditProfile = ({
     <div className="list-view">
       <>
         <PageHeader
-          extra={[<EditPasswordButton key="editPassword" saving={saving} />]}
+          extra={[
+            noPassword ? (
+              <></>
+            ) : (
+              <EditPasswordButton key="editPassword" saving={saving} />
+            ),
+          ]}
           // extra={[
           //   <Button
           //     disabled={saving}
