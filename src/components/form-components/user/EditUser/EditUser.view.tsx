@@ -4,6 +4,7 @@ import type { UserQuery } from 'graphql/user/queries/__generated__/user.generate
 import type { BusinessData, SelectOptions } from 'types/DataType';
 
 import BusinessesSelect from '#/components/form-components/BusinessesSelect/BusinessesSelect.view';
+import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
 // import validateMobileWithCountryCode from '#/utils/validate-contry-code';
 import { faPlus } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -22,6 +23,7 @@ import {
 import PhoneInput from 'antd-phone-input';
 import AddBusiness from 'components/form-components/businesses/AddBusiness';
 import { Role } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
@@ -74,6 +76,7 @@ const EditUser = ({
 }: Props): JSX.Element => {
   const intl = useIntl();
   const classes = useStyles();
+  const currentScheme = useAtomValue(currentSchemeAtom);
 
   return !data && loading ? (
     <Skeleton />
@@ -233,7 +236,7 @@ const EditUser = ({
                       defaultMessage:
                         'Please select a business for the new user.',
                     }),
-                    required: true,
+                    required: !currentScheme.optionalBusinessOnUsers,
                   },
                 ]}
               >

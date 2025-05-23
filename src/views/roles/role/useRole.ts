@@ -148,6 +148,10 @@ export function useRole(id: string | undefined, create: boolean): Props {
         ),
       });
 
+      // First, reset all form fields to clear previous role's permissions
+      form.resetFields();
+
+      // Then set the new role's values
       form.setFieldsValue({
         name: iData.role.name,
         type: iData.role.type,
