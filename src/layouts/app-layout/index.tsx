@@ -9,6 +9,7 @@ import { useAuth } from '#/hooks';
 import {
   currentSchemeBusinessesAtom,
   currentSchemeIdAtom,
+  currentUserSchemeAtom,
   settingSchemeAtom,
 } from '#/providers/SchemeProvider/SchemeProvider';
 import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
@@ -56,12 +57,16 @@ const AppLayout = (): JSX.Element => {
   const isSettingScheme = useAtomValue(settingSchemeAtom);
   const businesses = useAtomValue(currentSchemeBusinessesAtom);
   const currentUser = useAtomValue(currentUserAtom);
+  const noPassword = useAtomValue(currentUserSchemeAtom)?.scheme
+    ?.disablePassword;
   const email = currentUser?.email ?? '';
   const fullName = currentUser?.fullName ?? '';
   const id = currentUser?.id ?? '';
   const onboarded = !currentUser?.newUser || true;
   const termsExpired = currentUser?.termsExpired ?? false;
-  const forcePasswordReset = currentUser?.forcePasswordReset ?? false;
+  const forcePasswordReset = noPassword
+    ? false
+    : currentUser?.forcePasswordReset ?? false;
   const isSet = !!currentUser;
 
   const currentScheme = useAtomValue(currentSchemeIdAtom);

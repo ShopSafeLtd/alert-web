@@ -37,8 +37,13 @@ export default defineConfig((configEnv) => {
       mode === 'production' && removeConsole(),
       compression({
         algorithm: 'gzip',
+        exclude: [/\.(br|gz)$/],
         threshold: 1024,
         deleteOriginalAssets: false,
+      }),
+      compression({
+        algorithm: 'brotliCompress',
+        exclude: [/\.(br|gz)$/],
       }),
       mode !== 'production' && (visualizer({ open: true }) as PluginOption),
       mode !== 'production' &&

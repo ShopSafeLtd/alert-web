@@ -1,3 +1,4 @@
+import { currentUserSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import { useAuth as useAuthClerk } from '@clerk/clerk-react';
 import Loading from 'components/shared-components/AntD/Loading';
@@ -40,6 +41,9 @@ export const AppViews = (): JSX.Element => {
   const { isLoaded } = useAuthClerk();
 
   useManageSession();
+  const noPassword = useAtomValue(currentUserSchemeAtom)?.scheme
+    ?.disablePassword;
+
   const forcePasswordReset = useAtomValue(currentUserAtom)?.forcePasswordReset;
   const isSet = !!useAtomValue(currentUserAtom);
   const newUser = useAtomValue(currentUserAtom)?.newUser;
@@ -60,7 +64,13 @@ export const AppViews = (): JSX.Element => {
         <Routes>
           <Route element={<Navigate to="onboarding" />} index path="*" />
           <Route
-            element={forcePasswordReset ? <PasswordReset /> : <Onboarding />}
+            element={
+              forcePasswordReset && !noPassword ? (
+                <PasswordReset />
+              ) : (
+                <Onboarding />
+              )
+            }
             index
             key="onboarding"
             path="onboarding/*"
