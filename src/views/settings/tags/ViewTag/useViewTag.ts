@@ -302,6 +302,9 @@ const useViewTag = (): Return => {
         dataType: {
           equals: Model.Incident,
         },
+        recycled: {
+          equals: false,
+        },
         schemes: {
           some: {
             id: {
