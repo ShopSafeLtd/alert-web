@@ -17,6 +17,8 @@ export const useSignOut = (): {
     window.localStorage.setItem('theme', theme || 'light');
     window.sessionStorage.clear();
     void signOutClerk();
+
+    window.location.reload();
   };
   return { signOut };
 };

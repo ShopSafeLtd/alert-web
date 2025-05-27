@@ -6,6 +6,7 @@ import type { RefObject } from 'react';
 // import { EditPasswordButton } from '#/components/Password/OwnPasswordChange.view';
 import LocatingModal from '#/components/map/LocatingModal';
 import { CustomTermsView } from '#/components/onboarding/Onboarding/SchemeTerms/Terms.view';
+import { currentUserSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import FormatCalendar from '#/utils/format-calendar-24h';
 import SessionsTableModal from '#/views/settings/users/UserDetail/SessionsTable.modal';
 import { useTermQuery } from '#/views/settings/users/UserDetail/graphql/queries/__generated__/view-users-signed-terms.generated';
@@ -39,6 +40,7 @@ import {
 } from 'antd';
 import EditUser from 'components/form-components/user/EditUser';
 import { AppType, UserStatus } from 'graphql/types';
+import { useAtomValue } from 'jotai';
 import React, { useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
@@ -172,7 +174,8 @@ const userDetail = ({
 }: Props) => {
   const intl = useIntl();
   const classes = useStyles();
-
+  const noPassword = useAtomValue(currentUserSchemeAtom)?.scheme
+    ?.disablePassword;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const AppTypeFilter = [
     {
@@ -196,14 +199,14 @@ const userDetail = ({
     setIsModalOpen(false);
     setIsSessionsModalOpen(false);
   };
-  const EditPassword = () => (
-    // if (isOwn) {
-    //   return <EditPasswordButton key="5" saving={saving} />;
-    // }
-    <Button disabled={saving} key="5" onClick={toggleEditPassword}>
-      <FormattedMessage defaultMessage="Edit Password" />
-    </Button>
-  );
+  const EditPassword = () =>
+    noPassword ? (
+      <></>
+    ) : (
+      <Button disabled={saving} key="5" onClick={toggleEditPassword}>
+        <FormattedMessage defaultMessage="Edit Password" />
+      </Button>
+    );
   return (
     <div className="list-view">
       <PageHeader
