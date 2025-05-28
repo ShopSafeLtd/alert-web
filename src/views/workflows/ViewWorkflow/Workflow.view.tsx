@@ -2034,23 +2034,25 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                           <RoleSelect multi schemeId={schemeId} />
                         </Form.Item>
                         <Row gutter={[32, 16]}>
-                          {typeWatch !== 'scheduled' && workflowTypeWatch && (
-                            <Col>
-                              <Form.Item
-                                label={intl.formatMessage({
-                                  defaultMessage: 'Use trigger model groups',
-                                })}
-                                name="useDynamicGroups"
-                                tooltip={intl.formatMessage({
-                                  defaultMessage:
-                                    'Use the groups assigned to the triggering model to find the users to assign to the outcomes to.',
-                                })}
-                                valuePropName="checked"
-                              >
-                                <Switch />
-                              </Form.Item>
-                            </Col>
-                          )}
+                          {typeWatch !== 'scheduled' &&
+                            workflowTypeWatch &&
+                            workflowTypeWatch !== Model.Checklist && (
+                              <Col>
+                                <Form.Item
+                                  label={intl.formatMessage({
+                                    defaultMessage: 'Use trigger model groups',
+                                  })}
+                                  name="useDynamicGroups"
+                                  tooltip={intl.formatMessage({
+                                    defaultMessage:
+                                      'Use the groups assigned to the triggering model to find the users to assign to the outcomes to.',
+                                  })}
+                                  valuePropName="checked"
+                                >
+                                  <Switch />
+                                </Form.Item>
+                              </Col>
+                            )}
                           <Col flex={1}>
                             <Form.Item
                               label={
