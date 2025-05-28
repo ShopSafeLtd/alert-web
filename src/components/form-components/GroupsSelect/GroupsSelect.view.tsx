@@ -7,15 +7,33 @@ import { userSchemesAtom } from '#/providers/UserProvider/UserProvider';
 import {
   faRectangle,
   faRectangleHistoryCircleUser,
+  faSquareCheck,
 } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Col, Row, Select, Tooltip, TreeSelect } from 'antd';
 import { useAtomValue } from 'jotai/index';
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
+import { createUseStyles } from 'react-jss';
+
+const useStyles = createUseStyles({
+  button: {
+    borderBottomLeftRadius: 0,
+    borderTopLeftRadius: 0,
+    paddingLeft: 16,
+    paddingRight: 16,
+  },
+  select: {
+    '& .ant-select-selector': {
+      borderBottomRightRadius: '0px !important',
+      borderTopRightRadius: '0px !important',
+    },
+  },
+});
 
 interface Props {
   allowClear?: boolean;
+  allowSelectAll?: boolean;
   allowTree?: boolean;
   className?: string;
   maxTagCount?: 'responsive' | number;
@@ -83,6 +101,7 @@ export const useUserGroups = ({ reportMode }: UseUserGroupsProps) => {
 
 const GroupsSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
   allowClear,
+  allowSelectAll,
   allowTree = false,
   className,
   maxTagCount,
@@ -97,6 +116,7 @@ const GroupsSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
   ...props
 }) => {
   const intl = useIntl();
+  const styles = useStyles();
   const userSchemes = useAtomValue(userSchemesAtom);
   const { loading, selectOptions, treeData } = useUserGroups({
     reportMode,
@@ -134,6 +154,12 @@ const GroupsSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
     const mergedSchemes = [...groupSchemes, ...schemeIds];
     if (onChange) onChange(mergedGroups);
     if (onSchemeChange) onSchemeChange(mergedSchemes);
+  };
+
+  const selectAll = () => {
+    if (onChange) {
+      onChange(selectOptions.map((item) => item.value));
+    }
   };
 
   return allowTree && userSchemes.length > 0 ? (
@@ -212,23 +238,41 @@ const GroupsSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
       </Col>
     </Row>
   ) : (
-    <Select
-      allowClear={allowClear}
-      className={className}
-      disabled={loading}
-      loading={loading}
-      maxTagCount={maxTagCount}
-      mode={mode}
-      onChange={onChange}
-      optionFilterProp="label"
-      options={selectOptions}
-      placeholder={placeholder}
-      size={size}
-      style={style}
-      value={value}
-      // eslint-disable-next-line react/jsx-props-no-spreading
-      {...props}
-    />
+    <Row>
+      <Col flex={1}>
+        <Select
+          allowClear={allowClear}
+          className={className ?? allowSelectAll ? styles.select : undefined}
+          disabled={loading}
+          loading={loading}
+          maxTagCount={maxTagCount}
+          mode={mode}
+          onChange={onChange}
+          optionFilterProp="label"
+          options={selectOptions}
+          placeholder={placeholder}
+          size={size}
+          style={style}
+          value={value}
+          // eslint-disable-next-line react/jsx-props-no-spreading
+          {...props}
+        />
+      </Col>
+      <Col>
+        {allowSelectAll && (
+          <Tooltip
+            placement="bottom"
+            title={intl.formatMessage({
+              defaultMessage: 'Select all groups',
+            })}
+          >
+            <Button className={styles.button} onClick={selectAll}>
+              <FontAwesomeIcon icon={faSquareCheck} />
+            </Button>
+          </Tooltip>
+        )}
+      </Col>
+    </Row>
   );
 };
 
