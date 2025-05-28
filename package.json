@@ -182,6 +182,7 @@
     "vite-bundle-analyzer": "^0.18.1",
     "vite-plugin-compression2": "^1.3.3",
     "vite-plugin-env-compatible": "^2.0.1",
+    "vite-plugin-purgecss": "^0.2.13",
     "vite-plugin-remove-console": "^1.3.0",
     "vite-plugin-svgr": "^2.4.0",
     "vite-tsconfig-paths": "^4.0.5",
