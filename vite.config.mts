@@ -91,10 +91,14 @@ export default defineConfig((configEnv) => {
       chunkSizeWarningLimit: 1000,
       cssCodeSplit: true,
       reportCompressedSize: false,
+
       rollupOptions: {
         output: {
           manualChunks: (id) => {
             if (id.includes('node_modules')) {
+              if (id.match(/\/node_modules\/(react|react-dom|scheduler)\//)) {
+                return 'vendor-react';
+              }
               if (id.includes('ag-charts')) return 'vendor-ag-charts';
               if (id.includes('lodash')) return 'vendor-lodash';
               if (id.includes('date-fns')) return 'vendor-date-fns';
