@@ -756,7 +756,10 @@ const useWorkflowForm = (): Return => {
                 },
               ],
             },
-            trigger: WorkflowTrigger.Created,
+            trigger:
+              modelSelected && modelSelected === Model.Checklist
+                ? WorkflowTrigger.Completed
+                : WorkflowTrigger.Created,
             triggerModels:
               modelSelected === undefined
                 ? values.frequency

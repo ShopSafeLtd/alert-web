@@ -18,8 +18,7 @@ import {
 import dayjs from 'dayjs';
 import { InvestigationStatus } from 'graphql/types';
 import React from 'react';
-import { FormattedMessage, useIntl } from 'react-intl';
-import { FormattedList } from 'react-intl/lib';
+import { FormattedList, FormattedMessage, useIntl } from 'react-intl';
 import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
 import GetInvestigationStatusValues from 'types/enums/investigation-status';
@@ -218,7 +217,7 @@ const ListInvestigations = ({
               <div>
                 <FormattedList
                   type="unit"
-                  value={item.groups.map((group) => group.name)}
+                  value={item?.groups?.map((group) => group.name)}
                 />
               </div>
             ),

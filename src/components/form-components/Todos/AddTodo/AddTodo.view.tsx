@@ -16,6 +16,7 @@ import {
   Form,
   Input,
   InputNumber,
+  Modal,
   Row,
   Select,
   Tooltip,
@@ -224,6 +225,7 @@ const AddTodo = ({
               />
             </Form.Item>
           </Col>
+          <Col span={12} />
           <Col span={12}>
             <Form.Item
               label={intl.formatMessage({
@@ -231,13 +233,22 @@ const AddTodo = ({
               })}
               name="groups"
               rules={[
-                {
-                  message: intl.formatMessage({
-                    defaultMessage:
-                      'Please select at least one group for the activity.',
-                  }),
-                  required: true,
-                },
+                ({ getFieldValue }) => ({
+                  validator(_, value: string[]) {
+                    const businesses = getFieldValue('businesses') as string[];
+                    if (!value?.length && !businesses?.length) {
+                      return Promise.reject(
+                        new Error(
+                          intl.formatMessage({
+                            defaultMessage:
+                              'Please select at least one group or business for the activity.',
+                          })
+                        )
+                      );
+                    }
+                    return Promise.resolve();
+                  },
+                }),
               ]}
             >
               <Select
@@ -257,6 +268,24 @@ const AddTodo = ({
                 defaultMessage: 'Businesses',
               })}
               name="businesses"
+              rules={[
+                ({ getFieldValue }) => ({
+                  validator(_, value: string[]) {
+                    const groups = getFieldValue('groups') as string[];
+                    if (!value?.length && !groups?.length) {
+                      return Promise.reject(
+                        new Error(
+                          intl.formatMessage({
+                            defaultMessage:
+                              'Please select at least one group or business for the activity.',
+                          })
+                        )
+                      );
+                    }
+                    return Promise.resolve();
+                  },
+                }),
+              ]}
             >
               <BusinessesSelect
                 allowClear
@@ -453,7 +482,70 @@ const AddTodo = ({
                   danger
                   disabled={saving}
                   loading={saving}
-                  onClick={() => onSubmit(form.getFieldsValue())}
+                  onClick={() => {
+                    const data = form.getFieldsValue();
+
+                    if (data.name === undefined) {
+                      Modal.error({
+                        content: intl.formatMessage({
+                          defaultMessage:
+                            'Enter a name for the activity before creating it.',
+                        }),
+                        title: intl.formatMessage({
+                          defaultMessage: 'Missing Name',
+                        }),
+                        type: 'error',
+                      });
+                      return;
+                    }
+
+                    if (data.dueDate === undefined) {
+                      Modal.error({
+                        content: intl.formatMessage({
+                          defaultMessage:
+                            'Add a due date for the activity before creating it.',
+                        }),
+                        title: intl.formatMessage({
+                          defaultMessage: 'Missing Due Date',
+                        }),
+                        type: 'error',
+                      });
+                      return;
+                    }
+
+                    if (data.assignedUsers === undefined) {
+                      Modal.error({
+                        content: intl.formatMessage({
+                          defaultMessage:
+                            'Select assigned users for the activity before creating it.',
+                        }),
+                        title: intl.formatMessage({
+                          defaultMessage: 'Missing Assigned Users',
+                        }),
+                        type: 'error',
+                      });
+                      return;
+                    }
+
+                    if (
+                      data.groups === undefined &&
+                      data.businesses === undefined
+                    ) {
+                      Modal.error({
+                        content: intl.formatMessage({
+                          defaultMessage:
+                            'Select at least one group or a business for the activity before creating it.',
+                        }),
+                        title: intl.formatMessage({
+                          defaultMessage: 'Missing Group or Business',
+                        }),
+                        type: 'error',
+                      });
+                      return;
+                    }
+
+                    onSubmit(data);
+                  }}
                 >
                   {intl.formatMessage({
                     defaultMessage: 'Create Activity',

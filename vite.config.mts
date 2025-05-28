@@ -6,6 +6,7 @@ import envCompatible from 'vite-plugin-env-compatible';
 import { sentryVitePlugin } from '@sentry/vite-plugin';
 // local host launch fix
 import dns from 'node:dns';
+import purgeCss from 'vite-plugin-purgecss';
 
 import path from 'path';
 import { visualizer } from 'rollup-plugin-visualizer';
@@ -32,6 +33,25 @@ export default defineConfig((configEnv) => {
           babelrc: true,
         },
       }),
+      purgeCss({
+        content: [
+          './src/**/*.html',
+          './src/**/*.tsx',
+          './src/**/*.jsx',
+          './src/**/*.ts',
+          './src/**/*.js',
+        ],
+        safelist: [
+          /-(leave|enter|appear)(|-(to|from|active))$/,
+          /^(?!cursor-move).+-move$/,
+          /^router-link(|-exact)-active$/,
+          /data-v-.*/,
+          // Add Ant Design class patterns if you use it
+          /^ant-/,
+          /^hljs-/,
+        ],
+        defaultExtractor: (content) => content.match(/[\w-/:]+(?<!:)/g) || [],
+      }),
       envCompatible(),
       viteTsconfigPaths(),
       mode === 'production' && removeConsole(),
@@ -40,10 +60,6 @@ export default defineConfig((configEnv) => {
         exclude: [/\.(br|gz)$/],
         threshold: 1024,
         deleteOriginalAssets: false,
-      }),
-      compression({
-        algorithm: 'brotliCompress',
-        exclude: [/\.(br|gz)$/],
       }),
       mode !== 'production' && (visualizer({ open: true }) as PluginOption),
       mode !== 'production' &&
@@ -70,29 +86,30 @@ export default defineConfig((configEnv) => {
     build: {
       outDir: 'build',
       sourcemap: 'hidden' as const,
-      minify: 'esbuild',
-      rollupOptions: {
-        output: {
-          chunkFileNames: `assets/js/[name].${buildTimestamp}.[hash].js`,
-          entryFileNames: `assets/js/[name].${buildTimestamp}.[hash].js`,
-          assetFileNames: `assets/[ext]/[name].${buildTimestamp}.[hash].[ext]`,
-        },
-      },
+      minify: 'esbuild' as const,
       assetsInlineLimit: 4096,
       chunkSizeWarningLimit: 1000,
       cssCodeSplit: true,
       reportCompressedSize: false,
+
+      rollupOptions: {
+        output: {
+          manualChunks: (id) => {
+            if (id.includes('node_modules')) {
+              if (id.match(/\/node_modules\/(react|react-dom|scheduler)\//)) {
+                return 'vendor-react';
+              }
+              if (id.includes('ag-charts')) return 'vendor-ag-charts';
+              if (id.includes('lodash')) return 'vendor-lodash';
+              if (id.includes('date-fns')) return 'vendor-date-fns';
+              return 'vendor';
+            }
+          },
+        },
+      },
     },
     resolve: {
       alias: [
-        // {
-        //   find: 'react',
-        //   replacement: path.resolve(__dirname, 'node_modules/react'),
-        // },
-        // {
-        //   find: 'react-dom',
-        //   replacement: path.resolve(__dirname, 'node_modules/react-dom'),
-        // },
         { find: '@', replacement: path.resolve(__dirname, 'src') },
         { find: /^~/, replacement: pathResolve('./node_modules') },
       ],
