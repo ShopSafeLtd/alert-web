@@ -61,6 +61,10 @@ export default defineConfig((configEnv) => {
         threshold: 1024,
         deleteOriginalAssets: false,
       }),
+      compression({
+        algorithm: 'brotliCompress',
+        exclude: [/\.(br|gz)$/],
+      }),
       mode !== 'production' && (visualizer({ open: true }) as PluginOption),
       mode !== 'production' &&
         analyzer({
@@ -83,15 +87,23 @@ export default defineConfig((configEnv) => {
       APP_VERSION: JSON.stringify(process.env.npm_package_version),
       __BUILD_DATE__: JSON.stringify(new Date().toISOString()),
     },
+    optimizeDeps: {
+      include: ['lodash-es', 'date-fns', 'ag-charts-react', 'ag-grid-react'],
+      esbuildOptions: {
+        define: {
+          'process.env.NODE_ENV': '"production"',
+        },
+      },
+    },
     build: {
       outDir: 'build',
       sourcemap: 'hidden' as const,
       minify: 'esbuild' as const,
       assetsInlineLimit: 4096,
-      chunkSizeWarningLimit: 1000,
+      chunkSizeWarningLimit: 1500,
       cssCodeSplit: true,
       reportCompressedSize: false,
-
+      target: 'es2020',
       rollupOptions: {
         output: {
           manualChunks: (id) => {
@@ -99,12 +111,20 @@ export default defineConfig((configEnv) => {
               if (id.match(/\/node_modules\/(react|react-dom|scheduler)\//)) {
                 return 'vendor-react';
               }
+              if (id.includes('ag-grid-react')) return 'vendor-ag-grid';
+              if (id.includes('node_modules/antd')) return 'vendor-antd';
+              if (id.includes('node_modules/d3')) return 'vendor-d3';
               if (id.includes('ag-charts')) return 'vendor-ag-charts';
+              if (id.includes('ag-grid')) return 'vendor-ag-grid';
+
               if (id.includes('lodash')) return 'vendor-lodash';
               if (id.includes('date-fns')) return 'vendor-date-fns';
               return 'vendor';
             }
           },
+          chunkFileNames: 'assets/chunks/[name]-[hash].js',
+          entryFileNames: 'assets/[name]-[hash].js',
+          assetFileNames: 'assets/[name]-[hash].[ext]',
         },
       },
     },
