@@ -1,5 +1,7 @@
 import BusinessesSelect from '#/components/form-components/BusinessesSelect/BusinessesSelect.view';
 import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
+import { faSquareCheck } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
   Card,
@@ -9,10 +11,12 @@ import {
   Select,
   Statistic,
   Table,
+  Tooltip,
   Typography,
 } from 'antd';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
+import { createUseStyles } from 'react-jss';
 
 import type {
   Action,
@@ -22,6 +26,21 @@ import type {
 
 import Page from '../../../components/shared-components/AntD/Page/Page';
 import DatePicker from '../../../components/util-components/DatePicker';
+
+const useStyles = createUseStyles({
+  button: {
+    borderBottomLeftRadius: 0,
+    borderTopLeftRadius: 0,
+    paddingLeft: 16,
+    paddingRight: 16,
+  },
+  select: {
+    '& .ant-select-selector': {
+      borderBottomRightRadius: '0px !important',
+      borderTopRightRadius: '0px !important',
+    },
+  },
+});
 
 interface Props {
   crimeGroups: SelectOption[];
@@ -41,6 +60,8 @@ const ExportIncidentsView = ({
   state,
 }: Props) => {
   const intl = useIntl();
+  const classes = useStyles();
+
   return (
     <div style={{ marginLeft: 15 }}>
       <Page>
@@ -75,6 +96,7 @@ const ExportIncidentsView = ({
           <Col span={4}>
             <BusinessesSelect
               allowClear
+              allowSelectAll
               maxTagCount="responsive"
               mode="multiple"
               onChange={(value: string[]) => {
@@ -94,11 +116,13 @@ const ExportIncidentsView = ({
               })}
               showSearch
               style={{ marginLeft: 10, width: '100%' }}
+              value={state.businessIds}
             />
           </Col>
           <Col span={4}>
             <GroupsSelect
               allowClear
+              allowSelectAll
               maxTagCount="responsive"
               mode="multiple"
               onChange={(value: string[]) => {
@@ -118,32 +142,59 @@ const ExportIncidentsView = ({
               })}
               showSearch
               style={{ marginLeft: 10, width: '100%' }}
+              value={state.groupIds}
             />
           </Col>
           <Col span={4}>
-            <Select
-              allowClear
-              maxTagCount="responsive"
-              mode="multiple"
-              onChange={(value: string[]) => {
-                dispatch({
-                  payload: value,
-                  type: 'UPDATE_CRIME_GROUP_IDS',
-                });
-              }}
-              onClear={() => {
-                dispatch({
-                  payload: [],
-                  type: 'UPDATE_CRIME_GROUP_IDS',
-                });
-              }}
-              options={crimeGroups}
-              placeholder={intl.formatMessage({
-                defaultMessage: 'Select tags',
-              })}
-              showSearch
-              style={{ marginLeft: 10, width: '100%' }}
-            />
+            <Row>
+              <Col flex={1}>
+                <Select
+                  allowClear
+                  className={classes.select}
+                  maxTagCount="responsive"
+                  mode="multiple"
+                  onChange={(value: string[]) => {
+                    dispatch({
+                      payload: value,
+                      type: 'UPDATE_CRIME_GROUP_IDS',
+                    });
+                  }}
+                  onClear={() => {
+                    dispatch({
+                      payload: [],
+                      type: 'UPDATE_CRIME_GROUP_IDS',
+                    });
+                  }}
+                  options={crimeGroups}
+                  placeholder={intl.formatMessage({
+                    defaultMessage: 'Select tags',
+                  })}
+                  showSearch
+                  style={{ marginLeft: 10, width: '100%' }}
+                  value={state.crimeGroupIds}
+                />
+              </Col>
+              <Col>
+                <Tooltip
+                  placement="bottom"
+                  title={intl.formatMessage({
+                    defaultMessage: 'Select all tags',
+                  })}
+                >
+                  <Button
+                    className={classes.button}
+                    onClick={() => {
+                      dispatch({
+                        payload: crimeGroups.map((g) => g.value),
+                        type: 'UPDATE_CRIME_GROUP_IDS',
+                      });
+                    }}
+                  >
+                    <FontAwesomeIcon icon={faSquareCheck} />
+                  </Button>
+                </Tooltip>
+              </Col>
+            </Row>
           </Col>
           <Col span={6}>
             <Col
