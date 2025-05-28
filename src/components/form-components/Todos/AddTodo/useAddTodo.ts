@@ -29,10 +29,10 @@ const { useForm } = Form;
 export interface FormData {
   [answer: string]: Date | number | string | string[] | undefined;
   assignedUsers: string[];
-  businesses: string[];
+  businesses?: string[];
   description: string;
   dueDate: Date;
-  groups: string[];
+  groups?: string[];
   name: string;
   questionGroup?: string;
 }
@@ -314,7 +314,7 @@ const useAddTodo = ({
               url: file.url || '',
             })) || [],
           dueDate: data.dueDate,
-          groups: data.groups.map((id) => ({ id })),
+          groups: data.groups?.map((id) => ({ id })),
           incident: incidentId ? { connect: { id: incidentId } } : undefined,
           investigation: investigationId
             ? { connect: { id: investigationId } }
