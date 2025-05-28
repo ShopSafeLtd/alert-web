@@ -1,6 +1,7 @@
 import LoadingScreen from '#/components/layout-components/LoadingScreen';
 import { useTokenContext } from '#/context/token-context';
 import { useThemeLanguage } from '#/hooks/useThemeLanguage';
+import AppLayout from '#/layouts/app-layout';
 import { GuestLayout } from '#/layouts/guest-layout';
 import Terms from '#/navigation/auth-views/components/Terms';
 import GenerateSignInRedirect from '#/utils/generate-sign-in-redirect';
@@ -10,13 +11,12 @@ import { SignedIn, SignedOut } from '@clerk/clerk-react';
 import { ErrorBoundary, withSentryReactRouterV6Routing } from '@sentry/react';
 import { ConfigProvider } from 'antd';
 import theme from 'configs/ThemeConfig';
-import React, { lazy } from 'react';
+import React from 'react';
 import { IntlProvider } from 'react-intl';
 import { ThemeProvider } from 'react-jss';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
 const SentryRoutes = withSentryReactRouterV6Routing(Routes);
-const AppLayout = lazy(() => import('#/layouts/app-layout'));
 
 const Views = () => {
   // check if current url is staging. If so, redirect to  https://app.shopsafealert.co.uk/ unless localstorage has been set with staging:true

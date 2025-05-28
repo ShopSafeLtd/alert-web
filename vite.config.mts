@@ -41,10 +41,6 @@ export default defineConfig((configEnv) => {
         threshold: 1024,
         deleteOriginalAssets: false,
       }),
-      compression({
-        algorithm: 'brotliCompress',
-        exclude: [/\.(br|gz)$/],
-      }),
       mode !== 'production' && (visualizer({ open: true }) as PluginOption),
       mode !== 'production' &&
         analyzer({
@@ -70,7 +66,7 @@ export default defineConfig((configEnv) => {
     build: {
       outDir: 'build',
       sourcemap: 'hidden' as const,
-      minify: 'esbuild',
+      minify: 'esbuild' as const,
       rollupOptions: {
         output: {
           chunkFileNames: `assets/js/[name].${buildTimestamp}.[hash].js`,

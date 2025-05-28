@@ -10353,6 +10353,7 @@ export enum Model {
   Ban = 'BAN',
   Business = 'BUSINESS',
   Chat = 'CHAT',
+  Checklist = 'CHECKLIST',
   CrimeGroup = 'CRIME_GROUP',
   Cron = 'CRON',
   DemDevice = 'DEM_DEVICE',

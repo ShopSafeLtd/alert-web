@@ -346,6 +346,12 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                               }),
                               value: Model.Todo,
                             },
+                            {
+                              label: intl.formatMessage({
+                                defaultMessage: 'Checklist',
+                              }),
+                              value: Model.Checklist,
+                            },
                           ]}
                         />
                       </Form.Item>
@@ -429,7 +435,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                   </Row>
                 )}
               </Card>
-              {modelSelected && (
+              {modelSelected && modelSelected !== Model.Checklist && (
                 <Card bodyStyle={{ padding: 0 }}>
                   <>
                     <div style={{ padding: 20 }}>
@@ -2031,27 +2037,14 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                           {typeWatch !== 'scheduled' && workflowTypeWatch && (
                             <Col>
                               <Form.Item
-                                label={
-                                  workflowTypeWatch === Model.Incident
-                                    ? intl.formatMessage({
-                                        defaultMessage: 'Use incident groups',
-                                      })
-                                    : intl.formatMessage({
-                                        defaultMessage: 'Use offender groups',
-                                      })
-                                }
+                                label={intl.formatMessage({
+                                  defaultMessage: 'Use trigger model groups',
+                                })}
                                 name="useDynamicGroups"
-                                tooltip={
-                                  workflowTypeWatch === Model.Incident
-                                    ? intl.formatMessage({
-                                        defaultMessage:
-                                          'Use the groups assigned to the triggering incident to find the users to assign to the outcomes to.',
-                                      })
-                                    : intl.formatMessage({
-                                        defaultMessage:
-                                          'Use the groups assigned to the triggering offender to find the users to assign to the outcomes to.',
-                                      })
-                                }
+                                tooltip={intl.formatMessage({
+                                  defaultMessage:
+                                    'Use the groups assigned to the triggering model to find the users to assign to the outcomes to.',
+                                })}
                                 valuePropName="checked"
                               >
                                 <Switch />
