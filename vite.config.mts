@@ -46,7 +46,6 @@ export default defineConfig((configEnv) => {
           /^(?!cursor-move).+-move$/,
           /^router-link(|-exact)-active$/,
           /data-v-.*/,
-          // Add Ant Design class patterns if you use it
           /^ant-/,
           /^hljs-/,
         ],
@@ -74,10 +73,8 @@ export default defineConfig((configEnv) => {
         org: 'nvoyy-group',
         project: 'alert-web',
         disable: mode === 'development' || !env.SENTRY_AUTH_TOKEN,
-        // include: './build',
         authToken: env.SENTRY_AUTH_TOKEN,
         sourcemaps: {
-          // Specify the directory containing build artifacts
           assets: './build/**',
           ignore: '*/tinymce/**',
         },
@@ -89,11 +86,6 @@ export default defineConfig((configEnv) => {
     },
     optimizeDeps: {
       include: ['lodash-es', 'date-fns', 'ag-charts-react', 'ag-grid-react'],
-      esbuildOptions: {
-        define: {
-          'process.env.NODE_ENV': '"production"',
-        },
-      },
     },
     build: {
       outDir: 'build',
@@ -116,7 +108,6 @@ export default defineConfig((configEnv) => {
               if (id.includes('node_modules/d3')) return 'vendor-d3';
               if (id.includes('ag-charts')) return 'vendor-ag-charts';
               if (id.includes('ag-grid')) return 'vendor-ag-grid';
-
               if (id.includes('lodash')) return 'vendor-lodash';
               if (id.includes('date-fns')) return 'vendor-date-fns';
               return 'vendor';
