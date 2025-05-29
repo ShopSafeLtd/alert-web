@@ -202,7 +202,7 @@ const SettingsSideMenu = ({
       title: intl.formatMessage({
         defaultMessage: 'Data Export',
       }),
-      to: '/app/scheme-settings/data-export/export-incidents',
+      to: '/app/scheme-settings/data-export',
     },
     {
       permissions: {

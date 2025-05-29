@@ -4,8 +4,13 @@ import type {
   LabeledValue,
   SelectProps,
 } from 'antd/lib/select';
+import type { Currency } from 'graphql/types';
 
-import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import {
+  CurrencyCodeMap,
+  currencyAtom,
+  currentSchemeIdAtom,
+} from '#/providers/SchemeProvider/SchemeProvider';
 import { Col, Row, Select, Typography } from 'antd';
 import { useAtomValue } from 'jotai/index';
 import { debounce } from 'lodash-es';
@@ -36,6 +41,7 @@ export interface StockItemValue {
 interface Props {
   allowClear?: boolean;
   className?: string;
+  currency?: Currency;
   division?: string;
   maxTagCount?: 'responsive' | number;
   mode?: 'multiple' | 'tags';
@@ -53,6 +59,7 @@ const OptionLabel = ({
     barcode?: null | string;
     brand?: null | string;
     costPriceLocal?: null | number;
+    currency: string;
     name?: null | string;
     salesPriceLocal?: null | number;
     sku?: null | string;
@@ -85,7 +92,8 @@ const OptionLabel = ({
               {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
               <Typography.Text>
                 <FormattedNumber
-                  currency={'GBP'}
+                  currency={option.currency}
+                  currencyDisplay={'symbol'}
                   style={'currency'}
                   value={option.costPriceLocal || 0}
                 />
@@ -106,7 +114,8 @@ const OptionLabel = ({
               {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
               <Typography.Text>
                 <FormattedNumber
-                  currency={'GBP'}
+                  currency={option.currency}
+                  currencyDisplay={'symbol'}
                   style={'currency'}
                   value={option.salesPriceLocal || 0}
                 />
@@ -195,6 +204,7 @@ const filterOption = (inputValue: string, option?: DefaultOptionType) => {
 const StockItemSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
   allowClear = true,
   className,
+  currency,
   maxTagCount,
   mode,
   onChange,
@@ -208,6 +218,7 @@ const StockItemSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
   const currentSchemeId = useAtomValue(currentSchemeIdAtom);
   const [fetchingMore, setFetchingMore] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const fallbackCurrency = useAtomValue(currencyAtom);
 
   const { data, fetchMore, loading, variables } = useStockItemSelectQuery({
     onCompleted: () => {
@@ -219,6 +230,7 @@ const StockItemSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
     variables: {
       first: take,
       where: {
+        currency,
         schemeIds: [currentSchemeId],
       },
     },
@@ -247,6 +259,7 @@ const StockItemSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
         after: data?.stockItemsRelay.pageInfo.endCursor,
         first: 30,
         where: {
+          currency,
           schemeIds: [currentSchemeId],
           search: searchTerm,
         },
@@ -313,16 +326,27 @@ const StockItemSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
   );
 
   const options: SelectProps['options'] = data?.stockItemsRelay.edges.map(
-    ({ node: option }) => ({
-      key: option.id,
-      label: (
-        <OptionLabel
-          filterValue={`${option.sku} ${option.barcode} ${option.brand} ${option.name}`}
-          option={option}
-        />
-      ),
-      value: option.id,
-    })
+    ({ node: option }) => {
+      const fixedCurrency: string =
+        (currency ? CurrencyCodeMap[currency] : null) ||
+        fallbackCurrency ||
+        'GBP';
+
+      console.log(fixedCurrency);
+      return {
+        key: option.id,
+        label: (
+          <OptionLabel
+            filterValue={`${option.sku} ${option.barcode} ${option.brand} ${option.name}`}
+            option={{
+              ...option,
+              currency: fixedCurrency,
+            }}
+          />
+        ),
+        value: option.id,
+      };
+    }
   );
   const handleOnChange = (selected: string[]) => {
     if (onChange) {

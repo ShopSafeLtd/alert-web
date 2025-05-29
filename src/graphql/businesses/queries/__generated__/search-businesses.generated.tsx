@@ -11,7 +11,7 @@ export type SearchBusinessesQueryVariables = Types.Exact<{
 }>;
 
 
-export type SearchBusinessesQuery = { __typename?: 'Query', listBusinesses: { __typename?: 'ListBusinesses', total: number, businesses: Array<{ __typename?: 'Business', id: string, name: string, fullName: string, publicName: boolean, siteNumber?: string | null, locations: Array<{ __typename?: 'Address', id: string, full: string }> }> } };
+export type SearchBusinessesQuery = { __typename?: 'Query', listBusinesses: { __typename?: 'ListBusinesses', total: number, businesses: Array<{ __typename?: 'Business', id: string, name: string, fullName: string, publicName: boolean, currency?: Types.Currency | null, siteNumber?: string | null, locations: Array<{ __typename?: 'Address', id: string, full: string }> }> } };
 
 
 export const SearchBusinessesDocument = gql`
@@ -23,6 +23,7 @@ export const SearchBusinessesDocument = gql`
       name
       fullName
       publicName
+      currency
       siteNumber
       locations {
         id

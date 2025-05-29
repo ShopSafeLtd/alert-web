@@ -75,6 +75,7 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
     business {
       id
       name
+      currency
     }
 
     groups {

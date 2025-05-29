@@ -10,6 +10,7 @@ query Business(
     demId
     siteNumber
     brands
+    currency
     brandsList {
       id
       name

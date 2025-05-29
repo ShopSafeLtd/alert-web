@@ -1,4 +1,5 @@
 import type { ListGoodsTypesQuery } from 'graphql/goods-types/queries/__generated__/list-goods-types.generated';
+import type { Currency } from 'graphql/types';
 import type { GoodsData } from 'types/DataType';
 
 import StockItemSelect, {
@@ -13,6 +14,7 @@ import React from 'react';
 import { useIntl } from 'react-intl';
 
 interface Props {
+  currency?: Currency | null;
   goodsMode: GoodsMode;
   goodsTypesData: ListGoodsTypesQuery | undefined;
   onClose: () => void;
@@ -20,6 +22,7 @@ interface Props {
 }
 
 const AddGoods = ({
+  currency,
   goodsMode,
   goodsTypesData,
   onClose,
@@ -136,6 +139,7 @@ const AddGoods = ({
       {!stockItem && goodsMode === GoodsMode.Specific && (
         <StockItemSelect
           allowClear
+          currency={currency || undefined}
           onChange={onAddItem}
           placeholder={intl.formatMessage({
             defaultMessage: 'Search for an item to add to the incident...',

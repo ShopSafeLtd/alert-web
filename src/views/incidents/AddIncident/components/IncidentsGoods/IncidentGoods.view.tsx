@@ -1,12 +1,14 @@
 /* eslint-disable quotes */
 
 import type { ListGoodsTypesQuery } from 'graphql/goods-types/queries/__generated__/list-goods-types.generated';
+import type { Currency } from 'graphql/types';
 
 import StockItemSelect, {
   type StockItemValue,
 } from '#/components/form-components/StockItemSelect/StockItemSelect.view';
 import {
-  currencyAtom,
+  CurrencySymbolMap,
+  currencyEnumAtom,
   currencySymbolAtom,
 } from '#/providers/SchemeProvider/SchemeProvider';
 import { faPlus, faTrash } from '@fortawesome/pro-light-svg-icons';
@@ -34,6 +36,7 @@ import useStyles from '../../AddIncident.styles';
 const { Paragraph, Title } = Typography;
 
 interface Props {
+  businessCurrency?: Currency | null;
   division: string | undefined;
   dontKnowGoods: () => void;
   goods: {
@@ -54,6 +57,7 @@ interface Props {
 }
 
 const IncidentGoods = ({
+  businessCurrency,
   division,
   dontKnowGoods,
   goods,
@@ -65,8 +69,9 @@ const IncidentGoods = ({
 }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
-  const currency = useAtomValue(currencyAtom);
+  const schemeCurrency = useAtomValue(currencyEnumAtom);
 
+  const currency = businessCurrency || schemeCurrency;
   // eslint-disable-next-line unicorn/no-array-reduce
   const summary = goods?.reduce(
     (acc, item) => {
@@ -91,8 +96,9 @@ const IncidentGoods = ({
     },
     { recoveredValue: 0, value: 0 }
   );
-  const { prefix } = useAtomValue(currencySymbolAtom);
-
+  const { prefix: backupPrefix } = useAtomValue(currencySymbolAtom);
+  const prefix =
+    (currency ? CurrencySymbolMap[currency]?.prefix : null) || backupPrefix;
   return (
     <Card className={classes.card}>
       <Row align="bottom" style={{ marginBottom: 20 }}>
@@ -137,7 +143,6 @@ const IncidentGoods = ({
               }),
               // eslint-disable-next-line @typescript-eslint/require-await
               validator: async (rule, value) => {
-                console.log(rule);
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
                 if (value === undefined || (value && value.length === 0))
                   throw new Error(
@@ -155,6 +160,7 @@ const IncidentGoods = ({
               {goodsMode === GoodsMode.Specific && (
                 <StockItemSelect
                   allowClear
+                  currency={currency}
                   division={division}
                   onChange={onAddItem}
                   placeholder={intl.formatMessage({

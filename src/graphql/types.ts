@@ -1916,6 +1916,7 @@ export type Business = {
   checklists: Array<Checklist>;
   children: Array<Business>;
   createdAt: Scalars['Date'];
+  currency?: Maybe<Currency>;
   demDevices: Array<DemDevice>;
   demId?: Maybe<Scalars['String']>;
   division?: Maybe<Scalars['String']>;
@@ -2470,6 +2471,7 @@ export type Checklist = {
   description?: Maybe<Scalars['String']>;
   descriptionLocaled: Scalars['String'];
   id: Scalars['ID'];
+  roles: Array<CustomRole>;
   schemes: Array<Scheme>;
   sections: Array<ChecklistSection>;
   title: Scalars['String'];
@@ -2526,9 +2528,14 @@ export enum ChecklistAnswerType {
 export type ChecklistCreateUpdateInput = {
   businessIds?: InputMaybe<Array<Scalars['String']>>;
   description?: InputMaybe<Scalars['String']>;
+  roleIds?: InputMaybe<Array<Scalars['String']>>;
   sections: Array<SectionInput>;
   title: Scalars['String'];
   userIds?: InputMaybe<Array<Scalars['String']>>;
+};
+
+export type ChecklistDateRange = {
+  dateRange: DateRangeInput;
 };
 
 export type ChecklistOrderByWithRelationInput = {
@@ -2649,6 +2656,7 @@ export type ChecklistTableWhereInput = {
 export type ChecklistUpdateInput = {
   businessIds?: InputMaybe<Array<Scalars['String']>>;
   description?: InputMaybe<Scalars['String']>;
+  roleIds?: InputMaybe<Array<Scalars['String']>>;
   sections?: InputMaybe<Array<SectionInput>>;
   title?: InputMaybe<Scalars['String']>;
   userIds?: InputMaybe<Array<Scalars['String']>>;
@@ -2663,6 +2671,7 @@ export type ChecklistWhereInput = {
   createdAt?: InputMaybe<DateTimeFilter>;
   deleted?: InputMaybe<BoolFilter>;
   id?: InputMaybe<StringFilter>;
+  roles?: InputMaybe<CustomRoleListRelationFilter>;
   schemes?: InputMaybe<SchemeListRelationFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
   users?: InputMaybe<UserListRelationFilter>;
@@ -4101,6 +4110,12 @@ export type CustomRole = {
   updatedAt: Scalars['DateTime'];
   users: Array<UserScheme>;
   usersCount: Scalars['Int'];
+};
+
+export type CustomRoleListRelationFilter = {
+  every?: InputMaybe<CustomRoleWhereInput>;
+  none?: InputMaybe<CustomRoleWhereInput>;
+  some?: InputMaybe<CustomRoleWhereInput>;
 };
 
 export type CustomRoleWhereInput = {
@@ -10402,6 +10417,7 @@ export type Mutation = {
   createBlurFaces: Image;
   createBusiness: Business;
   createChat: Chat;
+  createChecklistCsvZip: Scalars['String'];
   createCollection: RekCollection;
   createComment: Intel;
   createCrimeGroup: CrimeGroup;
@@ -10742,6 +10758,12 @@ export type MutationCreateBusinessArgs = {
 
 export type MutationCreateChatArgs = {
   data: ChatCreateInput;
+};
+
+
+export type MutationCreateChecklistCsvZipArgs = {
+  range: ChecklistDateRange;
+  where: ActiveChecklistWhereInput;
 };
 
 
@@ -11769,75 +11791,11 @@ export type MutationUpsertShoeArgs = {
   data: UpsertShoe;
 };
 
-export enum MySafetyAboutThePersonSubmittingTheReport {
-  Colleague = 'Colleague',
-  Other = 'Other'
-}
-
 export type MySafetyImportDataInput = {
   groups: Array<UniqueId>;
-  incidents: Array<MySafetyImportIncidents>;
   scheme: UniqueId;
+  url: Scalars['String'];
 };
-
-export type MySafetyImportIncidents = {
-  aboutThePersonSubmittingTheReport?: InputMaybe<MySafetyAboutThePersonSubmittingTheReport>;
-  crimeEstimatedValueOfLoss?: InputMaybe<Scalars['String']>;
-  crimeLossType?: InputMaybe<Array<Scalars['String']>>;
-  crimeLossTypeOther?: InputMaybe<Scalars['String']>;
-  crimeReferenceNumber?: InputMaybe<Scalars['String']>;
-  crimeType: Array<Scalars['String']>;
-  crimeWasTheWeaponUsedResultingInAnInjury?: InputMaybe<MySafetyYesNo>;
-  crimeWeaponsPresent?: InputMaybe<MySafetyYesNo>;
-  crimeWereAnyWeaponsSeenOrThreatened?: InputMaybe<MySafetyYesNo>;
-  dateOccurred: Scalars['DateTime'];
-  doYouKnowTheRegistration?: InputMaybe<MySafetyYesNo>;
-  firstName?: InputMaybe<Scalars['String']>;
-  howDidItHappen?: InputMaybe<Scalars['String']>;
-  incidentID?: InputMaybe<Scalars['String']>;
-  offenderNameNickname: Scalars['String'];
-  offenders?: InputMaybe<Array<MySafetyImportOffender>>;
-  pleaseProvideDetails?: InputMaybe<Scalars['String']>;
-  site: Scalars['String'];
-  siteAddress?: InputMaybe<Scalars['String']>;
-  surname?: InputMaybe<Scalars['String']>;
-  timeOccurred: Scalars['DateTime'];
-  vehicleColour?: InputMaybe<Scalars['String']>;
-  vehicleMake?: InputMaybe<Scalars['String']>;
-  vehicleRegistration?: InputMaybe<Scalars['String']>;
-  vehicleType?: InputMaybe<Scalars['String']>;
-  wasAVehicleWasInvolved?: InputMaybe<MySafetyYesNo>;
-  wasThereAnyThreatOfViolenceMade?: InputMaybe<MySafetyYesNo>;
-  whoWereTheOffenders?: InputMaybe<MySafetyWhoWereTheOffenders>;
-};
-
-export type MySafetyImportOffender = {
-  additionalDetails?: InputMaybe<Scalars['String']>;
-  suspectApproxAge?: InputMaybe<Scalars['String']>;
-  suspectBuild?: InputMaybe<Scalars['String']>;
-  suspectClothes?: InputMaybe<Scalars['String']>;
-  suspectEthnicity?: InputMaybe<Scalars['String']>;
-  suspectFacialHair?: InputMaybe<Scalars['String']>;
-  suspectGender?: InputMaybe<Scalars['String']>;
-  suspectHWMetricOrIMp?: InputMaybe<Scalars['String']>;
-  suspectHair?: InputMaybe<Scalars['String']>;
-  suspectHeightImp?: InputMaybe<Scalars['String']>;
-  suspectHeightMet?: InputMaybe<Scalars['String']>;
-  suspectNotableDetails?: InputMaybe<Scalars['String']>;
-  suspectTattoos?: InputMaybe<Scalars['String']>;
-  suspectWeightImp?: InputMaybe<Scalars['String']>;
-  suspectWeightMet?: InputMaybe<Scalars['String']>;
-};
-
-export enum MySafetyWhoWereTheOffenders {
-  Adults = 'Adults',
-  Youths = 'Youths'
-}
-
-export enum MySafetyYesNo {
-  No = 'No',
-  Yes = 'Yes'
-}
 
 export type NestedBoolFilter = {
   equals?: InputMaybe<Scalars['Boolean']>;
@@ -14028,6 +13986,7 @@ export type Query = {
   action: Action;
   actions: Array<Action>;
   activeChecklist: ActiveChecklist;
+  activeChecklistExportPreview: QueryActiveChecklistExportPreviewConnection;
   activeChecklists: QueryActiveChecklistsConnection;
   activityGraph: Array<Graph>;
   activitySummary: ActivitySummary;
@@ -14246,6 +14205,16 @@ export type QueryActionsArgs = {
 
 export type QueryActiveChecklistArgs = {
   where: ActiveChecklistWhereUniqueInput;
+};
+
+
+export type QueryActiveChecklistExportPreviewArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  range: ChecklistDateRange;
+  where: ActiveChecklistWhereInput;
 };
 
 
@@ -15690,6 +15659,19 @@ export type QueryWorkflowsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<WorkflowWhereInput>;
+};
+
+export type QueryActiveChecklistExportPreviewConnection = {
+  __typename?: 'QueryActiveChecklistExportPreviewConnection';
+  edges: Array<QueryActiveChecklistExportPreviewConnectionEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type QueryActiveChecklistExportPreviewConnectionEdge = {
+  __typename?: 'QueryActiveChecklistExportPreviewConnectionEdge';
+  cursor: Scalars['String'];
+  node: ActiveChecklist;
 };
 
 export type QueryActiveChecklistsConnection = {
@@ -23672,6 +23654,7 @@ export type StockItemRelayOrderInput = {
 };
 
 export type StockItemRelayWhereInput = {
+  currency?: InputMaybe<Currency>;
   divisionIds?: InputMaybe<Array<Scalars['String']>>;
   schemeIds: Array<Scalars['String']>;
   search?: InputMaybe<Scalars['String']>;
