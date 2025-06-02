@@ -1,0 +1,5 @@
+query BusinessGroups($where:GroupWhereInput) {
+    groups(where:$where) {
+        id
+    }
+}

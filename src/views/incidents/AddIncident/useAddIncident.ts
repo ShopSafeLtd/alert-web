@@ -30,6 +30,7 @@ import hasPermission from '#/utils/has-permission';
 import hasRolePermission from '#/utils/has-role-permission';
 import { useGenerateStatementBodyMutation } from '#/views/incidents/AddIncident/graphql/__generated__/generateStatementBody.generated';
 import { useUpsertIncidentMutation } from '#/views/incidents/AddIncident/graphql/mutations/__generated__/upsert-incident.generated';
+import { useBusinessGroupsLazyQuery } from '#/views/incidents/AddIncident/graphql/queries/__generated__/business-groups.generated';
 import { useIncidentDraftDetailsQuery } from '#/views/incidents/AddIncident/graphql/queries/__generated__/edit-incident-draft.generated';
 import generateInitData from '#/views/incidents/AddIncident/helpers/generate-init-data';
 import upsertIncident from '#/views/incidents/AddIncident/helpers/upsert-incident';
@@ -175,6 +176,7 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
   const [customQuestions, setCustomQuestions] = useState<CustomQuestion[]>([]);
   const showSiteNumber = requireSiteNumberForUsers && !isAdmin;
   const [brands, setBrands] = useState<string[]>([]);
+  const [businessGroups, setBusinessGroups] = useState<string[]>([]);
   const formTags = Form.useWatch('tags', form);
   const victimInvolved = Form.useWatch('victimInvolved', form);
   const witnessesInvolved = Form.useWatch('witnessesInvolved', form);
@@ -234,6 +236,7 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
 
   const [generateStatementBody] = useGenerateStatementBodyMutation();
   const [getBrands] = useBusinessBrandsLazyQuery();
+  const [getGroups] = useBusinessGroupsLazyQuery();
 
   useEffect(() => {
     if (formBusiness) {
@@ -249,8 +252,28 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
           },
         },
       });
+
+      void getGroups({
+        onCompleted: (data) => {
+          if (data && data.groups && data.groups.length > 0) {
+            setBusinessGroups(data.groups.map((group) => group.id));
+          }
+        },
+        variables: {
+          where: {
+            businesses: {
+              some: {
+                id: {
+                  equals: formBusiness.value,
+                },
+              },
+            },
+          },
+        },
+      });
     } else {
       setBrands([]);
+      setBusinessGroups([]);
     }
   }, [formBusiness]);
 
@@ -1327,17 +1350,24 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
             if (item?.conditions && item.conditions.length > 0) {
               const conditions = item.conditions as {
                 conditionValues: string[];
-                questionId: string;
-                type: 'CUSTOM_QUESTION';
+                questionId?: string;
+                type: 'BUSINESS_GROUPS' | 'CUSTOM_QUESTION';
               }[];
 
               const checkedConditions = conditions.map((condition) => {
                 if (condition.type === 'CUSTOM_QUESTION') {
+                  const questionId = condition.questionId ?? '';
                   const questionValue = form.getFieldValue(
-                    condition.questionId
+                    questionId
                   ) as string;
 
                   return condition.conditionValues.includes(questionValue);
+                }
+
+                if (condition.type === 'BUSINESS_GROUPS') {
+                  return businessGroups.some((item) =>
+                    condition.conditionValues.includes(item)
+                  );
                 }
 
                 return true;

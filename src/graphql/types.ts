@@ -9072,6 +9072,10 @@ export type InvestigationWhereUniqueInput = {
   vehicles?: InputMaybe<VehicleListRelationFilter>;
 };
 
+export type JdSiteImportInput = {
+  fileUrl: Scalars['String'];
+};
+
 export type JsonFilter = {
   array_contains?: InputMaybe<Scalars['JSON']>;
   array_ends_with?: InputMaybe<Scalars['JSON']>;
@@ -10519,6 +10523,7 @@ export type Mutation = {
   indexImage: Image;
   intelOneImportData: SystemTask;
   inviteExistingUser: User;
+  jdSiteImport: SystemTask;
   linkBusinessToScheme: Business;
   linkOrgToDem: Business;
   linkUserToDem: User;
@@ -11259,6 +11264,11 @@ export type MutationIntelOneImportDataArgs = {
 export type MutationInviteExistingUserArgs = {
   data: UserUpdateInput;
   where: UniqueId;
+};
+
+
+export type MutationJdSiteImportArgs = {
+  data: JdSiteImportInput;
 };
 
 
@@ -14093,6 +14103,7 @@ export type Query = {
   listFeedItems?: Maybe<ListFeedItems>;
   listGoodsTypes: ListGoodsTypes;
   listIncidentTags: Array<IncidentTags>;
+  listIncidentTagsControl: Array<IncidentTags>;
   listIncidents?: Maybe<ListIncidents>;
   listIncidentsAllSchemes?: Maybe<ListIncidents>;
   listInvestigations: ListInvestigations;
@@ -14139,7 +14150,6 @@ export type Query = {
   role: CustomRole;
   roles: QueryRolesConnection;
   scheme: Scheme;
-  schemeUsersRelay: QuerySchemeUsersRelayConnection;
   schemes: Array<Scheme>;
   searchOffenders: QuerySearchOffendersConnection;
   sharingBusinesses: Array<SharingBusiness>;
@@ -14962,6 +14972,11 @@ export type QueryListIncidentTagsArgs = {
 };
 
 
+export type QueryListIncidentTagsControlArgs = {
+  where: IncidentTagsInput;
+};
+
+
 export type QueryListIncidentsArgs = {
   after?: InputMaybe<IncidentWhereUniqueInput>;
   order?: InputMaybe<IncidentOrderByWithRelationInput>;
@@ -15310,20 +15325,6 @@ export type QueryRolesArgs = {
 
 export type QuerySchemeArgs = {
   where: SchemeWhereUniqueInput;
-};
-
-
-export type QuerySchemeUsersRelayArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  cursor?: InputMaybe<UserSchemeWhereUniqueInput>;
-  distinct?: InputMaybe<Array<UserSchemeScalarFieldEnum>>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Array<UserSchemeOrderByWithRelationInput>>;
-  skip?: InputMaybe<Scalars['Int']>;
-  take?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<UserSchemeWhereInput>;
 };
 
 
@@ -16010,19 +16011,6 @@ export type QueryRolesConnectionEdge = {
   __typename?: 'QueryRolesConnectionEdge';
   cursor: Scalars['String'];
   node: CustomRole;
-};
-
-export type QuerySchemeUsersRelayConnection = {
-  __typename?: 'QuerySchemeUsersRelayConnection';
-  edges: Array<QuerySchemeUsersRelayConnectionEdge>;
-  pageInfo: PageInfo;
-  totalCount: Scalars['Int'];
-};
-
-export type QuerySchemeUsersRelayConnectionEdge = {
-  __typename?: 'QuerySchemeUsersRelayConnectionEdge';
-  cursor: Scalars['String'];
-  node: UserScheme;
 };
 
 export type QuerySearchOffendersConnection = {
