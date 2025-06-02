@@ -1,19 +1,34 @@
-/* eslint-disable */
-import { ConfigProvider } from 'antd';
-import generatePicker from 'antd/es/date-picker/generatePicker';
-import antdEnGB from 'antd/lib/locale/en_GB';
-import { enGB } from 'date-fns/locale';
-import dateFnsGenerateConfig from 'rc-picker/es/generate/dateFns';
+/* eslint-disable  */
 import React from 'react';
+import dateFnsGenerateConfig from 'rc-picker/lib/generate/dateFns';
+import generatePicker from 'antd/es/date-picker/generatePicker';
+import { ConfigProvider } from 'antd';
+import enUSAntd from 'antd/es/locale/en_US';
 
-const DatePicker = generatePicker<Date>(dateFnsGenerateConfig);
+const InternalDatePicker = generatePicker<Date>(dateFnsGenerateConfig);
 
-const DatePickerDayJs = (props: any) => {
-  return (
-    <ConfigProvider locale={antdEnGB}>
-      <DatePicker locale={enGB} {...props} />
+function wrapInEnglish<P>(PickerComponent: React.ComponentType<P>) {
+  return (props: P) => (
+    <ConfigProvider locale={enUSAntd}>
+      {/* @ts-ignore */}
+      <PickerComponent {...props} />
     </ConfigProvider>
   );
-};
+}
 
-export default DatePickerDayJs;
+const DatePicker = wrapInEnglish(InternalDatePicker);
+
+// @ts-ignore
+DatePicker.RangePicker = wrapInEnglish(InternalDatePicker.RangePicker);
+// @ts-ignore
+DatePicker.WeekPicker = wrapInEnglish(InternalDatePicker.WeekPicker);
+// @ts-ignore
+DatePicker.MonthPicker = wrapInEnglish(InternalDatePicker.MonthPicker);
+// @ts-ignore
+DatePicker.YearPicker = wrapInEnglish(InternalDatePicker.YearPicker);
+// @ts-ignore
+DatePicker.TimePicker = wrapInEnglish(InternalDatePicker.TimePicker);
+// @ts-ignore
+DatePicker.QuarterPicker = wrapInEnglish(InternalDatePicker.QuarterPicker);
+
+export default DatePicker;
