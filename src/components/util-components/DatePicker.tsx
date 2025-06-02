@@ -16,7 +16,10 @@ function wrapInEnglish<P>(PickerComponent: React.ComponentType<P>) {
   );
 }
 
-const DatePicker = wrapInEnglish(InternalDatePicker);
+// @ts-ignore
+const DatePicker = wrapInEnglish(
+  InternalDatePicker
+) as unknown as typeof InternalDatePicker;
 
 // @ts-ignore
 DatePicker.RangePicker = wrapInEnglish(InternalDatePicker.RangePicker);
