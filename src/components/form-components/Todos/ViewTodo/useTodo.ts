@@ -155,10 +155,11 @@ const useTodo = ({
                               PermissionMethod.Write,
                               PermissionMethod.Read,
                               PermissionMethod.Edit,
+                              PermissionMethod.ReadAll,
                             ],
                           },
                           model: {
-                            equals: PermissionModel.Activities,
+                            equals: PermissionModel.Tasks,
                           },
                         },
                       },

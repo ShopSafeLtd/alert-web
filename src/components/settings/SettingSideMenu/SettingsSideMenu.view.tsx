@@ -99,7 +99,7 @@ const SettingsSideMenu = ({
     {
       permissions: {
         method: PermissionMethod.Read,
-        model: PermissionModel.Dashboard,
+        model: PermissionModel.Dashboards,
       },
       title: intl.formatMessage({ defaultMessage: 'Dashboards' }),
       to: '/app/manage-dashboard/',
