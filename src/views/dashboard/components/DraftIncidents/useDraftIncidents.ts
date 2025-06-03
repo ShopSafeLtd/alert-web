@@ -43,6 +43,7 @@ const useDraftIncidents = (): Return => {
       following: gallery.includes('FOLLOWING'),
       groupIds: groupsFilter.length > 0 ? groupsFilter : undefined,
       myData: gallery.includes('MYDATA'),
+      useBusiness: true,
     },
   };
 
