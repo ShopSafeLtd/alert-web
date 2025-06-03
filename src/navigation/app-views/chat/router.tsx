@@ -1,10 +1,11 @@
+import RouteWrapper from '#/navigation/utils/route-wrapper';
+import { PermissionMethod, PermissionModel } from 'graphql/types';
 import React from 'react';
+import { useIntl } from 'react-intl';
 import { Route, Routes } from 'react-router';
 import ViewChat from 'views/chat/ViewChat';
+
 import PermissionCheckWrapper from '../../../components/PermissionCheck/PermissionCheckWrapper';
-import { PermissionMethod, PermissionModel } from 'graphql/types';
-import { useIntl } from 'react-intl';
-import RouteWrapper from '#/navigation/utils/route-wrapper';
 // import ViewMessage from 'components/viewChat/ViewMessage';
 // import MessagesQuery from 'old-components/chat/MessagesQuery/MessagesQuery';
 // import ChatRouter from 'old-components/chat/Chat/Chat';
@@ -19,30 +20,30 @@ const Chat = (): JSX.Element => {
     >
       <Routes>
         <Route
-          index
           element={
             <PermissionCheckWrapper
               permission={{
-                model: PermissionModel.Chat,
                 method: PermissionMethod.Read,
+                model: PermissionModel.Chat,
               }}
             >
               <ViewChat />
             </PermissionCheckWrapper>
           }
+          index
         />
         <Route
-          path=":id"
           element={
             <PermissionCheckWrapper
               permission={{
+                method: PermissionMethod.Read,
                 model: PermissionModel.Chat,
-                method: PermissionMethod.Edit,
               }}
             >
               <ViewChat />
             </PermissionCheckWrapper>
           }
+          path=":id"
         />
       </Routes>
     </RouteWrapper>
