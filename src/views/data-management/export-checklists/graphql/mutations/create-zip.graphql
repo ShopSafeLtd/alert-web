@@ -1,0 +1,6 @@
+mutation CreateChecklistCsvZip(
+  $range: ChecklistDateRange!
+  $where: ActiveChecklistWhereInput!
+) {
+  createChecklistCsvZip(where: $where, range: $range)
+}

@@ -6,6 +6,7 @@ import envCompatible from 'vite-plugin-env-compatible';
 import { sentryVitePlugin } from '@sentry/vite-plugin';
 // local host launch fix
 import dns from 'node:dns';
+import purgeCss from 'vite-plugin-purgecss';
 
 import path from 'path';
 import { visualizer } from 'rollup-plugin-visualizer';
@@ -32,6 +33,24 @@ export default defineConfig((configEnv) => {
           babelrc: true,
         },
       }),
+      purgeCss({
+        content: [
+          './src/**/*.html',
+          './src/**/*.tsx',
+          './src/**/*.jsx',
+          './src/**/*.ts',
+          './src/**/*.js',
+        ],
+        safelist: [
+          /-(leave|enter|appear)(|-(to|from|active))$/,
+          /^(?!cursor-move).+-move$/,
+          /^router-link(|-exact)-active$/,
+          /data-v-.*/,
+          /^ant-/,
+          /^hljs-/,
+        ],
+        defaultExtractor: (content) => content.match(/[\w-/:]+(?<!:)/g) || [],
+      }),
       envCompatible(),
       viteTsconfigPaths(),
       mode === 'production' && removeConsole(),
@@ -54,10 +73,8 @@ export default defineConfig((configEnv) => {
         org: 'nvoyy-group',
         project: 'alert-web',
         disable: mode === 'development' || !env.SENTRY_AUTH_TOKEN,
-        // include: './build',
         authToken: env.SENTRY_AUTH_TOKEN,
         sourcemaps: {
-          // Specify the directory containing build artifacts
           assets: './build/**',
           ignore: '*/tinymce/**',
         },
@@ -67,32 +84,43 @@ export default defineConfig((configEnv) => {
       APP_VERSION: JSON.stringify(process.env.npm_package_version),
       __BUILD_DATE__: JSON.stringify(new Date().toISOString()),
     },
+    optimizeDeps: {
+      include: ['lodash-es', 'date-fns', 'ag-charts-react', 'ag-grid-react'],
+    },
     build: {
       outDir: 'build',
       sourcemap: 'hidden' as const,
-      minify: 'esbuild',
-      rollupOptions: {
-        output: {
-          chunkFileNames: `assets/js/[name].${buildTimestamp}.[hash].js`,
-          entryFileNames: `assets/js/[name].${buildTimestamp}.[hash].js`,
-          assetFileNames: `assets/[ext]/[name].${buildTimestamp}.[hash].[ext]`,
-        },
-      },
+      minify: 'esbuild' as const,
       assetsInlineLimit: 4096,
-      chunkSizeWarningLimit: 1000,
+      chunkSizeWarningLimit: 1500,
       cssCodeSplit: true,
       reportCompressedSize: false,
+      target: 'es2020',
+      rollupOptions: {
+        output: {
+          manualChunks: (id) => {
+            if (id.includes('node_modules')) {
+              if (id.match(/\/node_modules\/(react|react-dom|scheduler)\//)) {
+                return 'vendor-react';
+              }
+              if (id.includes('ag-grid-react')) return 'vendor-ag-grid';
+              if (id.includes('node_modules/antd')) return 'vendor-antd';
+              if (id.includes('node_modules/d3')) return 'vendor-d3';
+              if (id.includes('ag-charts')) return 'vendor-ag-charts';
+              if (id.includes('ag-grid')) return 'vendor-ag-grid';
+              if (id.includes('lodash')) return 'vendor-lodash';
+              if (id.includes('date-fns')) return 'vendor-date-fns';
+              return 'vendor';
+            }
+          },
+          chunkFileNames: 'assets/chunks/[name]-[hash].js',
+          entryFileNames: 'assets/[name]-[hash].js',
+          assetFileNames: 'assets/[name]-[hash].[ext]',
+        },
+      },
     },
     resolve: {
       alias: [
-        // {
-        //   find: 'react',
-        //   replacement: path.resolve(__dirname, 'node_modules/react'),
-        // },
-        // {
-        //   find: 'react-dom',
-        //   replacement: path.resolve(__dirname, 'node_modules/react-dom'),
-        // },
         { find: '@', replacement: path.resolve(__dirname, 'src') },
         { find: /^~/, replacement: pathResolve('./node_modules') },
       ],

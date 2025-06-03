@@ -86,6 +86,11 @@ export const currencyAtom = atom((get) => {
   return CurrencyCodeMap[currencyEnum];
 });
 
+export const currencyEnumAtom = atom((get) => {
+  const { scheme } = get(currentUserSchemeAtom);
+  return scheme?.currency || Currency.Gbp;
+});
+
 export const currencySymbolAtom = atom((get) => {
   const { scheme } = get(currentUserSchemeAtom);
   const currencyEnum = scheme?.currency || Currency.Gbp;

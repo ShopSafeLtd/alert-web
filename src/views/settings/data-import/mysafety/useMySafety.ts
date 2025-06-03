@@ -1,7 +1,8 @@
 import type { MySafetyCSVData } from '#/components/form-components/MySafetyCSV/MySafetyCSV.types';
-import type { FormInstance } from 'antd';
+import type { FormInstance, UploadFile, UploadProps } from 'antd';
 
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import customRequest from '#/utils/custom-request';
 import { Form, notification } from 'antd';
 import { useMySafetyImportDataMutation } from 'graphql/imports/__generated__/mysafety-import.generated';
 import { useAtomValue } from 'jotai/index';
@@ -13,6 +14,8 @@ interface FormData {
 }
 
 interface Return {
+  documentUploadProps: UploadProps;
+  fileList: UploadFile[];
   form: FormInstance<FormData>;
   onSubmit: (data: FormData) => void;
   saving: boolean;
@@ -38,39 +41,21 @@ const useMySafety = (): Return => {
       });
     },
   });
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
 
-  const onSubmit = async ({ groups, mySafety }: FormData) => {
+  const onSubmit = async ({ groups }: FormData) => {
     try {
       setSaving(true);
+      const url = fileList[0].url || '';
 
       await importData({
         variables: {
           data: {
             groups: groups.map((id) => ({ id })) || [],
-            incidents: mySafety
-              .filter(
-                // filter where actualValue isn't NaN
-                (item) => !Number.isNaN(item.actualValue)
-              )
-              .map((item) => ({
-                actualValue: item.actualValue,
-                createdByName: item.createdByName,
-                crimeReferenceNumber: item.crimeReferenceNumber,
-                crimeType: item.crimeType,
-                dateOccurred: item.dateOccurred,
-                description: item.description,
-                emergencyServicesAttend: item.emergencyServicesAttend,
-                estimatedValue: item.estimatedValue,
-                incidentID: item.incidentID,
-                offenderNameNickname: item.officerName ?? '',
-                site: item.site,
-                specificArea: item.specificArea,
-                timeOccurred: item.timeOccurred,
-                wereWeaponsUsed: item.wereWeaponsUsed,
-              })),
             scheme: {
               id: schemeId,
             },
+            url,
           },
         },
       });
@@ -80,7 +65,33 @@ const useMySafety = (): Return => {
     }
   };
 
+  const handleChange: UploadProps['onChange'] = (info) => {
+    let newFileList = [...info.fileList];
+
+    newFileList = newFileList.map((file) => {
+      if (file.response) {
+        // eslint-disable-next-line no-param-reassign, @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access
+        file.url = file.response[0].url;
+        // eslint-disable-next-line no-param-reassign, @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access
+        file.fileName = file.response[0].blobName;
+      }
+      return file;
+    });
+
+    setFileList(newFileList);
+  };
+  const documentUploadProps: UploadProps = {
+    customRequest,
+    headers: {
+      type: 'csv',
+    },
+    multiple: false,
+    onChange: handleChange,
+  };
+
   return {
+    documentUploadProps,
+    fileList,
     form,
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     onSubmit,

@@ -62,6 +62,7 @@ export const useUserData = () => {
   };
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const UsersSelect = ({
   allowClear,
   className,
@@ -90,4 +91,4 @@ const UsersSelect = ({
   );
 };
 
-export default UsersSelect;
+export { default } from './UsersSelectFetchMore.view';

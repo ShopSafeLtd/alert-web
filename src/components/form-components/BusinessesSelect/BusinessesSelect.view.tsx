@@ -11,12 +11,15 @@ import {
   useBusinessesSideListQuery,
 } from '#/components/businesses/BusinessSideList/graphql/queries/__generated__/sidelist.generated';
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
-import { Select, Typography } from 'antd';
+import { faSquareCheck } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Col, Row, Select, Tooltip, Typography } from 'antd';
 import { QueryMode, SortOrder } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
 import { debounce } from 'lodash-es';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
+import { createUseStyles } from 'react-jss';
 
 export type ValueType =
   | LabeledValue
@@ -28,6 +31,7 @@ export type ValueType =
 
 interface Props {
   allowClear?: boolean;
+  allowSelectAll?: boolean;
   className?: string;
   getAddress?: (arg0: string) => void;
   maxTagCount?: 'responsive' | number;
@@ -39,6 +43,21 @@ interface Props {
   style?: React.CSSProperties;
   value?: ValueType;
 }
+
+const useStyles = createUseStyles({
+  button: {
+    borderBottomLeftRadius: 0,
+    borderTopLeftRadius: 0,
+    paddingLeft: 16,
+    paddingRight: 16,
+  },
+  select: {
+    '& .ant-select-selector': {
+      borderBottomRightRadius: '0px !important',
+      borderTopRightRadius: '0px !important',
+    },
+  },
+});
 
 function convertToArrayOfStrings(onChangeValue: ValueType): string[] {
   if (!onChangeValue) return [];
@@ -95,6 +114,7 @@ const filterOption = (inputValue: string, option?: DefaultOptionType) => {
  */
 const BusinessesSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
   allowClear = true,
+  allowSelectAll,
   className,
   getAddress,
   maxTagCount,
@@ -103,10 +123,11 @@ const BusinessesSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
   placeholder,
   queryVars,
   size,
-  style,
+  style = {},
   value,
   ...props
 }) => {
+  const styles = useStyles();
   const intl = useIntl();
   const take = 50;
   const currentSchemeId = useAtomValue(currentSchemeIdAtom);
@@ -373,59 +394,86 @@ const BusinessesSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
   // {/* ))} */}
   // {/* </Select> */}
   //
-  return (
-    <Select
-      allowClear={allowClear}
-      className={className}
-      filterOption={filterOption}
-      loading={loading || fetchingMore}
-      maxTagCount={maxTagCount}
-      mode={mode}
-      notFoundContent={
-        loading || fetchingMore
-          ? intl.formatMessage({ defaultMessage: 'loading' })
-          : null
-      }
-      onChange={(selected: ValueType) => {
-        const selectedStrings = convertToArrayOfStrings(selected);
-        // const newStrings = new Set(
-        //   selectedStrings.filter(
-        //     (item) =>
-        //       !selectedMissingBusinesses?.some(
-        //         (missing) => missing.value === item
-        //       )
-        //   )
-        // );
 
-        // const newOptions =
-        //   options.filter((item) => newStrings.has(item.value as string)) || [];
-        if (onChange) onChange(selectedStrings);
-        if (getAddress) {
-          const location = sortedData.find(({ node }) => node.id === selected);
-          if (location) {
-            getAddress(location.node.locations[0].full || '');
+  const selectAll = () => {
+    if (onChange) {
+      onChange(merged.map((item) => item.value as string));
+    }
+  };
+
+  return (
+    <Row>
+      <Col flex={1}>
+        <Select
+          allowClear={allowClear}
+          className={className ?? allowSelectAll ? styles.select : undefined}
+          filterOption={filterOption}
+          loading={loading || fetchingMore}
+          maxTagCount={maxTagCount}
+          mode={mode}
+          notFoundContent={
+            loading || fetchingMore
+              ? intl.formatMessage({ defaultMessage: 'loading' })
+              : null
           }
-        }
-        // setSelectedMissingBusinesses([
-        //   ...(selectedMissingBusinesses || []),
-        //   ...newOptions,
-        // ]);
-      }}
-      onClear={() => {
-        if (onChange) onChange([]);
-      }}
-      onPopupScroll={onScroll}
-      onSearch={(v: string) => {
-        changeHandler(v);
-      }}
-      optionFilterProp="label"
-      options={merged}
-      placeholder={placeholder}
-      size={size}
-      style={style}
-      value={value || undefined}
-      {...props}
-    />
+          onChange={(selected: ValueType) => {
+            const selectedStrings = convertToArrayOfStrings(selected);
+            // const newStrings = new Set(
+            //   selectedStrings.filter(
+            //     (item) =>
+            //       !selectedMissingBusinesses?.some(
+            //         (missing) => missing.value === item
+            //       )
+            //   )
+            // );
+
+            // const newOptions =
+            //   options.filter((item) => newStrings.has(item.value as string)) || [];
+            if (onChange) onChange(selectedStrings);
+            if (getAddress) {
+              const location = sortedData.find(
+                ({ node }) => node.id === selected
+              );
+              if (location) {
+                getAddress(location.node.locations[0].full || '');
+              }
+            }
+            // setSelectedMissingBusinesses([
+            //   ...(selectedMissingBusinesses || []),
+            //   ...newOptions,
+            // ]);
+          }}
+          onClear={() => {
+            if (onChange) onChange([]);
+          }}
+          onPopupScroll={onScroll}
+          onSearch={(v: string) => {
+            changeHandler(v);
+          }}
+          optionFilterProp="label"
+          options={merged}
+          placeholder={placeholder}
+          size={size}
+          style={style}
+          value={value || undefined}
+          {...props}
+        />
+      </Col>
+      <Col>
+        {allowSelectAll && (
+          <Tooltip
+            placement="bottom"
+            title={intl.formatMessage({
+              defaultMessage: 'Select all businesses',
+            })}
+          >
+            <Button className={styles.button} onClick={selectAll}>
+              <FontAwesomeIcon icon={faSquareCheck} />
+            </Button>
+          </Tooltip>
+        )}
+      </Col>
+    </Row>
   );
 };
 

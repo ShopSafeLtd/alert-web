@@ -202,7 +202,7 @@ const SettingsSideMenu = ({
       title: intl.formatMessage({
         defaultMessage: 'Data Export',
       }),
-      to: '/app/scheme-settings/data-export/export-incidents',
+      to: '/app/scheme-settings/data-export',
     },
     {
       permissions: {
@@ -214,8 +214,17 @@ const SettingsSideMenu = ({
       }),
       to: '/app/scheme-settings/recycle-bin',
     },
-  ];
-
+  ]
+    .filter((item) => hasRolePermission({ permission: item.permissions }))
+    .map((item) => (
+      <Link key={item.to} to={item.to}>
+        <div className={classes.item}>
+          <Typography.Text className={classes.text}>
+            {item.title}
+          </Typography.Text>
+        </div>
+      </Link>
+    ));
   return (
     <Sider collapsed={collapsed} collapsible trigger={null}>
       <Button
@@ -240,20 +249,7 @@ const SettingsSideMenu = ({
           <Typography.Paragraph className={classes.menuTitle}>
             <FormattedMessage defaultMessage="Settings" />
           </Typography.Paragraph>
-
-          {settings
-            .filter((item) =>
-              hasRolePermission({ permission: item.permissions })
-            )
-            .map((item) => (
-              <Link key={item.to} to={item.to}>
-                <div className={classes.item}>
-                  <Typography.Text className={classes.text}>
-                    {item.title}
-                  </Typography.Text>
-                </div>
-              </Link>
-            ))}
+          {...settings}
         </div>
       )}
     </Sider>

@@ -21,11 +21,13 @@ const IncidentGoods = ({
   goodsVisible,
   knowGoods,
 }: Props) => {
-  const { division, goods, goodsTypesData, onAddItem } = useIncidentGoods({
-    form,
-  });
+  const { businessCurrency, division, goods, goodsTypesData, onAddItem } =
+    useIncidentGoods({
+      form,
+    });
   return (
     <View
+      businessCurrency={businessCurrency}
       division={division}
       dontKnowGoods={dontKnowGoods}
       goods={goods}

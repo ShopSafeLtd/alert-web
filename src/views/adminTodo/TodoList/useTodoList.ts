@@ -7,7 +7,6 @@ import type { MutationUpdaterFn } from '@apollo/client';
 import type { TableProps } from 'antd';
 import type { CreateTodoMutation } from 'graphql/todos/mutations/__generated__/create-todo.generated';
 
-import { useUserData } from '#/components/form-components/UsersSelect/UsersSelect.view';
 import { useGroupsContext } from '#/context/groups-context';
 import {
   currentPermissionsAtom,
@@ -67,12 +66,13 @@ interface Return {
   setSearch: (value: string) => void;
   setSelectedTodo: (id: null | string) => void;
   setStatusMode: (value: TodoStatusInput) => void;
+  setUsersFilter: (value: string[]) => void;
   templateData: ListData[];
   toggleAddTodo: () => void;
   toggleAllSchemes: () => void;
   toggleAllUsers: () => void;
+
   updateTodoList: MutationUpdaterFn<CreateTodoMutation>;
-  userData: { label: string; value: string }[];
 }
 
 const useAdminTodos = ({
@@ -282,7 +282,6 @@ const useAdminTodos = ({
   };
 
   const { groups: groupsData } = useGroupsContext();
-  const { userData } = useUserData();
 
   const onTableChange: TableProps<TableItem>['onChange'] = (_, filters) => {
     console.log(filters);
@@ -361,12 +360,12 @@ const useAdminTodos = ({
     setSearch,
     setSelectedTodo,
     setStatusMode,
+    setUsersFilter,
     templateData,
     toggleAddTodo,
     toggleAllSchemes,
     toggleAllUsers,
     updateTodoList,
-    userData,
   };
 };
 

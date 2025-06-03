@@ -2,11 +2,12 @@ import type { GoodsData } from '#/types/DataType';
 import type { ViewIncidentQuery } from '#/views/incidents/ViewIncident/__generated__/view-incident.generated';
 import type { MutationUpdaterFn } from '@apollo/client';
 import type { UpdateIncidentGoodsMutation } from 'graphql/incidents/mutations/update/__generated__/update-incident-goods.generated';
+import type { Currency } from 'graphql/types';
 
 import AddGoods from '#/components/form-components/incident/goods/AddGoods';
 import EditGoods from '#/components/form-components/incident/goods/EditGoods';
 import {
-  currencyAtom,
+  currencyEnumAtom,
   currentSchemeAtom,
 } from '#/providers/SchemeProvider/SchemeProvider';
 import {
@@ -43,6 +44,7 @@ import { useIntl } from 'react-intl';
 const { Paragraph, Title } = Typography;
 
 interface Props {
+  currency?: Currency | null;
   data: ViewIncidentQuery | undefined;
   deleteRights: boolean;
   editRights: boolean;
@@ -53,6 +55,7 @@ interface Props {
 }
 
 const Items = ({
+  currency: businessCurrency,
   data,
   deleteRights,
   editRights,
@@ -65,8 +68,8 @@ const Items = ({
   const goodsMode = useAtomValue(currentSchemeAtom)?.goodsMode;
   const [editGoodsData, setEditGoodsData] = useState<GoodsData | null>(null);
   const [addGoods, setAddGoods] = useState(false);
-  const currency = useAtomValue(currencyAtom);
-
+  const schemeCurrency = useAtomValue(currencyEnumAtom);
+  const currency = businessCurrency || schemeCurrency;
   const [updateIncidentGoods] = useUpdateIncidentGoodsMutation({
     onError: () => {
       errorNotification();
@@ -577,7 +580,11 @@ const Items = ({
         zIndex={999}
       >
         {addGoods ? (
-          <AddGoods onClose={toggleAddGoods} update={onAddGoods} />
+          <AddGoods
+            currency={currency}
+            onClose={toggleAddGoods}
+            update={onAddGoods}
+          />
         ) : (
           <div />
         )}
@@ -593,6 +600,7 @@ const Items = ({
       >
         {editGoodsData ? (
           <EditGoods
+            currency={currency}
             data={editGoodsData}
             onClose={() => setEditGoodsData(null)}
             saving={saving}

@@ -2,12 +2,12 @@
 import type { TodoListQuery } from '#/views/adminTodo/TodoList/__generated__/TodoListQuery.generated';
 import type { ListData } from '#/views/adminTodo/TodoList/useTodoList';
 import type { MutationUpdaterFn } from '@apollo/client';
-import type { TableProps } from 'antd';
 import type { CreateTodoMutation } from 'graphql/todos/mutations/__generated__/create-todo.generated';
 import type { TodoStatusInput } from 'graphql/types';
 
 import PermissionCheckWrapper from '#/components/PermissionCheck/PermissionCheckWrapper';
 import EditTodo from '#/components/form-components/Todos/EditTodo';
+import UsersManySelect from '#/components/form-components/UsersSelect/UsersSelectFetchMore.view';
 import {
   currentPermissionsAtom,
   currentSchemeAtom,
@@ -73,12 +73,12 @@ interface Props {
   data: TodoListQuery | null | undefined;
   editTodo: null | string;
   groupsData: { label: string; value: string }[];
-  groupsFilter: string[];
+  // groupsFilter: string[];
   loading: boolean;
   onCompletedTodo: (id: string) => void;
   onDeleteTodo: (id: string) => void;
   onPaginationChange: (page: number, pageSize: number) => void;
-  onTableChange: TableProps<TableItem>['onChange'];
+  // onTableChange: TableProps<TableItem>['onChange'];
   onUncompletedTodo: (id: string) => void;
   saving: boolean;
   selectTemplate: (id: null | string) => void;
@@ -89,12 +89,12 @@ interface Props {
   setSearch: (value: string) => void;
   setSelectedTodo: (id: null | string) => void;
   setStatusMode: (value: TodoStatusInput) => void;
+  setUsersFilter: (users: string[]) => void;
   templateData: ListData[];
   toggleAddTodo: () => void;
   toggleAllSchemes: () => void;
   toggleAllUsers: () => void;
   updateTodoList: MutationUpdaterFn<CreateTodoMutation>;
-  userData: { label: string; value: string }[];
 }
 
 const getLinkedItemId = (todo: TodoListQuery['todoRelay']['edges'][0]) => {
@@ -158,26 +158,27 @@ const AdminTodos = ({
   data,
   editTodo,
   groupsData,
-  groupsFilter,
+  // groupsFilter,
   loading,
   onCompletedTodo,
   onDeleteTodo,
   onPaginationChange,
-  onTableChange,
+  // onTableChange,
   onUncompletedTodo,
   saving,
   selectTemplate,
   selectedTemplate,
   selectedTodo,
   setEditTodo,
+  setGroupsFilter,
   setSearch,
   setSelectedTodo,
   setStatusMode,
+  setUsersFilter,
   templateData,
   toggleAddTodo,
   toggleAllUsers,
   updateTodoList,
-  userData,
 }: Props): JSX.Element => {
   // const classes = useStyles();
   const intl = useIntl();
@@ -200,6 +201,34 @@ const AdminTodos = ({
             placeholder={intl.formatMessage({
               defaultMessage: 'Search for a task...',
             })}
+            style={{ width: 350 }}
+          />
+        </Col>
+        <Col>
+          <UsersManySelect
+            allowClear
+            disabled={saving}
+            mode={'multiple'}
+            onChange={setUsersFilter}
+            placeholder={intl.formatMessage({
+              defaultMessage: 'Search for a user...',
+            })}
+            showSearch
+            style={{ width: 350 }}
+          />
+        </Col>
+        <Col>
+          <Select
+            allowClear
+            disabled={saving}
+            mode={'multiple'}
+            onChange={setGroupsFilter}
+            optionFilterProp={'label'}
+            options={groupsData}
+            placeholder={intl.formatMessage({
+              defaultMessage: 'Search for a group...',
+            })}
+            showSearch
             style={{ width: 350 }}
           />
         </Col>
@@ -226,6 +255,7 @@ const AdminTodos = ({
             </Radio.Button>
           </Radio.Group>
         </Col>
+
         <PermissionCheckWrapper
           permission={{
             method: PermissionMethod.ReadAll,
@@ -390,11 +420,6 @@ const AdminTodos = ({
             {
               dataIndex: 'assignedUsers',
               ellipsis: true,
-              filterSearch: true,
-              filters: userData.map((item) => ({
-                text: item.label,
-                value: item.value,
-              })),
               key: 'assignedUsers',
               render: (value: { fullName: string; id: string }[]) => (
                 <Row gutter={4}>
@@ -422,12 +447,6 @@ const AdminTodos = ({
             },
             {
               dataIndex: 'groups',
-              filterSearch: true,
-              filteredValue: groupsFilter,
-              filters: groupsData.map((item) => ({
-                text: item.label,
-                value: item.value,
-              })),
               key: 'groups',
               render: (value: { id: string; name: string }[]) => (
                 <Typography.Text>
@@ -630,7 +649,6 @@ const AdminTodos = ({
             todo,
           }))}
           loading={loading}
-          onChange={onTableChange}
           pagination={{
             current: currentPage,
             hideOnSinglePage: true,

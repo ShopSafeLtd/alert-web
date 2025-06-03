@@ -1,14 +1,15 @@
 query ListBusinessesDivision(
-    $where: BusinessWhereInput
-    $skip: Int
-    $take: Int
-    $orderBy: [BusinessOrderBy!]
+  $where: BusinessWhereInput
+  $skip: Int
+  $take: Int
+  $orderBy: [BusinessOrderBy!]
 ) {
-    listBusinesses(where: $where, skip: $skip, take: $take, orderBy: $orderBy) {
-        total
-        businesses {
-            id
-            division
-        }
+  listBusinesses(where: $where, skip: $skip, take: $take, orderBy: $orderBy) {
+    total
+    businesses {
+      id
+      division
+      currency
     }
+  }
 }

@@ -15,12 +15,12 @@ const AdminTodos = (): JSX.Element => {
     data,
     editTodo,
     groupsData,
-    groupsFilter,
+    // groupsFilter,
     loading,
     onCompletedTodo,
     onDeleteTodo,
     onPaginationChange,
-    onTableChange,
+    // onTableChange,
     onUncompletedTodo,
     saving,
     selectTemplate,
@@ -31,12 +31,12 @@ const AdminTodos = (): JSX.Element => {
     setSearch,
     setSelectedTodo,
     setStatusMode,
+    setUsersFilter,
     templateData,
     toggleAddTodo,
     toggleAllSchemes,
     toggleAllUsers,
     updateTodoList,
-    userData,
   } = useAdminTodos({ defaultOpen: id });
 
   return (
@@ -48,12 +48,12 @@ const AdminTodos = (): JSX.Element => {
       data={data}
       editTodo={editTodo}
       groupsData={groupsData}
-      groupsFilter={groupsFilter}
+      // groupsFilter={groupsFilter}
       loading={loading}
       onCompletedTodo={onCompletedTodo}
       onDeleteTodo={onDeleteTodo}
       onPaginationChange={onPaginationChange}
-      onTableChange={onTableChange}
+      // onTableChange={onTableChange}
       onUncompletedTodo={onUncompletedTodo}
       saving={saving}
       selectTemplate={selectTemplate}
@@ -64,12 +64,12 @@ const AdminTodos = (): JSX.Element => {
       setSearch={setSearch}
       setSelectedTodo={setSelectedTodo}
       setStatusMode={setStatusMode}
+      setUsersFilter={setUsersFilter}
       templateData={templateData}
       toggleAddTodo={toggleAddTodo}
       toggleAllSchemes={toggleAllSchemes}
       toggleAllUsers={toggleAllUsers}
       updateTodoList={updateTodoList}
-      userData={userData}
     />
   );
 };

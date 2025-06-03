@@ -6,7 +6,7 @@ import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect
 import UsersSelect from '#/components/form-components/UsersSelect/UsersSelect.view';
 import GoodsSelect from '#/components/form-components/goodsSelect/GoodsSelect.view';
 import DatePicker from '#/components/util-components/DatePicker';
-import { Button, Col, Form, Input, Row, Select, Typography } from 'antd';
+import { Button, Col, Form, Input, Row, Select, Space, Typography } from 'antd';
 import dayjs from 'dayjs';
 import React from 'react';
 import { useIntl } from 'react-intl';
@@ -173,235 +173,239 @@ const IncidentFilter = ({
           </Button>
         </Col>
       </Row>
-
-      <Row gutter={16}>
-        <Col span={23}>
-          <Typography.Paragraph className={classes.selectTitle}>
-            {intl.formatMessage({ defaultMessage: 'Sort Order' })}
-          </Typography.Paragraph>
-          <Select
-            className={classes.select}
-            onChange={setOrder}
-            size="small"
-            value={order}
-          >
-            <Select.Option value={IncidentSort.createdAtDesc}>
-              {intl.formatMessage({
-                defaultMessage: 'Newest First',
-              })}
-            </Select.Option>
-            <Select.Option value={IncidentSort.createdAtAsc}>
-              {intl.formatMessage({
-                defaultMessage: 'Oldest First',
-              })}
-            </Select.Option>
-          </Select>
-        </Col>
-      </Row>
-
-      <Row gutter={16}>
-        <Col span={23}>
-          <Typography.Paragraph className={classes.selectTitle}>
-            {intl.formatMessage({
-              defaultMessage: 'Created Between',
-            })}
-          </Typography.Paragraph>
-
-          <Form.Item name="createdAt" style={{ marginBottom: 0 }}>
-            <RangePicker
+      <Space direction="vertical" size="middle" style={{ width: '100%' }}>
+        <Row gutter={16}>
+          <Col span={23}>
+            <Typography.Paragraph className={classes.selectTitle}>
+              {intl.formatMessage({ defaultMessage: 'Sort Order' })}
+            </Typography.Paragraph>
+            <Select
               className={classes.select}
-              onChange={(value) => {
-                if (value && value[0] && value[1])
-                  setCreatedAtFilter({
-                    endDate: new Date(value[1].valueOf()),
-                    startDate: new Date(value[0].valueOf()),
-                  });
-              }}
-            />
-          </Form.Item>
-        </Col>
-      </Row>
+              onChange={setOrder}
+              size="small"
+              value={order}
+            >
+              <Select.Option value={IncidentSort.createdAtDesc}>
+                {intl.formatMessage({
+                  defaultMessage: 'Newest First',
+                })}
+              </Select.Option>
+              <Select.Option value={IncidentSort.createdAtAsc}>
+                {intl.formatMessage({
+                  defaultMessage: 'Oldest First',
+                })}
+              </Select.Option>
+            </Select>
+          </Col>
+        </Row>
 
-      <Row gutter={16}>
-        <Col span={23}>
-          <Typography.Paragraph className={classes.selectTitle}>
-            {intl.formatMessage({
-              defaultMessage: 'Occurred Between',
-            })}
-          </Typography.Paragraph>
-          <Form.Item name="date" style={{ marginBottom: 0 }}>
-            <RangePicker
+        <Row gutter={16}>
+          <Col span={23}>
+            <Typography.Paragraph className={classes.selectTitle}>
+              {intl.formatMessage({
+                defaultMessage: 'Created Between',
+              })}
+            </Typography.Paragraph>
+
+            <Form.Item name="createdAt" style={{ marginBottom: 0 }}>
+              <RangePicker
+                className={classes.select}
+                onChange={(value) => {
+                  if (value && value[0] && value[1])
+                    setCreatedAtFilter({
+                      endDate: new Date(value[1].valueOf()),
+                      startDate: new Date(value[0].valueOf()),
+                    });
+                }}
+              />
+            </Form.Item>
+          </Col>
+        </Row>
+
+        <Row gutter={16}>
+          <Col span={23}>
+            <Typography.Paragraph className={classes.selectTitle}>
+              {intl.formatMessage({
+                defaultMessage: 'Occurred Between',
+              })}
+            </Typography.Paragraph>
+            <Form.Item name="date" style={{ marginBottom: 0 }}>
+              <RangePicker
+                className={classes.select}
+                onChange={(value) => {
+                  if (value && value[0] && value[1])
+                    setIncidentDateFilter({
+                      endDate: new Date(value[1].valueOf()),
+                      startDate: new Date(value[0].valueOf()),
+                    });
+                }}
+              />
+            </Form.Item>
+          </Col>
+        </Row>
+
+        {/* <Row gutter={16}> */}
+        {/*  <Col span={23}> */}
+        {/*    <Typography.Paragraph className={classes.selectTitle}> */}
+        {/*      {intl.formatMessage({ defaultMessage: 'Priority', id: '8lCjAM' })} */}
+        {/*    </Typography.Paragraph> */}
+
+        {/*    <Select */}
+        {/*      className={classes.select} */}
+        {/*      placeholder={intl.formatMessage({ */}
+        {/*        defaultMessage: 'Priority', */}
+        {/*        id: '8lCjAM', */}
+        {/*      })} */}
+        {/*      mode="multiple" */}
+        {/*      size="small" */}
+        {/*      maxTagCount={4} */}
+        {/*      allowClear */}
+        {/*      onChange={setIncidentPriority} */}
+        {/*      value={priority.sort(sortPrios)} */}
+        {/*      tagRender={tagRender} */}
+        {/*    > */}
+        {/*      <Select.Option value={IncidentPriority.Low}> */}
+        {/*        <FormattedMessage id="477I0g" defaultMessage="Low" /> */}
+        {/*      </Select.Option> */}
+        {/*      <Select.Option value={IncidentPriority.Normal}> */}
+        {/*        <FormattedMessage id="myq2ZL" defaultMessage="Normal" /> */}
+        {/*      </Select.Option> */}
+        {/*      <Select.Option value={IncidentPriority.Medium}> */}
+        {/*        <FormattedMessage id="ovJ26C" defaultMessage="Medium" /> */}
+        {/*      </Select.Option> */}
+        {/*      <Select.Option value={IncidentPriority.High}> */}
+        {/*        <FormattedMessage id="AxMhQr" defaultMessage="High" /> */}
+        {/*      </Select.Option> */}
+        {/*    </Select> */}
+        {/*  </Col> */}
+        {/* </Row> */}
+
+        <Row gutter={16}>
+          <Col span={23}>
+            <Typography.Paragraph className={classes.selectTitle}>
+              {intl.formatMessage({ defaultMessage: 'Groups' })}
+            </Typography.Paragraph>
+
+            <GroupsSelect
+              allowClear
               className={classes.select}
-              onChange={(value) => {
-                if (value && value[0] && value[1])
-                  setIncidentDateFilter({
-                    endDate: new Date(value[1].valueOf()),
-                    startDate: new Date(value[0].valueOf()),
-                  });
+              maxTagCount={2}
+              mode="multiple"
+              onChange={setGroupsFilter}
+              placeholder={intl.formatMessage({
+                defaultMessage: 'Groups',
+              })}
+              size="small"
+              style={{
+                width: '100%',
               }}
+              value={groups}
             />
-          </Form.Item>
-        </Col>
-      </Row>
+          </Col>
+        </Row>
+        <Row gutter={16}>
+          <Col span={23}>
+            <Typography.Paragraph className={classes.selectTitle}>
+              {intl.formatMessage({
+                defaultMessage: 'Crime Types',
+              })}
+            </Typography.Paragraph>
+            <CrimeTypesSelect
+              allowClear
+              className={classes.select}
+              mode="multiple"
+              onChange={setCrimeTypesFilter}
+              placeholder={intl.formatMessage({
+                defaultMessage: 'Crime Types',
+              })}
+              value={crimeTypesValue}
+            />
+          </Col>
+        </Row>
+        <Typography.Paragraph className={classes.filtersTitle}>
+          {intl.formatMessage({ defaultMessage: 'Details' })}
+        </Typography.Paragraph>
+        <Row gutter={16}>
+          <Col span={23}>
+            <Typography.Paragraph className={classes.selectTitle}>
+              {intl.formatMessage({
+                defaultMessage: 'Goods Involved',
+              })}
+            </Typography.Paragraph>
+            <GoodsSelect
+              allowClear
+              className={classes.select}
+              mode="multiple"
+              onChange={setGoodsFilter}
+              placeholder={intl.formatMessage({
+                defaultMessage: 'Goods Involved',
+              })}
+              value={goodsValue}
+            />
+          </Col>
+        </Row>
+        <Row>
+          <Col span={23}>
+            <Typography.Paragraph className={classes.selectTitle}>
+              {intl.formatMessage({
+                defaultMessage: 'Characteristics',
+              })}
+            </Typography.Paragraph>
+            <Input.TextArea
+              className={classes.select}
+              onChange={(e) => setPeculiarities(e.target.value)}
+              value={peculiarities}
+            />
+          </Col>
+        </Row>
 
-      {/* <Row gutter={16}> */}
-      {/*  <Col span={23}> */}
-      {/*    <Typography.Paragraph className={classes.selectTitle}> */}
-      {/*      {intl.formatMessage({ defaultMessage: 'Priority', id: '8lCjAM' })} */}
-      {/*    </Typography.Paragraph> */}
+        <Typography.Paragraph className={classes.filtersTitle}>
+          {intl.formatMessage({ defaultMessage: 'Locations' })}
+        </Typography.Paragraph>
+        <Row gutter={16}>
+          <Col span={24}>
+            <Typography.Paragraph className={classes.selectTitle}>
+              {intl.formatMessage({
+                defaultMessage: 'Incident has happened at:',
+              })}
+            </Typography.Paragraph>
+            <BusinessesSelect
+              className={classes.select}
+              maxTagCount="responsive"
+              mode="multiple"
+              onChange={setBusinessesFilter}
+              placeholder={intl.formatMessage({
+                defaultMessage: 'Select Businesses',
+              })}
+              style={{ width: '100%' }}
+              value={businessesValue}
+            />
+          </Col>
+        </Row>
 
-      {/*    <Select */}
-      {/*      className={classes.select} */}
-      {/*      placeholder={intl.formatMessage({ */}
-      {/*        defaultMessage: 'Priority', */}
-      {/*        id: '8lCjAM', */}
-      {/*      })} */}
-      {/*      mode="multiple" */}
-      {/*      size="small" */}
-      {/*      maxTagCount={4} */}
-      {/*      allowClear */}
-      {/*      onChange={setIncidentPriority} */}
-      {/*      value={priority.sort(sortPrios)} */}
-      {/*      tagRender={tagRender} */}
-      {/*    > */}
-      {/*      <Select.Option value={IncidentPriority.Low}> */}
-      {/*        <FormattedMessage id="477I0g" defaultMessage="Low" /> */}
-      {/*      </Select.Option> */}
-      {/*      <Select.Option value={IncidentPriority.Normal}> */}
-      {/*        <FormattedMessage id="myq2ZL" defaultMessage="Normal" /> */}
-      {/*      </Select.Option> */}
-      {/*      <Select.Option value={IncidentPriority.Medium}> */}
-      {/*        <FormattedMessage id="ovJ26C" defaultMessage="Medium" /> */}
-      {/*      </Select.Option> */}
-      {/*      <Select.Option value={IncidentPriority.High}> */}
-      {/*        <FormattedMessage id="AxMhQr" defaultMessage="High" /> */}
-      {/*      </Select.Option> */}
-      {/*    </Select> */}
-      {/*  </Col> */}
-      {/* </Row> */}
-
-      <Row gutter={16}>
-        <Col span={23}>
-          <Typography.Paragraph className={classes.selectTitle}>
-            {intl.formatMessage({ defaultMessage: 'Groups' })}
-          </Typography.Paragraph>
-
-          <GroupsSelect
-            allowClear
-            className={classes.select}
-            maxTagCount={2}
-            mode="multiple"
-            onChange={setGroupsFilter}
-            placeholder={intl.formatMessage({
-              defaultMessage: 'Groups',
-            })}
-            size="small"
-            value={groups}
-          />
-        </Col>
-      </Row>
-      <Row>
-        <Col span={23}>
-          <Typography.Paragraph className={classes.selectTitle}>
-            {intl.formatMessage({
-              defaultMessage: 'Crime Types',
-            })}
-          </Typography.Paragraph>
-          <CrimeTypesSelect
-            allowClear
-            className={classes.select}
-            mode="multiple"
-            onChange={setCrimeTypesFilter}
-            placeholder={intl.formatMessage({
-              defaultMessage: 'Crime Types',
-            })}
-            value={crimeTypesValue}
-          />
-        </Col>
-      </Row>
-      <Typography.Paragraph className={classes.filtersTitle}>
-        {intl.formatMessage({ defaultMessage: 'Details' })}
-      </Typography.Paragraph>
-      <Row gutter={16}>
-        <Col span={23}>
-          <Typography.Paragraph className={classes.selectTitle}>
-            {intl.formatMessage({
-              defaultMessage: 'Goods Involved',
-            })}
-          </Typography.Paragraph>
-          <GoodsSelect
-            allowClear
-            className={classes.select}
-            mode="multiple"
-            onChange={setGoodsFilter}
-            placeholder={intl.formatMessage({
-              defaultMessage: 'Goods Involved',
-            })}
-            value={goodsValue}
-          />
-        </Col>
-      </Row>
-      <Row>
-        <Col span={23}>
-          <Typography.Paragraph className={classes.selectTitle}>
-            {intl.formatMessage({
-              defaultMessage: 'Characteristics',
-            })}
-          </Typography.Paragraph>
-          <Input.TextArea
-            className={classes.select}
-            onChange={(e) => setPeculiarities(e.target.value)}
-            value={peculiarities}
-          />
-        </Col>
-      </Row>
-
-      <Typography.Paragraph className={classes.filtersTitle}>
-        {intl.formatMessage({ defaultMessage: 'Locations' })}
-      </Typography.Paragraph>
-      <Row gutter={16}>
-        <Col span={24}>
-          <Typography.Paragraph className={classes.selectTitle}>
-            {intl.formatMessage({
-              defaultMessage: 'Incident has happened at:',
-            })}
-          </Typography.Paragraph>
-          <BusinessesSelect
-            className={classes.select}
-            maxTagCount="responsive"
-            mode="multiple"
-            onChange={setBusinessesFilter}
-            placeholder={intl.formatMessage({
-              defaultMessage: 'Select Businesses',
-            })}
-            style={{ width: '100%' }}
-            value={businessesValue}
-          />
-        </Col>
-      </Row>
-
-      <Typography.Paragraph className={classes.filtersTitle}>
-        {intl.formatMessage({ defaultMessage: 'Created By' })}
-      </Typography.Paragraph>
-      <Row gutter={16}>
-        <Col span={24}>
-          <Typography.Paragraph className={classes.selectTitle}>
-            {intl.formatMessage({
-              defaultMessage: 'Incident created by:',
-            })}
-          </Typography.Paragraph>
-          <UsersSelect
-            allowClear
-            className={classes.select}
-            mode="multiple"
-            onChange={setCreatedByFilter}
-            placeholder={intl.formatMessage({
-              defaultMessage: 'Select Users',
-            })}
-            value={createdBy}
-          />
-        </Col>
-      </Row>
+        <Typography.Paragraph className={classes.filtersTitle}>
+          {intl.formatMessage({ defaultMessage: 'Created By' })}
+        </Typography.Paragraph>
+        <Row gutter={16}>
+          <Col span={24}>
+            <Typography.Paragraph className={classes.selectTitle}>
+              {intl.formatMessage({
+                defaultMessage: 'Incident created by:',
+              })}
+            </Typography.Paragraph>
+            <UsersSelect
+              allowClear
+              className={classes.select}
+              mode="multiple"
+              onChange={setCreatedByFilter}
+              placeholder={intl.formatMessage({
+                defaultMessage: 'Select Users',
+              })}
+              value={createdBy}
+            />
+          </Col>
+        </Row>
+      </Space>
     </Form>
   );
 };

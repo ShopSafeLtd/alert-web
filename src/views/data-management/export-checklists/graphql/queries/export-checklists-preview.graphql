@@ -1,0 +1,28 @@
+query PreviewChecklistExport(
+  $first: Int
+  $range: ChecklistDateRange!
+  $where: ActiveChecklistWhereInput!
+) {
+  activeChecklistExportPreview(first: $first, where: $where, range: $range) {
+    totalCount
+    edges {
+      node {
+        id
+        name
+        percentageScore
+        percentComplete
+        status
+        document {
+          id
+          url
+        }
+        updatedAt
+        business {
+          name
+          id
+        }
+        completedAt
+      }
+    }
+  }
+}

@@ -1,3 +1,4 @@
+import type { Currency } from 'graphql/types';
 import type { GoodsData } from 'types/DataType';
 
 import React from 'react';
@@ -6,12 +7,19 @@ import View from './EditGoods.view';
 import useEditGoods from './useEditGoods';
 
 interface Props {
+  currency?: Currency | null;
   data: GoodsData;
   onClose: () => void;
   saving: boolean;
   update: (value: GoodsData) => void;
 }
-const EditGoods = ({ data, onClose, saving, update }: Props): JSX.Element => {
+const EditGoods = ({
+  currency,
+  data,
+  onClose,
+  saving,
+  update,
+}: Props): JSX.Element => {
   const { goodsMode, goodsTypesData, onSubmit } = useEditGoods({
     data,
     update,
@@ -20,6 +28,7 @@ const EditGoods = ({ data, onClose, saving, update }: Props): JSX.Element => {
   return (
     <div>
       <View
+        currency={currency}
         data={data}
         goodsMode={goodsMode}
         goodsTypesData={goodsTypesData}

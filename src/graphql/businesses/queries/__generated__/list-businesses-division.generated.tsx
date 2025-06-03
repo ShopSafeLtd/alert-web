@@ -11,7 +11,7 @@ export type ListBusinessesDivisionQueryVariables = Types.Exact<{
 }>;
 
 
-export type ListBusinessesDivisionQuery = { __typename?: 'Query', listBusinesses: { __typename?: 'ListBusinesses', total: number, businesses: Array<{ __typename?: 'Business', id: string, division?: string | null }> } };
+export type ListBusinessesDivisionQuery = { __typename?: 'Query', listBusinesses: { __typename?: 'ListBusinesses', total: number, businesses: Array<{ __typename?: 'Business', id: string, division?: string | null, currency?: Types.Currency | null }> } };
 
 
 export const ListBusinessesDivisionDocument = gql`
@@ -21,6 +21,7 @@ export const ListBusinessesDivisionDocument = gql`
     businesses {
       id
       division
+      currency
     }
   }
 }
