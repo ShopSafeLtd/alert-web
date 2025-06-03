@@ -1417,10 +1417,7 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
           const involvedTags: string[] =
             form.getFieldValue('involvedTags') || ([] as string[]);
 
-          console.log('involvedTags', involvedTags);
-
           if (brands && brands.length > 0) {
-            console.log('brands', brands);
             const filteredQuestions = tagQuestions
               .filter((question) => {
                 if (question.dependentOnBrandIds.length > 0) {
@@ -1431,7 +1428,6 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
                 return true;
               })
               .filter((question) => {
-                console.log('dependentOnTagIds', question.dependentOnTagIds);
                 if (question.dependentOnTagIds.length > 0) {
                   return question.dependentOnTagIds.some((id) =>
                     involvedTags.includes(id)
@@ -1447,11 +1443,6 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
               .filter((question) => question.dependentOnBrandIds.length === 0)
               .filter((question) => {
                 if (question.dependentOnTagIds.length > 0) {
-                  console.log(
-                    question.dependentOnTagIds.some((id) =>
-                      involvedTags.includes(id)
-                    )
-                  );
                   return question.dependentOnTagIds.some((id) =>
                     involvedTags.includes(id)
                   );
@@ -1464,7 +1455,7 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
         }
       }
     }
-  }, [formTags, incidentTagsData, brands, formDataVersion]);
+  }, [formTags, incidentTagsData, brands, formDataVersion, businessGroups]);
   const hasDraft = useMemo(
     () => incidentForm.some((item) => item.type === IncidentFormField.Draft),
     [incidentForm]
