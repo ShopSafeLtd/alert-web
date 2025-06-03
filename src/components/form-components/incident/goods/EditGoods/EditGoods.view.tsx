@@ -1,7 +1,11 @@
 import type { ListGoodsTypesQuery } from '#/graphql/goods-types/queries/__generated__/list-goods-types.generated';
+import type { Currency } from 'graphql/types';
 import type { GoodsData } from 'types/DataType';
 
-import { currencySymbolAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import {
+  CurrencySymbolMap,
+  currencySymbolAtom,
+} from '#/providers/SchemeProvider/SchemeProvider';
 import { Button, Col, Form, Input, InputNumber, Row, Select } from 'antd';
 import { GoodsMode } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
@@ -11,6 +15,7 @@ import { useIntl } from 'react-intl';
 const { useForm } = Form;
 
 interface Props {
+  currency?: Currency | null;
   data: GoodsData;
   goodsMode: GoodsMode;
   goodsTypesData: ListGoodsTypesQuery | undefined;
@@ -20,6 +25,7 @@ interface Props {
 }
 
 const EditGoods = ({
+  currency,
   data,
   goodsMode,
   goodsTypesData,
@@ -32,7 +38,9 @@ const EditGoods = ({
 
   const value = Form.useWatch('value', form);
   const quantity = Form.useWatch('quantity', form);
-  const { prefix } = useAtomValue(currencySymbolAtom);
+  const { prefix: backupPrefix } = useAtomValue(currencySymbolAtom);
+  const prefix =
+    (currency ? CurrencySymbolMap[currency]?.prefix : null) || backupPrefix;
   return (
     <Form<GoodsData>
       initialValues={{

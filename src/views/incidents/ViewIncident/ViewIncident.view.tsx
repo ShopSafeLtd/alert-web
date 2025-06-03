@@ -166,6 +166,7 @@ const ViewIncident = ({
                             </Col>
                           </Row>
                           <Items
+                            currency={data?.incident?.business?.currency}
                             data={data}
                             deleteRights={deleteRights}
                             editRights={editRights}

@@ -79,6 +79,22 @@ const useChecklists = (): Return => {
         [checklistSort.field]: checklistSort.order,
       },
       where: {
+        OR: [
+          {
+            roles: {
+              none: {},
+            },
+          },
+          {
+            roles: {
+              some: {
+                users: {
+                  some: { userId: { equals: userId } },
+                },
+              },
+            },
+          },
+        ],
         business: checklistFilter.businesses?.length
           ? { some: { id: { in: checklistFilter.businesses } } }
           : undefined,

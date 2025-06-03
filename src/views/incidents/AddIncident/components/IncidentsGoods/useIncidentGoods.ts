@@ -2,6 +2,7 @@ import type { FormData } from '#/views/incidents/AddIncident/types/formData';
 import type { FormInstance } from 'antd';
 import type { StockItemValue } from 'components/form-components/StockItemSearch/StockItemSearch.view';
 import type { ListGoodsTypesQuery } from 'graphql/goods-types/queries/__generated__/list-goods-types.generated';
+import type { Currency } from 'graphql/types';
 
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { Form } from 'antd';
@@ -11,6 +12,7 @@ import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
 
 interface Return {
+  businessCurrency?: Currency | null;
   division: string | undefined;
   goods: {
     goodsType?: string;
@@ -42,9 +44,12 @@ const useIncidentGoods = ({
       },
     },
   });
+  const business = Form.useWatch('business', form);
+
   const { data: businessesData } = useListBusinessesDivisionQuery({
     variables: {
       where: {
+        id: business?.value ? { equals: business.value } : undefined,
         schemes: {
           some: {
             id: {
@@ -56,14 +61,16 @@ const useIncidentGoods = ({
     },
   });
   const [division, setDivision] = useState<string | undefined>(undefined);
-  const business = Form.useWatch('business', form);
-
+  const [businessCurrency, setBusinessCurrency] = useState<Currency | null>();
   useEffect(() => {
     if (businessesData && business) {
       const fullBusiness = businessesData.listBusinesses.businesses.find(
         ({ id }) => id === business.value
       );
       if (fullBusiness?.division) setDivision(fullBusiness.division);
+      if (fullBusiness?.currency) {
+        setBusinessCurrency(fullBusiness?.currency);
+      }
     }
   }, [business]);
   const goods = Form.useWatch('goods', form) || [];
@@ -84,6 +91,7 @@ const useIncidentGoods = ({
   };
 
   return {
+    businessCurrency,
     division,
     goods,
     goodsTypesData,

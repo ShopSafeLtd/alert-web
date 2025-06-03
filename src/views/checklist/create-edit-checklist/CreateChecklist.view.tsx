@@ -2,6 +2,8 @@
 import type { FormInstance } from 'antd';
 
 import BusinessesSelect from '#/components/form-components/BusinessesSelect/BusinessesSelect.view';
+import RoleSelect from '#/components/form-components/Roles/RoleSelect';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { PlusOutlined } from '@ant-design/icons';
 import {
   Button,
@@ -18,6 +20,7 @@ import {
   Select,
   Space,
 } from 'antd';
+import { useAtomValue } from 'jotai/index';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate, useParams } from 'react-router';
@@ -103,6 +106,7 @@ const CreateChecklistView: React.FC<Props> = ({
   const intl = useIntl();
   const { id } = useParams();
   const navigate = useNavigate();
+  const schemeId = useAtomValue(currentSchemeIdAtom);
 
   return (
     <div className="page-view">
@@ -183,6 +187,16 @@ const CreateChecklistView: React.FC<Props> = ({
                   })}
                   showSearch
                 />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item
+                label={intl.formatMessage({
+                  defaultMessage: 'Roles',
+                })}
+                name="roles"
+              >
+                <RoleSelect multi schemeId={schemeId} />
               </Form.Item>
             </Col>
             <Col span={8}>

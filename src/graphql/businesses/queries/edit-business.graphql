@@ -5,6 +5,7 @@ query EditBusiness($where: BusinessWhereUniqueInput!) {
     fullName
     publicName
     siteNumber
+    currency
     parent {
       id
       name

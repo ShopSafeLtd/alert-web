@@ -70,6 +70,7 @@ export const NavScheme = () => {
 
     setScheme(scheme.id);
 
+    navigate('/');
     handleVisibleChange(false);
   };
 
