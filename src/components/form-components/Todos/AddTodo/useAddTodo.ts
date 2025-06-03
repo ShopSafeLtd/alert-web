@@ -16,7 +16,12 @@ import { userIdAtom } from '#/providers/UserProvider/UserProvider';
 import { useQuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/__generated__/listTemplates.generated';
 import { Form, notification } from 'antd';
 import { useCreateTodoMutation } from 'graphql/todos/mutations/__generated__/create-todo.generated';
-import { AnswerType, Role, SortOrder } from 'graphql/types';
+import {
+  AnswerType,
+  PermissionMethod,
+  PermissionModel,
+  SortOrder,
+} from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -34,6 +39,7 @@ export interface FormData {
   dueDate: Date;
   groups?: string[];
   name: string;
+
   questionGroup?: string;
 }
 
@@ -189,6 +195,16 @@ const useAddTodo = ({
         fullName: SortOrder.Asc,
       },
       where: {
+        businesses: businessId
+          ? {
+              some: {
+                id: {
+                  equals: businessId,
+                },
+              },
+            }
+          : undefined,
+
         groups: {
           some: {
             users: {
@@ -210,15 +226,25 @@ const useAddTodo = ({
                   },
                 },
               },
+
               {
-                role: activityAssignToUser
+                permissions: activityAssignToUser
                   ? undefined
                   : {
-                      in: [
-                        Role.ContentAdmin,
-                        Role.SchemeAdmin,
-                        Role.ShopsafeAdmin,
-                      ],
+                      permissions: {
+                        some: {
+                          allowedMethods: {
+                            hasSome: [
+                              PermissionMethod.Write,
+                              PermissionMethod.Read,
+                              PermissionMethod.Edit,
+                            ],
+                          },
+                          model: {
+                            equals: PermissionModel.Activities,
+                          },
+                        },
+                      },
                     },
               },
             ],

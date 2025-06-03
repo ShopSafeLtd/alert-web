@@ -5,13 +5,16 @@ import type { TodoQuery } from '#/components/form-components/Todos/ViewTodo/grap
 import type { MutationUpdaterFn } from '@apollo/client';
 import type { FormInstance, UploadFile, UploadProps } from 'antd';
 
+import { useAddTodoUsersQuery } from '#/components/form-components/Todos/AddTodo/graphql/__generated__/AddTodoUsers.generated';
 import { useUpdateTaskMutation } from '#/components/form-components/Todos/ViewTodo/graphql/__generated__/update-todo.generated';
 import { useTodoQuery } from '#/components/form-components/Todos/ViewTodo/graphql/__generated__/view-task.generated';
-import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import {
+  currentSchemeAtom,
+  currentSchemeIdAtom,
+} from '#/providers/SchemeProvider/SchemeProvider';
 import { userIdAtom } from '#/providers/UserProvider/UserProvider';
 import { Form } from 'antd';
-import { Role, SortOrder } from 'graphql/types';
-import { useListSchemeUsersQuery } from 'graphql/users/queries/__generated__/list-scheme-users.generated';
+import { PermissionMethod, PermissionModel, SortOrder } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
 
@@ -52,7 +55,8 @@ const useTodo = ({
   updateTodo: (value: boolean, i?: string) => void;
 }): Return => {
   const [form] = useForm();
-
+  const activityAssignToUser =
+    useAtomValue(currentSchemeAtom)?.activityAssignToUser;
   const [saving, setSaving] = useState(false);
   const [actionsOpen, setActionsOpen] = useState(false);
   const [users, setUsers] = useState<
@@ -100,27 +104,35 @@ const useTodo = ({
     }
   }, [todo]);
 
-  const { data: usersData, loading: usersLoading } = useListSchemeUsersQuery({
+  const { data: usersData, loading: usersLoading } = useAddTodoUsersQuery({
     fetchPolicy: 'cache-and-network',
+    skip: !todo,
     variables: {
-      groupWhere: {
-        scheme: {
-          id: {
-            equals: schemeId,
-          },
-        },
-      },
       orderBy: {
         fullName: SortOrder.Asc,
       },
-      schemesWhere: {
-        scheme: {
-          id: {
-            equals: schemeId,
+      where: {
+        businesses: todo?.todo?.business?.id
+          ? {
+              some: {
+                id: {
+                  equals: todo?.todo?.business?.id,
+                },
+              },
+            }
+          : undefined,
+
+        groups: {
+          some: {
+            users: {
+              some: {
+                id: {
+                  equals: currentUser,
+                },
+              },
+            },
           },
         },
-      },
-      where: {
         schemes: {
           some: {
             AND: [
@@ -131,10 +143,26 @@ const useTodo = ({
                   },
                 },
               },
+
               {
-                role: {
-                  in: [Role.SchemeAdmin, Role.ShopsafeAdmin],
-                },
+                permissions: activityAssignToUser
+                  ? undefined
+                  : {
+                      permissions: {
+                        some: {
+                          allowedMethods: {
+                            hasSome: [
+                              PermissionMethod.Write,
+                              PermissionMethod.Read,
+                              PermissionMethod.Edit,
+                            ],
+                          },
+                          model: {
+                            equals: PermissionModel.Activities,
+                          },
+                        },
+                      },
+                    },
               },
             ],
           },
