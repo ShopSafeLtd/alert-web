@@ -15,7 +15,12 @@ import {
 import { userIdAtom } from '#/providers/UserProvider/UserProvider';
 import { useQuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/__generated__/listTemplates.generated';
 import { Form, notification } from 'antd';
-import { AnswerType, Role, SortOrder } from 'graphql/types';
+import {
+  AnswerType,
+  PermissionMethod,
+  PermissionModel,
+  SortOrder,
+} from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -175,11 +180,22 @@ const useEditTodo = ({ initData, onClose, todoId }: Props): Return => {
 
   const { data: usersData, loading: usersLoading } = useAddTodoUsersQuery({
     fetchPolicy: 'cache-and-network',
+    skip: !todoData,
     variables: {
       orderBy: {
         fullName: SortOrder.Asc,
       },
       where: {
+        businesses: todoData?.todo?.business?.id
+          ? {
+              some: {
+                id: {
+                  equals: todoData?.todo?.business?.id,
+                },
+              },
+            }
+          : undefined,
+
         groups: {
           some: {
             users: {
@@ -201,15 +217,25 @@ const useEditTodo = ({ initData, onClose, todoId }: Props): Return => {
                   },
                 },
               },
+
               {
-                role: activityAssignToUser
+                permissions: activityAssignToUser
                   ? undefined
                   : {
-                      in: [
-                        Role.ContentAdmin,
-                        Role.SchemeAdmin,
-                        Role.ShopsafeAdmin,
-                      ],
+                      permissions: {
+                        some: {
+                          allowedMethods: {
+                            hasSome: [
+                              PermissionMethod.Write,
+                              PermissionMethod.Read,
+                              PermissionMethod.Edit,
+                            ],
+                          },
+                          model: {
+                            equals: PermissionModel.Activities,
+                          },
+                        },
+                      },
                     },
               },
             ],
@@ -218,7 +244,6 @@ const useEditTodo = ({ initData, onClose, todoId }: Props): Return => {
       },
     },
   });
-
   const assignedUsers = Form.useWatch('assignedUsers', form);
   useEffect(() => {
     if (usersData?.users && assignedUsers) {

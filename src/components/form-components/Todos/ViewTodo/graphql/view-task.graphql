@@ -45,6 +45,7 @@ query Todo($where: TodoWhereUniqueInput!) {
       }
     }
     business {
+      id
       name
       locations {
         geoLat

@@ -4124,6 +4124,7 @@ export type CustomRoleWhereInput = {
   OR?: InputMaybe<Array<CustomRoleWhereInput>>;
   id?: InputMaybe<StringFilter>;
   name?: InputMaybe<StringFilter>;
+  permissions?: InputMaybe<PermissionListRelationFilter>;
   users?: InputMaybe<UserSchemeListRelationFilter>;
 };
 
@@ -4170,6 +4171,7 @@ export type DashboardInput = {
   following?: InputMaybe<Scalars['Boolean']>;
   groupIds?: InputMaybe<Array<Scalars['String']>>;
   myData?: InputMaybe<Scalars['Boolean']>;
+  useBusiness?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type DashboardLayout = {
@@ -5489,6 +5491,21 @@ export type EnumOnboardStepsWithAggregatesFilter = {
   in?: InputMaybe<Array<OnboardSteps>>;
   not?: InputMaybe<OnboardSteps>;
   notIn?: InputMaybe<Array<OnboardSteps>>;
+};
+
+export type EnumPermissionMethodListFilter = {
+  equals?: InputMaybe<Array<PermissionMethod>>;
+  has?: InputMaybe<PermissionMethod>;
+  hasEvery?: InputMaybe<Array<PermissionMethod>>;
+  hasSome?: InputMaybe<Array<PermissionMethod>>;
+  isEmpty?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type EnumPermissionModelListFilter = {
+  equals?: InputMaybe<PermissionModel>;
+  in?: InputMaybe<Array<PermissionModel>>;
+  not?: InputMaybe<PermissionModel>;
+  notIn?: InputMaybe<Array<PermissionModel>>;
 };
 
 export type EnumPoliceResponseTimeNullableFilter = {
@@ -13866,6 +13883,12 @@ export type PermissionInput = {
   model: PermissionModel;
 };
 
+export type PermissionListRelationFilter = {
+  every?: InputMaybe<PermissionWhereInput>;
+  none?: InputMaybe<PermissionWhereInput>;
+  some?: InputMaybe<PermissionWhereInput>;
+};
+
 export enum PermissionMethod {
   Approve = 'APPROVE',
   Delete = 'DELETE',
@@ -13919,6 +13942,17 @@ export enum PermissionModel {
   VisionAiSettings = 'VISION_AI_SETTINGS',
   Workflows = 'WORKFLOWS'
 }
+
+export type PermissionWhereInput = {
+  AND?: InputMaybe<Array<PermissionWhereInput>>;
+  NOT?: InputMaybe<Array<PermissionWhereInput>>;
+  OR?: InputMaybe<Array<PermissionWhereInput>>;
+  allowedMethods?: InputMaybe<EnumPermissionMethodListFilter>;
+  id?: InputMaybe<StringFilter>;
+  model?: InputMaybe<EnumPermissionModelListFilter>;
+  role?: InputMaybe<CustomRoleWhereInput>;
+  roleId?: InputMaybe<StringFilter>;
+};
 
 export type Permissions = {
   __typename?: 'Permissions';
@@ -14119,6 +14153,7 @@ export type Query = {
   listTodos: ListTodos;
   listUserContribution: ListUserContribution;
   listUserNotifications: ListUserNotifications;
+  /** @deprecated Use relay - better performance */
   listUsers: ListUsers;
   listVehicles: ListVehicles;
   loginEvent: LoginEvent;
@@ -14150,6 +14185,7 @@ export type Query = {
   role: CustomRole;
   roles: QueryRolesConnection;
   scheme: Scheme;
+  schemeUsersRelay: QuerySchemeUsersRelayConnection;
   schemes: Array<Scheme>;
   searchOffenders: QuerySearchOffendersConnection;
   sharingBusinesses: Array<SharingBusiness>;
@@ -15328,6 +15364,20 @@ export type QuerySchemeArgs = {
 };
 
 
+export type QuerySchemeUsersRelayArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  cursor?: InputMaybe<UserSchemeWhereUniqueInput>;
+  distinct?: InputMaybe<Array<UserSchemeScalarFieldEnum>>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<UserSchemeOrderByWithRelationInput>>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<UserSchemeWhereInput>;
+};
+
+
 export type QuerySchemesArgs = {
   cursor?: InputMaybe<SchemeWhereUniqueInput>;
   distinct?: InputMaybe<Array<SchemeScalarFieldEnum>>;
@@ -16011,6 +16061,19 @@ export type QueryRolesConnectionEdge = {
   __typename?: 'QueryRolesConnectionEdge';
   cursor: Scalars['String'];
   node: CustomRole;
+};
+
+export type QuerySchemeUsersRelayConnection = {
+  __typename?: 'QuerySchemeUsersRelayConnection';
+  edges: Array<QuerySchemeUsersRelayConnectionEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type QuerySchemeUsersRelayConnectionEdge = {
+  __typename?: 'QuerySchemeUsersRelayConnectionEdge';
+  cursor: Scalars['String'];
+  node: UserScheme;
 };
 
 export type QuerySearchOffendersConnection = {
@@ -22457,6 +22520,7 @@ export type UserSchemeWhereInput = {
   createdAt?: InputMaybe<DateTimeFilter>;
   fullName?: InputMaybe<StringFilter>;
   id?: InputMaybe<StringFilter>;
+  permissions?: InputMaybe<CustomRoleWhereInput>;
   recycled?: InputMaybe<BoolFilter>;
   role?: InputMaybe<EnumRoleFilter>;
   scheme?: InputMaybe<SchemeWhereInput>;
