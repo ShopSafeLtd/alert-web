@@ -48,6 +48,7 @@ export default defineConfig((configEnv) => {
           /data-v-.*/,
           /^ant-/,
           /^hljs-/,
+          /^yarl__/,
         ],
         defaultExtractor: (content) => content.match(/[\w-/:]+(?<!:)/g) || [],
       }),
