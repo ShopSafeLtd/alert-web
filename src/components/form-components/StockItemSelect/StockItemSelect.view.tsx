@@ -205,6 +205,7 @@ const StockItemSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
   allowClear = true,
   className,
   currency,
+  division,
   maxTagCount,
   mode,
   onChange,
@@ -231,6 +232,7 @@ const StockItemSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
       first: take,
       where: {
         currency,
+        divisionIds: division ? [division] : undefined,
         schemeIds: [currentSchemeId],
       },
     },
@@ -260,6 +262,7 @@ const StockItemSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
         first: 30,
         where: {
           currency,
+          divisionIds: division ? [division] : undefined,
           schemeIds: [currentSchemeId],
           search: searchTerm,
         },
@@ -312,6 +315,8 @@ const StockItemSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
       variables: {
         first: 30,
         where: {
+          currency,
+          divisionIds: division ? [division] : undefined,
           schemeIds: [currentSchemeId],
           search: searchValueInput,
         },
