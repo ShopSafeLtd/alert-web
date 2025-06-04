@@ -114,9 +114,9 @@ export default defineConfig((configEnv) => {
               return 'vendor';
             }
           },
-          chunkFileNames: 'assets/chunks/[name]-[hash].js',
-          entryFileNames: 'assets/[name]-[hash].js',
-          assetFileNames: 'assets/[name]-[hash].[ext]',
+          chunkFileNames: `assets/js/[name].${buildTimestamp}.[hash].js`,
+          entryFileNames: `assets/js/[name].${buildTimestamp}.[hash].js`,
+          assetFileNames: `assets/[ext]/[name].${buildTimestamp}.[hash].[ext]`,
         },
       },
     },
