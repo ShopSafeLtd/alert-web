@@ -6,7 +6,6 @@ import envCompatible from 'vite-plugin-env-compatible';
 import { sentryVitePlugin } from '@sentry/vite-plugin';
 // local host launch fix
 import dns from 'node:dns';
-import purgeCss from 'vite-plugin-purgecss';
 
 import path from 'path';
 import { visualizer } from 'rollup-plugin-visualizer';
@@ -33,25 +32,25 @@ export default defineConfig((configEnv) => {
           babelrc: true,
         },
       }),
-      purgeCss({
-        content: [
-          './src/**/*.html',
-          './src/**/*.tsx',
-          './src/**/*.jsx',
-          './src/**/*.ts',
-          './src/**/*.js',
-        ],
-        safelist: [
-          /-(leave|enter|appear)(|-(to|from|active))$/,
-          /^(?!cursor-move).+-move$/,
-          /^router-link(|-exact)-active$/,
-          /data-v-.*/,
-          /^ant-/,
-          /^hljs-/,
-          /^yarl__/,
-        ],
-        defaultExtractor: (content) => content.match(/[\w-/:]+(?<!:)/g) || [],
-      }),
+      // purgeCss({
+      //   content: [
+      //     './src/**/*.html',
+      //     './src/**/*.tsx',
+      //     './src/**/*.jsx',
+      //     './src/**/*.ts',
+      //     './src/**/*.js',
+      //   ],
+      //   safelist: [
+      //     /-(leave|enter|appear)(|-(to|from|active))$/,
+      //     /^(?!cursor-move).+-move$/,
+      //     /^router-link(|-exact)-active$/,
+      //     /data-v-.*/,
+      //     /^ant-/,
+      //     /^hljs-/,
+      //     /^yarl__/,
+      //   ],
+      //   defaultExtractor: (content) => content.match(/[\w-/:]+(?<!:)/g) || [],
+      // }),
       envCompatible(),
       viteTsconfigPaths(),
       mode === 'production' && removeConsole(),
