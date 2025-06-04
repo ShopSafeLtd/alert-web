@@ -5,6 +5,7 @@ query recycledItems(
   $first: Int
   $after: String
   $dataType: [String!]
+  $skip: Int
 ) {
   recycledItems(
     schemeId: $schemeId
@@ -13,6 +14,7 @@ query recycledItems(
     first: $first
     after: $after
     dataType: $dataType
+    skip: $skip
   ) {
     id
     deletedAt

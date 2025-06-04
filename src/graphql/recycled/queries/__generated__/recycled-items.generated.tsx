@@ -10,14 +10,15 @@ export type RecycledItemsQueryVariables = Types.Exact<{
   first?: Types.InputMaybe<Types.Scalars['Int']>;
   after?: Types.InputMaybe<Types.Scalars['String']>;
   dataType?: Types.InputMaybe<Array<Types.Scalars['String']> | Types.Scalars['String']>;
+  skip?: Types.InputMaybe<Types.Scalars['Int']>;
 }>;
 
 
-export type RecycledItemsQuery = { __typename?: 'Query', recycledItems: Array<{ __typename?: 'RecycledItem', id: string, deletedAt: Date, expiresAt: Date, systemTask: boolean, deletedBy: { __typename?: 'User', id: string, fullName: string, businesses: Array<{ __typename?: 'Business', id: string, name: string }> }, incident: { __typename?: 'Incident', id: string, date: Date, recycled: boolean, subject: string, createdBy: { __typename?: 'User', id: string, fullName: string, businesses: Array<{ __typename?: 'Business', id: string, name: string }> }, location?: { __typename?: 'Address', id: string, full: string } | null }, offender: { __typename?: 'Offender', id: string, gender?: Types.Gender | null, name?: string | null, race?: Types.Race | null, recycled: boolean, incidents: Array<{ __typename?: 'Incident', id: string, date: Date, location?: { __typename?: 'Address', id: string, full: string } | null }> }, scheme: { __typename?: 'Scheme', id: string } }> };
+export type RecycledItemsQuery = { __typename?: 'Query', recycledItems: Array<{ __typename?: 'RecycledItem', id: string, deletedAt: Date, expiresAt: Date, systemTask?: boolean | null, deletedBy: { __typename?: 'User', id: string, fullName: string, businesses: Array<{ __typename?: 'Business', id: string, name: string }> }, incident?: { __typename?: 'Incident', id: string, date: Date, recycled: boolean, subject: string, createdBy: { __typename?: 'User', id: string, fullName: string, businesses: Array<{ __typename?: 'Business', id: string, name: string }> }, location?: { __typename?: 'Address', id: string, full: string } | null } | null, offender?: { __typename?: 'Offender', id: string, gender?: Types.Gender | null, name?: string | null, race?: Types.Race | null, recycled: boolean, incidents: Array<{ __typename?: 'Incident', id: string, date: Date, location?: { __typename?: 'Address', id: string, full: string } | null }> } | null, scheme: { __typename?: 'Scheme', id: string } }> };
 
 
 export const RecycledItemsDocument = gql`
-    query recycledItems($schemeId: String!, $search: String, $order: RecycledItemOrderByWithRelationInput, $first: Int, $after: String, $dataType: [String!]) {
+    query recycledItems($schemeId: String!, $search: String, $order: RecycledItemOrderByWithRelationInput, $first: Int, $after: String, $dataType: [String!], $skip: Int) {
   recycledItems(
     schemeId: $schemeId
     search: $search
@@ -25,6 +26,7 @@ export const RecycledItemsDocument = gql`
     first: $first
     after: $after
     dataType: $dataType
+    skip: $skip
   ) {
     id
     deletedAt

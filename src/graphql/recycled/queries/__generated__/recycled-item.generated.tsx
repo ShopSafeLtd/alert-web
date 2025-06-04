@@ -8,7 +8,7 @@ export type RecycledItemQueryVariables = Types.Exact<{
 }>;
 
 
-export type RecycledItemQuery = { __typename?: 'Query', recycledItem?: { __typename?: 'RecycledItem', id: string, systemTask: boolean, incident: { __typename?: 'Incident', id: string, date: Date, recycled: boolean, subject: string, createdBy: { __typename?: 'User', id: string, fullName: string, businesses: Array<{ __typename?: 'Business', id: string, name: string }> }, location?: { __typename?: 'Address', id: string, full: string } | null }, offender: { __typename?: 'Offender', id: string, gender?: Types.Gender | null, name?: string | null, race?: Types.Race | null, recycled: boolean, incidents: Array<{ __typename?: 'Incident', id: string, date: Date, location?: { __typename?: 'Address', id: string, full: string } | null }> }, scheme: { __typename?: 'Scheme', id: string } } | null };
+export type RecycledItemQuery = { __typename?: 'Query', recycledItem?: { __typename?: 'RecycledItem', id: string, systemTask?: boolean | null, incident?: { __typename?: 'Incident', id: string, date: Date, recycled: boolean, subject: string, createdBy: { __typename?: 'User', id: string, fullName: string, businesses: Array<{ __typename?: 'Business', id: string, name: string }> }, location?: { __typename?: 'Address', id: string, full: string } | null } | null, offender?: { __typename?: 'Offender', id: string, gender?: Types.Gender | null, name?: string | null, race?: Types.Race | null, recycled: boolean, incidents: Array<{ __typename?: 'Incident', id: string, date: Date, location?: { __typename?: 'Address', id: string, full: string } | null }> } | null, scheme: { __typename?: 'Scheme', id: string } } | null };
 
 
 export const RecycledItemDocument = gql`

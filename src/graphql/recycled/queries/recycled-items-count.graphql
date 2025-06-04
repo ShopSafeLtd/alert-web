@@ -1,0 +1,7 @@
+query recycledItemsCount(
+  $schemeId: String!
+  $search: String
+  $dataType: [String!]
+) {
+  recycledItemsCount(schemeId: $schemeId, search: $search, dataType: $dataType)
+}

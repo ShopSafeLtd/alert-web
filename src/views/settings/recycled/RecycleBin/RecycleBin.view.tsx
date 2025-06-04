@@ -18,16 +18,18 @@ interface Props {
   currentId: string | undefined;
   data: RecycledItemsQuery | undefined;
   loading: boolean;
+  pagination: { page: number; pageSize: number };
   recycledId: string | undefined;
   restoreIncident: boolean;
   restoreOffender: boolean;
   saving: boolean;
   setCurrentId: (value: string | undefined) => void;
+  setPagination: (value: { page: number; pageSize: number }) => void;
   setRecycledId: (value: string | undefined) => void;
   toggleRestore: (value: string | undefined) => void;
   toggleRestoreIncident: () => void;
-
   toggleRestoreOffender: () => void;
+  totalCount: number;
   updateDeleteIncident: MutationUpdaterFn<DeleteIncidentMutation>;
   updateDeleteOffender: MutationUpdaterFn<DeleteOffenderMutation>;
   updateRestoreIncident: MutationUpdaterFn<RestoreIncidentMutation>;
@@ -48,21 +50,25 @@ const RecycleBin = ({
   currentId,
   data,
   loading,
+  pagination,
   recycledId,
   restoreIncident,
   restoreOffender,
   saving,
   setCurrentId,
+  setPagination,
   setRecycledId,
   toggleRestore,
   toggleRestoreIncident,
   toggleRestoreOffender,
+  totalCount,
   updateDeleteIncident,
   updateDeleteOffender,
   updateRestoreIncident,
   updateRestoreOffender,
 }: Props): JSX.Element => {
   const intl = useIntl();
+
   const columns: ColumnsType<ColumnType> = [
     {
       dataIndex: 'type',
@@ -164,9 +170,13 @@ const RecycleBin = ({
         }))}
         loading={loading}
         pagination={{
-          defaultPageSize: 20,
+          current: pagination.page,
           hideOnSinglePage: true,
-          pageSize: 20,
+          onChange: (page, pageSize) => {
+            setPagination({ page, pageSize });
+          },
+          pageSize: pagination.pageSize,
+          total: totalCount,
         }}
         size="small"
         style={{ marginRight: 10 }}
