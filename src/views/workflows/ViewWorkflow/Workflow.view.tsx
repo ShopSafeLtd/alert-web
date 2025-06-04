@@ -3,6 +3,7 @@ import type { Theme } from '#/configs/ThemeConfig';
 import type { FormInstance } from 'antd';
 
 import BusinessesSelect from '#/components/form-components/BusinessesSelect/BusinessesSelect.view';
+import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
 import RoleSelect from '#/components/form-components/Roles/RoleSelect';
 import UsersManySelect from '#/components/form-components/UsersSelect/UsersSelectFetchMore.view';
 import DatePicker from '#/components/util-components/DatePicker';
@@ -69,6 +70,7 @@ interface WorkflowProps {
   goods: { label: string; value: string }[];
   goodsTypeCheck: boolean;
   groups: LabelValue[];
+  groupsSelected: boolean;
   incidentTimeCountCheck: boolean;
   lessThanSelected: boolean;
   loading: boolean;
@@ -117,6 +119,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
   goods,
   goodsTypeCheck,
   groups,
+  groupsSelected,
   incidentTimeCountCheck,
   lessThanSelected,
   loading,
@@ -549,6 +552,79 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                                   mode="tags"
                                   optionFilterProp="label"
                                   options={tags}
+                                />
+                              </Form.Item>
+                            </div>
+                          )}
+                        </div>
+                        <Divider style={{ marginBottom: 0, marginTop: 0 }} />
+                        <div>
+                          <Row style={{ padding: 20 }} wrap={false}>
+                            <Col flex={1}>
+                              <Typography.Title
+                                level={4}
+                                style={{
+                                  alignItems: 'center',
+                                  display: 'flex',
+                                  paddingTop: 8,
+                                }}
+                              >
+                                <FormattedMessage defaultMessage="Incident has a group" />
+                              </Typography.Title>
+                              <Typography.Text type="secondary">
+                                <FormattedMessage defaultMessage="Only trigger the workflow if the incident has a specific content group." />
+                              </Typography.Text>
+                            </Col>
+                            <Col>
+                              <Form.Item name="groups" valuePropName="checked">
+                                <Switch />
+                              </Form.Item>
+                            </Col>
+                          </Row>
+                          {groupsSelected && (
+                            <div className={classes.cardBody}>
+                              <Form.Item
+                                label={
+                                  <FormattedMessage defaultMessage="If any or all the content groups are present" />
+                                }
+                                name="groupMethod"
+                                rules={[
+                                  {
+                                    message: intl.formatMessage({
+                                      defaultMessage: 'Please select an option',
+                                    }),
+                                    required: true,
+                                  },
+                                ]}
+                              >
+                                <Radio.Group
+                                  optionType="button"
+                                  options={[
+                                    {
+                                      label: intl.formatMessage({
+                                        defaultMessage: 'Any',
+                                      }),
+                                      value: 'any',
+                                    },
+                                    {
+                                      label: intl.formatMessage({
+                                        defaultMessage: 'All',
+                                      }),
+                                      value: 'all',
+                                    },
+                                  ]}
+                                />
+                              </Form.Item>
+                              <Form.Item
+                                label={
+                                  <FormattedMessage defaultMessage="Content Groups" />
+                                }
+                                name="groupIds"
+                              >
+                                <GroupsSelect
+                                  allowClear
+                                  mode={'multiple'}
+                                  style={{ width: '100%' }}
                                 />
                               </Form.Item>
                             </div>

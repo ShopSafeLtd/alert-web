@@ -80,6 +80,10 @@ interface WorkflowConditions {
     anyAll: AnyAll;
     goods: string[] | undefined;
   };
+  groups?: {
+    anyAll: AnyAll;
+    groups: string[] | undefined;
+  };
   incidentTimeCount?: {
     noDays: string;
     noIncidents: string;
@@ -124,6 +128,9 @@ export interface FormData {
   goodsType: string[];
   goodsTypeCheck: boolean;
   goodsTypeCondition: AnyAll;
+  groupIds: string[];
+  groupMethod: AnyAll;
+  groups: boolean;
   incidentTimeCountCheck: boolean;
   incidentTimeCountDays: number;
   incidentTimeCountIncidents: number;
@@ -175,6 +182,7 @@ interface Return {
   goods: { label: string; value: string }[];
   goodsTypeCheck: boolean;
   groups: LabelValue[];
+  groupsSelected: boolean;
   incidentTimeCountCheck: boolean;
   lessThanSelected: boolean;
   loading: boolean;
@@ -274,6 +282,7 @@ const useWorkflowForm = (): Return => {
   } = useActivityTemplates();
   const navigate = useNavigate();
   const tagsSelected = Form.useWatch('tags', form);
+  const groupsSelected = Form.useWatch('groups', form);
   const valueSelected = Form.useWatch('valueCheck', form);
   const questionsSelected = Form.useWatch('questionChecked', form);
   const modelSelected = Form.useWatch('workflowType', form);
@@ -331,6 +340,11 @@ const useWorkflowForm = (): Return => {
               conditions?.goodsType?.goods &&
               conditions.goodsType.goods?.length > 0,
             goodsTypeCondition: conditions?.goodsType?.anyAll,
+            groupIds: conditions?.groups?.groups,
+            groupMethod: conditions?.groups?.anyAll,
+            groups:
+              conditions?.groups?.groups &&
+              conditions?.groups.groups.length > 0,
             incidentTimeCountCheck:
               conditions?.incidentTimeCount !== undefined &&
               !!conditions.incidentTimeCount.noDays &&
@@ -663,6 +677,12 @@ const useWorkflowForm = (): Return => {
             goods: values.goodsType,
           }
         : undefined,
+      groups: values.groups
+        ? {
+            anyAll: values.groupMethod,
+            groups: values.groupIds,
+          }
+        : undefined,
       incidentTimeCount: values.incidentTimeCountCheck
         ? {
             noDays: values.incidentTimeCountDays.toFixed(0),
@@ -795,6 +815,7 @@ const useWorkflowForm = (): Return => {
       })) || [],
     goodsTypeCheck,
     groups,
+    groupsSelected,
     incidentTimeCountCheck,
     lessThanSelected,
     loading: loading || templatesLoading || editWorkflowLoading || goodsLoading,
