@@ -13,6 +13,7 @@ const WorkflowFormContainer = () => {
     goods,
     goodsTypeCheck,
     groups,
+    groupsSelected,
     incidentTimeCountCheck,
     lessThanSelected,
     loading,
@@ -51,6 +52,7 @@ const WorkflowFormContainer = () => {
       goods={goods}
       goodsTypeCheck={goodsTypeCheck}
       groups={groups}
+      groupsSelected={groupsSelected}
       incidentTimeCountCheck={incidentTimeCountCheck}
       lessThanSelected={lessThanSelected}
       loading={loading}
