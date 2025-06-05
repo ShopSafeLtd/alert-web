@@ -1,44 +1,51 @@
 import React from 'react';
+
 import View from './RecycleBin.view';
-import useRecycleBin from './RecycleBin';
+import useRecycleBin from './useRecycleBin';
 
 const RecycleBin = (): JSX.Element => {
   const {
+    currentId,
     data,
     loading,
-    saving,
-    currentId,
-    setCurrentId,
+    pagination,
     recycledId,
+    restoreIncident,
+    restoreOffender,
+    saving,
+    setCurrentId,
+    setPagination,
     setRecycledId,
     toggleRestore,
-    restoreIncident,
     toggleRestoreIncident,
-    updateRestoreIncident,
-    updateDeleteIncident,
-    restoreOffender,
     toggleRestoreOffender,
-    updateRestoreOffender,
+    totalCount,
+    updateDeleteIncident,
     updateDeleteOffender,
+    updateRestoreIncident,
+    updateRestoreOffender,
   } = useRecycleBin();
   return (
     <View
+      currentId={currentId}
       data={data}
       loading={loading}
-      saving={saving}
-      currentId={currentId}
-      setCurrentId={setCurrentId}
+      pagination={pagination}
       recycledId={recycledId}
+      restoreIncident={restoreIncident}
+      restoreOffender={restoreOffender}
+      saving={saving}
+      setCurrentId={setCurrentId}
+      setPagination={setPagination}
       setRecycledId={setRecycledId}
       toggleRestore={toggleRestore}
-      restoreIncident={restoreIncident}
       toggleRestoreIncident={toggleRestoreIncident}
-      updateRestoreIncident={updateRestoreIncident}
-      updateDeleteIncident={updateDeleteIncident}
-      restoreOffender={restoreOffender}
       toggleRestoreOffender={toggleRestoreOffender}
-      updateRestoreOffender={updateRestoreOffender}
+      totalCount={totalCount}
+      updateDeleteIncident={updateDeleteIncident}
       updateDeleteOffender={updateDeleteOffender}
+      updateRestoreIncident={updateRestoreIncident}
+      updateRestoreOffender={updateRestoreOffender}
     />
   );
 };
