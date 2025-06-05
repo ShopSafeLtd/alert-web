@@ -2,6 +2,7 @@
 /* eslint-disable no-param-reassign */
 
 import type { Action } from 'easy-peasy';
+
 import { action } from 'easy-peasy';
 import { LocalStorageKeys, typedLocalStorage } from 'utils';
 
@@ -11,90 +12,101 @@ export enum NavType {
 }
 
 export enum SideNavTheme {
-  LIGHT = 'LIGHT',
   DARK = 'DARK',
+  LIGHT = 'LIGHT',
 }
 
 export const ThemeConfig = {
-  visibleBottomNav: true,
-  visibleAppBar: true,
-  visibleAppDrawer: false,
-  visibleStatusBar: false,
-  multiAppBar: false,
-  title: '',
-  navbarAction: 'default',
-  statusBarText: '',
-  search: '',
-  searchActive: false,
-  searchText: '',
   backLinkTo: '',
-  navbarActionDisabled: false,
-  newMessages: false,
-  newIncidents: false,
+  currentTheme:
+    (typedLocalStorage.get(LocalStorageKeys.theme) as 'dark' | 'light') ||
+    (window.matchMedia('(prefers-color-scheme: dark)').matches
+      ? 'dark'
+      : 'light'),
+  headerNavColor: '',
   lightbox: false,
   lightboxImages: [],
   lightboxIndex: 0,
-  platform: '',
-  notification: false,
-  notificationText: '',
-  notificationBottom: false,
-
-  navCollapsed: false,
-  sideNavTheme: SideNavTheme.LIGHT,
   locale:
     typedLocalStorage.get(LocalStorageKeys.lang) ||
     navigator.language.split('-')[0] ||
     'en',
-  navType: NavType.SIDE,
-  topNavColor: '#3e82f7',
-  headerNavColor: '',
   mobileNav: false,
-  currentTheme:
-    (typedLocalStorage.get(LocalStorageKeys.theme) as 'light' | 'dark') ||
-    (window.matchMedia('(prefers-color-scheme: dark)').matches
-      ? 'dark'
-      : 'light'),
+  multiAppBar: false,
+  navCollapsed: false,
+  navType: NavType.SIDE,
+  navbarAction: 'default',
+  navbarActionDisabled: false,
+  newIncidents: false,
+  newMessages: false,
+  notification: false,
+  notificationBottom: false,
+  notificationText: '',
+  platform: '',
+  search: '',
+  searchActive: false,
+  searchText: '',
+
+  sideNavTheme: SideNavTheme.LIGHT,
+  statusBarText: '',
+  title: '',
+  topNavColor: '#3e82f7',
+  visibleAppBar: true,
+  visibleAppDrawer: false,
+  visibleBottomNav: true,
+  visibleStatusBar: false,
 };
 
 export interface ThemeModel {
-  visibleBottomNav: boolean;
-  visibleAppBar: boolean;
-  visibleAppDrawer: boolean;
-  visibleStatusBar: boolean;
-  multiAppBar: boolean;
-  title: string;
-  navbarAction: string;
-  statusBarText: string;
-  search: string;
-  searchActive: boolean;
-  searchText: string;
   backLinkTo: string;
-  navbarActionDisabled: boolean;
-  newMessages: boolean;
-  newIncidents: boolean;
+  changeLocale: Action<ThemeModel, string>;
+  clearNav: Action<ThemeModel>;
+  clearSearch: Action<ThemeModel>;
+  currentTheme: 'dark' | 'light';
+  handleSearch: Action<ThemeModel, string>;
+  headerNavColor: string;
+  headerNavColorChange: Action<ThemeModel, string>;
   lightbox: boolean;
   lightboxImages: string[];
   lightboxIndex: number;
-  platform: string;
+  locale: string;
+  mobileNav: boolean;
+  multiAppBar: boolean;
+  navCollapsed: boolean;
+  navType: NavType;
+  navTypeChange: Action<ThemeModel, NavType>;
+  navbarAction: string;
+  navbarActionDisabled: boolean;
+  newIncidents: boolean;
+  newMessages: boolean;
   notification: boolean;
-  notificationText: string;
   notificationBottom: boolean;
-
-  clearNav: Action<ThemeModel>;
-  setBottomNav: Action<ThemeModel, boolean>;
+  notificationText: string;
+  platform: string;
+  search: string;
+  searchActive: boolean;
+  searchText: string;
   setAppBar: Action<ThemeModel, boolean>;
-  setTitle: Action<ThemeModel, string>;
-  setNewMessages: Action<ThemeModel, boolean>;
-  toggleAppDrawer: Action<ThemeModel>;
-  setStatusBar: Action<ThemeModel, { visible: boolean; text: string }>;
-  setNavBarAction: Action<ThemeModel, string>;
+  setBackLinkTo: Action<ThemeModel, string>;
+  setBottomNav: Action<ThemeModel, boolean>;
+  setLightboxIndex: Action<ThemeModel, number>;
   setMultiAppBar: Action<ThemeModel, boolean>;
-  handleSearch: Action<ThemeModel, string>;
-  clearSearch: Action<ThemeModel>;
+  setNavBarAction: Action<ThemeModel, string>;
+  setNavBarActionDisabled: Action<ThemeModel, boolean>;
+  setNewIncidents: Action<ThemeModel>;
+  setNewMessages: Action<ThemeModel, boolean>;
+  setPlatform: Action<ThemeModel, string>;
   setSearch: Action<ThemeModel, string>;
   setSearchText: Action<ThemeModel, string>;
-  setBackLinkTo: Action<ThemeModel, string>;
-  setNavBarActionDisabled: Action<ThemeModel, boolean>;
+  setStatusBar: Action<ThemeModel, { text: string; visible: boolean }>;
+  setTitle: Action<ThemeModel, string>;
+  sideNavStyleChange: Action<ThemeModel, SideNavTheme>;
+  sideNavTheme: SideNavTheme;
+  statusBarText: string;
+  switchTheme: Action<ThemeModel, 'dark' | 'light'>;
+  title: string;
+  toggleAppDrawer: Action<ThemeModel>;
+  toggleCollapsedNav: Action<ThemeModel, boolean>;
   toggleLightBox: Action<
     ThemeModel,
     {
@@ -102,40 +114,29 @@ export interface ThemeModel {
       index: number;
     }
   >;
-  setPlatform: Action<ThemeModel, string>;
+  toggleMobileNav: Action<ThemeModel>;
   toggleNotificationBar: Action<
     ThemeModel,
     {
+      bottom: boolean;
       status: boolean;
       text: string;
-      bottom: boolean;
     }
   >;
-  setNewIncidents: Action<ThemeModel>;
-  setLightboxIndex: Action<ThemeModel, number>;
-
-  navCollapsed: boolean;
-  sideNavTheme: SideNavTheme;
-  locale: string;
-  navType: NavType;
   topNavColor: string;
-  headerNavColor: string;
-  mobileNav: boolean;
-  currentTheme: 'light' | 'dark';
-
-  toggleCollapsedNav: Action<ThemeModel, boolean>;
-  sideNavStyleChange: Action<ThemeModel, SideNavTheme>;
-  changeLocale: Action<ThemeModel, string>;
-  navTypeChange: Action<ThemeModel, NavType>;
   topNavColorChange: Action<ThemeModel, string>;
-  headerNavColorChange: Action<ThemeModel, string>;
-  toggleMobileNav: Action<ThemeModel, boolean>;
-  switchTheme: Action<ThemeModel, 'light' | 'dark'>;
+  visibleAppBar: boolean;
+  visibleAppDrawer: boolean;
+  visibleBottomNav: boolean;
+  visibleStatusBar: boolean;
 }
 
 const themeModel: ThemeModel = {
   ...ThemeConfig,
 
+  changeLocale: action((state, payload) => {
+    state.locale = payload;
+  }),
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   clearNav: action((state, _payload) => {
     state.backLinkTo = ThemeConfig.backLinkTo;
@@ -173,6 +174,12 @@ const themeModel: ThemeModel = {
   }),
   handleSearch: action((state, payload) => {
     state.search = payload;
+  }),
+  headerNavColorChange: action((state, payload) => {
+    state.headerNavColor = payload;
+  }),
+  navTypeChange: action((state, payload) => {
+    state.navType = payload;
   }),
   setAppBar: action((state, payload) => {
     state.visibleAppBar = payload;
@@ -217,44 +224,34 @@ const themeModel: ThemeModel = {
   setTitle: action((state, payload) => {
     state.title = payload;
   }),
+  sideNavStyleChange: action((state, payload) => {
+    state.sideNavTheme = payload;
+  }),
+  switchTheme: action((state, payload) => {
+    typedLocalStorage.set(LocalStorageKeys.theme, payload);
+    state.currentTheme = payload;
+  }),
   toggleAppDrawer: action((state) => {
     state.visibleAppDrawer = !state.visibleStatusBar;
+  }),
+  toggleCollapsedNav: action((state, payload) => {
+    state.navCollapsed = payload;
   }),
   toggleLightBox: action((state, payload) => {
     state.lightbox = !state.lightbox;
     state.lightboxImages = payload.images;
     state.lightboxIndex = payload.index;
   }),
+  toggleMobileNav: action((state) => {
+    state.mobileNav = !state.mobileNav;
+  }),
   toggleNotificationBar: action((state, payload) => {
     state.notification = payload.status;
     state.notificationBottom = payload.bottom;
     state.notificationText = payload.text;
   }),
-
-  toggleCollapsedNav: action((state, payload) => {
-    state.navCollapsed = payload;
-  }),
-  sideNavStyleChange: action((state, payload) => {
-    state.sideNavTheme = payload;
-  }),
-  changeLocale: action((state, payload) => {
-    state.locale = payload;
-  }),
-  navTypeChange: action((state, payload) => {
-    state.navType = payload;
-  }),
   topNavColorChange: action((state, payload) => {
     state.topNavColor = payload;
-  }),
-  headerNavColorChange: action((state, payload) => {
-    state.headerNavColor = payload;
-  }),
-  toggleMobileNav: action((state, payload) => {
-    state.mobileNav = payload;
-  }),
-  switchTheme: action((state, payload) => {
-    typedLocalStorage.set(LocalStorageKeys.theme, payload);
-    state.currentTheme = payload;
   }),
 };
 

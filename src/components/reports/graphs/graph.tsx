@@ -84,7 +84,7 @@ const Graph = ({
     <div
       className="no-break"
       ref={containerRef}
-      style={{ height: '100%', marginLeft: 15, width: '100%%' }}
+      style={{ height: '100%', width: '100%' }}
     >
       <Typography.Title level={4}>{label}</Typography.Title>
       {loading ? (

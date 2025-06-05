@@ -127,7 +127,10 @@ const IncidentCCTV = ({ form, policeReporting, saving }: Props) => {
                 {fields.map(({ key, name, ...restField }) => (
                   <Col xs={24} xxl={12}>
                     <div className={classes.cctvCard}>
-                      <Row style={{ marginBottom: 10, padding: '15px 15px' }}>
+                      <Row
+                        style={{ marginBottom: 10, padding: '15px 15px' }}
+                        wrap={false}
+                      >
                         <Col flex={1}>
                           <Typography.Title
                             level={4}
@@ -149,7 +152,7 @@ const IncidentCCTV = ({ form, policeReporting, saving }: Props) => {
                         </Col>
                       </Row>
                       <Row gutter={16} style={{ padding: '0 15px' }}>
-                        <Col key={key} xxl={10}>
+                        <Col key={key} sm={10} span={24} xxl={10}>
                           <Form.Item
                             {...restField}
                             label={intl.formatMessage({
@@ -163,7 +166,7 @@ const IncidentCCTV = ({ form, policeReporting, saving }: Props) => {
                             <Input style={{ width: '100%' }} />
                           </Form.Item>
                         </Col>
-                        <Col xxl={6}>
+                        <Col md={6} span={24} xxl={6}>
                           <Form.Item
                             {...restField}
                             label={intl.formatMessage({
@@ -175,7 +178,7 @@ const IncidentCCTV = ({ form, policeReporting, saving }: Props) => {
                             <TimePicker style={{ width: '100%' }} />
                           </Form.Item>
                         </Col>
-                        <Col xxl={6}>
+                        <Col md={6} span={24} xxl={6}>
                           <Form.Item
                             {...restField}
                             label={intl.formatMessage({
@@ -187,7 +190,7 @@ const IncidentCCTV = ({ form, policeReporting, saving }: Props) => {
                             <TimePicker style={{ width: '100%' }} />
                           </Form.Item>
                         </Col>
-                        <Col span={3} xxl={6}>
+                        <Col md={4} span={12} xxl={6}>
                           <Form.Item
                             label={intl.formatMessage({
                               defaultMessage: 'Shows Incident',
@@ -218,7 +221,7 @@ const IncidentCCTV = ({ form, policeReporting, saving }: Props) => {
                             />
                           </Form.Item>
                         </Col>
-                        <Col span={4} xxl={6}>
+                        <Col md={5} span={12} xxl={6}>
                           <Form.Item
                             label={intl.formatMessage({
                               defaultMessage: 'Shows suspects face',
@@ -249,7 +252,7 @@ const IncidentCCTV = ({ form, policeReporting, saving }: Props) => {
                             />
                           </Form.Item>
                         </Col>
-                        <Col span={3} xxl={6}>
+                        <Col md={4} span={24} xxl={6}>
                           <Form.Item
                             label={intl.formatMessage({
                               defaultMessage: 'Correct Time',
@@ -306,7 +309,7 @@ const IncidentCCTV = ({ form, policeReporting, saving }: Props) => {
                               return null;
                             }
                             return (
-                              <Col span={24}>
+                              <Col sm={10} span={24} xxl={24}>
                                 <Row gutter={16} style={{ padding: '0 15px' }}>
                                   <Col xxl={8}>
                                     <Form.Item
@@ -387,7 +390,7 @@ const IncidentCCTV = ({ form, policeReporting, saving }: Props) => {
                             );
                           }}
                         </Form.Item>
-                        <Col xxl={24}>
+                        <Col span={24} xxl={24}>
                           <Form.Item
                             {...restField}
                             label={intl.formatMessage({

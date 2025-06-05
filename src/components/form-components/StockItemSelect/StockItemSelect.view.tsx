@@ -36,6 +36,7 @@ export interface StockItemValue {
   name?: null | string;
   salesPriceLocal?: null | number;
   sku?: null | string;
+  variant?: null | string;
 }
 
 interface Props {
@@ -368,6 +369,7 @@ const StockItemSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
           name: item.node.name,
           salesPriceLocal: item.node.salesPriceLocal,
           sku: item.node.sku,
+          variant: item.node.variant,
         });
     }
   };

@@ -87,7 +87,7 @@ const Offenders = ({
           </Divider>
           <Row gutter={[16, 16]}>
             {offenders.map((offender, index) => (
-              <Col key={offender.id}>
+              <Col key={offender.id} lg={8} md={12} span={24} xxl={6}>
                 <OffenderProfile
                   index={index}
                   mergeActive={mergeActive}
@@ -117,7 +117,7 @@ const Offenders = ({
             <span className={classes.subHeaderRequired}>*</span>
             <FormattedMessage defaultMessage="How many offenders were involved in the incident?" />
           </Paragraph>
-          <Row gutter={8}>
+          <Row gutter={[8, 8]}>
             <Col>
               <CountButton
                 onClick={toggleNoOffenders}
