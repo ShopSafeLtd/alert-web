@@ -32,6 +32,10 @@ const styles = createUseStyles((theme: Theme) => ({
     color: '#4d5b75',
     marginRight: 8,
   },
+  stockRow: {
+    borderBottom: `2px solid ${theme.borderColor}`,
+    marginBottom: 20,
+  },
 }));
 
 export default styles;

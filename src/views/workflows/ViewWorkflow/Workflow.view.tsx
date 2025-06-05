@@ -2034,6 +2034,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                                     name="setPriority"
                                   >
                                     <Select
+                                      allowClear
                                       options={Object.keys(
                                         IncidentPriority
                                       ).map((key) => ({

@@ -1,7 +1,9 @@
-import React from 'react';
-import { Card } from 'antd';
+import Graph from '#/components/reports/graphs/graph';
+import utils from '#/utils';
+import { Card, Grid } from 'antd';
+import React, { useEffect, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
-import BarGraph from '../../../../components/reports/graphs/barGraph';
+const { useBreakpoint } = Grid;
 
 interface Props {
   data: { label: string; value: number }[];
@@ -9,28 +11,88 @@ interface Props {
 }
 const DayOfWeekBar = ({ data, loading }: Props) => {
   const intl = useIntl();
+  const elementRef = useRef<HTMLDivElement | null>(null);
+  const [height, setHeight] = useState(0);
+  const screens = utils.getBreakPoint(useBreakpoint());
+  const isMobile = !screens.includes('xl');
+
+  useEffect(() => {
+    if (!elementRef.current) return;
+
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries as { contentRect: { height: number } }[]) {
+        setHeight(entry.contentRect.height);
+      }
+    });
+
+    resizeObserver.observe(elementRef.current);
+
+    // Cleanup on unmount
+    return () => resizeObserver.disconnect();
+  }, []);
+
   return (
     <Card
+      bodyStyle={{
+        display: 'flex',
+        height: '100%',
+        overflow: 'hidden',
+        padding: 10,
+      }}
       loading={loading}
+      ref={elementRef}
       style={{ height: '100%' }}
-      bodyStyle={{ height: '90%' }}
-      title={intl.formatMessage({
-        defaultMessage: 'Incidents by time of day',
-      })}
     >
-      <BarGraph
-        data={data}
+      <Graph
         emptyLabel={intl.formatMessage({
           defaultMessage: 'No incidents',
         })}
-        margin={{
-          bottom: 40,
-          top: 10,
-          right: 10,
-          left: 20,
+        graphOptions={{
+          axes: [
+            {
+              label: {
+                enabled: !isMobile,
+              },
+              type: 'number',
+            },
+            {
+              type: 'category',
+            },
+          ],
+          data: data
+            .filter((item) => item.value !== 0)
+            .map((item) => ({
+              hour: item.label,
+              incidents: item.value,
+            })),
+          height: height - 36,
+          legend: {
+            enabled: false,
+          },
+          series: [
+            {
+              type: 'bar',
+              xKey: 'hour',
+              xName: 'Hour',
+              yKey: 'incidents',
+              yName: 'Incidents',
+            },
+          ],
         }}
-        simplifyGrid
-        bottomLabel="(Hr)"
+        gridOptions={{
+          columnDefs: [
+            { field: 'hour', headerName: 'Hour' },
+            { field: 'count', headerName: 'Incident Count' },
+          ],
+          rowData: data.map((item) => ({
+            count: item.value,
+            hour: item?.label,
+          })),
+        }}
+        label={intl.formatMessage({
+          defaultMessage: 'Peak Incident Hours',
+        })}
+        loading={!loading}
       />
     </Card>
   );
