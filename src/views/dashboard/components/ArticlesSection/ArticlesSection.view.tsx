@@ -38,9 +38,12 @@ const ArticlesSection = ({
   setSearch,
   sortFilter,
   toggleSortFilter,
+  width,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const intl = useIntl();
+
+  console.log('width:', width);
   return (
     <Col
       style={{
@@ -116,7 +119,11 @@ const ArticlesSection = ({
             style={{ alignItems: 'stretch', padding: 10 }}
           >
             {data?.articles.map((article) => (
-              <Col sm={24} style={{ marginBottom: 10 }} xl={12}>
+              <Col
+                sm={24}
+                style={{ marginBottom: 10 }}
+                xl={width < 4 ? 24 : 12}
+              >
                 <ArticleCard article={article} key={article.id} />
               </Col>
             ))}
