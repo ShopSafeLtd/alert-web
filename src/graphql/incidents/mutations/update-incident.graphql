@@ -2,6 +2,10 @@ mutation updateIncident($where: UniqueId!, $data: IncidentUpdateInput!) {
   updateIncident(where: $where, data: $data) {
     id
     subject
+    business {
+      id
+      name
+    }
     description
     dayTime
     date
