@@ -3,9 +3,7 @@ import type { NavItem } from 'configs/NavigationConfig';
 import type { Theme } from 'configs/ThemeConfig';
 import type { NavType } from 'state';
 
-import mobileNav, {
-  mobileNavOpenAtom,
-} from '#/components/layout-components/AntD/navigation/MobileNav';
+import { mobileNavOpenAtom } from '#/components/layout-components/AntD/navigation/MobileNav';
 import NavTranslations from '#/components/layout-components/AntD/navigation/NavTranslations';
 import {
   currentPermissionsAtom,
@@ -165,7 +163,7 @@ const SideNavContent = ({
         overflow: 'hidden',
       }}
     >
-      {!mobileNav && (
+      {!isMobile && (
         <Link to="/app/dashboard">
           <Logo logoType="default" />
         </Link>
@@ -323,7 +321,7 @@ const SideNavContent = ({
           </Badge>
         </Col>
       </Row>
-      {customLogo && !mobileNav && (
+      {customLogo && !isMobile && (
         <img
           alt={intl.formatMessage({ defaultMessage: 'Alert Logo' })}
           src={getLogo({
