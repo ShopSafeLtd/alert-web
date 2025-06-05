@@ -14176,6 +14176,7 @@ export type Query = {
   question: Question;
   recycledItem?: Maybe<RecycledItem>;
   recycledItems: Array<RecycledItem>;
+  recycledItemsCount: Scalars['Int'];
   reportGroup: ReportGroup;
   reportGroups: QueryReportGroupsConnection;
   reportTemplate: ReportTemplate;
@@ -15295,6 +15296,15 @@ export type QueryRecycledItemsArgs = {
   dataType?: InputMaybe<Array<Scalars['String']>>;
   first?: InputMaybe<Scalars['Int']>;
   order?: InputMaybe<RecycledItemOrderByWithRelationInput>;
+  schemeId: Scalars['String'];
+  search?: InputMaybe<Scalars['String']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type QueryRecycledItemsCountArgs = {
+  dataType?: InputMaybe<Array<Scalars['String']>>;
   schemeId: Scalars['String'];
   search?: InputMaybe<Scalars['String']>;
   take?: InputMaybe<Scalars['Int']>;
@@ -16420,10 +16430,10 @@ export type RecycledItem = {
   deletedBy: User;
   expiresAt: Scalars['Date'];
   id: Scalars['ID'];
-  incident: Incident;
-  offender: Offender;
+  incident?: Maybe<Incident>;
+  offender?: Maybe<Offender>;
   scheme: Scheme;
-  systemTask: Scalars['Boolean'];
+  systemTask?: Maybe<Scalars['Boolean']>;
 };
 
 export type RecycledItemListRelationFilter = {
