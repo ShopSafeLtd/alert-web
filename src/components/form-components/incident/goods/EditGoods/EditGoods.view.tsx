@@ -153,46 +153,30 @@ const EditGoods = ({
 
       {goodsMode === GoodsMode.Specific && (
         <Row gutter={16}>
-          <Col span={12}>
+          <Col span={24}>
             <Form.Item
               label={intl.formatMessage({
                 defaultMessage: 'Item Name',
               })}
               name="name"
-              rules={[
-                {
-                  message: intl.formatMessage({
-                    defaultMessage: 'Please enter the name',
-                  }),
-                  required: true,
-                },
-              ]}
               tooltip={intl.formatMessage({
-                defaultMessage: 'The SKU of the name.',
+                defaultMessage: 'The name of the item.',
               })}
             >
-              <Input disabled={saving} readOnly style={{ width: 250 }} />
+              <Input disabled={saving} readOnly style={{ width: '100%' }} />
             </Form.Item>
           </Col>
-          <Col span={12}>
+          <Col span={24}>
             <Form.Item
               label={intl.formatMessage({
                 defaultMessage: 'SKU',
               })}
               name="sku"
-              rules={[
-                {
-                  message: intl.formatMessage({
-                    defaultMessage: 'Please enter the SKU',
-                  }),
-                  required: true,
-                },
-              ]}
               tooltip={intl.formatMessage({
                 defaultMessage: 'The SKU of the item.',
               })}
             >
-              <Input disabled={saving} readOnly style={{ width: 250 }} />
+              <Input disabled={saving} readOnly style={{ width: '100%' }} />
             </Form.Item>
           </Col>
           <Col span={12}>
@@ -223,30 +207,29 @@ const EditGoods = ({
               />
             </Form.Item>
           </Col>
+          <Col span={12} />
           <Col span={12}>
             <Form.Item
               label={intl.formatMessage({
-                defaultMessage: 'Value Recovered',
+                defaultMessage: 'Quantity',
               })}
-              name="recoveredValue"
+              name="quantity"
               rules={[
                 {
                   message: intl.formatMessage({
-                    defaultMessage: 'Please enter a value',
+                    defaultMessage: 'Please enter a quantity',
                   }),
                   required: true,
                 },
               ]}
               tooltip={intl.formatMessage({
-                defaultMessage: 'The value of the goods that were recovered.',
+                defaultMessage: 'The quantity of the goods taken.',
               })}
             >
               <InputNumber
                 disabled={saving}
                 max={value ?? undefined}
                 min={0}
-                precision={2}
-                prefix={prefix}
                 style={{ width: '100%' }}
               />
             </Form.Item>

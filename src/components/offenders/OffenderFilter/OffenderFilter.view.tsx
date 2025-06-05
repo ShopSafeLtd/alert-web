@@ -195,6 +195,9 @@ const OffenderFilter = ({
               defaultMessage: 'Groups',
             })}
             size="small"
+            style={{
+              width: '100%',
+            }}
             value={groupsFilter}
           />
         </Col>

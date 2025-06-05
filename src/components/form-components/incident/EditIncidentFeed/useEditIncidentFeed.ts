@@ -168,10 +168,19 @@ const useEditIncidentFeed = ({ incidentId, onClose }: Props): Return => {
   const onSubmit = (data: FormData) => {
     setSaving(true);
     if (incidentId) {
+      const business = data.business as string[] | undefined;
       void updateIncident({
         variables: {
           data: {
             approved: { set: true },
+            business:
+              Array.isArray(business) && business.at(0)
+                ? { connect: { id: business.at(0) ?? '' } }
+                : incidentData?.incident.business?.id
+                  ? {
+                      disconnect: true,
+                    }
+                  : undefined,
             crimeTypes: {
               set: [
                 ...data.tagsCrimeTypes.map((id) => ({ id })),
