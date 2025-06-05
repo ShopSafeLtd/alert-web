@@ -27,12 +27,12 @@ const Views = () => {
     window.location.replace('https://app.shopsafe.io/');
   }
 
-  if (navigator?.userAgent?.toLowerCase().includes('android')) {
-    window.location.href =
-      'https://play.google.com/store/apps/details?id=co.uk.shopsafealert.app';
-  } else if (navigator?.userAgent?.toLowerCase().includes('iphone')) {
-    window.location.href = 'https://apps.apple.com/gb/app/alert/id1497736226';
-  }
+  // if (navigator?.userAgent?.toLowerCase().includes('android')) {
+  //   window.location.href =
+  //     'https://play.google.com/store/apps/details?id=co.uk.shopsafealert.app';
+  // } else if (navigator?.userAgent?.toLowerCase().includes('iphone')) {
+  //   window.location.href = 'https://apps.apple.com/gb/app/alert/id1497736226';
+  // }
   const { token } = useTokenContext();
 
   const {

@@ -1,3 +1,5 @@
+import type { Theme } from '#/configs/ThemeConfig';
+
 import LoadingScreen from '#/components/layout-components/LoadingScreen';
 import Loading from '#/components/shared-components/AntD/Loading';
 import {
@@ -14,27 +16,47 @@ import {
 } from '#/providers/SchemeProvider/SchemeProvider';
 import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import { useAuth as useAuthClerk } from '@clerk/clerk-react';
+import { faBars } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Grid, Layout } from 'antd';
-import MobileNav from 'components/layout-components/AntD/navigation/MobileNav';
+import MobileNav, {
+  mobileNavOpenAtom,
+} from 'components/layout-components/AntD/navigation/MobileNav';
 import SideNav from 'components/layout-components/AntD/navigation/SideNav';
 import navigationConfig from 'configs/NavigationConfig';
-import { useAtomValue } from 'jotai/index';
+import { useAtomValue, useSetAtom } from 'jotai/index';
 import AppViews from 'navigation/app-views/router';
 import { usePostHog } from 'posthog-js/react';
 import React, { Suspense, useEffect } from 'react';
 import { useThemeSwitcher } from 'react-css-theme-switcher/src';
+import { createUseStyles } from 'react-jss';
 import { useLocation } from 'react-router-dom';
 import { NavType, useStoreState } from 'state';
 import utils from 'utils';
 
-import ScreenSizeUnsupported from '../../components/layout-components/ScreenSizeUnsuported';
-
 const { Content } = Layout;
 const { useBreakpoint } = Grid;
+
+const useStyles = createUseStyles((theme: Theme) => ({
+  menuButton: {
+    alignItems: 'center',
+    backgroundColor: theme.primary,
+    borderRadius: '100%',
+    display: 'flex',
+    height: 46,
+    justifyContent: 'center',
+    position: 'fixed',
+    right: 20,
+    top: 20,
+    width: 46,
+    zIndex: 899,
+  },
+}));
 
 const AppLayout = (): JSX.Element => {
   const location = useLocation();
   const posthog = usePostHog();
+  const classes = useStyles();
 
   const navCollapsed = useStoreState((state) => state.theme.navCollapsed);
   const navType = useStoreState((state) => state.theme.navType);
@@ -44,7 +66,7 @@ const AppLayout = (): JSX.Element => {
   );
   const { getCurrentUser } = useAuth();
   const screens = utils.getBreakPoint(useBreakpoint());
-  const isMobile = !screens.includes('lg');
+  const isMobile = !screens.includes('xl');
   const isNavSide = navType === NavType.SIDE;
   const { isLoaded } = useAuthClerk();
 
@@ -70,6 +92,11 @@ const AppLayout = (): JSX.Element => {
   const isSet = !!currentUser;
 
   const currentScheme = useAtomValue(currentSchemeIdAtom);
+  const setMobileNavOpen = useSetAtom(mobileNavOpenAtom);
+
+  const onMobileNavToggle = () => {
+    setMobileNavOpen(true);
+  };
 
   const { status } = useThemeSwitcher();
 
@@ -112,40 +139,41 @@ const AppLayout = (): JSX.Element => {
   if (!isLoaded || !isSet || isSettingScheme) return <LoadingScreen />;
 
   return (
-    <ScreenSizeUnsupported>
-      <Suspense fallback={<Loading cover="content" />}>
-        <GroupsProvider>
-          <Layout>
-            <Layout className="app-container">
-              {isNavSide && !isMobile && !onboardingRoute ? (
-                <SideNav routeInfo={currentRouteInfo} />
-              ) : null}
-              <Layout
-                className=""
+    <Suspense fallback={<Loading cover="content" />}>
+      <GroupsProvider>
+        <Layout>
+          <Layout className="app-container">
+            {isNavSide && !isMobile && !onboardingRoute ? (
+              <SideNav routeInfo={currentRouteInfo} />
+            ) : null}
+            <Layout
+              className=""
+              style={{
+                paddingLeft: onboardingRoute ? 0 : getLayoutGutter(),
+              }}
+            >
+              <div
+                className={'app-content'}
                 style={{
-                  paddingLeft: onboardingRoute ? 0 : getLayoutGutter(),
+                  padding:
+                    location.pathname.includes('settings') || onboardingRoute
+                      ? 0
+                      : undefined,
                 }}
               >
-                <div
-                  className={'app-content'}
-                  style={{
-                    padding:
-                      location.pathname.includes('settings') || onboardingRoute
-                        ? 0
-                        : undefined,
-                  }}
-                >
-                  <Content>
-                    <AppViews />
-                  </Content>
-                </div>
-              </Layout>
+                <Content>
+                  <AppViews />
+                </Content>
+              </div>
             </Layout>
-            {isMobile && <MobileNav routeInfo={currentRouteInfo} />}
           </Layout>
-        </GroupsProvider>
-      </Suspense>
-    </ScreenSizeUnsupported>
+          {isMobile && <MobileNav routeInfo={currentRouteInfo} />}
+          <div className={classes.menuButton} onClick={onMobileNavToggle}>
+            <FontAwesomeIcon color="#FFF" icon={faBars} size="xl" />
+          </div>
+        </Layout>
+      </GroupsProvider>
+    </Suspense>
   );
 };
 

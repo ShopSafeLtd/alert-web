@@ -38,7 +38,6 @@ const ArticlesSection = ({
   setSearch,
   sortFilter,
   toggleSortFilter,
-  width,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const intl = useIntl();
@@ -99,7 +98,7 @@ const ArticlesSection = ({
         >
           {Array.from({ length: 24 }).map((_, index) => (
             // eslint-disable-next-line react/no-array-index-key
-            <Col key={index} span={4 % width === 0 ? 24 : 24 / (4 % width)}>
+            <Col key={index} span={24} xl={12}>
               <ArticleSkeletonCard />
             </Col>
           ))}
@@ -117,11 +116,7 @@ const ArticlesSection = ({
             style={{ alignItems: 'stretch', padding: 10 }}
           >
             {data?.articles.map((article) => (
-              <Col
-                sm={2 % width === 0 ? 24 : 24 / (2 % width)}
-                style={{ marginBottom: 10 }}
-                xxl={4 % width === 0 ? 24 : 24 / (4 % width)}
-              >
+              <Col sm={24} style={{ marginBottom: 10 }} xl={12}>
                 <ArticleCard article={article} key={article.id} />
               </Col>
             ))}

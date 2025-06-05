@@ -282,8 +282,8 @@ const Profiles = ({
           {(fields, { add, remove }) => (
             <>
               {fields.map(({ key, name, ...restField }, i) => (
-                <Row gutter={32}>
-                  <Col key={key}>
+                <Row gutter={32} key={key}>
+                  <Col md={8} sm={12} span={24} xl={8}>
                     <Form.Item
                       {...restField}
                       label={
@@ -298,7 +298,7 @@ const Profiles = ({
                       <Input style={{ width: '100%' }} />
                     </Form.Item>
                   </Col>
-                  <Col span={3}>
+                  <Col md={8} sm={12} span={24} xl={3}>
                     <Form.Item
                       label={
                         i === 0 &&
@@ -311,7 +311,7 @@ const Profiles = ({
                       <Input style={{ width: '100%' }} />
                     </Form.Item>
                   </Col>
-                  <Col span={4}>
+                  <Col md={8} sm={12} span={24} xl={4}>
                     <Form.Item
                       label={
                         i === 0 &&
@@ -324,7 +324,7 @@ const Profiles = ({
                       <Input style={{ width: '100%' }} />
                     </Form.Item>
                   </Col>
-                  <Col flex={1}>
+                  <Col lg={14} span={20} xl={7}>
                     <Form.Item
                       label={
                         i === 0 &&
@@ -337,7 +337,7 @@ const Profiles = ({
                       <Input style={{ width: '100%' }} />
                     </Form.Item>
                   </Col>
-                  <Col>
+                  <Col span={4} xl={1}>
                     <Button
                       onClick={() => remove(name)}
                       style={{
@@ -403,7 +403,7 @@ const Profiles = ({
             <>
               {fields.map(({ key, name, ...restField }, i) => (
                 <Row gutter={32}>
-                  <Col key={key}>
+                  <Col key={key} md={8} sm={12} span={24} xl={8}>
                     <Form.Item
                       {...restField}
                       label={
@@ -418,7 +418,7 @@ const Profiles = ({
                       <Input style={{ width: '100%' }} />
                     </Form.Item>
                   </Col>
-                  <Col span={3}>
+                  <Col md={8} sm={12} span={24} xl={3}>
                     <Form.Item
                       label={
                         i === 0 &&
@@ -431,7 +431,7 @@ const Profiles = ({
                       <Input style={{ width: '100%' }} />
                     </Form.Item>
                   </Col>
-                  <Col span={4}>
+                  <Col md={8} sm={12} span={24} xl={4}>
                     <Form.Item
                       label={
                         i === 0 &&
@@ -444,7 +444,7 @@ const Profiles = ({
                       <Input style={{ width: '100%' }} />
                     </Form.Item>
                   </Col>
-                  <Col flex={1}>
+                  <Col lg={14} span={20} xl={7}>
                     <Form.Item
                       label={
                         i === 0 &&
@@ -457,7 +457,7 @@ const Profiles = ({
                       <Input style={{ width: '100%' }} />
                     </Form.Item>
                   </Col>
-                  <Col>
+                  <Col span={4} xl={1}>
                     <Button
                       onClick={() => remove(name)}
                       style={{

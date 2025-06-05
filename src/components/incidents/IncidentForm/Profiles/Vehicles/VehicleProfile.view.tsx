@@ -1,28 +1,30 @@
+import { faTrash } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Col, Popconfirm, Row, Tooltip, Typography } from 'antd';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { Button, Col, Popconfirm, Row, Tooltip, Typography } from 'antd';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/pro-light-svg-icons';
+
+import type { AddVehicleData, StateVehicleData } from './useVehicles';
+
 import WatermarkImage from '../../../../images/WatermarkImage.view';
-import type { StateVehicleData, AddVehicleData } from './useVehicles';
 import useStyles from '../Profiles.styles';
 
 const { Text } = Typography;
 
 interface Props {
-  vehicle: StateVehicleData;
   onRemoveVehicle: (id: string) => void;
+  saving: boolean;
   setMatchExistingOpen: (value: AddVehicleData | null) => void;
   setUpdateOpen: (value: StateVehicleData | null) => void;
-  saving: boolean;
+  vehicle: StateVehicleData;
 }
 
 const VehicleProfileView = ({
-  vehicle,
   onRemoveVehicle,
+  saving,
   setMatchExistingOpen,
   setUpdateOpen,
-  saving,
+  vehicle,
 }: Props) => {
   const intl = useIntl();
   const classes = useStyles();
@@ -94,7 +96,7 @@ const VehicleProfileView = ({
           </div>
         </div>
         <div className={classes.grow} />
-        <Row gutter={8} justify="end">
+        <Row gutter={[8, 8]} justify="end">
           <Col>
             <Tooltip
               title={intl.formatMessage({
@@ -103,10 +105,10 @@ const VehicleProfileView = ({
               })}
             >
               <Button
-                size="small"
-                onClick={() => setUpdateOpen(vehicle)}
                 className={vehicle.blank ? classes.redButton : ''}
                 disabled={saving}
+                onClick={() => setUpdateOpen(vehicle)}
+                size="small"
               >
                 <FormattedMessage defaultMessage="Add Details" />
               </Button>
@@ -121,9 +123,9 @@ const VehicleProfileView = ({
                 })}
               >
                 <Button
-                  size="small"
-                  onClick={() => setMatchExistingOpen(vehicle)}
                   disabled={saving}
+                  onClick={() => setMatchExistingOpen(vehicle)}
+                  size="small"
                 >
                   <FormattedMessage defaultMessage="Match Vehicle" />
                 </Button>
@@ -132,25 +134,25 @@ const VehicleProfileView = ({
           )}
           <Col>
             <Popconfirm
-              placement="topLeft"
-              title={intl.formatMessage({
-                defaultMessage: 'Remove the vehicle?',
+              cancelText={intl.formatMessage({
+                defaultMessage: 'No',
+              })}
+              okText={intl.formatMessage({
+                defaultMessage: 'Yes',
               })}
               onConfirm={() => {
                 onRemoveVehicle(vehicle.id);
               }}
-              okText={intl.formatMessage({
-                defaultMessage: 'Yes',
-              })}
-              cancelText={intl.formatMessage({
-                defaultMessage: 'No',
-              })}
               overlayInnerStyle={{ padding: 10 }}
+              placement="topLeft"
+              title={intl.formatMessage({
+                defaultMessage: 'Remove the vehicle?',
+              })}
             >
               <Button
                 disabled={saving}
+                icon={<FontAwesomeIcon icon={faTrash} size="xs" />}
                 style={{ height: 36 }}
-                icon={<FontAwesomeIcon size="xs" icon={faTrash} />}
               />
             </Popconfirm>
           </Col>
