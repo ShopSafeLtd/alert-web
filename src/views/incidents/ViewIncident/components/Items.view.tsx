@@ -57,7 +57,6 @@ interface Props {
 const Items = ({
   currency: businessCurrency,
   data,
-  deleteRights,
   editRights,
   incidentId,
   loading,
@@ -178,12 +177,16 @@ const Items = ({
             update: [
               {
                 data: {
-                  goodsType: {
-                    connect: {
-                      id: value.goodsTypeId || '',
-                    },
-                  },
+                  goodsType: value.goodsTypeId
+                    ? {
+                        connect: {
+                          id: value.goodsTypeId || '',
+                        },
+                      }
+                    : undefined,
                   name: { set: value.name },
+                  quantity: { set: value.quantity || 0 },
+                  recoveredQuantity: { set: value.recoveredQuantity || 0 },
                   recoveredValue: { set: value.recoveredValue || 0 },
                   value: { set: value.value || 0 },
                 },
@@ -362,7 +365,7 @@ const Items = ({
                               </Tooltip>
                             </Col>
                           )}
-                          {deleteRights && (
+                          {editRights && (
                             <Col>
                               <Tooltip
                                 title={intl.formatMessage({
@@ -470,6 +473,72 @@ const Items = ({
                         defaultMessage: 'Item Total',
                       }),
                     },
+                    {
+                      dataIndex: 'Options',
+                      key: 'Options',
+                      render: (_, record) => (
+                        <Row className="no-print" gutter={8}>
+                          {editRights && (
+                            <Col>
+                              <Tooltip
+                                title={intl.formatMessage({
+                                  defaultMessage: 'Edit Item',
+                                })}
+                              >
+                                <Button
+                                  disabled={saving}
+                                  icon={
+                                    <FontAwesomeIcon icon={faPenToSquare} />
+                                  }
+                                  onClick={() => {
+                                    setEditGoodsData(record.item);
+                                  }}
+                                  size="small"
+                                />
+                              </Tooltip>
+                            </Col>
+                          )}
+                          {editRights && (
+                            <Col>
+                              <Tooltip
+                                title={intl.formatMessage({
+                                  defaultMessage: 'Remove Item',
+                                })}
+                              >
+                                <Popconfirm
+                                  cancelText={intl.formatMessage({
+                                    defaultMessage: 'No',
+                                  })}
+                                  okText={intl.formatMessage({
+                                    defaultMessage: 'Yes',
+                                  })}
+                                  onConfirm={() => onDeleteGoods(record.key)}
+                                  overlayInnerStyle={{
+                                    padding: 10,
+                                  }}
+                                  placement="topLeft"
+                                  title={intl.formatMessage({
+                                    defaultMessage: 'Remove the item?',
+                                  })}
+                                  trigger="hover"
+                                >
+                                  <Button
+                                    disabled={saving}
+                                    // }
+                                    icon={<FontAwesomeIcon icon={faTrash} />}
+                                    // onClick={() =>
+                                    //   onDeleteGoods(record.key)
+                                    size="small"
+                                  />
+                                </Popconfirm>
+                              </Tooltip>
+                            </Col>
+                          )}
+                        </Row>
+                      ),
+                      title: '',
+                      width: 100,
+                    },
                   ]
             }
             dataSource={data?.incident?.incidentItems.map((item) => ({
@@ -557,6 +626,7 @@ const Items = ({
                       style: 'currency',
                     })}
                   </Table.Summary.Cell>
+                  <Table.Summary.Cell index={6} />
                 </Table.Summary.Row>
               );
             }}
