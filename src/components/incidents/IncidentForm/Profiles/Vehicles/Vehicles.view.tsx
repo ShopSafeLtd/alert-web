@@ -71,7 +71,7 @@ const Vehicles = ({
             <span className={classes.subHeaderRequired}>*</span>
             <FormattedMessage defaultMessage="How many vehicles were involved in the incident?" />
           </Paragraph>
-          <Row gutter={8}>
+          <Row gutter={[8, 8]}>
             <Col>
               <CountButton
                 onClick={toggleNoVehicles}
@@ -129,7 +129,7 @@ const Vehicles = ({
           </Divider>
           <Row gutter={[16, 16]}>
             {vehicles.map((vehicle) => (
-              <Col key={vehicle.id}>
+              <Col key={vehicle.id} lg={8} md={12} span={24} xxl={6}>
                 <VehicleProfile
                   onRemoveVehicle={onRemoveVehicle}
                   saving={saving}

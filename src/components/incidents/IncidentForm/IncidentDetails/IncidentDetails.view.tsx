@@ -34,7 +34,7 @@ const IncidentDetails = ({ saving }: Props): JSX.Element => {
         </Col>
       </Row>
       <Row gutter={16}>
-        <Col span={6}>
+        <Col md={6} span={24}>
           <Form.Item
             label={intl.formatMessage({ defaultMessage: 'Time & Date' }, {})}
             name="date"

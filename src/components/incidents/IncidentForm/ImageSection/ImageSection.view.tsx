@@ -90,27 +90,31 @@ const ImageSection = ({
   const { imageAnalyseGo, imageUpload } = getCustomUrls();
   return (
     <div>
-      <Row align="middle" style={{ marginBottom: 20 }}>
+      <Row align="middle" gutter={[8, 8]} style={{ marginBottom: 20 }}>
         <Col>
-          <Title level={4} style={{ marginBottom: 0, marginLeft: 5 }}>
-            {intl.formatMessage({
-              defaultMessage: 'Images & Other Media',
-            })}
-          </Title>
+          <Row>
+            <Col>
+              <Title level={4} style={{ marginBottom: 0, marginLeft: 5 }}>
+                {intl.formatMessage({
+                  defaultMessage: 'Images & Other Media',
+                })}
+              </Title>
+            </Col>
+            <Col>
+              <Paragraph
+                italic
+                style={{ marginBottom: 1, marginLeft: 5 }}
+                type="secondary"
+              >
+                {intl.formatMessage({
+                  defaultMessage:
+                    '- Please add other images & media that you have related to this incident.',
+                })}
+              </Paragraph>
+            </Col>
+          </Row>
         </Col>
         <Col>
-          <Paragraph
-            italic
-            style={{ marginBottom: 1, marginLeft: 5 }}
-            type="secondary"
-          >
-            {intl.formatMessage({
-              defaultMessage:
-                '- Please add other images & media that you have related to this incident.',
-            })}
-          </Paragraph>
-        </Col>
-        <Col style={{ marginLeft: 30 }}>
           <Upload
             // listType="picture-card"
             accept=".png,.jpeg"
@@ -145,7 +149,7 @@ const ImageSection = ({
             </Tooltip>
           </Upload>
         </Col>
-        <Col style={{ marginLeft: 30 }}>
+        <Col>
           <Tooltip
             placement="bottom"
             title={intl.formatMessage({
@@ -168,7 +172,6 @@ const ImageSection = ({
                     style={{ marginRight: 5 }}
                   />
                 }
-                type="text"
               >
                 {intl.formatMessage({
                   defaultMessage: 'Upload Document',

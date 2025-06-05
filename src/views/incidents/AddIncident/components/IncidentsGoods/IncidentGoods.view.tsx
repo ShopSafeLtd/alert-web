@@ -101,29 +101,33 @@ const IncidentGoods = ({
     (currency ? CurrencySymbolMap[currency]?.prefix : null) || backupPrefix;
   return (
     <Card className={classes.card}>
-      <Row align="bottom" style={{ marginBottom: 20 }}>
+      <Row align="middle" gutter={[8, 8]} style={{ marginBottom: 20 }}>
         <Col>
-          <Title level={4} style={{ marginBottom: 0, marginLeft: 5 }}>
-            {goodsVisible
-              ? intl.formatMessage({
-                  defaultMessage: 'What goods were involved?',
-                })
-              : intl.formatMessage({
-                  defaultMessage: 'Do you know what goods were involved?',
+          <Row>
+            <Col>
+              <Title level={4} style={{ marginBottom: 0, marginLeft: 5 }}>
+                {goodsVisible
+                  ? intl.formatMessage({
+                      defaultMessage: 'What goods were involved?',
+                    })
+                  : intl.formatMessage({
+                      defaultMessage: 'Do you know what goods were involved?',
+                    })}
+              </Title>
+            </Col>
+            <Col flex={1}>
+              <Paragraph
+                italic
+                style={{ marginBottom: 1, marginLeft: 5 }}
+                type="secondary"
+              >
+                {intl.formatMessage({
+                  defaultMessage:
+                    '- Please provide information about the lost/recovered goods.',
                 })}
-          </Title>
-        </Col>
-        <Col flex={1}>
-          <Paragraph
-            italic
-            style={{ marginBottom: 1, marginLeft: 5 }}
-            type="secondary"
-          >
-            {intl.formatMessage({
-              defaultMessage:
-                '- Please provide information about the lost/recovered goods.',
-            })}
-          </Paragraph>
+              </Paragraph>
+            </Col>
+          </Row>
         </Col>
         {goodsVisible && (
           <Col>
@@ -168,7 +172,7 @@ const IncidentGoods = ({
                       'Search for an item to add to the incident...',
                   })}
                   showSearch
-                  style={{ marginBottom: 20, width: 500 }}
+                  style={{ marginBottom: 20, maxWidth: '100%', width: 500 }}
                 />
               )}
               {/* eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison */}
@@ -216,7 +220,7 @@ const IncidentGoods = ({
                 </Empty>
               )}
               {fields.map(({ key, name, ...restField }, index) => (
-                <Row gutter={8} key={key}>
+                <Row className={classes.stockRow} gutter={8} key={key}>
                   {/* eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison */}
                   {goodsMode === GoodsMode.Generic && (
                     <>
@@ -346,7 +350,7 @@ const IncidentGoods = ({
                   {/* eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison */}
                   {goodsMode === GoodsMode.Specific && (
                     <>
-                      <Col>
+                      <Col lg={6} span={24}>
                         <Form.Item
                           {...restField}
                           label={
@@ -366,13 +370,13 @@ const IncidentGoods = ({
                             },
                           ]}
                           tooltip={intl.formatMessage({
-                            defaultMessage: 'The SKU of the name.',
+                            defaultMessage: 'The name of the itmem.',
                           })}
                         >
-                          <Input readOnly style={{ width: 250 }} />
+                          <Input readOnly style={{ width: '100%' }} />
                         </Form.Item>
                       </Col>
-                      <Col>
+                      <Col lg={4} md={6} sm={12} span={24}>
                         <Form.Item
                           {...restField}
                           label={
@@ -395,10 +399,28 @@ const IncidentGoods = ({
                             defaultMessage: 'The SKU of the item.',
                           })}
                         >
-                          <Input readOnly style={{ width: 250 }} />
+                          <Input readOnly style={{ width: '100%' }} />
                         </Form.Item>
                       </Col>
-                      <Col>
+                      <Col lg={3} md={6} sm={12} span={24}>
+                        <Form.Item
+                          {...restField}
+                          label={
+                            index
+                              ? ''
+                              : intl.formatMessage({
+                                  defaultMessage: 'Variant',
+                                })
+                          }
+                          name={[name, 'variant']}
+                          tooltip={intl.formatMessage({
+                            defaultMessage: 'The variant of the item.',
+                          })}
+                        >
+                          <Input readOnly style={{ width: '100%' }} />
+                        </Form.Item>
+                      </Col>
+                      <Col lg={3} md={3} span={12} xl={2}>
                         <Form.Item
                           {...restField}
                           label={
@@ -425,11 +447,11 @@ const IncidentGoods = ({
                             min={0}
                             precision={2}
                             prefix={prefix}
-                            style={{ width: 150 }}
+                            style={{ width: '100%' }}
                           />
                         </Form.Item>
                       </Col>
-                      <Col>
+                      <Col lg={3} md={3} span={12} xl={2}>
                         <Form.Item
                           {...restField}
                           label={
@@ -464,11 +486,11 @@ const IncidentGoods = ({
                           <InputNumber
                             min={0}
                             precision={0}
-                            style={{ width: 150 }}
+                            style={{ width: '100%' }}
                           />
                         </Form.Item>
                       </Col>
-                      <Col>
+                      <Col lg={3} md={3} span={12}>
                         <Form.Item
                           {...restField}
                           label={
@@ -497,7 +519,7 @@ const IncidentGoods = ({
                             max={goods[index].quantity}
                             min={0}
                             precision={0}
-                            style={{ width: 150 }}
+                            style={{ width: '100%' }}
                           />
                         </Form.Item>
                       </Col>
@@ -588,8 +610,8 @@ const IncidentGoods = ({
       )}
       {goodsMode === GoodsMode.Specific && goods?.length > 0 && (
         <Row gutter={16}>
-          <Col style={{ width: 525 }} />
-          <Col style={{ width: 155 }}>
+          <Col lg={14} md={12} span={0} />
+          <Col lg={2} md={3} span={8}>
             <Title level={5} style={{ marginBottom: 0 }}>
               <FormattedMessage defaultMessage="Total Value" />
             </Title>
@@ -598,7 +620,7 @@ const IncidentGoods = ({
               style: 'currency',
             })}
           </Col>
-          <Col style={{ width: 155 }}>
+          <Col lg={2} md={3} span={8}>
             <Title level={5} style={{ marginBottom: 0 }}>
               <FormattedMessage defaultMessage="Total Loss" />
             </Title>
@@ -610,7 +632,7 @@ const IncidentGoods = ({
               }
             )}
           </Col>
-          <Col>
+          <Col lg={4} md={6} span={8}>
             <Title level={5} style={{ marginBottom: 0 }}>
               <FormattedMessage defaultMessage="Total Recovered Value" />
             </Title>

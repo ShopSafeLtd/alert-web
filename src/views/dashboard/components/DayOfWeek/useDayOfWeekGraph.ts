@@ -1,5 +1,7 @@
+import { isAdminAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { useDashboardContext } from '#/views/dashboard/Dashboard.context';
 import { useIncidentsDayOfWeekQuery } from '#/views/dashboard/graphql/queries/__generated__/day-of-week.generated';
+import { useAtomValue } from 'jotai/index';
 import { useEffect, useMemo, useState } from 'react';
 
 interface Return {
@@ -11,6 +13,8 @@ const useDayOfWeekGraph = (): Return => {
   const {
     variables: { createdAt: createdAtFilter, gallery, groups: groupsFilter },
   } = useDashboardContext();
+  const isAdmin = useAtomValue(isAdminAtom);
+
   const thirtyDaysAgo = useMemo(() => {
     const date = new Date();
     date.setDate(date.getDate() - 30);
@@ -38,6 +42,7 @@ const useDayOfWeekGraph = (): Return => {
         following: gallery.includes('FOLLOWING'),
         groupIds: groupsFilter.length > 0 ? groupsFilter : undefined,
         myData: gallery.includes('MYDATA'),
+        useBusiness: !isAdmin,
       },
     },
   });

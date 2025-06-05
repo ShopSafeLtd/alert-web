@@ -3,6 +3,9 @@ import type { NavItem } from 'configs/NavigationConfig';
 import type { Theme } from 'configs/ThemeConfig';
 import type { NavType } from 'state';
 
+import mobileNav, {
+  mobileNavOpenAtom,
+} from '#/components/layout-components/AntD/navigation/MobileNav';
 import NavTranslations from '#/components/layout-components/AntD/navigation/NavTranslations';
 import {
   currentPermissionsAtom,
@@ -17,12 +20,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Badge, Col, Drawer, Grid, Menu, Row, Skeleton } from 'antd';
 import NotificationsDrawer from 'components/notifications/NotificationsDrawer/NotificationDrawer.container';
 import navConfig, { BadgeTypes } from 'configs/NavigationConfig';
-import { useAtomValue } from 'jotai/index';
+import { useAtomValue, useSetAtom } from 'jotai/index';
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { createUseStyles } from 'react-jss';
 import { Link } from 'react-router-dom';
-import { SideNavTheme, useStoreActions, useStoreState } from 'state';
+import { SideNavTheme, useStoreState } from 'state';
 import utils from 'utils';
 
 import IntlMessage from '../../../util-components/AntD/IntlMessage';
@@ -118,13 +121,14 @@ const SideNavContent = ({
   localization,
   messages,
   notifications,
-  onMobileNavToggle,
   routeInfo,
   sideNavTheme,
   todos,
 }: SideNavContentProps) => {
   const classes = useStyles();
   const intl = useIntl();
+
+  const setMobileNavOpen = useSetAtom(mobileNavOpenAtom);
   const permissions = useAtomValue(currentPermissionsAtom);
   const settingScheme = useAtomValue(settingSchemeAtom);
   const currentTheme = useStoreState((state) => state.theme.currentTheme);
@@ -136,10 +140,10 @@ const SideNavContent = ({
   // ???
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  const isMobile = !utils.getBreakPoint(useBreakpoint()).includes('lg');
+  const isMobile = !utils.getBreakPoint(useBreakpoint()).includes('xl');
   const closeMobileNav = () => {
     if (isMobile) {
-      onMobileNavToggle(false);
+      setMobileNavOpen(false);
     }
   };
 
@@ -161,9 +165,11 @@ const SideNavContent = ({
         overflow: 'hidden',
       }}
     >
-      <Link to="/app/dashboard">
-        <Logo logoType="default" />
-      </Link>
+      {!mobileNav && (
+        <Link to="/app/dashboard">
+          <Logo logoType="default" />
+        </Link>
+      )}
       {settingScheme ? (
         <div style={{ borderRight: 0, flex: 1, padding: 10 }}>
           <Skeleton.Button
@@ -286,8 +292,23 @@ const SideNavContent = ({
             )}
         </Menu>
       )}
-      <NavScheme />
-      <NavTranslations />
+      {!isMobile && (
+        <>
+          <NavScheme />
+          <NavTranslations />
+        </>
+      )}
+      {isMobile && (
+        <Row style={{ width: '100%' }}>
+          <Col span={12}>
+            <NavScheme />
+          </Col>
+          <Col span={12}>
+            <NavTranslations />
+          </Col>
+        </Row>
+      )}
+
       <Row style={{ width: '100%' }}>
         <Col span={12}>
           <NavProfile />
@@ -302,7 +323,7 @@ const SideNavContent = ({
           </Badge>
         </Col>
       </Row>
-      {customLogo && (
+      {customLogo && !mobileNav && (
         <img
           alt={intl.formatMessage({ defaultMessage: 'Alert Logo' })}
           src={getLogo({
@@ -343,9 +364,11 @@ interface Props {
 const MenuContent = (props: Props) => {
   const sideNavTheme = useStoreState((state) => state.theme.sideNavTheme);
 
-  const onMobileNavToggle = useStoreActions(
-    (actions) => actions.theme.toggleMobileNav
-  );
+  const setMobileNavOpen = useSetAtom(mobileNavOpenAtom);
+
+  const onMobileNavToggle = () => {
+    setMobileNavOpen(false);
+  };
   const userTodos = useAtomValue(userTodosAtom);
   const userMessages = useAtomValue(currentUserAtom)?.messageCount ?? 0;
   const userNotifications = useAtomValue(userNotificationsAtom);
