@@ -22,8 +22,8 @@ export const getCustomUrls = () => {
       faceUrl: 'https://app.jdshield.com/util-api/extract-faces-from-url',
       imageAnalyseGo: 'https://app.jdshield.com/util-api/upload',
       imageUpload: 'https://app.jdshield.com/api/images',
-      imageUploadFetch: 'https://app.jdshield.com/util-api/images',
-      imageUploadGo: 'https://app.jdshield.com/util-api/get-upload-url',
+      imageUploadFetch: 'https://app.jdshield.com/util-api/get-upload-url',
+      imageUploadGo: 'https://app.jdshield.com/util-api/images',
     },
   };
 
