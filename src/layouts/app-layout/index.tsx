@@ -168,9 +168,11 @@ const AppLayout = (): JSX.Element => {
             </Layout>
           </Layout>
           {isMobile && <MobileNav routeInfo={currentRouteInfo} />}
-          <div className={classes.menuButton} onClick={onMobileNavToggle}>
-            <FontAwesomeIcon color="#FFF" icon={faBars} size="xl" />
-          </div>
+          {isMobile && (
+            <div className={classes.menuButton} onClick={onMobileNavToggle}>
+              <FontAwesomeIcon color="#FFF" icon={faBars} size="xl" />
+            </div>
+          )}
         </Layout>
       </GroupsProvider>
     </Suspense>
