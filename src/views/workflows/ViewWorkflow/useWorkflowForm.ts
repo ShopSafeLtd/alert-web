@@ -169,6 +169,7 @@ export interface FormData {
   valueCheck: boolean;
   valuePrice: number;
   workflowMode: 'scheduled' | 'trigger';
+  workflowTrigger?: WorkflowTrigger;
   workflowType?: Model | null;
 }
 
@@ -403,6 +404,7 @@ const useWorkflowForm = (): Return => {
               : 0,
             workflowMode:
               workflow.triggerModels === Model.Cron ? 'scheduled' : 'trigger',
+            workflowTrigger: workflow.trigger,
             workflowType: workflow.triggerModels,
           });
         }
@@ -717,6 +719,13 @@ const useWorkflowForm = (): Return => {
 
       return;
     }
+
+    const trigger =
+      modelSelected && modelSelected === Model.Checklist
+        ? WorkflowTrigger.Completed
+        : modelSelected && modelSelected === Model.Incident
+          ? values.workflowTrigger ?? WorkflowTrigger.Created
+          : WorkflowTrigger.Created;
     if (EditId) {
       void updateWorkflow({
         variables: {
@@ -776,10 +785,7 @@ const useWorkflowForm = (): Return => {
                 },
               ],
             },
-            trigger:
-              modelSelected && modelSelected === Model.Checklist
-                ? WorkflowTrigger.Completed
-                : WorkflowTrigger.Created,
+            trigger,
             triggerModels:
               modelSelected === undefined
                 ? values.frequency
