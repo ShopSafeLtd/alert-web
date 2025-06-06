@@ -31,6 +31,7 @@ import {
   CronSchedule,
   IncidentPriority,
   Model,
+  WorkflowTrigger,
 } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
 import React from 'react';
@@ -354,6 +355,48 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                                 defaultMessage: 'Checklist',
                               }),
                               value: Model.Checklist,
+                            },
+                          ]}
+                        />
+                      </Form.Item>
+                    )}
+                  </Col>
+                  <Col span={24}>
+                    {modelSelected && modelSelected === Model.Incident && (
+                      <Form.Item
+                        label={
+                          <FormattedMessage defaultMessage="Trigger Action" />
+                        }
+                        name="workflowTrigger"
+                        rules={[
+                          {
+                            message: intl.formatMessage({
+                              defaultMessage: 'Please select an option',
+                            }),
+                            required: true,
+                          },
+                        ]}
+                        tooltip={intl.formatMessage({
+                          defaultMessage:
+                            'The action that triggers the workflow.',
+                        })}
+                      >
+                        <Radio.Group
+                          defaultValue={WorkflowTrigger.Created}
+                          disabled={editId !== undefined}
+                          optionType="button"
+                          options={[
+                            {
+                              label: intl.formatMessage({
+                                defaultMessage: 'Created',
+                              }),
+                              value: WorkflowTrigger.Created,
+                            },
+                            {
+                              label: intl.formatMessage({
+                                defaultMessage: 'Approved',
+                              }),
+                              value: WorkflowTrigger.Approved,
                             },
                           ]}
                         />

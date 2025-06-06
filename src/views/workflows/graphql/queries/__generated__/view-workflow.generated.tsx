@@ -8,7 +8,7 @@ export type ViewWorkflowQueryVariables = Types.Exact<{
 }>;
 
 
-export type ViewWorkflowQuery = { __typename?: 'Query', workflow?: { __typename?: 'Workflow', name: string, conditions: { [key: string]: any }, triggerModels: Types.Model, cronSchedule?: Types.CronSchedule | null, cronDate?: Date | null, actions: Array<{ __typename?: 'WorkflowAction', data: { [key: string]: any }, id: string }> } | null };
+export type ViewWorkflowQuery = { __typename?: 'Query', workflow?: { __typename?: 'Workflow', name: string, conditions: { [key: string]: any }, triggerModels: Types.Model, trigger: Types.WorkflowTrigger, cronSchedule?: Types.CronSchedule | null, cronDate?: Date | null, actions: Array<{ __typename?: 'WorkflowAction', data: { [key: string]: any }, id: string }> } | null };
 
 
 export const ViewWorkflowDocument = gql`
@@ -17,6 +17,7 @@ export const ViewWorkflowDocument = gql`
     name
     conditions
     triggerModels
+    trigger
     cronSchedule
     cronDate
     actions {
