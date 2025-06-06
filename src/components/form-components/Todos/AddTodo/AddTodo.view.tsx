@@ -398,11 +398,7 @@ const AddTodo = ({
                       addonAfter={intl.formatMessage({
                         defaultMessage: 'mins',
                       })}
-                      disabled={
-                        saving ||
-                        disableTemplateFields ||
-                        forceTemplateSelection
-                      }
+                      disabled={saving || forceTemplateSelection}
                       min={0}
                     />
                   </Form.Item>
