@@ -42,6 +42,7 @@ export interface StockItemValue {
   sku?: null | string;
 }
 
+// @deprecated
 const StockItemSearch = ({
   debounceTimeout = 200,
   division,

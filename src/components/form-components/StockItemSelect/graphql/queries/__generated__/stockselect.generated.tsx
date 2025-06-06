@@ -3,50 +3,45 @@ import type * as Types from '../../../../../../graphql/types.js';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
-export type StockItemSelectQueryVariables = Types.Exact<{
+export type StockItemsSearchQueryVariables = Types.Exact<{
   where: Types.StockItemRelayWhereInput;
-  first?: Types.InputMaybe<Types.Scalars['Int']>;
+  take: Types.Scalars['Int'];
   after?: Types.InputMaybe<Types.Scalars['String']>;
+  orderBy?: Types.InputMaybe<Types.StockItemRelayOrderInput>;
 }>;
 
 
-export type StockItemSelectQuery = { __typename?: 'Query', stockItemsRelay: { __typename?: 'QueryStockItemsRelayConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage: boolean }, edges: Array<{ __typename?: 'QueryStockItemsRelayConnectionEdge', node: { __typename?: 'StockItem', id: string, barcode?: string | null, brand?: string | null, costPriceLocal?: number | null, costPriceStandard?: number | null, division?: string | null, name?: string | null, salesPriceLocal?: number | null, salesPriceStandard?: number | null, sku?: string | null, variant?: string | null } }> } };
+export type StockItemsSearchQuery = { __typename?: 'Query', stockItemsSearch: { __typename?: 'StockItemSearchResult', hasMore?: string | null, stock: Array<{ __typename?: 'StockItem', id: string, barcode?: string | null, brand?: string | null, costPriceLocal?: number | null, costPriceStandard?: number | null, division?: string | null, name?: string | null, salesPriceLocal?: number | null, salesPriceStandard?: number | null, sku?: string | null, variant?: string | null }> } };
 
 
-export const StockItemSelectDocument = gql`
-    query StockItemSelect($where: stockItemRelayWhereInput!, $first: Int, $after: String) {
-  stockItemsRelay(where: $where, first: $first, after: $after) {
-    totalCount
-    pageInfo {
-      endCursor
-      hasNextPage
-    }
-    edges {
-      node {
-        id
-        barcode
-        brand
-        costPriceLocal
-        costPriceStandard
-        division
-        name
-        salesPriceLocal
-        salesPriceStandard
-        sku
-        variant
-      }
+export const StockItemsSearchDocument = gql`
+    query StockItemsSearch($where: stockItemRelayWhereInput!, $take: Int!, $after: String, $orderBy: stockItemRelayOrderInput) {
+  stockItemsSearch(where: $where, take: $take, after: $after, orderBy: $orderBy) {
+    hasMore
+    stock {
+      id
+      barcode
+      brand
+      costPriceLocal
+      costPriceStandard
+      division
+      name
+      salesPriceLocal
+      salesPriceStandard
+      sku
+      variant
     }
   }
 }
     `;
-export function useStockItemSelectQuery(baseOptions: Apollo.QueryHookOptions<StockItemSelectQuery, StockItemSelectQueryVariables>) {
+export function useStockItemsSearchQuery(baseOptions: Apollo.QueryHookOptions<StockItemsSearchQuery, StockItemsSearchQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<StockItemSelectQuery, StockItemSelectQueryVariables>(StockItemSelectDocument, options);
+        return Apollo.useQuery<StockItemsSearchQuery, StockItemsSearchQueryVariables>(StockItemsSearchDocument, options);
       }
-export function useStockItemSelectLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StockItemSelectQuery, StockItemSelectQueryVariables>) {
+export function useStockItemsSearchLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StockItemsSearchQuery, StockItemsSearchQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<StockItemSelectQuery, StockItemSelectQueryVariables>(StockItemSelectDocument, options);
+          return Apollo.useLazyQuery<StockItemsSearchQuery, StockItemsSearchQueryVariables>(StockItemsSearchDocument, options);
         }
-export type StockItemSelectQueryHookResult = ReturnType<typeof useStockItemSelectQuery>;
-export type StockItemSelectLazyQueryHookResult = ReturnType<typeof useStockItemSelectLazyQuery>;
-export type StockItemSelectQueryResult = Apollo.QueryResult<StockItemSelectQuery, StockItemSelectQueryVariables>;
+export type StockItemsSearchQueryHookResult = ReturnType<typeof useStockItemsSearchQuery>;
+export type StockItemsSearchLazyQueryHookResult = ReturnType<typeof useStockItemsSearchLazyQuery>;
+export type StockItemsSearchQueryResult = Apollo.QueryResult<StockItemsSearchQuery, StockItemsSearchQueryVariables>;
