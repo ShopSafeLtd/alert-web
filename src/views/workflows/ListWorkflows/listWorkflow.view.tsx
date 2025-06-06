@@ -47,7 +47,10 @@ const ListWorkflowView = ({ data, loading }: Props) => {
           dataSource={data}
           loading={loading}
           pagination={{
+            defaultPageSize: 25,
             hideOnSinglePage: true,
+            pageSizeOptions: ['25', '50', '100'],
+            showSizeChanger: true,
           }}
           size="small"
         />

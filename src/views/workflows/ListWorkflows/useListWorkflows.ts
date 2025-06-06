@@ -1,4 +1,6 @@
-import { Model, WorkflowTrigger } from '#/graphql/types';
+import type { WorkflowsQueryVariables } from '#/views/workflows/graphql/queries/__generated__/list-workflows.generated';
+
+import { Model, SortOrder, WorkflowTrigger } from '#/graphql/types';
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { useWorkflowsQuery } from '#/views/workflows/graphql/queries/__generated__/list-workflows.generated';
 import { useAtomValue } from 'jotai/index';
@@ -66,7 +68,10 @@ const useListWorkflows = (): Return => {
   const intl = useIntl();
 
   const currentScheme = useAtomValue(currentSchemeIdAtom) ?? '';
-  const variables = {
+  const variables: WorkflowsQueryVariables = {
+    orderBy: {
+      name: SortOrder.Asc,
+    },
     where: {
       schemes: {
         some: {

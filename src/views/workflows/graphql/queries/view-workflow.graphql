@@ -3,6 +3,7 @@ query ViewWorkflow($where: WorkflowWhereUniqueInput!) {
     name
     conditions
     triggerModels
+    trigger
       cronSchedule
       cronDate
 
