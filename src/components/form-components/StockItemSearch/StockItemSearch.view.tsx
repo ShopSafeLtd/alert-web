@@ -40,6 +40,7 @@ export interface StockItemValue {
   name?: null | string;
   salesPriceLocal?: null | number;
   sku?: null | string;
+  variant?: string;
 }
 
 // @deprecated
