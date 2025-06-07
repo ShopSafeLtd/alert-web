@@ -159,7 +159,7 @@ const RecycleBin = ({
         dataSource={data?.recycledItems?.map((item) => ({
           deletedAt: item?.deletedAt,
           deletedBy: item?.deletedBy
-            ? `${item?.deletedBy?.fullName}, ${item?.deletedBy?.businesses[0]?.name}.`
+            ? `${item?.deletedBy?.fullName}, ${item?.deletedBy?.businesses[0]?.name || ''}.`
             : 'Automatically Expired',
           expiresAt: item?.expiresAt,
           id: item?.id || '',

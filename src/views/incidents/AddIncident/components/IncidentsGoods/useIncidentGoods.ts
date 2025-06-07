@@ -85,6 +85,7 @@ const useIncidentGoods = ({
           sku: data.sku || '',
           stockItem: data.id,
           value: data.salesPriceLocal ?? data.costPriceLocal ?? 0,
+          variant: data.variant,
         },
       ],
     });

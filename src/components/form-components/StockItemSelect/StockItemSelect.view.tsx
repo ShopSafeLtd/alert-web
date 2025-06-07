@@ -17,7 +17,7 @@ import { debounce } from 'lodash-es';
 import React, { useCallback, useState } from 'react';
 import { FormattedMessage, FormattedNumber, useIntl } from 'react-intl';
 
-import { useStockItemSelectQuery } from './graphql/queries/__generated__/stockselect.generated';
+import { useStockItemsSearchQuery } from './graphql/queries/__generated__/stockselect.generated';
 
 export type ValueType =
   | LabeledValue
@@ -36,7 +36,7 @@ export interface StockItemValue {
   name?: null | string;
   salesPriceLocal?: null | number;
   sku?: null | string;
-  variant?: null | string;
+  variant?: string;
 }
 
 interface Props {
@@ -222,7 +222,7 @@ const StockItemSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
   const [searchTerm, setSearchTerm] = useState('');
   const fallbackCurrency = useAtomValue(currencyAtom);
 
-  const { data, fetchMore, loading, variables } = useStockItemSelectQuery({
+  const { data, fetchMore, loading, variables } = useStockItemsSearchQuery({
     onCompleted: () => {
       setFetchingMore(false);
     },
@@ -230,7 +230,7 @@ const StockItemSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
       setFetchingMore(false);
     },
     variables: {
-      first: take,
+      take,
       where: {
         currency,
         divisionIds: division ? [division] : undefined,
@@ -245,22 +245,22 @@ const StockItemSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
         setFetchingMore(false);
 
         if (!fetchMoreResult) return prev;
-        const prevIds = prev.stockItemsRelay?.edges.map(({ node }) => node.id);
+        const prevIds = prev.stockItemsSearch?.stock.map((node) => node.id);
         return {
-          stockItemsRelay: {
-            ...fetchMoreResult.stockItemsRelay,
-            edges: [
-              ...(prev.stockItemsRelay?.edges || []),
-              ...(fetchMoreResult.stockItemsRelay?.edges.filter(
-                ({ node }) => !prevIds?.includes(node.id)
+          stockItemsSearch: {
+            ...fetchMoreResult.stockItemsSearch,
+            stock: [
+              ...(prev.stockItemsSearch?.stock || []),
+              ...(fetchMoreResult.stockItemsSearch?.stock.filter(
+                (node) => !prevIds?.includes(node.id)
               ) || []),
             ],
           },
         };
       },
       variables: {
-        after: data?.stockItemsRelay.pageInfo.endCursor,
-        first: 30,
+        after: data?.stockItemsSearch?.hasMore,
+        take,
         where: {
           currency,
           divisionIds: division ? [division] : undefined,
@@ -276,7 +276,7 @@ const StockItemSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
     if (
       !loading &&
       target.scrollTop + target.offsetHeight === target.scrollHeight &&
-      data?.stockItemsRelay.pageInfo.hasNextPage
+      data?.stockItemsSearch?.hasMore
     ) {
       next();
       target.scrollTo({ top: target.scrollHeight });
@@ -288,7 +288,7 @@ const StockItemSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
 
     setSearchTerm(searchValueInput);
     if (
-      !data?.stockItemsRelay.pageInfo?.hasNextPage &&
+      !data?.stockItemsSearch?.hasMore &&
       variables?.where.search === searchValueInput
     ) {
       setFetchingMore(false);
@@ -300,21 +300,22 @@ const StockItemSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
       updateQuery: (prev, { fetchMoreResult }) => {
         setFetchingMore(false);
         if (!fetchMoreResult) return prev;
-        const prevIds = prev.stockItemsRelay?.edges.map(({ node }) => node.id);
+        const prevIds = prev.stockItemsSearch?.stock.map((n) => n.id);
         return {
-          stockItemsRelay: {
-            ...fetchMoreResult.stockItemsRelay,
-            edges: [
-              ...(prev.stockItemsRelay?.edges || []),
-              ...(fetchMoreResult.stockItemsRelay?.edges.filter(
-                ({ node }) => !prevIds?.includes(node.id)
+          stockItemsSearch: {
+            ...fetchMoreResult.stockItemsSearch,
+            stock: [
+              ...(prev.stockItemsSearch?.stock || []),
+              ...(fetchMoreResult.stockItemsSearch?.stock.filter(
+                (node) => !prevIds?.includes(node.id)
               ) || []),
             ],
           },
         };
       },
       variables: {
-        first: 30,
+        after: data?.stockItemsSearch?.hasMore,
+        take: 30,
         where: {
           currency,
           divisionIds: division ? [division] : undefined,
@@ -331,8 +332,8 @@ const StockItemSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
     [debounce, handleChange]
   );
 
-  const options: SelectProps['options'] = data?.stockItemsRelay.edges.map(
-    ({ node: option }) => {
+  const options: SelectProps['options'] = data?.stockItemsSearch?.stock.map(
+    (option) => {
       const fixedCurrency: string =
         (currency ? CurrencyCodeMap[currency] : null) ||
         fallbackCurrency ||
@@ -356,20 +357,20 @@ const StockItemSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
   );
   const handleOnChange = (selected: string[]) => {
     if (onChange) {
-      const item = data?.stockItemsRelay.edges.find(({ node }) =>
+      const item = data?.stockItemsSearch?.stock.find((node) =>
         selected.includes(node.id)
       );
       if (item)
         onChange({
-          barcode: item.node.barcode,
-          brand: item.node.brand,
-          costPriceLocal: item.node.costPriceLocal,
-          id: item.node.id,
-          key: item.node.id,
-          name: item.node.name,
-          salesPriceLocal: item.node.salesPriceLocal,
-          sku: item.node.sku,
-          variant: item.node.variant,
+          barcode: item.barcode,
+          brand: item.brand,
+          costPriceLocal: item.costPriceLocal,
+          id: item.id,
+          key: item.id,
+          name: item.name,
+          salesPriceLocal: item.salesPriceLocal,
+          sku: item.sku,
+          variant: item.variant ?? undefined,
         });
     }
   };
