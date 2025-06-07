@@ -38,6 +38,7 @@ export interface FormData {
     sku?: string;
     stockItem?: string;
     value?: number;
+    variant?: string;
   }[];
   goodsKnown?: boolean;
   groups?: string[];
