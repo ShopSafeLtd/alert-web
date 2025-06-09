@@ -37,13 +37,11 @@ const generateInitData = (draftData: IncidentDraftDetailsQuery): FormData => {
     cctvAvailable: false,
     documents:
       evidence && evidence.length > 0
-        ? {
-            fileList: evidence?.map((doc) => ({
-              name: doc.name,
-              uid: doc.id,
-              url: doc.url,
-            })),
-          }
+        ? evidence?.map((doc) => ({
+            name: doc.name,
+            uid: doc.id,
+            url: doc.url,
+          }))
         : undefined,
     subject,
     ...answersJson,

@@ -1,5 +1,6 @@
+import RolesSelect from '#/components/form-components/RolesSelect/RolesSelect.view';
 import { Button, Col, Row, Select, Typography } from 'antd';
-import { Role, UserStatus } from 'graphql/types';
+import { UserStatus } from 'graphql/types';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { UserSort } from 'types/enums/user_sort';
@@ -15,9 +16,9 @@ interface Props {
   order: UserSort;
   setGroupsFilter: (value: string[]) => void;
   setOrder: (value: UserSort) => void;
-  setUserRole: (value: Role) => void;
+  setUserRole: (value: string[]) => void;
   setUserStatus: (value: UserStatus[]) => void;
-  userRole: Role | undefined;
+  userRole: string[];
   userStatus: UserStatus[] | undefined;
 }
 
@@ -118,7 +119,7 @@ const UserFilter = ({
           <Typography.Paragraph className={classes.selectTitle}>
             <FormattedMessage defaultMessage="Role" />
           </Typography.Paragraph>
-          <Select
+          <RolesSelect
             allowClear
             className={classes.select}
             onChange={setUserRole}
@@ -126,20 +127,7 @@ const UserFilter = ({
               defaultMessage: 'Role',
             })}
             value={userRole}
-          >
-            <Select.Option value={Role.User}>
-              <FormattedMessage defaultMessage="User" />
-            </Select.Option>
-            <Select.Option value={Role.ContentAdmin}>
-              <FormattedMessage defaultMessage="Content Admin" />
-            </Select.Option>
-            <Select.Option value={Role.GroupAdmin}>
-              <FormattedMessage defaultMessage="Group Admin" />
-            </Select.Option>
-            <Select.Option value={Role.SchemeAdmin}>
-              <FormattedMessage defaultMessage="Scheme Admin" />
-            </Select.Option>
-          </Select>
+          />
         </Col>
       </Row>
       <Row gutter={16}>

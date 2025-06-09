@@ -281,13 +281,10 @@ const upsertIncident = (
       value: item.value || 0,
     }));
 
-  const newDocuments = formData.documents?.fileList?.filter(
-    (doc) => !!doc.originFileObj
-  );
+  const newDocuments = formData.documents?.filter((doc) => !!doc.originFileObj);
 
   const removedDocuments = evidence?.filter(
-    (doc) =>
-      !formData.documents?.fileList?.some((newDoc) => newDoc.uid === doc.id)
+    (doc) => !formData.documents?.some((newDoc) => newDoc.uid === doc.id)
   );
 
   const documentsFormatted = {

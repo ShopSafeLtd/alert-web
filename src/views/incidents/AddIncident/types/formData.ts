@@ -25,7 +25,7 @@ export interface FormData {
   cctvAvailable?: boolean;
   date: Date;
   description: string;
-  documents?: { fileList: UploadFile[] };
+  documents?: UploadFile[];
   draftSkip?: string;
   fellingTags?: string[];
   goods?: {

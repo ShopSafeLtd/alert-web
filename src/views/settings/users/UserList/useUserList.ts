@@ -1,6 +1,6 @@
 import type { UserListQuery } from '#/views/settings/users/UserList/__generated__/UserList.generated';
 import type { MutationUpdaterFn } from '@apollo/client';
-import type { Role, UserStatus } from 'graphql/types';
+import type { UserStatus } from 'graphql/types';
 import type { CreateUserInDatabaseMutation } from 'graphql/users/mutations/__generated__/create-user-in-databse.generated';
 import type { InviteExistingUserMutation } from 'graphql/users/mutations/__generated__/invite-exiting-user.generated';
 
@@ -31,7 +31,7 @@ interface Return {
   setOrder: (value: UserSort) => void;
   setSearch: (value: string) => void;
   setSelectedGroups: (value: string[]) => void;
-  setUserRole: (value: Role) => void;
+  setUserRole: (value: string[]) => void;
   setUserStatus: (value: UserStatus[]) => void;
   sortFilter: boolean;
   toggleAddUser: () => void;
@@ -39,7 +39,7 @@ interface Return {
   toggleSortFilter: () => void;
   updateExitingUserList: MutationUpdaterFn<InviteExistingUserMutation>;
   updateUserList: MutationUpdaterFn<CreateUserInDatabaseMutation>;
-  userRole: Role | undefined;
+  userRole: string[];
   userStatus: UserStatus[] | undefined;
 }
 
@@ -55,7 +55,7 @@ const useUserList = (): Return => {
   const [order, setOrder] = useState<UserSort>(UserSort.nameAsc);
   const [selectedGroups, setSelectedGroups] = useState<string[]>([]);
   const [userStatus, setUserStatus] = useState<UserStatus[]>();
-  const [userRole, setUserRole] = useState<Role>();
+  const [userRole, setUserRole] = useState<string[] | undefined>([]);
 
   const getOrderBy = {
     [UserSort.createdAtAsc]: {
@@ -132,14 +132,17 @@ const useUserList = (): Return => {
       },
       schemes: {
         some: {
+          permissions:
+            userRole && userRole.length > 0
+              ? {
+                  id: {
+                    in: userRole,
+                  },
+                }
+              : undefined,
           recycled: {
             equals: false,
           },
-          role: userRole
-            ? {
-                equals: userRole,
-              }
-            : undefined,
           scheme: {
             id: {
               equals: schemeId,
@@ -185,7 +188,7 @@ const useUserList = (): Return => {
   const clearFilters = () => {
     setSelectedGroups([]);
     setUserStatus(undefined);
-    setUserRole(undefined);
+    setUserRole([]);
     setOrder(UserSort.nameAsc);
   };
   const updateUserList: MutationUpdaterFn<CreateUserInDatabaseMutation> = (
@@ -286,7 +289,7 @@ const useUserList = (): Return => {
     toggleSortFilter,
     updateExitingUserList,
     updateUserList,
-    userRole,
+    userRole: userRole ?? [],
     userStatus,
   };
 };

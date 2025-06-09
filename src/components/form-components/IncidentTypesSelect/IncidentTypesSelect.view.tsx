@@ -1,3 +1,4 @@
+import type { TreeSelectProps } from 'antd';
 import type { SizeType } from 'antd/lib/config-provider/SizeContext';
 import type { SelectProps } from 'antd/lib/select';
 
@@ -5,9 +6,9 @@ import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { TreeSelect } from 'antd';
 import { useListIncidentTagsQuery } from 'graphql/tags/queries/__generated__/list-incident-tags.generated';
 import { useAtomValue } from 'jotai/index';
-import React from 'react';
+import React, { useMemo } from 'react';
 
-interface Props {
+interface Props extends TreeSelectProps {
   allowClear?: boolean;
   className?: string;
   maxTagCount?: 'responsive' | number;
@@ -41,22 +42,9 @@ const IncidentTypesSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
     },
   });
 
-  return (
-    <TreeSelect
-      allowClear={allowClear}
-      className={className}
-      disabled={loading}
-      dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-      loading={loading}
-      maxTagCount={maxTagCount}
-      multiple={multiple}
-      onChange={onChange}
-      optionFilterProp="label"
-      placeholder={placeholder}
-      showSearch
-      size={size}
-      style={style}
-      treeData={data?.listIncidentTags
+  const treeData = useMemo(
+    () =>
+      data?.listIncidentTags
         .filter((tag) => tag.tier === 0)
         .map((tag) => ({
           children: data?.listIncidentTags
@@ -73,8 +61,35 @@ const IncidentTypesSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
             })),
           label: tag.label,
           value: tag.value,
-        }))}
+        })),
+    [data]
+  );
+
+  const onTreeChange = (items: string[]) => {
+    console.log(items);
+    if (props.treeCheckable) {
+      if (onChange) onChange(items);
+    } else if (onChange) onChange(items);
+  };
+
+  return (
+    <TreeSelect
+      allowClear={allowClear}
+      className={className}
+      disabled={loading}
+      dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+      loading={loading}
+      maxTagCount={maxTagCount}
+      multiple={multiple}
+      onChange={onTreeChange}
+      optionFilterProp="label"
+      placeholder={placeholder}
+      showSearch
+      size={size}
+      style={style}
+      treeData={treeData}
       treeDefaultExpandAll
+      treeNodeFilterProp="label"
       value={value}
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...props}

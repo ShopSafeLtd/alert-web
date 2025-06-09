@@ -16,10 +16,11 @@ import {
 } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Card, Col, Descriptions, Row, Tag, Tooltip, Typography } from 'antd';
+import dayjs from 'dayjs';
 import { IncidentPriority } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
 import React, { useState } from 'react';
-import { useIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 
 const { Paragraph, Text, Title } = Typography;
@@ -143,7 +144,15 @@ const IncidentDetails = ({ data, editRights, loading }: Props) => {
                 </span>
               }
             >
-              {data?.incident?.createdBy.fullName}
+              <FormattedMessage
+                defaultMessage="{var1} ({var2})"
+                values={{
+                  var1: data?.incident?.createdBy.fullName,
+                  var2: data?.incident
+                    ? dayjs(data.incident.createdAt).format('DD/MM/YY HH:mm:ss')
+                    : intl.formatMessage({ defaultMessage: 'Unknown' }),
+                }}
+              />
             </Descriptions.Item>
             <Descriptions.Item
               className={classes.detail}
