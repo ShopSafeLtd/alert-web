@@ -30,13 +30,13 @@ const CctvRecords = ({ data, loading }: Props) =>
           {
             dataIndex: 'startTime',
             key: 'startTime',
-            render: (value: Date) => dayjs(value).format('HH:mm DD/MM/YYYY'),
+            render: (value: Date) => dayjs(value).format('HH:mm:ss DD/MM/YYYY'),
             title: <FormattedMessage defaultMessage="Start Time" />,
           },
           {
             dataIndex: 'endTime',
             key: 'endTime',
-            render: (value: Date) => dayjs(value).format('HH:mm DD/MM/YYYY'),
+            render: (value: Date) => dayjs(value).format('HH:mm:ss DD/MM/YYYY'),
             title: <FormattedMessage defaultMessage="End Time" />,
           },
           {

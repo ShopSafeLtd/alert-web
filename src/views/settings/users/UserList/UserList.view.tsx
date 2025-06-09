@@ -1,6 +1,5 @@
 import type { UserListQuery } from '#/views/settings/users/UserList/__generated__/UserList.generated';
 import type { MutationUpdaterFn } from '@apollo/client';
-import type { Role } from 'graphql/types';
 import type { CreateUserInDatabaseMutation } from 'graphql/users/mutations/__generated__/create-user-in-databse.generated';
 import type { InviteExistingUserMutation } from 'graphql/users/mutations/__generated__/invite-exiting-user.generated';
 import type { UserSort } from 'types/enums/user_sort';
@@ -34,7 +33,7 @@ interface Props {
   setOrder: (value: UserSort) => void;
   setSearch: (value: string) => void;
   setSelectedGroups: (value: string[]) => void;
-  setUserRole: (value: Role) => void;
+  setUserRole: (value: string[]) => void;
   setUserStatus: (value: UserStatus[]) => void;
   sortFilter: boolean;
   toggleAddUser: () => void;
@@ -42,7 +41,7 @@ interface Props {
   toggleSortFilter: () => void;
   updateExitingUserList: MutationUpdaterFn<InviteExistingUserMutation>;
   updateUserList: MutationUpdaterFn<CreateUserInDatabaseMutation>;
-  userRole: Role | undefined;
+  userRole: string[];
   userStatus: UserStatus[] | undefined;
 }
 const getTextStatus = (value: UserStatus) => {

@@ -788,6 +788,12 @@ export enum AiImpactAssessmentSecurityResourceImpact {
   Medium = 'MEDIUM'
 }
 
+export type AiIncidentImportInput = {
+  fallbackGroup: Array<UniqueId>;
+  scheme: UniqueId;
+  url: Scalars['String'];
+};
+
 export type AiInvestigationLeads = {
   __typename?: 'AiInvestigationLeads';
   createdAt: Scalars['Date'];
@@ -10422,6 +10428,7 @@ export type Mutation = {
   addQuestion: Question;
   addUploadedImageToIncident: Incident;
   addUsersToBusiness: Business;
+  aiIncidentImport: SystemTask;
   approveAiSuggestion: AiSuggestion;
   approveIncident: Incident;
   approveOffender: Offender;
@@ -10692,6 +10699,11 @@ export type MutationAddUsersToBusinessArgs = {
   data: Array<UserWhereUniqueInput>;
   schemeWhere: SchemeWhereUniqueInput;
   where: BusinessWhereUniqueInput;
+};
+
+
+export type MutationAiIncidentImportArgs = {
+  data: AiIncidentImportInput;
 };
 
 
@@ -14118,6 +14130,7 @@ export type Query = {
   investigationRelay: QueryInvestigationRelayConnection;
   investigationTableReport: ListInvestigationPerformance;
   investigations: Array<Investigation>;
+  isPasswordDisabled: Scalars['Boolean'];
   latestIncident?: Maybe<LatestIncident>;
   latestIncidents: QueryLatestIncidentsConnection;
   latestVehicles: QueryLatestVehiclesConnection;
@@ -14186,7 +14199,6 @@ export type Query = {
   role: CustomRole;
   roles: QueryRolesConnection;
   scheme: Scheme;
-  schemeUsersRelay: QuerySchemeUsersRelayConnection;
   schemes: Array<Scheme>;
   searchOffenders: QuerySearchOffendersConnection;
   sharingBusinesses: Array<SharingBusiness>;
@@ -14864,6 +14876,11 @@ export type QueryInvestigationsArgs = {
 };
 
 
+export type QueryIsPasswordDisabledArgs = {
+  email: Scalars['String'];
+};
+
+
 export type QueryLatestIncidentArgs = {
   where: DashboardInput;
 };
@@ -15372,20 +15389,6 @@ export type QueryRolesArgs = {
 
 export type QuerySchemeArgs = {
   where: SchemeWhereUniqueInput;
-};
-
-
-export type QuerySchemeUsersRelayArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  cursor?: InputMaybe<UserSchemeWhereUniqueInput>;
-  distinct?: InputMaybe<Array<UserSchemeScalarFieldEnum>>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Array<UserSchemeOrderByWithRelationInput>>;
-  skip?: InputMaybe<Scalars['Int']>;
-  take?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<UserSchemeWhereInput>;
 };
 
 
@@ -16080,19 +16083,6 @@ export type QueryRolesConnectionEdge = {
   __typename?: 'QueryRolesConnectionEdge';
   cursor: Scalars['String'];
   node: CustomRole;
-};
-
-export type QuerySchemeUsersRelayConnection = {
-  __typename?: 'QuerySchemeUsersRelayConnection';
-  edges: Array<QuerySchemeUsersRelayConnectionEdge>;
-  pageInfo: PageInfo;
-  totalCount: Scalars['Int'];
-};
-
-export type QuerySchemeUsersRelayConnectionEdge = {
-  __typename?: 'QuerySchemeUsersRelayConnectionEdge';
-  cursor: Scalars['String'];
-  node: UserScheme;
 };
 
 export type QuerySearchOffendersConnection = {
