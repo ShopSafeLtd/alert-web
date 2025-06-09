@@ -993,11 +993,8 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
         const impact = data.fellingTags?.map((id) => ({ id })) || [];
 
         const getDocuments = () => {
-          if (
-            data.documents?.fileList &&
-            data.documents?.fileList?.length > 0
-          ) {
-            return data.documents?.fileList.map((file) => ({
+          if (data.documents && data.documents?.length > 0) {
+            return data.documents.map((file) => ({
               fileType: file.type || '',
               name: file.name || '',
               origFileName: file.fileName || '',
@@ -1006,6 +1003,7 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
           }
           return undefined;
         };
+
         void createIncident({
           variables: {
             data: {

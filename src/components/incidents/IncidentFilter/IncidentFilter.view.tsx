@@ -1,8 +1,8 @@
 import type { DateType } from 'types/DataType';
 
 import BusinessesSelect from '#/components/form-components/BusinessesSelect/BusinessesSelect.view';
-import CrimeTypesSelect from '#/components/form-components/CrimeTypesSelect/CrimeTypesSelect.view';
 import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
+import IncidentTypesSelect from '#/components/form-components/IncidentTypesSelect/IncidentTypesSelect.view';
 import UsersSelect from '#/components/form-components/UsersSelect/UsersSelect.view';
 import GoodsSelect from '#/components/form-components/goodsSelect/GoodsSelect.view';
 import DatePicker from '#/components/util-components/DatePicker';
@@ -307,17 +307,20 @@ const IncidentFilter = ({
           <Col span={23}>
             <Typography.Paragraph className={classes.selectTitle}>
               {intl.formatMessage({
-                defaultMessage: 'Crime Types',
+                defaultMessage: 'Incident Types',
               })}
             </Typography.Paragraph>
-            <CrimeTypesSelect
+            <IncidentTypesSelect
               allowClear
               className={classes.select}
-              mode="multiple"
+              maxTagCount={4}
+              multiple
               onChange={setCrimeTypesFilter}
               placeholder={intl.formatMessage({
-                defaultMessage: 'Crime Types',
+                defaultMessage: 'Incident Types',
               })}
+              showCheckedStrategy="SHOW_CHILD"
+              treeCheckable
               value={crimeTypesValue}
             />
           </Col>
