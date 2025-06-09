@@ -43,9 +43,6 @@ const useIntelOne = (): Return => {
       await importData({
         variables: {
           data: {
-            groups: data.groups.map((id) => ({
-              id,
-            })),
             incidents: data.intelOne
               .map((item) => ({
                 colour: item.colour,
