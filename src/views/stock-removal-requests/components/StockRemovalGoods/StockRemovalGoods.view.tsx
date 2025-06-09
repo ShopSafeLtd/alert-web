@@ -33,7 +33,7 @@ const IncidentGoods = ({ division, goods, onAddItem }: Props) => {
   return (
     <div>
       <Typography.Paragraph strong>
-        <FormattedMessage defaultMessage="Requested Items" />
+        <FormattedMessage defaultMessage="Select items for the request" />
       </Typography.Paragraph>
       <Form.List
         name="items"
