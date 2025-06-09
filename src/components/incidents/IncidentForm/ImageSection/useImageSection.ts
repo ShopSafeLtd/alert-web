@@ -126,6 +126,10 @@ const useImageSection = ({ form, incidentForm, onChange }: Props): Return => {
     }
   }, [form, images]);
 
+  useEffect(() => {
+    form.setFieldValue('documents', fileList);
+  }, [form, fileList]);
+
   const onImageChange = (info: UploadChangeParam<StateImageData>) => {
     let newFileList = [...info.fileList];
 

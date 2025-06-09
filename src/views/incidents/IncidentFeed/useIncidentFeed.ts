@@ -151,7 +151,12 @@ const useIncidentFeed = (): Return => {
                     mode: QueryMode.Insensitive,
                   },
                 },
-
+                {
+                  policeRef: {
+                    contains: search,
+                    mode: QueryMode.Insensitive,
+                  },
+                },
                 {
                   referenceStr: {
                     contains: search,
@@ -175,6 +180,16 @@ const useIncidentFeed = (): Return => {
                 },
                 {
                   offenders: {
+                    some: {
+                      name: {
+                        contains: search,
+                        mode: QueryMode.Insensitive,
+                      },
+                    },
+                  },
+                },
+                {
+                  incidentItems: {
                     some: {
                       name: {
                         contains: search,
