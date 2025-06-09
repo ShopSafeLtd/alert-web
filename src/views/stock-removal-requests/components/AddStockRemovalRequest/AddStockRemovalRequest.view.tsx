@@ -98,7 +98,7 @@ const AddStockRemovalRequest = ({ onClose }: Props) => {
       variables: {
         data: {
           approverIds: values.approvers,
-          businessId: values.businessId?.at(0),
+          businessId: values.businessId?.at(0) ?? '',
           description: values.description,
           items: values.items.map((i) => ({
             itemId: i.stockItem ?? '',
