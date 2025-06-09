@@ -289,7 +289,7 @@ const useUserList = (): Return => {
     toggleSortFilter,
     updateExitingUserList,
     updateUserList,
-    userRole,
+    userRole: userRole ?? [],
     userStatus,
   };
 };
