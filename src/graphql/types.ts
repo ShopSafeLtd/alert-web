@@ -8572,7 +8572,6 @@ export type IntelListRelationFilter = {
 };
 
 export type IntelOneImportDataInput = {
-  groups: Array<UniqueId>;
   incidents: Array<IntelOneImportIncidents>;
   scheme: UniqueId;
 };
