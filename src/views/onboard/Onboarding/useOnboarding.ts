@@ -9,7 +9,7 @@ import { useAgreeTermsMutation } from '#/views/onboard/Onboarding/__generated__/
 import { notification } from 'antd';
 import { useCurrentSchemeTermsQuery } from 'graphql/scheme/queries/__generated__/current-terms.generated';
 import { useSignTermsMutation } from 'graphql/user/mutation/__generated__/sign-terms.generated';
-import { useAtomValue } from 'jotai/index';
+import { useAtomValue, useSetAtom } from 'jotai';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
@@ -41,6 +41,8 @@ interface Return {
 const useOnboarding = (): Return => {
   const intl = useIntl();
   const userId = useAtomValue(userIdAtom);
+  const user = useAtomValue(currentUserAtom);
+
   const name = useAtomValue(currentUserAtom)?.fullName ?? '';
   const schemeId = useAtomValue(currentSchemeAtom)?.id ?? '';
   const [current, setCurrent] = useState(0);
@@ -51,7 +53,10 @@ const useOnboarding = (): Return => {
   const markTermsSigned = useStoreActions(
     (action) => action.user.userOnboarded
   );
+  const newUser = useAtomValue(currentUserAtom)?.newUser;
+  const setNewUser = useSetAtom(currentUserAtom);
 
+  console.log('newUser', newUser);
   console.log(schemeId);
 
   const onNext = () => {
@@ -97,6 +102,12 @@ const useOnboarding = (): Return => {
         }),
         placement: 'bottomRight',
       });
+      if (user) {
+        setNewUser({
+          ...user,
+          newUser: false,
+        });
+      }
       markTermsSigned();
       navigate('/app/dashboard');
     },
