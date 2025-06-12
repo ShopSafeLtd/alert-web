@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access,func-call-spacing */
 import type {
   ViewIncidentQuery,
   ViewIncidentQueryVariables,
@@ -31,7 +31,10 @@ import type {
   VehicleData,
 } from 'types/DataType';
 
-import { useMentionableUsersQuery } from '#/components/MessageInput/UpdateBar/graphql/queries/__generated__/users-to-mention.generated';
+import {
+  useMentionableUsersLazyQuery,
+  useMentionableUsersQuery,
+} from '#/components/MessageInput/UpdateBar/graphql/queries/__generated__/users-to-mention.generated';
 import { useGroupsContext } from '#/context/groups-context';
 import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import hasRolePermission from '#/utils/has-role-permission';
@@ -62,7 +65,8 @@ import { useSubscribeToVehicleMutation } from 'graphql/vehicles/mutations/__gene
 import { VehicleDocument } from 'graphql/vehicles/queries/__generated__/view-vehicle.generated';
 import update from 'immutability-helper';
 import { useAtomValue } from 'jotai/index';
-import { useEffect, useState } from 'react';
+import { debounce } from 'lodash-es';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import { getText } from 'utils/getMentions/get-mention-text';
@@ -78,6 +82,8 @@ interface Return {
   linkIncident: boolean;
   linkOffender: boolean;
   linkVehicle: boolean;
+  loading: boolean;
+  onSearch: (search: string) => void;
   onSubmitUpdate: () => void;
   onUpdateImageChange: UploadProps['onChange'];
   onUpdateImagePreview: (value: UploadFile) => void;
@@ -89,7 +95,9 @@ interface Return {
   removeVehicle: (value: string | undefined) => void;
   saving: boolean;
   schemeUsers: Map<string, SchemeUserData> | undefined;
-  setMentionedUser: (value: { id: string; value: string }[]) => void;
+  setMentionedUser: (
+    value: ({ id: string; value: string } & SchemeUserData)[]
+  ) => void;
   setUpdateInput: (value: string) => void;
   showUpdatePicker: boolean;
   toggleLinkArticle: () => void;
@@ -166,7 +174,7 @@ const useUpdateBar = ({
   );
 
   const [mentionedUser, setMentionedUser] = useState<
-    { id: string; value: string }[]
+    ({ id: string; value: string } & SchemeUserData)[]
   >([]);
   const [updateFileList, setUpdateFileList] = useState<UploadFile[]>([]);
   const [updateIncidents, setUpdateIncidents] = useState<IncidentCardData[]>(
@@ -219,16 +227,59 @@ const useUpdateBar = ({
       for (const user of mentionableUsersData.mentionableUsers) {
         updatedSchemeUsers.set(user.fullName, {
           businessesName: user.businessesName,
-          firstLetter: user.firstLetter, // You might want to include this as well.
+          firstLetter: user.firstLetter,
           fullName: user.fullName,
-          // Here, I suggest using user.id as the key instead of user.fullName for uniqueness.
           id: user.id,
           oldFullName: user.oldFullName,
         });
       }
-      setSchemeUsers(updatedSchemeUsers); // Update the state with the updated map.
+      setSchemeUsers(updatedSchemeUsers);
     }
-  }, [mentionableUsersData]); // Ensuring useEffect is called when mentionableUsersData changes.
+  }, [mentionableUsersData]);
+
+  const [loading, setLoading] = useState(false);
+
+  const ref = useRef<string>();
+
+  const [fetchMissing] = useMentionableUsersLazyQuery({});
+
+  const loadUsers = (key: string) => {
+    if (!key) {
+      setSchemeUsers(new Map());
+      return;
+    }
+
+    void fetchMissing({
+      variables: {
+        search: key,
+        take: 40,
+      },
+    }).then((res) => {
+      if (ref.current !== key) return;
+
+      const items = res.data?.mentionableUsers || [];
+
+      // Transform into [id, user] pairs for Map constructor
+      const mappedEntries: [string, SchemeUserData][] = items.map((user) => [
+        user.id,
+        user,
+      ]);
+
+      const mapped = new Map<string, SchemeUserData>(mappedEntries);
+
+      setLoading(false);
+      setSchemeUsers(mapped);
+    });
+  };
+  const debounceLoadGithubUsers = useCallback(debounce(loadUsers, 800), []);
+
+  const onSearch = (search: string) => {
+    ref.current = search;
+    setLoading(!!search);
+    setSchemeUsers(new Map());
+
+    debounceLoadGithubUsers(search);
+  };
 
   const [subscribeToIncident] = useSubscribeToIncidentMutation();
   const [subscribeToOffender] = useSubscribeToOffenderMutation();
@@ -567,7 +618,7 @@ const useUpdateBar = ({
               id: replyTo.id,
             }
           : undefined,
-        text: getText(updateInput, schemeUsers),
+        text: getText(updateInput, mentionedUser),
         type: getUpdateType(),
       };
 
@@ -1105,6 +1156,8 @@ const useUpdateBar = ({
     linkIncident,
     linkOffender,
     linkVehicle,
+    loading,
+    onSearch,
     onSubmitUpdate,
     onUpdateImageChange,
     // eslint-disable-next-line @typescript-eslint/no-misused-promises

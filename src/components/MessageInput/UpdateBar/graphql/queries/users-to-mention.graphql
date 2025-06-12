@@ -1,5 +1,5 @@
-query MentionableUsers {
-  mentionableUsers {
+query MentionableUsers($take: Int, $skip: Int, $search: String) {
+  mentionableUsers(search: $search, skip: $skip, take: $take) {
     businessesName
     firstLetter
     fullName
