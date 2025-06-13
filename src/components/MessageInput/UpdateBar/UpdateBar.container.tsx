@@ -49,6 +49,8 @@ const UpdateBar = ({
     linkIncident,
     linkOffender,
     linkVehicle,
+    loading,
+    onSearch,
     onSubmitUpdate,
     onUpdateImageChange,
     onUpdateImagePreview,
@@ -104,6 +106,8 @@ const UpdateBar = ({
       linkIncident={linkIncident}
       linkOffender={linkOffender}
       linkVehicle={linkVehicle}
+      loading={loading}
+      onSearch={onSearch}
       onSubmitUpdate={onSubmitUpdate}
       onUpdateImageChange={onUpdateImageChange}
       onUpdateImagePreview={onUpdateImagePreview}

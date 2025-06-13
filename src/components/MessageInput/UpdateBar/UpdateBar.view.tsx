@@ -76,6 +76,8 @@ interface Props {
   linkIncident: boolean;
   linkOffender: boolean;
   linkVehicle: boolean;
+  loading: boolean;
+  onSearch: (search: string) => void;
   onSubmitUpdate: () => void;
   onUpdateImageChange: UploadProps['onChange'];
   onUpdateImagePreview: (value: UploadFile) => void;
@@ -93,7 +95,9 @@ interface Props {
   } | null;
   saving: boolean;
   schemeUsers: Map<string, SchemeUserData> | undefined;
-  setMentionedUser: (value: { id: string; value: string }[]) => void;
+  setMentionedUser: (
+    value: ({ id: string; value: string } & SchemeUserData)[]
+  ) => void;
   setReplyTo: (
     value: {
       createdAt: string;
@@ -134,6 +138,8 @@ const UpdateBar = ({
   linkIncident,
   linkOffender,
   linkVehicle,
+  loading,
+  onSearch,
   onSubmitUpdate,
   onUpdateImageChange,
   onUpdateImagePreview,
@@ -346,6 +352,7 @@ const UpdateBar = ({
           <Col flex={1} style={{ height: '40px' }}>
             <Mentions
               autoFocus
+              loading={loading}
               onChange={(value) => {
                 setUpdateInput(value);
                 const mentions = getMentions(value);
@@ -353,17 +360,23 @@ const UpdateBar = ({
                   mentions
                     .map((mention) => schemeUsers?.get(mention.value))
                     .map((item) => ({
+                      ...item,
+                      businessesName: item?.businessesName || '',
+                      firstLetter: item?.fullName?.charAt(0) || '',
+                      fullName: item?.fullName || '',
                       id: item?.id || '',
+                      oldFullName: item?.oldFullName || '',
                       value: item?.fullName || '',
                     }))
                     .filter((item) => item.value !== '')
                 );
               }}
+              onSearch={onSearch}
               prefix="@"
               style={{ height: 40 }}
               value={updateInput}
             >
-              {schemeUsers &&
+              {schemeUsers && schemeUsers.size > 0 ? (
                 [...schemeUsers.values()]?.map(
                   ({ businessesName, fullName, id }) => (
                     <Option key={id} value={fullName}>
@@ -378,7 +391,12 @@ const UpdateBar = ({
                       )}
                     </Option>
                   )
-                )}
+                )
+              ) : (
+                <Option disabled value="">
+                  <FormattedMessage defaultMessage="Search for a user" />
+                </Option>
+              )}
             </Mentions>
           </Col>
 
