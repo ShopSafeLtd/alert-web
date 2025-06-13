@@ -29,7 +29,7 @@ const SettingsHome = () => {
       <Typography.Title level={3} style={{ marginBottom: 20 }}>
         <FormattedMessage defaultMessage="Admin Home" />
       </Typography.Title>
-      <Row gutter={16} style={{}} wrap={false}>
+      <Row gutter={16} style={{}} wrap={true}>
         {hasUserPerms && (
           <Col span={8}>
             <Card>

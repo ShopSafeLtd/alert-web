@@ -95,6 +95,7 @@ const ExportIncidentsView = ({
           </Col>
           <Col span={4}>
             <BusinessesSelect
+              allSelected={state.allBusinesses}
               allowClear
               allowSelectAll
               maxTagCount="responsive"
@@ -109,6 +110,12 @@ const ExportIncidentsView = ({
                 dispatch({
                   payload: [],
                   type: 'UPDATE_BUSINESS_IDS',
+                });
+              }}
+              onSelectAll={() => {
+                dispatch({
+                  payload: !state.allBusinesses,
+                  type: 'ALL_BUSINESSES',
                 });
               }}
               placeholder={intl.formatMessage({

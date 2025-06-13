@@ -3,15 +3,19 @@ import type * as Types from '../../../../../../graphql/types.js';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
-export type MentionableUsersQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type MentionableUsersQueryVariables = Types.Exact<{
+  take?: Types.InputMaybe<Types.Scalars['Int']>;
+  skip?: Types.InputMaybe<Types.Scalars['Int']>;
+  search?: Types.InputMaybe<Types.Scalars['String']>;
+}>;
 
 
 export type MentionableUsersQuery = { __typename?: 'Query', mentionableUsers: Array<{ __typename?: 'MentionableUser', businessesName: string, firstLetter: string, fullName: string, id: string, oldFullName: string }> };
 
 
 export const MentionableUsersDocument = gql`
-    query MentionableUsers {
-  mentionableUsers {
+    query MentionableUsers($take: Int, $skip: Int, $search: String) {
+  mentionableUsers(search: $search, skip: $skip, take: $take) {
     businessesName
     firstLetter
     fullName
