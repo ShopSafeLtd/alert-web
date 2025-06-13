@@ -25,6 +25,7 @@ export interface SelectOption {
 }
 
 export type ActionType =
+  | 'ALL_BUSINESSES'
   | 'SET_DATA'
   | 'SET_OPTIONS'
   | 'SET_PROGRESS'
@@ -42,6 +43,7 @@ export type Action = {
     | { [key in Options]: SelectOption[] }
     | { data: ExportIncidentsState['data'] }
     | Date
+    | boolean
     | null
     | number
     | string
@@ -52,6 +54,7 @@ export type Action = {
 type Options = 'businessOptions' | 'crimeGroupOptions' | 'groupOptions';
 
 export interface ExportIncidentsState {
+  allBusinesses: boolean;
   businessIds: string[];
   crimeGroupIds: string[];
   crimeGroupOptions: SelectOption[];
@@ -80,6 +83,7 @@ const useExportIncidents = (): Return => {
   const schemeId = useAtomValue(currentSchemeIdAtom);
 
   const initialState: ExportIncidentsState = {
+    allBusinesses: false,
     businessIds: [],
     crimeGroupIds: [],
     crimeGroupOptions: [],
@@ -165,6 +169,11 @@ const useExportIncidents = (): Return => {
       case 'SET_ZIP_FILE': {
         const zipFile = action.payload as null | string;
         return { ...state, zipFile };
+      }
+
+      case 'ALL_BUSINESSES': {
+        const allBusinesses = action.payload as boolean;
+        return { ...state, allBusinesses, businessIds: [] };
       }
 
       default: {

@@ -30,6 +30,7 @@ export type ValueType =
   | string[];
 
 interface Props {
+  allSelected?: boolean;
   allowClear?: boolean;
   allowSelectAll?: boolean;
   className?: string;
@@ -37,6 +38,7 @@ interface Props {
   maxTagCount?: 'responsive' | number;
   mode?: 'multiple' | 'tags';
   onChange?: (value: string[]) => void;
+  onSelectAll?: () => void;
   placeholder?: string;
   queryVars?: BusinessesSelectQueryVariables;
   size?: SizeType;
@@ -113,6 +115,7 @@ const filterOption = (inputValue: string, option?: DefaultOptionType) => {
  TODO Return value is always a string[]. think it is because the onchange is set to always be string[]. Need to look at more
  */
 const BusinessesSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
+  allSelected,
   allowClear = true,
   allowSelectAll,
   className,
@@ -120,6 +123,7 @@ const BusinessesSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
   maxTagCount,
   mode,
   onChange,
+  onSelectAll,
   placeholder,
   queryVars,
   size,
@@ -396,7 +400,10 @@ const BusinessesSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
   //
 
   const selectAll = () => {
-    if (onChange) {
+    if (onSelectAll) {
+      onSelectAll();
+    }
+    if (onChange && !onSelectAll) {
       onChange(merged.map((item) => item.value as string));
     }
   };
@@ -407,6 +414,7 @@ const BusinessesSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
         <Select
           allowClear={allowClear}
           className={className ?? allowSelectAll ? styles.select : undefined}
+          disabled={allSelected || props.disabled}
           filterOption={filterOption}
           loading={loading || fetchingMore}
           maxTagCount={maxTagCount}
@@ -455,7 +463,7 @@ const BusinessesSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
           placeholder={placeholder}
           size={size}
           style={style}
-          value={value || undefined}
+          value={allSelected ? [] : value || undefined}
           {...props}
         />
       </Col>
@@ -463,11 +471,22 @@ const BusinessesSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
         {allowSelectAll && (
           <Tooltip
             placement="bottom"
-            title={intl.formatMessage({
-              defaultMessage: 'Select all businesses',
-            })}
+            title={
+              allSelected
+                ? intl.formatMessage({
+                    defaultMessage: 'Select specific',
+                  })
+                : intl.formatMessage({
+                    defaultMessage: 'Select all',
+                  })
+            }
           >
-            <Button className={styles.button} onClick={selectAll}>
+            <Button
+              className={styles.button}
+              danger={allSelected}
+              onClick={selectAll}
+              type={allSelected ? 'primary' : undefined}
+            >
               <FontAwesomeIcon icon={faSquareCheck} />
             </Button>
           </Tooltip>
