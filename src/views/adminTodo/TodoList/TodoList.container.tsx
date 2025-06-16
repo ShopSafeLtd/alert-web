@@ -14,6 +14,7 @@ const AdminTodos = (): JSX.Element => {
     currentPageSize,
     data,
     editTodo,
+    filtersOpen,
     groupsData,
     // groupsFilter,
     loading,
@@ -31,11 +32,11 @@ const AdminTodos = (): JSX.Element => {
     setSearch,
     setSelectedTodo,
     setStatusMode,
-    setUsersFilter,
     templateData,
     toggleAddTodo,
     toggleAllSchemes,
     toggleAllUsers,
+    toggleFiltersOpen,
     updateTodoList,
   } = useAdminTodos({ defaultOpen: id });
 
@@ -47,6 +48,7 @@ const AdminTodos = (): JSX.Element => {
       currentPageSize={currentPageSize}
       data={data}
       editTodo={editTodo}
+      filtersOpen={filtersOpen}
       groupsData={groupsData}
       // groupsFilter={groupsFilter}
       loading={loading}
@@ -64,11 +66,11 @@ const AdminTodos = (): JSX.Element => {
       setSearch={setSearch}
       setSelectedTodo={setSelectedTodo}
       setStatusMode={setStatusMode}
-      setUsersFilter={setUsersFilter}
       templateData={templateData}
       toggleAddTodo={toggleAddTodo}
       toggleAllSchemes={toggleAllSchemes}
       toggleAllUsers={toggleAllUsers}
+      toggleFiltersOpen={toggleFiltersOpen}
       updateTodoList={updateTodoList}
     />
   );

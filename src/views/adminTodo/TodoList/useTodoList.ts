@@ -18,6 +18,14 @@ import {
   TodoListDocument,
   useTodoListQuery,
 } from '#/views/adminTodo/TodoList/__generated__/TodoListQuery.generated';
+import {
+  activityFilterBusinessIdsAtom,
+  activityFilterCompletedDateAtom,
+  activityFilterCreatedDateAtom,
+  activityFilterDueDateAtom,
+  activityFilterGroupIdsAtom,
+  activityFilterUserIdsAtom,
+} from '#/views/adminTodo/TodoList/ActivityFilter';
 import { useDeleteTodoMutation } from '#/views/adminTodo/graphql/mutations/__generated__/delete-todo.generated';
 import { useQuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/__generated__/listTemplates.generated';
 import { useUpdateTodoMutation } from 'graphql/todos/mutations/__generated__/update_todo.generated';
@@ -49,6 +57,7 @@ interface Return {
   currentPageSize: number;
   data: TodoListQuery | null | undefined;
   editTodo: null | string;
+  filtersOpen: boolean;
   groupsData: { label: string; value: string }[];
   groupsFilter: string[];
   loading: boolean;
@@ -66,12 +75,11 @@ interface Return {
   setSearch: (value: string) => void;
   setSelectedTodo: (id: null | string) => void;
   setStatusMode: (value: TodoStatusInput) => void;
-  setUsersFilter: (value: string[]) => void;
   templateData: ListData[];
   toggleAddTodo: () => void;
   toggleAllSchemes: () => void;
   toggleAllUsers: () => void;
-
+  toggleFiltersOpen: () => void;
   updateTodoList: MutationUpdaterFn<CreateTodoMutation>;
 }
 
@@ -83,14 +91,21 @@ const useAdminTodos = ({
   const schemeId = useAtomValue(currentSchemeIdAtom);
   const permissions = useAtomValue(currentPermissionsAtom);
   const userId = useAtomValue(userIdAtom);
+  const groupIds = useAtomValue(activityFilterGroupIdsAtom);
+  const businessIds = useAtomValue(activityFilterBusinessIdsAtom);
+  const userIds = useAtomValue(activityFilterUserIdsAtom);
+  const dueDate = useAtomValue(activityFilterDueDateAtom);
+  const createdDate = useAtomValue(activityFilterCreatedDateAtom);
+  const completedDate = useAtomValue(activityFilterCompletedDateAtom);
+
   const [saving, setSaving] = useState(false);
   const [addTodo, setAddTodo] = useState(false);
   const [editTodo, setEditTodo] = useState<null | string>(null);
   const [allUsers, setAllUsers] = useState(false);
   const [allSchemes, setAllSchemes] = useState(false);
+  const [filtersOpen, setFiltersOpen] = useState(false);
   const [search, setSearch] = useState('');
   const [groupsFilter, setGroupsFilter] = useState<string[]>([]);
-  const [usersFilter, setUsersFilter] = useState<string[]>([]);
   const [statusMode, setStatusMode] = useState<TodoStatusInput>(
     TodoStatusInput.Uncompleted
   );
@@ -107,6 +122,11 @@ const useAdminTodos = ({
 
   const { data: queryData } = useQuestionGroupOnSchemeQuery({
     variables: {
+      orderBy: [
+        {
+          name: SortOrder.Asc,
+        },
+      ],
       where: {
         id: currentScheme,
       },
@@ -138,7 +158,8 @@ const useAdminTodos = ({
   };
 
   const getUsersMode = (): TodoUserModeInput => {
-    if (allUsers && usersFilter.length > 0) return TodoUserModeInput.Selected;
+    if (allUsers && userIds && userIds.length > 0)
+      return TodoUserModeInput.Selected;
     if (allUsers) return TodoUserModeInput.All;
     return TodoUserModeInput.Current;
   };
@@ -150,9 +171,14 @@ const useAdminTodos = ({
     skip: (page - 1) * pageSize,
     take: pageSize,
     where: {
-      assignedUsers: usersFilter,
-      groupIds: groupsFilter.length > 0 ? groupsFilter : undefined,
-      schemeIds: allSchemes ? undefined : [schemeId],
+      assignedUsers: userIds && userIds.length > 0 ? userIds : undefined,
+      businessIds:
+        businessIds && businessIds.length > 0 ? businessIds : undefined,
+      completedAt: completedDate?.value,
+      createdAt: createdDate?.value,
+      dueDate: dueDate?.value,
+      groupIds: groupIds && groupIds.length > 0 ? groupIds : undefined,
+      schemeIds: [schemeId],
       search,
       status: statusMode,
       userMode: getUsersMode(),
@@ -286,7 +312,6 @@ const useAdminTodos = ({
   const onTableChange: TableProps<TableItem>['onChange'] = (_, filters) => {
     console.log(filters);
     setGroupsFilter((filters.groups as string[]) ?? []);
-    setUsersFilter((filters.assignedUsers as string[]) ?? []);
   };
 
   const onDeleteTodo = async (id: string) => {
@@ -335,6 +360,10 @@ const useAdminTodos = ({
     permissions,
   });
 
+  const toggleFiltersOpen = () => {
+    setFiltersOpen(!filtersOpen);
+  };
+
   return {
     addTodo,
     canDelete,
@@ -342,6 +371,7 @@ const useAdminTodos = ({
     currentPageSize: pageSize,
     data,
     editTodo,
+    filtersOpen,
     groupsData,
     groupsFilter,
     loading: (data === null || data === undefined) && loading,
@@ -360,11 +390,11 @@ const useAdminTodos = ({
     setSearch,
     setSelectedTodo,
     setStatusMode,
-    setUsersFilter,
     templateData,
     toggleAddTodo,
     toggleAllSchemes,
     toggleAllUsers,
+    toggleFiltersOpen,
     updateTodoList,
   };
 };

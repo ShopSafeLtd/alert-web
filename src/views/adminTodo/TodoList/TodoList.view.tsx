@@ -7,7 +7,6 @@ import type { TodoStatusInput } from 'graphql/types';
 
 import PermissionCheckWrapper from '#/components/PermissionCheck/PermissionCheckWrapper';
 import EditTodo from '#/components/form-components/Todos/EditTodo';
-import UsersManySelect from '#/components/form-components/UsersSelect/UsersSelectFetchMore.view';
 import {
   currentPermissionsAtom,
   currentSchemeAtom,
@@ -19,6 +18,7 @@ import {
   faCog,
   faEdit,
   faEllipsisH,
+  faFilter,
   faPlus,
   faTrash,
 } from '@fortawesome/pro-light-svg-icons';
@@ -35,7 +35,6 @@ import {
   Popconfirm,
   Radio,
   Row,
-  Select,
   Table,
   Tooltip,
   Typography,
@@ -50,11 +49,14 @@ import FormatCalendar from 'utils/format-calendar-24h';
 import getTodoUrl from 'utils/get-to-do-url';
 
 import ViewTodo from '../../../components/form-components/Todos/ViewTodo/Todo.container';
+import ActivityFilter from './ActivityFilter';
 
 type TemplateData = ListData;
 
 export interface TableItem {
   assignedUsers: { fullName: string; id: string }[];
+  business?: string;
+  businessId?: string;
   completed?: boolean | null;
   description?: null | string;
   dueDate?: Date | null;
@@ -72,6 +74,7 @@ interface Props {
   currentPageSize: number;
   data: TodoListQuery | null | undefined;
   editTodo: null | string;
+  filtersOpen: boolean;
   groupsData: { label: string; value: string }[];
   // groupsFilter: string[];
   loading: boolean;
@@ -89,11 +92,11 @@ interface Props {
   setSearch: (value: string) => void;
   setSelectedTodo: (id: null | string) => void;
   setStatusMode: (value: TodoStatusInput) => void;
-  setUsersFilter: (users: string[]) => void;
   templateData: ListData[];
   toggleAddTodo: () => void;
   toggleAllSchemes: () => void;
   toggleAllUsers: () => void;
+  toggleFiltersOpen: () => void;
   updateTodoList: MutationUpdaterFn<CreateTodoMutation>;
 }
 
@@ -157,7 +160,7 @@ const AdminTodos = ({
   currentPageSize,
   data,
   editTodo,
-  groupsData,
+  filtersOpen,
   // groupsFilter,
   loading,
   onCompletedTodo,
@@ -170,14 +173,13 @@ const AdminTodos = ({
   selectedTemplate,
   selectedTodo,
   setEditTodo,
-  setGroupsFilter,
   setSearch,
   setSelectedTodo,
   setStatusMode,
-  setUsersFilter,
   templateData,
   toggleAddTodo,
   toggleAllUsers,
+  toggleFiltersOpen,
   updateTodoList,
 }: Props): JSX.Element => {
   // const classes = useStyles();
@@ -193,42 +195,14 @@ const AdminTodos = ({
 
   return (
     <div className="list-view">
-      <Row gutter={8} style={{ marginBottom: 15 }}>
+      <Row gutter={[8, 16]} justify="end" style={{ marginBottom: 15 }}>
         <Col>
           <Input
             allowClear
             onChange={(event) => setSearch(event.target.value)}
             placeholder={intl.formatMessage({
-              defaultMessage: 'Search for a task...',
+              defaultMessage: 'Search activities...',
             })}
-            style={{ width: 350 }}
-          />
-        </Col>
-        <Col>
-          <UsersManySelect
-            allowClear
-            disabled={saving}
-            mode={'multiple'}
-            onChange={setUsersFilter}
-            placeholder={intl.formatMessage({
-              defaultMessage: 'Search for a user...',
-            })}
-            showSearch
-            style={{ width: 350 }}
-          />
-        </Col>
-        <Col>
-          <Select
-            allowClear
-            disabled={saving}
-            mode={'multiple'}
-            onChange={setGroupsFilter}
-            optionFilterProp={'label'}
-            options={groupsData}
-            placeholder={intl.formatMessage({
-              defaultMessage: 'Search for a group...',
-            })}
-            showSearch
             style={{ width: 350 }}
           />
         </Col>
@@ -255,7 +229,6 @@ const AdminTodos = ({
             </Radio.Button>
           </Radio.Group>
         </Col>
-
         <PermissionCheckWrapper
           permission={{
             method: PermissionMethod.ReadAll,
@@ -278,7 +251,40 @@ const AdminTodos = ({
             </Radio.Group>
           </Col>
         </PermissionCheckWrapper>
+        <Col>
+          <Button onClick={toggleFiltersOpen}>
+            <FontAwesomeIcon icon={faFilter} size="lg" />
+          </Button>
+        </Col>
 
+        {templateData.length === 0 && (
+          <PermissionCheckWrapper
+            permission={{
+              method: PermissionMethod.Write,
+              model: PermissionModel.Tasks,
+            }}
+            unauthorizedElement={<div />}
+          >
+            <Col>
+              <Button
+                disabled={saving}
+                icon={
+                  <FontAwesomeIcon
+                    icon={faPlus}
+                    size="lg"
+                    style={{ marginRight: 5 }}
+                  />
+                }
+                onClick={toggleAddTodo}
+                type="primary"
+              >
+                {intl.formatMessage({
+                  defaultMessage: 'New Activity',
+                })}
+              </Button>
+            </Col>
+          </PermissionCheckWrapper>
+        )}
         {templateData.length > 0 && (
           <PermissionCheckWrapper
             permission={{
@@ -287,49 +293,44 @@ const AdminTodos = ({
             }}
             unauthorizedElement={<div />}
           >
-            <Col span={4}>
-              <Select
-                onSelect={(value) => selectTemplate(value)}
-                options={templateData.map((item) => ({
-                  label: item.name,
-                  value: item.id,
-                }))}
-                placeholder={intl.formatMessage({
-                  defaultMessage: 'Create Activity from Template',
-                })}
-                style={{ width: '100%' }}
-                value={null}
-              />
+            <Col>
+              <Dropdown
+                menu={{
+                  items: [
+                    {
+                      key: 10_000,
+                      label: intl.formatMessage({
+                        defaultMessage: 'Create Blank Activity',
+                      }),
+                      onClick: toggleAddTodo,
+                    },
+                    ...templateData.map((item) => ({
+                      key: item.id,
+                      label: item.name,
+                      onClick: () => selectTemplate(item.id),
+                    })),
+                  ],
+                }}
+              >
+                <Button
+                  disabled={saving}
+                  icon={
+                    <FontAwesomeIcon
+                      icon={faPlus}
+                      size="lg"
+                      style={{ marginRight: 5 }}
+                    />
+                  }
+                  type="primary"
+                >
+                  {intl.formatMessage({
+                    defaultMessage: 'New Activity',
+                  })}
+                </Button>
+              </Dropdown>
             </Col>
           </PermissionCheckWrapper>
         )}
-
-        <PermissionCheckWrapper
-          permission={{
-            method: PermissionMethod.Write,
-            model: PermissionModel.Tasks,
-          }}
-          unauthorizedElement={<div />}
-        >
-          <Col>
-            <Button
-              disabled={saving}
-              icon={
-                <FontAwesomeIcon
-                  icon={faPlus}
-                  size="lg"
-                  style={{ marginRight: 5 }}
-                />
-              }
-              onClick={toggleAddTodo}
-              type="primary"
-            >
-              {intl.formatMessage({
-                defaultMessage: 'New Activity',
-              })}
-            </Button>
-          </Col>
-        </PermissionCheckWrapper>
         <PermissionCheckWrapper
           permission={{
             method: PermissionMethod.Read,
@@ -363,6 +364,16 @@ const AdminTodos = ({
               ),
               title: intl.formatMessage({
                 defaultMessage: 'Name',
+              }),
+            },
+            {
+              dataIndex: 'reference',
+              key: 'reference',
+              render: (value, record) => (
+                <Link to={`${getTodoUrl(record.todo.node)}`}>{value}</Link>
+              ),
+              title: intl.formatMessage({
+                defaultMessage: 'Alert ID',
               }),
             },
             {
@@ -443,6 +454,18 @@ const AdminTodos = ({
               ),
               title: intl.formatMessage({
                 defaultMessage: 'Assigned Users',
+              }),
+            },
+            {
+              dataIndex: 'business',
+              key: 'business',
+              render: (value, todo) => (
+                <Link to={`/app/businesses/view/${todo.businessId}`}>
+                  {value}
+                </Link>
+              ),
+              title: intl.formatMessage({
+                defaultMessage: 'Business',
               }),
             },
             {
@@ -636,6 +659,8 @@ const AdminTodos = ({
           ]}
           dataSource={data?.todoRelay.edges?.map((todo) => ({
             assignedUsers: todo.node.assignedUsers,
+            business: todo.node.business?.name,
+            businessId: todo.node.business?.id,
             completed: todo.node.completed,
             completedDate: todo.node.completedDate,
             createdAt: todo.node.createdAt,
@@ -645,6 +670,7 @@ const AdminTodos = ({
             key: todo.node.id,
             linkedItem: getLinkedItemId(todo),
             name: todo.node.name,
+            reference: todo.node.reference,
             status: todo.node.completed,
             todo,
           }))}
@@ -716,6 +742,17 @@ const AdminTodos = ({
         ) : (
           <div />
         )}
+      </Drawer>
+
+      <Drawer
+        onClose={toggleFiltersOpen}
+        open={filtersOpen}
+        title={intl.formatMessage({
+          defaultMessage: 'Filter Activities',
+        })}
+        width={400}
+      >
+        <ActivityFilter />
       </Drawer>
     </div>
   );

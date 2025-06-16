@@ -186,27 +186,32 @@ const useEditTodo = ({ initData, onClose, todoId }: Props): Return => {
         fullName: SortOrder.Asc,
       },
       where: {
-        businesses: todoData?.todo?.business?.id
-          ? {
+        OR: [
+          {
+            businesses: todoData?.todo?.business?.id
+              ? {
+                  some: {
+                    id: {
+                      equals: todoData?.todo?.business?.id,
+                    },
+                  },
+                }
+              : undefined,
+          },
+          {
+            groups: {
               some: {
-                id: {
-                  equals: todoData?.todo?.business?.id,
-                },
-              },
-            }
-          : undefined,
-
-        groups: {
-          some: {
-            users: {
-              some: {
-                id: {
-                  equals: userId,
+                users: {
+                  some: {
+                    id: {
+                      equals: userId,
+                    },
+                  },
                 },
               },
             },
           },
-        },
+        ],
         schemes: {
           some: {
             AND: [
