@@ -39,25 +39,21 @@ const IntelOneCSV = ({ onChange }: Props) => {
       onChange(
         data
           .filter((_, i) => i > 0)
-          .map((item) => {
-            console.log(item[1], dayjs(item[1], 'DD/MM/YYYY HH:mm'));
-            return {
-              colour: item[12],
-              crimeRef: item[7],
-              description: item[8],
-              group: item[13],
-              make: item[10],
-              model: item[11],
-              offenderName:
-                item[5] && item[5] !== '' ? item[5]?.split(',') : [],
-              reference: item[2],
-              registration: item[9],
-              reportDate: dayjs(item[1], 'DD/MM/YYYY HH:mm').toDate(),
-              siteName: item[0],
-              type: item[4],
-              value: Number(item[6]),
-            };
-          })
+          .map((item) => ({
+            colour: item[12],
+            crimeRef: item[7],
+            description: item[8],
+            group: item[13],
+            make: item[10],
+            model: item[11],
+            offenderName: item[5] && item[5] !== '' ? item[5]?.split(',') : [],
+            reference: item[2],
+            registration: item[9],
+            reportDate: dayjs(item[1], 'DD/MM/YYYY HH:mm').toDate(),
+            siteName: item[0],
+            type: item[4],
+            value: Number(item[6]),
+          }))
       );
   };
 

@@ -7,6 +7,7 @@ const WorkflowFormContainer = () => {
   const {
     activityTemplateForm,
     availableQuestions,
+    checklistOption,
     createNewQuestion,
     descriptionCheck,
     form,
@@ -46,6 +47,7 @@ const WorkflowFormContainer = () => {
     <View
       activityTemplateForm={activityTemplateForm}
       availableQuestions={availableQuestions}
+      checklistOption={checklistOption}
       createNewQuestion={createNewQuestion}
       descriptionCheck={descriptionCheck}
       form={form}
