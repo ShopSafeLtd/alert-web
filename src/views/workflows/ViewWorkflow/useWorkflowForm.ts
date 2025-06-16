@@ -4,6 +4,7 @@ import type { AnswerType, CronSchedule, IncidentPriority } from 'graphql/types';
 
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import useActivityTemplates from '#/views/adminTodo/ActivityTemplates/useActivityTemplates';
+import { useChecklistsQuery } from '#/views/checklist/graphql/queries/__generated__/list-checklists.generated';
 import { useCreateOneWorkflowMutation } from '#/views/workflows/graphql/mutations/__generated__/create-workflow.generated';
 import { useUpdateOneWorkflowMutation } from '#/views/workflows/graphql/mutations/__generated__/update-workflow.generated';
 import { useViewWorkflowQuery } from '#/views/workflows/graphql/queries/__generated__/view-workflow.generated';
@@ -60,18 +61,23 @@ interface WorkflowData {
     questions: string[];
   };
   usersToGetFrom?: {
+    createdBy?: boolean;
     groups?: string[];
     parentGroups?: boolean;
     roles?: string[];
     users?: string[];
   };
 }
-
 type AnyAll = 'all' | 'any';
 export type OverUnder = 'over' | 'under';
 
 interface WorkflowConditions {
   anyAll: AnyAll;
+  checkListScore?: {
+    greaterThan: boolean;
+    score: number;
+  };
+  checklistTemplate?: string[];
   descriptionWords?: {
     anyAll: AnyAll;
     words: string[] | undefined;
@@ -119,6 +125,9 @@ export interface Question {
 export interface FormData {
   autoApprove: boolean;
   autoApproveCheck: boolean;
+  checklistScore?: null | number;
+  checklistScoreGreaterThan?: boolean | null;
+  checklistTemplate?: null | string[];
   cronDate?: Date;
   cronStart?: Date;
   descriptionCheck: boolean;
@@ -162,6 +171,8 @@ export interface FormData {
   taskOutcome: boolean;
   taskQuestions: string[];
   updateIncident: boolean;
+  useChecklistScore?: boolean;
+  useCreatedBy?: boolean;
   useDynamicGroups?: boolean;
   userManagementGroups: string[];
   userManagementRoles: string[];
@@ -177,6 +188,7 @@ export type LabelValue = { label: string; value: string };
 interface Return {
   activityTemplateForm: boolean;
   availableQuestions: Question[];
+  checklistOption: { label: string; value: string }[];
   createNewQuestion: (id: string, question: string) => void;
   descriptionCheck: boolean;
   form: FormInstance<FormData>;
@@ -323,10 +335,13 @@ const useWorkflowForm = (): Return => {
               ...(action?.usersToGetFrom?.users || []),
             ],
           };
-
           form.setFieldsValue({
             autoApprove: action?.autoApprove,
             autoApproveCheck: action?.autoApprove !== undefined,
+            checklistScore: conditions?.checkListScore?.score || null,
+            checklistScoreGreaterThan:
+              conditions?.checkListScore?.greaterThan || null,
+            checklistTemplate: conditions?.checklistTemplate || null,
             cronDate: workflow.cronDate
               ? new Date(workflow.cronDate)
               : undefined,
@@ -392,6 +407,8 @@ const useWorkflowForm = (): Return => {
             taskName: action?.task?.name,
             taskOutcome: !!action?.task?.name,
             taskQuestions: action?.task?.questions,
+            useChecklistScore: !!conditions?.checkListScore,
+            useCreatedBy: !!action?.usersToGetFrom?.createdBy,
             useDynamicGroups: !!action?.usersToGetFrom?.parentGroups,
             userManagementGroups: newCombined.groups,
             userManagementRoles: action?.usersToGetFrom?.roles || [],
@@ -658,6 +675,7 @@ const useWorkflowForm = (): Return => {
           }
         : undefined,
       usersToGetFrom: {
+        createdBy: values.useCreatedBy,
         groups: values.userManagementGroups,
         parentGroups: values.useDynamicGroups,
         roles: values.userManagementRoles,
@@ -667,6 +685,17 @@ const useWorkflowForm = (): Return => {
 
     const conditionsData: WorkflowConditions = {
       anyAll: values.option,
+      checkListScore:
+        values.checklistScore !== null && values.checklistScore !== undefined
+          ? {
+              greaterThan: values.checklistScoreGreaterThan || false,
+              score: values.checklistScore,
+            }
+          : undefined,
+      checklistTemplate:
+        values.checklistTemplate && values.checklistTemplate.length > 0
+          ? values.checklistTemplate
+          : undefined,
       descriptionWords: values.descriptionCheck
         ? {
             anyAll: values.descriptionCondition,
@@ -808,9 +837,35 @@ const useWorkflowForm = (): Return => {
     },
   });
 
+  const schemeId = useAtomValue(currentSchemeIdAtom);
+
+  const { data: checklistData, loading: checklistLoading } = useChecklistsQuery(
+    {
+      fetchPolicy: 'cache-and-network',
+      variables: {
+        order: {
+          title: SortOrder.Asc,
+        },
+        where: {
+          deleted: { equals: false },
+          schemes: {
+            some: { id: { equals: schemeId } },
+          },
+        },
+      },
+    }
+  );
+
+  const checklistOption =
+    checklistData?.checklists.map((checklist) => ({
+      label: checklist.titleLocaled,
+      value: checklist.id,
+    })) || [];
+
   return {
     activityTemplateForm,
     availableQuestions,
+    checklistOption,
     createNewQuestion,
     descriptionCheck,
     form,
@@ -824,7 +879,12 @@ const useWorkflowForm = (): Return => {
     groupsSelected,
     incidentTimeCountCheck,
     lessThanSelected,
-    loading: loading || templatesLoading || editWorkflowLoading || goodsLoading,
+    loading:
+      loading ||
+      templatesLoading ||
+      editWorkflowLoading ||
+      goodsLoading ||
+      checklistLoading,
     modelSelected,
     newQuestion,
     onClose,

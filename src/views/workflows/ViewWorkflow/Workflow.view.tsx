@@ -65,6 +65,7 @@ interface ListData {
 interface WorkflowProps {
   activityTemplateForm: boolean;
   availableQuestions: Question[];
+  checklistOption: { label: string; value: string }[];
   createNewQuestion: (id: string, question: string) => void;
   descriptionCheck: boolean;
   form: FormInstance<FormData>;
@@ -114,6 +115,7 @@ const useStyles = createUseStyles((theme: Theme) => ({
 const WorkflowView: React.FC<WorkflowProps> = ({
   activityTemplateForm,
   availableQuestions,
+  checklistOption,
   createNewQuestion,
   descriptionCheck,
   form,
@@ -481,7 +483,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                   </Row>
                 )}
               </Card>
-              {modelSelected && modelSelected !== Model.Checklist && (
+              {modelSelected && (
                 <Card bodyStyle={{ padding: 0 }}>
                   <>
                     <div style={{ padding: 20 }}>
@@ -490,6 +492,10 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                       </Typography.Title>
                       <Typography.Paragraph style={{ marginBottom: 20 }}>
                         <FormattedMessage defaultMessage="Use workflow conditions to trigger the workflow only when certain conditions are met." />
+                        <br />
+                        {modelSelected === Model.Checklist && (
+                          <FormattedMessage defaultMessage="If no conditions selected, workflow will trigger on checklist completion" />
+                        )}
                       </Typography.Paragraph>
                       <Form.Item
                         label={
@@ -501,7 +507,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                             message: intl.formatMessage({
                               defaultMessage: 'Please select an option',
                             }),
-                            required: true,
+                            required: modelSelected !== Model.Checklist,
                           },
                         ]}
                       >
@@ -524,6 +530,123 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                         />
                       </Form.Item>
                     </div>
+
+                    {modelSelected === Model.Checklist && (
+                      <>
+                        <Divider style={{ marginBottom: 0, marginTop: 0 }} />
+                        <div>
+                          <Row style={{ padding: 20 }} wrap={false}>
+                            <Col flex={1}>
+                              <Typography.Title
+                                level={4}
+                                style={{
+                                  alignItems: 'center',
+                                  display: 'flex',
+                                  paddingTop: 8,
+                                }}
+                              >
+                                <FormattedMessage defaultMessage="Use Checklist Score" />
+                              </Typography.Title>
+                              <Typography.Text type="secondary">
+                                <FormattedMessage defaultMessage="Only trigger the workflow based on checklist score." />
+                              </Typography.Text>
+                            </Col>
+                            <Col span={2}>
+                              <Form.Item
+                                name="useChecklistScore"
+                                valuePropName="checked"
+                              >
+                                <Switch />
+                              </Form.Item>
+                            </Col>
+                          </Row>
+                        </div>
+
+                        <Form.Item
+                          noStyle
+                          shouldUpdate={(prev, curr) =>
+                            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+                            prev.useChecklistScore !== curr.useChecklistScore
+                          }
+                        >
+                          {({ getFieldValue }) =>
+                            getFieldValue('useChecklistScore') ? (
+                              <div className={classes.cardBody}>
+                                <Form.Item
+                                  label={
+                                    <FormattedMessage defaultMessage="Score Threshold" />
+                                  }
+                                  name="checklistScore"
+                                  rules={[
+                                    {
+                                      message: 'Enter a non-negative number',
+                                      min: 0,
+                                      required: true,
+                                      type: 'number',
+                                    },
+                                  ]}
+                                >
+                                  <InputNumber
+                                    min={0}
+                                    style={{ width: '100%' }}
+                                  />
+                                </Form.Item>
+
+                                <Form.Item
+                                  initialValue={true}
+                                  name="checklistScoreGreaterThan"
+                                >
+                                  <Radio.Group>
+                                    <Radio value={true}>
+                                      <FormattedMessage defaultMessage="Trigger when score is greater than threshold" />
+                                    </Radio>
+                                    <Radio value={false}>
+                                      <FormattedMessage defaultMessage="Trigger when score is less than threshold" />
+                                    </Radio>
+                                  </Radio.Group>
+                                </Form.Item>
+                              </div>
+                            ) : null
+                          }
+                        </Form.Item>
+
+                        <Divider style={{ marginBottom: 0, marginTop: 0 }} />
+                        <div>
+                          <Row style={{ padding: 20 }} wrap={false}>
+                            <Col span={24}>
+                              <Typography.Title
+                                level={4}
+                                style={{
+                                  alignItems: 'center',
+                                  display: 'flex',
+                                  paddingTop: 8,
+                                }}
+                              >
+                                <FormattedMessage defaultMessage="If selected template was used" />
+                              </Typography.Title>
+                              <Typography.Text type="secondary">
+                                <FormattedMessage defaultMessage="Only trigger the workflow based on the checklist template." />
+                              </Typography.Text>
+                            </Col>
+                          </Row>
+                          <Row style={{ padding: 20 }} wrap={false}>
+                            <Col span={24}>
+                              <Form.Item name="checklistTemplate">
+                                <Select
+                                  allowClear
+                                  loading={loading}
+                                  mode={'multiple'}
+                                  optionFilterProp={'label'}
+                                  options={checklistOption}
+                                  showSearch
+                                  style={{ width: '100%' }}
+                                />
+                              </Form.Item>
+                            </Col>
+                          </Row>
+                        </div>
+                      </>
+                    )}
 
                     {modelSelected === Model.Incident && (
                       <>
@@ -2153,6 +2276,20 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                         >
                           <RoleSelect multi schemeId={schemeId} />
                         </Form.Item>
+                        {typeWatch !== 'scheduled' && (
+                          <Form.Item
+                            label={
+                              <FormattedMessage defaultMessage="Use created/completed by user" />
+                            }
+                            name="useCreatedBy"
+                            tooltip={
+                              <FormattedMessage defaultMessage="Include the user who created or completed the triggering model" />
+                            }
+                            valuePropName="checked"
+                          >
+                            <Switch />
+                          </Form.Item>
+                        )}
                         <Row gutter={[32, 16]}>
                           {typeWatch !== 'scheduled' &&
                             workflowTypeWatch &&

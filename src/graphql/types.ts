@@ -7753,6 +7753,7 @@ export type IncidentExport = {
 };
 
 export type IncidentExportInput = {
+  allBusinesses?: InputMaybe<Scalars['Boolean']>;
   businessIds: Array<Scalars['String']>;
   crimeGroupIds: Array<Scalars['String']>;
   dateRange: DateRangeInput;
@@ -8616,27 +8617,8 @@ export type IntelListRelationFilter = {
 };
 
 export type IntelOneImportDataInput = {
-  incidents: Array<IntelOneImportIncidents>;
   scheme: UniqueId;
-};
-
-export type IntelOneImportIncidents = {
-  colour?: InputMaybe<Scalars['String']>;
-  crimeRef?: InputMaybe<Scalars['String']>;
-  description: Scalars['String'];
-  group?: InputMaybe<Scalars['String']>;
-  lat?: InputMaybe<Scalars['String']>;
-  lng?: InputMaybe<Scalars['String']>;
-  make?: InputMaybe<Scalars['String']>;
-  model?: InputMaybe<Scalars['String']>;
-  offenderName: Array<Scalars['String']>;
-  postcode?: InputMaybe<Scalars['String']>;
-  reference: Scalars['String'];
-  registration?: InputMaybe<Scalars['String']>;
-  reportDate: Scalars['Date'];
-  siteName: Scalars['String'];
-  type: Scalars['String'];
-  value?: InputMaybe<Scalars['Float']>;
+  url: Scalars['String'];
 };
 
 export type IntelOrderByRelationAggregateInput = {
@@ -22530,7 +22512,6 @@ export type UserScheme = {
   notificationCount: Scalars['Int'];
   orignalPermissions: CustomRole;
   permissions: Array<Permissions>;
-  permissionsId?: Maybe<Scalars['String']>;
   recycled: Scalars['Boolean'];
   role: Role;
   scheme: Scheme;
