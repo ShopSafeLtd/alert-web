@@ -8236,6 +8236,27 @@ export type IncidentQuestions = {
   tooltip?: Maybe<Scalars['String']>;
 };
 
+export type IncidentRelaySimpleInput = {
+  approved?: InputMaybe<Scalars['Boolean']>;
+  businessIds?: InputMaybe<Array<Scalars['String']>>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  createdByIds?: InputMaybe<Array<Scalars['String']>>;
+  crimeGroupIds?: InputMaybe<Array<Scalars['String']>>;
+  date?: InputMaybe<DateTimeFilter>;
+  goodsTypeIds?: InputMaybe<Array<Scalars['String']>>;
+  groupIds?: InputMaybe<Array<Scalars['String']>>;
+  incidentTagIds?: InputMaybe<Array<Scalars['String']>>;
+  incidentTypeIds?: InputMaybe<Array<Scalars['String']>>;
+  policeInvolved?: InputMaybe<Scalars['Boolean']>;
+  policeReported?: InputMaybe<Scalars['Boolean']>;
+  priorities?: InputMaybe<Array<IncidentPriority>>;
+  search?: InputMaybe<Scalars['String']>;
+  stockItemIds?: InputMaybe<Array<Scalars['String']>>;
+  userDataOnly?: InputMaybe<Scalars['Boolean']>;
+  userIsFollowing?: InputMaybe<Scalars['Boolean']>;
+  vehicleIds?: InputMaybe<Array<Scalars['String']>>;
+};
+
 export enum IncidentScalarFieldEnum {
   ActivityAuthorised = 'activityAuthorised',
   Approved = 'approved',
@@ -14140,6 +14161,7 @@ export type Query = {
   incidentHeatPerformance: ListIncidentsHeatPerformance;
   incidentItems: QueryIncidentItemsConnection;
   incidentMonthGraph: Array<Graph>;
+  incidentRelaySimple: QueryIncidentRelaySimpleConnection;
   incidentTableReport: ListIncidentPerformance;
   incidents: Array<Incident>;
   incidentsDayOfWeek: Array<Graph>;
@@ -14818,6 +14840,16 @@ export type QueryIncidentItemsArgs = {
 
 export type QueryIncidentMonthGraphArgs = {
   where: BusinessIncidentsCountGraphInput;
+};
+
+
+export type QueryIncidentRelaySimpleArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  order?: InputMaybe<Array<IncidentOrderByWithRelationInput>>;
+  where?: InputMaybe<IncidentRelaySimpleInput>;
 };
 
 
@@ -16001,6 +16033,19 @@ export type QueryIncidentItemsConnectionEdge = {
   __typename?: 'QueryIncidentItemsConnectionEdge';
   cursor: Scalars['String'];
   node: IncidentItem;
+};
+
+export type QueryIncidentRelaySimpleConnection = {
+  __typename?: 'QueryIncidentRelaySimpleConnection';
+  edges: Array<QueryIncidentRelaySimpleConnectionEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type QueryIncidentRelaySimpleConnectionEdge = {
+  __typename?: 'QueryIncidentRelaySimpleConnectionEdge';
+  cursor: Scalars['String'];
+  node: Incident;
 };
 
 export type QueryIncidentsRelayConnection = {
@@ -20409,6 +20454,7 @@ export type Todo = {
   offender?: Maybe<Offender>;
   offenderId?: Maybe<Scalars['String']>;
   questions: Array<TaskQuestion>;
+  reference?: Maybe<Scalars['Int']>;
   schemes: Array<Scheme>;
   similarOffenderIds: Array<Scalars['String']>;
   timeTaken: Array<TimeTaken>;
@@ -20507,7 +20553,10 @@ export type TodoOrderByWithRelationInput = {
 
 export type TodoRelayWhereInput = {
   assignedUsers?: InputMaybe<Array<Scalars['String']>>;
+  businessIds?: InputMaybe<Array<Scalars['String']>>;
+  completedAt?: InputMaybe<DateRangeInput>;
   createdAt?: InputMaybe<DateRangeInput>;
+  dueDate?: InputMaybe<DateRangeInput>;
   groupIds?: InputMaybe<Array<Scalars['String']>>;
   schemeIds?: InputMaybe<Array<Scalars['String']>>;
   search?: InputMaybe<Scalars['String']>;

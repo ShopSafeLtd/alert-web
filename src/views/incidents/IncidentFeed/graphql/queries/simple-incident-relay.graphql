@@ -1,0 +1,23 @@
+query IncidentRelaySimple(
+  $order: [IncidentOrderByWithRelationInput!]
+  $first: Int
+  $after: String
+  $where: IncidentRelaySimpleInput
+) {
+  incidentRelaySimple(
+    order: $order
+    first: $first
+    after: $after
+    where: $where
+  ) {
+    edges {
+      node {
+        ...IncidentCard
+      }
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}

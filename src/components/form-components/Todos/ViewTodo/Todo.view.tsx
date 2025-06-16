@@ -108,6 +108,17 @@ const TodoView = ({
         </Descriptions.Item>
         <Descriptions.Item
           label={intl.formatMessage({
+            defaultMessage: 'Alert ID',
+          })}
+        >
+          {loading ? (
+            <Skeleton.Input style={{ height: 24 }} />
+          ) : (
+            todo?.todo?.reference || ''
+          )}
+        </Descriptions.Item>
+        <Descriptions.Item
+          label={intl.formatMessage({
             defaultMessage: 'Created At',
           })}
         >

@@ -1,6 +1,6 @@
-query QuestionGroupOnScheme($where: SchemeWhereUniqueInput!, $questionGroupsWhere: QuestionGroupWhereInput) {
+query QuestionGroupOnScheme($where: SchemeWhereUniqueInput!, $questionGroupsWhere: QuestionGroupWhereInput, $orderBy: [QuestionGroupOrderByWithRelationInput!]) {
   scheme(where: $where) {
-    questionGroups(where: $questionGroupsWhere) {
+    questionGroups(where: $questionGroupsWhere, orderBy: $orderBy) {
       id
       name
       description

@@ -119,6 +119,7 @@ export const defaultCurrentUserSchemeAtom: UserSchemeState = {
     defaultPublicOffenderDOB: false,
     disableGalleryOnNative: false,
     disablePassword: false,
+    dontAutoSetTimeDate: false,
     draftIncidents: false,
     facialDetection: false,
     facialRecognition: false,

@@ -8,6 +8,7 @@ import type { TagsQuery } from 'graphql/tags/queries/__generated__/tags.generate
 import type { CustomQuestion, LocationData } from 'types/DataType';
 
 import Loading from '#/components/shared-components/AntD/Loading';
+import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import IncidentCCTV from '#/views/incidents/AddIncident/components/IncidentCCTV/IncidentCCTV.view';
 import {
   Button,
@@ -26,6 +27,7 @@ import ImageSection from 'components/incidents/IncidentForm/ImageSection';
 import IncidentDetails from 'components/incidents/IncidentForm/IncidentDetails';
 import Profiles from 'components/incidents/IncidentForm/Profiles';
 import { IncidentFormField } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
@@ -108,6 +110,7 @@ const AddIncident = ({
 }: Props): JSX.Element => {
   const classes = useStyles();
   const intl = useIntl();
+  const dontSetDate = useAtomValue(currentSchemeAtom)?.dontAutoSetTimeDate;
 
   const reorderedAndTrimmedForm = (() => {
     const reordered = incidentForm.flatMap((field) => {
@@ -167,7 +170,7 @@ const AddIncident = ({
       <Form<FormData>
         form={form}
         initialValues={{
-          date: new Date(),
+          date: dontSetDate ? undefined : new Date(),
           fullAddress: primaryAddress?.full,
           images: [],
           involvedTags: [],
