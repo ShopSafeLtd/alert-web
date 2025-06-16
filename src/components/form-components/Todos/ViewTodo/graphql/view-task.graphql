@@ -5,6 +5,7 @@ query Todo($where: TodoWhereUniqueInput!) {
       fullName
     }
     name
+    reference
     actions {
       id
       description

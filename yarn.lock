@@ -3262,6 +3262,16 @@
   resolved "https://registry.npmjs.org/@icons/material/-/material-0.2.4.tgz"
   integrity sha512-QPcGmICAPbGLGb6F/yNf/KzKqvFx8z5qx3D1yFqVAjoFmXK35EgyW+cJ57Te3CNsmzblwtzakLGFqHPqrfb4Tw==
 
+"@importok/javascript@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@importok/javascript/-/javascript-2.1.0.tgz#7dcbb4a3950080bbf8b5e8d3d77a7356575218e2"
+  integrity sha512-+xpdrg3PoO5MdqfYU/CEThaBsgZwUkgBfUJWL3clqzbwJNYY43S3HbiUevbfXqYhQB/SHu676WVfLM7k36clxg==
+
+"@importok/react@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@importok/react/-/react-2.1.0.tgz#67bf1523bed044811b2a9e66573a95a2fb9683f5"
+  integrity sha512-XhIvot1WaEFPOBpN0rBmIN83U0BLdjbNfvnsCXm6jJPEe6LKQU25n9vUaEx+wvgzGXCjL1jrXxwSbf5okbqsfA==
+
 "@isaacs/cliui@^8.0.2":
   version "8.0.2"
   resolved "https://registry.yarnpkg.com/@isaacs/cliui/-/cliui-8.0.2.tgz#b37667b7bc181c168782259bab42474fbf52b550"

@@ -6,6 +6,7 @@ const defaultOptions = {} as const;
 export type QuestionGroupOnSchemeQueryVariables = Types.Exact<{
   where: Types.SchemeWhereUniqueInput;
   questionGroupsWhere?: Types.InputMaybe<Types.QuestionGroupWhereInput>;
+  orderBy?: Types.InputMaybe<Array<Types.QuestionGroupOrderByWithRelationInput> | Types.QuestionGroupOrderByWithRelationInput>;
 }>;
 
 
@@ -13,9 +14,9 @@ export type QuestionGroupOnSchemeQuery = { __typename?: 'Query', scheme: { __typ
 
 
 export const QuestionGroupOnSchemeDocument = gql`
-    query QuestionGroupOnScheme($where: SchemeWhereUniqueInput!, $questionGroupsWhere: QuestionGroupWhereInput) {
+    query QuestionGroupOnScheme($where: SchemeWhereUniqueInput!, $questionGroupsWhere: QuestionGroupWhereInput, $orderBy: [QuestionGroupOrderByWithRelationInput!]) {
   scheme(where: $where) {
-    questionGroups(where: $questionGroupsWhere) {
+    questionGroups(where: $questionGroupsWhere, orderBy: $orderBy) {
       id
       name
       description

@@ -12,7 +12,7 @@ export type TodoListQueryVariables = Types.Exact<{
 }>;
 
 
-export type TodoListQuery = { __typename?: 'Query', todoRelay: { __typename?: 'QueryTodoRelayConnection', totalCount: number, edges: Array<{ __typename?: 'QueryTodoRelayConnectionEdge', node: { __typename?: 'Todo', id: string, name?: string | null, description?: string | null, dueDate?: Date | null, completedDate?: Date | null, completed?: boolean | null, createdAt: Date, type?: Types.TodoType | null, vehicleId?: string | null, offenderId?: string | null, crimeGroupId?: string | null, incidentId?: string | null, investigationId?: string | null, chatId?: string | null, vehicle?: { __typename?: 'Vehicle', id: string, reference?: number | null } | null, offender?: { __typename?: 'Offender', id: string, reference?: number | null } | null, crimeGroup?: { __typename?: 'CrimeGroup', id: string, reference?: number | null } | null, incident?: { __typename?: 'Incident', id: string, reference?: number | null } | null, investigation?: { __typename?: 'Investigation', id: string, reference?: number | null } | null, assignedUsers: Array<{ __typename?: 'User', id: string, fullName: string }>, groups: Array<{ __typename?: 'Group', id: string, name: string }> } }>, pageInfo: { __typename?: 'PageInfo', endCursor?: string | null } } };
+export type TodoListQuery = { __typename?: 'Query', todoRelay: { __typename?: 'QueryTodoRelayConnection', totalCount: number, edges: Array<{ __typename?: 'QueryTodoRelayConnectionEdge', node: { __typename?: 'Todo', id: string, name?: string | null, reference?: number | null, description?: string | null, dueDate?: Date | null, completedDate?: Date | null, completed?: boolean | null, createdAt: Date, type?: Types.TodoType | null, vehicleId?: string | null, offenderId?: string | null, crimeGroupId?: string | null, incidentId?: string | null, investigationId?: string | null, chatId?: string | null, business?: { __typename?: 'Business', name: string, id: string } | null, vehicle?: { __typename?: 'Vehicle', id: string, reference?: number | null } | null, offender?: { __typename?: 'Offender', id: string, reference?: number | null } | null, crimeGroup?: { __typename?: 'CrimeGroup', id: string, reference?: number | null } | null, incident?: { __typename?: 'Incident', id: string, reference?: number | null } | null, investigation?: { __typename?: 'Investigation', id: string, reference?: number | null } | null, assignedUsers: Array<{ __typename?: 'User', id: string, fullName: string }>, groups: Array<{ __typename?: 'Group', id: string, name: string }> } }>, pageInfo: { __typename?: 'PageInfo', endCursor?: string | null } } };
 
 
 export const TodoListDocument = gql`
@@ -28,6 +28,7 @@ export const TodoListDocument = gql`
       node {
         id
         name
+        reference
         description
         dueDate
         completedDate
@@ -35,6 +36,10 @@ export const TodoListDocument = gql`
         createdAt
         type
         vehicleId
+        business {
+          name
+          id
+        }
         vehicle {
           id
           reference

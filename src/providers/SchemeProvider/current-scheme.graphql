@@ -31,6 +31,8 @@ query CurrentSchemeProvider($where: UserSchemeWhereUniqueInput!) {
       disablePassword
       draftIncidents
       currency
+      dontAutoSetTimeDate
+      dontAutoSetTimeDate
       activityAssignToUser
       autoPopulateDescription
       defaultPublicOffenderDOB

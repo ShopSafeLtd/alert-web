@@ -2476,6 +2476,7 @@ export type Checklist = {
   createdAt: Scalars['Date'];
   description?: Maybe<Scalars['String']>;
   descriptionLocaled: Scalars['String'];
+  groups: Array<Group>;
   id: Scalars['ID'];
   roles: Array<CustomRole>;
   schemes: Array<Scheme>;
@@ -2495,6 +2496,16 @@ export type ChecklistActiveChecklistsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<ActiveChecklistWhereInput>;
+};
+
+
+export type ChecklistGroupsArgs = {
+  cursor?: InputMaybe<GroupWhereUniqueInput>;
+  distinct?: InputMaybe<Array<GroupScalarFieldEnum>>;
+  orderBy?: InputMaybe<Array<GroupOrderByWithRelationInput>>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<GroupWhereInput>;
 };
 
 
@@ -2534,6 +2545,7 @@ export enum ChecklistAnswerType {
 export type ChecklistCreateUpdateInput = {
   businessIds?: InputMaybe<Array<Scalars['String']>>;
   description?: InputMaybe<Scalars['String']>;
+  groupsIds?: InputMaybe<Array<Scalars['String']>>;
   roleIds?: InputMaybe<Array<Scalars['String']>>;
   sections: Array<SectionInput>;
   title: Scalars['String'];
@@ -2662,6 +2674,7 @@ export type ChecklistTableWhereInput = {
 export type ChecklistUpdateInput = {
   businessIds?: InputMaybe<Array<Scalars['String']>>;
   description?: InputMaybe<Scalars['String']>;
+  groupsIds?: InputMaybe<Array<Scalars['String']>>;
   roleIds?: InputMaybe<Array<Scalars['String']>>;
   sections?: InputMaybe<Array<SectionInput>>;
   title?: InputMaybe<Scalars['String']>;
@@ -3078,6 +3091,7 @@ export type CreateIncidentCrimeGroups = {
 };
 
 export type CreateIncidentData = {
+  activityAuthorised?: InputMaybe<Scalars['Boolean']>;
   answers?: InputMaybe<Array<AnswersInput>>;
   business?: InputMaybe<UniqueId>;
   cctvRecords?: InputMaybe<CreateIncidentCctvRecords>;
@@ -4641,6 +4655,7 @@ export type DiscImportDataInput = {
 };
 
 export type DiscImportHistoricIncidentsInput = {
+  activityAuthorised?: InputMaybe<Scalars['Boolean']>;
   building?: InputMaybe<Scalars['String']>;
   business?: InputMaybe<UniqueId>;
   county?: InputMaybe<Scalars['String']>;
@@ -4666,6 +4681,7 @@ export type DiscImportImagesInput = {
 };
 
 export type DiscImportIncidentsInput = {
+  activityAuthorised?: InputMaybe<Scalars['Boolean']>;
   building?: InputMaybe<Scalars['String']>;
   business?: InputMaybe<UniqueId>;
   county?: InputMaybe<Scalars['String']>;
@@ -6343,6 +6359,8 @@ export type Folder = {
   parentFolderId?: Maybe<Scalars['String']>;
   scheme: Scheme;
   schemeId?: Maybe<Scalars['String']>;
+  totalChildFolders: Scalars['Int'];
+  totalDocuments: Scalars['Int'];
   updatedAt: Scalars['Date'];
 };
 
@@ -7384,6 +7402,7 @@ export type ImpressionWhereUniqueInput = {
 export type Incident = {
   __typename?: 'Incident';
   actionableScore: Scalars['Int'];
+  activityAuthorised: Scalars['Boolean'];
   aiBehavioralAnalysis?: Maybe<AiBehavioralAnalysis>;
   aiImpactAssessment?: Maybe<AiImpactAssessment>;
   aiImprovements?: Maybe<Scalars['String']>;
@@ -8113,6 +8132,7 @@ export type IncidentOrderByRelationAggregateInput = {
 
 export type IncidentOrderByWithRelationInput = {
   actions?: InputMaybe<ActionOrderByRelationAggregateInput>;
+  activityAuthorised?: InputMaybe<SortOrder>;
   answers?: InputMaybe<AnswerOrderByRelationAggregateInput>;
   approved?: InputMaybe<SortOrder>;
   articleColumns?: InputMaybe<ArticleColumnOrderByRelationAggregateInput>;
@@ -8216,7 +8236,29 @@ export type IncidentQuestions = {
   tooltip?: Maybe<Scalars['String']>;
 };
 
+export type IncidentRelaySimpleInput = {
+  approved?: InputMaybe<Scalars['Boolean']>;
+  businessIds?: InputMaybe<Array<Scalars['String']>>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  createdByIds?: InputMaybe<Array<Scalars['String']>>;
+  crimeGroupIds?: InputMaybe<Array<Scalars['String']>>;
+  date?: InputMaybe<DateTimeFilter>;
+  goodsTypeIds?: InputMaybe<Array<Scalars['String']>>;
+  groupIds?: InputMaybe<Array<Scalars['String']>>;
+  incidentTagIds?: InputMaybe<Array<Scalars['String']>>;
+  incidentTypeIds?: InputMaybe<Array<Scalars['String']>>;
+  policeInvolved?: InputMaybe<Scalars['Boolean']>;
+  policeReported?: InputMaybe<Scalars['Boolean']>;
+  priorities?: InputMaybe<Array<IncidentPriority>>;
+  search?: InputMaybe<Scalars['String']>;
+  stockItemIds?: InputMaybe<Array<Scalars['String']>>;
+  userDataOnly?: InputMaybe<Scalars['Boolean']>;
+  userIsFollowing?: InputMaybe<Scalars['Boolean']>;
+  vehicleIds?: InputMaybe<Array<Scalars['String']>>;
+};
+
 export enum IncidentScalarFieldEnum {
+  ActivityAuthorised = 'activityAuthorised',
   Approved = 'approved',
   BusinessId = 'businessId',
   CreatedAt = 'createdAt',
@@ -8308,6 +8350,7 @@ export type IncidentTotal = {
 };
 
 export type IncidentUpdateInput = {
+  activityAuthorised?: InputMaybe<NullableSetBooleanHelper>;
   approved?: InputMaybe<SetBooleanHelper>;
   business?: InputMaybe<NullableConnectDisconnectHelper>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutIncidents>;
@@ -8337,6 +8380,7 @@ export type IncidentWhereInput = {
   NOT?: InputMaybe<Array<IncidentWhereInput>>;
   OR?: InputMaybe<Array<IncidentWhereInput>>;
   actions?: InputMaybe<ActionListRelationFilter>;
+  activityAuthorised?: InputMaybe<BoolFilter>;
   answers?: InputMaybe<AnswerListRelationFilter>;
   approved?: InputMaybe<BoolNullableFilter>;
   articleColumns?: InputMaybe<ArticleColumnListRelationFilter>;
@@ -8353,7 +8397,6 @@ export type IncidentWhereInput = {
   dayOfWeek?: InputMaybe<IntNullableFilter>;
   deleted?: InputMaybe<BoolFilter>;
   description?: InputMaybe<StringFilter>;
-  draft?: InputMaybe<BoolFilter>;
   evidence?: InputMaybe<DocumentListRelationFilter>;
   feedItems?: InputMaybe<FeedItemListRelationFilter>;
   geoLat?: InputMaybe<StringNullableFilter>;
@@ -8409,6 +8452,7 @@ export type IncidentWhereUniqueInput = {
   NOT?: InputMaybe<Array<IncidentWhereInput>>;
   OR?: InputMaybe<Array<IncidentWhereInput>>;
   actions?: InputMaybe<ActionListRelationFilter>;
+  activityAuthorised?: InputMaybe<BoolFilter>;
   answers?: InputMaybe<AnswerListRelationFilter>;
   approved?: InputMaybe<BoolNullableFilter>;
   articleColumns?: InputMaybe<ArticleColumnListRelationFilter>;
@@ -10554,6 +10598,7 @@ export type Mutation = {
   mergeBusinessesWithSameName: Business;
   mergeOffender: Offender;
   mySafetyImportData: SystemTask;
+  recycleActiveChecklist: ActiveChecklist;
   recycleChecklist: Checklist;
   recycleDemEvidence?: Maybe<Scalars['String']>;
   recycleExpiredData: SystemTask;
@@ -10614,7 +10659,6 @@ export type Mutation = {
   updateDemGroup: DemGroup;
   updateDocument: Document;
   updateFlow: Flow;
-  updateFolder: Folder;
   updateGroup: Group;
   updateIncident: Incident;
   updateIncidentBusiness: Incident;
@@ -11338,6 +11382,11 @@ export type MutationMySafetyImportDataArgs = {
 };
 
 
+export type MutationRecycleActiveChecklistArgs = {
+  id: Scalars['String'];
+};
+
+
 export type MutationRecycleChecklistArgs = {
   id: Scalars['String'];
 };
@@ -11599,12 +11648,6 @@ export type MutationUpdateDocumentArgs = {
 
 export type MutationUpdateFlowArgs = {
   data: UpdateFlowData;
-  where: UniqueId;
-};
-
-
-export type MutationUpdateFolderArgs = {
-  data: UpdateFolder;
   where: UniqueId;
 };
 
@@ -14118,6 +14161,7 @@ export type Query = {
   incidentHeatPerformance: ListIncidentsHeatPerformance;
   incidentItems: QueryIncidentItemsConnection;
   incidentMonthGraph: Array<Graph>;
+  incidentRelaySimple: QueryIncidentRelaySimpleConnection;
   incidentTableReport: ListIncidentPerformance;
   incidents: Array<Incident>;
   incidentsDayOfWeek: Array<Graph>;
@@ -14795,6 +14839,16 @@ export type QueryIncidentItemsArgs = {
 
 export type QueryIncidentMonthGraphArgs = {
   where: BusinessIncidentsCountGraphInput;
+};
+
+
+export type QueryIncidentRelaySimpleArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  order?: InputMaybe<Array<IncidentOrderByWithRelationInput>>;
+  where?: InputMaybe<IncidentRelaySimpleInput>;
 };
 
 
@@ -15964,6 +16018,19 @@ export type QueryIncidentItemsConnectionEdge = {
   __typename?: 'QueryIncidentItemsConnectionEdge';
   cursor: Scalars['String'];
   node: IncidentItem;
+};
+
+export type QueryIncidentRelaySimpleConnection = {
+  __typename?: 'QueryIncidentRelaySimpleConnection';
+  edges: Array<QueryIncidentRelaySimpleConnectionEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type QueryIncidentRelaySimpleConnectionEdge = {
+  __typename?: 'QueryIncidentRelaySimpleConnectionEdge';
+  cursor: Scalars['String'];
+  node: Incident;
 };
 
 export type QueryIncidentsRelayConnection = {
@@ -17388,6 +17455,7 @@ export type Scheme = {
   disableGalleryOnNative: Scalars['Boolean'];
   disablePassword: Scalars['Boolean'];
   documents: Array<Document>;
+  dontAutoSetTimeDate: Scalars['Boolean'];
   draftIncidents: Scalars['Boolean'];
   facialDetection: Scalars['Boolean'];
   facialRecognition: Scalars['Boolean'];
@@ -18420,6 +18488,7 @@ export type SentrysysImportDataInput = {
 };
 
 export type SentrysysImportHistoricIncidentsInput = {
+  activityAuthorised?: InputMaybe<Scalars['Boolean']>;
   business?: InputMaybe<UniqueId>;
   crimeTypes?: InputMaybe<Array<UniqueId>>;
   date?: InputMaybe<Scalars['Date']>;
@@ -18445,6 +18514,7 @@ export type SentrysysImportIncidentItemInput = {
 };
 
 export type SentrysysImportIncidentsInput = {
+  activityAuthorised?: InputMaybe<Scalars['Boolean']>;
   business?: InputMaybe<UniqueId>;
   createdBy?: InputMaybe<UniqueId>;
   crimeTypes?: InputMaybe<Array<UniqueId>>;
@@ -20331,9 +20401,9 @@ export type Todo = {
   answers?: Maybe<Array<Answer>>;
   assignedUsers: Array<User>;
   authorised?: Maybe<Scalars['Boolean']>;
-  authorisedUsers?: Maybe<Array<User>>;
   business?: Maybe<Business>;
   chatId?: Maybe<Scalars['String']>;
+  checklist?: Maybe<ActiveChecklist>;
   completed?: Maybe<Scalars['Boolean']>;
   completedBy?: Maybe<User>;
   completedById?: Maybe<Scalars['String']>;
@@ -20356,6 +20426,7 @@ export type Todo = {
   offender?: Maybe<Offender>;
   offenderId?: Maybe<Scalars['String']>;
   questions: Array<TaskQuestion>;
+  reference?: Maybe<Scalars['Int']>;
   schemes: Array<Scheme>;
   similarOffenderIds: Array<Scalars['String']>;
   timeTaken: Array<TimeTaken>;
@@ -20378,10 +20449,11 @@ export type TodoGroupsArgs = {
 export type TodoCreateInput = {
   assignedUsers?: InputMaybe<ConnectOnlyArrayHelper>;
   authorised?: InputMaybe<Scalars['Boolean']>;
-  authorisedUsers?: InputMaybe<ConnectOnlyArrayHelper>;
   business?: InputMaybe<ConnectHelper>;
+  checklist?: InputMaybe<ConnectHelper>;
   completed?: InputMaybe<Scalars['Boolean']>;
   createdBy?: InputMaybe<ConnectHelper>;
+  crimeGroup?: InputMaybe<ConnectHelper>;
   description?: InputMaybe<Scalars['String']>;
   documents?: InputMaybe<Array<CreateDocument>>;
   dueDate?: InputMaybe<Scalars['Date']>;
@@ -20389,11 +20461,13 @@ export type TodoCreateInput = {
   incident?: InputMaybe<ConnectHelper>;
   investigation?: InputMaybe<ConnectHelper>;
   name?: InputMaybe<Scalars['String']>;
+  offender?: InputMaybe<ConnectHelper>;
   questions?: InputMaybe<TaskQuestionCreateNestedManyWithoutTaskInput>;
   schemes?: InputMaybe<ConnectOnlyArrayHelper>;
   similarOffenderIds?: InputMaybe<Array<Scalars['String']>>;
   timeTaken?: InputMaybe<TimeTakenCreateNestedManyWithoutTodoInput>;
   type?: InputMaybe<TodoType>;
+  vehicle?: InputMaybe<ConnectHelper>;
 };
 
 export type TodoListRelationFilter = {
@@ -20451,7 +20525,10 @@ export type TodoOrderByWithRelationInput = {
 
 export type TodoRelayWhereInput = {
   assignedUsers?: InputMaybe<Array<Scalars['String']>>;
+  businessIds?: InputMaybe<Array<Scalars['String']>>;
+  completedAt?: InputMaybe<DateRangeInput>;
   createdAt?: InputMaybe<DateRangeInput>;
+  dueDate?: InputMaybe<DateRangeInput>;
   groupIds?: InputMaybe<Array<Scalars['String']>>;
   schemeIds?: InputMaybe<Array<Scalars['String']>>;
   search?: InputMaybe<Scalars['String']>;
@@ -20557,21 +20634,26 @@ export type TodoUpdateInput = {
   answers?: InputMaybe<AnswerUpdateManyWithoutTodoNestedInput>;
   assignedUsers?: InputMaybe<RelationSet>;
   authorised?: InputMaybe<NullableSetBooleanHelper>;
-  authorisedUsers?: InputMaybe<RelationSet>;
   businessId?: InputMaybe<Scalars['String']>;
+  checklistId?: InputMaybe<Scalars['String']>;
   completed?: InputMaybe<NullableSetBooleanHelper>;
   completedBy?: InputMaybe<ConnectHelper>;
   completedDate?: InputMaybe<NullableSetDateHelper>;
+  crimeGroupId?: InputMaybe<Scalars['String']>;
   description?: InputMaybe<Scalars['String']>;
   documents?: InputMaybe<Array<UpdateDocument>>;
   dueDate?: InputMaybe<NullableSetDateHelper>;
   groups?: InputMaybe<RelationSet>;
+  incidentId?: InputMaybe<Scalars['String']>;
+  investigationId?: InputMaybe<Scalars['String']>;
   name?: InputMaybe<Scalars['String']>;
+  offenderId?: InputMaybe<Scalars['String']>;
   questions?: InputMaybe<TaskQuestionUpdateManyWithoutTaskNestedInput>;
   schemes?: InputMaybe<NullableConnectArrayHelper>;
   similarOffenderIds?: InputMaybe<Array<Scalars['String']>>;
   timeTaken?: InputMaybe<TimeTakenCreateManyEnvelope>;
   type?: InputMaybe<NullableEnumTodoTypeFieldUpdateOperationsInput>;
+  vehicleId?: InputMaybe<Scalars['String']>;
 };
 
 export enum TodoUserModeInput {
@@ -20892,12 +20974,6 @@ export type UpdateFlowNodeData = {
   positionY: Scalars['Int'];
   type: Scalars['String'];
   width: Scalars['Int'];
-};
-
-export type UpdateFolder = {
-  description?: InputMaybe<SetStringHelper>;
-  name?: InputMaybe<SetStringHelper>;
-  parentTagId?: InputMaybe<Scalars['String']>;
 };
 
 export enum UpdateIcon {
@@ -21414,6 +21490,7 @@ export type UpsertIncidentOffender = {
 
 export type UpsertRole = {
   canApprove?: InputMaybe<Scalars['Boolean']>;
+  folderIds?: InputMaybe<Array<Scalars['String']>>;
   name?: InputMaybe<Scalars['String']>;
   permissions: Array<PermissionInput>;
   roleId?: InputMaybe<Scalars['String']>;
@@ -23685,6 +23762,7 @@ export type InvestigationRelayOrderInput = {
 
 export type InvestigationRelayWhereInput = {
   groupIds?: InputMaybe<Array<Scalars['String']>>;
+  id?: InputMaybe<StringFilter>;
   schemeIds: Array<Scalars['String']>;
   search?: InputMaybe<Scalars['String']>;
   status?: InputMaybe<Array<InvestigationStatus>>;
