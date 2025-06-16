@@ -32,7 +32,6 @@ query CurrentSchemeProvider($where: UserSchemeWhereUniqueInput!) {
       draftIncidents
       currency
       dontAutoSetTimeDate
-      dontAutoSetTimeDate
       activityAssignToUser
       autoPopulateDescription
       defaultPublicOffenderDOB
