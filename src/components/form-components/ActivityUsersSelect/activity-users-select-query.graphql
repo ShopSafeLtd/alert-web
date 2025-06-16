@@ -1,0 +1,11 @@
+query ActivityUsersSelect(
+    $where: UserWhereInput
+    $orderBy: [UserOrderByWithRelationInput!]
+    $after: UserWhereUniqueInput
+) {
+    users(where: $where, orderBy: $orderBy, after: $after) {
+        id
+        fullName
+    }
+
+}
