@@ -1,6 +1,7 @@
 import type { IntelOneCSVData } from '#/components/form-components/IntelOneCSV/IntelOneCSV.types';
 
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import saveJsonToUrl from '#/views/settings/data-import/utils/save-json-to-url';
 import { notification } from 'antd';
 import { useIntelOneImportDataMutation } from 'graphql/imports/__generated__/intel-one-import.generated';
 import { useAtomValue } from 'jotai/index';
@@ -40,31 +41,36 @@ const useIntelOne = (): Return => {
   const onSubmit = async (data: FormData) => {
     try {
       setSaving(true);
+      const url = await saveJsonToUrl(
+        data.intelOne
+          .map((item) => ({
+            colour: item.colour,
+            crimeRef: item.crimeRef,
+            description: item.description,
+            group: item.group,
+            make: item.make,
+            model: item.model,
+            offenderName: item.offenderName,
+            reference: item.reference,
+            registration: item.registration,
+            reportDate: item.reportDate,
+            siteName: item.siteName,
+            type: item.type,
+            value: item.value,
+          }))
+          .filter((item) => item.description && item.type && item.reportDate)
+      );
+      if (!url) {
+        return;
+      }
+
       await importData({
         variables: {
           data: {
-            incidents: data.intelOne
-              .map((item) => ({
-                colour: item.colour,
-                crimeRef: item.crimeRef,
-                description: item.description,
-                group: item.group,
-                make: item.make,
-                model: item.model,
-                offenderName: item.offenderName,
-                reference: item.reference,
-                registration: item.registration,
-                reportDate: item.reportDate,
-                siteName: item.siteName,
-                type: item.type,
-                value: item.value,
-              }))
-              .filter(
-                (item) => item.description && item.type && item.reportDate
-              ),
             scheme: {
               id: schemeId,
             },
+            url,
           },
         },
       });
