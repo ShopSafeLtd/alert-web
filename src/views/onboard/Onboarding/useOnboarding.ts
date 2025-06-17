@@ -106,6 +106,7 @@ const useOnboarding = (): Return => {
         setNewUser({
           ...user,
           newUser: false,
+          termsExpired: false,
         });
       }
       markTermsSigned();
