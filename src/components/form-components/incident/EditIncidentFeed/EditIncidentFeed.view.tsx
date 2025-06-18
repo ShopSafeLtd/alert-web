@@ -50,10 +50,7 @@ Props): JSX.Element => {
   ) : (
     <Form
       initialValues={{
-        business: {
-          label: data?.business?.name,
-          value: data?.business?.id,
-        },
+        business: data?.business?.id ? [data?.business?.id] : [],
         customerRef: data?.customerRef,
         date: data?.date ? new Date(data?.date) : '',
         description: data?.description,
