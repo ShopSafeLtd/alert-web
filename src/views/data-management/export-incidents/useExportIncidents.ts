@@ -111,46 +111,59 @@ const useExportIncidents = (): Return => {
     switch (action.type) {
       case 'UPDATE_TAKE': {
         if (typeof action.payload === 'number') {
-          return { ...state, take: action.payload };
+          return { ...state, take: action.payload, zipFile: null };
         }
         break;
       }
 
       case 'UPDATE_SKIP': {
         if (typeof action.payload === 'number') {
-          return { ...state, skip: action.payload };
+          return { ...state, skip: action.payload, zipFile: null };
         }
         break;
       }
 
       case 'UPDATE_GROUP_IDS': {
-        return { ...state, groupIds: action.payload as string[] };
+        return {
+          ...state,
+          groupIds: action.payload as string[],
+          zipFile: null,
+        };
       }
 
       case 'UPDATE_BUSINESS_IDS': {
-        return { ...state, businessIds: action.payload as string[] };
+        return {
+          ...state,
+          businessIds: action.payload as string[],
+          zipFile: null,
+        };
       }
 
       case 'UPDATE_CRIME_GROUP_IDS': {
-        return { ...state, crimeGroupIds: action.payload as string[] };
+        return {
+          ...state,
+          crimeGroupIds: action.payload as string[],
+          zipFile: null,
+        };
       }
 
       case 'UPDATE_START_DATE': {
         if (action.payload instanceof Date) {
-          return { ...state, startDate: action.payload };
+          return { ...state, startDate: action.payload, zipFile: null };
         }
         break;
       }
 
       case 'UPDATE_END_DATE': {
         if (action.payload instanceof Date) {
-          return { ...state, endDate: action.payload };
+          return { ...state, endDate: action.payload, zipFile: null };
         }
         break;
       }
+
       case 'SET_OPTIONS': {
         const options = action.payload as { [key in Options]: SelectOption[] };
-        return { ...state, ...options };
+        return { ...state, ...options, zipFile: null };
       }
 
       case 'SET_DATA': {
@@ -173,7 +186,7 @@ const useExportIncidents = (): Return => {
 
       case 'ALL_BUSINESSES': {
         const allBusinesses = action.payload as boolean;
-        return { ...state, allBusinesses, businessIds: [] };
+        return { ...state, allBusinesses, businessIds: [], zipFile: null };
       }
 
       default: {
@@ -181,10 +194,8 @@ const useExportIncidents = (): Return => {
       }
     }
 
-    // If the payload type check fails, return the current state.
     return state;
   };
-
   // Create the useReducer hook
   const [state, dispatch] = useReducer(reducer, initialState);
 
@@ -265,6 +276,13 @@ const useExportIncidents = (): Return => {
           payload: 100,
           type: 'SET_PROGRESS',
         });
+
+        const link = document.createElement('a');
+        link.href = d.createCsvZip;
+        link.download = `export-incidents-${dayjs().format('YYYY-MM-DD')}.zip`;
+        document.body.append(link);
+        link.click();
+        link.remove();
       }
     },
   });
@@ -303,10 +321,6 @@ const useExportIncidents = (): Return => {
       const elapsedTime = currentTime - startTime;
 
       if (elapsedTime >= duration) {
-        dispatch({
-          payload: null,
-          type: 'SET_ZIP_FILE',
-        });
         dispatch({
           payload: targetProgress,
           type: 'SET_PROGRESS',
