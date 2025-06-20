@@ -3,6 +3,7 @@ import type { ActiveChecklistsQuery } from '#/views/checklist/graphql/queries/__
 import type { ChecklistsQuery } from '#/views/checklist/graphql/queries/__generated__/list-checklists.generated';
 import type { FetchResult } from '@apollo/client';
 
+import PermissionCheckWrapper from '#/components/PermissionCheck/PermissionCheckWrapper';
 import {
   faDownload,
   faPenToSquare,
@@ -23,7 +24,11 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
-import { ChecklistStatus } from 'graphql/types';
+import {
+  ChecklistStatus,
+  PermissionMethod,
+  PermissionModel,
+} from 'graphql/types';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { useNavigate } from 'react-router';
@@ -31,7 +36,6 @@ import { Link } from 'react-router-dom';
 
 import type {
   ActiveChecklistSortOptions,
-  // ChecklistSortOptions,
   ChecklistSortOrder,
   FilterModelValues,
   SetChecklistFilterModel,
@@ -387,13 +391,22 @@ const ChecklistsView: React.FC<ChecklistsViewProps> = ({
                       ]}
                       value={checklistFilter.ownUser}
                     />,
-                    <Button
-                      key={1}
-                      onClick={() => navigate('/app/checklists/add')}
-                      type="primary"
+                    <PermissionCheckWrapper
+                      key={9}
+                      permission={{
+                        method: PermissionMethod.Edit,
+                        model: PermissionModel.Checklist,
+                      }}
+                      unauthorizedElement={<div />}
                     >
-                      <FormattedMessage defaultMessage="Create New Template" />
-                    </Button>,
+                      <Button
+                        key={1}
+                        onClick={() => navigate('/app/checklists/add')}
+                        type="primary"
+                      >
+                        <FormattedMessage defaultMessage="Create New Template" />
+                      </Button>
+                    </PermissionCheckWrapper>,
                   ]}
                 />
                 <Card>
@@ -403,7 +416,15 @@ const ChecklistsView: React.FC<ChecklistsViewProps> = ({
                         dataIndex: 'title',
                         key: 'title',
                         render: (value, item) => (
-                          <Link to={`edit/${item.key}`}>{value}</Link>
+                          <PermissionCheckWrapper
+                            permission={{
+                              method: PermissionMethod.Edit,
+                              model: PermissionModel.Checklist,
+                            }}
+                            unauthorizedElement={<div> {value} </div>}
+                          >
+                            <Link to={`edit/${item.key}`}>{value}</Link>
+                          </PermissionCheckWrapper>
                         ),
                         title: <FormattedMessage defaultMessage="Title" />,
                       },
@@ -440,45 +461,61 @@ const ChecklistsView: React.FC<ChecklistsViewProps> = ({
                                 size="small"
                               />
                             </Tooltip>
-                            <Tooltip
-                              title={intl.formatMessage({
-                                defaultMessage: 'Edit template',
-                              })}
+                            <PermissionCheckWrapper
+                              permission={{
+                                method: PermissionMethod.Edit,
+                                model: PermissionModel.Checklist,
+                              }}
+                              unauthorizedElement={<div />}
                             >
-                              <Button
-                                icon={
-                                  <FontAwesomeIcon
-                                    icon={faPenToSquare}
-                                    onClick={() =>
-                                      navigate(
-                                        `/app/checklists/edit/${record.key}`
-                                      )
-                                    }
-                                  />
-                                }
-                                size="small"
-                              />
-                            </Tooltip>
-                            <Tooltip
-                              title={intl.formatMessage({
-                                defaultMessage: 'Delete template',
-                              })}
-                            >
-                              <Popconfirm
-                                okText={intl.formatMessage({
-                                  defaultMessage: 'Delete',
-                                })}
-                                onConfirm={() => deleteTemplate(record.key)}
-                                overlayInnerStyle={{ padding: 10 }}
+                              <Tooltip
                                 title={intl.formatMessage({
-                                  defaultMessage: 'Are you sure?',
+                                  defaultMessage: 'Edit template',
                                 })}
                               >
                                 <Button
-                                  icon={<FontAwesomeIcon icon={faTrash} />}
+                                  icon={
+                                    <FontAwesomeIcon
+                                      icon={faPenToSquare}
+                                      onClick={() =>
+                                        navigate(
+                                          `/app/checklists/edit/${record.key}`
+                                        )
+                                      }
+                                    />
+                                  }
+                                  size="small"
                                 />
-                              </Popconfirm>
-                            </Tooltip>
+                              </Tooltip>
+                            </PermissionCheckWrapper>
+                            <PermissionCheckWrapper
+                              permission={{
+                                method: PermissionMethod.Delete,
+                                model: PermissionModel.Checklist,
+                              }}
+                              unauthorizedElement={<div />}
+                            >
+                              <Tooltip
+                                title={intl.formatMessage({
+                                  defaultMessage: 'Delete template',
+                                })}
+                              >
+                                <Popconfirm
+                                  okText={intl.formatMessage({
+                                    defaultMessage: 'Delete',
+                                  })}
+                                  onConfirm={() => deleteTemplate(record.key)}
+                                  overlayInnerStyle={{ padding: 10 }}
+                                  title={intl.formatMessage({
+                                    defaultMessage: 'Are you sure?',
+                                  })}
+                                >
+                                  <Button
+                                    icon={<FontAwesomeIcon icon={faTrash} />}
+                                  />
+                                </Popconfirm>
+                              </Tooltip>
+                            </PermissionCheckWrapper>
                           </Space>
                         ),
                         title: '',
