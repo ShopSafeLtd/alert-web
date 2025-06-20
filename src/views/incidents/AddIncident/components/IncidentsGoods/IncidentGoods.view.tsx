@@ -240,7 +240,7 @@ const IncidentGoods = ({
                               message: intl.formatMessage({
                                 defaultMessage: 'Please enter a type',
                               }),
-                              required: index === 0,
+                              required: true,
                             },
                           ]}
                         >
@@ -296,7 +296,7 @@ const IncidentGoods = ({
                               message: intl.formatMessage({
                                 defaultMessage: 'Please enter a value',
                               }),
-                              required: index === 0,
+                              required: true,
                             },
                           ]}
                           tooltip={intl.formatMessage({
@@ -328,7 +328,7 @@ const IncidentGoods = ({
                               message: intl.formatMessage({
                                 defaultMessage: 'Please enter a value',
                               }),
-                              required: index === 0,
+                              required: true,
                             },
                           ]}
                           tooltip={intl.formatMessage({
@@ -366,11 +366,11 @@ const IncidentGoods = ({
                               message: intl.formatMessage({
                                 defaultMessage: 'Please enter the name',
                               }),
-                              required: index === 0,
+                              required: true,
                             },
                           ]}
                           tooltip={intl.formatMessage({
-                            defaultMessage: 'The name of the itmem.',
+                            defaultMessage: 'The name of the item.',
                           })}
                         >
                           <Input readOnly style={{ width: '100%' }} />
@@ -392,7 +392,7 @@ const IncidentGoods = ({
                               message: intl.formatMessage({
                                 defaultMessage: 'Please enter the SKU',
                               }),
-                              required: index === 0,
+                              required: true,
                             },
                           ]}
                           tooltip={intl.formatMessage({
@@ -436,7 +436,7 @@ const IncidentGoods = ({
                               message: intl.formatMessage({
                                 defaultMessage: 'Please enter the value',
                               }),
-                              required: index === 0,
+                              required: true,
                             },
                           ]}
                           tooltip={intl.formatMessage({
@@ -467,7 +467,7 @@ const IncidentGoods = ({
                               message: intl.formatMessage({
                                 defaultMessage: 'Please enter a quantity.',
                               }),
-                              required: index === 0,
+                              required: true,
                             },
                             {
                               message: intl.formatMessage({
@@ -507,7 +507,7 @@ const IncidentGoods = ({
                                 defaultMessage:
                                   'Please enter a recovered quantity.',
                               }),
-                              required: index === 0,
+                              required: true,
                             },
                           ]}
                           tooltip={intl.formatMessage({
@@ -516,7 +516,7 @@ const IncidentGoods = ({
                           })}
                         >
                           <InputNumber
-                            max={goods[index].quantity}
+                            max={goods[index]?.quantity || 0}
                             min={0}
                             precision={0}
                             style={{ width: '100%' }}
