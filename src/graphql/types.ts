@@ -7294,6 +7294,23 @@ export type ImportDemEvidence = {
   tags?: InputMaybe<Array<Scalars['String']>>;
 };
 
+export type ImportResult = {
+  __typename?: 'ImportResult';
+  failed?: Maybe<Scalars['Int']>;
+  results?: Maybe<Array<ImportResultDetail>>;
+  success: Scalars['Boolean'];
+  successful?: Maybe<Scalars['Int']>;
+  total?: Maybe<Scalars['Int']>;
+};
+
+export type ImportResultDetail = {
+  __typename?: 'ImportResultDetail';
+  error?: Maybe<Scalars['String']>;
+  reference?: Maybe<Scalars['String']>;
+  success: Scalars['Boolean'];
+  uuid: Scalars['String'];
+};
+
 export enum ImportType {
   Csv = 'CSV',
   Disc = 'DISC',
@@ -7922,6 +7939,11 @@ export type IncidentImageUpdate = {
   primary?: InputMaybe<Scalars['Boolean']>;
   rotation?: InputMaybe<Scalars['Int']>;
   totalFaces?: InputMaybe<Scalars['Int']>;
+};
+
+export type IncidentImportDataInput = {
+  fileUrl: Scalars['String'];
+  skipDuplicateCheck?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type IncidentItem = {
@@ -10575,6 +10597,7 @@ export type Mutation = {
   generateFeedItems: SystemTask;
   generateStatementBody: GeneratedStatementBody;
   importStockItemCsv: Scalars['Boolean'];
+  incidentImport: ImportResult;
   indexExistingImages: SystemTask;
   indexFaces: SystemTask;
   indexImage: Image;
@@ -11310,6 +11333,11 @@ export type MutationGenerateStatementBodyArgs = {
 
 export type MutationImportStockItemCsvArgs = {
   where: Scalars['String'];
+};
+
+
+export type MutationIncidentImportArgs = {
+  data: IncidentImportDataInput;
 };
 
 
