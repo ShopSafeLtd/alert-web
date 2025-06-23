@@ -381,7 +381,7 @@ const navigationConfig: NavItem[] = [
           id: 'documents',
           defaultMessage: 'Documents',
         }),
-        path: `${APP_PREFIX_PATH}/resources/documents`,
+        path: `${APP_PREFIX_PATH}/resources/folders`,
         title: 'Documents',
         icon: faFile,
         breadcrumb: true,

@@ -1,3 +1,5 @@
+import type { InvestigationData } from '#/types/DataType';
+
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { SortOrder } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
@@ -12,8 +14,9 @@ import type {
 import { useLinkInvestigationsQuery } from './graphql/__generated__/list-investigations-link.generated';
 
 interface Props {
+  investigationIds?: string[];
   onClose: () => void;
-  update: (value: string) => void;
+  update: (value: InvestigationData) => void;
 }
 
 interface Return {
@@ -28,7 +31,11 @@ interface Return {
   saving: boolean;
 }
 
-const useLinkInvestigation = ({ onClose, update }: Props): Return => {
+const useLinkInvestigation = ({
+  investigationIds,
+  onClose,
+  update,
+}: Props): Return => {
   const [saving, setSaving] = useState(false);
   const [selected, setSelected] = useState<string | undefined>();
   const schemeId = useAtomValue(currentSchemeIdAtom);
@@ -53,6 +60,7 @@ const useLinkInvestigation = ({ onClose, update }: Props): Return => {
     take: pageSize,
     where: {
       groupIds: groupsFilter,
+      id: { notIn: investigationIds },
       schemeIds: [schemeId],
       search,
       status: statusFilter,
@@ -65,9 +73,12 @@ const useLinkInvestigation = ({ onClose, update }: Props): Return => {
 
   const onSubmit = () => {
     setSaving(true);
+    const selectedData = data?.investigationRelay?.edges.find(
+      ({ node: { id } }) => id === selected
+    )?.node;
 
-    if (selected) {
-      update(selected);
+    if (selectedData) {
+      update(selectedData);
     }
     setSaving(false);
     onClose();

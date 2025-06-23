@@ -1,5 +1,6 @@
 mutation deleteDocument($id: String!) {
   deleteDocument(where: { id: $id }) {
     id
+    folderId
   }
 }

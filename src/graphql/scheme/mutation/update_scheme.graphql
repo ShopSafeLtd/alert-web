@@ -25,10 +25,12 @@ mutation updateScheme($where: UniqueId!, $data: SchemeUpdateInput!) {
     incidentCustomQuestionRadio
     incidentTypeTooltip
     activityAssignToUser
+    requireActivityAuthorised
     useBusinessGroupsOnIncident
     imagesRequiredOnOffenders
     incidentRetention
     offenderRetention
+    policeReporting
     oneSelectedIncidentTypeOnly
     logo {
       id

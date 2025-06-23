@@ -4,6 +4,13 @@ import type { UpdateTaskMutation } from '#/components/form-components/Todos/View
 import type { TodoQuery } from '#/components/form-components/Todos/ViewTodo/graphql/__generated__/view-task.generated';
 import type { MutationUpdaterFn } from '@apollo/client';
 import type { FormInstance, UploadFile, UploadProps } from 'antd';
+import type {
+  ChecklistData,
+  CrimeGroupData,
+  IncidentCardData,
+  InvestigationData,
+  OffenderData,
+} from 'types/DataType';
 
 import { useAddTodoUsersQuery } from '#/components/form-components/Todos/AddTodo/graphql/__generated__/AddTodoUsers.generated';
 import { useUpdateTaskMutation } from '#/components/form-components/Todos/ViewTodo/graphql/__generated__/update-todo.generated';
@@ -11,14 +18,20 @@ import { useTodoQuery } from '#/components/form-components/Todos/ViewTodo/graphq
 import {
   currentSchemeAtom,
   currentSchemeIdAtom,
+  // currentUserAtom,
 } from '#/providers/SchemeProvider/SchemeProvider';
-import { userIdAtom } from '#/providers/UserProvider/UserProvider';
+import {
+  userIdAtom,
+  userSchemesAtom,
+} from '#/providers/UserProvider/UserProvider';
 import { Form } from 'antd';
 import { PermissionMethod, PermissionModel, SortOrder } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
 
 import customRequest from '../../../../utils/custom-request';
+import { useIncidentActivityAuthorisedLazyQuery } from './graphql/__generated__/Incident-activity-authorised.generated';
+import { useUserParentRolesLazyQuery } from './graphql/__generated__/user-parent-roles.generated';
 
 export interface FormData {
   [key: string]: boolean | number | string | undefined;
@@ -26,10 +39,18 @@ export interface FormData {
 interface Return {
   actionsOpen: boolean;
   availableUsers: { id: string; name: string; timeTaken: number }[];
+  checklistsData: ChecklistData | undefined;
+  crimeGroupsData: CrimeGroupData | undefined;
   documentList: UploadFile[];
   documentUploadProps?: UploadProps;
   form: FormInstance;
+  incidentsData: IncidentCardData | undefined;
+  investigationsData: InvestigationData | undefined;
   loading: boolean;
+  minimal?: boolean;
+  needAuthorised: boolean;
+  offendersData: OffenderData | undefined;
+  onAuthorisedTodo: () => void;
   onSubmit: (value: FormData) => void;
   saving: boolean;
   setAvailableUsers: (
@@ -38,6 +59,11 @@ interface Return {
   setUsers: (users: { id: string; name: string; timeTaken: number }[]) => void;
   todo: TodoQuery | undefined;
   toggleActionsOpen: () => void;
+  updateChecklistsList: (value: ChecklistData | undefined) => void;
+  updateCrimeGroupsList: (value: CrimeGroupData | undefined) => void;
+  updateIncidentList: (value: IncidentCardData | undefined) => void;
+  updateInvestigationList: (value: InvestigationData | undefined) => void;
+  updateOffendersList: (value: OffenderData | undefined) => void;
   users: { id: string; name: string; timeTaken: number }[];
 }
 
@@ -45,19 +71,32 @@ const { useForm } = Form;
 
 const useTodo = ({
   id,
+  minimal,
   onClose,
   updateQuery,
   updateTodo,
 }: {
   id: null | string;
+  minimal: boolean;
   onClose: () => void;
   updateQuery?: MutationUpdaterFn<UpdateTaskMutation>;
-  updateTodo: (value: boolean, i?: string) => void;
+  updateTodo?: (value: boolean, i?: string) => void;
 }): Return => {
   const [form] = useForm();
   const activityAssignToUser =
     useAtomValue(currentSchemeAtom)?.activityAssignToUser;
+  const schemeRequireAuthorised =
+    useAtomValue(currentSchemeAtom).requireActivityAuthorised;
+  // const currentUser = useAtomValue(currentUserAtom);
+  const currentUser = useAtomValue(userIdAtom);
+  const userSchemes = useAtomValue(userSchemesAtom);
+  const userRoleIds = new Set(
+    userSchemes.map((el) => el.permissionsId).filter(Boolean)
+  );
+
   const [saving, setSaving] = useState(false);
+  const [needAuthorised, setNeedAuthorised] = useState(false);
+
   const [actionsOpen, setActionsOpen] = useState(false);
   const [users, setUsers] = useState<
     { id: string; name: string; timeTaken: number }[]
@@ -67,19 +106,39 @@ const useTodo = ({
   >([]);
   const schemeId = useAtomValue(currentSchemeIdAtom);
   const [documentList, setDocumentList] = useState<UploadFile[]>([]);
-  const currentUser = useAtomValue(userIdAtom);
+  const [crimeGroupsData, setCrimeGroupsData] = useState<
+    CrimeGroupData | undefined
+  >(undefined);
+  const [offendersData, setOffendersData] = useState<OffenderData | undefined>(
+    undefined
+  );
+  const [checklistsData, setChecklistsData] = useState<
+    ChecklistData | undefined
+  >(undefined);
+  const [incidentsData, setIncidentsData] = useState<
+    IncidentCardData | undefined
+  >(undefined);
+  const [investigationsData, setInvestigationsData] = useState<
+    InvestigationData | undefined
+  >(undefined);
+
   const { data: todo, loading } = useTodoQuery({
     fetchPolicy: 'cache-and-network',
-    onCompleted: () => {
-      if (todo?.todo?.evidence && todo?.todo?.evidence.length > 0)
+    onCompleted: ({ todo }) => {
+      if (todo?.evidence && todo?.evidence.length > 0)
         setDocumentList(
-          todo?.todo?.evidence?.map((document) => ({
+          todo?.evidence?.map((document) => ({
             name: document.name,
             status: 'done',
             uid: document.id,
             url: document.url,
           }))
         );
+      setOffendersData(todo.offender ?? undefined);
+      setCrimeGroupsData(todo.crimeGroup ?? undefined);
+      setChecklistsData(todo.checklist ?? undefined);
+      setIncidentsData(todo.incident ?? undefined);
+      setInvestigationsData(todo.investigation ?? undefined);
     },
     variables: {
       where: {
@@ -87,6 +146,83 @@ const useTodo = ({
       },
     },
   });
+  // check if the user can authorise
+  const [getIncident] = useIncidentActivityAuthorisedLazyQuery();
+  const [getCreatedByParentRole] = useUserParentRolesLazyQuery();
+  useEffect(() => {
+    if (
+      minimal &&
+      schemeRequireAuthorised &&
+      incidentsData?.id &&
+      userRoleIds
+    ) {
+      void getIncident({
+        // ????
+        onCompleted: ({ incident }) => {
+          if (incident.activityAuthorised) {
+            void getCreatedByParentRole({
+              onCompleted: ({ user }) => {
+                const parentRoleIds = new Set(
+                  user.schemes
+                    .map((scheme) => scheme.orignalPermissions.parentId)
+                    .filter(Boolean)
+                );
+                const hasCommonRole = [...userRoleIds].some((roleId) =>
+                  parentRoleIds.has(roleId as string)
+                );
+                setNeedAuthorised(hasCommonRole);
+              },
+              variables: {
+                schemeWhere: {
+                  id: {
+                    equals: schemeId,
+                  },
+                },
+
+                where: {
+                  id: todo?.todo.createdBy?.id,
+                },
+              },
+            });
+          }
+        },
+        variables: {
+          where: {
+            id: incidentsData?.id,
+          },
+        },
+      });
+    }
+  }, [incidentsData, schemeRequireAuthorised, minimal]);
+
+  // useEffect(() => {
+  //   if (incidentData?.incident.activityAuthorised) {
+  //     void getCreatedByParentRole({
+  //       onCompleted: ({ user }) => {
+  //         const parentRoleIds = new Set(
+  //           user.schemes
+  //             .map((scheme) => scheme.orignalPermissions.parentId)
+  //             .filter(Boolean)
+  //         );
+  //         const hasCommonRole = [...userRoleIds].some((roleId) =>
+  //           parentRoleIds.has(roleId as string)
+  //         );
+  //         setNeedAuthorised(hasCommonRole);
+  //       },
+  //       variables: {
+  //         schemeWhere: {
+  //           id: {
+  //             equals: schemeId,
+  //           },
+  //         },
+
+  //         where: {
+  //           id: todo?.todo.createdBy?.id,
+  //         },
+  //       },
+  //     });
+  //   }
+  // }, [incidentsData]);
 
   useEffect(() => {
     if (todo?.todo?.assignedUsers) {
@@ -253,6 +389,7 @@ const useTodo = ({
             //   })),
             // },
           },
+          checklistId: checklistsData?.id,
           completed: {
             set: true,
           },
@@ -262,6 +399,8 @@ const useTodo = ({
           completedDate: {
             set: new Date(),
           },
+          crimeGroupId: crimeGroupsData?.id,
+
           documents: {
             // @ts-expect-error TODO fix this date issue Wait to check
             deleted:
@@ -278,6 +417,9 @@ const useTodo = ({
                   }))
                 : undefined,
           },
+          incidentId: incidentsData?.id,
+          investigationId: investigationsData?.id,
+          offenderId: offendersData?.id,
           questions: {
             update: answers?.map((answer) => ({
               data: {
@@ -314,8 +456,24 @@ const useTodo = ({
         },
       },
     });
-    updateTodo(true, id || '');
+    if (updateTodo) updateTodo(true, id || '');
   };
+  const onAuthorisedTodo = () => {
+    setSaving(true);
+    void updateTodoMutation({
+      variables: {
+        data: {
+          authorised: {
+            set: true,
+          },
+        },
+        where: {
+          id: id || '',
+        },
+      },
+    });
+  };
+
   // evidence
   const handleChange: UploadProps['onChange'] = (info) => {
     let newFileList = [...info.fileList];
@@ -346,16 +504,28 @@ const useTodo = ({
   return {
     actionsOpen,
     availableUsers,
+    checklistsData,
+    crimeGroupsData,
     documentList,
     documentUploadProps,
     form,
+    incidentsData,
+    investigationsData,
     loading: loading || usersLoading,
+    needAuthorised,
+    offendersData,
+    onAuthorisedTodo,
     onSubmit,
     saving,
     setAvailableUsers,
     setUsers,
     todo,
     toggleActionsOpen,
+    updateChecklistsList: setChecklistsData,
+    updateCrimeGroupsList: setCrimeGroupsData,
+    updateIncidentList: setIncidentsData,
+    updateInvestigationList: setInvestigationsData,
+    updateOffendersList: setOffendersData,
     users,
   };
 };

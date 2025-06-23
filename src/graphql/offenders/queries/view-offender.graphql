@@ -16,6 +16,7 @@ query ViewOffender(
     scheme {
       mg11Available
     }
+    sourceDetails
     updatedAt
     justification
     infoSource

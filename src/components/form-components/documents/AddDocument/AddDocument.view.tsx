@@ -9,6 +9,7 @@ import useStyles from './AddDocument.styles';
 
 interface OnSubmitValues {
   categories: string[];
+  folderId: string;
   name: string;
   url: string;
 }

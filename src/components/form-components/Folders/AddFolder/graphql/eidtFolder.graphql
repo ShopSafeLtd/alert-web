@@ -1,0 +1,26 @@
+query EditFolder($where: FolderWhereUniqueInput!) {
+  folder(where: $where) {
+    id
+    name
+    parentFolderId
+    description
+    roles {
+      id
+    }
+    documents {
+      ...FolderDocuments
+    }
+    totalDocuments
+    totalChildFolders
+    childFolders {
+      id
+      name
+      description
+      documents {
+        ...FolderDocuments
+      }
+      totalDocuments
+      totalChildFolders
+    }
+  }
+}

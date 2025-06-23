@@ -105,12 +105,7 @@ const useLinkCrimeGroup = ({
         });
       }
       if (getCrimeGroup) {
-        const crimeGroup = data?.listCrimeGroups?.crimeGroups?.find(
-          (item) => item.id === selected
-        );
-        if (crimeGroup) {
-          getCrimeGroup({ crimeGroup });
-        }
+        getCrimeGroup({ crimeGroup: selectedData });
       }
     }
     setSaving(false);

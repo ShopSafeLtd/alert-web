@@ -1,7 +1,7 @@
 import type * as Types from '../../types.js';
 
 import { gql } from '@apollo/client';
-export type FeedTodoFragment = { __typename?: 'Todo', description?: string | null, id: string, name?: string | null, dueDate?: Date | null, completed?: boolean | null, type?: Types.TodoType | null, vehicleId?: string | null, offenderId?: string | null, crimeGroupId?: string | null, incidentId?: string | null, investigationId?: string | null, chatId?: string | null, similarOffenderIds: Array<string> };
+export type FeedTodoFragment = { __typename?: 'Todo', description?: string | null, id: string, name?: string | null, dueDate?: Date | null, completed?: boolean | null, authorised?: boolean | null, type?: Types.TodoType | null, vehicleId?: string | null, offenderId?: string | null, crimeGroupId?: string | null, incidentId?: string | null, investigationId?: string | null, chatId?: string | null, similarOffenderIds: Array<string> };
 
 export const FeedTodoFragmentDoc = gql`
     fragment FeedTodo on Todo {
@@ -10,6 +10,7 @@ export const FeedTodoFragmentDoc = gql`
   name
   dueDate
   completed
+  authorised
   type
   vehicleId
   offenderId

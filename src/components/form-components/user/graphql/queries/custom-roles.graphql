@@ -1,5 +1,5 @@
-query UserRoles($schemeId: String!) {
-  roles(schemeId: $schemeId) {
+query UserRoles($schemeId: String!, $roleId: String) {
+  roles(schemeId: $schemeId, roleId: $roleId) {
     edges {
       node {
         type

@@ -1,24 +1,29 @@
-import type { SelectProps, UploadProps } from 'antd';
+import type { FolderData } from '#/types/DataType';
+import type { FormInstance, SelectProps, UploadProps } from 'antd';
 
 import { UploadOutlined } from '@ant-design/icons';
-import { Button, Col, Form, Row, Select, Upload } from 'antd';
-import React from 'react';
+import { faPlus } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Col, Drawer, Form, Row, Select, Upload } from 'antd';
+import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 
-import useStyles from './AddDocuments.styles';
+import type { FormData } from './useAddDocuments';
 
-interface OnSubmitValues {
-  categories: string[];
-  name: string;
-  url: string;
-}
+import AddFolder from '../../Folders/AddFolder';
+import FoldersSelect from '../../Folders/FolderSelect/FoldersSelect.view';
+import useStyles from './AddDocuments.styles';
 
 interface Props {
   categories: SelectProps['options'];
   categoriesChange: (categories: { value: string }[]) => void;
   categoriesLoading: boolean;
   documentUploadProps: UploadProps;
+  folderId?: string;
+  form: FormInstance<FormData>;
+  onAddNewFolder: (value: FolderData) => void;
   onClose: () => void;
+  onSelectFolder: (value: string) => void;
   onSubmit: () => void;
   providedId: boolean;
   saving: boolean;
@@ -30,7 +35,11 @@ const AddDocument = ({
   categoriesChange,
   categoriesLoading,
   documentUploadProps,
+  folderId,
+  form,
+  onAddNewFolder,
   onClose,
+  onSelectFolder,
   onSubmit,
   providedId,
   saving,
@@ -38,9 +47,13 @@ const AddDocument = ({
 }: Props) => {
   const intl = useIntl();
   const classes = useStyles();
-
+  const [addFolderVisible, setAddFolderVisible] = useState(false);
+  const toggleAddFolderVisible = () => {
+    setAddFolderVisible(!addFolderVisible);
+  };
   return (
-    <Form<OnSubmitValues>
+    <Form
+      form={form}
       initialValues={{
         categories: [],
         name: '',
@@ -98,6 +111,54 @@ const AddDocument = ({
           </Form.Item>
         </Col>
       </Row>
+      <Row gutter={16} style={{ marginLeft: 10, marginRight: 10 }}>
+        <Col flex={1}>
+          <Row align="top" gutter={20}>
+            <Col flex={1}>
+              <Form.Item
+                label={intl.formatMessage({
+                  defaultMessage: 'Folder',
+                })}
+                name="folder"
+                tooltip={intl.formatMessage({
+                  defaultMessage: 'Please select a folder for the document',
+                })}
+              >
+                <FoldersSelect
+                  allowClear
+                  onChange={onSelectFolder}
+                  parentFolderId={folderId}
+                  placeholder={intl.formatMessage({
+                    defaultMessage: 'Select a folder...',
+                  })}
+                  showSearch
+                  // showOption={sele}
+                />
+              </Form.Item>
+            </Col>
+
+            <Col>
+              <Button
+                disabled={saving}
+                icon={
+                  <FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />
+                }
+                onClick={toggleAddFolderVisible}
+                style={{ color: 'red', marginTop: 3, padding: 8 }}
+              >
+                {intl.formatMessage({
+                  defaultMessage: 'New Folder',
+                })}
+              </Button>
+            </Col>
+          </Row>
+        </Col>
+      </Row>
+      {/* <SelectFolderRow
+        onAddNewFolder={onAddNewFolder}
+        onSelectFolder={onSelectFolder}
+        saving={saving}
+      /> */}
       <Row className={classes.btn}>
         <Upload
           // eslint-disable-next-line react/jsx-props-no-spreading
@@ -140,6 +201,24 @@ const AddDocument = ({
           </Col>
         </Row>
       </Form.Item>
+      <Drawer
+        onClose={toggleAddFolderVisible}
+        open={addFolderVisible}
+        title={intl.formatMessage({
+          defaultMessage: 'Add New Folder',
+        })}
+        width={600}
+        zIndex={1001}
+      >
+        {addFolderVisible && (
+          <AddFolder
+            onAddNewFolder={onAddNewFolder}
+            onClose={toggleAddFolderVisible}
+            parentFolderId={folderId}
+            saving={saving}
+          />
+        )}
+      </Drawer>
     </Form>
   );
 };

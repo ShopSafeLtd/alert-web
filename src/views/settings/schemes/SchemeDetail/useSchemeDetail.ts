@@ -46,6 +46,7 @@ export interface FormData {
   offenderRetention: null | number;
   oneSelectedIncidentTypeOnly: boolean;
   reportOnly: boolean;
+  requireActivityAuthorised: boolean;
   requireSiteNumberForUsers: boolean;
   restrictIncidentAccess: boolean;
   useBusinessGroupsOnIncident: boolean;
@@ -131,6 +132,7 @@ const useSchemeDetail = (): Return => {
           },
         ]);
       }
+      console.log('useSchemeDetailsQuery', scheme.requireActivityAuthorised);
     },
     variables: {
       where: {
@@ -243,6 +245,7 @@ const useSchemeDetail = (): Return => {
             set: data.oneSelectedIncidentTypeOnly,
           },
           reportOnly: { set: data.reportOnly },
+          requireActivityAuthorised: { set: data.requireActivityAuthorised },
           requireSiteNumberForUsers: { set: data.requireSiteNumberForUsers },
           // ???
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment

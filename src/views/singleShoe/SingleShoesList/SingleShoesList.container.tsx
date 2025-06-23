@@ -10,6 +10,7 @@ const SingleShoesList = (): JSX.Element => {
     awaitingMatchShoesLoading,
     awaitingShippingShoesData,
     awaitingShippingShoesLoading,
+    matchedShoesData,
     onDelete,
     onReceivedShoe,
     onShippedShoe,
@@ -33,6 +34,7 @@ const SingleShoesList = (): JSX.Element => {
       awaitingMatchShoesLoading={awaitingMatchShoesLoading}
       awaitingShippingShoesData={awaitingShippingShoesData}
       awaitingShippingShoesLoading={awaitingShippingShoesLoading}
+      matchedShoesTotalCount={matchedShoesData?.totalCount || 0}
       onDelete={onDelete}
       onReceivedShoe={onReceivedShoe}
       onShippedShoe={onShippedShoe}

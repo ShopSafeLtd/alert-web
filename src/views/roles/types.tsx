@@ -107,6 +107,7 @@ export const roleItems: {
     ],
     title: <FormattedMessage defaultMessage="Automations" />,
   },
+
   {
     description: (
       <FormattedMessage defaultMessage="Share critical alerts, warnings, and intelligence updates with relevant users." />

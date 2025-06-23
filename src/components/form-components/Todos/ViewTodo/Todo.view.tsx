@@ -1,8 +1,22 @@
 import type { TodoQuery } from '#/components/form-components/Todos/ViewTodo/graphql/__generated__/view-task.generated';
-import type { CustomQuestion } from '#/types/DataType';
+import type {
+  ChecklistData,
+  CrimeGroupData,
+  CustomQuestion,
+  IncidentCardData,
+  InvestigationData,
+  OffenderData,
+} from '#/types/DataType';
 import type { FormInstance, UploadFile, UploadProps } from 'antd';
 
+import ChecklistDetailCard from '#/components/MessageInput/MessageCard/ChecklistDetailCard';
+import CrimeGroupDetailCard from '#/components/MessageInput/MessageCard/CrimeGroupDetailCard';
+import IncidentDetailCard from '#/components/MessageInput/MessageCard/IncidentDetailCard';
+import InvestigationDetailCard from '#/components/MessageInput/MessageCard/InvestigationDetailCard';
+import OffenderDetailCard from '#/components/MessageInput/MessageCard/OffenderDetailCard';
 import MapCard from '#/components/map/LocatingCard/MapCard.view';
+import { PermissionMethod, PermissionModel } from '#/graphql/types';
+import hasRolePermission from '#/utils/has-role-permission';
 import { UploadOutlined } from '@ant-design/icons';
 import {
   Button,
@@ -26,16 +40,23 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import type { FormData } from './useTodo';
 
 import CustomQuestions from '../../../../views/incidents/AddIncident/components/IncidentCustom/CustomQuestion.view';
-
+import LinkProfile from '../LinkProfile';
 interface Props {
   actionsOpen: boolean;
   availableUsers: { id: string; name: string; timeTaken: number }[];
+  checklistsData: ChecklistData | undefined;
   confirmText?: string;
+  crimeGroupsData: CrimeGroupData | undefined;
   documentList: UploadFile[];
   documentUploadProps?: UploadProps;
   form: FormInstance;
+  incidentsData: IncidentCardData | undefined;
+  investigationsData: InvestigationData | undefined;
   loading: boolean;
   minimal?: boolean;
+  needAuthorised: boolean;
+  offendersData: OffenderData | undefined;
+  onAuthorisedTodo: () => void;
   onClose: () => void;
   onSubmit: (value: FormData) => void;
   saving: boolean;
@@ -45,18 +66,30 @@ interface Props {
   setUsers: (users: { id: string; name: string; timeTaken: number }[]) => void;
   todo: TodoQuery | undefined;
   toggleActionsOpen: () => void;
+  updateChecklistsList: (value: ChecklistData | undefined) => void;
+  updateCrimeGroupsList: (value: CrimeGroupData | undefined) => void;
+  updateIncidentList: (value: IncidentCardData | undefined) => void;
+  updateInvestigationList: (value: InvestigationData | undefined) => void;
+  updateOffendersList: (value: OffenderData | undefined) => void;
   users: { id: string; name: string; timeTaken: number }[];
 }
 
 const TodoView = ({
   actionsOpen,
   availableUsers,
+  checklistsData,
   confirmText,
+  crimeGroupsData,
   documentList,
   documentUploadProps,
   form,
+  incidentsData,
+  investigationsData,
   loading,
   minimal = false,
+  needAuthorised,
+  offendersData,
+  onAuthorisedTodo,
   onClose,
   onSubmit,
   saving,
@@ -64,6 +97,11 @@ const TodoView = ({
   setUsers,
   todo,
   toggleActionsOpen,
+  updateChecklistsList,
+  updateCrimeGroupsList,
+  updateIncidentList,
+  updateInvestigationList,
+  updateOffendersList,
   users,
 }: Props) => {
   const intl = useIntl();
@@ -189,7 +227,7 @@ const TodoView = ({
         {questions && questions.length > 0 ? (
           <Divider style={{ marginTop: 10 }} />
         ) : null}
-        <Row>
+        <Row style={{ marginBottom: 15 }}>
           <Col span={24}>
             <Typography.Title level={4}>
               {intl.formatMessage({
@@ -245,6 +283,19 @@ const TodoView = ({
             </Row>
           </Col>
         </Row>
+        <LinkProfile
+          checklistsData={checklistsData}
+          crimeGroupsData={crimeGroupsData}
+          incidentsData={incidentsData}
+          investigationsData={investigationsData}
+          offendersData={offendersData}
+          saving={saving}
+          updateChecklistsList={updateChecklistsList}
+          updateCrimeGroupsList={updateCrimeGroupsList}
+          updateIncidentList={updateIncidentList}
+          updateInvestigationList={updateInvestigationList}
+          updateOffendersList={updateOffendersList}
+        />
         <Form.Item
           label={intl.formatMessage({
             defaultMessage: 'Evidence',
@@ -305,7 +356,114 @@ const TodoView = ({
           </Row>
         </Form.Item>
       </Form>
+      {needAuthorised && (
+        <>
+          <Row gutter={20} style={{ marginTop: 10 }}>
+            {hasRolePermission({
+              permission: {
+                method: PermissionMethod.Read,
+                model: PermissionModel.Incidents,
+              },
+            }) && incidentsData ? (
+              <Col span={12}>
+                <Divider>
+                  {intl.formatMessage({
+                    defaultMessage: 'Incident',
+                  })}
+                </Divider>
+                <IncidentDetailCard incident={incidentsData} />
+              </Col>
+            ) : null}
 
+            {hasRolePermission({
+              permission: {
+                method: PermissionMethod.Read,
+                model: PermissionModel.Offenders,
+              },
+            }) && offendersData ? (
+              <Col span={12}>
+                <Divider>
+                  {intl.formatMessage({
+                    defaultMessage: 'Offender',
+                  })}
+                </Divider>
+                <OffenderDetailCard offender={offendersData} />
+              </Col>
+            ) : null}
+            {hasRolePermission({
+              permission: {
+                method: PermissionMethod.Read,
+                model: PermissionModel.Investigations,
+              },
+            }) && investigationsData ? (
+              <Col span={12}>
+                <Divider>
+                  {intl.formatMessage({
+                    defaultMessage: 'Investigation',
+                  })}
+                </Divider>
+                <InvestigationDetailCard investigation={investigationsData} />
+              </Col>
+            ) : null}
+            {hasRolePermission({
+              permission: {
+                method: PermissionMethod.Read,
+                model: PermissionModel.CrimeGroups,
+              },
+            }) && crimeGroupsData ? (
+              <Col span={12}>
+                <Divider>
+                  {intl.formatMessage({
+                    defaultMessage: 'Crime Group',
+                  })}
+                </Divider>
+                <CrimeGroupDetailCard crimeGroup={crimeGroupsData} />
+              </Col>
+            ) : null}
+            {hasRolePermission({
+              permission: {
+                method: PermissionMethod.Read,
+                model: PermissionModel.Checklist,
+              },
+            }) && checklistsData ? (
+              <Col span={12}>
+                <Divider>
+                  {intl.formatMessage({
+                    defaultMessage: 'CheckList',
+                  })}
+                </Divider>
+                <ChecklistDetailCard checklist={checklistsData} />
+              </Col>
+            ) : null}
+          </Row>
+          <Row gutter={16} justify="end" style={{ marginTop: 10 }}>
+            <Col>
+              <Button
+                disabled={saving}
+                onClick={() => {
+                  onClose();
+                }}
+              >
+                {intl.formatMessage({
+                  defaultMessage: 'Cancel',
+                })}
+              </Button>
+            </Col>
+            <Col>
+              <Button
+                disabled={saving}
+                loading={saving}
+                onClick={onAuthorisedTodo}
+                type="primary"
+              >
+                {intl.formatMessage({
+                  defaultMessage: 'Authorise Activity',
+                })}
+              </Button>
+            </Col>
+          </Row>
+        </>
+      )}
       <Modal
         onCancel={toggleActionsOpen}
         open={actionsOpen}

@@ -11,9 +11,9 @@ export type SearchOffendersQueryVariables = Types.Exact<{
 }>;
 
 
-export type SearchOffendersQuery = { __typename?: 'Query', searchOffenders: { __typename?: 'QuerySearchOffendersConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null }, edges: Array<{ __typename?: 'QuerySearchOffendersConnectionEdge', node: { __typename?: 'Offender', age?: Types.Age | null, build?: Types.Build | null, dateOfBirth?: Date | null, gender?: Types.Gender | null, hair?: string | null, id: string, dateSource?: string | null, updatedAt: Date, name?: string | null, peculiarities?: string | null, race?: Types.Race | null, reference?: number | null, images: Array<{ __typename?: 'Image', id: string, optimised?: string | null, position: Types.ImagePosition, rotation: number }>, lastActive?: { __typename?: 'Incident', id: string, dayTime: string } | null, tags: Array<{ __typename?: 'Tag', id: string, name: string }> } }> } };
+export type SearchOffendersQuery = { __typename?: 'Query', searchOffenders: { __typename?: 'QuerySearchOffendersConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null }, edges: Array<{ __typename?: 'QuerySearchOffendersConnectionEdge', node: { __typename?: 'Offender', age?: Types.Age | null, build?: Types.Build | null, dateOfBirth?: Date | null, gender?: Types.Gender | null, hair?: string | null, id: string, dateSource?: string | null, updatedAt: Date, totalIncidents: number, totalValue: number, name?: string | null, peculiarities?: string | null, race?: Types.Race | null, reference?: number | null, images: Array<{ __typename?: 'Image', id: string, optimised?: string | null, position: Types.ImagePosition, rotation: number }>, lastActive?: { __typename?: 'Incident', id: string, dayTime: string } | null, tags: Array<{ __typename?: 'Tag', id: string, name: string }> } }> } };
 
-export type OffenderSearchDetailsFragment = { __typename?: 'Offender', age?: Types.Age | null, build?: Types.Build | null, dateOfBirth?: Date | null, gender?: Types.Gender | null, hair?: string | null, id: string, dateSource?: string | null, updatedAt: Date, name?: string | null, peculiarities?: string | null, race?: Types.Race | null, reference?: number | null, images: Array<{ __typename?: 'Image', id: string, optimised?: string | null, position: Types.ImagePosition, rotation: number }>, lastActive?: { __typename?: 'Incident', id: string, dayTime: string } | null, tags: Array<{ __typename?: 'Tag', id: string, name: string }> };
+export type OffenderSearchDetailsFragment = { __typename?: 'Offender', age?: Types.Age | null, build?: Types.Build | null, dateOfBirth?: Date | null, gender?: Types.Gender | null, hair?: string | null, id: string, dateSource?: string | null, updatedAt: Date, totalIncidents: number, totalValue: number, name?: string | null, peculiarities?: string | null, race?: Types.Race | null, reference?: number | null, images: Array<{ __typename?: 'Image', id: string, optimised?: string | null, position: Types.ImagePosition, rotation: number }>, lastActive?: { __typename?: 'Incident', id: string, dayTime: string } | null, tags: Array<{ __typename?: 'Tag', id: string, name: string }> };
 
 export const OffenderSearchDetailsFragmentDoc = gql`
     fragment OffenderSearchDetails on Offender {
@@ -25,6 +25,8 @@ export const OffenderSearchDetailsFragmentDoc = gql`
   id
   dateSource
   updatedAt
+  totalIncidents
+  totalValue
   images {
     id
     optimised

@@ -1,4 +1,5 @@
 import RouteWrapper from '#/navigation/utils/route-wrapper';
+import MatchedShoesList from '#/views/singleShoe/SingleShoesList/MatchedShoesList.view';
 import SingleShoesList from '#/views/singleShoe/SingleShoesList/SingleShoesList.container';
 import { PermissionMethod, PermissionModel } from 'graphql/types';
 import React from 'react';
@@ -28,6 +29,19 @@ const SingleShoe = (): JSX.Element => {
             </PermissionCheckWrapper>
           }
           index
+        />
+        <Route
+          element={
+            <PermissionCheckWrapper
+              permission={{
+                method: PermissionMethod.Read,
+                model: PermissionModel.SingleShoe,
+              }}
+            >
+              <MatchedShoesList />
+            </PermissionCheckWrapper>
+          }
+          path="view"
         />
       </Routes>
     </RouteWrapper>

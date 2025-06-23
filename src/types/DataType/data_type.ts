@@ -7,10 +7,12 @@ import type {
   ArticlePriority,
   BanType,
   Build,
+  ChecklistStatus,
   Gender,
   Height,
   IdSource,
   ImagePosition,
+  InvestigationStatus,
   Race,
   UpdateType,
 } from 'graphql/types';
@@ -75,6 +77,13 @@ export interface OffenderData {
 }
 
 export interface OffenderCardData {
+  age?: Age | null;
+  build?: Build | null;
+  dateOfBirth?: Date | null;
+  dateSource?: null | string;
+  gender?: Gender | null;
+  hair?: null | string;
+  height?: Height | null;
   id: string;
   images?:
     | {
@@ -85,7 +94,10 @@ export interface OffenderCardData {
     | null
     | undefined;
   name?: null | string;
+  race?: Race | null;
   reference?: null | number;
+  totalIncidents?: number;
+  totalValue?: number;
   updatedAt?: Date | undefined;
 }
 
@@ -108,6 +120,10 @@ export interface IncidentCardData {
   description?: string;
   id: string;
   images?: ImageCardData[] | null | undefined;
+  location?: {
+    full?: null | string | undefined;
+    id: string;
+  } | null;
   policeRef?: null | string | undefined;
   reference?: null | number;
   subject?: null | string;
@@ -180,7 +196,16 @@ export interface InvestigationDetails {
   id: string;
   name?: string;
 }
-
+export interface InvestigationData {
+  closedAt?: Date | null;
+  createdAt: Date;
+  description?: null | string;
+  groupIds?: string[];
+  id: string;
+  name?: string;
+  reference?: null | number;
+  status: InvestigationStatus;
+}
 // image
 export interface ImageCardData {
   blurFaces?: BlurFaceData[];
@@ -515,4 +540,20 @@ export interface DemGroupData {
   demId?: string;
   id: string;
   name: string;
+}
+export interface FolderData {
+  description: string;
+  name: string;
+  parentId: string;
+}
+export interface ChecklistData {
+  business?: {
+    id: string;
+    name: string;
+  } | null;
+  id: string;
+  name?: null | string;
+  percentComplete: number;
+  percentageScore: string;
+  status: ChecklistStatus;
 }

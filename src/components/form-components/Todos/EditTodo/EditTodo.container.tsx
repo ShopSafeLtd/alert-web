@@ -16,9 +16,14 @@ const EditTodo = ({ initData, onClose, todoId }: Props): JSX.Element => {
     addQuestion,
     adminUsersData,
     availableUsers,
+    checklistsData,
+    crimeGroupsData,
     documentList,
     documentUploadProps,
     form,
+    incidentsData,
+    investigationsData,
+    offendersData,
     onSubmit,
     questions,
     saving,
@@ -30,6 +35,11 @@ const EditTodo = ({ initData, onClose, todoId }: Props): JSX.Element => {
     templatesLoading,
     todoLoading,
     update,
+    updateChecklistsList,
+    updateCrimeGroupsList,
+    updateIncidentList,
+    updateInvestigationList,
+    updateOffendersList,
     users,
     usersLoading,
   } = useAddTodo({
@@ -43,10 +53,15 @@ const EditTodo = ({ initData, onClose, todoId }: Props): JSX.Element => {
       addQuestion={addQuestion}
       adminUsersData={adminUsersData}
       availableUsers={availableUsers}
+      checklistsData={checklistsData}
+      crimeGroupsData={crimeGroupsData}
       documentList={documentList}
       documentUploadProps={documentUploadProps}
       form={form}
+      incidentsData={incidentsData}
+      investigationsData={investigationsData}
       loading={todoLoading}
+      offendersData={offendersData}
       onClose={onClose}
       onSubmit={onSubmit}
       questions={questions}
@@ -58,6 +73,11 @@ const EditTodo = ({ initData, onClose, todoId }: Props): JSX.Element => {
       templatesData={templatesData}
       templatesLoading={templatesLoading}
       update={update}
+      updateChecklistsList={updateChecklistsList}
+      updateCrimeGroupsList={updateCrimeGroupsList}
+      updateIncidentList={updateIncidentList}
+      updateInvestigationList={updateInvestigationList}
+      updateOffendersList={updateOffendersList}
       users={users}
       usersLoading={usersLoading}
     />

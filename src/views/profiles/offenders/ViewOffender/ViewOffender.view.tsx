@@ -815,6 +815,7 @@ const ViewOffender = ({
                                         )}
                                       </Typography.Text>
                                     ) : (
+                                      // add view source detail <Description>data?.offender.sourceDetails</Description>
                                       <Typography.Text type="warning">
                                         {intl.formatMessage({
                                           defaultMessage: 'Not Verified',

@@ -1,0 +1,24 @@
+query FoldersSelect(
+  $first: Int
+  $after: String
+  $orderBy: [FolderOrderByWithRelationInput!]
+  $where: FolderWhereInput
+) {
+  folders(first: $first, after: $after, orderBy: $orderBy, where: $where) {
+    totalCount
+    edges {
+      node {
+        id
+        name
+        childFolders {
+          id
+          name
+        }
+      }
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+  }
+}

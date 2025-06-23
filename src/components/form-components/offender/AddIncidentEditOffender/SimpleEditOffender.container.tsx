@@ -30,21 +30,29 @@ const EditOffender = ({
   onImagesUploaded,
   update,
 }: Props): JSX.Element => {
-  const { ageCheck, form, idVerified, onSubmit, setUploading, uploading } =
-    useEditOffender({
-      data,
-      onClose,
-      onCompleted,
-      onEditOffender,
-      onImagesUploaded,
-      update,
-    });
+  const {
+    ageCheck,
+    form,
+    idSource,
+    idVerified,
+    onSubmit,
+    setUploading,
+    uploading,
+  } = useEditOffender({
+    data,
+    onClose,
+    onCompleted,
+    onEditOffender,
+    onImagesUploaded,
+    update,
+  });
   return (
     <div>
       <View
         ageCheck={ageCheck}
         data={data}
         form={form}
+        idSource={idSource}
         idVerified={idVerified}
         images={images?.map((el) => ({
           ...el,

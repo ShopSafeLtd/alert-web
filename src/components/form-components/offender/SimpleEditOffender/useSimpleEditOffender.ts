@@ -54,6 +54,7 @@ export interface OffenderData {
   name?: null | string;
   peculiarities?: null | string;
   race?: Race | null;
+  sourceDetails?: null | string;
   targetedGoods?: null | string[];
 }
 
@@ -94,6 +95,7 @@ export interface FormData {
   peculiarities: string;
   postcode?: string;
   race: Race;
+  sourceDetails: string;
   street?: string;
   targetedGoods: string[];
   townCity?: string;
@@ -213,6 +215,7 @@ const useEditOffender = ({
         name: value.name || 'Unidentified Offender',
         peculiarities: value.peculiarities || null,
         race: value.race || null,
+        sourceDetails: value.sourceDetails || null,
         targetedGoods: value.targetedGoods,
       });
     } else {

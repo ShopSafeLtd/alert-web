@@ -36,6 +36,7 @@ interface Props {
   ageCheck: boolean;
   customGalleries: { label: string; value: string }[];
   customGalleriesLoading: boolean;
+  idSource?: IdSource | null;
   idVerified?: boolean;
   offenderSettings: OffenderSettingsType;
   onSearchOffender: () => void;
@@ -58,6 +59,7 @@ const OffenderDetails = ({
   ageCheck,
   customGalleries,
   customGalleriesLoading,
+  idSource,
   idVerified,
   offenderSettings,
   onSearchOffender,
@@ -472,74 +474,99 @@ const OffenderDetails = ({
             </Form.Item>
           </Col>
           {idVerified && (
-            <Col>
-              <Form.Item
-                label={intl.formatMessage({
-                  defaultMessage: 'ID Source',
-                })}
-                name="idSource"
-                rules={[
-                  {
-                    message: intl.formatMessage({
-                      defaultMessage: 'Please enter the source of the ID.',
-                    }),
-                    required: true,
-                  },
-                ]}
-                tooltip={intl.formatMessage({
-                  defaultMessage: 'How did you confirm the ID?',
-                })}
-              >
-                <Select
-                  disabled={saving}
-                  options={[
+            <>
+              <Col>
+                <Form.Item
+                  label={intl.formatMessage({
+                    defaultMessage: 'ID Source',
+                  })}
+                  name="idSource"
+                  rules={[
                     {
-                      label: intl.formatMessage({
-                        defaultMessage: 'Driving Licence',
+                      message: intl.formatMessage({
+                        defaultMessage: 'Please enter the source of the ID.',
                       }),
-                      value: IdSource.DrivingLicence,
-                    },
-                    {
-                      label: intl.formatMessage({
-                        defaultMessage: 'ID Card',
-                      }),
-                      value: IdSource.IdCard,
-                    },
-                    {
-                      label: intl.formatMessage({
-                        defaultMessage: 'By BCRP',
-                      }),
-                      value: IdSource.Bcrp,
-                    },
-                    {
-                      label: intl.formatMessage({
-                        defaultMessage: 'Known Offender',
-                      }),
-                      value: IdSource.Known,
-                    },
-                    {
-                      label: intl.formatMessage({
-                        defaultMessage: 'Provided By Police',
-                      }),
-                      value: IdSource.Police,
-                    },
-                    {
-                      label: intl.formatMessage({
-                        defaultMessage: 'Other',
-                      }),
-                      value: IdSource.Other,
-                    },
-                    {
-                      label: intl.formatMessage({
-                        defaultMessage: 'Passport',
-                      }),
-                      value: IdSource.Passport,
+                      required: true,
                     },
                   ]}
-                  style={{ width: 200 }}
-                />
-              </Form.Item>
-            </Col>
+                  tooltip={intl.formatMessage({
+                    defaultMessage: 'How did you confirm the ID?',
+                  })}
+                >
+                  <Select
+                    options={[
+                      {
+                        label: intl.formatMessage({
+                          defaultMessage: 'Driving Licence',
+                        }),
+                        value: IdSource.DrivingLicence,
+                      },
+                      {
+                        label: intl.formatMessage({
+                          defaultMessage: 'ID Card',
+                        }),
+                        value: IdSource.IdCard,
+                      },
+                      {
+                        label: intl.formatMessage({
+                          defaultMessage: 'by BCRP',
+                        }),
+                        value: IdSource.Bcrp,
+                      },
+                      {
+                        label: intl.formatMessage({
+                          defaultMessage: 'Known Offender',
+                        }),
+                        value: IdSource.Known,
+                      },
+                      {
+                        label: intl.formatMessage({
+                          defaultMessage: 'Provided By Police',
+                        }),
+                        value: IdSource.Police,
+                      },
+                      {
+                        label: intl.formatMessage({
+                          defaultMessage: 'Other',
+                        }),
+                        value: IdSource.Other,
+                      },
+                      {
+                        label: intl.formatMessage({
+                          defaultMessage: 'Passport',
+                        }),
+                        value: IdSource.Passport,
+                      },
+                    ]}
+                    style={{ width: 200 }}
+                  />
+                </Form.Item>
+              </Col>
+
+              <Col flex={1}>
+                <Form.Item
+                  label={intl.formatMessage({
+                    defaultMessage: 'Id Source Details',
+                  })}
+                  name="sourceDetails"
+                  rules={[
+                    {
+                      message: intl.formatMessage({
+                        defaultMessage:
+                          'Please enter details of the verified id source.',
+                      }),
+                      required: idSource === IdSource.Police,
+                    },
+                  ]}
+                  tooltip={intl.formatMessage({
+                    defaultMessage:
+                      'Details of the verified id source, if this is police provide officer collar number and the date it was provided.',
+                  })}
+                >
+                  <Input.TextArea />
+                </Form.Item>
+              </Col>
+            </>
           )}
         </Row>
       )}

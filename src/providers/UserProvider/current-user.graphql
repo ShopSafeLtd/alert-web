@@ -1,48 +1,49 @@
 query CurrentUserProvider {
-    currentUser {
+  currentUser {
+    id
+    fullName
+    email
+    reference
+    messageCount
+    newUser
+    reportToAllBusinesses
+    hasPassword
+    totalSchemes
+    termsExpired
+    forcePasswordReset
+    messageCount
+    schemes {
+      id
+      schemeId
+      scheme {
         id
-        fullName
-        email
-        reference
-        messageCount
-        newUser
-        reportToAllBusinesses
-        hasPassword
-        totalSchemes
-        termsExpired
-        forcePasswordReset
-        messageCount
-        schemes {
-            id
-            schemeId
-            scheme {
-                id
-                name
-            }
-        }
-        totalUnreadNotifications
-        expoPushTokens {
-            id
-            token
-        }
-        defaultGroups {
-            id
-            schemeId
-            name
-        }
-        groups {
-            id
-            schemeId
-            name
-        }
-        businesses {
-            id
-            name
-            demId
-            brands
-            schemes {
-                id
-            }
-}
+        name
+      }
+      permissionsId
     }
+    totalUnreadNotifications
+    expoPushTokens {
+      id
+      token
+    }
+    defaultGroups {
+      id
+      schemeId
+      name
+    }
+    groups {
+      id
+      schemeId
+      name
+    }
+    businesses {
+      id
+      name
+      demId
+      brands
+      schemes {
+        id
+      }
+    }
+  }
 }

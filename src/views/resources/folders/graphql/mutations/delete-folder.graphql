@@ -1,0 +1,5 @@
+mutation deleteFolder($id: String!) {
+  deleteFolder(where: { id: $id }) {
+    id
+  }
+}

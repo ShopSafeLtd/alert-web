@@ -489,6 +489,7 @@ export type ActiveChecklistWhereInput = {
   completedBy?: InputMaybe<UserWhereInput>;
   completedById?: InputMaybe<StringNullableFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
+  deleted?: InputMaybe<BoolFilter>;
   document?: InputMaybe<DocumentWhereInput>;
   id?: InputMaybe<StringFilter>;
   maxWeight?: InputMaybe<IntFilter>;
@@ -4120,10 +4121,14 @@ export type CustomRole = {
   __typename?: 'CustomRole';
   admin: Scalars['Boolean'];
   approvalTier: Scalars['Boolean'];
+  checklists: Array<Checklist>;
   createdAt: Scalars['DateTime'];
   dashboard: Dashboard;
+  folders: Array<Folder>;
   id: Scalars['ID'];
   name: Scalars['String'];
+  parent: CustomRole;
+  parentId?: Maybe<Scalars['String']>;
   permissions: Array<Permission>;
   scheme: Scheme;
   type: Role;
@@ -6357,6 +6362,7 @@ export type Folder = {
   name: Scalars['String'];
   parentFolder?: Maybe<Folder>;
   parentFolderId?: Maybe<Scalars['String']>;
+  roles: Array<CustomRole>;
   scheme: Scheme;
   schemeId?: Maybe<Scalars['String']>;
   totalChildFolders: Scalars['Int'];
@@ -6434,6 +6440,7 @@ export type FolderWhereInput = {
   id?: InputMaybe<StringFilter>;
   name?: InputMaybe<StringFilter>;
   parentFolderId?: InputMaybe<StringNullableFilter>;
+  roles?: InputMaybe<CustomRoleListRelationFilter>;
   scheme?: InputMaybe<SchemeWhereInput>;
   schemeId?: InputMaybe<StringNullableFilter>;
   search?: InputMaybe<Array<FolderWhereInput>>;
@@ -10543,6 +10550,7 @@ export type Mutation = {
   deleteOneQuestionGroup?: Maybe<QuestionGroup>;
   deleteOneStatementTemplate?: Maybe<StatementTemplate>;
   deleteOneWorkflow?: Maybe<Workflow>;
+  deleteQuestion: Question;
   deleteRecycleTag: Tag;
   deleteReportGroup: ReportGroup;
   deleteReportTemplate?: Maybe<ReportTemplate>;
@@ -11178,6 +11186,11 @@ export type MutationDeleteOneStatementTemplateArgs = {
 
 export type MutationDeleteOneWorkflowArgs = {
   where: WorkflowWhereUniqueInput;
+};
+
+
+export type MutationDeleteQuestionArgs = {
+  where?: InputMaybe<UniqueId>;
 };
 
 
@@ -14212,6 +14225,7 @@ export type Query = {
   performanceReport: PerformanceReport;
   previewIncidentExport: IncidentExport;
   question: Question;
+  questions: QueryQuestionsConnection;
   recycledItem?: Maybe<RecycledItem>;
   recycledItems: Array<RecycledItem>;
   recycledItemsCount: Scalars['Int'];
@@ -14224,7 +14238,6 @@ export type Query = {
   role: CustomRole;
   roles: QueryRolesConnection;
   scheme: Scheme;
-  schemeUsersRelay: QuerySchemeUsersRelayConnection;
   schemes: Array<Scheme>;
   searchOffenders: QuerySearchOffendersConnection;
   sharingBusinesses: Array<SharingBusiness>;
@@ -15340,6 +15353,15 @@ export type QueryQuestionArgs = {
 };
 
 
+export type QueryQuestionsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where: QuestionsListWhere;
+};
+
+
 export type QueryRecycledItemArgs = {
   where: RecycledItemWhereUniqueInput;
 };
@@ -15417,6 +15439,7 @@ export type QueryRolesArgs = {
   before?: InputMaybe<Scalars['String']>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
+  roleId?: InputMaybe<Scalars['String']>;
   schemeId: Scalars['String'];
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
@@ -15425,20 +15448,6 @@ export type QueryRolesArgs = {
 
 export type QuerySchemeArgs = {
   where: SchemeWhereUniqueInput;
-};
-
-
-export type QuerySchemeUsersRelayArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  cursor?: InputMaybe<UserSchemeWhereUniqueInput>;
-  distinct?: InputMaybe<Array<UserSchemeScalarFieldEnum>>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Array<UserSchemeOrderByWithRelationInput>>;
-  skip?: InputMaybe<Scalars['Int']>;
-  take?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<UserSchemeWhereInput>;
 };
 
 
@@ -16122,6 +16131,19 @@ export type QueryNotificationRelayConnectionEdge = {
   node: UserNotification;
 };
 
+export type QueryQuestionsConnection = {
+  __typename?: 'QueryQuestionsConnection';
+  edges: Array<QueryQuestionsConnectionEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type QueryQuestionsConnectionEdge = {
+  __typename?: 'QueryQuestionsConnectionEdge';
+  cursor: Scalars['String'];
+  node: Question;
+};
+
 export type QueryReportGroupsConnection = {
   __typename?: 'QueryReportGroupsConnection';
   edges: Array<QueryReportGroupsConnectionEdge>;
@@ -16146,19 +16168,6 @@ export type QueryRolesConnectionEdge = {
   __typename?: 'QueryRolesConnectionEdge';
   cursor: Scalars['String'];
   node: CustomRole;
-};
-
-export type QuerySchemeUsersRelayConnection = {
-  __typename?: 'QuerySchemeUsersRelayConnection';
-  edges: Array<QuerySchemeUsersRelayConnectionEdge>;
-  pageInfo: PageInfo;
-  totalCount: Scalars['Int'];
-};
-
-export type QuerySchemeUsersRelayConnectionEdge = {
-  __typename?: 'QuerySchemeUsersRelayConnectionEdge';
-  cursor: Scalars['String'];
-  node: UserScheme;
 };
 
 export type QuerySearchOffendersConnection = {
@@ -16267,6 +16276,7 @@ export type QueryUsersRelayConnectionEdge = {
 
 export type Question = {
   __typename?: 'Question';
+  activityCount: Scalars['Int'];
   createdAt: Scalars['Date'];
   id: Scalars['ID'];
   model: QuestionModel;
@@ -16280,6 +16290,8 @@ export type Question = {
   questionTranslations: Array<Scalars['JSON']>;
   schemes: Array<Scheme>;
   tags: Array<TagQuestion>;
+  tagsCount: Scalars['Int'];
+  tasks: Array<TaskQuestion>;
   type: AnswerType;
   updatedAt: Scalars['Date'];
 };
@@ -16474,6 +16486,14 @@ export type QuestionWhereUniqueInput = {
   type?: InputMaybe<EnumAnswerTypeFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
   workFlowActions?: InputMaybe<WorkflowActionListRelationFilter>;
+};
+
+export type QuestionsListWhere = {
+  activityQuestions?: InputMaybe<Scalars['Boolean']>;
+  schemeId: Scalars['String'];
+  search?: InputMaybe<Scalars['String']>;
+  tagQuestions?: InputMaybe<Scalars['Boolean']>;
+  type?: InputMaybe<Array<AnswerType>>;
 };
 
 export enum Race {
@@ -21402,10 +21422,11 @@ export type UpsertDemGroup = {
 
 export type UpsertFolder = {
   dataType?: InputMaybe<Model>;
-  description: Scalars['String'];
+  description?: InputMaybe<Scalars['String']>;
   folderId?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
   parentId?: InputMaybe<Scalars['String']>;
+  roleIds?: InputMaybe<Array<Scalars['String']>>;
 };
 
 export type UpsertIncidentCctvRecord = {
@@ -21500,8 +21521,10 @@ export type UpsertIncidentOffender = {
 
 export type UpsertRole = {
   canApprove?: InputMaybe<Scalars['Boolean']>;
+  checklistIds?: InputMaybe<Array<Scalars['String']>>;
   folderIds?: InputMaybe<Array<Scalars['String']>>;
   name?: InputMaybe<Scalars['String']>;
+  parentId?: InputMaybe<Scalars['String']>;
   permissions: Array<PermissionInput>;
   roleId?: InputMaybe<Scalars['String']>;
   schemeId: Scalars['String'];
@@ -22512,6 +22535,7 @@ export type UserScheme = {
   notificationCount: Scalars['Int'];
   orignalPermissions: CustomRole;
   permissions: Array<Permissions>;
+  permissionsId?: Maybe<Scalars['String']>;
   recycled: Scalars['Boolean'];
   role: Role;
   scheme: Scheme;
