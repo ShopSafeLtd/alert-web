@@ -18,6 +18,8 @@ query AddIncidentIncidentTags($where: IncidentTagsInput!) {
       dependentOnQuestionId
       dependentOnAnswerValue
       dependentOnBrandIds
+      dependentOnAnswerValueArray
+      dependentMode
       dependentOnTagIds
       tooltip
       options {

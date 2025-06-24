@@ -432,7 +432,9 @@ export interface CustomQuestionAction {
 export interface CustomQuestion {
   actions: CustomQuestionAction[];
   answerType: AnswerType;
+  dependentMode?: 'all' | 'any' | null;
   dependentOnAnswerValue?: null | string;
+  dependentOnAnswerValueArray?: string[];
   dependentOnBrandIds?: string[];
   dependentOnQuestionId?: null | string;
   label: string;

@@ -1400,7 +1400,13 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
           const tagQuestions = tag.questions.map((question) => ({
             actions: (question.actions as CustomQuestionAction[]) ?? [],
             answerType: question?.answerType || AnswerType.String,
+            dependentMode: (question?.dependentMode || null) as
+              | 'all'
+              | 'any'
+              | null,
             dependentOnAnswerValue: question?.dependentOnAnswerValue || null,
+            dependentOnAnswerValueArray:
+              question?.dependentOnAnswerValueArray || [],
             dependentOnBrandIds: question?.dependentOnBrandIds || [],
             dependentOnQuestionId: question?.dependentOnQuestionId || null,
             dependentOnTagIds: question?.dependentOnTagIds || [],

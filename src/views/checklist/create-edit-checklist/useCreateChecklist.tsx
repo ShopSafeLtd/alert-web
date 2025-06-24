@@ -51,6 +51,7 @@ interface Question {
   type:
     | 'GOOD_BAD'
     | 'GOOD_BAD_NA'
+    | 'MEDIA'
     | 'PASS_FAIL'
     | 'PASS_FAIL_NA'
     | 'TEXT'
@@ -173,6 +174,7 @@ const createAnswerWeight = (
   type:
     | 'GOOD_BAD'
     | 'GOOD_BAD_NA'
+    | 'MEDIA'
     | 'PASS_FAIL'
     | 'PASS_FAIL_NA'
     | 'TEXT'

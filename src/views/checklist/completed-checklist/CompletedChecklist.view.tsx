@@ -539,6 +539,20 @@ const CompletedChecklistView = ({
                                     <Typography.Text type="secondary">
                                       {question.answer}
                                     </Typography.Text>
+                                  ) : question.type === 'MEDIA' ? (
+                                    <a
+                                      href={question.answer}
+                                      rel="noopener noreferrer"
+                                      style={{
+                                        color: 'red',
+                                        display: 'inline-block',
+                                        maxWidth: '100%',
+                                        wordBreak: 'break-all',
+                                      }}
+                                      target="_blank"
+                                    >
+                                      {question.answer}
+                                    </a>
                                   ) : (
                                     question.answer
                                   )}
@@ -791,7 +805,23 @@ const CompletedChecklistView = ({
                         textAlign: 'center',
                       }}
                     >
-                      {question.answer}
+                      {question.type === 'MEDIA' ? (
+                        <a
+                          href={question.answer}
+                          rel="noopener noreferrer"
+                          style={{
+                            color: 'red',
+                            display: 'inline-block',
+                            maxWidth: '100%',
+                            wordBreak: 'break-all',
+                          }}
+                          target="_blank"
+                        >
+                          {question.answer}
+                        </a>
+                      ) : (
+                        question.answer
+                      )}
                     </Col>
                     <Space direction="vertical">
                       <Col span={24}>
@@ -975,6 +1005,20 @@ const CompletedChecklistView = ({
                                       <Typography.Text type="secondary">
                                         {question.answer}
                                       </Typography.Text>
+                                    ) : question.type === 'MEDIA' ? (
+                                      <a
+                                        href={question.answer}
+                                        rel="noopener noreferrer"
+                                        style={{
+                                          color: 'red',
+                                          display: 'inline-block',
+                                          maxWidth: '100%',
+                                          wordBreak: 'break-all',
+                                        }}
+                                        target="_blank"
+                                      >
+                                        {question.answer}
+                                      </a>
                                     ) : (
                                       question.answer
                                     )}

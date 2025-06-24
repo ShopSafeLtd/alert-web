@@ -320,6 +320,7 @@ const useActiveChecklist = (): Return => {
             );
             if (dependOn?.answer !== isDepend.answer) unusedDep = true;
           }
+
           const questionFormatted = {
             answer: question.answer || '',
             flagged: unusedDep ? false : question.answer === 'FAIL',

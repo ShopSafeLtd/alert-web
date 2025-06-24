@@ -25,6 +25,8 @@ import type { FormData } from './useUpdateQuestion';
 
 import { AnswerType } from '../../../graphql/types';
 
+const ANSWER_SEPARATOR = '|||';
+
 interface AddQuestionViewProps {
   brands: {
     label: string;
@@ -52,15 +54,15 @@ const UpdateQuestionView = ({
   tags = [],
 }: AddQuestionViewProps) => {
   const answerType = data.type;
+  const dependentOn = Form.useWatch('dependentOn', form);
+  const dependentQuestion = tagQuestions.find(
+    (q) => q.tagQuestionId === dependentOn
+  );
   const opt = data.newOptions || [];
   const intl = useIntl();
-  const dependentOn = Form.useWatch('dependentOn', form);
   const currentSchemeId = useAtomValue(currentSchemeIdAtom);
 
   const generateFormItem = () => {
-    const dependentQuestion = tagQuestions.find(
-      (q) => q.tagQuestionId === dependentOn
-    );
     if (!dependentOn || !dependentQuestion) return <div />;
     switch (dependentQuestion.type) {
       case AnswerType.String: {
@@ -84,10 +86,22 @@ const UpdateQuestionView = ({
       case AnswerType.Time: {
         return <DatePicker.TimePicker />;
       }
-      case AnswerType.SelectSingle:
+      case AnswerType.SelectSingle: {
+        return (
+          <Select
+            mode="multiple"
+            options={dependentQuestion.options?.map((o) => ({
+              label: o,
+              value: o.toLowerCase(),
+            }))}
+          />
+        );
+      }
+      // eslint-disable-next-line sonarjs/no-duplicated-branches
       case AnswerType.Select: {
         return (
           <Select
+            mode="multiple"
             options={dependentQuestion.options?.map((o) => ({
               label: o,
               value: o.toLowerCase(),
@@ -108,7 +122,16 @@ const UpdateQuestionView = ({
       form={form}
       initialValues={data}
       layout="vertical"
-      onFinish={onSubmit}
+      onFinish={(values) => {
+        const raw = values.dependentAnswer;
+        if (!values.dependentAnswer) {
+          onSubmit(values);
+        }
+        const normalized = Array.isArray(raw)
+          ? raw.map((item) => String(item).toLowerCase()).join(ANSWER_SEPARATOR)
+          : String(raw).toLowerCase();
+        onSubmit({ ...values, dependentAnswer: normalized });
+      }}
     >
       <Card loading={loading}>
         <Form.Item
@@ -258,25 +281,48 @@ const UpdateQuestionView = ({
           />
         </Form.Item>
         {dependentOn && (
-          <Form.Item
-            hidden={!dependentOn}
-            label={intl.formatMessage({
-              defaultMessage: 'Dependent Answer',
-            })}
-            name="dependentAnswer"
-            required={!!dependentOn}
-            rules={[
-              {
-                message: intl.formatMessage({
-                  defaultMessage:
-                    'Please select an answer that this question will depend on to show in the form',
-                }),
-                required: !!dependentOn,
-              },
-            ]}
-          >
-            {generateFormItem()}
-          </Form.Item>
+          <>
+            <Form.Item
+              hidden={!dependentOn}
+              label={intl.formatMessage({
+                defaultMessage: 'Dependent Answer',
+              })}
+              name="dependentAnswer"
+              required={!!dependentOn}
+              rules={[
+                {
+                  message: intl.formatMessage({
+                    defaultMessage:
+                      'Please select an answer that this question will depend on to show in the form',
+                  }),
+                  required: !!dependentOn,
+                },
+              ]}
+            >
+              {generateFormItem()}
+            </Form.Item>
+            <Form.Item
+              hidden={!dependentOn}
+              initialValue="any"
+              label={intl.formatMessage({
+                defaultMessage: 'Match Mode',
+              })}
+              name="dependentMatchMode"
+            >
+              <Radio.Group
+                buttonStyle="solid"
+                disabled={dependentQuestion?.type === AnswerType.SelectSingle}
+                size="small"
+              >
+                <Radio.Button value="any">
+                  <FormattedMessage defaultMessage="Any" />
+                </Radio.Button>
+                <Radio.Button value="all">
+                  <FormattedMessage defaultMessage="All" />
+                </Radio.Button>
+              </Radio.Group>
+            </Form.Item>
+          </>
         )}
 
         <Form.Item
