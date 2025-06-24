@@ -651,6 +651,14 @@ const CreateChecklistView: React.FC<Props> = ({
                                                           }),
                                                         value: 'TEXT',
                                                       },
+                                                      {
+                                                        label:
+                                                          intl.formatMessage({
+                                                            defaultMessage:
+                                                              'Media',
+                                                          }),
+                                                        value: 'MEDIA',
+                                                      },
                                                     ]}
                                                   />
                                                 </Form.Item>
@@ -1049,6 +1057,53 @@ const CreateChecklistView: React.FC<Props> = ({
                                                               </Space>
                                                             );
                                                           }
+                                                          case 'MEDIA': {
+                                                            return (
+                                                              <Space>
+                                                                <Row>
+                                                                  <Form.Item
+                                                                    initialValue={
+                                                                      5
+                                                                    }
+                                                                    label={intl.formatMessage(
+                                                                      {
+                                                                        defaultMessage:
+                                                                          'Media Weight',
+                                                                      }
+                                                                    )}
+                                                                    name={[
+                                                                      questionField.name,
+                                                                      'passWeight',
+                                                                    ]}
+                                                                    rules={[
+                                                                      {
+                                                                        required:
+                                                                          true,
+                                                                      },
+                                                                    ]}
+                                                                    style={{
+                                                                      marginBottom: 0,
+                                                                    }}
+                                                                  >
+                                                                    <InputNumber
+                                                                      min={0}
+                                                                      placeholder={intl.formatMessage(
+                                                                        {
+                                                                          defaultMessage:
+                                                                            'Media Weight',
+                                                                        }
+                                                                      )}
+                                                                      size="small"
+                                                                      style={{
+                                                                        width:
+                                                                          '100px',
+                                                                      }}
+                                                                    />
+                                                                  </Form.Item>
+                                                                </Row>
+                                                              </Space>
+                                                            );
+                                                          }
                                                           default: {
                                                             return null;
                                                           }
@@ -1198,8 +1253,8 @@ const CreateChecklistView: React.FC<Props> = ({
                                                       sectionIndex
                                                     ].subsections[
                                                       subsectionIndex
-                                                    ].questions.map(
-                                                      (q, index) => {
+                                                    ].questions
+                                                      .map((q, index) => {
                                                         if (
                                                           index !==
                                                           questionIndex
@@ -1210,8 +1265,11 @@ const CreateChecklistView: React.FC<Props> = ({
                                                           };
                                                         }
                                                         return null;
-                                                      }
-                                                    );
+                                                      })
+                                                      .filter(
+                                                        (q) =>
+                                                          q?.type === 'MEDIA'
+                                                      );
 
                                                   let selectedQ = qs.find(
                                                     (qQuestion) =>
@@ -1300,6 +1358,11 @@ const CreateChecklistView: React.FC<Props> = ({
                                                                 ))
                                                             }
                                                             options={qs
+                                                              .filter(
+                                                                (qItem) =>
+                                                                  qItem?.type ===
+                                                                  'MEDIA'
+                                                              )
                                                               .map((qItem) => ({
                                                                 label: `${
                                                                   qItem?.question ||

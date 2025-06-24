@@ -4,6 +4,7 @@ import type { CreateQuestionInput } from 'graphql/types';
 
 import { useCreateOrAddQuestionMutation } from '#/components/form-components/addQuestion/graphql/__generated__/create-question.generated';
 import { useAvailableQuestionsQuery } from '#/components/form-components/addQuestion/graphql/__generated__/get-questions.generated';
+import { convertAnyAllToEnum } from '#/components/form-components/update-question-on-tag/useUpdateQuestion';
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { useBrandsQuery } from '#/views/settings/brands/graphql/queries/__generated__/brands.generated';
 import { Form, notification } from 'antd';
@@ -16,6 +17,8 @@ import { useParams } from 'react-router-dom';
 import type { TagQuestion } from '../update-question-on-tag/UpdateQuestion.container';
 
 import errorNotification from '../../../types/mutation_notifications/error_notification';
+
+const ANSWER_SEPARATOR = '|||';
 
 interface Return {
   brands: {
@@ -31,8 +34,9 @@ interface Return {
 }
 
 export interface FormData {
-  dependentAnswer: number | string;
+  dependentAnswer: null | number | string | string[];
   dependentBrands: string[];
+  dependentMatchMode: 'all' | 'any';
   dependentOn: string;
   options: string[];
   question: string;
@@ -64,8 +68,9 @@ const useAddQuestion = ({ onClose, tagQuestions }: Props): Return => {
 
   const [form] = useForm<FormData>();
   const [data] = useState<FormData>({
-    dependentAnswer: '',
+    dependentAnswer: null,
     dependentBrands: [],
+    dependentMatchMode: 'any',
     dependentOn: '',
     options: [],
     question: '',
@@ -115,18 +120,18 @@ const useAddQuestion = ({ onClose, tagQuestions }: Props): Return => {
     const dependentOnTag = tagQuestions?.find(
       (tagQ) => tagQ.tagQuestionId === values.dependentOn
     );
-
     let answerString: string | undefined;
     if (dependentOnTag) {
-      answerString =
-        typeof values.dependentAnswer === 'number'
-          ? values.dependentAnswer.toString()
-          : values.dependentAnswer.toLowerCase();
+      const raw = values.dependentAnswer;
+      answerString = Array.isArray(raw)
+        ? raw.map((item) => String(item).toLowerCase()).join(ANSWER_SEPARATOR)
+        : String(raw).toLowerCase();
     }
 
     const dataToSubmit: CreateQuestionInput = {
       brands: values.dependentBrands ?? [],
       dependentAnswer: answerString ?? undefined,
+      dependentMatchMode: convertAnyAllToEnum(values.dependentMatchMode),
       dependentOnQId: dependentOnTag?.questionId ?? undefined,
       dependentOnTagQId: values.dependentOn ?? undefined,
       options: values.options,

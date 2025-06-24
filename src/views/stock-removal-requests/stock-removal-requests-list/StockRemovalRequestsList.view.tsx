@@ -26,8 +26,9 @@ import {
 import dayjs from 'dayjs';
 import { SortOrder, StockRemovalRequestStatus } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
+import { useParams } from 'react-router-dom';
 
 const getStockRemovalRequestlStatusText = (
   value: StockRemovalRequestStatus
@@ -41,6 +42,8 @@ const getStockRemovalRequestlStatusText = (
 
 const StockRemovalRequestsList = () => {
   const intl = useIntl();
+  const params = useParams();
+
   const schemeId = useAtomValue(currentSchemeIdAtom);
 
   const [addOpen, setAddOpen] = useState(false);
@@ -56,6 +59,12 @@ const StockRemovalRequestsList = () => {
       title: intl.formatMessage({ defaultMessage: 'Are you sure?' }),
     });
   };
+
+  useEffect(() => {
+    if (params.id) {
+      setViewOpen(params.id);
+    }
+  }, [params]);
 
   const { data } = useStockRemovalRequestsQuery({
     variables: {
@@ -76,7 +85,7 @@ const StockRemovalRequestsList = () => {
         <Col span={6}>
           <Input
             placeholder={intl.formatMessage({
-              defaultMessage: 'Search for a requesr...',
+              defaultMessage: 'Search for a request...',
             })}
           />
         </Col>
@@ -134,6 +143,11 @@ const StockRemovalRequestsList = () => {
       </Row>
       <Table
         columns={[
+          {
+            dataIndex: 'reference',
+            key: 'reference',
+            title: intl.formatMessage({ defaultMessage: 'Alert ID' }),
+          },
           {
             dataIndex: 'title',
             key: 'title',
@@ -246,6 +260,7 @@ const StockRemovalRequestsList = () => {
           })),
           createdAt: node.createdAt,
           key: node.id,
+          reference: node.reference,
           status: node.status,
           title: node.title,
         }))}

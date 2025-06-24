@@ -34,6 +34,8 @@ import {
   YesNoPreview,
 } from './previews';
 
+const ANSWER_SEPARATOR = '|||';
+
 interface AddQuestionViewProps {
   brands: {
     label: string;
@@ -66,6 +68,9 @@ const AddQuestionView = ({
   const selectedId = Form.useWatch('selectedId', form);
   const intl = useIntl();
   const dependentOn = Form.useWatch('dependentOn', form);
+  const dependentQuestion = tagQuestions?.find(
+    (q) => q.tagQuestionId === dependentOn
+  );
   const currentSchemeId = useAtomValue(currentSchemeIdAtom);
 
   const generatePreview = () => {
@@ -129,10 +134,20 @@ const AddQuestionView = ({
       case AnswerType.Time: {
         return <DatePicker.TimePicker />;
       }
-      case AnswerType.SelectSingle:
+      case AnswerType.SelectSingle: {
+        return (
+          <Select
+            options={dependentQuestion.options?.map((o) => ({
+              label: o,
+              value: o.toLowerCase(),
+            }))}
+          />
+        );
+      }
       case AnswerType.Select: {
         return (
           <Select
+            mode="multiple"
             options={dependentQuestion.options?.map((o) => ({
               label: o,
               value: o.toLowerCase(),
@@ -154,7 +169,13 @@ const AddQuestionView = ({
       form={form}
       initialValues={data}
       layout="vertical"
-      onFinish={onSubmit}
+      onFinish={(values) => {
+        const raw = values.dependentAnswer;
+        const normalized = Array.isArray(raw)
+          ? raw.map((item) => String(item).toLowerCase()).join(ANSWER_SEPARATOR)
+          : String(raw).toLowerCase();
+        onSubmit({ ...values, dependentAnswer: normalized });
+      }}
     >
       <Card>
         <Form.Item
@@ -403,6 +424,27 @@ const AddQuestionView = ({
             ]}
           >
             {generateFormItem()}
+          </Form.Item>
+          <Form.Item
+            hidden={!dependentOn}
+            initialValue="any"
+            label={intl.formatMessage({
+              defaultMessage: 'Match Mode',
+            })}
+            name="dependentMatchMode"
+          >
+            <Radio.Group
+              buttonStyle="solid"
+              disabled={dependentQuestion?.type === AnswerType.SelectSingle}
+              size="small"
+            >
+              <Radio.Button value="any">
+                <FormattedMessage defaultMessage="Any" />
+              </Radio.Button>
+              <Radio.Button value="all">
+                <FormattedMessage defaultMessage="All" />
+              </Radio.Button>
+            </Radio.Group>
           </Form.Item>
           <Form.Item
             hidden={brands?.length === 0}

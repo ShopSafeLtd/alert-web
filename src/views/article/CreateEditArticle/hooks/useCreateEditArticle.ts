@@ -89,7 +89,6 @@ const useCreateEditArticle = (): Props => {
   const [previewImage, setPreviewImage] = useState<string>('');
   const [imageList, setImageList] = useState<UploadFile[]>([]);
 
-  const [groups, setGroups] = useState<{ label: string; value: string }[]>([]);
   const [selectedGroups, setSelectedGroups] = useState<string[]>([]);
   const [categories, setCategories] = useState<SelectProps['options']>([]);
   const [categoryIds, setCategoryIds] = useState<
@@ -211,15 +210,8 @@ const useCreateEditArticle = (): Props => {
     },
   });
 
-  const { data: groupsData, loading: groupsLoading } = useSchemeGroupsQuery({
+  const { data: groupsData } = useSchemeGroupsQuery({
     fetchPolicy: 'cache-and-network',
-    onCompleted: (r) => {
-      const groupsFormatted = r.groups.map((group) => ({
-        label: `${group.name} (${group.scheme.name})`,
-        value: group.id,
-      }));
-      setGroups(groupsFormatted);
-    },
     variables: {
       where: {
         scheme: {
@@ -826,8 +818,6 @@ const useCreateEditArticle = (): Props => {
     fileList,
     filePickerCallback,
     form,
-    groups,
-    groupsLoading,
     id: articleId,
     imagesUploadHandler: imageUploadHandler,
     incidents,

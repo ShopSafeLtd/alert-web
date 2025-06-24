@@ -22,6 +22,8 @@ query ListIncidentTags($where: IncidentTagsInput!) {
       dependentOnAnswerValue
       dependentOnTagIds
       dependentOnBrandIds
+      dependentMode
+      dependentOnAnswerValueArray
       tooltip
       actions
       options {

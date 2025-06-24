@@ -39,11 +39,64 @@ const CustomQuestions = ({ disabled, form, questions }: Props) => {
                 tooltip={question.tooltip}
               >
                 {({ getFieldValue }) => {
-                  const currentValue = getFieldValue(
+                  const dependentValues = getFieldValue(
                     question.dependentOnQuestionId || ''
-                  ) as string | undefined;
-                  return currentValue?.toLowerCase() ===
-                    question.dependentOnAnswerValue ? (
+                  ) as string | string[] | undefined;
+                  const valuesArray =
+                    question.dependentOnAnswerValueArray || [];
+                  const mode = question.dependentMode;
+                  let shouldRender = false;
+
+                  // Normalize answer array and mode-based matching
+                  const lowerValuesArray = valuesArray.map((v) =>
+                    v.toLowerCase()
+                  );
+                  let selectedValues: string[] = [];
+                  if (Array.isArray(dependentValues)) {
+                    // direct array of selected values
+                    selectedValues = dependentValues.map((v) =>
+                      String(v).toLowerCase()
+                    );
+                  } else if (typeof dependentValues === 'string') {
+                    const raw = dependentValues;
+                    if (raw.includes('|||')) {
+                      selectedValues = raw
+                        .split('|||')
+                        .map((v) => v.trim().toLowerCase())
+                        .filter(Boolean);
+                    } else if (raw.includes(',')) {
+                      selectedValues = raw
+                        .split(',')
+                        .map((v) => v.trim().toLowerCase())
+                        .filter(Boolean);
+                    } else {
+                      selectedValues = [raw.trim().toLowerCase()];
+                    }
+                  }
+
+                  if (mode !== null && lowerValuesArray.length > 0) {
+                    if (mode === 'any') {
+                      shouldRender = lowerValuesArray.some((val) =>
+                        selectedValues.includes(val)
+                      );
+                    } else if (mode === 'all') {
+                      shouldRender = lowerValuesArray.every((val) =>
+                        selectedValues.includes(val)
+                      );
+                    }
+                  } else {
+                    // Fallback to single-value logic if no array-based criteria
+                    const currentValue = (
+                      Array.isArray(dependentValues)
+                        ? dependentValues[0]
+                        : dependentValues
+                    )?.toLowerCase();
+                    shouldRender =
+                      currentValue ===
+                      question.dependentOnAnswerValue?.toLowerCase();
+                  }
+
+                  return shouldRender ? (
                     <Form.Item
                       label={question.label}
                       name={question.questionId}

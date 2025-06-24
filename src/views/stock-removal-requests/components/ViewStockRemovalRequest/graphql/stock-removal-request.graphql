@@ -6,6 +6,19 @@ query stockRemovalRequest($where: UniqueId!) {
         description
         status
         reference
+        costCentreCode
+        fascia
+        personalityInfluences
+        reason
+        reasonForNonReturn
+        rechargeBrand
+        rechargeReference
+        returnDate
+        shippingAddress
+        smqAccountNumber
+        socialHandles
+        storeOrDC
+        willStockBeReturned
         items {
             id
             name

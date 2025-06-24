@@ -8,7 +8,7 @@ export type AddIncidentIncidentTagsQueryVariables = Types.Exact<{
 }>;
 
 
-export type AddIncidentIncidentTagsQuery = { __typename?: 'Query', listIncidentTags: Array<{ __typename?: 'IncidentTags', hasChildren: boolean, label: string, parentId?: string | null, parents: Array<string>, tier: number, value: string, tooltip?: string | null, policeReporting: boolean, incidentForm?: Array<{ __typename?: 'IncidentFormOnTag', position: number, type: Types.IncidentFormField }> | null, questions?: Array<{ __typename?: 'IncidentQuestions', answerType: Types.AnswerType, label: string, questionId: string, required: boolean, tagQuestionId: string, priority: number, dependentOnQuestionId?: string | null, dependentOnAnswerValue?: string | null, dependentOnBrandIds?: Array<string> | null, dependentOnTagIds?: Array<string> | null, tooltip?: string | null, options: Array<{ __typename?: 'AnswerOption', label: string, value: string }> }> | null }> };
+export type AddIncidentIncidentTagsQuery = { __typename?: 'Query', listIncidentTags: Array<{ __typename?: 'IncidentTags', hasChildren: boolean, label: string, parentId?: string | null, parents: Array<string>, tier: number, value: string, tooltip?: string | null, policeReporting: boolean, incidentForm?: Array<{ __typename?: 'IncidentFormOnTag', position: number, type: Types.IncidentFormField }> | null, questions?: Array<{ __typename?: 'IncidentQuestions', answerType: Types.AnswerType, label: string, questionId: string, required: boolean, tagQuestionId: string, priority: number, dependentOnQuestionId?: string | null, dependentOnAnswerValue?: string | null, dependentOnBrandIds?: Array<string> | null, dependentOnAnswerValueArray?: Array<string> | null, dependentMode?: string | null, dependentOnTagIds?: Array<string> | null, tooltip?: string | null, options: Array<{ __typename?: 'AnswerOption', label: string, value: string }> }> | null }> };
 
 
 export const AddIncidentIncidentTagsDocument = gql`
@@ -32,6 +32,8 @@ export const AddIncidentIncidentTagsDocument = gql`
       dependentOnQuestionId
       dependentOnAnswerValue
       dependentOnBrandIds
+      dependentOnAnswerValueArray
+      dependentMode
       dependentOnTagIds
       tooltip
       options {

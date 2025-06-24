@@ -4,6 +4,7 @@ import type { FormInstance } from 'antd';
 
 import FormattedMessageFixed from '#/components/util-components/FormattedMessageFixed';
 import { getCustomUrls } from '#/providers/GetCustomUrls';
+import MediaUrlUploader from '#/views/checklist/active-checklist/media-component';
 import { PlusOutlined } from '@ant-design/icons';
 import { faFileUpload } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -272,7 +273,6 @@ const ActiveChecklistView = ({
                                                       questionName,
                                                       'answer',
                                                     ]}
-                                                    shouldUpdate
                                                   >
                                                     {question?.type ===
                                                     'TEXT' ? (
@@ -287,6 +287,9 @@ const ActiveChecklistView = ({
                                                           }
                                                         )}
                                                       />
+                                                    ) : question?.type ===
+                                                      'MEDIA' ? (
+                                                      <MediaUrlUploader />
                                                     ) : (
                                                       <Radio.Group
                                                         buttonStyle="solid"
@@ -313,65 +316,74 @@ const ActiveChecklistView = ({
                                                 </Col>
 
                                                 {/* Render Additional Info Field */}
-                                                {question?.type !== 'TEXT' && (
-                                                  <Col span={12}>
+                                                {question?.type !== 'TEXT' &&
+                                                  question?.type !==
+                                                    'MEDIA' && (
+                                                    <Col span={12}>
+                                                      <Form.Item
+                                                        className={
+                                                          classes.sideMargin
+                                                        }
+                                                        label={intl.formatMessage(
+                                                          {
+                                                            defaultMessage:
+                                                              'Additional Info',
+                                                          }
+                                                        )}
+                                                        name={[
+                                                          questionName,
+                                                          'additionalComments',
+                                                        ]}
+                                                      >
+                                                        <Input.TextArea
+                                                          placeholder={intl.formatMessage(
+                                                            {
+                                                              defaultMessage:
+                                                                'Enter your comment here...',
+                                                            }
+                                                          )}
+                                                        />
+                                                      </Form.Item>
+                                                    </Col>
+                                                  )}
+
+                                                {/* Render Image Upload Field */}
+                                                {question?.type !== 'TEXT' &&
+                                                  question?.type !==
+                                                    'MEDIA' && (
                                                     <Form.Item
                                                       className={
                                                         classes.sideMargin
                                                       }
+                                                      getValueFromEvent={
+                                                        normFile
+                                                      }
                                                       label={intl.formatMessage(
                                                         {
                                                           defaultMessage:
-                                                            'Additional Info',
+                                                            'Images',
                                                         }
                                                       )}
                                                       name={[
                                                         questionName,
-                                                        'additionalComments',
+                                                        'images',
                                                       ]}
+                                                      valuePropName="fileList"
                                                     >
-                                                      <Input.TextArea
-                                                        placeholder={intl.formatMessage(
-                                                          {
+                                                      <Upload
+                                                        action={checklistUpload}
+                                                        listType="picture-card"
+                                                      >
+                                                        <Button type="ghost">
+                                                          <PlusOutlined />
+                                                          {intl.formatMessage({
                                                             defaultMessage:
-                                                              'Enter your comment here...',
-                                                          }
-                                                        )}
-                                                      />
+                                                              'Upload',
+                                                          })}
+                                                        </Button>
+                                                      </Upload>
                                                     </Form.Item>
-                                                  </Col>
-                                                )}
-
-                                                {/* Render Image Upload Field */}
-                                                {question?.type !== 'TEXT' && (
-                                                  <Form.Item
-                                                    className={
-                                                      classes.sideMargin
-                                                    }
-                                                    getValueFromEvent={normFile}
-                                                    label={intl.formatMessage({
-                                                      defaultMessage: 'Images',
-                                                    })}
-                                                    name={[
-                                                      questionName,
-                                                      'images',
-                                                    ]}
-                                                    valuePropName="fileList"
-                                                  >
-                                                    <Upload
-                                                      action={checklistUpload}
-                                                      listType="picture-card"
-                                                    >
-                                                      <Button type="ghost">
-                                                        <PlusOutlined />
-                                                        {intl.formatMessage({
-                                                          defaultMessage:
-                                                            'Upload',
-                                                        })}
-                                                      </Button>
-                                                    </Upload>
-                                                  </Form.Item>
-                                                )}
+                                                  )}
                                               </div>
                                             );
                                           }
