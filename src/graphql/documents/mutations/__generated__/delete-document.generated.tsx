@@ -8,13 +8,14 @@ export type DeleteDocumentMutationVariables = Types.Exact<{
 }>;
 
 
-export type DeleteDocumentMutation = { __typename?: 'Mutation', deleteDocument: { __typename?: 'Document', id: string } };
+export type DeleteDocumentMutation = { __typename?: 'Mutation', deleteDocument: { __typename?: 'Document', id: string, folderId?: string | null } };
 
 
 export const DeleteDocumentDocument = gql`
     mutation deleteDocument($id: String!) {
   deleteDocument(where: {id: $id}) {
     id
+    folderId
   }
 }
     `;

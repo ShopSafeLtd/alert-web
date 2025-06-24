@@ -1,94 +1,144 @@
+import ToolCard from '#/components/data-management/ToolCard';
+import useSharedStyles from '#/components/data-management/shared.styles';
 import { currentPermissionsAtom } from '#/providers/SchemeProvider/SchemeProvider';
-import { faUser } from '@fortawesome/pro-light-svg-icons';
+import {
+  faCloudDownload,
+  faFileExport,
+  faSquareCheck,
+} from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, Card, Col, Row, Typography } from 'antd';
+import { Card, Col, Row, Space, Typography } from 'antd';
 import { PermissionModel } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Link } from 'react-router-dom';
-
-import useStyles from './SettingsHome.styles';
 
 const ExportHome = () => {
-  const classes = useStyles();
-
+  const classes = useSharedStyles();
   const permissions = useAtomValue(currentPermissionsAtom)?.map(
     ({ model }) => model
   );
 
-  const hasExportPerms = permissions.includes(PermissionModel.DataExport);
+  const hasExportPerms = permissions?.includes(PermissionModel.DataExport);
+
+  const exportTools = [
+    {
+      description: (
+        <FormattedMessage defaultMessage="Export incidents data to CSV format for analysis and reporting outside of Alert." />
+      ),
+      icon: <FontAwesomeIcon icon={faFileExport} />,
+      iconBackground: '#f5222d',
+      iconColor: '#f5222d',
+      title: <FormattedMessage defaultMessage="Export Incidents" />,
+      to: '/app/scheme-settings/data-export/export-incidents',
+    },
+    {
+      description: (
+        <FormattedMessage defaultMessage="Export checklist data to CSV format for compliance tracking and external reporting." />
+      ),
+      icon: <FontAwesomeIcon icon={faSquareCheck} />,
+      iconBackground: '#52c41a',
+      iconColor: '#52c41a',
+      title: <FormattedMessage defaultMessage="Export Checklists" />,
+      to: '/app/scheme-settings/data-export/export-checklists',
+    },
+  ];
+
+  // const knowledgeBaseSections = [
+  //   {
+  //     content: (
+  //       <Space direction="vertical" size={8}>
+  //         <Typography.Text>
+  //           • <strong>CSV:</strong>{' '}
+  //           <FormattedMessage defaultMessage="Best for spreadsheet applications" />
+  //         </Typography.Text>
+  //       </Space>
+  //     ),
+  //     title: <FormattedMessage defaultMessage="Export Formats" />,
+  //   },
+  //   {
+  //     content: (
+  //       <Space direction="vertical" size={8}>
+  //         <Typography.Text>
+  //           • <FormattedMessage defaultMessage="Filter by date ranges" />
+  //         </Typography.Text>
+  //         <Typography.Text>
+  //           • <FormattedMessage defaultMessage="Select specific data fields" />
+  //         </Typography.Text>
+  //         <Typography.Text>
+  //           • <FormattedMessage defaultMessage="Apply status filters" />
+  //         </Typography.Text>
+  //       </Space>
+  //     ),
+  //     title: <FormattedMessage defaultMessage="Data Filtering" />,
+  //   },
+  // ];
 
   return (
     <div className={classes.page}>
-      <Typography.Title level={3} style={{ marginBottom: 20 }}>
-        <FormattedMessage defaultMessage="Export Home" />
-      </Typography.Title>
-      <Row gutter={16} style={{}} wrap={false}>
-        {hasExportPerms && (
-          <>
-            <Col span={8}>
-              <Card>
-                <Row align="middle" className={classes.cardRow} gutter={16}>
-                  <Col>
-                    <div className={classes.cardIcon}>
-                      <FontAwesomeIcon icon={faUser} size="lg" />
-                    </div>
-                  </Col>
-                  <Col>
-                    <Typography.Text className={classes.cardTitle}>
-                      <FormattedMessage defaultMessage="Export Incidents" />
-                    </Typography.Text>
-                  </Col>
-                </Row>
-                <div style={{ marginBottom: 15 }}>
-                  <Typography.Text>
-                    <FormattedMessage defaultMessage="Export incidents from Alert into a CSV file for user outside of the app." />
-                  </Typography.Text>
-                </div>
-                <Row justify="end">
-                  <Col>
-                    <Link to="/app/scheme-settings/data-export/export-incidents">
-                      <Button size="small">
-                        <FormattedMessage defaultMessage="Export Data" />
-                      </Button>
-                    </Link>
-                  </Col>
-                </Row>
-              </Card>
-            </Col>
-            <Col span={8}>
-              <Card>
-                <Row align="middle" className={classes.cardRow} gutter={16}>
-                  <Col>
-                    <div className={classes.cardIcon}>
-                      <FontAwesomeIcon icon={faUser} size="lg" />
-                    </div>
-                  </Col>
-                  <Col>
-                    <Typography.Text className={classes.cardTitle}>
-                      <FormattedMessage defaultMessage="Export Checklists" />
-                    </Typography.Text>
-                  </Col>
-                </Row>
-                <div style={{ marginBottom: 15 }}>
-                  <Typography.Text>
-                    <FormattedMessage defaultMessage="Export checklists from Alert into a CSV file for user outside of the app." />
-                  </Typography.Text>
-                </div>
-                <Row justify="end">
-                  <Col>
-                    <Link to="/app/scheme-settings/data-export/export-checklists">
-                      <Button size="small">
-                        <FormattedMessage defaultMessage="Export Data" />
-                      </Button>
-                    </Link>
-                  </Col>
-                </Row>
-              </Card>
-            </Col>
-          </>
-        )}
+      <Row className={classes.mainRow} gutter={16} wrap={false}>
+        <Col span={16}>
+          <div className={classes.toolsSection}>
+            <Typography.Title className={classes.toolsSectionTitle} level={3}>
+              <FormattedMessage defaultMessage="Data Export Tools" />
+            </Typography.Title>
+            <Typography.Text
+              className={classes.toolsSectionSubtitle}
+              type="secondary"
+            >
+              <FormattedMessage defaultMessage="Export your data from Alert for external use and analysis." />
+            </Typography.Text>
+          </div>
+
+          {hasExportPerms ? (
+            <Row className={classes.toolsGrid} gutter={[16, 16]}>
+              {exportTools.map((tool, index) => (
+                <Col key={index} lg={8} sm={12} xs={24}>
+                  <ToolCard
+                    description={tool.description}
+                    icon={tool.icon}
+                    iconBackground={tool.iconBackground}
+                    iconColor={tool.iconColor}
+                    title={tool.title}
+                    to={tool.to}
+                  />
+                </Col>
+              ))}
+            </Row>
+          ) : (
+            <Card className={classes.permissionCard}>
+              <Space direction="vertical" size={16}>
+                <FontAwesomeIcon
+                  className={classes.permissionIcon}
+                  icon={faCloudDownload}
+                />
+                <Typography.Title className={classes.permissionTitle} level={4}>
+                  <FormattedMessage defaultMessage="Export Access Required" />
+                </Typography.Title>
+                <Typography.Text className={classes.permissionText}>
+                  <FormattedMessage defaultMessage="You don't have permission to export data. Please contact your administrator for access." />
+                </Typography.Text>
+              </Space>
+            </Card>
+          )}
+        </Col>
+
+        {/* Knowledge Base Section */}
+        {/* <Col span={8}>*/}
+        {/*  <KnowledgeBaseSection*/}
+        {/*    // proTip={{*/}
+        {/*    //   content: (*/}
+        {/*    //     <FormattedMessage defaultMessage="Schedule regular exports to maintain up-to-date external backups of your critical data." />*/}
+        {/*    //   ),*/}
+        {/*    //   title: <FormattedMessage defaultMessage="💡 Pro Tip" />,*/}
+        {/*    // }}*/}
+        {/*    sections={knowledgeBaseSections}*/}
+        {/*    subtitle={*/}
+        {/*      <FormattedMessage defaultMessage="Learn how to export your data effectively" />*/}
+        {/*    }*/}
+        {/*    title={<FormattedMessage defaultMessage="Export Guide" />}*/}
+        {/*  />*/}
+        {/* </Col>*/}
       </Row>
     </div>
   );

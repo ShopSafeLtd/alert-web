@@ -6,6 +6,7 @@ query schemeDetails($where: SchemeWhereUniqueInput!) {
     reportOnly
     autoApproveIncidents
     autoApproveOffenders
+    defaultPublicOffenderDOB
     defaultIncidentEmail
     defaultIncidentPush
     defaultBulletinEmails
@@ -26,6 +27,7 @@ query schemeDetails($where: SchemeWhereUniqueInput!) {
     incidentCustomQuestionRadio
     incidentTypeTooltip
     activityAssignToUser
+    requireActivityAuthorised
     useBusinessGroupsOnIncident
     imagesRequiredOnOffenders
     requireSiteNumberForUsers

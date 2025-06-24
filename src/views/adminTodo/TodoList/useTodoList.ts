@@ -61,6 +61,7 @@ interface Return {
   groupsData: { label: string; value: string }[];
   groupsFilter: string[];
   loading: boolean;
+
   onCompletedTodo: (id: string) => void;
   onDeleteTodo: (id: string) => void;
   onPaginationChange: (page: number, pageSize: number) => void;
@@ -90,6 +91,7 @@ const useAdminTodos = ({
 }): Return => {
   const schemeId = useAtomValue(currentSchemeIdAtom);
   const permissions = useAtomValue(currentPermissionsAtom);
+
   const userId = useAtomValue(userIdAtom);
   const groupIds = useAtomValue(activityFilterGroupIdsAtom);
   const businessIds = useAtomValue(activityFilterBusinessIdsAtom);
@@ -118,8 +120,6 @@ const useAdminTodos = ({
     null
   );
 
-  const currentScheme = useAtomValue(currentSchemeIdAtom);
-
   const { data: queryData } = useQuestionGroupOnSchemeQuery({
     variables: {
       orderBy: [
@@ -128,7 +128,7 @@ const useAdminTodos = ({
         },
       ],
       where: {
-        id: currentScheme,
+        id: schemeId,
       },
     },
   });
@@ -375,6 +375,7 @@ const useAdminTodos = ({
     groupsData,
     groupsFilter,
     loading: (data === null || data === undefined) && loading,
+
     onCompletedTodo,
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     onDeleteTodo,

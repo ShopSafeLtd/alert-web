@@ -1,7 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access */
 import type { CreateDocumentsMutation } from '#/graphql/documents/mutations/__generated__/create-documents.generated';
+import type { FolderData } from '#/types/DataType';
+import type {
+  FolderQuery,
+  FolderQueryVariables,
+} from '#/views/resources/folders/graphql/queries/__generated__/folder.generated';
 import type { MutationUpdaterFn } from '@apollo/client';
-import type { SelectProps, UploadProps } from 'antd';
+import type { FormInstance, SelectProps, UploadProps } from 'antd';
 import type { UploadFile } from 'antd/es/upload/interface';
 import type {
   ListDocumentsOnSchemeQuery,
@@ -16,20 +21,34 @@ import { useCreateDocumentsMutation } from '#/graphql/documents/mutations/__gene
 import { useCreateTagMutation } from '#/graphql/tags/mutations/__generated__/create-tag.generated';
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { userIdAtom } from '#/providers/UserProvider/UserProvider';
+import errorNotification from '#/types/mutation_notifications/error_notification';
+import { FolderDocument } from '#/views/resources/folders/graphql/queries/__generated__/folder.generated';
+import { Form, notification } from 'antd';
 import { ListDocumentsOnSchemeDocument } from 'graphql/documents/queries/__generated__/list-documents.generated';
 import { ViewInvestigationDocument } from 'graphql/investigations/queries/__generated__/view-investigation.generated';
 import { useTagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
 import { DocumentType, Model } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useIntl } from 'react-intl';
 
 import customRequest from '../../../../utils/custom-request';
 
+const { useForm } = Form;
+
+export interface FormData {
+  categories: string[];
+  folder: string;
+  name: string;
+  url: string;
+}
 interface Props {
   crimeGroupId?: null | string;
+  folderId?: string;
   incidentId?: null | string;
   investigationId?: null | string;
   isEvidence?: boolean;
+
   offenderId?: null | string;
   onClose: () => void;
   update?: MutationUpdaterFn<CreateDocumentsMutation> | undefined;
@@ -41,6 +60,9 @@ interface Return {
   categoriesChange: (categories: { value: string }[]) => void;
   categoriesLoading: boolean;
   documentUploadProps: UploadProps;
+  form: FormInstance<FormData>;
+  onAddNewFolder: (value: FolderData) => void;
+  onSelectFolder: (value: string) => void;
   onSubmit: () => void;
   saving: boolean;
   selectedCategories: { value: string }[];
@@ -48,6 +70,7 @@ interface Return {
 
 const useAddDocument = ({
   crimeGroupId,
+  folderId,
   incidentId,
   investigationId,
   isEvidence,
@@ -56,6 +79,10 @@ const useAddDocument = ({
   update,
   vehicleId,
 }: Props): Return => {
+  const intl = useIntl();
+
+  const [form] = useForm<FormData>();
+
   const currentScheme = useAtomValue(currentSchemeIdAtom);
   const userId = useAtomValue(userIdAtom);
   const [saving, setSaving] = useState(false);
@@ -66,6 +93,23 @@ const useAddDocument = ({
   const [categoryIds, setCategoryIds] = useState<
     { id: string; value: string }[]
   >([]);
+
+  const [selectFolder, setSelectFolder] = useState('');
+  const [newFolder, setNewFolder] = useState<FolderData | undefined>(undefined);
+  const onSelectFolder = (value: string) => {
+    form.setFieldsValue({
+      folder: value,
+    });
+    setSelectFolder(value);
+    if (newFolder) setNewFolder(undefined);
+  };
+  const onAddNewFolder = (value: FolderData) => {
+    form.setFieldsValue({
+      folder: value.name,
+    });
+    setNewFolder(value);
+    if (selectFolder) setSelectFolder('');
+  };
 
   const [createTag] = useCreateTagMutation({
     onCompleted: (result) => {
@@ -82,6 +126,13 @@ const useAddDocument = ({
       setSelectedCategories([...(selectedCategories as []), newCategory]);
     },
   });
+
+  useEffect(() => {
+    if (folderId)
+      form.setFieldsValue({
+        folder: folderId,
+      });
+  }, [folderId]);
 
   const { loading: tagsLoading } = useTagsQuery({
     fetchPolicy: 'cache-and-network',
@@ -155,14 +206,56 @@ const useAddDocument = ({
 
   const [createDocuments] = useCreateDocumentsMutation({
     onCompleted: () => {
-      setSaving(false);
-      onClose();
+      notification.success({
+        description: intl.formatMessage({
+          defaultMessage: 'The document has been added!',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Added!',
+        }),
+        placement: 'bottomRight',
+      });
+    },
+    onError: () => {
+      errorNotification();
     },
     update:
       update ||
       ((store, result) => {
         if (result === null || result === undefined) return;
-        if (!investigationId) {
+        if (folderId) {
+          const existingData = store.readQuery<
+            FolderQuery,
+            FolderQueryVariables
+          >({
+            query: FolderDocument,
+            variables: {
+              where: {
+                id: folderId,
+              },
+            },
+          });
+          if (existingData && result.data) {
+            const oldDocuments = existingData.folder?.documents || [];
+            const newDocuments = result.data.createDocuments;
+            store.writeQuery<FolderQuery, FolderQueryVariables>({
+              data: {
+                folder: {
+                  ...existingData.folder,
+                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                  // @ts-ignore
+                  documents: [...oldDocuments, ...newDocuments],
+                },
+              },
+              query: FolderDocument,
+              variables: {
+                where: {
+                  id: folderId,
+                },
+              },
+            });
+          }
+        } else if (!investigationId) {
           const existingData = store.readQuery<
             ListDocumentsOnSchemeQuery,
             ListDocumentsOnSchemeQueryVariables
@@ -236,7 +329,11 @@ const useAddDocument = ({
       }),
   });
   const [fileList, setFileList] = useState<UploadFile[]>([]);
-
+  const getFolder = () => {
+    if (folderId) return folderId;
+    if (selectFolder && !newFolder) return selectFolder;
+    return undefined;
+  };
   const onSubmit = () => {
     setSaving(true);
 
@@ -260,8 +357,16 @@ const useAddDocument = ({
               origFileName: file.fileName || '',
               url: file.url || '',
             })),
+            folderId: getFolder(),
             incidentId: incidentId || null,
             investigationId: investigationId || null,
+            newFolder: newFolder
+              ? {
+                  description: newFolder.description,
+                  name: newFolder.name,
+                  parentId: newFolder.parentId,
+                }
+              : undefined,
             offenderId: offenderId || null,
             schemeId:
               investigationId ||
@@ -313,6 +418,9 @@ const useAddDocument = ({
     categoriesChange,
     categoriesLoading: tagsLoading,
     documentUploadProps,
+    form,
+    onAddNewFolder,
+    onSelectFolder,
     onSubmit,
     saving,
     selectedCategories,

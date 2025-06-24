@@ -18,6 +18,7 @@ query LinkInvestigations(
         status
         createdAt
         reference
+        closedAt
       }
     }
   }

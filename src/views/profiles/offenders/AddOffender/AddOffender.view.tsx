@@ -164,6 +164,8 @@ const AddOffender = ({
   viewPotentialOffenders,
 }: Props): JSX.Element => {
   const intl = useIntl();
+  const idSource = Form.useWatch('idSource', form);
+
   return (
     <div className="list-view">
       <PageHeader
@@ -208,6 +210,7 @@ const AddOffender = ({
               ageCheck={ageCheck}
               customGalleries={customGalleries}
               customGalleriesLoading={customGalleriesLoading}
+              idSource={idSource}
               idVerified={idVerified}
               offenderSettings={offenderSettings}
               onSearchOffender={onSearchOffender}

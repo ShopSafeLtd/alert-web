@@ -3,7 +3,10 @@ import type { RolesQuery } from '#/views/roles/graphql/queries/__generated__/rol
 import type { FormInstance } from 'antd';
 import type { Role } from 'graphql/types';
 
+import { useFoldersSelectQuery } from '#/components/form-components/Folders/FolderSelect/graphql/__generated__/FolderSelectQuery.generated';
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import { useStoreState } from '#/state';
+import { useSelectChecklistsQuery } from '#/views/checklist/graphql/queries/__generated__/select-checklists.generated';
 import { useDeleteRoleMutation } from '#/views/roles/graphql/mutations/__generated__/deleteRole.generated';
 import { useUpsertPermissionMutation } from '#/views/roles/graphql/mutations/__generated__/upsertPermissions.generated';
 import { useRoleQuery } from '#/views/roles/graphql/queries/__generated__/role.generated';
@@ -26,15 +29,29 @@ import { roleItems, settings } from '../types';
 export interface DeleteFormValues {
   newRoleId: string;
 }
+export interface TreeData {
+  key: string;
+  title: string;
+  value: string;
+}
+export interface FolderTreeData extends TreeData {
+  children: TreeData[];
+}
 
 interface Props {
   changed: boolean;
+  checklistsData: TreeData[];
   clearAll: () => void;
   data: RoleQuery | undefined;
+  foldersData: FolderTreeData[];
   form: FormInstance<FormValues>;
   loading: boolean;
+  onChecklistsToggle: (checked: boolean) => void;
   onDelete: (values: DeleteFormValues) => void;
   onFinish: (values: FormValues) => void;
+  onFoldersToggle: (checked: boolean) => void;
+  onSelectChecklist: (value: string[]) => void;
+  onSelectFolder: (value: string[]) => void;
   onSettingsToggle: (value: boolean) => void;
   roleName: string | undefined;
   setAll: () => void;
@@ -46,19 +63,83 @@ interface Props {
 
 export interface FormValues extends FormData {
   approvalAllowed: boolean;
+  checklists: string[];
+  folders: string[];
   name: string;
+  parentId: string;
+  selectAllChecklists: boolean;
+  selectAllFolders: boolean;
   type: Role;
 }
 
 export function useRole(id: string | undefined, create: boolean): Props {
   const intl = useIntl();
+  const schemeId = useAtomValue(currentSchemeIdAtom);
+  const { checklistSort } = useStoreState((state) => state.filter);
   const [form] = Form.useForm<FormValues>();
+
   const navigate = useNavigate();
   const [changed, setChanged] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const schemeId = useAtomValue(currentSchemeIdAtom);
 
+  const { data, loading } = useRoleQuery({
+    fetchPolicy: 'cache-and-network',
+    onCompleted: (iData) => {
+      const permissions = iData?.role?.permissions.map((item) => ({
+        methods: item?.allowedMethods,
+        model: item?.model,
+      }));
+
+      console.log({
+        ...Object.fromEntries(
+          permissions?.flatMap((item) =>
+            item?.methods?.map((method) => [`${item.model}:${method}`, true])
+          ) || []
+        ),
+      });
+
+      // First, reset all form fields to clear previous role's permissions
+      form.resetFields();
+
+      // Then set the new role's values
+      form.setFieldsValue({
+        checklists: iData.role.checklists.map(({ id }) => id) || [],
+        folders: iData.role.folders.map(({ id }) => id) || [],
+        name: iData.role.name,
+        parentId: iData.role.parentId || '',
+        type: iData.role.type,
+        ...Object.fromEntries(
+          permissions?.flatMap((item) =>
+            item?.methods?.map((method) => [`${item.model}:${method}`, true])
+          ) || []
+        ),
+      });
+    },
+    skip: !id,
+    variables: {
+      where: {
+        id,
+      },
+    },
+  });
+  const { data: foldersData, loading: foldersLoading } =
+    useFoldersSelectQuery();
+  const { data: checklistsData, loading: checklistLoading } =
+    useSelectChecklistsQuery({
+      fetchPolicy: 'cache-and-network',
+      variables: {
+        order: {
+          [checklistSort.field]: checklistSort.order,
+        },
+        where: {
+          deleted: { equals: false },
+          schemes: {
+            some: { id: { equals: schemeId } },
+          },
+        },
+      },
+    });
   const [deletePermission] = useDeleteRoleMutation({
     onCompleted: () => {
       notification.success({
@@ -120,7 +201,10 @@ export function useRole(id: string | undefined, create: boolean): Props {
       variables: {
         data: {
           canApprove: values.approvalAllowed,
+          checklistIds: values.checklists,
+          folderIds: values.folders,
           name: values.name,
+          parentId: values.parentId,
           permissions: result,
           roleId: id,
           schemeId,
@@ -132,44 +216,35 @@ export function useRole(id: string | undefined, create: boolean): Props {
 
   const toggleShowDelete = () => setShowDelete(!showDelete);
 
-  const { data, loading } = useRoleQuery({
-    fetchPolicy: 'cache-and-network',
-    onCompleted: (iData) => {
-      const permissions = iData?.role?.permissions.map((item) => ({
-        methods: item?.allowedMethods,
-        model: item?.model,
-      }));
-
-      console.log({
-        ...Object.fromEntries(
-          permissions?.flatMap((item) =>
-            item?.methods?.map((method) => [`${item.model}:${method}`, true])
-          ) || []
-        ),
-      });
-
-      // First, reset all form fields to clear previous role's permissions
-      form.resetFields();
-
-      // Then set the new role's values
-      form.setFieldsValue({
-        name: iData.role.name,
-        type: iData.role.type,
-        ...Object.fromEntries(
-          permissions?.flatMap((item) =>
-            item?.methods?.map((method) => [`${item.model}:${method}`, true])
-          ) || []
-        ),
-      });
-    },
-    skip: !id,
-    variables: {
-      where: {
-        id,
-      },
-    },
-  });
   const roleName = data?.role.name;
+
+  const onSelectFolder = (value: string[]) => {
+    form.setFieldsValue({
+      folders: value,
+    });
+  };
+  const onSelectChecklist = (value: string[]) => {
+    form.setFieldsValue({
+      checklists: value,
+    });
+  };
+  const onSelectAllFolders = () => {
+    const allFolderIds =
+      foldersData?.folders?.edges?.flatMap((edge) => {
+        const parentId = edge.node?.id ? [edge.node.id] : [];
+        const childIds =
+          edge.node?.childFolders?.map((child) => child.id) || [];
+        return [...parentId, ...childIds];
+      }) || [];
+    form.setFieldsValue({
+      folders: allFolderIds,
+    });
+  };
+  const onSelectAllChecklists = () => {
+    form.setFieldsValue({
+      checklists: checklistsData?.checklists.map((el) => el.id) || [],
+    });
+  };
 
   const clearAll = () => {
     const permissionEntries: [string, boolean][] = [
@@ -179,6 +254,12 @@ export function useRole(id: string | undefined, create: boolean): Props {
     ];
 
     form.setFieldsValue(Object.fromEntries(permissionEntries));
+    form.setFieldsValue({
+      checklists: [],
+      folders: [],
+      selectAllChecklists: false,
+      selectAllFolders: false,
+    });
   };
   const setAll = () => {
     const permissionEntries: [string, boolean][] = [
@@ -188,6 +269,12 @@ export function useRole(id: string | undefined, create: boolean): Props {
     ];
 
     form.setFieldsValue(Object.fromEntries(permissionEntries));
+    onSelectAllFolders();
+    onSelectAllChecklists();
+    form.setFieldsValue({
+      selectAllChecklists: true,
+      selectAllFolders: true,
+    });
   };
 
   const clearAllSettings = () => {
@@ -224,6 +311,25 @@ export function useRole(id: string | undefined, create: boolean): Props {
     }
   };
 
+  const onFoldersToggle = (checked: boolean) => {
+    if (checked) {
+      onSelectAllFolders();
+    } else {
+      form.setFieldsValue({
+        folders: [],
+      });
+    }
+  };
+  const onChecklistsToggle = (checked: boolean) => {
+    if (checked) {
+      onSelectAllChecklists();
+    } else {
+      form.setFieldsValue({
+        checklists: [],
+      });
+    }
+  };
+
   const onDelete = (values: DeleteFormValues) => {
     if (id) {
       toggleShowDelete();
@@ -246,12 +352,36 @@ export function useRole(id: string | undefined, create: boolean): Props {
 
   return {
     changed,
+    checklistsData:
+      checklistsData?.checklists.map((el) => ({
+        key: el.id,
+        title: el.titleLocaled,
+        value: el.id,
+      })) || [],
     clearAll,
     data,
+    foldersData:
+      foldersData?.folders.edges.map(({ node: folder }) => ({
+        children:
+          folder.childFolders && folder.childFolders.length > 0
+            ? folder.childFolders.map((el) => ({
+                key: el.id,
+                title: el.name,
+                value: el.id,
+              }))
+            : [],
+        key: folder.id,
+        title: folder.name,
+        value: folder.id,
+      })) || [],
     form,
-    loading,
+    loading: loading || foldersLoading || checklistLoading,
+    onChecklistsToggle,
     onDelete,
     onFinish,
+    onFoldersToggle,
+    onSelectChecklist,
+    onSelectFolder,
     onSettingsToggle,
     roleName,
     setAll,

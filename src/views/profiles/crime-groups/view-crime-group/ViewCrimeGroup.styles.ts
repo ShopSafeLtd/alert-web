@@ -47,6 +47,7 @@ const useStyles = createUseStyles((theme: Theme) => ({
   headerTitle: {
     marginBottom: '0px !important',
   },
+  icon: { marginRight: 5 },
   image: {
     '&:hover': {
       '@media only screen and (min-height: 800px)': {
@@ -139,6 +140,7 @@ const useStyles = createUseStyles((theme: Theme) => ({
     padding: 20,
   },
   toolBtn: { borderLeft: 'none', borderRadius: 0, padding: '8.5px .9rem' },
+
   updatesContainer: {
     height: '100%',
     position: 'relative',

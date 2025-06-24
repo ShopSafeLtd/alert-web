@@ -34,6 +34,7 @@ const UseAddNewOffenderTest = () => {
             idSource: IdSource.IdCard,
             height: Height.Unknown,
             comment: 'unknown',
+            sourceDetails: '',
           })
         }
       >

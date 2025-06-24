@@ -64,6 +64,9 @@ const CSVImport = lazy(
   () =>
     import('views/settings/data-import/csv/data-import/ImportData.container')
 );
+const IncidentImport = lazy(
+  () => import('views/settings/data-import/incident-import/IncidentImport')
+);
 const CustomGalleries = lazy(() => import('views/settings/customGallery'));
 const CustomSchemeTerms = lazy(
   () =>
@@ -95,8 +98,8 @@ const SchemeSettings = (): JSX.Element => {
   const [collapsed, setCollapsed] = useState(false);
 
   return (
-    <Row wrap={false}>
-      <Col style={collapsed ? { width: 20 } : undefined}>
+    <Row style={{ minHeight: '100vh' }} wrap={false}>
+      <Col style={collapsed ? { width: 80 } : { width: 260 }}>
         <SettingsSideMenu collapsed={collapsed} setCollapsed={setCollapsed} />
       </Col>
       <Col flex={1} style={{ height: '100vh', overflow: 'auto' }}>
@@ -433,6 +436,21 @@ const SchemeSettings = (): JSX.Element => {
                 </PermissionCheckWrapper>
               }
               path="data-import/sentrysys"
+            />
+            <Route
+              element={
+                <PermissionCheckWrapper
+                  permission={[
+                    {
+                      method: PermissionMethod.Read,
+                      model: PermissionModel.DataImport,
+                    },
+                  ]}
+                >
+                  <IncidentImport />
+                </PermissionCheckWrapper>
+              }
+              path="data-import/incident-import"
             />
             <Route
               element={

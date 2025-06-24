@@ -38,6 +38,7 @@ export interface OffenderData {
   name?: null | string;
   peculiarities?: null | string;
   race?: Race | null;
+  sourceDetails?: null | string;
   targetedGoods?: null | string[];
 }
 
@@ -71,6 +72,7 @@ export interface FormData {
   name: string;
   peculiarities: string;
   race: Race;
+  sourceDetails: string;
   targetedGoods: string[];
   // addressAlias?: string;
   // building?: string;
@@ -83,6 +85,7 @@ export interface FormData {
 interface Return {
   ageCheck: boolean | undefined;
   form: FormInstance<FormData>;
+  idSource: IdSource | undefined;
   idVerified: boolean | undefined;
   onSubmit: (value: FormData) => void;
   setUploading: (value: boolean) => void;
@@ -101,6 +104,8 @@ const useEditOffender = ({
   const [uploading, setUploading] = useState(false);
   const ageCheck = Form.useWatch('ageCheck', form);
   const idVerified = Form.useWatch('idVerified', form);
+  const idSource = Form.useWatch('idSource', form);
+
   const [updateOffender] = useUpdateSimpleOffenderMutation({
     onCompleted,
     onError: () => {
@@ -187,6 +192,7 @@ const useEditOffender = ({
         name: value.name || 'Unidentified Offender',
         peculiarities: value.peculiarities || null,
         race: value.race || null,
+        sourceDetails: value.sourceDetails || null,
         targetedGoods: value.targetedGoods,
       });
     } else {
@@ -243,6 +249,7 @@ const useEditOffender = ({
             name: { set: value.name },
             peculiarities: { set: value.peculiarities || '' },
             race: { set: value.race || null },
+            sourceDetails: { set: value.sourceDetails || null },
             // addresses: {
             //   update: [
             //     {
@@ -295,6 +302,7 @@ const useEditOffender = ({
   return {
     ageCheck,
     form,
+    idSource,
     idVerified,
     onSubmit,
     setUploading,

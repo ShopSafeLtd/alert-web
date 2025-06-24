@@ -18,6 +18,7 @@ const AdminTodos = (): JSX.Element => {
     groupsData,
     // groupsFilter,
     loading,
+
     onCompletedTodo,
     onDeleteTodo,
     onPaginationChange,

@@ -53,6 +53,7 @@ query currentUser(
         incidentCustomQuestionRadio
         incidentTypeTooltip
         activityAssignToUser
+        requireActivityAuthorised
         useBusinessGroupsOnIncident
         imagesRequiredOnOffenders
         taskTimeTracking

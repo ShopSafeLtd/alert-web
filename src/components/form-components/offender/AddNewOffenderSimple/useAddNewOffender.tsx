@@ -94,6 +94,7 @@ export interface FormData {
   peculiarities: string;
   postcode?: string;
   race: Race;
+  sourceDetails: string;
   street?: string;
   townCity?: string;
 }
@@ -219,6 +220,7 @@ const useAddNewOffender = ({
         name: data.name || 'Unidentified Offender',
         peculiarities: data.peculiarities || null,
         race: data.race || null,
+        sourceDetails: data.sourceDetails || null,
         // groupIds: data.groups || [],
       });
     } else {
@@ -258,6 +260,7 @@ const useAddNewOffender = ({
             height: data.height || null,
             idSource: data.idSource,
             idVerified: data.idVerified,
+
             image:
               data.images && data.images.length > 0
                 ? {
@@ -291,6 +294,7 @@ const useAddNewOffender = ({
             peculiarities: data.peculiarities || null,
             race: data.race || null,
             scheme: schemeId,
+            sourceDetails: data.sourceDetails || null,
             vehicles: vehicleId ? { connect: [{ id: vehicleId }] } : undefined,
           },
         },

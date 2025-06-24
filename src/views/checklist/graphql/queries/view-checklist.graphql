@@ -32,6 +32,9 @@ query Checklist($where: ChecklistWhereUniqueInput!) {
     roles {
       id
     }
+    groups {
+      id
+    }
     business {
       id
     }

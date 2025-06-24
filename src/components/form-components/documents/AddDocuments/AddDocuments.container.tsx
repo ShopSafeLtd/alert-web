@@ -8,18 +8,20 @@ import useAddDocument from './useAddDocuments';
 
 interface Props {
   crimeGroupId?: null | string;
+  folderId?: string;
   incidentId?: null | string;
   investigationId?: null | string;
   isEvidence?: boolean;
   offenderId?: null | string;
   onClose: () => void;
-  update?: MutationUpdaterFn<CreateDocumentsMutation> | undefined;
+  update?: MutationUpdaterFn<CreateDocumentsMutation>;
   vehicleId?: null | string;
 }
 
 const AddDocument = memo(
   ({
     crimeGroupId,
+    folderId,
     incidentId,
     investigationId,
     isEvidence,
@@ -33,11 +35,15 @@ const AddDocument = memo(
       categoriesChange,
       categoriesLoading,
       documentUploadProps,
+      form,
+      onAddNewFolder,
+      onSelectFolder,
       onSubmit,
       saving,
       selectedCategories,
     } = useAddDocument({
       crimeGroupId,
+      folderId,
       incidentId,
       investigationId,
       isEvidence,
@@ -53,7 +59,11 @@ const AddDocument = memo(
         categoriesChange={categoriesChange}
         categoriesLoading={categoriesLoading}
         documentUploadProps={documentUploadProps}
+        folderId={folderId}
+        form={form}
+        onAddNewFolder={onAddNewFolder}
         onClose={onClose}
+        onSelectFolder={onSelectFolder}
         onSubmit={onSubmit}
         providedId={
           !!(

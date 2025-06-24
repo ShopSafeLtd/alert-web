@@ -342,6 +342,8 @@ const useAddExistingOffender = ({
   const clearFilters = () => dispatch({ type: ActionType.RESET_STATE });
 
   const onSubmit = () => {
+    console.log('onSubmit111');
+
     setSaving(true);
     if (type === 'single' && update) {
       if (!currentId) return;
@@ -349,6 +351,8 @@ const useAddExistingOffender = ({
         ({ node: offender }) => offender.id === currentId
       )?.node;
       if (currentId && selectedOffender && selectedOffender.id === currentId) {
+        console.log('onSubmit22');
+
         update({
           age: selectedOffender.age || null,
           build: selectedOffender.build || null,
@@ -371,6 +375,8 @@ const useAddExistingOffender = ({
           race: selectedOffender.race || null,
           reference: selectedOffender.reference,
           tags: selectedOffender.tags,
+          totalIncidents: selectedOffender.totalIncidents || 0,
+          totalValue: selectedOffender.totalValue || 0,
           updatedAt: selectedOffender.updatedAt || null,
         });
       }

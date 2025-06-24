@@ -8,6 +8,7 @@ import type { CreateInvestigationMutation } from 'graphql/investigations/mutatio
 import type { CreateSimpleOffenderMutation } from 'graphql/offenders/mutations/__generated__/create-simple-offender.generated';
 import type { VehicleData } from 'types/DataType';
 
+import AddAlias from '#/components/form-components/CrimeGroupSelect/crimeGroup/Alias';
 import AddDocuments from '#/components/form-components/documents/AddDocuments';
 import AddExistingOffender from '#/components/form-components/offender/AddExistingOffender';
 import { currencyAtom } from '#/providers/SchemeProvider/SchemeProvider';
@@ -44,7 +45,6 @@ import SuggestedMembers from 'components/crimeGroups/SuggestedMembers/SuggestedM
 import CrimeGroupSideList from 'components/crimeGroups/sidelist';
 import AddInvestigation from 'components/form-components/Investigation/AddInvestigation';
 import AddVehicle from 'components/form-components/Vehicle/AddVehicle';
-import AddAlias from 'components/form-components/crimeGroup/Alias';
 import LinkVehicle from 'components/form-components/linkOptions/LinkVehicle';
 import AddNewOffenderSimple from 'components/form-components/offender/AddNewOffenderSimple';
 import MapCard from 'components/map/MapCard/MapCard.view';
@@ -247,6 +247,7 @@ const ViewCrimeGroup = ({
                   type="ghost"
                 >
                   <FontAwesomeIcon
+                    className={classes.icon}
                     icon={data?.crimeGroup?.subscribed ? faBellSlash : faBell}
                     size="1x"
                   />
@@ -287,7 +288,11 @@ const ViewCrimeGroup = ({
                     onClick={toggleAddAlias}
                     type="ghost"
                   >
-                    <FontAwesomeIcon icon={faEdit} size="1x" />
+                    <FontAwesomeIcon
+                      className={classes.icon}
+                      icon={faEdit}
+                      size="1x"
+                    />
                     {intl.formatMessage({
                       defaultMessage: 'Edit',
                     })}
@@ -307,7 +312,11 @@ const ViewCrimeGroup = ({
                     loading={isPrinting}
                     onClick={handlePrint}
                   >
-                    <FontAwesomeIcon icon={faFileDownload} size="1x" />
+                    <FontAwesomeIcon
+                      className={classes.icon}
+                      icon={faFileDownload}
+                      size="1x"
+                    />
                     {intl.formatMessage({
                       defaultMessage: 'Download',
                     })}
@@ -346,7 +355,11 @@ const ViewCrimeGroup = ({
                     }}
                     type="ghost"
                   >
-                    <FontAwesomeIcon icon={faTrash} size="1x" />
+                    <FontAwesomeIcon
+                      className={classes.icon}
+                      icon={faTrash}
+                      size="1x"
+                    />
                     {intl.formatMessage({
                       defaultMessage: 'Delete',
                     })}
@@ -466,8 +479,8 @@ const ViewCrimeGroup = ({
                             {
                               icon: (
                                 <FontAwesomeIcon
+                                  className={classes.icon}
                                   icon={faMagnifyingGlass}
-                                  style={{ marginRight: 5 }}
                                 />
                               ),
                               key: '1',
@@ -479,8 +492,8 @@ const ViewCrimeGroup = ({
                             {
                               icon: (
                                 <FontAwesomeIcon
+                                  className={classes.icon}
                                   icon={faPlus}
-                                  style={{ marginRight: 5 }}
                                 />
                               ),
                               key: '2',
@@ -496,8 +509,8 @@ const ViewCrimeGroup = ({
                       <Button
                         icon={
                           <FontAwesomeIcon
+                            className={classes.icon}
                             icon={faPlus}
-                            style={{ marginRight: 5 }}
                           />
                         }
                         size="small"
@@ -551,8 +564,8 @@ const ViewCrimeGroup = ({
                             {
                               icon: (
                                 <FontAwesomeIcon
+                                  className={classes.icon}
                                   icon={faMagnifyingGlass}
-                                  style={{ marginRight: 5 }}
                                 />
                               ),
                               key: '1',
@@ -564,8 +577,8 @@ const ViewCrimeGroup = ({
                             {
                               icon: (
                                 <FontAwesomeIcon
+                                  className={classes.icon}
                                   icon={faPlus}
-                                  style={{ marginRight: 5 }}
                                 />
                               ),
                               key: '2',
@@ -581,8 +594,8 @@ const ViewCrimeGroup = ({
                       <Button
                         icon={
                           <FontAwesomeIcon
+                            className={classes.icon}
                             icon={faPlus}
-                            style={{ marginRight: 5 }}
                           />
                         }
                         size="small"
@@ -648,8 +661,8 @@ const ViewCrimeGroup = ({
                       <Button
                         icon={
                           <FontAwesomeIcon
+                            className={classes.icon}
                             icon={faPlus}
-                            style={{ marginRight: 5 }}
                           />
                         }
                         onClick={toggleAddDocument}
@@ -695,8 +708,8 @@ const ViewCrimeGroup = ({
                       <Button
                         icon={
                           <FontAwesomeIcon
+                            className={classes.icon}
                             icon={faPlus}
-                            style={{ marginRight: 5 }}
                           />
                         }
                         onClick={toggleAddInvestigation}

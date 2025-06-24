@@ -1,9 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
+
 import type { EditTodoQuery } from '#/components/form-components/Todos/EditTodo/graphql/__generated__/edit_todo.generated';
 import type { QuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/__generated__/listTemplates.generated';
 import type { FormInstance, UploadFile } from 'antd';
 import type { UploadProps } from 'antd/es/upload/interface';
-import type { CustomQuestion, SelectOptions } from 'types/DataType';
+import type {
+  ChecklistData,
+  CrimeGroupData,
+  CustomQuestion,
+  IncidentCardData,
+  InvestigationData,
+  OffenderData,
+  SelectOptions,
+} from 'types/DataType';
 
 import { useAddTodoUsersQuery } from '#/components/form-components/Todos/AddTodo/graphql/__generated__/AddTodoUsers.generated';
 import { useEditTodoQuery } from '#/components/form-components/Todos/EditTodo/graphql/__generated__/edit_todo.generated';
@@ -55,9 +64,14 @@ interface Return {
   addQuestion: boolean;
   adminUsersData: SelectOptions[] | undefined;
   availableUsers: { id: string; name: string; timeTaken: number }[];
+  checklistsData: ChecklistData | undefined;
+  crimeGroupsData: CrimeGroupData | undefined;
   documentList: UploadFile[];
   documentUploadProps?: UploadProps;
   form: FormInstance<FormData>;
+  incidentsData: IncidentCardData | undefined;
+  investigationsData: InvestigationData | undefined;
+  offendersData: OffenderData | undefined;
   onSubmit: (value: FormData) => void;
   questions: CustomQuestion[];
   saving: boolean;
@@ -77,6 +91,11 @@ interface Return {
   todoData: EditTodoQuery | undefined;
   todoLoading: boolean;
   update: (id: string, question: string) => void;
+  updateChecklistsList: (value: ChecklistData | undefined) => void;
+  updateCrimeGroupsList: (value: CrimeGroupData | undefined) => void;
+  updateIncidentList: (value: IncidentCardData | undefined) => void;
+  updateInvestigationList: (value: InvestigationData | undefined) => void;
+  updateOffendersList: (value: OffenderData | undefined) => void;
   users: { id: string; name: string; timeTaken: number }[];
   usersLoading: boolean;
 }
@@ -92,6 +111,21 @@ const useEditTodo = ({ initData, onClose, todoId }: Props): Return => {
   const [addQuestion, setAddQuestion] = useState(false);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [questions, setQuestions] = useState<CustomQuestion[]>([]);
+  const [crimeGroupsData, setCrimeGroupsData] = useState<
+    CrimeGroupData | undefined
+  >(undefined);
+  const [offendersData, setOffendersData] = useState<OffenderData | undefined>(
+    undefined
+  );
+  const [checklistsData, setChecklistsData] = useState<
+    ChecklistData | undefined
+  >(undefined);
+  const [incidentsData, setIncidentsData] = useState<
+    IncidentCardData | undefined
+  >(undefined);
+  const [investigationsData, setInvestigationsData] = useState<
+    InvestigationData | undefined
+  >(undefined);
   const [users, setUsers] = useState<
     { id: string; name: string; timeTaken: number }[]
   >([]);
@@ -115,6 +149,12 @@ const useEditTodo = ({ initData, onClose, todoId }: Props): Return => {
         groups: todo.groups.map(({ id }) => id),
         name: todo.name || '',
       });
+      setOffendersData(todo.offender ?? undefined);
+      setCrimeGroupsData(todo.crimeGroup ?? undefined);
+      setChecklistsData(todo.checklist ?? undefined);
+      setIncidentsData(todo.incident ?? undefined);
+      setInvestigationsData(todo.investigation ?? undefined);
+
       const newQuestions = todo.questions.map(({ id, question }) => {
         form.setFieldValue(
           question.id,
@@ -342,11 +382,13 @@ const useEditTodo = ({ initData, onClose, todoId }: Props): Return => {
           },
           assignedUsers: { set: data.assignedUsers.map((id) => ({ id })) },
           businessId: data.business.length > 0 ? data.business[0] : undefined,
+          checklistId: checklistsData?.id,
           completed: data.completed
             ? {
                 set: data.completed,
               }
             : undefined,
+          crimeGroupId: crimeGroupsData?.id,
           description: data.description,
           documents: {
             // @ts-expect-error TODO fix this date issue Wait to check
@@ -366,7 +408,10 @@ const useEditTodo = ({ initData, onClose, todoId }: Props): Return => {
           },
           dueDate: { set: data.dueDate },
           groups: { set: data.groups.map((id) => ({ id })) },
+          incidentId: incidentsData?.id,
+          investigationId: investigationsData?.id,
           name: data.name,
+          offenderId: offendersData?.id,
           questions: {
             create:
               selectedQuestions && selectedQuestions.length > 0
@@ -454,9 +499,14 @@ const useEditTodo = ({ initData, onClose, todoId }: Props): Return => {
       value: user.id,
     })),
     availableUsers,
+    checklistsData,
+    crimeGroupsData,
     documentList,
     documentUploadProps,
     form,
+    incidentsData,
+    investigationsData,
+    offendersData,
     onSubmit,
     questions,
     saving,
@@ -472,6 +522,11 @@ const useEditTodo = ({ initData, onClose, todoId }: Props): Return => {
     todoData,
     todoLoading,
     update,
+    updateChecklistsList: setChecklistsData,
+    updateCrimeGroupsList: setCrimeGroupsData,
+    updateIncidentList: setIncidentsData,
+    updateInvestigationList: setInvestigationsData,
+    updateOffendersList: setOffendersData,
     users,
     usersLoading,
   };

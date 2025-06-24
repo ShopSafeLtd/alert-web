@@ -1,0 +1,22 @@
+mutation UpsertFolder($data: UpsertFolder!) {
+  upsertFolder(data: $data) {
+    id
+    name
+    description
+    documents {
+      ...FolderDocuments
+    }
+    totalDocuments
+    totalChildFolders
+    childFolders {
+      id
+      name
+      description
+      documents {
+        ...FolderDocuments
+      }
+      totalDocuments
+      totalChildFolders
+    }
+  }
+}

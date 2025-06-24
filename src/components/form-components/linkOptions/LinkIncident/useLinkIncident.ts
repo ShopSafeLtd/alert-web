@@ -289,25 +289,19 @@ const useLinkIncident = ({
     setSaving(true);
     const selectedData = data?.incidentsRelay?.edges.find(
       ({ node: { id } }) => id === selected
-    );
+    )?.node;
     if (selectedData) {
       if (update) {
         update({
-          dayTime: selectedData.node.dayTime,
-          description: selectedData.node.description,
-          id: selectedData.node.id,
-          reference: selectedData.node.reference,
-          subject: selectedData.node.subject,
+          dayTime: selectedData.dayTime,
+          description: selectedData.description,
+          id: selectedData.id,
+          reference: selectedData.reference,
+          subject: selectedData.subject,
         });
       }
       if (getIncident) {
-        const incident = data?.incidentsRelay?.edges?.find(
-          (item) => item.node.id === selected
-        );
-        if (incident) {
-          // TODO fix types
-          getIncident({ incident: incident.node });
-        }
+        getIncident({ incident: selectedData });
       }
     }
     setSaving(false);

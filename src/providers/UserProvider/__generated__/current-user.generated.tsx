@@ -6,7 +6,7 @@ const defaultOptions = {} as const;
 export type CurrentUserProviderQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type CurrentUserProviderQuery = { __typename?: 'Query', currentUser?: { __typename?: 'User', id: string, fullName: string, email?: string | null, reference?: number | null, messageCount: number, newUser: boolean, reportToAllBusinesses?: boolean | null, hasPassword: boolean, totalSchemes: number, termsExpired: boolean, forcePasswordReset: boolean, totalUnreadNotifications: number, schemes: Array<{ __typename?: 'UserScheme', id: string, schemeId: string, scheme: { __typename?: 'Scheme', id: string, name: string } }>, expoPushTokens: Array<{ __typename?: 'ExpoPushToken', id: string, token: string }>, defaultGroups: Array<{ __typename?: 'Group', id: string, schemeId: string, name: string }>, groups: Array<{ __typename?: 'Group', id: string, schemeId: string, name: string }>, businesses: Array<{ __typename?: 'Business', id: string, name: string, demId?: string | null, brands: Array<string>, schemes: Array<{ __typename?: 'Scheme', id: string }> }> } | null };
+export type CurrentUserProviderQuery = { __typename?: 'Query', currentUser?: { __typename?: 'User', id: string, fullName: string, email?: string | null, reference?: number | null, messageCount: number, newUser: boolean, reportToAllBusinesses?: boolean | null, hasPassword: boolean, totalSchemes: number, termsExpired: boolean, forcePasswordReset: boolean, totalUnreadNotifications: number, schemes: Array<{ __typename?: 'UserScheme', id: string, schemeId: string, permissionsId?: string | null, scheme: { __typename?: 'Scheme', id: string, name: string } }>, expoPushTokens: Array<{ __typename?: 'ExpoPushToken', id: string, token: string }>, defaultGroups: Array<{ __typename?: 'Group', id: string, schemeId: string, name: string }>, groups: Array<{ __typename?: 'Group', id: string, schemeId: string, name: string }>, businesses: Array<{ __typename?: 'Business', id: string, name: string, demId?: string | null, brands: Array<string>, schemes: Array<{ __typename?: 'Scheme', id: string }> }> } | null };
 
 
 export const CurrentUserProviderDocument = gql`
@@ -31,6 +31,7 @@ export const CurrentUserProviderDocument = gql`
         id
         name
       }
+      permissionsId
     }
     totalUnreadNotifications
     expoPushTokens {

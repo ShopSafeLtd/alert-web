@@ -9,7 +9,7 @@ export type UpdateSchemeMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateSchemeMutation = { __typename?: 'Mutation', updateScheme: { __typename?: 'Scheme', id: string, name: string, restrictIncidentAccess: boolean, reportOnly: boolean, autoApproveIncidents: boolean, autoApproveOffenders: boolean, defaultPublicOffenderDOB: boolean, defaultIncidentEmail: boolean, defaultIncidentPush: boolean, defaultBulletinEmails: boolean, defaultBulletinPush: boolean, defaultSubscribedIncidentOnly: boolean, defaultSubscribedOffenderOnly: boolean, defaultMessagePush: boolean, defaultOffenderEmail: boolean, defaultOffenderPush: boolean, autoPopulateDescription: boolean, needJustification: boolean, requireSiteNumberForUsers: boolean, facialRecognition: boolean, facialDetection: boolean, facialRedaction: boolean, incidentCustomQuestionRadio: boolean, incidentTypeTooltip?: string | null, activityAssignToUser: boolean, useBusinessGroupsOnIncident: boolean, imagesRequiredOnOffenders: boolean, incidentRetention?: number | null, offenderRetention?: number | null, oneSelectedIncidentTypeOnly: boolean, logo?: { __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, optimisedPersisted?: string | null } | null, darkLogo?: { __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, optimisedPersisted?: string | null } | null } };
+export type UpdateSchemeMutation = { __typename?: 'Mutation', updateScheme: { __typename?: 'Scheme', id: string, name: string, restrictIncidentAccess: boolean, reportOnly: boolean, autoApproveIncidents: boolean, autoApproveOffenders: boolean, defaultPublicOffenderDOB: boolean, defaultIncidentEmail: boolean, defaultIncidentPush: boolean, defaultBulletinEmails: boolean, defaultBulletinPush: boolean, defaultSubscribedIncidentOnly: boolean, defaultSubscribedOffenderOnly: boolean, defaultMessagePush: boolean, defaultOffenderEmail: boolean, defaultOffenderPush: boolean, autoPopulateDescription: boolean, needJustification: boolean, requireSiteNumberForUsers: boolean, facialRecognition: boolean, facialDetection: boolean, facialRedaction: boolean, incidentCustomQuestionRadio: boolean, incidentTypeTooltip?: string | null, activityAssignToUser: boolean, requireActivityAuthorised: boolean, useBusinessGroupsOnIncident: boolean, imagesRequiredOnOffenders: boolean, incidentRetention?: number | null, offenderRetention?: number | null, policeReporting: boolean, oneSelectedIncidentTypeOnly: boolean, logo?: { __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, optimisedPersisted?: string | null } | null, darkLogo?: { __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, optimisedPersisted?: string | null } | null } };
 
 
 export const UpdateSchemeDocument = gql`
@@ -40,10 +40,12 @@ export const UpdateSchemeDocument = gql`
     incidentCustomQuestionRadio
     incidentTypeTooltip
     activityAssignToUser
+    requireActivityAuthorised
     useBusinessGroupsOnIncident
     imagesRequiredOnOffenders
     incidentRetention
     offenderRetention
+    policeReporting
     oneSelectedIncidentTypeOnly
     logo {
       id

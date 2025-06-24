@@ -5,6 +5,7 @@ mutation UpdateTodo($data: TodoUpdateInput!, $where: UniqueId!) {
     dueDate
     completedDate
     completed
+    authorised
     id
     name
     similarOffenderIds

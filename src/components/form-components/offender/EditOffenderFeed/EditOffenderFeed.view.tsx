@@ -49,6 +49,7 @@ const EditOffender = ({
   const ageCheck = Form.useWatch('ageCheck', form);
   const idVerified = Form.useWatch('idVerified', form);
   const incidentsCount = (data?.offender?.totalIncidents || 0) > 0;
+  const idSource = Form.useWatch('idSource', form);
   return (
     <div className="list-view">
       {loading ? (
@@ -92,6 +93,7 @@ const EditOffender = ({
             name: data?.offender?.name || null,
             peculiarities: data?.offender?.peculiarities || null,
             race: data?.offender?.race || null,
+            sourceDetails: data?.offender?.sourceDetails || '',
             tags:
               data?.offender?.tags && data?.offender?.tags.length > 0
                 ? data?.offender?.tags.map(({ id }) => id)
@@ -103,6 +105,7 @@ const EditOffender = ({
         >
           <OffenderFormDetails
             ageCheck={ageCheck}
+            idSource={idSource}
             idVerified={idVerified}
             offenderSettings={offenderSettings}
             saving={saving}

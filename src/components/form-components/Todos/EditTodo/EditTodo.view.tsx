@@ -1,6 +1,14 @@
 import type { QuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/__generated__/listTemplates.generated';
 import type { FormInstance, UploadFile, UploadProps } from 'antd';
-import type { CustomQuestion, SelectOptions } from 'types/DataType';
+import type {
+  ChecklistData,
+  CrimeGroupData,
+  CustomQuestion,
+  IncidentCardData,
+  InvestigationData,
+  OffenderData,
+  SelectOptions,
+} from 'types/DataType';
 
 import DatePicker from '#/components/util-components/DatePicker';
 // import CustomQuestions from '../../../../views/incidents/AddIncident/components/IncidentCustom/CustomQuestion.view';
@@ -29,19 +37,25 @@ import type { FormData } from './useEditTodo';
 
 import BusinessesSelect from '../../BusinessesSelect/BusinessesSelect.view';
 import CreateQuestionContainer from '../../createQuestion/CreateQuestion.container';
-
+import LinkProfile from '../LinkProfile';
 interface Props {
   addQuestion: boolean;
   adminUsersData: SelectOptions[] | undefined;
   availableUsers: { id: string; name: string; timeTaken: number }[];
+  // todoData: EditTodoQuery | undefined;
+  checklistsData: ChecklistData | undefined;
+  crimeGroupsData: CrimeGroupData | undefined;
   documentList: UploadFile[];
   documentUploadProps?: UploadProps;
   // setSelectedQuestions: (value: { id: string; question: string }[]) => void;
   form: FormInstance<FormData>;
+  incidentsData: IncidentCardData | undefined;
+  // setSelectedIds: (value: string[]) => void;
+  investigationsData: InvestigationData | undefined;
   loading: boolean;
+  offendersData: OffenderData | undefined;
   onClose: () => void;
   onSubmit: (value: FormData) => void;
-  // setSelectedIds: (value: string[]) => void;
   // selectedQuestions: { id: string; question: string }[];
   questions: CustomQuestion[];
   saving: boolean;
@@ -54,23 +68,32 @@ interface Props {
   templatesData: QuestionGroupOnSchemeQuery | undefined;
   templatesLoading: boolean;
   update: (id: string, question: string) => void;
+  updateChecklistsList: (value: ChecklistData | undefined) => void;
+  updateCrimeGroupsList: (value: CrimeGroupData | undefined) => void;
+  updateIncidentList: (value: IncidentCardData | undefined) => void;
+  updateInvestigationList: (value: InvestigationData | undefined) => void;
+  updateOffendersList: (value: OffenderData | undefined) => void;
   users: { id: string; name: string; timeTaken: number }[];
   usersLoading: boolean;
-  // todoData: EditTodoQuery | undefined;
 }
 
 const EditTodo = ({
   addQuestion,
   adminUsersData,
   availableUsers,
+  checklistsData,
+  crimeGroupsData,
   documentList,
   documentUploadProps,
   // setSelectedQuestions,
   form,
+  incidentsData,
+  // setSelectedIds,
+  investigationsData,
   loading,
+  offendersData,
   onClose,
   onSubmit,
-  // setSelectedIds,
   // selectedQuestions,
   questions,
   saving,
@@ -81,6 +104,11 @@ const EditTodo = ({
   templatesData,
   templatesLoading,
   update,
+  updateChecklistsList,
+  updateCrimeGroupsList,
+  updateIncidentList,
+  updateInvestigationList,
+  updateOffendersList,
   users,
   usersLoading,
 }: // todoData,
@@ -331,6 +359,19 @@ Props): JSX.Element => {
             </Row>
           </Col>
         </Row>
+        <LinkProfile
+          checklistsData={checklistsData}
+          crimeGroupsData={crimeGroupsData}
+          incidentsData={incidentsData}
+          investigationsData={investigationsData}
+          offendersData={offendersData}
+          saving={saving}
+          updateChecklistsList={updateChecklistsList}
+          updateCrimeGroupsList={updateCrimeGroupsList}
+          updateIncidentList={updateIncidentList}
+          updateInvestigationList={updateInvestigationList}
+          updateOffendersList={updateOffendersList}
+        />
         <Form.Item
           label={intl.formatMessage({
             defaultMessage: 'Evidence',

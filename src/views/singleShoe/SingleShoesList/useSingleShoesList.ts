@@ -28,6 +28,8 @@ interface Return {
     | null
     | undefined;
   awaitingShippingShoesLoading: boolean;
+  matchedShoesData: NonNullable<ShoesQuery['shoes']> | null | undefined;
+  matchedShoesLoading: boolean;
   onDelete: (value: string) => void;
   onReceivedShoe: (value: string) => void;
   onShippedShoe: (value: string) => void;
@@ -107,6 +109,18 @@ const useSingleShoesList = (): Return => {
     useShoesQuery({
       fetchPolicy: 'cache-and-network',
       variables: shippedVars,
+    });
+  const { data: matchedShoesData, loading: matchedShoesLoading } =
+    useShoesQuery({
+      fetchPolicy: 'cache-and-network',
+      variables: {
+        take: 30,
+        where: {
+          status: {
+            not: ShoeStatus.AwaitingMatch,
+          },
+        },
+      },
     });
 
   // delete
@@ -452,6 +466,8 @@ const useSingleShoesList = (): Return => {
     awaitingMatchShoesLoading,
     awaitingShippingShoesData: awaitingShippingShoesData?.shoes,
     awaitingShippingShoesLoading,
+    matchedShoesData: matchedShoesData?.shoes,
+    matchedShoesLoading,
     onDelete,
     onReceivedShoe,
     onShippedShoe,

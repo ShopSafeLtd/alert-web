@@ -45,7 +45,6 @@ import useStyles from './ListChcklists.styles';
 import CreateActiveChecklist from './drawer/create-active-checklist';
 
 interface ChecklistsViewProps {
-  // };
   activeChecklistSort: {
     field: ActiveChecklistSortOptions;
     order: ChecklistSortOrder;
@@ -65,19 +64,20 @@ interface ChecklistsViewProps {
   }) => Promise<FetchResult<CreateActiveChecklistMutation>>;
   createChecklistOpen: boolean;
   data: ChecklistsQuery | undefined;
+  deleteChecklist: (id: string) => void;
   deleteTemplate: (id: string) => void;
   loading: boolean;
-  selectedChecklist: { id: string; title: string } | null;
   // setChecklistSort: (args: {
   //   field: ChecklistSortOptions;
   //   order: ChecklistSortOrder;
+  selectedChecklist: { id: string; title: string } | null;
+  // checklistSort: {
+  //   field: ChecklistSortOptions;
   // }) => void;
   setActiveChecklistSort: (args: {
     field: ActiveChecklistSortOptions;
     order: ChecklistSortOrder;
   }) => void;
-  // checklistSort: {
-  //   field: ChecklistSortOptions;
   //   order: ChecklistSortOrder;
   setChecklistFilters: (filters: SetChecklistFilterModel) => void;
   toggleCreateChecklistDrawer: (
@@ -95,6 +95,7 @@ const ChecklistsView: React.FC<ChecklistsViewProps> = ({
   createActive,
   createChecklistOpen,
   data,
+  deleteChecklist,
   deleteTemplate,
   loading,
   selectedChecklist,
@@ -184,14 +185,14 @@ const ChecklistsView: React.FC<ChecklistsViewProps> = ({
                         title: (
                           <FormattedMessage defaultMessage="Completion (%)" />
                         ),
-                        width: 100,
+                        width: 140,
                       },
                       {
                         dataIndex: 'score',
                         key: 'score',
                         title: <FormattedMessage defaultMessage="Score (%)" />,
 
-                        width: 200,
+                        width: 100,
                       },
                       {
                         dataIndex: 'status',
@@ -231,7 +232,7 @@ const ChecklistsView: React.FC<ChecklistsViewProps> = ({
                           ),
                         sorter: true,
                         title: <FormattedMessage defaultMessage="Status" />,
-                        width: 200,
+                        width: 150,
                       },
                       {
                         dataIndex: 'completedAt',
@@ -246,7 +247,7 @@ const ChecklistsView: React.FC<ChecklistsViewProps> = ({
                         title: (
                           <FormattedMessage defaultMessage="Completed Date" />
                         ),
-                        width: 100,
+                        width: 150,
                       },
 
                       {
@@ -257,15 +258,13 @@ const ChecklistsView: React.FC<ChecklistsViewProps> = ({
                           _,
                           record: {
                             documentLink: string;
+                            key: string;
                             status: ChecklistStatus;
                           }
-                        ) => {
-                          if (
-                            record.status === ChecklistStatus.Completed &&
-                            record.documentLink
-                          )
-                            return (
-                              <Space>
+                        ) => (
+                          <Space>
+                            {record.status === ChecklistStatus.Completed &&
+                              record.documentLink && (
                                 <Tooltip
                                   title={intl.formatMessage({
                                     defaultMessage: 'Download Pdf',
@@ -281,19 +280,41 @@ const ChecklistsView: React.FC<ChecklistsViewProps> = ({
                                       />
                                     }
                                     size="small"
-                                    style={{
-                                      zIndex: 1000,
-                                    }}
+                                    style={{ zIndex: 1000 }}
                                   />
                                 </Tooltip>
-                              </Space>
-                            );
-                          return null;
-                        },
+                              )}
+                            <PermissionCheckWrapper
+                              permission={{
+                                method: PermissionMethod.Delete,
+                                model: PermissionModel.Checklist,
+                              }}
+                              unauthorizedElement={<div />}
+                            >
+                              <Tooltip
+                                title={intl.formatMessage({
+                                  defaultMessage: 'Delete Checklist',
+                                })}
+                              >
+                                <Popconfirm
+                                  okText={intl.formatMessage({
+                                    defaultMessage: 'Delete',
+                                  })}
+                                  onConfirm={() => deleteChecklist(record.key)}
+                                  overlayInnerStyle={{ padding: 10 }}
+                                  title={intl.formatMessage({
+                                    defaultMessage: 'Are you sure?',
+                                  })}
+                                >
+                                  <Button
+                                    icon={<FontAwesomeIcon icon={faTrash} />}
+                                  />
+                                </Popconfirm>
+                              </Tooltip>
+                            </PermissionCheckWrapper>
+                          </Space>
+                        ),
                         title: '',
-                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                        // @ts-ignore
-                        // ???
                         width: 100,
                       },
                     ]}

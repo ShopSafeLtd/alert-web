@@ -1,5 +1,8 @@
 import type { CreateActiveChecklistMutation } from '#/views/checklist/graphql/mutations/__generated__/create-active-checklist.generated';
-import type { ActiveChecklistsQuery } from '#/views/checklist/graphql/queries/__generated__/list-active-checklists.generated';
+import type {
+  ActiveChecklistsQuery,
+  ActiveChecklistsQueryVariables,
+} from '#/views/checklist/graphql/queries/__generated__/list-active-checklists.generated';
 import type { ChecklistsQuery } from '#/views/checklist/graphql/queries/__generated__/list-checklists.generated';
 import type { FetchResult } from '@apollo/client';
 
@@ -7,7 +10,10 @@ import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import { useCreateActiveChecklistMutation } from '#/views/checklist/graphql/mutations/__generated__/create-active-checklist.generated';
 import { useRecycleChecklistMutation } from '#/views/checklist/graphql/mutations/__generated__/recycle-checklist.generated';
-import { useActiveChecklistsQuery } from '#/views/checklist/graphql/queries/__generated__/list-active-checklists.generated';
+import {
+  ActiveChecklistsDocument,
+  useActiveChecklistsQuery,
+} from '#/views/checklist/graphql/queries/__generated__/list-active-checklists.generated';
 import { useChecklistsQuery } from '#/views/checklist/graphql/queries/__generated__/list-checklists.generated';
 import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
@@ -21,6 +27,7 @@ import type {
 } from '../../../state/filter-model';
 
 import { useStoreActions, useStoreState } from '../../../state';
+import { useRecycleActiveChecklistMutation } from '../graphql/mutations/__generated__/recycle-active-checklist.generated';
 
 interface Return {
   activeChecklistSort: {
@@ -46,6 +53,7 @@ interface Return {
   }) => Promise<FetchResult<CreateActiveChecklistMutation>>;
   createChecklistOpen: boolean;
   data: ChecklistsQuery | undefined;
+  deleteChecklist: (id: string) => void;
   deleteTemplate: (id: string) => void;
 
   loading: boolean;
@@ -108,50 +116,50 @@ const useChecklists = (): Return => {
       },
     },
   });
+  const activeChecklistVariables: ActiveChecklistsQueryVariables = {
+    order: {
+      [activeChecklistSort.field]: activeChecklistSort.order,
+    },
+    where: {
+      OR: [
+        {
+          checklist: {
+            business: checklistFilter.businesses?.length
+              ? { some: { id: { in: checklistFilter.businesses } } }
+              : undefined,
+            schemes: {
+              some: { id: { equals: schemeId } },
+            },
+          },
+        },
+        {
+          business: checklistFilter.businesses?.length
+            ? { id: { in: checklistFilter.businesses } }
+            : undefined,
+          checklist: {
+            schemes: {
+              some: { id: { equals: schemeId } },
+            },
+          },
 
+          completedBy: checklistFilter.ownUser
+            ? { id: { equals: userId } }
+            : undefined,
+        },
+      ],
+      deleted: { equals: false },
+      status: {
+        in: checklistFilter.activeStatus,
+      },
+    },
+  };
   const {
     data: activeChecklistsData,
     loading: activeChecklistsLoading,
     refetch,
   } = useActiveChecklistsQuery({
     fetchPolicy: 'cache-and-network',
-
-    variables: {
-      order: {
-        [activeChecklistSort.field]: activeChecklistSort.order,
-      },
-      where: {
-        OR: [
-          {
-            checklist: {
-              business: checklistFilter.businesses?.length
-                ? { some: { id: { in: checklistFilter.businesses } } }
-                : undefined,
-              schemes: {
-                some: { id: { equals: schemeId } },
-              },
-            },
-          },
-          {
-            business: checklistFilter.businesses?.length
-              ? { id: { in: checklistFilter.businesses } }
-              : undefined,
-            checklist: {
-              schemes: {
-                some: { id: { equals: schemeId } },
-              },
-            },
-
-            completedBy: checklistFilter.ownUser
-              ? { id: { equals: userId } }
-              : undefined,
-          },
-        ],
-        status: {
-          in: checklistFilter.activeStatus,
-        },
-      },
-    },
+    variables: activeChecklistVariables,
   });
 
   const [createActiveChecklist] = useCreateActiveChecklistMutation();
@@ -224,7 +232,42 @@ const useChecklists = (): Return => {
       },
     });
   };
+  const [recycleActiveChecklist] = useRecycleActiveChecklistMutation();
+  const deleteChecklist = (value: string) => {
+    void recycleActiveChecklist({
+      update: (store, { data: res }) => {
+        if (
+          res?.recycleActiveChecklist === null ||
+          res?.recycleActiveChecklist === undefined
+        )
+          return;
 
+        const existingData = store.readQuery<ActiveChecklistsQuery>({
+          query: ActiveChecklistsDocument,
+        });
+
+        if (!existingData?.activeChecklists) return;
+
+        store.writeQuery<ActiveChecklistsQuery>({
+          data: {
+            __typename: 'Query',
+            activeChecklists: {
+              ...existingData.activeChecklists,
+              edges: existingData.activeChecklists.edges.filter(
+                ({ node }) => node.id !== res.recycleActiveChecklist.id
+              ),
+              totalCount: existingData.activeChecklists.totalCount - 1,
+            },
+          },
+          query: ActiveChecklistsDocument,
+          variables: activeChecklistVariables,
+        });
+      },
+      variables: {
+        recycleActiveChecklistId: value,
+      },
+    });
+  };
   return {
     activeChecklistSort,
     activeChecklistsData,
@@ -235,6 +278,7 @@ const useChecklists = (): Return => {
     createActive,
     createChecklistOpen: selectedChecklist !== null,
     data,
+    deleteChecklist,
     deleteTemplate,
     loading,
     selectedChecklist,

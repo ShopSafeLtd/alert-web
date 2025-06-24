@@ -5,10 +5,12 @@ mutation UpdateTodoDetails($data: TodoUpdateInput!, $where: UniqueId!) {
     description
     dueDate
     completed
+    authorised
     assignedUsers {
       id
       fullName
     }
+
     business {
       id
     }

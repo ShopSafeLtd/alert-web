@@ -5,6 +5,7 @@ import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
 export type UserRolesQueryVariables = Types.Exact<{
   schemeId: Types.Scalars['String'];
+  roleId?: Types.InputMaybe<Types.Scalars['String']>;
 }>;
 
 
@@ -12,8 +13,8 @@ export type UserRolesQuery = { __typename?: 'Query', roles: { __typename?: 'Quer
 
 
 export const UserRolesDocument = gql`
-    query UserRoles($schemeId: String!) {
-  roles(schemeId: $schemeId) {
+    query UserRoles($schemeId: String!, $roleId: String) {
+  roles(schemeId: $schemeId, roleId: $roleId) {
     edges {
       node {
         type

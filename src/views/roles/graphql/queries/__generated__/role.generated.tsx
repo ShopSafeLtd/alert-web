@@ -8,7 +8,7 @@ export type RoleQueryVariables = Types.Exact<{
 }>;
 
 
-export type RoleQuery = { __typename?: 'Query', role: { __typename?: 'CustomRole', id: string, name: string, usersCount: number, approvalTier: boolean, type: Types.Role, permissions: Array<{ __typename?: 'Permission', allowedMethods: Array<Types.PermissionMethod>, model: Types.PermissionModel }>, users: Array<{ __typename?: 'UserScheme', user: { __typename?: 'User', fullName: string, id: string, email?: string | null } }> } };
+export type RoleQuery = { __typename?: 'Query', role: { __typename?: 'CustomRole', id: string, name: string, usersCount: number, approvalTier: boolean, type: Types.Role, parentId?: string | null, permissions: Array<{ __typename?: 'Permission', allowedMethods: Array<Types.PermissionMethod>, model: Types.PermissionModel }>, folders: Array<{ __typename?: 'Folder', id: string, name: string, childFolders: Array<{ __typename?: 'Folder', id: string, name: string }> }>, checklists: Array<{ __typename?: 'Checklist', id: string, title: string }>, users: Array<{ __typename?: 'UserScheme', user: { __typename?: 'User', fullName: string, id: string, email?: string | null } }> } };
 
 
 export const RoleDocument = gql`
@@ -23,6 +23,18 @@ export const RoleDocument = gql`
       model
     }
     type
+    folders {
+      id
+      name
+      childFolders {
+        id
+        name
+      }
+    }
+    checklists {
+      id
+      title
+    }
     users {
       user {
         fullName
@@ -30,6 +42,7 @@ export const RoleDocument = gql`
         email
       }
     }
+    parentId
   }
 }
     `;

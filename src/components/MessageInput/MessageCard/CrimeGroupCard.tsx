@@ -1,4 +1,5 @@
-import React from 'react';
+import type { CrimeGroupData } from 'types/DataType';
+
 import { faCircleXmark } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -10,7 +11,7 @@ import {
   Row,
   Typography,
 } from 'antd';
-import type { CrimeGroupData } from 'types/DataType';
+import React from 'react';
 import { useIntl } from 'react-intl';
 
 const { Title } = Typography;
@@ -25,42 +26,42 @@ const CrimeGroupCard = ({ crimeGroup, removeCrimeGroup, saving }: Props) => {
   const intl = useIntl();
   return (
     <Card
-      style={{ width: 120, height: 100 }}
       bodyStyle={{
-        paddingTop: 5,
-        paddingLeft: 2,
         marginBottom: -5,
+        paddingLeft: 2,
+        paddingTop: 5,
       }}
-      size="small"
       className="message-card"
+      size="small"
+      style={{ height: 100, width: 120 }}
     >
       <Row gutter={5} wrap={false}>
         {removeCrimeGroup && (
           <Popconfirm
-            placement="topLeft"
-            trigger="click"
-            title={intl.formatMessage({
-              defaultMessage: 'Remove the crime group?',
-            })}
-            onConfirm={() => removeCrimeGroup(crimeGroup.id)}
-            okText={intl.formatMessage({ defaultMessage: 'Yes' })}
             cancelText={intl.formatMessage({
               defaultMessage: 'No',
             })}
+            okText={intl.formatMessage({ defaultMessage: 'Yes' })}
+            onConfirm={() => removeCrimeGroup(crimeGroup.id)}
             overlayInnerStyle={{ padding: 10 }}
+            placement="topLeft"
+            title={intl.formatMessage({
+              defaultMessage: 'Remove the crime group?',
+            })}
+            trigger="click"
           >
             <Button
-              size="small"
               disabled={saving}
-              style={{ position: 'absolute', top: -5, right: -5, zIndex: 100 }}
-              shape="circle"
-              type="text"
               icon={<FontAwesomeIcon icon={faCircleXmark} size="lg" />}
+              shape="circle"
+              size="small"
+              style={{ position: 'absolute', right: -5, top: -5, zIndex: 100 }}
+              type="text"
             />
           </Popconfirm>
         )}
 
-        <Col flex={1} style={{ marginTop: 10, marginLeft: 5 }}>
+        <Col flex={1} style={{ marginLeft: 5, marginTop: 10 }}>
           <Title ellipsis level={4} style={{ marginBottom: 5 }}>
             {crimeGroup.alias ||
               intl.formatMessage(
@@ -71,13 +72,13 @@ const CrimeGroupCard = ({ crimeGroup, removeCrimeGroup, saving }: Props) => {
               )}
           </Title>
 
-          <Descriptions size="small" column={1}>
+          <Descriptions column={1} size="small">
             {crimeGroup.alias && (
               <Descriptions.Item
-                style={{ paddingBottom: 0 }}
                 label={intl.formatMessage({
                   defaultMessage: 'Alert ID',
                 })}
+                style={{ paddingBottom: 0 }}
               >
                 {crimeGroup.reference}
               </Descriptions.Item>

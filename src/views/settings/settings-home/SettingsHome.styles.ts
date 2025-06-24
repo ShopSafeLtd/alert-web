@@ -1,45 +1,194 @@
-import { createUseStyles } from 'react-jss';
 import type { Theme } from 'configs/ThemeConfig';
 
+import { createUseStyles } from 'react-jss';
+
 const useStyles = createUseStyles((theme: Theme) => ({
-  page: {
-    padding: 20,
-  },
-  settingCard: {
-    padding: 15,
-    cursor: 'pointer',
-    maxWidth: 300,
-    '&:hover': {
-      backgroundColor: theme.hoverBackground,
-    },
-  },
-  settingIcon: {},
-  settingP: {
-    marginBottom: '0px !important',
-    fontSize: 13,
-  },
-  settingTitle: {
-    fontWeight: '600',
+  actionIcon: {
+    color: theme.secondaryText,
     fontSize: 14,
+    transition: 'all 0.3s ease',
   },
-  buttonRow: {
-    marginTop: 10,
+  cardAction: {
+    opacity: 0.6,
+    position: 'absolute',
+    right: 20,
+    top: 20,
+  },
+  cardContent: {
+    padding: '16px',
+    position: 'relative',
+  },
+  cardDescription: {
+    color: theme.secondaryText,
+    fontSize: 14,
+    lineHeight: 1.5,
+    marginBottom: '0 !important',
+  },
+  cardGrid: {
+    marginTop: 20,
+  },
+  cardIconWrapper: {
+    alignItems: 'center',
+    borderRadius: 14,
+    display: 'flex',
+    height: 56,
+    justifyContent: 'center',
+    width: 56,
   },
   cardTitle: {
-    fontSize: 15,
-    fontWeight: '500',
+    color: theme.headerColor,
+    fontSize: '16px !important',
+    fontWeight: '600 !important',
+    lineHeight: 1.4,
+    marginBottom: '8px !important',
   },
-  cardIcon: {
-    borderRadius: 10,
-    backgroundColor: theme.imageBackgroundColor,
-    height: 40,
-    width: 40,
+  header: {
+    marginBottom: 40,
+    padding: '24px 0',
+  },
+  helpActions: {
     display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexWrap: 'wrap',
+    gap: 12,
+    marginTop: 20,
   },
-  cardRow: {
-    marginBottom: 10,
+  helpCard: {
+    background: `linear-gradient(135deg, ${theme.primary}08 0%, transparent 100%)`,
+    border: `1px solid ${theme.borderColor}`,
+    borderRadius: 16,
+    padding: '32px',
+  },
+  helpContent: {
+    alignItems: 'flex-start',
+    display: 'flex',
+    gap: 20,
+  },
+  helpDescription: {
+    color: theme.secondaryText,
+    fontSize: 16,
+    lineHeight: 1.6,
+    marginBottom: 20,
+  },
+  helpIcon: {
+    alignItems: 'center',
+    borderRadius: 16,
+    color: 'white',
+    display: 'flex',
+    flexShrink: 0,
+    fontSize: 24,
+    height: 64,
+    justifyContent: 'center',
+    width: 64,
+  },
+  helpTitle: {
+    color: theme.headerColor,
+    fontSize: '20px !important',
+    fontWeight: '600 !important',
+    marginBottom: '8px !important',
+  },
+  managementCard: {
+    background: theme.componentBackground,
+    border: `1px solid ${theme.borderColor}`,
+    borderRadius: 12,
+    height: '100%',
+    overflow: 'hidden',
+    transition: 'all 0.3s ease',
+  },
+  managementIconWrapper: {
+    alignItems: 'center',
+    background: `linear-gradient(135deg, ${theme.primary}10 0%, ${theme.primary}05 100%)`,
+    borderRadius: 12,
+    display: 'flex',
+    fontSize: 20,
+    height: 48,
+    justifyContent: 'center',
+    width: 48,
+  },
+  page: {
+    background: theme.colorScheme === 'dark' ? theme.bodyBackground : '#f8f9fa',
+    minHeight: '100vh',
+    padding: '24px',
+  },
+  pageDescription: {
+    color: theme.secondaryText,
+    fontSize: 18,
+    lineHeight: 1.6,
+  },
+  pageTitle: {
+    WebkitBackgroundClip: 'text',
+    WebkitTextFillColor: 'transparent',
+    background: `linear-gradient(135deg, ${theme.primary} 0%, ${theme.primary}80 100%)`,
+    color: theme.headerColor,
+    fontSize: '36px !important',
+    fontWeight: '700 !important',
+    marginBottom: '8px !important',
+  },
+  quickCard: {
+    background: theme.componentBackground,
+    border: `1px solid ${theme.borderColor}`,
+    borderRadius: 16,
+    height: '100%',
+    overflow: 'hidden',
+    position: 'relative',
+    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+  },
+  section: {
+    marginBottom: 48,
+  },
+  sectionDescription: {
+    color: theme.secondaryText,
+    fontSize: 16,
+    lineHeight: 1.6,
+    marginBottom: 24,
+  },
+  sectionIcon: {
+    color: theme.primary,
+    fontSize: 20,
+  },
+  sectionTitle: {
+    alignItems: 'center',
+    color: theme.headerColor,
+    display: 'flex',
+    fontSize: '24px !important',
+    fontWeight: '600 !important',
+    gap: 12,
+    marginBottom: '8px !important',
+  },
+  statsCard: {
+    border: `1px solid ${theme.borderColor}`,
+    borderRadius: 16,
+    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.05)',
+  },
+  tipItem: {
+    alignItems: 'flex-start',
+    color: theme.secondaryText,
+    display: 'flex',
+    fontSize: 14,
+    gap: 12,
+    lineHeight: 1.5,
+  },
+  tipsCard: {
+    border: `1px solid ${theme.borderColor}`,
+    borderRadius: 16,
+    height: '100%',
+  },
+  tipsIcon: {
+    color: theme.primary,
+    fontSize: 16,
+  },
+  tipsList: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 16,
+  },
+  tipsTitle: {
+    alignItems: 'center',
+    color: theme.headerColor,
+    display: 'flex',
+    fontSize: '18px !important',
+    fontWeight: '600 !important',
+    gap: 8,
+    marginBottom: '20px !important',
   },
 }));
 export default useStyles;

@@ -28,6 +28,7 @@ import {
 } from 'antd';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
+import { Link } from 'react-router-dom';
 
 import ViewShoe from './ViewShoe.modal';
 
@@ -40,6 +41,7 @@ interface Props {
     | null
     | undefined;
   awaitingShippingShoesLoading: boolean;
+  matchedShoesTotalCount: number;
   onDelete: (value: string) => void;
   onReceivedShoe: (value: string) => void;
   onShippedShoe: (value: string) => void;
@@ -62,6 +64,7 @@ const SingleShoesList = ({
   awaitingMatchShoesLoading,
   awaitingShippingShoesData,
   awaitingShippingShoesLoading,
+  matchedShoesTotalCount,
   onDelete,
   onReceivedShoe,
   onShippedShoe,
@@ -91,7 +94,28 @@ const SingleShoesList = ({
             value={search}
           />
         </Col>
+
         <Col flex={1} />
+        <Col>
+          <Link to={`/app/singleShoeSystem/view`}>
+            <Button
+              icon={
+                <FontAwesomeIcon
+                  icon={faEye}
+                  size="lg"
+                  style={{ marginRight: 5 }}
+                />
+              }
+            >
+              {intl.formatMessage(
+                {
+                  defaultMessage: 'Matched Shoes: {total}',
+                },
+                { total: matchedShoesTotalCount }
+              )}
+            </Button>
+          </Link>
+        </Col>
         <Col>
           <Button
             icon={

@@ -11,7 +11,7 @@ export type ListTodosQueryVariables = Types.Exact<{
 }>;
 
 
-export type ListTodosQuery = { __typename?: 'Query', listTodos: { __typename?: 'ListTodos', total: number, uncompletedTotal: number, totalUserTodos: number, todos: Array<{ __typename?: 'Todo', description?: string | null, id: string, name?: string | null, dueDate?: Date | null, createdAt: Date, completed?: boolean | null, type?: Types.TodoType | null, vehicleId?: string | null, offenderId?: string | null, crimeGroupId?: string | null, incidentId?: string | null, investigationId?: string | null, chatId?: string | null, completedDate?: Date | null, vehicle?: { __typename?: 'Vehicle', id: string, reference?: number | null } | null, offender?: { __typename?: 'Offender', id: string, reference?: number | null } | null, crimeGroup?: { __typename?: 'CrimeGroup', id: string, reference?: number | null } | null, incident?: { __typename?: 'Incident', id: string, reference?: number | null } | null, investigation?: { __typename?: 'Investigation', id: string, reference?: number | null } | null, createdBy?: { __typename?: 'User', id: string, fullName: string } | null, completedBy?: { __typename?: 'User', id: string, fullName: string } | null, assignedUsers: Array<{ __typename?: 'User', id: string, fullName: string }>, groups: Array<{ __typename?: 'Group', id: string, name: string }> }> } };
+export type ListTodosQuery = { __typename?: 'Query', listTodos: { __typename?: 'ListTodos', total: number, uncompletedTotal: number, totalUserTodos: number, todos: Array<{ __typename?: 'Todo', description?: string | null, id: string, name?: string | null, dueDate?: Date | null, createdAt: Date, completed?: boolean | null, authorised?: boolean | null, type?: Types.TodoType | null, vehicleId?: string | null, offenderId?: string | null, crimeGroupId?: string | null, incidentId?: string | null, investigationId?: string | null, chatId?: string | null, completedDate?: Date | null, vehicle?: { __typename?: 'Vehicle', id: string, reference?: number | null } | null, offender?: { __typename?: 'Offender', id: string, reference?: number | null } | null, crimeGroup?: { __typename?: 'CrimeGroup', id: string, reference?: number | null } | null, incident?: { __typename?: 'Incident', id: string, reference?: number | null } | null, investigation?: { __typename?: 'Investigation', id: string, reference?: number | null } | null, createdBy?: { __typename?: 'User', id: string, fullName: string } | null, completedBy?: { __typename?: 'User', id: string, fullName: string } | null, assignedUsers: Array<{ __typename?: 'User', id: string, fullName: string }>, groups: Array<{ __typename?: 'Group', id: string, name: string }> }> } };
 
 
 export const ListTodosDocument = gql`
@@ -24,6 +24,7 @@ export const ListTodosDocument = gql`
       dueDate
       createdAt
       completed
+      authorised
       type
       vehicleId
       vehicle {

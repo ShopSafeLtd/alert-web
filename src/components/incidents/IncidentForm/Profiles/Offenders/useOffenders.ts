@@ -86,6 +86,7 @@ export interface AddOffenderData {
   peculiarities?: null | string;
   race?: Race | null;
   reference?: null | number;
+  sourceDetails?: null | string;
   targetedGoods?: null | string[];
   // groupIds?: string[];
 }

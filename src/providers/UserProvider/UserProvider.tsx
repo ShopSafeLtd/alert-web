@@ -35,6 +35,7 @@ export const defaultCurrentUserAtom: CurrentUser = {
   id: '',
   messageCount: 0,
   newUser: false,
+  // permissionsId: '',
   reference: 0,
   reportToAllBusinesses: false,
   schemes: [],

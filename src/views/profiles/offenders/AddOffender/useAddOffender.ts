@@ -91,6 +91,7 @@ export interface FormData {
   peculiarities: string;
   postcode?: string;
   race: Race;
+  sourceDetails?: string;
   street?: string;
   tags: (SelectOptions | string)[];
   townCity?: string;
@@ -719,6 +720,7 @@ const useAddOffender = (): Return => {
           race: data.race || null,
           scheme: schemeId,
           sessionId,
+          sourceDetails: data.sourceDetails || null,
           tags: getOffenderTags(),
           vehicles: getVehicles(),
         },

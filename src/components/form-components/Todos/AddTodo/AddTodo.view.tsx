@@ -1,6 +1,14 @@
 import type { QuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/__generated__/listTemplates.generated';
 import type { FormInstance, UploadFile, UploadProps } from 'antd';
-import type { CustomQuestion, SelectOptions } from 'types/DataType';
+import type {
+  ChecklistData,
+  CrimeGroupData,
+  CustomQuestion,
+  IncidentCardData,
+  InvestigationData,
+  OffenderData,
+  SelectOptions,
+} from 'types/DataType';
 
 import DatePicker from '#/components/util-components/DatePicker';
 import { useGroupsContext } from '#/context/groups-context';
@@ -32,16 +40,23 @@ import type { FormData } from './useAddTodo';
 import CustomQuestions from '../../../../views/incidents/AddIncident/components/IncidentCustom/CustomQuestion.view';
 import BusinessesSelect from '../../BusinessesSelect/BusinessesSelect.view';
 import CreateQuestionContainer from '../../createQuestion/CreateQuestion.container';
+import LinkProfile from '../LinkProfile';
+const { Title } = Typography;
 
 interface Props {
   addQuestion: boolean;
   adminUsersData: SelectOptions[] | undefined;
   availableUsers: { id: string; name: string; timeTaken: number }[];
   businessId?: string;
+  checklistsData: ChecklistData | undefined;
+  crimeGroupsData: CrimeGroupData | undefined;
   documentList: UploadFile[];
   documentUploadProps?: UploadProps;
   // setSelectedQuestions: (value: { id: string; question: string }[]) => void;
   form: FormInstance<FormData>;
+  incidentsData: IncidentCardData | undefined;
+  investigationsData: InvestigationData | undefined;
+  offendersData: OffenderData | undefined;
   onClose: () => void;
   onSubmit: (value: FormData) => void;
   // setSelectedIds: (value: string[]) => void;
@@ -57,7 +72,13 @@ interface Props {
   templatesData: QuestionGroupOnSchemeQuery | undefined;
   templatesLoading: boolean;
   update: (id: string, question: string) => void;
+  updateChecklistsList: (value: ChecklistData | undefined) => void;
+  updateCrimeGroupsList: (value: CrimeGroupData | undefined) => void;
+  updateIncidentList: (value: IncidentCardData | undefined) => void;
+  updateInvestigationList: (value: InvestigationData | undefined) => void;
+  updateOffendersList: (value: OffenderData | undefined) => void;
   users: { id: string; name: string; timeTaken: number }[];
+
   usersLoading: boolean;
 }
 
@@ -66,10 +87,15 @@ const AddTodo = ({
   adminUsersData,
   availableUsers,
   businessId,
+  checklistsData,
+  crimeGroupsData,
   documentList,
   documentUploadProps,
   // setSelectedQuestions,
   form,
+  incidentsData,
+  investigationsData,
+  offendersData,
   onClose,
   onSubmit,
   // setSelectedIds,
@@ -83,11 +109,17 @@ const AddTodo = ({
   templatesData,
   templatesLoading,
   update,
+  updateChecklistsList,
+  updateCrimeGroupsList,
+  updateIncidentList,
+  updateInvestigationList,
+  updateOffendersList,
   users,
   usersLoading,
 }: Props): JSX.Element => {
   const intl = useIntl();
   const { groups, groupsLoading } = useGroupsContext();
+
   const allowOverride =
     useAtomValue(currentSchemeAtom)?.allowTodoTemplateOverride;
   const isAdmin = useAtomValue(isAdminAtom);
@@ -370,11 +402,11 @@ const AddTodo = ({
         <Row>
           <Col span={24}>
             {users.length > 0 && (
-              <Typography.Title level={4}>
+              <Title level={4}>
                 {intl.formatMessage({
                   defaultMessage: 'Time Tracking',
                 })}
-              </Typography.Title>
+              </Title>
             )}
             <Row>
               <Col flex={1}>
@@ -436,6 +468,20 @@ const AddTodo = ({
             </Row>
           </Col>
         </Row>
+        <LinkProfile
+          checklistsData={checklistsData}
+          crimeGroupsData={crimeGroupsData}
+          incidentsData={incidentsData}
+          investigationsData={investigationsData}
+          offendersData={offendersData}
+          saving={saving}
+          updateChecklistsList={updateChecklistsList}
+          updateCrimeGroupsList={updateCrimeGroupsList}
+          updateIncidentList={updateIncidentList}
+          updateInvestigationList={updateInvestigationList}
+          updateOffendersList={updateOffendersList}
+        />
+
         <Form.Item
           label={intl.formatMessage({
             defaultMessage: 'Evidence',
@@ -459,6 +505,7 @@ const AddTodo = ({
             </Button>
           </Upload>
         </Form.Item>
+
         <Form.Item>
           <Row gutter={16} justify="end" style={{ marginTop: 30 }}>
             <Col>
@@ -582,6 +629,97 @@ const AddTodo = ({
           <div />
         )}
       </Drawer>
+      {/* <Drawer
+        onClose={toggleLinkIncident}
+        open={linkIncident}
+        title={intl.formatMessage({
+          defaultMessage: 'Link Incidents',
+        })}
+        width="800"
+      >
+        {linkIncident ? (
+          <LinkIncident
+            incidentIds={incidentsData ? [incidentsData?.id] : []}
+            onClose={toggleLinkIncident}
+            update={updateIncidentList}
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+      <Drawer
+        onClose={toggleLinkOffender}
+        open={linkOffender}
+        title={intl.formatMessage({
+          defaultMessage: 'Link Offenders',
+        })}
+        width="800"
+      >
+        {linkOffender ? (
+          <LinkOffender
+            offenderIds={offendersData ? [offendersData?.id] : []}
+            onClose={toggleLinkOffender}
+            update={updateOffendersList}
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+
+      <Drawer
+        onClose={toggleLinkCrimeGroup}
+        open={linkCrimeGroup}
+        title={intl.formatMessage({
+          defaultMessage: 'Add Crime Groups',
+        })}
+        width="800"
+        zIndex={1001}
+      >
+        {linkCrimeGroup ? (
+          <LinkCrimeGroup
+            crimeGroupIds={crimeGroupsData ? [crimeGroupsData?.id] : []}
+            onClose={toggleLinkCrimeGroup}
+            update={updateCrimeGroupsList}
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+      <Drawer
+        onClose={toggleLinkChecklist}
+        open={linkChecklist}
+        title={intl.formatMessage({
+          defaultMessage: 'Link Checklists',
+        })}
+        width="800"
+      >
+        {linkChecklist ? (
+          <LinkChecklist
+            checklistIds={checklistsData ? [checklistsData.id] : []}
+            onClose={toggleLinkChecklist}
+            update={updateChecklistsList}
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+      <Drawer
+        onClose={toggleLinkInvestigation}
+        open={linkInvestigation}
+        title={intl.formatMessage({
+          defaultMessage: 'Link Investigation',
+        })}
+        width="800"
+      >
+        {linkInvestigation ? (
+          <LinkInvestigation
+            onClose={toggleLinkInvestigation}
+            update={updateInvestigationList}
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer> */}
     </>
   );
 };

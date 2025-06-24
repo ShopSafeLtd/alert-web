@@ -55,6 +55,7 @@ type TemplateData = ListData;
 
 export interface TableItem {
   assignedUsers: { fullName: string; id: string }[];
+  authorised?: boolean | null;
   business?: string;
   businessId?: string;
   completed?: boolean | null;
@@ -78,6 +79,7 @@ interface Props {
   groupsData: { label: string; value: string }[];
   // groupsFilter: string[];
   loading: boolean;
+  // needAuthorised: boolean;
   onCompletedTodo: (id: string) => void;
   onDeleteTodo: (id: string) => void;
   onPaginationChange: (page: number, pageSize: number) => void;
@@ -136,6 +138,14 @@ const getLinkedItemId = (todo: TodoListQuery['todoRelay']['edges'][0]) => {
         values={{ var1: todo.node.investigation.reference }}
       />
     );
+  if (todo.node.checklist)
+    return (
+      <FormattedMessage
+        defaultMessage="Checklist: {var1}"
+        values={{ var1: todo.node.checklist.name }}
+      />
+    );
+
   return undefined;
 };
 
@@ -150,6 +160,8 @@ const getLinkedItemTo = (todo?: TodoListQuery['todoRelay']['edges'][0]) => {
   if (todo.node.vehicleId) return `/app/vehicles/view/${todo.node.vehicleId}`;
   if (todo.node.investigationId)
     return `/app/investigations/view/${todo.node.investigationId}`;
+  if (todo.node.checklist?.id)
+    return `/app/checklists/active/${todo.node.checklist.id}`;
   return '#';
 };
 
@@ -163,6 +175,7 @@ const AdminTodos = ({
   filtersOpen,
   // groupsFilter,
   loading,
+  // needAuthorised,
   onCompletedTodo,
   onDeleteTodo,
   onPaginationChange,
@@ -186,7 +199,6 @@ const AdminTodos = ({
   const intl = useIntl();
   const shouldOpen = useAtomValue(currentSchemeAtom)?.taskTimeTracking;
   const permissions = useAtomValue(currentPermissionsAtom);
-
   const completeTodo = (value: boolean, id?: string) => {
     if (value && id) {
       onCompletedTodo(id);
@@ -203,7 +215,7 @@ const AdminTodos = ({
             placeholder={intl.formatMessage({
               defaultMessage: 'Search activities...',
             })}
-            style={{ width: 350 }}
+            // style={{ width: 350 }}
           />
         </Col>
         <Col flex={1} />
@@ -366,6 +378,17 @@ const AdminTodos = ({
                 defaultMessage: 'Name',
               }),
             },
+            // {
+            //   dataIndex: 'description',
+            //   ellipsis: true,
+            //   key: 'description',
+            //   render: (value: string) => (
+            //     <Tooltip title={value}>{value}</Tooltip>
+            //   ),
+            //   title: intl.formatMessage({
+            //     defaultMessage: 'Description',
+            //   }),
+            // },
             {
               dataIndex: 'reference',
               key: 'reference',
@@ -590,6 +613,58 @@ const AdminTodos = ({
                       </Button>
                     </Tooltip>
                   </Col>
+                  {/* {needAuthorised && !record.authorised ? (
+                    <Col>
+                      <Tooltip
+                        title={intl.formatMessage({
+                          defaultMessage: 'Authorise activity',
+                        })}
+                      >
+                        <Button
+                          onClick={() => setAuthorisedTodo(record.todo.node.id)}
+                          size="small"
+                          style={{
+                            borderBottomLeftRadius: 0,
+                            borderBottomRightRadius: canDelete ? 0 : 10,
+                            borderLeft: 'none',
+                            borderTopLeftRadius: 0,
+                            borderTopRightRadius: canDelete ? 0 : 10,
+                            paddingLeft: 10,
+                            paddingRight: 10,
+                          }}
+                        >
+                          <FontAwesomeIcon icon={faFileCheck} />
+                        </Button>
+                      </Tooltip>
+                    </Col>
+                  ) : (
+                    <Col>
+                      <Tooltip
+                        title={intl.formatMessage({
+                          defaultMessage: 'View activity',
+                        })}
+                      >
+                        <Button
+                          onClick={() => setSelectedTodo(record.todo.node.id)}
+                          size="small"
+                          style={{
+                            borderBottomLeftRadius: 0,
+                            borderBottomRightRadius: canDelete ? 0 : 10,
+                            borderLeft: 'none',
+                            borderTopLeftRadius: 0,
+                            borderTopRightRadius: canDelete ? 0 : 10,
+                            paddingLeft: 10,
+                            paddingRight: 10,
+                          }}
+                        >
+                          <FontAwesomeIcon
+                            icon={faArrowUpRightAndArrowDownLeftFromCenter}
+                          />
+                        </Button>
+                      </Tooltip>
+                    </Col>
+                  )} */}
+
                   {canDelete && (
                     <Col>
                       <Dropdown
@@ -659,6 +734,7 @@ const AdminTodos = ({
           ]}
           dataSource={data?.todoRelay.edges?.map((todo) => ({
             assignedUsers: todo.node.assignedUsers,
+            authorised: todo.node.authorised,
             business: todo.node.business?.name,
             businessId: todo.node.business?.id,
             completed: todo.node.completed,
@@ -710,7 +786,7 @@ const AdminTodos = ({
         onClose={() => setSelectedTodo(null)}
         open={!!selectedTodo}
         title={intl.formatMessage({
-          defaultMessage: 'Complete Activity',
+          defaultMessage: 'View Activity',
         })}
         width={800}
       >
@@ -729,6 +805,26 @@ const AdminTodos = ({
           <div />
         )}
       </Drawer>
+      {/* <Drawer
+        onClose={() => setAuthorisedTodo('')}
+        open={!!authorisedTodo}
+        title={intl.formatMessage({
+          defaultMessage: 'Authorise Activity',
+        })}
+        width={800}
+      >
+        {authorisedTodo ? (
+          <ViewTodo
+            id={authorisedTodo}
+            minimal={true}
+            needAuthorised={true}
+            onClose={() => setAuthorisedTodo('')}
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer> */}
+
       <Drawer
         onClose={() => setEditTodo(null)}
         open={!!editTodo}

@@ -1,0 +1,11 @@
+fragment FolderDocuments on Document {
+  id
+  name
+  url
+  thumbnailUrl
+  createdAt
+  tags {
+    id
+    name
+  }
+}

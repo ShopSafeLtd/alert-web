@@ -5,7 +5,15 @@ import type { MutationUpdaterFn } from '@apollo/client';
 import type { FormInstance, UploadFile } from 'antd';
 import type { UploadProps } from 'antd/es/upload/interface';
 import type { CreateTodoMutation } from 'graphql/todos/mutations/__generated__/create-todo.generated';
-import type { CustomQuestion, SelectOptions } from 'types/DataType';
+import type {
+  ChecklistData,
+  CrimeGroupData,
+  CustomQuestion,
+  IncidentCardData,
+  InvestigationData,
+  OffenderData,
+  SelectOptions,
+} from 'types/DataType';
 
 import { useAddTodoUsersQuery } from '#/components/form-components/Todos/AddTodo/graphql/__generated__/AddTodoUsers.generated';
 import {
@@ -32,9 +40,10 @@ import customRequest from '../../../../utils/custom-request';
 const { useForm } = Form;
 
 export interface FormData {
-  [answer: string]: Date | number | string | string[] | undefined;
+  [answer: string]: Date | boolean | number | string | string[] | undefined;
   assignedUsers: string[];
-  businesses?: string[];
+  businesses: string[];
+  completed: boolean;
   description: string;
   dueDate: Date;
   groups?: string[];
@@ -45,27 +54,44 @@ export interface FormData {
 
 interface Props {
   businessId?: string;
+  checklistId?: string;
+  crimeGroupId?: string;
   incidentId?: string;
   initData?: {
     id: string;
   };
   investigationId?: string;
+  offenderId?: string;
   onClose: () => void;
   updateMutation?: MutationUpdaterFn<CreateTodoMutation>;
+  vehicleId?: string;
 }
 
 interface Return {
   addQuestion: boolean;
   adminUsersData: SelectOptions[] | undefined;
   availableUsers: { id: string; name: string; timeTaken: number }[];
+  checklistsData: ChecklistData | undefined;
+  crimeGroupsData: CrimeGroupData | undefined;
+  currentStep: number;
   documentList: UploadFile[];
   documentUploadProps?: UploadProps;
   form: FormInstance<FormData>;
+  incidentsData: IncidentCardData | undefined;
+  investigationsData: InvestigationData | undefined;
+  offendersData: OffenderData | undefined;
+  // removeChecklist: (value: string | undefined) => void;
+  // removeCrimeGroup: (value: string | undefined) => void;
+  // removeIncident: (value: string | undefined) => void;
   onSubmit: (value: FormData) => void;
   questions: CustomQuestion[];
+
+  // removeOffender: (value: string | undefined) => void;
+  saveData: FormData | undefined;
   saving: boolean;
   selectedIds?: string[];
   selectedQuestions: { id: string; question: string; type: AnswerType }[];
+
   setAddQuestion: (value: boolean) => void;
   setAvailableUsers: (
     users: { id: string; name: string; timeTaken: number }[]
@@ -74,32 +100,45 @@ interface Return {
   setSelectedQuestions: (
     value: { id: string; question: string; type: AnswerType }[]
   ) => void;
+
   setUsers: (users: { id: string; name: string; timeTaken: number }[]) => void;
   templatesData: QuestionGroupOnSchemeQuery | undefined;
   templatesLoading: boolean;
   update: (id: string, question: string) => void;
+  updateChecklistsList: (value: ChecklistData | undefined) => void;
+  updateCrimeGroupsList: (value: CrimeGroupData | undefined) => void;
+  updateIncidentList: (value: IncidentCardData | undefined) => void;
+  updateInvestigationList: (value: InvestigationData | undefined) => void;
+  updateOffendersList: (value: OffenderData | undefined) => void;
   users: { id: string; name: string; timeTaken: number }[];
   usersLoading: boolean;
 }
 
 const useAddTodo = ({
   businessId,
+  checklistId,
+  crimeGroupId,
   incidentId,
   initData,
   investigationId,
+  offenderId,
   onClose,
   updateMutation,
+  vehicleId,
 }: Props): Return => {
   const [form] = useForm<FormData>();
   const intl = useIntl();
   const schemeId = useAtomValue(currentSchemeIdAtom);
   const activityAssignToUser =
     useAtomValue(currentSchemeAtom)?.activityAssignToUser;
+
   const userId = useAtomValue(userIdAtom);
   const [saving, setSaving] = useState(false);
+  const [saveData, setSaveData] = useState<FormData | undefined>(undefined);
   const [addQuestion, setAddQuestion] = useState(false);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [questions, setQuestions] = useState<CustomQuestion[]>([]);
+  const [currentStep, setCurrentStep] = useState(0);
   const [users, setUsers] = useState<
     { id: string; name: string; timeTaken: number }[]
   >([]);
@@ -110,6 +149,22 @@ const useAddTodo = ({
     { id: string; question: string; type: AnswerType }[]
   >([]);
   const [documentList, setDocumentList] = useState<UploadFile[]>([]);
+
+  const [crimeGroupsData, setCrimeGroupsData] = useState<
+    CrimeGroupData | undefined
+  >(undefined);
+  const [offendersData, setOffendersData] = useState<OffenderData | undefined>(
+    undefined
+  );
+  const [checklistsData, setChecklistsData] = useState<
+    ChecklistData | undefined
+  >(undefined);
+  const [incidentsData, setIncidentsData] = useState<
+    IncidentCardData | undefined
+  >(undefined);
+  const [investigationsData, setInvestigationsData] = useState<
+    InvestigationData | undefined
+  >(undefined);
   useEffect(() => {
     if (businessId) {
       form.setFieldsValue({
@@ -290,101 +345,122 @@ const useAddTodo = ({
     },
   });
 
-  const onSubmit = (data: FormData) => {
+  const onSubmit = (data: FormData, next?: boolean) => {
     setSaving(true);
 
-    const userTime = users.map((user) => ({
-      id: user.id,
-      timeTaken: data[user.id],
-    }));
-    const timeTaken = userTime
-      .map((time) => ({
-        timeTaken: time.timeTaken as number,
-        userId: time.id,
-      }))
-      ?.filter((time) => time.timeTaken && time.timeTaken > 0);
-
-    void createTodo({
-      onCompleted: () => {
-        setSaving(false);
-        onClose();
-        notification.success({
-          description: intl.formatMessage({
-            defaultMessage: 'The activity has been added.',
-          }),
-          message: intl.formatMessage({
-            defaultMessage: 'Successfully Added!',
-          }),
-          placement: 'bottomRight',
-        });
-      },
-      update: updateMutation,
-      variables: {
-        data: {
-          assignedUsers:
-            data.assignedUsers && data.assignedUsers.length > 0
-              ? { connect: data.assignedUsers.map((id) => ({ id })) }
-              : undefined,
-          business: businessId
-            ? { connect: { id: businessId } }
-            : data.businesses && data.businesses.length > 0
-              ? { connect: { id: data.businesses[0] } }
-              : undefined,
-          completed: false,
-          createdBy: { connect: { id: userId } },
-          description: data.description,
-          documents:
-            documentList.map((file) => ({
-              fileType: file.type || '',
-              name: file.name || '',
-              origFileName: file.fileName || '',
-              url: file.url || '',
-            })) || [],
-          dueDate: data.dueDate,
-          groups: data.groups?.map((id) => ({ id })),
-          incident: incidentId ? { connect: { id: incidentId } } : undefined,
-          investigation: investigationId
-            ? { connect: { id: investigationId } }
-            : undefined,
-          name: data.name,
-          questions:
-            selectedQuestions && selectedQuestions.length > 0
-              ? {
-                  create: selectedQuestions.map((question) => ({
-                    answers: {
-                      create: [
-                        {
-                          answer: (data[question.id] as string) || '',
-                          type: question.type,
-                        },
-                      ],
-                    },
-                    question: {
-                      connect: {
-                        id: question.id,
-                      },
-                    },
-                  })),
-                }
-              : undefined,
-          schemes: {
-            connect: [
-              {
-                id: schemeId,
-              },
-            ],
-          },
-          timeTaken:
-            userTime && timeTaken
-              ? {
-                  createMany: {
-                    data: timeTaken,
-                  },
-                }
-              : undefined,
+    if (next) {
+      setSaveData(data);
+      setCurrentStep(currentStep + 1);
+      setSaving(false);
+    } else {
+      const userTime = users.map((user) => ({
+        id: user.id,
+        timeTaken: data[user.id],
+      }));
+      const timeTaken = userTime
+        .map((time) => ({
+          timeTaken: time.timeTaken as number,
+          userId: time.id,
+        }))
+        ?.filter((time) => time.timeTaken && time.timeTaken > 0);
+      const getId = (id?: string, dataId?: string) => {
+        if (id) return { connect: { id } };
+        if (dataId) return { connect: { id: dataId } };
+        return undefined;
+      };
+      void createTodo({
+        onCompleted: () => {
+          setSaving(false);
+          onClose();
+          notification.success({
+            description: intl.formatMessage({
+              defaultMessage: 'The activity has been added.',
+            }),
+            message: intl.formatMessage({
+              defaultMessage: 'Successfully Added!',
+            }),
+            placement: 'bottomRight',
+          });
         },
-      },
-    });
+        update: updateMutation,
+        variables: {
+          data: {
+            assignedUsers:
+              data.assignedUsers && data.assignedUsers.length > 0
+                ? { connect: data.assignedUsers.map((id) => ({ id })) }
+                : undefined,
+
+            business: businessId
+              ? { connect: { id: businessId } }
+              : data.businesses && data.businesses.length > 0
+                ? { connect: { id: data.businesses[0] } }
+                : undefined,
+            checklist: getId(checklistId, checklistsData?.id),
+            completed: data.completed,
+            createdBy: { connect: { id: userId } },
+            crimeGroup: getId(crimeGroupId, crimeGroupsData?.id),
+            description: data.description,
+            documents:
+              documentList.map((file) => ({
+                fileType: file.type || '',
+                name: file.name || '',
+                origFileName: file.fileName || '',
+                url: file.url || '',
+              })) || [],
+
+            // investigation: investigationId
+            //   ? { connect: { id: investigationId } }
+            //   : investigationsData
+            dueDate: data.dueDate,
+            groups: data.groups ? data.groups.map((id) => ({ id })) : [],
+            //     ? { connect: { id: investigationsData.id } }
+            incident: getId(incidentId, incidentsData?.id),
+
+            //     : undefined,
+            investigation: getId(investigationId, investigationsData?.id),
+            name: data.name,
+            offender: getId(offenderId, offendersData?.id),
+            questions:
+              selectedQuestions && selectedQuestions.length > 0
+                ? {
+                    create: selectedQuestions.map((question) => ({
+                      answers: {
+                        create: [
+                          {
+                            answer: (data[question.id] as string) || '',
+                            type: question.type,
+                          },
+                        ],
+                      },
+                      question: {
+                        connect: {
+                          id: question.id,
+                        },
+                      },
+                    })),
+                  }
+                : undefined,
+
+            schemes: {
+              connect: [
+                {
+                  id: schemeId,
+                },
+              ],
+            },
+            timeTaken:
+              userTime && timeTaken
+                ? {
+                    createMany: {
+                      data: timeTaken,
+                    },
+                  }
+                : undefined,
+            vehicle: getId(vehicleId),
+          },
+        },
+      });
+    }
   };
   // evidence
   const handleChange: UploadProps['onChange'] = (info) => {
@@ -408,6 +484,51 @@ const useAddTodo = ({
     multiple: true,
     onChange: handleChange,
   };
+
+  // function
+
+  // const updateCrimeGroupsList = (selectedCrimeGroup: CrimeGroupData) => {
+  //   setCrimeGroupsData([...crimeGroupsData, selectedCrimeGroup]);
+  // };
+  // const updateChecklistsList = (selectedChecklist: ChecklistData) => {
+  //   setChecklistsData([...offendersData, selectedChecklist]);
+  // };
+  // const updateOffendersList = (selectedOffender: OffenderData) => {
+  //   console.log('updateOffendersList');
+
+  //   setOffendersData(selectedOffender);
+  // };
+  // const updateIncidentList = (selectedIncident: IncidentCardData) => {
+  //   setIncidentsData([...incidentsData, selectedIncident]);
+  // };
+  // const removeChecklist = (checklistId: string | undefined) => {
+  //   if (checklistId) {
+  //     setChecklistsData(
+  //       checklistsData?.filter((checklist) => checklist.id !== checklistId)
+  //     );
+  //   }
+  // };
+  // const removeOffender = (offenderId: string | undefined) => {
+  //   if (offenderId) {
+  //     setOffendersData(
+  //       offendersData?.filter((offender) => offender.id !== offenderId)
+  //     );
+  //   }
+  // };
+  // const removeIncident = (incidentId: string | undefined) => {
+  //   if (incidentId) {
+  //     setIncidentsData(
+  //       incidentsData?.filter((incident) => incident.id !== incidentId)
+  //     );
+  //   }
+  // };
+  // const removeCrimeGroup = (crimeGroupId: string | undefined) => {
+  //   if (crimeGroupId) {
+  //     setCrimeGroupsData(
+  //       crimeGroupsData?.filter((crimeGroup) => crimeGroup.id !== crimeGroupId)
+  //     );
+  //   }
+  // };
   return {
     addQuestion,
     adminUsersData: usersData?.users.map((user) => ({
@@ -415,11 +536,23 @@ const useAddTodo = ({
       value: user.id,
     })),
     availableUsers,
+    checklistsData,
+    crimeGroupsData,
+    currentStep,
     documentList,
     documentUploadProps,
     form,
+
+    incidentsData,
+    investigationsData,
+    offendersData,
+    // removeChecklist,
+    // removeCrimeGroup,
+    // removeIncident,
     onSubmit,
     questions,
+    // removeOffender,
+    saveData,
     saving,
     selectedIds,
     selectedQuestions,
@@ -431,6 +564,11 @@ const useAddTodo = ({
     templatesData,
     templatesLoading,
     update,
+    updateChecklistsList: setChecklistsData,
+    updateCrimeGroupsList: setCrimeGroupsData,
+    updateIncidentList: setIncidentsData,
+    updateInvestigationList: setInvestigationsData,
+    updateOffendersList: setOffendersData,
     users,
     usersLoading,
   };

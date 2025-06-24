@@ -4,6 +4,7 @@ fragment FeedTodo on Todo {
   name
   dueDate
   completed
+  authorised
   type
   vehicleId
   offenderId
