@@ -1,3 +1,4 @@
+import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
 import AddExistingOffender from '#/components/form-components/offender/AddExistingOffender/AddExistingOffender.container';
 import pdfFilePickerCallback from '#/views/article/CreateEditArticle/hooks/handlePdf';
 import { UploadOutlined } from '@ant-design/icons';
@@ -18,7 +19,11 @@ import {
   Typography,
   Upload,
 } from 'antd';
-import { ArticlePriority } from 'graphql/types';
+import {
+  ArticlePriority,
+  PermissionMethod,
+  PermissionModel,
+} from 'graphql/types';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
@@ -46,7 +51,6 @@ const CreateEditArticleView = ({
   filePickerCallback,
   form,
   // imgSrcs,
-  groups,
   id,
   imagesUploadHandler,
   incidents,
@@ -206,24 +210,25 @@ const CreateEditArticleView = ({
                     },
                   ]}
                 >
-                  <Select
-                    loading={loading}
+                  <GroupsSelect
+                    allowClear
+                    allowSelectAll
+                    allowTree
                     maxTagCount={2}
                     mode="multiple"
                     onChange={onGroupsChange}
                     optionFilterProp="label"
+                    permissionsFilter={[
+                      {
+                        allowedMethods: [PermissionMethod.Read],
+                        model: PermissionModel.Reports,
+                      },
+                    ]}
                     placeholder={intl.formatMessage({
                       defaultMessage: 'Content Groups',
                     })}
-                    size="small"
                     style={{ minWidth: 200 }}
-                  >
-                    {groups.map((group) => (
-                      <Select.Option label={group.label} value={group.value}>
-                        {group.label}
-                      </Select.Option>
-                    ))}
-                  </Select>
+                  />
                 </Form.Item>
               </Col>
               <Col span={6}>

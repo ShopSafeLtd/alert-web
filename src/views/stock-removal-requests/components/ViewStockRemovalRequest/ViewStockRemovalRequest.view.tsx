@@ -130,9 +130,121 @@ const ViewStockRemovalRequest = ({ requestId }: Props) => {
             getStockRemovalRequestlStatusText(data.stockRemovalRequest.status)}
         </Descriptions.Item>
         <Descriptions.Item
-          label={intl.formatMessage({ defaultMessage: 'Business' })}
+          label={intl.formatMessage({ defaultMessage: 'Reason For Removal' })}
         >
-          {data?.stockRemovalRequest.business.name}
+          {data?.stockRemovalRequest.reason}
+        </Descriptions.Item>
+        <Descriptions.Item
+          label={intl.formatMessage({
+            defaultMessage: 'Store or DC?',
+          })}
+        >
+          {data?.stockRemovalRequest.storeOrDC}
+        </Descriptions.Item>
+        {data?.stockRemovalRequest.storeOrDC === 'DC' && (
+          <Descriptions.Item
+            label={intl.formatMessage({
+              defaultMessage: 'Shipping Address',
+            })}
+          >
+            {data?.stockRemovalRequest.storeOrDC}
+          </Descriptions.Item>
+        )}
+        {data?.stockRemovalRequest.storeOrDC === 'Store' && (
+          <Descriptions.Item
+            label={intl.formatMessage({ defaultMessage: 'Business' })}
+          >
+            {data?.stockRemovalRequest.business.name}
+          </Descriptions.Item>
+        )}
+        <Descriptions.Item
+          label={intl.formatMessage({
+            defaultMessage: 'Recharged to Brand?',
+          })}
+        >
+          {data?.stockRemovalRequest.storeOrDC}
+        </Descriptions.Item>
+        <Descriptions.Item
+          label={intl.formatMessage({
+            defaultMessage: 'Is this being recharged to Brand?',
+          })}
+        >
+          {data?.stockRemovalRequest.rechargeBrand}
+        </Descriptions.Item>
+        {data?.stockRemovalRequest.rechargeBrand === 'Yes' && (
+          <Descriptions.Item
+            label={intl.formatMessage({
+              defaultMessage: 'Brand Recharge Reference',
+            })}
+          >
+            {data?.stockRemovalRequest.rechargeReference}
+          </Descriptions.Item>
+        )}
+        {data?.stockRemovalRequest.rechargeBrand === 'No' && (
+          <Descriptions.Item
+            label={intl.formatMessage({
+              defaultMessage: 'Cost Centre / Nominal Budget code',
+            })}
+          >
+            {data?.stockRemovalRequest.costCentreCode}
+          </Descriptions.Item>
+        )}
+        <Descriptions.Item
+          label={intl.formatMessage({
+            defaultMessage: 'Will the stock be returned?',
+          })}
+        >
+          {data?.stockRemovalRequest.willStockBeReturned}
+        </Descriptions.Item>
+        {data?.stockRemovalRequest.willStockBeReturned === 'Yes' && (
+          <Descriptions.Item
+            label={intl.formatMessage({
+              defaultMessage: 'SMQ Account Number',
+            })}
+          >
+            {data?.stockRemovalRequest.smqAccountNumber}
+          </Descriptions.Item>
+        )}
+        {data?.stockRemovalRequest.willStockBeReturned === 'Yes' && (
+          <Descriptions.Item
+            label={intl.formatMessage({
+              defaultMessage: 'Estimated Return Date',
+            })}
+          >
+            {data?.stockRemovalRequest.returnDate}
+          </Descriptions.Item>
+        )}
+        {data?.stockRemovalRequest.willStockBeReturned === 'No' && (
+          <Descriptions.Item
+            label={intl.formatMessage({
+              defaultMessage: 'Reason for the stock not being returned',
+            })}
+          >
+            {data?.stockRemovalRequest.reasonForNonReturn}
+          </Descriptions.Item>
+        )}
+        <Descriptions.Item
+          label={intl.formatMessage({
+            defaultMessage: 'Does this involve personality influences?',
+          })}
+        >
+          {data?.stockRemovalRequest.personalityInfluences}
+        </Descriptions.Item>
+        {data?.stockRemovalRequest.personalityInfluences === 'Yes' && (
+          <Descriptions.Item
+            label={intl.formatMessage({
+              defaultMessage: 'Social Handles',
+            })}
+          >
+            {data?.stockRemovalRequest.socialHandles}
+          </Descriptions.Item>
+        )}
+        <Descriptions.Item
+          label={intl.formatMessage({
+            defaultMessage: 'Fascia',
+          })}
+        >
+          {data?.stockRemovalRequest.fascia}
         </Descriptions.Item>
       </Descriptions>
       <Typography.Title level={4}>

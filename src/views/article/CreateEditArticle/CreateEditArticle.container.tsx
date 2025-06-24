@@ -16,10 +16,7 @@ const CreateEditArticleContainer = () => {
     editorRef,
     fileList,
     filePickerCallback,
-
     form,
-    groups,
-    groupsLoading,
     id,
     // eslint-disable-next-line @typescript-eslint/unbound-method
     imagesUploadHandler,
@@ -59,8 +56,6 @@ const CreateEditArticleContainer = () => {
       fileList={fileList}
       filePickerCallback={filePickerCallback}
       form={form}
-      groups={groups}
-      groupsLoading={groupsLoading}
       id={id}
       imagesUploadHandler={imagesUploadHandler}
       incidents={incidents}

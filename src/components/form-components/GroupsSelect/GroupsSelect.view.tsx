@@ -1,18 +1,15 @@
 import type { SizeType } from 'antd/lib/config-provider/SizeContext';
 import type { SelectProps } from 'antd/lib/select';
+import type { PermissionMethod, PermissionModel } from 'graphql/types';
 
 import { useSchemeGroupsSelectQuery } from '#/components/form-components/GroupsSelect/graphql/queries/__generated__/groups.generated';
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { userSchemesAtom } from '#/providers/UserProvider/UserProvider';
-import {
-  faRectangle,
-  faRectangleHistoryCircleUser,
-  faSquareCheck,
-} from '@fortawesome/pro-light-svg-icons';
+import { faSquareCheck } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Col, Row, Select, Tooltip, TreeSelect } from 'antd';
 import { useAtomValue } from 'jotai/index';
-import React, { useState } from 'react';
+import React from 'react';
 import { useIntl } from 'react-intl';
 import { createUseStyles } from 'react-jss';
 
@@ -40,26 +37,32 @@ interface Props {
   mode?: 'multiple' | 'tags';
   onChange?: (value: string[]) => void;
   onSchemeChange?: (value: string[]) => void;
+  permissionsFilter?: {
+    allowedMethods: PermissionMethod[];
+    model: PermissionModel;
+  }[];
   placeholder?: string;
-  reportMode?: boolean;
   size?: SizeType;
   style?: React.CSSProperties;
   value?: string[];
 }
 
 interface UseUserGroupsProps {
-  reportMode?: boolean;
+  permissionsFilter?: {
+    allowedMethods: PermissionMethod[];
+    model: PermissionModel;
+  }[];
 }
 
-export const useUserGroups = ({ reportMode }: UseUserGroupsProps) => {
+export const useUserGroups = ({ permissionsFilter }: UseUserGroupsProps) => {
   const currentScheme = useAtomValue(currentSchemeIdAtom);
 
   const { data, loading } = useSchemeGroupsSelectQuery({
     fetchPolicy: 'cache-first',
     variables: {
       where: {
-        reportGroupsOnly: reportMode,
-        schemeIds: reportMode ? undefined : [currentScheme],
+        schemeIds: permissionsFilter ? undefined : [currentScheme],
+        schemePermissionFilter: permissionsFilter,
       },
     },
   });
@@ -108,8 +111,8 @@ const GroupsSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
   mode,
   onChange,
   onSchemeChange,
+  permissionsFilter,
   placeholder,
-  reportMode = false,
   size,
   style,
   value,
@@ -119,15 +122,8 @@ const GroupsSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
   const styles = useStyles();
   const userSchemes = useAtomValue(userSchemesAtom);
   const { loading, selectOptions, treeData } = useUserGroups({
-    reportMode,
+    permissionsFilter,
   });
-  const [treeMode, setTreeMode] = useState(false);
-
-  const toggleTreeMode = () => {
-    if (treeMode && onChange) onChange([]);
-    setTreeMode(!treeMode);
-  };
-
   const onTreeChange = (items: string[]) => {
     // get schemes
     const schemes = items.filter((item) => item.includes('scheme:'));
@@ -164,77 +160,39 @@ const GroupsSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
 
   return allowTree && userSchemes.length > 0 ? (
     <Row wrap={false}>
-      {treeMode && (
-        <Col flex={1}>
-          <TreeSelect
-            allowClear={allowClear}
-            className="connected-select"
-            disabled={loading}
-            loading={loading}
-            maxTagCount={maxTagCount}
-            multiple
-            onChange={onTreeChange}
-            placeholder={placeholder}
-            showCheckedStrategy="SHOW_PARENT"
-            showSearch
-            size={size}
-            style={style}
-            treeCheckable
-            treeData={treeData}
-            treeNodeFilterProp="label"
-            value={value}
-          />
-        </Col>
-      )}
-      {!treeMode && (
-        <Col flex={1}>
-          <Select
-            allowClear={allowClear}
-            className="connected-select"
-            disabled={loading}
-            loading={loading}
-            maxTagCount={maxTagCount}
-            mode={mode}
-            onChange={onChange}
-            optionFilterProp="label"
-            options={selectOptions}
-            placeholder={placeholder}
-            size={size}
-            style={style}
-            value={value}
-            // eslint-disable-next-line react/jsx-props-no-spreading
-            {...props}
-          />
-        </Col>
-      )}
+      <Col flex={1}>
+        <TreeSelect
+          allowClear={allowClear}
+          className="connected-select"
+          disabled={loading}
+          loading={loading}
+          maxTagCount={maxTagCount}
+          multiple
+          onChange={onTreeChange}
+          placeholder={placeholder}
+          showCheckedStrategy="SHOW_PARENT"
+          showSearch
+          size={size}
+          style={style}
+          treeCheckable
+          treeData={treeData}
+          treeNodeFilterProp="label"
+          value={value}
+        />
+      </Col>
       <Col>
-        <Tooltip
-          title={
-            treeMode
-              ? intl.formatMessage({
-                  defaultMessage: 'Switch to single scheme reports',
-                })
-              : intl.formatMessage({
-                  defaultMessage: 'Switch to multi scheme reports',
-                })
-          }
-        >
-          <Button
-            onClick={toggleTreeMode}
-            style={{
-              borderBottomLeftRadius: 0,
-              borderLeft: 0,
-              borderTopLeftRadius: 0,
-              paddingLeft: 14,
-              paddingRight: 14,
-            }}
+        {allowSelectAll && (
+          <Tooltip
+            placement="bottom"
+            title={intl.formatMessage({
+              defaultMessage: 'Select all groups',
+            })}
           >
-            <FontAwesomeIcon
-              icon={treeMode ? faRectangle : faRectangleHistoryCircleUser}
-              size="lg"
-            />
-          </Button>
-        </Tooltip>
+            <Button className={styles.button} onClick={selectAll}>
+              <FontAwesomeIcon icon={faSquareCheck} />
+            </Button>
+          </Tooltip>
+        )}
       </Col>
     </Row>
   ) : (
