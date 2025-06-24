@@ -197,7 +197,25 @@ const AddStockRemovalRequest = ({ onClose }: Props) => {
                 },
               ]}
             >
-              <BusinessesSelect disabled={saving} maxTagCount={1} />
+              <BusinessesSelect disabled={saving} maxTagCount={1} showSearch />
+            </Form.Item>
+          </Col>
+        )}
+        {storeOrDC === 'DC' && (
+          <Col span={12}>
+            <Form.Item
+              label={intl.formatMessage({ defaultMessage: 'Shipping Address' })}
+              name="shippingAddress"
+              rules={[
+                {
+                  message: intl.formatMessage({
+                    defaultMessage: 'Please provide an address',
+                  }),
+                  required: true,
+                },
+              ]}
+            >
+              <Input.TextArea disabled={saving} />
             </Form.Item>
           </Col>
         )}
@@ -328,7 +346,7 @@ const AddStockRemovalRequest = ({ onClose }: Props) => {
       <Row>
         <Col span={12}>
           <Form.Item
-            label={intl.formatMessage({ defaultMessage: 'Reason For Removal' })}
+            label={intl.formatMessage({ defaultMessage: 'Fascia' })}
             name="fascia"
           >
             <Select

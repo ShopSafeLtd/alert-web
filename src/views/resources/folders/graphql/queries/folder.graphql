@@ -1,0 +1,22 @@
+query Folder($where: FolderWhereUniqueInput!) {
+  folder(where: $where) {
+    id
+    name
+    description
+    documents {
+      ...FolderDocuments
+    }
+    totalDocuments
+    totalChildFolders
+    childFolders {
+      id
+      name
+      description
+      documents {
+        ...FolderDocuments
+      }
+      totalDocuments
+      totalChildFolders
+    }
+  }
+}

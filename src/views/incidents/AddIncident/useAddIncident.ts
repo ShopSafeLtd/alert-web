@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access */
+import type { CreateIncidentMutation } from '#/graphql/incidents/mutations/__generated__/create-incident.generated';
 import type { FormData } from '#/views/incidents/AddIncident/types/formData';
 import type { MutationUpdaterFn } from '@apollo/client';
 import type { FormInstance } from 'antd';
-import type { CreateIncidentMutation } from 'graphql/incidents/mutations/__generated__/crreate-incident.generated';
 import type { AddressesQuery } from 'graphql/incidents/queries/__generated__/address.generated';
 import type { ListIncidentsQuery } from 'graphql/incidents/queries/__generated__/list-incidents.generated';
 import type { ViewInvestigationQuery } from 'graphql/investigations/queries/__generated__/view-investigation.generated';
@@ -16,6 +16,7 @@ import type {
 } from 'types/DataType';
 
 import { useGroupsContext } from '#/context/groups-context';
+import { useCreateIncidentMutation } from '#/graphql/incidents/mutations/__generated__/create-incident.generated';
 import { sessionIdAtom } from '#/hooks/useManageSession';
 import {
   currencyAtom,
@@ -38,7 +39,6 @@ import { Form, Modal, notification } from 'antd';
 import dayjs from 'dayjs';
 import { useBusinessBrandsLazyQuery } from 'graphql/businesses/queries/__generated__/business-brands.generated';
 import { useListGoodsTypesQuery } from 'graphql/goods-types/queries/__generated__/list-goods-types.generated';
-import { useCreateIncidentMutation } from 'graphql/incidents/mutations/__generated__/crreate-incident.generated';
 import { useAddressesQuery } from 'graphql/incidents/queries/__generated__/address.generated';
 import { ListIncidentsDocument } from 'graphql/incidents/queries/__generated__/list-incidents.generated';
 import { ViewInvestigationDocument } from 'graphql/investigations/queries/__generated__/view-investigation.generated';

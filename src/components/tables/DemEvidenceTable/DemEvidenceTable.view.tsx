@@ -657,7 +657,7 @@ const DemEvidenceTable = ({
             update={(value) => {
               if (selectedAssignedItem)
                 onAssign({
-                  investigationId: value,
+                  investigationId: value.id,
                   thumbnailUrl: selectedAssignedItem.thumbnailUrl,
                   url: selectedAssignedItem.url,
                 });

@@ -1,22 +1,23 @@
-import React from 'react';
 import { Button, Col, Form, Input, Row, Typography } from 'antd';
+import React from 'react';
 import { useIntl } from 'react-intl';
+
 import type { FormData } from './useAddTag';
 
 const { Text } = Typography;
 
 interface Props {
-  onSubmit: (value: FormData) => void;
-  onClose: () => void;
-  saving: boolean;
   description?: string;
+  onClose: () => void;
+  onSubmit: (value: FormData) => void;
+  saving: boolean;
 }
 
 const AddTag = ({
-  onSubmit,
-  onClose,
-  saving,
   description,
+  onClose,
+  onSubmit,
+  saving,
 }: Props): JSX.Element => {
   const intl = useIntl();
 
@@ -32,14 +33,14 @@ const AddTag = ({
       <Row gutter={16}>
         <Col span={24}>
           <Form.Item
-            name="name"
             label={intl.formatMessage({ defaultMessage: 'Name' })}
+            name="name"
             rules={[
               {
-                required: true,
                 message: intl.formatMessage({
                   defaultMessage: 'Please enter a name for the custom gallery.',
                 }),
+                required: true,
               },
             ]}
           >
@@ -49,18 +50,18 @@ const AddTag = ({
 
         <Col span={24}>
           <Form.Item
-            name="description"
             label={intl.formatMessage({
               defaultMessage: 'Description',
             })}
+            name="description"
           >
-            <Input.TextArea rows={10} disabled={saving} />
+            <Input.TextArea disabled={saving} rows={10} />
           </Form.Item>
         </Col>
       </Row>
 
       <Form.Item>
-        <Row style={{ marginTop: 30 }} gutter={16} justify="end">
+        <Row gutter={16} justify="end" style={{ marginTop: 30 }}>
           <Col>
             <Button disabled={saving} onClick={onClose}>
               {intl.formatMessage({ defaultMessage: 'Cancel' })}
@@ -68,10 +69,10 @@ const AddTag = ({
           </Col>
           <Col>
             <Button
-              type="primary"
-              htmlType="submit"
               disabled={saving}
+              htmlType="submit"
               loading={saving}
+              type="primary"
             >
               {intl.formatMessage({ defaultMessage: 'Create' })}
             </Button>

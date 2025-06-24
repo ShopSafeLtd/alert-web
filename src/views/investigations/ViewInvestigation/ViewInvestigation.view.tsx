@@ -12,6 +12,8 @@ import type {
   VehicleData,
 } from 'types/DataType';
 
+import AddCrimeGroup from '#/components/form-components/CrimeGroupSelect/crimeGroup/AddCrimeGroup';
+import EditCrimeGroup from '#/components/form-components/CrimeGroupSelect/crimeGroup/EditCrimeGroup';
 import AddDocuments from '#/components/form-components/documents/AddDocuments';
 import AddExistingOffender from '#/components/form-components/offender/AddExistingOffender';
 import useReportPrint from '#/utils/reportPrint/usePrintReports';
@@ -39,8 +41,6 @@ import AddTodo from 'components/form-components/Todos/AddTodo';
 import ViewTodo from 'components/form-components/Todos/ViewTodo/Todo.container';
 import AddVehicleSimple from 'components/form-components/Vehicle/AddVehicleSimple';
 import EditVehicleSimple from 'components/form-components/Vehicle/EditVehicleSimple';
-import AddCrimeGroup from 'components/form-components/crimeGroup/AddCrimeGroup';
-import EditCrimeGroup from 'components/form-components/crimeGroup/EditCrimeGroup';
 import LinkCrimeGroup from 'components/form-components/linkOptions/LinkCrimeGroup';
 import LinkVehicle from 'components/form-components/linkOptions/LinkVehicle';
 import SelectIncidents from 'components/form-components/linkOptions/SelectIncidents';

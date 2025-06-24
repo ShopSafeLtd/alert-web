@@ -8,6 +8,7 @@ query scheme($where: SchemeWhereUniqueInput!) {
     autoApproveOffenders
     defaultIncidentEmail
     defaultIncidentPush
+    policeReporting
     defaultBulletinEmails
     defaultBulletinPush
     defaultSubscribedIncidentOnly
@@ -26,6 +27,7 @@ query scheme($where: SchemeWhereUniqueInput!) {
     incidentCustomQuestionRadio
     incidentTypeTooltip
     activityAssignToUser
+    requireActivityAuthorised
     useBusinessGroupsOnIncident
     imagesRequiredOnOffenders
     requireSiteNumberForUsers

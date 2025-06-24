@@ -2,6 +2,7 @@
 import type { FormInstance } from 'antd';
 
 import BusinessesSelect from '#/components/form-components/BusinessesSelect/BusinessesSelect.view';
+import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
 import RoleSelect from '#/components/form-components/Roles/RoleSelect';
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { PlusOutlined } from '@ant-design/icons';
@@ -170,7 +171,7 @@ const CreateChecklistView: React.FC<Props> = ({
             </Col>
           </Row>
           <Row gutter={16}>
-            <Col span={8}>
+            <Col span={12}>
               <Form.Item
                 label={intl.formatMessage({
                   defaultMessage: 'Users',
@@ -189,17 +190,8 @@ const CreateChecklistView: React.FC<Props> = ({
                 />
               </Form.Item>
             </Col>
-            <Col span={8}>
-              <Form.Item
-                label={intl.formatMessage({
-                  defaultMessage: 'Roles',
-                })}
-                name="roles"
-              >
-                <RoleSelect multi schemeId={schemeId} />
-              </Form.Item>
-            </Col>
-            <Col span={8}>
+
+            <Col span={12}>
               <Form.Item
                 label={intl.formatMessage({
                   defaultMessage: 'Businesses',
@@ -215,6 +207,26 @@ const CreateChecklistView: React.FC<Props> = ({
                   })}
                   showSearch
                 />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                label={intl.formatMessage({
+                  defaultMessage: 'Roles',
+                })}
+                name="roles"
+              >
+                <RoleSelect multi schemeId={schemeId} />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                label={intl.formatMessage({
+                  defaultMessage: 'Groups',
+                })}
+                name="groups"
+              >
+                <GroupsSelect mode="multiple" />
               </Form.Item>
             </Col>
           </Row>

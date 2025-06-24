@@ -1,45 +1,48 @@
 import React from 'react';
+
 import View from './Checklists.view';
 import useChecklists from './useChecklists';
 
 const Checklists = (): JSX.Element => {
   const {
-    data,
-    loading,
-    activeChecklistsData,
-    activeChecklistsLoading,
-    createActive,
-    activeTab,
-    checklistFilter,
-    setChecklistFilters,
-    createChecklistOpen,
-    toggleCreateChecklistDrawer,
-    selectedChecklist,
     // checklistSort,
     activeChecklistSort,
+    activeChecklistsData,
+    activeChecklistsLoading,
+    activeTab,
+    checklistFilter,
+    createActive,
+    createChecklistOpen,
+    data,
+    deleteChecklist,
+    deleteTemplate,
+    loading,
+    selectedChecklist,
     // setChecklistSort,
     setActiveChecklistSort,
-    deleteTemplate,
+    setChecklistFilters,
+    toggleCreateChecklistDrawer,
   } = useChecklists();
 
   return (
     <View
       // checklistSort={checklistSort}
       activeChecklistSort={activeChecklistSort}
-      // setChecklistSort={setChecklistSort}
-      setActiveChecklistSort={setActiveChecklistSort}
-      selectedChecklist={selectedChecklist}
-      createChecklistOpen={createChecklistOpen}
-      toggleCreateChecklistDrawer={toggleCreateChecklistDrawer}
-      activeTab={activeTab}
-      createActive={createActive}
-      data={data}
-      loading={loading}
       activeChecklistsData={activeChecklistsData}
       activeChecklistsLoading={activeChecklistsLoading}
+      activeTab={activeTab}
       checklistFilter={checklistFilter}
-      setChecklistFilters={setChecklistFilters}
+      createActive={createActive}
+      createChecklistOpen={createChecklistOpen}
+      data={data}
+      deleteChecklist={deleteChecklist}
       deleteTemplate={deleteTemplate}
+      loading={loading}
+      selectedChecklist={selectedChecklist}
+      // setChecklistSort={setChecklistSort}
+      setActiveChecklistSort={setActiveChecklistSort}
+      setChecklistFilters={setChecklistFilters}
+      toggleCreateChecklistDrawer={toggleCreateChecklistDrawer}
     />
   );
 };

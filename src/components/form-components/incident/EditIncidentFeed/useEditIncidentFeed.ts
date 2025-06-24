@@ -23,6 +23,7 @@ import { useIntl } from 'react-intl';
 import errorNotification from 'types/mutation_notifications/error_notification';
 
 export interface FormData {
+  activityAuthorised?: boolean;
   business?: LabeledValue | string | string[];
   customerRef: string;
   date: Date;
@@ -172,6 +173,7 @@ const useEditIncidentFeed = ({ incidentId, onClose }: Props): Return => {
       void updateIncident({
         variables: {
           data: {
+            activityAuthorised: { set: data.activityAuthorised || false },
             approved: { set: true },
             business:
               Array.isArray(business) && business.at(0)

@@ -55,15 +55,15 @@ const AddShoe = ({
     <div>
       <Steps
         current={currentStep}
-        items={[
-          {
-            // description: ,
-            title: intl.formatMessage({ defaultMessage: 'Shoe Details' }),
-          },
-          {
-            title: intl.formatMessage({ defaultMessage: 'Match' }),
-          },
-        ]}
+        // items={[
+        //   {
+        //     // description: ,
+        //     title: intl.formatMessage({ defaultMessage: 'Shoe Details' }),
+        //   },
+        //   {
+        //     title: intl.formatMessage({ defaultMessage: 'Match' }),
+        //   },
+        // ]}
         style={{ width: '90%' }}
       />
       {loading ? (

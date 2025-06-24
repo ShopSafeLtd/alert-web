@@ -12,6 +12,7 @@ query listTodos(
       dueDate
       createdAt
       completed
+      authorised
       type
       vehicleId
       vehicle {

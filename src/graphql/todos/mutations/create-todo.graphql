@@ -2,6 +2,7 @@ mutation CreateTodo($data: TodoCreateInput!) {
   createTodo(data: $data) {
     id
     name
+    authorised
     description
     dueDate
     completedDate

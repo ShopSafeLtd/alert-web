@@ -1,0 +1,17 @@
+query UserParentRoles(
+  $where: UserWhereUniqueInput!
+  $schemeWhere: UserSchemeWhereInput
+) {
+  user(where: $where) {
+    id
+    fullName
+    schemes(where: $schemeWhere) {
+      id
+      schemeId
+      orignalPermissions {
+        id
+        parentId
+      }
+    }
+  }
+}

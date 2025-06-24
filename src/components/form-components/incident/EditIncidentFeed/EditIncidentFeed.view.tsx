@@ -50,11 +50,12 @@ Props): JSX.Element => {
   ) : (
     <Form
       initialValues={{
+        activityAuthorised: data?.activityAuthorised || false,
         business: data?.business?.id ? [data?.business?.id] : [],
         customerRef: data?.customerRef,
         date: data?.date ? new Date(data?.date) : '',
-        description: data?.description,
 
+        description: data?.description,
         groups:
           data?.groups && data?.groups.length > 0
             ? data?.groups.map(({ id }) => id)
@@ -419,6 +420,37 @@ Props): JSX.Element => {
             })}
           >
             <Input disabled={saving} style={{ width: 200 }} />
+          </Form.Item>
+        </Col>
+        <Col span={12}>
+          <Form.Item
+            label={intl.formatMessage({
+              defaultMessage: 'Completing activities requires authorization?',
+            })}
+            name="activityAuthorised"
+            tooltip={intl.formatMessage({
+              defaultMessage:
+                'Completing activities linked to this incident requires authorization.',
+            })}
+          >
+            <Radio.Group
+              disabled={saving}
+              optionType="button"
+              options={[
+                {
+                  label: intl.formatMessage({
+                    defaultMessage: 'Yes',
+                  }),
+                  value: true,
+                },
+                {
+                  label: intl.formatMessage({
+                    defaultMessage: 'No',
+                  }),
+                  value: false,
+                },
+              ]}
+            />
           </Form.Item>
         </Col>
       </Row>

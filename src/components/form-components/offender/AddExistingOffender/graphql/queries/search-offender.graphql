@@ -1,4 +1,9 @@
-query SearchOffenders($where: SearchOffenderWhere! $order: SearchOffenderSort, $after: String, $first: Int) {
+query SearchOffenders(
+  $where: SearchOffenderWhere!
+  $order: SearchOffenderSort
+  $after: String
+  $first: Int
+) {
   searchOffenders(where: $where, order: $order, after: $after, first: $first) {
     totalCount
     pageInfo {
@@ -22,6 +27,8 @@ fragment OffenderSearchDetails on Offender {
   id
   dateSource
   updatedAt
+  totalIncidents
+  totalValue
   images {
     id
     optimised

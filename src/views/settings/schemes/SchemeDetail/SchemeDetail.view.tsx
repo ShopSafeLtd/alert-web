@@ -121,6 +121,7 @@ const SchemeDetail = ({
             oneSelectedIncidentTypeOnly:
               data?.scheme?.oneSelectedIncidentTypeOnly || false,
             reportOnly: data?.scheme?.reportOnly,
+            requireActivityAuthorised: data?.scheme?.requireActivityAuthorised,
             requireSiteNumberForUsers:
               data?.scheme?.requireSiteNumberForUsers || false,
             restrictIncidentAccess: data?.scheme?.restrictIncidentAccess,
@@ -616,6 +617,20 @@ const SchemeDetail = ({
                 defaultMessage: 'Allow activities to be assigned to users',
               })}
               name="activityAssignToUser"
+              style={{ marginBottom: 0 }}
+              valuePropName="checked"
+            >
+              <Switch
+                className="scheme-detail-switch"
+                disabled={saving}
+                style={{ marginLeft: 5 }}
+              />
+            </Form.Item>
+            <Form.Item
+              label={intl.formatMessage({
+                defaultMessage: 'Completing activities requires authorization',
+              })}
+              name="requireActivityAuthorised"
               style={{ marginBottom: 0 }}
               valuePropName="checked"
             >

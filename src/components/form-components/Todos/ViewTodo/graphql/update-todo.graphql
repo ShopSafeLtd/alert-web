@@ -5,12 +5,14 @@ mutation UpdateTask($data: TodoUpdateInput!, $where: UniqueId!) {
     description
     dueDate
     completed
+    authorised
     completedDate
     createdAt
     assignedUsers {
       id
       fullName
     }
+
     evidence {
       id
       name

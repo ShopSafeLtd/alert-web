@@ -9,6 +9,18 @@ query Role($where: CustomRoleWhereUniqueInput!) {
       model
     }
     type
+    folders {
+      id
+      name
+      childFolders {
+        id
+        name
+      }
+    }
+    checklists {
+      id
+      title
+    }
     users {
       user {
         fullName
@@ -16,5 +28,6 @@ query Role($where: CustomRoleWhereUniqueInput!) {
         email
       }
     }
+    parentId
   }
 }

@@ -5,6 +5,7 @@ query EditTodo($where: TodoWhereUniqueInput!) {
     name
     dueDate
     completed
+    authorised
     type
     completedDate
     business {
@@ -14,6 +15,7 @@ query EditTodo($where: TodoWhereUniqueInput!) {
       id
       fullName
     }
+
     timeTaken {
       user {
         id
@@ -52,6 +54,61 @@ query EditTodo($where: TodoWhereUniqueInput!) {
       name
       url
       fileType
+    }
+    checklist {
+      id
+      name
+      percentageScore
+      percentComplete
+      status
+      business {
+        id
+        name
+      }
+    }
+    crimeGroup {
+      id
+      alias
+      reference
+      totalIncidents
+      totalOffenders
+      totalRecoveredValue
+      totalTheftSuccess
+      totalValue
+    }
+    incident {
+      id
+      dayTime
+      policeRef
+      reference
+      subject
+      totalValue
+      images {
+        id
+        optimised
+        url
+      }
+    }
+    offender {
+      id
+      name
+      totalIncidents
+      reference
+      updatedAt
+      totalValue
+      images {
+        id
+        optimised
+        url
+      }
+    }
+    investigation {
+      id
+      name
+      reference
+      status
+      createdAt
+      closedAt
     }
   }
 }

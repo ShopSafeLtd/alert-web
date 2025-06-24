@@ -62,6 +62,7 @@ const EditOffender = ({
   const allImages = vehicleImages
     ? [...(filteredImages || []), ...vehicleImages]
     : images;
+  const idSource = Form.useWatch('idSource', form);
 
   return (
     <div className="list-view">
@@ -97,6 +98,7 @@ const EditOffender = ({
             peculiarities: data.peculiarities || null,
             postcode: data.address?.postcode || '',
             race: data.race || null,
+            sourceDetails: data.sourceDetails || '',
             street: data.address?.street || '',
             targetedGoods: data.targetedGoods || [],
             townCity: data.address?.townCity || '',
@@ -106,6 +108,7 @@ const EditOffender = ({
         >
           <OffenderFormDetails
             ageCheck={ageCheck}
+            idSource={idSource}
             idVerified={idVerified}
             offenderSettings={offenderSettings}
             saving={saving}

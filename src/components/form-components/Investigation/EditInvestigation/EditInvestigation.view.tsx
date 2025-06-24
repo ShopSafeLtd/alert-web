@@ -1,39 +1,41 @@
-import React from 'react';
-import { Button, Col, Form, Input, Row } from 'antd';
-import { useIntl } from 'react-intl';
 import type { InvestigationDetails } from 'types/DataType';
+
 import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
+import { Button, Col, Form, Input, Row } from 'antd';
+import React from 'react';
+import { useIntl } from 'react-intl';
+
 import type { InvestigationData } from './useEditInvestigation';
 
 interface Props {
+  investigationData?: InvestigationDetails;
   onClose: () => void;
   onSubmit: (value: InvestigationData) => void;
   saving: boolean;
-  investigationData?: InvestigationDetails;
 }
 
 const AddInvestigation = ({
+  investigationData,
   onClose,
   onSubmit,
   saving,
-  investigationData,
 }: Props): JSX.Element => {
   const intl = useIntl();
 
   return (
     <div>
       <Form
+        initialValues={investigationData}
         layout="vertical"
         onFinish={onSubmit}
-        initialValues={investigationData}
       >
         <Row gutter={16}>
           <Col span={24}>
             <Form.Item
-              name="name"
               label={intl.formatMessage({
                 defaultMessage: 'Name',
               })}
+              name="name"
             >
               <Input disabled={saving} />
             </Form.Item>
@@ -42,10 +44,10 @@ const AddInvestigation = ({
         <Row>
           <Col span={24}>
             <Form.Item
-              name="description"
               label={intl.formatMessage({
                 defaultMessage: 'Description',
               })}
+              name="description"
             >
               <Input disabled={saving} />
             </Form.Item>
@@ -54,17 +56,17 @@ const AddInvestigation = ({
         <Row>
           <Col span={24}>
             <Form.Item
-              name="groupIds"
               label={intl.formatMessage({
                 defaultMessage: 'Groups',
               })}
+              name="groupIds"
             >
               <GroupsSelect disabled={saving} mode="multiple" />
             </Form.Item>
           </Col>
         </Row>
         <Form.Item>
-          <Row style={{ marginTop: 30 }} gutter={16} justify="end">
+          <Row gutter={16} justify="end" style={{ marginTop: 30 }}>
             <Col>
               <Button disabled={saving} onClick={onClose}>
                 {intl.formatMessage({
@@ -74,10 +76,10 @@ const AddInvestigation = ({
             </Col>
             <Col>
               <Button
-                type="primary"
-                htmlType="submit"
                 disabled={saving}
+                htmlType="submit"
                 loading={saving}
+                type="primary"
               >
                 {investigationData
                   ? intl.formatMessage({

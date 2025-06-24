@@ -1,10 +1,14 @@
 import type { RoleQuery } from '#/views/roles/graphql/queries/__generated__/role.generated';
 import type { FormInstance } from 'antd';
 
+import RoleSelect from '#/components/form-components/Roles/RoleSelect';
 import RolesSelect from '#/components/form-components/RolesSelect/RolesSelect.view';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { roleItems, settings } from '#/views/roles/types';
 import {
   faCheckSquare,
+  faFileSpreadsheet,
+  faFolders,
   faSquare,
   faTrash,
 } from '@fortawesome/pro-light-svg-icons';
@@ -23,30 +27,44 @@ import {
   Space,
   Switch,
   Tooltip,
+  Tree,
   Typography,
 } from 'antd';
 import { PermissionMethod, PermissionModel, Role } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { useNavigate } from 'react-router';
 
-import type { DeleteFormValues, FormValues } from './useRole';
+import type {
+  DeleteFormValues,
+  FolderTreeData,
+  FormValues,
+  TreeData,
+} from './useRole';
 
 import ViewRoleSidelist from './ViewRole.Sidelist';
 import useStyles from './ViewRole.styles';
 
 interface Props {
   changed: boolean;
+  checklistsData: TreeData[];
   clearAll: () => void;
   create: boolean;
   data: RoleQuery | undefined;
+  foldersData: FolderTreeData[];
   form: FormInstance<FormValues>;
   id?: string;
   loading: boolean;
+  onChecklistsToggle: (checked: boolean) => void;
   onDelete: (values: DeleteFormValues) => void;
   onFinish: (values: FormValues) => void;
+  onFoldersToggle: (checked: boolean) => void;
+  onSelectChecklist: (value: string[]) => void;
+  onSelectFolder: (value: string[]) => void;
   onSettingsToggle: (value: boolean) => void;
   roleName: string | undefined;
+
   setAll: () => void;
   setChanged: (changed: boolean) => void;
   showDelete: boolean;
@@ -55,12 +73,19 @@ interface Props {
 }
 
 const RoleView = ({
+  checklistsData,
   clearAll,
+  data,
+  foldersData,
   form,
   id,
   loading,
+  onChecklistsToggle,
   onDelete,
   onFinish,
+  onFoldersToggle,
+  onSelectChecklist,
+  onSelectFolder,
   onSettingsToggle,
   roleName,
   setAll,
@@ -69,6 +94,10 @@ const RoleView = ({
   toggleShowDelete,
 }: Props) => {
   const navigate = useNavigate();
+  const folders = Form.useWatch('folders', form);
+  const checklists = Form.useWatch('checklists', form);
+
+  const schemeId = useAtomValue(currentSchemeIdAtom);
 
   const intl = useIntl();
   const formatMessage = intl.formatMessage.bind(intl);
@@ -248,6 +277,19 @@ const RoleView = ({
                             </Select>
                           </Form.Item>
                         </Col>
+                        <Col span={12}>
+                          <Form.Item
+                            label={intl.formatMessage({
+                              defaultMessage: 'Parent Role',
+                            })}
+                            name="roles"
+                          >
+                            <RoleSelect
+                              roleId={data?.role.id}
+                              schemeId={schemeId}
+                            />
+                          </Form.Item>
+                        </Col>
                         <Col span={24}>
                           <Form.Item
                             label={formatMessage({
@@ -256,6 +298,7 @@ const RoleView = ({
                             labelAlign="left"
                             labelCol={{ span: 7 }}
                             name="approvalAllowed"
+                            style={{ width: '100%' }}
                             valuePropName="checked"
                           >
                             <Switch />
@@ -414,6 +457,137 @@ const RoleView = ({
                         </Col>
                       ))}
                       <Col />
+                    </Row>
+                    <Row gutter={16} style={{ marginBottom: 20 }}>
+                      <Col span={12}>
+                        <Card style={{ marginBottom: 0 }}>
+                          <Row
+                            gutter={16}
+                            style={{ width: '100%' }}
+                            wrap={false}
+                          >
+                            <Col flex={1}>
+                              <Row gutter={8}>
+                                <Col>
+                                  <FontAwesomeIcon icon={faFolders} size="xl" />
+                                </Col>
+                                <Col flex={1} style={{ marginBottom: 0 }}>
+                                  <Typography.Title level={4}>
+                                    <FormattedMessage defaultMessage="Folders" />
+                                  </Typography.Title>
+                                </Col>
+                              </Row>
+                              <Typography.Paragraph>
+                                <FormattedMessage defaultMessage="Manage the access to folders for this role." />
+                              </Typography.Paragraph>
+                            </Col>
+
+                            <Col>
+                              <Form.Item
+                                name="selectAllFolders"
+                                style={{ marginBottom: 0 }}
+                                valuePropName="checked"
+                              >
+                                <Switch
+                                  disabled={loading}
+                                  loading={loading}
+                                  onChange={(checked) =>
+                                    onFoldersToggle(checked)
+                                  }
+                                  style={{ paddingBottom: -20 }}
+                                />
+                              </Form.Item>
+                            </Col>
+                          </Row>
+
+                          <Row gutter={32}>
+                            <Form.Item name="folders" style={{ width: '100%' }}>
+                              <Tree
+                                blockNode
+                                checkable
+                                checkedKeys={folders}
+                                disabled={loading}
+                                height={200}
+                                onCheck={(checkedKeys) => {
+                                  const keys = Array.isArray(checkedKeys)
+                                    ? checkedKeys
+                                    : checkedKeys.checked;
+                                  onSelectFolder(keys as string[]);
+                                }}
+                                // style={style}
+                                treeData={foldersData}
+                              />
+                            </Form.Item>
+                          </Row>
+                        </Card>
+                      </Col>
+                      <Col span={12}>
+                        <Card style={{ marginBottom: 0 }}>
+                          <Row
+                            gutter={16}
+                            style={{ width: '100%' }}
+                            wrap={false}
+                          >
+                            <Col flex={1}>
+                              <Row gutter={8}>
+                                <Col>
+                                  <FontAwesomeIcon
+                                    icon={faFileSpreadsheet}
+                                    size="xl"
+                                  />
+                                </Col>
+                                <Col flex={1} style={{ marginBottom: 0 }}>
+                                  <Typography.Title level={4}>
+                                    <FormattedMessage defaultMessage="Checklist Templates" />
+                                  </Typography.Title>
+                                </Col>
+                              </Row>
+                              <Typography.Paragraph>
+                                <FormattedMessage defaultMessage="Manage the access to checklist templates for this role." />
+                              </Typography.Paragraph>
+                            </Col>
+
+                            <Col>
+                              <Form.Item
+                                name="selectAllChecklists"
+                                style={{ marginBottom: 0 }}
+                                valuePropName="checked"
+                              >
+                                <Switch
+                                  disabled={loading}
+                                  loading={loading}
+                                  onChange={(checked) =>
+                                    onChecklistsToggle(checked)
+                                  }
+                                  style={{ paddingBottom: -20 }}
+                                />
+                              </Form.Item>
+                            </Col>
+                          </Row>
+
+                          <Row gutter={32}>
+                            <Form.Item
+                              name="checklists"
+                              style={{ width: '100%' }}
+                            >
+                              <Tree
+                                blockNode
+                                checkable
+                                checkedKeys={checklists}
+                                disabled={loading}
+                                height={200}
+                                onCheck={(checkedKeys) => {
+                                  const keys = Array.isArray(checkedKeys)
+                                    ? checkedKeys
+                                    : checkedKeys.checked;
+                                  onSelectChecklist(keys as string[]);
+                                }}
+                                treeData={checklistsData}
+                              />
+                            </Form.Item>
+                          </Row>
+                        </Card>
+                      </Col>
                     </Row>
 
                     <Row>

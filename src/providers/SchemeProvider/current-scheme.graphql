@@ -56,6 +56,7 @@ query CurrentSchemeProvider($where: UserSchemeWhereUniqueInput!) {
       userTodos
       needJustification
       incidentTypeTooltip
+      requireActivityAuthorised
       requireBusinessOnIncident
       optionalBusinessOnUsers
       connectedToSchemes {

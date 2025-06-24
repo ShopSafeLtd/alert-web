@@ -1,0 +1,14 @@
+mutation IncidentImport($data: IncidentImportDataInput!) {
+    incidentImport (data: $data) {
+        failed
+        results {
+            error
+            reference
+            success
+            uuid
+        }
+        success
+        successful
+        total
+    }
+}

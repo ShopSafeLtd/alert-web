@@ -12,6 +12,7 @@ query EditIncident($where: IncidentWhereUniqueInput!) {
     policeRef
     policeNo
     policeInvolved
+    activityAuthorised
     subscribed
     totalValue
     totalRecoveredValue

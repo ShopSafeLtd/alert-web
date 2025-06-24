@@ -1,0 +1,6 @@
+query IncidentActivityAuthorised($where: IncidentWhereUniqueInput!) {
+  incident(where: $where) {
+    id
+    activityAuthorised
+  }
+}

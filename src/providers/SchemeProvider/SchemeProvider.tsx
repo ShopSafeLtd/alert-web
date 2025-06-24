@@ -135,6 +135,7 @@ export const defaultCurrentUserSchemeAtom: UserSchemeState = {
     oneSelectedIncidentTypeOnly: false,
     optionalBusinessOnUsers: false,
     reportOnly: false,
+    requireActivityAuthorised: false,
     requireBusinessOnIncident: false,
     requireSiteNumberForUsers: false,
     restrictIncidentAccess: false,

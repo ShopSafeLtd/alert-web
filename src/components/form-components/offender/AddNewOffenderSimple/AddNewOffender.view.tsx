@@ -48,6 +48,7 @@ const AddNewOffender = ({
   const intl = useIntl();
   const imagesRequired =
     useAtomValue(currentSchemeAtom)?.imagesRequiredOnOffenders;
+  const idSource = Form.useWatch('idSource', form);
 
   return loading ? (
     <Skeleton />
@@ -55,6 +56,7 @@ const AddNewOffender = ({
     <Form form={form} layout="vertical" onFinish={onSubmit}>
       <OffenderFormDetails
         ageCheck={ageCheck}
+        idSource={idSource}
         idVerified={idVerified}
         offenderSettings={offenderSettings}
         saving={saving}

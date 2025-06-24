@@ -1,5 +1,6 @@
-import React from 'react';
 import { Card, Skeleton } from 'antd';
+import React from 'react';
+
 import useStyles from './ArticleCard.styles';
 
 interface Props {
@@ -16,8 +17,8 @@ const ArticleSkeletonCard = ({ inFeedList }: Props): JSX.Element => {
       />
 
       <div
-        style={{ paddingLeft: 10, marginTop: 10 }}
         className="feedItem-card-content"
+        style={{ marginTop: 10, paddingLeft: 10 }}
       >
         <Skeleton active />
       </div>
