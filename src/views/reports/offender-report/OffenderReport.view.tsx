@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Col, Drawer, Row, Select, Typography } from 'antd';
 import { margin, rowHeight } from 'components/reports/utils/utils';
 import Page from 'components/shared-components/AntD/Page/Page';
+import { PermissionMethod, PermissionModel } from 'graphql/types';
 import React, { useMemo } from 'react';
 import RGL, { WidthProvider } from 'react-grid-layout';
 import { useIntl } from 'react-intl';
@@ -60,10 +61,15 @@ const FilterOptions = ({
           setSelectedGroups(value || []);
         }}
         onSchemeChange={setSelectedSchemes}
+        permissionsFilter={[
+          {
+            allowedMethods: [PermissionMethod.Read],
+            model: PermissionModel.Reports,
+          },
+        ]}
         placeholder={intl.formatMessage({
           defaultMessage: 'Select Groups',
         })}
-        reportMode
         style={{ width: '100%' }}
         value={selectedGroups}
       />

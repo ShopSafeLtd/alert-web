@@ -1,8 +1,15 @@
+import type {
+  StockRemovalRequestsQuery,
+  StockRemovalRequestsQueryVariables,
+} from '#/views/stock-removal-requests/stock-removal-requests-list/graphql/__generated__/stock-removal-requests.generated';
+
 import BusinessesSelect from '#/components/form-components/BusinessesSelect/BusinessesSelect.view';
 import UsersSelect from '#/components/form-components/UsersSelect/UsersSelect.view';
 import DatePicker from '#/components/util-components/DatePicker';
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import { useCreateStockRemovalRequestMutation } from '#/views/stock-removal-requests/components/AddStockRemovalRequest/graphql/__generated__/create-stock-removal-request.generated';
+import { StockRemovalRequestsDocument } from '#/views/stock-removal-requests/stock-removal-requests-list/graphql/__generated__/stock-removal-requests.generated';
 import {
   Button,
   Col,
@@ -13,6 +20,7 @@ import {
   Select,
   notification,
 } from 'antd';
+import { SortOrder } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
 import React, { useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
@@ -39,46 +47,106 @@ export interface FormData {
     stockItem?: string;
     value?: number;
   }[];
-  personalityInfluences: string;
+  personalityInfluences: 'No' | 'Yes';
   reason: string;
-  reasonForNonReturn?: string;
+  reasonForNonReturn: string;
+  rechargeBrand: 'No' | 'Yes';
   rechargeReference?: string;
-  rechargedToBrand: string;
-  returnDate: Date;
+  returnDate?: Date;
+  shippingAddress?: string;
   smqAccountNumber?: string;
   socialHandles?: string;
   storeOrDC: 'DC' | 'Store';
   title: string;
-  willStockBeReturned: string;
+  willStockBeReturned: 'No' | 'Yes';
 }
 
 const AddStockRemovalRequest = ({ onClose }: Props) => {
   const intl = useIntl();
   const [form] = Form.useForm<FormData>();
   const currentScheme = useAtomValue(currentSchemeIdAtom);
+  const currentUserId = useAtomValue(currentUserAtom)?.id;
 
   const [saving, setSaving] = useState(false);
 
   const storeOrDC = Form.useWatch('storeOrDC', form);
-  const rechargeBrand = Form.useWatch('rechargedToBrand', form);
+  const rechargeBrand = Form.useWatch('rechargeBrand', form);
+  console.log('rechargeBrand', rechargeBrand);
   const willStockBeReturned = Form.useWatch('willStockBeReturned', form);
   const personalityInfluences = Form.useWatch('personalityInfluences', form);
 
-  const [createRemovalRequest] = useCreateStockRemovalRequestMutation();
+  const [createRemovalRequest] = useCreateStockRemovalRequestMutation({
+    update: (store, { data: res }) => {
+      if (
+        res?.createStockRemovalRequest === null ||
+        res?.createStockRemovalRequest === undefined
+      )
+        return;
+      const existingData = store.readQuery<
+        StockRemovalRequestsQuery,
+        StockRemovalRequestsQueryVariables
+      >({
+        query: StockRemovalRequestsDocument,
+        variables: {
+          orderBy: [
+            {
+              createdAt: SortOrder.Desc,
+            },
+          ],
+          where: {
+            schemeId: currentScheme,
+          },
+        },
+      });
+
+      if (!existingData?.stockRemovalRequests) return;
+      store.writeQuery<
+        StockRemovalRequestsQuery,
+        StockRemovalRequestsQueryVariables
+      >({
+        data: {
+          stockRemovalRequests: {
+            edges: [
+              ...existingData.stockRemovalRequests.edges,
+              {
+                node: res.createStockRemovalRequest,
+              },
+            ],
+            totalCount: existingData.stockRemovalRequests.totalCount + 1,
+          },
+        },
+        query: StockRemovalRequestsDocument,
+        variables: {
+          orderBy: [
+            {
+              createdAt: SortOrder.Desc,
+            },
+          ],
+          where: {
+            schemeId: currentScheme,
+          },
+        },
+      });
+    },
+  });
 
   const onFinish = (values: FormData) => {
     setSaving(true);
     void createRemovalRequest({
-      onCompleted: () => {
+      onCompleted: (data) => {
         setSaving(false);
         notification.success({
           description: intl.formatMessage({
             defaultMessage:
               'The approvers have been notified of your new request.',
           }),
-          message: intl.formatMessage({
-            defaultMessage: 'Request Created',
-          }),
+          duration: 0,
+          message: intl.formatMessage(
+            {
+              defaultMessage: `Request Created (Alert ID: {var1})`,
+            },
+            { var1: data.createStockRemovalRequest.reference }
+          ),
           placement: 'bottomRight',
         });
         onClose();
@@ -99,13 +167,26 @@ const AddStockRemovalRequest = ({ onClose }: Props) => {
         data: {
           approverIds: values.approvers,
           businessId: values.businessId?.at(0) ?? '',
+          costCentreCode: values.costCentreCode,
           description: values.description,
+          fascia: values.fascia,
           items: values.items.map((i) => ({
             itemId: i.stockItem ?? '',
             quantity: i.quantity ?? 0,
           })),
+          personalityInfluences: values.personalityInfluences,
+          reason: values.reason,
+          reasonForNonReturn: values.reasonForNonReturn,
+          rechargeBrand: values.rechargeBrand,
+          rechargeReference: values.rechargeReference,
+          returnDate: values.returnDate,
           schemeId: currentScheme,
+          shippingAddress: values.shippingAddress,
+          smqAccountNumber: values.smqAccountNumber,
+          socialHandles: values.socialHandles,
+          storeOrDC: values.storeOrDC,
           title: values.title,
+          willStockBeReturned: values.willStockBeReturned,
         },
       },
     });
@@ -142,6 +223,14 @@ const AddStockRemovalRequest = ({ onClose }: Props) => {
           <Form.Item
             label={intl.formatMessage({ defaultMessage: 'Reason For Removal' })}
             name="reason"
+            rules={[
+              {
+                message: intl.formatMessage({
+                  defaultMessage: 'Please select a reason for removal',
+                }),
+                required: true,
+              },
+            ]}
           >
             <Select
               disabled={saving}
@@ -172,6 +261,14 @@ const AddStockRemovalRequest = ({ onClose }: Props) => {
               defaultMessage: 'Is this being picked from Store or DC ',
             })}
             name="storeOrDC"
+            rules={[
+              {
+                message: intl.formatMessage({
+                  defaultMessage: 'This is a required field.',
+                }),
+                required: true,
+              },
+            ]}
           >
             <Radio.Group disabled={saving}>
               <Radio.Button value="Store">
@@ -226,7 +323,15 @@ const AddStockRemovalRequest = ({ onClose }: Props) => {
             label={intl.formatMessage({
               defaultMessage: 'Is this being recharged to Brand?',
             })}
-            name="rechargedToBrand"
+            name="rechargeBrand"
+            rules={[
+              {
+                message: intl.formatMessage({
+                  defaultMessage: 'This is a required field.',
+                }),
+                required: true,
+              },
+            ]}
           >
             <Radio.Group disabled={saving}>
               <Radio.Button value="Yes">
@@ -245,6 +350,14 @@ const AddStockRemovalRequest = ({ onClose }: Props) => {
                 defaultMessage: 'Enter Brand Recharge Reference',
               })}
               name="rechargeReference"
+              rules={[
+                {
+                  message: intl.formatMessage({
+                    defaultMessage: 'This is a required field.',
+                  }),
+                  required: true,
+                },
+              ]}
             >
               <Input />
             </Form.Item>
@@ -255,8 +368,24 @@ const AddStockRemovalRequest = ({ onClose }: Props) => {
                 defaultMessage: 'Enter Cost Centre/Nominal Budget code ',
               })}
               name="costCentreCode"
+              rules={[
+                {
+                  message: intl.formatMessage({
+                    defaultMessage: 'This is a required field.',
+                  }),
+                  required: true,
+                },
+                {
+                  message: intl.formatMessage({
+                    defaultMessage:
+                      'Cost centre code must be in format 0000-000000 (4 digits, dash, 6 digits)',
+                  }),
+                  pattern: /^\d{4}-\d{6}$/,
+                },
+              ]}
             >
-              <Input />
+              {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
+              <Input maxLength={11} placeholder="0000-000000" />
             </Form.Item>
           )}
         </Col>
@@ -268,6 +397,14 @@ const AddStockRemovalRequest = ({ onClose }: Props) => {
               defaultMessage: 'Will the stock be returned?',
             })}
             name="willStockBeReturned"
+            rules={[
+              {
+                message: intl.formatMessage({
+                  defaultMessage: 'This is a required field.',
+                }),
+                required: true,
+              },
+            ]}
           >
             <Radio.Group disabled={saving}>
               <Radio.Button value="Yes">
@@ -286,16 +423,39 @@ const AddStockRemovalRequest = ({ onClose }: Props) => {
                 defaultMessage: 'Enter SMQ Account Number',
               })}
               name="smqAccountNumber"
+              rules={[
+                {
+                  message: intl.formatMessage({
+                    defaultMessage: 'This is a required field.',
+                  }),
+                  required: true,
+                },
+                {
+                  message: intl.formatMessage({
+                    defaultMessage: 'SMQ Account Number must be 4 or 5 digits',
+                  }),
+                  pattern: /^\d{4,5}$/,
+                },
+              ]}
             >
-              <Input />
+              {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
+              <Input maxLength={5} placeholder="12345" />
             </Form.Item>
           )}
           {willStockBeReturned === 'Yes' && (
             <Form.Item
               label={intl.formatMessage({
-                defaultMessage: 'Return Date',
+                defaultMessage: 'Expected Return Date',
               })}
-              name="Return Date"
+              name="returnDate"
+              rules={[
+                {
+                  message: intl.formatMessage({
+                    defaultMessage: 'This is a required field.',
+                  }),
+                  required: true,
+                },
+              ]}
             >
               <DatePicker />
             </Form.Item>
@@ -306,6 +466,14 @@ const AddStockRemovalRequest = ({ onClose }: Props) => {
                 defaultMessage: 'Reason for the stock not being returned',
               })}
               name="reasonForNonReturn"
+              rules={[
+                {
+                  message: intl.formatMessage({
+                    defaultMessage: 'This is a required field.',
+                  }),
+                  required: true,
+                },
+              ]}
             >
               <Input.TextArea />
             </Form.Item>
@@ -319,6 +487,14 @@ const AddStockRemovalRequest = ({ onClose }: Props) => {
               defaultMessage: 'Does this involve personality influences?',
             })}
             name="personalityInfluences"
+            rules={[
+              {
+                message: intl.formatMessage({
+                  defaultMessage: 'This is a required field.',
+                }),
+                required: true,
+              },
+            ]}
           >
             <Radio.Group disabled={saving}>
               <Radio.Button value="Yes">
@@ -337,6 +513,14 @@ const AddStockRemovalRequest = ({ onClose }: Props) => {
                 defaultMessage: 'Social Media Handles',
               })}
               name="socialHandles"
+              rules={[
+                {
+                  message: intl.formatMessage({
+                    defaultMessage: 'This is a required field.',
+                  }),
+                  required: true,
+                },
+              ]}
             >
               <Input />
             </Form.Item>
@@ -348,6 +532,14 @@ const AddStockRemovalRequest = ({ onClose }: Props) => {
           <Form.Item
             label={intl.formatMessage({ defaultMessage: 'Fascia' })}
             name="fascia"
+            rules={[
+              {
+                message: intl.formatMessage({
+                  defaultMessage: 'This is a required field.',
+                }),
+                required: true,
+              },
+            ]}
           >
             <Select
               disabled={saving}
@@ -410,7 +602,12 @@ const AddStockRemovalRequest = ({ onClose }: Props) => {
               },
             ]}
           >
-            <UsersSelect mode="multiple" />
+            <UsersSelect
+              allowClear
+              mode="multiple"
+              queryVars={{ where: { id: { notIn: [currentUserId ?? ''] } } }}
+              showSearch
+            />
           </Form.Item>
         </Col>
       </Row>

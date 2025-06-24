@@ -29,6 +29,19 @@ const StockRemovalRequests = (): JSX.Element => {
           }
           index
         />
+        <Route
+          element={
+            <PermissionCheckWrapper
+              permission={{
+                method: PermissionMethod.Read,
+                model: PermissionModel.StockRemovalRequests,
+              }}
+            >
+              <StockRemovalRequestsListView />
+            </PermissionCheckWrapper>
+          }
+          path="/:id"
+        />
       </Routes>
     </RouteWrapper>
   );
