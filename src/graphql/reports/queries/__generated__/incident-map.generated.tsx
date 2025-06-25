@@ -8,20 +8,52 @@ export type IncidentMapQueryVariables = Types.Exact<{
 }>;
 
 
-export type IncidentMapQuery = { __typename?: 'Query', incidents: Array<{ __typename?: 'Incident', id: string, location?: { __typename?: 'Address', id: string, geoLat?: number | null, geoLng?: number | null } | null, business?: { __typename?: 'Business', id: string } | null }> };
+export type IncidentMapQuery = { __typename?: 'Query', incidents: Array<{ __typename?: 'Incident', id: string, subject: string, reference?: number | null, policeRef?: string | null, customerRef?: string | null, dayTime: string, description: string, priority: Types.IncidentPriority, approved?: boolean | null, totalValue: number, location?: { __typename?: 'Address', id: string, geoLat?: number | null, geoLng?: number | null, full: string } | null, business?: { __typename?: 'Business', id: string, name: string } | null, images: Array<{ __typename?: 'Image', id: string, optimised?: string | null, url?: string | null }>, crimeTypes: Array<{ __typename?: 'Tag', id: string, name: string }>, groups: Array<{ __typename?: 'Group', id: string, name: string }>, offenders: Array<{ __typename?: 'Offender', id: string, name?: string | null }>, createdBy: { __typename?: 'User', id: string, fullName: string } }> };
 
 
 export const IncidentMapDocument = gql`
     query IncidentMap($where: IncidentWhereInput!) {
   incidents(where: $where) {
     id
+    subject
+    reference
+    policeRef
+    customerRef
+    dayTime
+    description
+    priority
+    approved
+    totalValue
     location {
       id
       geoLat
       geoLng
+      full
     }
     business {
       id
+      name
+    }
+    images {
+      id
+      optimised
+      url
+    }
+    crimeTypes {
+      id
+      name
+    }
+    groups {
+      id
+      name
+    }
+    offenders {
+      id
+      name
+    }
+    createdBy {
+      id
+      fullName
     }
   }
 }

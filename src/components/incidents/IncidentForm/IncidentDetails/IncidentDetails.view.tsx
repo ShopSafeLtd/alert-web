@@ -1,5 +1,5 @@
 import DatePicker from '#/components/util-components/DatePicker';
-import { Col, Form, Input, Radio, Row, Typography } from 'antd';
+import { Col, Form, Input, Row, Typography } from 'antd';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
@@ -92,37 +92,37 @@ const IncidentDetails = ({ saving }: Props): JSX.Element => {
             <Input.TextArea disabled={saving} />
           </Form.Item>
         </Col>
-        <Col span={12}>
-          <Form.Item
-            label={intl.formatMessage({
-              defaultMessage: 'Completing activities requires authorization?',
-            })}
-            name="activityAuthorised"
-            tooltip={intl.formatMessage({
-              defaultMessage:
-                'Completing activities linked to this incident requires authorization.',
-            })}
-          >
-            <Radio.Group
-              disabled={saving}
-              optionType="button"
-              options={[
-                {
-                  label: intl.formatMessage({
-                    defaultMessage: 'Yes',
-                  }),
-                  value: true,
-                },
-                {
-                  label: intl.formatMessage({
-                    defaultMessage: 'No',
-                  }),
-                  value: false,
-                },
-              ]}
-            />
-          </Form.Item>
-        </Col>
+        {/* <Col span={12}>*/}
+        {/*  <Form.Item*/}
+        {/*    label={intl.formatMessage({*/}
+        {/*      defaultMessage: 'Completing activities requires authorization?',*/}
+        {/*    })}*/}
+        {/*    name="activityAuthorised"*/}
+        {/*    tooltip={intl.formatMessage({*/}
+        {/*      defaultMessage:*/}
+        {/*        'Completing activities linked to this incident requires authorization.',*/}
+        {/*    })}*/}
+        {/*  >*/}
+        {/*    <Radio.Group*/}
+        {/*      disabled={saving}*/}
+        {/*      optionType="button"*/}
+        {/*      options={[*/}
+        {/*        {*/}
+        {/*          label: intl.formatMessage({*/}
+        {/*            defaultMessage: 'Yes',*/}
+        {/*          }),*/}
+        {/*          value: true,*/}
+        {/*        },*/}
+        {/*        {*/}
+        {/*          label: intl.formatMessage({*/}
+        {/*            defaultMessage: 'No',*/}
+        {/*          }),*/}
+        {/*          value: false,*/}
+        {/*        },*/}
+        {/*      ]}*/}
+        {/*    />*/}
+        {/*  </Form.Item>*/}
+        {/* </Col>*/}
       </Row>
     </>
   );
