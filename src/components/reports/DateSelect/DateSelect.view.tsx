@@ -195,6 +195,11 @@ const DateSelect = ({ defaultRange, onChange }: Props) => {
 
   const toggleCustomRange = () => setCustomRangeOpen(!customRangeOpen);
 
+  const formatStartDate = (date: Date | null) => {
+    if (!date) return null;
+    return dayjs(date).hour(0).minute(0).second(1).toDate();
+  };
+
   return customRangeOpen ? (
     <Row>
       <Col>
@@ -210,7 +215,7 @@ const DateSelect = ({ defaultRange, onChange }: Props) => {
                       value?.[1] ??
                       dayjs().hour(23).minute(59).minute(59).toDate(),
                     startDate:
-                      value?.[0] ??
+                      formatStartDate(value?.[0]) ??
                       dayjs()
                         .hour(0)
                         .minute(0)
