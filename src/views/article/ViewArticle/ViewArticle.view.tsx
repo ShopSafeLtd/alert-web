@@ -9,8 +9,9 @@ import {
 } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Card, Col, List, Row, Typography } from 'antd';
+import InlineWatermarkProcessor from 'components/images/InlineWatermarkProcessor';
 import WatermarkSlide from 'components/images/WatermartkSlide.view';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useIntl } from 'react-intl';
 import FormatCalendar from 'utils/format-calendar-24h';
 import Lightbox from 'yet-another-react-lightbox';
@@ -27,6 +28,23 @@ import OffenderCard from '../../../components/offenders/OffenderCard';
 const { Text, Title } = Typography;
 
 const useStyles = createUseStyles(() => ({
+  articleContent: {
+    '& .article-content': {
+      '& img': {
+        height: 'auto',
+        maxWidth: '100%',
+      },
+      marginTop: 20,
+      width: '100%',
+    },
+    '@media print': {
+      '& .watermark-overlay': {
+        '-webkit-print-color-adjust': 'exact',
+        opacity: '0.3 !important',
+        'print-color-adjust': 'exact',
+      },
+    },
+  },
   content: {
     height: '100vh',
     width: '100%',
@@ -48,7 +66,6 @@ const ViewArticleView = ({
   data,
   editArticle,
   handlePrint,
-  isPrinting,
   lightBoxOpen,
   lightboxElements,
   loading,
@@ -59,33 +76,7 @@ const ViewArticleView = ({
 
   const intl = useIntl();
 
-  useEffect(() => {
-    if (!componentRef?.current) return;
-    const node = componentRef.current;
-    const imageNodes = [...node.querySelectorAll('img')];
-    const allImageUrls = imageNodes.map((img) => img.src);
-
-    const handleImageClick = (event: Event) => {
-      const target = event.currentTarget as HTMLImageElement;
-      const clickedUrl = target.src;
-      const clickedIndex = allImageUrls.indexOf(clickedUrl);
-      openLightbox(
-        allImageUrls.map((url) => ({
-          src: url,
-        })),
-        clickedIndex
-      );
-    };
-
-    for (const img of imageNodes) {
-      img.addEventListener('click', handleImageClick);
-    }
-    return () => {
-      for (const img of imageNodes) {
-        img.removeEventListener('click', handleImageClick);
-      }
-    };
-  }, [componentRef, data, openLightbox]);
+  // Image click handling is now managed by InlineWatermarkProcessor
 
   return (
     <>
@@ -239,23 +230,27 @@ const ViewArticleView = ({
                 </Col>
               </Row>
               <Row gutter={60} style={{ marginBottom: 5 }}>
-                <Col>
-                  <div
-                    // eslint-disable-next-line react/no-danger
-                    dangerouslySetInnerHTML={{
-                      __html: data?.article?.rows[0].columns[0].text || '',
-                    }}
-                    ref={componentRef}
-                    style={
-                      isPrinting
-                        ? undefined
-                        : {
-                            height: '100%',
-                            marginTop: 20,
-                            width: '100%',
-                          }
-                    }
-                  />
+                <Col className={classes.articleContent}>
+                  <div ref={componentRef}>
+                    <InlineWatermarkProcessor
+                      className="article-content"
+                      htmlContent={data?.article?.rows[0].columns[0].text || ''}
+                      onImageClick={(src, index) => {
+                        const container = componentRef.current;
+                        if (!container) return;
+
+                        const imageNodes = container.querySelectorAll('img');
+                        const allImageUrls = [...imageNodes].map(
+                          (img) => img.src
+                        );
+
+                        openLightbox(
+                          allImageUrls.map((url) => ({ src: url })),
+                          index
+                        );
+                      }}
+                    />
+                  </div>
                 </Col>
               </Row>
             </Card>

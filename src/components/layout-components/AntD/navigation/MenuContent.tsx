@@ -1,7 +1,7 @@
 import type { IconDefinition } from '@fortawesome/pro-light-svg-icons';
-import type { NavItem } from 'configs/NavigationConfig';
+import type { MenuItem, NavItem, SubMenuItem } from 'configs/NavigationConfig';
 import type { Theme } from 'configs/ThemeConfig';
-import type { NavType } from 'state';
+import type { NavType, SideNavTheme } from 'state';
 
 import { mobileNavOpenAtom } from '#/components/layout-components/AntD/navigation/MobileNav';
 import NavTranslations from '#/components/layout-components/AntD/navigation/NavTranslations';
@@ -15,7 +15,7 @@ import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import hasPermission from '#/utils/has-permission';
 import { faBell } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Badge, Col, Drawer, Grid, Menu, Row, Skeleton } from 'antd';
+import { Badge, Col, Drawer, Grid, Row, Skeleton } from 'antd';
 import NotificationsDrawer from 'components/notifications/NotificationsDrawer/NotificationDrawer.container';
 import navConfig, { BadgeTypes } from 'configs/NavigationConfig';
 import { useAtomValue, useSetAtom } from 'jotai/index';
@@ -23,7 +23,7 @@ import React, { useEffect, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { createUseStyles } from 'react-jss';
 import { Link } from 'react-router-dom';
-import { SideNavTheme, useStoreState } from 'state';
+import { useStoreState } from 'state';
 import utils from 'utils';
 
 import IntlMessage from '../../../util-components/AntD/IntlMessage';
@@ -31,56 +31,292 @@ import Logo from './Logo';
 import NavProfile from './NavProfile';
 import NavScheme from './NavScheme';
 
+const THEME_LIGHT_HOVER_BG = 'rgba(0, 0, 0, 0.04)';
+const TRANSFORM_HOVER = 'translateX(2px)';
+const TRANSITION_ALL = 'all 0.2s ease';
+
 const useStyles = createUseStyles((theme: Theme) => ({
-  notificationCol: {
+  bottomMenuCol: {
     '&:hover': {
-      backgroundColor: theme.hoverBackground,
+      '& $bottomMenuColContent': {
+        backgroundColor:
+          theme.colorScheme === 'dark'
+            ? theme.itemHoverBackground
+            : THEME_LIGHT_HOVER_BG,
+        transform: TRANSFORM_HOVER,
+      },
     },
+  },
+  bottomMenuColContent: {
     alignItems: 'center',
-    borderBottom: `1px solid ${theme.borderColor}`,
+    borderRadius: 8,
     cursor: 'pointer',
     display: 'flex',
+    height: 48,
     justifyContent: 'center',
+    marginBottom: 2,
+    padding: '8px 12px',
+    transition: TRANSITION_ALL,
+    width: '100%',
+  },
+  bottomMenuItem: {
+    '&:hover': {
+      backgroundColor:
+        theme.colorScheme === 'dark'
+          ? theme.itemHoverBackground
+          : THEME_LIGHT_HOVER_BG,
+      transform: TRANSFORM_HOVER,
+    },
+    alignItems: 'center',
+    borderRadius: 8,
+    cursor: 'pointer',
+    display: 'flex',
+    marginBottom: 4,
+    padding: '8px 12px',
+    transition: TRANSITION_ALL,
+    width: '100%',
+  },
+  bottomMenuSection: {
+    marginTop: 'auto',
+    padding: '8px 12px',
+  },
+  menuItem: {
+    '&.active': {
+      '& $menuItemIcon': {
+        color: theme.primary,
+      },
+      '& $menuItemText': {
+        color: theme.primary,
+        fontWeight: 600,
+      },
+      backgroundColor: `${theme.primary}15`,
+      paddingLeft: 19,
+    },
+    '&:hover': {
+      backgroundColor:
+        theme.colorScheme === 'dark'
+          ? theme.itemHoverBackground
+          : THEME_LIGHT_HOVER_BG,
+      transform: TRANSFORM_HOVER,
+    },
+    alignItems: 'center',
+    borderRadius: 8,
+    color: 'inherit',
+    cursor: 'pointer',
+    display: 'flex',
+    marginBottom: 1,
+    padding: '8px 16px',
+    textDecoration: 'none',
+    transition: TRANSITION_ALL,
+  },
+  menuItemBadge: {
+    marginLeft: 'auto',
+  },
+  menuItemIcon: {
+    color: theme.secondaryText,
+    fontSize: 16,
+    marginRight: 12,
+    textAlign: 'center',
+    transition: 'color 0.2s ease',
+    width: 20,
+  },
+  menuItemText: {
+    color: theme.headerColor,
+    flex: 1,
+    fontSize: 14,
+    fontWeight: 500,
+    transition: TRANSITION_ALL,
+  },
+  menuItemTextSmall: {
+    color:
+      theme.colorScheme === 'dark'
+        ? 'rgba(255, 255, 255, 0.85)'
+        : theme.secondaryText,
+    fontSize: 13,
+    fontWeight: 400,
+    transition: TRANSITION_ALL,
+  },
+  menuSection: {
+    marginBottom: 2,
+  },
+  menuSectionTitle: {
+    color: theme.secondaryText,
+    fontSize: 11,
+    fontWeight: 700,
+    letterSpacing: '0.5px',
+    marginBottom: 4,
+    padding: '8px 16px 4px',
+    textTransform: 'uppercase',
+  },
+  subMenuItem: {
+    '&.active': {
+      '& $menuItemTextSmall': {
+        color: theme.primary,
+        fontWeight: 600,
+      },
+      '&::before': {
+        backgroundColor: theme.primary,
+      },
+      backgroundColor: `${theme.primary}08`,
+      paddingLeft: 51,
+    },
+    '&::before': {
+      backgroundColor: theme.borderColor,
+      borderRadius: '50%',
+      content: '""',
+      height: 4,
+      left: 32,
+      position: 'absolute',
+      top: '50%',
+      transform: 'translateY(-50%)',
+      transition: 'background-color 0.2s ease',
+      width: 4,
+    },
+    '&:hover': {
+      backgroundColor:
+        theme.colorScheme === 'dark'
+          ? theme.itemHoverBackground
+          : THEME_LIGHT_HOVER_BG,
+      transform: TRANSFORM_HOVER,
+    },
+    alignItems: 'center',
+    borderRadius: 8,
+    color: 'inherit',
+    cursor: 'pointer',
+    display: 'flex',
+    marginBottom: 1,
+    padding: '6px 16px 6px 48px',
+    position: 'relative',
+    textDecoration: 'none',
+    transition: TRANSITION_ALL,
+  },
+  subSubMenuItem: {
+    '&.active': {
+      '& $menuItemTextSmall': {
+        color: theme.primary,
+        fontWeight: 600,
+      },
+      '&::before': {
+        backgroundColor: theme.primary,
+      },
+      backgroundColor: `${theme.primary}05`,
+      paddingLeft: 67,
+    },
+    '&::before': {
+      backgroundColor: theme.borderColor,
+      borderRadius: '50%',
+      content: '""',
+      height: 3,
+      left: 48,
+      position: 'absolute',
+      top: '50%',
+      transform: 'translateY(-50%)',
+      transition: 'background-color 0.2s ease',
+      width: 3,
+    },
+    '&:hover': {
+      '& $menuItemTextSmall': {
+        color: theme.primary,
+      },
+      '&::before': {
+        backgroundColor: theme.primary,
+      },
+      backgroundColor:
+        theme.colorScheme === 'dark'
+          ? theme.itemHoverBackground
+          : THEME_LIGHT_HOVER_BG,
+      transform: TRANSFORM_HOVER,
+    },
+    alignItems: 'center',
+    borderRadius: 8,
+    color: 'inherit',
+    cursor: 'pointer',
+    display: 'flex',
+    marginBottom: 1,
+    padding: '6px 16px 6px 64px',
+    position: 'relative',
+    textDecoration: 'none',
+    transition: TRANSITION_ALL,
+  },
+  treeMenu: {
+    borderRight: 0,
+    flex: 1,
+    overflow: 'auto',
+    padding: '8px 12px',
   },
 }));
 
-const { SubMenu } = Menu;
 const { useBreakpoint } = Grid;
 
 const setLocale = (isLocaleOn: boolean, localeKey: string) =>
   isLocaleOn ? <IntlMessage id={localeKey} /> : localeKey.toString();
 
-const setDefaultOpen = (key: string) => {
-  const keyList = [];
-  let keyString = '';
-  if (key) {
-    const arr = key.split('-');
-    for (const [index, elm] of arr.entries()) {
-      index === 0 ? (keyString = elm) : (keyString = `${keyString}-${elm}`);
-      // ???
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      keyList.push(keyString);
-    }
-  }
-  return keyList;
-};
+const Icon = ({
+  className,
+  icon,
+}: {
+  className?: string;
+  icon: IconDefinition;
+}) => <FontAwesomeIcon className={className} fixedWidth icon={icon} />;
 
-const Icon = ({ icon }: { icon: IconDefinition }) => (
-  <FontAwesomeIcon
-    fixedWidth
-    icon={icon}
-    style={{ fontSize: 18, marginBottom: -3, marginRight: 10 }}
-  />
-);
-const SubIcon = ({ icon }: { icon: IconDefinition }) => (
-  <FontAwesomeIcon
-    fixedWidth
-    icon={icon}
-    size="lg"
-    style={{ fontSize: 18, marginLeft: 10, marginRight: 10, width: 22 }}
-  />
-);
+const TreeMenuItem = ({
+  classes,
+  getBadgeCount,
+  isActive,
+  item,
+  level = 0,
+  localization,
+  onItemClick,
+}: {
+  classes: ReturnType<typeof useStyles>;
+  getBadgeCount: Record<BadgeTypes, number>;
+  isActive: boolean;
+  item: MenuItem | NavItem | SubMenuItem;
+  level?: number;
+  localization: boolean;
+  onItemClick: () => void;
+}) => {
+  const getItemClass = () => {
+    if (level === 0) return classes.menuItem;
+    if (level === 1) return classes.subMenuItem;
+    return classes.subSubMenuItem;
+  };
+
+  const getTextClass = () => {
+    if (level === 0) return classes.menuItemText;
+    return classes.menuItemTextSmall;
+  };
+
+  const content = (
+    <div className={`${getItemClass()} ${isActive ? 'active' : ''}`}>
+      {item.icon && level === 0 && (
+        <Icon className={classes.menuItemIcon} icon={item.icon} />
+      )}
+      <span className={getTextClass()}>
+        {setLocale(localization, item.intl.id)}
+      </span>
+      {item.badge && getBadgeCount[item.badge] > 0 && (
+        <Badge
+          className={classes.menuItemBadge}
+          count={getBadgeCount[item.badge]}
+          size="small"
+        />
+      )}
+    </div>
+  );
+
+  return item.path ? (
+    <Link
+      onClick={onItemClick}
+      style={{ color: 'inherit', textDecoration: 'none' }}
+      to={item.path}
+    >
+      {content}
+    </Link>
+  ) : (
+    content
+  );
+};
 
 interface SideNavContentProps {
   hideGroupTitle?: boolean;
@@ -115,12 +351,10 @@ const getLogo = (props: GetLogoArgs) => {
 };
 
 const SideNavContent = ({
-  hideGroupTitle,
   localization,
   messages,
   notifications,
   routeInfo,
-  sideNavTheme,
   todos,
 }: SideNavContentProps) => {
   const classes = useStyles();
@@ -187,140 +421,117 @@ const SideNavContent = ({
           />
         </div>
       ) : (
-        <Menu
-          className={
-            hideGroupTitle
-              ? 'hide-group-title nav-menu-overflowed'
-              : 'nav-menu-overflowed'
-          }
-          defaultOpenKeys={setDefaultOpen(routeInfo?.key)}
-          defaultSelectedKeys={[routeInfo?.key]}
-          mode="inline"
-          style={{ borderRight: 0, flex: 1 }}
-          theme={sideNavTheme === SideNavTheme.LIGHT ? 'light' : 'dark'}
-        >
+        <div className={classes.treeMenu}>
           {navigationConfig
             .filter((el) =>
               el.permission
                 ? hasPermission({ permission: el.permission, permissions })
                 : true
             )
-            .map((menu) =>
-              menu.submenu.length > 0 ? (
-                <Menu.SubMenu
-                  icon={<Icon icon={menu.icon} />}
-                  key={menu.key}
-                  title={setLocale(localization, menu.intl.id)}
-                >
-                  {menu.submenu
-                    .filter((el) =>
-                      el.permission
-                        ? hasPermission({
-                            permission: el.permission,
-                            permissions,
-                          })
-                        : true
-                    )
-                    .map((subMenuFirst) =>
-                      subMenuFirst.submenu.length > 0 ? (
-                        <SubMenu
-                          icon={
-                            subMenuFirst.icon ? (
-                              <Icon icon={subMenuFirst?.icon} />
-                            ) : null
-                          }
-                          key={subMenuFirst.key}
-                          title={setLocale(localization, subMenuFirst.intl.id)}
-                        >
-                          {subMenuFirst.submenu.map((subMenuSecond) => (
-                            <Menu.Item key={subMenuSecond.key}>
-                              {subMenuSecond.icon ? (
-                                <Icon icon={subMenuSecond?.icon} />
-                              ) : null}
-                              <span>
-                                {setLocale(localization, subMenuSecond.intl.id)}
-                              </span>
-                              <Link
-                                onClick={() => closeMobileNav()}
-                                to={subMenuSecond.path}
+            .map((menu) => {
+              const isMainActive =
+                routeInfo?.key === menu.key ||
+                routeInfo?.key?.startsWith(`${menu.key}-`);
+
+              return (
+                <div className={classes.menuSection} key={menu.key}>
+                  <TreeMenuItem
+                    classes={classes}
+                    getBadgeCount={getBadgeCount}
+                    isActive={isMainActive && menu.submenu.length === 0}
+                    item={menu}
+                    level={0}
+                    localization={localization}
+                    onItemClick={closeMobileNav}
+                  />
+
+                  {menu.submenu.length > 0 && (
+                    <div>
+                      {menu.submenu
+                        .filter((el) =>
+                          el.permission
+                            ? hasPermission({
+                                permission: el.permission,
+                                permissions,
+                              })
+                            : true
+                        )
+                        .map((subMenuFirst) => {
+                          const isSubActive =
+                            routeInfo?.key === subMenuFirst.key ||
+                            routeInfo?.key?.startsWith(`${subMenuFirst.key}-`);
+
+                          return (
+                            <div key={subMenuFirst.key}>
+                              <TreeMenuItem
+                                classes={classes}
+                                getBadgeCount={getBadgeCount}
+                                isActive={
+                                  isSubActive &&
+                                  subMenuFirst.submenu.length === 0
+                                }
+                                item={subMenuFirst}
+                                level={1}
+                                localization={localization}
+                                onItemClick={closeMobileNav}
                               />
-                            </Menu.Item>
-                          ))}
-                        </SubMenu>
-                      ) : (
-                        <Menu.Item
-                          key={subMenuFirst.key}
-                          style={{ paddingLeft: 15 }}
-                        >
-                          {subMenuFirst.icon ? (
-                            <SubIcon icon={subMenuFirst.icon} />
-                          ) : null}
-                          <span>
-                            {setLocale(localization, subMenuFirst.intl.id)}
-                          </span>
-                          <Link
-                            onClick={() => closeMobileNav()}
-                            to={subMenuFirst.path}
-                          />
-                        </Menu.Item>
-                      )
-                    )}
-                </Menu.SubMenu>
-              ) : (
-                <Menu.Item key={menu.key}>
-                  {menu.icon ? <Icon icon={menu?.icon} /> : null}
-                  {menu.badge && getBadgeCount[menu.badge] > 0 ? (
-                    <Badge
-                      count={getBadgeCount[menu.badge]}
-                      offset={[9, 0]}
-                      showZero
-                      size="small"
-                      style={{ height: 20, padding: 3 }}
-                    >
-                      <span>{setLocale(localization, menu?.intl.id)}</span>
-                    </Badge>
-                  ) : (
-                    <span>{setLocale(localization, menu?.intl.id)}</span>
+
+                              {subMenuFirst.submenu.length > 0 && (
+                                <div>
+                                  {subMenuFirst.submenu.map((subMenuSecond) => {
+                                    const isSubSubActive =
+                                      routeInfo?.key === subMenuSecond.key;
+
+                                    return (
+                                      <TreeMenuItem
+                                        classes={classes}
+                                        getBadgeCount={getBadgeCount}
+                                        isActive={isSubSubActive}
+                                        item={subMenuSecond}
+                                        key={subMenuSecond.key}
+                                        level={2}
+                                        localization={localization}
+                                        onItemClick={closeMobileNav}
+                                      />
+                                    );
+                                  })}
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
+                    </div>
                   )}
-                  {menu.path ? (
-                    <Link onClick={() => closeMobileNav()} to={menu.path} />
-                  ) : null}
-                </Menu.Item>
-              )
-            )}
-        </Menu>
+                </div>
+              );
+            })}
+        </div>
       )}
-      {!isMobile && (
-        <>
-          <NavScheme />
-          <NavTranslations />
-        </>
-      )}
-      {isMobile && (
+      <div className={classes.bottomMenuSection}>
+        <NavScheme />
+
         <Row style={{ width: '100%' }}>
-          <Col span={12}>
-            <NavScheme />
+          <Col className={classes.bottomMenuCol} span={8}>
+            <NavProfile />
           </Col>
-          <Col span={12}>
-            <NavTranslations />
+          <Col className={classes.bottomMenuCol} span={8}>
+            <div className={classes.bottomMenuColContent}>
+              <NavTranslations />
+            </div>
+          </Col>
+          <Col className={classes.bottomMenuCol} span={8}>
+            <div
+              className={classes.bottomMenuColContent}
+              onClick={toggleNotificationOpen}
+              style={{ cursor: 'pointer' }}
+            >
+              <Badge count={notifications} offset={[8, 0]} size="small">
+                <FontAwesomeIcon icon={faBell} size="xl" />
+              </Badge>
+            </div>
           </Col>
         </Row>
-      )}
-
-      <Row style={{ width: '100%' }}>
-        <Col span={12}>
-          <NavProfile />
-        </Col>
-        <Col
-          className={classes.notificationCol}
-          onClick={toggleNotificationOpen}
-          span={12}
-        >
-          <Badge count={notifications} offset={[8, 0]} size="small">
-            <FontAwesomeIcon icon={faBell} size="xl" />
-          </Badge>
-        </Col>
-      </Row>
+      </div>
       {customLogo && !isMobile && (
         <img
           alt={intl.formatMessage({ defaultMessage: 'Alert Logo' })}
@@ -331,7 +542,6 @@ const SideNavContent = ({
           style={{
             marginBottom: 15,
             marginLeft: 20,
-            marginTop: 15,
             width: 100,
           }}
         />
