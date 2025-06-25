@@ -1,5 +1,6 @@
 /* eslint-disable react/require-default-props */
 import type { WatermarkSlideType } from '#/components/images/WatermartkSlide.view';
+import type { Theme } from 'configs/ThemeConfig';
 import type {
   ArticleData,
   CrimeGroupData,
@@ -9,11 +10,12 @@ import type {
   VehicleData,
 } from 'types/DataType';
 
+import PermissionCheckWrapper from '#/components/PermissionCheck/PermissionCheckWrapper';
 import WatermarkSlide from '#/components/images/WatermartkSlide.view';
 import downloadImage from '#/utils/images/download-image';
 import { faDownload } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Avatar, Button, Col, Row, Typography } from 'antd';
+import { Button, Col, Row, Typography } from 'antd';
 import {
   ArticleMessageCard,
   CrimeGroupMessageList,
@@ -22,23 +24,97 @@ import {
   VehicleMessageCard,
 } from 'components/MessageInput/MessageCard';
 import WatermarkImage from 'components/images/WatermarkImage.view';
+import { PermissionMethod, PermissionModel } from 'graphql/types';
 import React, { useState } from 'react';
 import { createUseStyles } from 'react-jss';
+import { Link } from 'react-router-dom';
 import Lightbox from 'yet-another-react-lightbox';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
+
 const { Text } = Typography;
-const useStyles = createUseStyles({
+const useStyles = createUseStyles((theme: Theme) => ({
   button: {
-    bottom: 5,
-    color: 'fff',
-    cursor: ' pointer',
-    height: 30,
+    '&:hover': {
+      backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    },
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    border: 'none',
+    borderRadius: 6,
+    bottom: 8,
+    color: '#fff',
+    cursor: 'pointer',
+    height: 32,
     padding: '0px 8px',
     position: 'absolute',
-    right: 5,
+    right: 8,
+
     zIndex: 10,
   },
-});
+  entityCard: {
+    '& > a': {
+      textDecoration: 'none',
+    },
+    '& > a > div, & > div': {
+      backgroundColor: 'transparent !important',
+      border: 'none !important',
+      borderRadius: 8,
+      cursor: 'pointer',
+      margin: 0,
+      padding: '8px 0',
+      transition: 'all 0.2s ease',
+    },
+
+    '&:hover': {
+      '& > a > div': {
+        backgroundColor:
+          theme.colorScheme === 'dark'
+            ? 'rgba(255, 255, 255, 0.02)'
+            : 'rgba(0, 0, 0, 0.01)',
+        transform: 'translateX(2px)',
+      },
+    },
+
+    '&:last-child': {
+      marginBottom: 0,
+    },
+
+    marginBottom: 8,
+  },
+  imageContainer: {
+    borderRadius: 12,
+    marginBottom: 8,
+    overflow: 'hidden',
+    position: 'relative',
+  },
+  imageGrid: {
+    display: 'grid',
+    gap: 4,
+    marginBottom: 8,
+  },
+  messageContentWrapper: {
+    margin: 0,
+    padding: 0,
+  },
+  messageText: {
+    margin: 0,
+    wordWrap: 'break-word',
+  },
+  multiImageGrid: {
+    '& > div': {
+      borderRadius: 8,
+      overflow: 'hidden',
+    },
+  },
+  singleImage: {
+    borderRadius: 8,
+    cursor: 'pointer',
+    height: 300,
+    minWidth: 250,
+    overflow: 'hidden',
+    position: 'relative',
+    width: '100%',
+  },
+}));
 const getImageSpan = (length: number, index: number) => {
   if (length === 3) {
     if (index === 0) return 24;
@@ -152,7 +228,6 @@ interface Props {
       }
     | null
     | undefined;
-  id: string;
   images?: ImageCardData[];
   incidents?: IncidentCardData[];
   offenders?: OffenderCardData[];
@@ -177,15 +252,11 @@ const Content = ({
   articles,
   content,
   crimeGroups,
-  currentUser,
   date,
   from,
-  id,
   images,
   incidents,
   offenders,
-
-  paddingTop,
   showUser,
   vehicles,
 }: Props): JSX.Element => {
@@ -217,176 +288,182 @@ const Content = ({
     }
   };
   return (
-    <div>
-      <Row
-        gutter={8}
-        justify={currentUser ? 'end' : 'start'}
-        style={{ marginTop: paddingTop ? 15 : 0 }}
-      >
-        {showUser && (
-          <Col>
-            <Avatar className="message-avatar">{from?.origFirstLetter}</Avatar>
+    <div className={classes.messageContentWrapper}>
+      {/* Show user info and date only if requested (legacy support) */}
+      {showUser && date && (
+        <Row
+          style={{
+            marginBottom: 8,
+            marginLeft: 0,
+            marginRight: 0,
+            marginTop: 0,
+          }}
+        >
+          <Col style={{ marginRight: 20 }}>
+            <Text strong style={{ fontSize: 13 }}>
+              {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
+              {`${from?.fullName}${
+                from?.businesses && from?.businesses[0]?.fullName
+                  ? `(${from?.businesses[0].fullName})`
+                  : ''
+              }`}
+            </Text>
           </Col>
-        )}
-        <Col>
-          <div
-            className={
-              currentUser
-                ? 'message-content-card currentUser-card'
-                : 'message-content-card'
-            }
-            style={{ marginLeft: !currentUser && !showUser ? 48 : 0 }}
-          >
-            <Row
-              style={{
-                marginBottom: 0,
-                marginLeft: 15,
-                marginRight: 10,
-                marginTop: 8,
-              }}
-            >
-              {showUser && (
-                <Col
-                  style={{
-                    marginRight: 20,
+          <Col>
+            <Text style={{ fontSize: 13 }} type="secondary">
+              {date}
+            </Text>
+          </Col>
+        </Row>
+      )}
+
+      {images && images.length > 0 && (
+        <div className={classes.imageGrid}>
+          {images.length === 1 ? (
+            images.map((image, index) => (
+              <div className={classes.singleImage} key={image.id}>
+                <PermissionCheckWrapper
+                  permission={{
+                    method: PermissionMethod.Edit,
+                    model: PermissionModel.Chat,
                   }}
+                  unauthorizedElement={<div />}
                 >
-                  <Text strong style={{ fontSize: 13 }}>
-                    {/* eslint-disable-next-line @typescript-eslint/restrict-template-expressions,formatjs/no-literal-string-in-jsx */}
-                    {`${from?.fullName}${
-                      from?.businesses && from?.businesses[0]?.fullName
-                        ? `(${from?.businesses[0].fullName})`
-                        : ''
-                    }`}
-                  </Text>
-                </Col>
-              )}
-              <Col>
-                <Text style={{ fontSize: 13 }} type="secondary">
-                  {date}
-                </Text>
-              </Col>
-            </Row>
-
-            {images && images.length > 0 && (
-              <Row style={{ margin: 5 }}>
-                {images.length === 1 ? (
-                  images.map((image, index) => (
-                    <Col key={image.id}>
-                      <Button className={classes.button}>
-                        <FontAwesomeIcon
-                          icon={faDownload}
-                          onClick={() =>
-                            // eslint-disable-next-line no-void
-                            void downloadImage(
-                              image.optimised || image.url || '',
-                              `${image.id}`
-                            )
-                          }
-                          size="sm"
-                        />
-                      </Button>
-
-                      <div
-                        onClick={() => {
-                          triggerLightbox(
-                            images.map((el) => ({
-                              src: el.optimised || '',
-                            })) || [],
-                            index
-                          );
-                        }}
-                        style={{ height: 300, width: 300 }}
-                      >
-                        <WatermarkImage url={image.optimised} />
-                      </div>
-                    </Col>
-                  ))
-                ) : (
-                  <Row style={{ backgroundColor: '#FFF', width: 500 }}>
-                    {images.map((image, index) => (
-                      <Col
-                        key={image.id}
-                        onClick={() => {
-                          triggerLightbox(
-                            images.map((el) => ({
-                              src: el.optimised || '',
-                            })) || [],
-                            index
-                          );
-                        }}
-                        span={getImageSpan(images.length, index)}
-                      >
-                        <CollageImage
-                          index={index}
-                          length={images.length}
-                          onDownload={() =>
-                            // eslint-disable-next-line no-void
-                            void downloadImage(
-                              image.optimised || image.url || '',
-                              `${image.id}`
-                            )
-                          }
-                          src={image.optimised}
-                        />
-                      </Col>
-                    ))}
-                  </Row>
-                )}
+                  <Button className={classes.button}>
+                    <FontAwesomeIcon
+                      icon={faDownload}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        void downloadImage(
+                          image.optimised || image.url || '',
+                          `${image.id}`
+                        );
+                      }}
+                      size="sm"
+                    />
+                  </Button>
+                </PermissionCheckWrapper>
+                <div
+                  onClick={() => {
+                    triggerLightbox(
+                      images.map((el) => ({
+                        src: el.optimised || '',
+                      })) || [],
+                      index
+                    );
+                  }}
+                  style={{ height: 300, width: '100%' }}
+                >
+                  <WatermarkImage url={image.optimised} />
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className={classes.multiImageGrid}>
+              <Row style={{ width: '100%' }}>
+                {images.map((image, index) => (
+                  <Col
+                    key={image.id}
+                    onClick={() => {
+                      triggerLightbox(
+                        images.map((el) => ({
+                          src: el.optimised || '',
+                        })) || [],
+                        index
+                      );
+                    }}
+                    span={getImageSpan(images.length, index)}
+                  >
+                    <CollageImage
+                      index={index}
+                      length={images.length}
+                      onDownload={() =>
+                        // eslint-disable-next-line no-void
+                        void downloadImage(
+                          image.optimised || image.url || '',
+                          `${image.id}`
+                        )
+                      }
+                      src={image.optimised}
+                    />
+                  </Col>
+                ))}
               </Row>
-            )}
-            {offenders &&
-              offenders.length > 0 &&
-              offenders.map((offender) => (
+            </div>
+          )}
+        </div>
+      )}
+      {offenders && offenders.length > 0 && (
+        <div>
+          {offenders.map((offender) => (
+            <div className={classes.entityCard} key={offender.id}>
+              <Link to={`/app/offenders/${offender.id}`}>
                 <OffenderMessageCard
-                  key={offender.id}
                   offender={offender}
                   triggerLightbox={triggerLightbox}
                 />
-              ))}
-            {incidents &&
-              incidents.length > 0 &&
-              incidents.map((incident) => (
+              </Link>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {incidents && incidents.length > 0 && (
+        <div>
+          {incidents.map((incident) => (
+            <div className={classes.entityCard} key={incident.id}>
+              <Link to={`/app/incidents/${incident.id}`}>
                 <IncidentMessageCard
                   incident={incident}
-                  key={incident.id}
                   triggerLightbox={triggerLightbox}
                 />
-              ))}
-            {vehicles &&
-              vehicles.length > 0 &&
-              vehicles.map((vehicle) => (
+              </Link>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {vehicles && vehicles.length > 0 && (
+        <div>
+          {vehicles.map((vehicle) => (
+            <div className={classes.entityCard} key={vehicle.id}>
+              <Link to={`/app/vehicles/${vehicle.id}`}>
                 <VehicleMessageCard
-                  key={vehicle.id}
                   triggerLightbox={triggerLightbox}
                   vehicle={vehicle}
                 />
-              ))}
+              </Link>
+            </div>
+          ))}
+        </div>
+      )}
 
-            {crimeGroups && crimeGroups.length > 0 && (
-              <CrimeGroupMessageList crimeGroups={crimeGroups} />
-            )}
-            {articles &&
-              articles.length > 0 &&
-              articles.map((article) => (
+      {crimeGroups && crimeGroups.length > 0 && (
+        <div className={classes.entityCard}>
+          <CrimeGroupMessageList crimeGroups={crimeGroups} />
+        </div>
+      )}
+
+      {articles && articles.length > 0 && (
+        <div>
+          {articles.map((article) => (
+            <div className={classes.entityCard} key={article.id}>
+              <Link to={`/app/bulletins/${article.id}`}>
                 <ArticleMessageCard
                   article={article}
-                  key={article.id}
                   triggerLightbox={triggerLightbox}
                 />
-              ))}
-            {content && (
-              <Row key={id}>
-                <div className="message-content-bubble">
-                  <Col>
-                    <Text>{getContent(content)}</Text>
-                  </Col>
-                </div>
-              </Row>
-            )}
-          </div>
-        </Col>
-      </Row>
+              </Link>
+            </div>
+          ))}
+        </div>
+      )}
+      {content && (
+        <div className={classes.messageText}>
+          <Text>{getContent(content)}</Text>
+        </div>
+      )}
+
       {lightboxElements && lightBoxOpen && (
         <Lightbox
           close={() => triggerLightbox([], 0)}

@@ -3370,7 +3370,7 @@ export type CreateStockRemovalRequestApproverInput = {
 
 export type CreateStockRemovalRequestInput = {
   approverIds: Array<Scalars['String']>;
-  businessId: Scalars['String'];
+  businessId?: InputMaybe<Scalars['String']>;
   costCentreCode?: InputMaybe<Scalars['String']>;
   description?: InputMaybe<Scalars['String']>;
   fascia?: InputMaybe<Scalars['String']>;
@@ -14283,7 +14283,6 @@ export type Query = {
   role: CustomRole;
   roles: QueryRolesConnection;
   scheme: Scheme;
-  schemeUsersRelay: QuerySchemeUsersRelayConnection;
   schemes: Array<Scheme>;
   searchOffenders: QuerySearchOffendersConnection;
   sharingBusinesses: Array<SharingBusiness>;
@@ -15497,20 +15496,6 @@ export type QuerySchemeArgs = {
 };
 
 
-export type QuerySchemeUsersRelayArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  cursor?: InputMaybe<UserSchemeWhereUniqueInput>;
-  distinct?: InputMaybe<Array<UserSchemeScalarFieldEnum>>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Array<UserSchemeOrderByWithRelationInput>>;
-  skip?: InputMaybe<Scalars['Int']>;
-  take?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<UserSchemeWhereInput>;
-};
-
-
 export type QuerySchemesArgs = {
   cursor?: InputMaybe<SchemeWhereUniqueInput>;
   distinct?: InputMaybe<Array<SchemeScalarFieldEnum>>;
@@ -16228,19 +16213,6 @@ export type QueryRolesConnectionEdge = {
   __typename?: 'QueryRolesConnectionEdge';
   cursor: Scalars['String'];
   node: CustomRole;
-};
-
-export type QuerySchemeUsersRelayConnection = {
-  __typename?: 'QuerySchemeUsersRelayConnection';
-  edges: Array<QuerySchemeUsersRelayConnectionEdge>;
-  pageInfo: PageInfo;
-  totalCount: Scalars['Int'];
-};
-
-export type QuerySchemeUsersRelayConnectionEdge = {
-  __typename?: 'QuerySchemeUsersRelayConnectionEdge';
-  cursor: Scalars['String'];
-  node: UserScheme;
 };
 
 export type QuerySearchOffendersConnection = {
@@ -19368,7 +19340,7 @@ export type StockRemovalRequest = {
   __typename?: 'StockRemovalRequest';
   actions: Array<Action>;
   approvers: Array<StockRemovalRequestApproval>;
-  business: Business;
+  business?: Maybe<Business>;
   costCentreCode?: Maybe<Scalars['String']>;
   createdAt: Scalars['Date'];
   createdBy: User;
