@@ -26,8 +26,6 @@ export interface Props {
     pdfOnly?: boolean
   ) => void;
   form: FormInstance<FormData>;
-  groups: { label: string; value: string }[];
-  groupsLoading: boolean;
   id?: string;
   imagesUploadHandler(
     blobInfo: { blob: () => Blob | string; filename: () => string | undefined },
@@ -52,7 +50,6 @@ export interface Props {
   selectedGroups: string[];
   selectedSchemes: string[];
   setPreviewImage: (arg0: string) => void;
-
   setPreviewText: (arg0: string) => void;
 }
 

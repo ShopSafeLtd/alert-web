@@ -2536,6 +2536,7 @@ export type ChecklistAnswer = {
 export enum ChecklistAnswerType {
   GoodBad = 'GOOD_BAD',
   GoodBadNa = 'GOOD_BAD_NA',
+  Media = 'MEDIA',
   PassFail = 'PASS_FAIL',
   PassFailNa = 'PASS_FAIL_NA',
   Text = 'TEXT',
@@ -3331,6 +3332,7 @@ export type CreateOffenderVehicles = {
 export type CreateQuestionInput = {
   brands?: InputMaybe<Array<Scalars['String']>>;
   dependentAnswer?: InputMaybe<Scalars['String']>;
+  dependentMatchMode?: InputMaybe<AnyAll>;
   dependentOnQId?: InputMaybe<Scalars['String']>;
   dependentOnTagQId?: InputMaybe<Scalars['String']>;
   model?: InputMaybe<QuestionModel>;
@@ -3369,10 +3371,23 @@ export type CreateStockRemovalRequestApproverInput = {
 export type CreateStockRemovalRequestInput = {
   approverIds: Array<Scalars['String']>;
   businessId: Scalars['String'];
+  costCentreCode?: InputMaybe<Scalars['String']>;
   description?: InputMaybe<Scalars['String']>;
+  fascia?: InputMaybe<Scalars['String']>;
   items: Array<CreateStockRemovalItemInput>;
+  personalityInfluences?: InputMaybe<Scalars['String']>;
+  reason?: InputMaybe<Scalars['String']>;
+  reasonForNonReturn?: InputMaybe<Scalars['String']>;
+  rechargeBrand?: InputMaybe<Scalars['String']>;
+  rechargeReference?: InputMaybe<Scalars['String']>;
+  returnDate?: InputMaybe<Scalars['DateTime']>;
   schemeId: Scalars['String'];
+  shippingAddress?: InputMaybe<Scalars['String']>;
+  smqAccountNumber?: InputMaybe<Scalars['String']>;
+  socialHandles?: InputMaybe<Scalars['String']>;
+  storeOrDC?: InputMaybe<Scalars['String']>;
   title: Scalars['String'];
+  willStockBeReturned?: InputMaybe<Scalars['String']>;
 };
 
 export type CreateTermsInput = {
@@ -8253,7 +8268,9 @@ export type IncidentQuestions = {
   __typename?: 'IncidentQuestions';
   actions: Array<Scalars['JSON']>;
   answerType: AnswerType;
+  dependentMode?: Maybe<Scalars['String']>;
   dependentOnAnswerValue?: Maybe<Scalars['String']>;
+  dependentOnAnswerValueArray?: Maybe<Array<Scalars['String']>>;
   dependentOnBrandIds?: Maybe<Array<Scalars['String']>>;
   dependentOnQuestionId?: Maybe<Scalars['String']>;
   dependentOnTagIds?: Maybe<Array<Scalars['String']>>;
@@ -14266,6 +14283,7 @@ export type Query = {
   role: CustomRole;
   roles: QueryRolesConnection;
   scheme: Scheme;
+  schemeUsersRelay: QuerySchemeUsersRelayConnection;
   schemes: Array<Scheme>;
   searchOffenders: QuerySearchOffendersConnection;
   sharingBusinesses: Array<SharingBusiness>;
@@ -15479,6 +15497,20 @@ export type QuerySchemeArgs = {
 };
 
 
+export type QuerySchemeUsersRelayArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  cursor?: InputMaybe<UserSchemeWhereUniqueInput>;
+  distinct?: InputMaybe<Array<UserSchemeScalarFieldEnum>>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<UserSchemeOrderByWithRelationInput>>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<UserSchemeWhereInput>;
+};
+
+
 export type QuerySchemesArgs = {
   cursor?: InputMaybe<SchemeWhereUniqueInput>;
   distinct?: InputMaybe<Array<SchemeScalarFieldEnum>>;
@@ -16196,6 +16228,19 @@ export type QueryRolesConnectionEdge = {
   __typename?: 'QueryRolesConnectionEdge';
   cursor: Scalars['String'];
   node: CustomRole;
+};
+
+export type QuerySchemeUsersRelayConnection = {
+  __typename?: 'QuerySchemeUsersRelayConnection';
+  edges: Array<QuerySchemeUsersRelayConnectionEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type QuerySchemeUsersRelayConnectionEdge = {
+  __typename?: 'QuerySchemeUsersRelayConnectionEdge';
+  cursor: Scalars['String'];
+  node: UserScheme;
 };
 
 export type QuerySearchOffendersConnection = {
@@ -19324,15 +19369,28 @@ export type StockRemovalRequest = {
   actions: Array<Action>;
   approvers: Array<StockRemovalRequestApproval>;
   business: Business;
+  costCentreCode?: Maybe<Scalars['String']>;
   createdAt: Scalars['Date'];
   createdBy: User;
   description?: Maybe<Scalars['String']>;
+  fascia?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   items: Array<StockRemovalItem>;
+  personalityInfluences?: Maybe<Scalars['String']>;
+  reason?: Maybe<Scalars['String']>;
+  reasonForNonReturn?: Maybe<Scalars['String']>;
+  rechargeBrand?: Maybe<Scalars['String']>;
+  rechargeReference?: Maybe<Scalars['String']>;
   reference?: Maybe<Scalars['Int']>;
+  returnDate?: Maybe<Scalars['DateTime']>;
   scheme: Scheme;
+  shippingAddress?: Maybe<Scalars['String']>;
+  smqAccountNumber?: Maybe<Scalars['String']>;
+  socialHandles?: Maybe<Scalars['String']>;
   status: StockRemovalRequestStatus;
+  storeOrDC?: Maybe<Scalars['String']>;
   title: Scalars['String'];
+  willStockBeReturned?: Maybe<Scalars['String']>;
 };
 
 export type StockRemovalRequestApproval = {
@@ -21128,6 +21186,7 @@ export type UpdateQuestionOnActivityInput = {
 export type UpdateQuestionOnTagInput = {
   brands?: InputMaybe<Array<Scalars['String']>>;
   dependentAnswer?: InputMaybe<Scalars['String']>;
+  dependentMatchMode?: InputMaybe<AnyAll>;
   dependentOnQId?: InputMaybe<Scalars['String']>;
   dependentOnTagQId?: InputMaybe<Scalars['String']>;
   dependentTags?: InputMaybe<Array<Scalars['String']>>;
@@ -21233,12 +21292,25 @@ export type UpdateStockRemovalItemInput = {
 export type UpdateStockRemovalRequestInput = {
   approverIds?: InputMaybe<Array<Scalars['String']>>;
   businessId?: InputMaybe<Scalars['String']>;
+  costCentreCode?: InputMaybe<Scalars['String']>;
   createItems?: InputMaybe<Array<CreateStockRemovalItemInput>>;
   deleteItems?: InputMaybe<Array<Scalars['String']>>;
   description?: InputMaybe<Scalars['String']>;
+  fascia?: InputMaybe<Scalars['String']>;
+  personalityInfluences?: InputMaybe<Scalars['String']>;
+  reason?: InputMaybe<Scalars['String']>;
+  reasonForNonReturn?: InputMaybe<Scalars['String']>;
+  rechargeBrand?: InputMaybe<Scalars['String']>;
+  rechargeReference?: InputMaybe<Scalars['String']>;
+  returnDate?: InputMaybe<Scalars['DateTime']>;
   schemeId?: InputMaybe<Scalars['String']>;
+  shippingAddress?: InputMaybe<Scalars['String']>;
+  smqAccountNumber?: InputMaybe<Scalars['String']>;
+  socialHandles?: InputMaybe<Scalars['String']>;
+  storeOrDC?: InputMaybe<Scalars['String']>;
   title?: InputMaybe<Scalars['String']>;
   updateItems?: InputMaybe<Array<UpdateStockRemovalItemInput>>;
+  willStockBeReturned?: InputMaybe<Scalars['String']>;
 };
 
 export type UpdateTagQuestionInput = {
@@ -22284,9 +22356,14 @@ export type UserContributionWhereInput = {
   search?: InputMaybe<Scalars['String']>;
 };
 
+export type UserGroupsPermissionFilter = {
+  allowedMethods: Array<PermissionMethod>;
+  model: PermissionModel;
+};
+
 export type UserGroupsReplayWhere = {
-  reportGroupsOnly?: InputMaybe<Scalars['Boolean']>;
   schemeIds?: InputMaybe<Array<Scalars['String']>>;
+  schemePermissionFilter?: InputMaybe<Array<UserGroupsPermissionFilter>>;
 };
 
 export type UserIncidentsCountGraphInput = {

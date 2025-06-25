@@ -1,9 +1,16 @@
 mutation CreateStockRemovalRequest($data: CreateStockRemovalRequestInput!) {
     createStockRemovalRequest(data: $data) {
         id
+        createdAt
+        title
         status
         reference
-        title,
-        createdAt
+        approvers {
+            status
+            user {
+                id
+                fullName
+            }
+        }
     }
 }

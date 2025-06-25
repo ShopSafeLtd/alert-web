@@ -8,7 +8,7 @@ export type ListIncidentTagsQueryVariables = Types.Exact<{
 }>;
 
 
-export type ListIncidentTagsQuery = { __typename?: 'Query', listIncidentTags: Array<{ __typename?: 'IncidentTags', hasChildren: boolean, label: string, parentId?: string | null, parents: Array<string>, policeReporting: boolean, tier: number, value: string, tooltip?: string | null, incidentForm?: Array<{ __typename?: 'IncidentFormOnTag', position: number, type: Types.IncidentFormField, metadata?: { [key: string]: any } | null, conditions?: Array<{ [key: string]: any }> | null }> | null, questions?: Array<{ __typename?: 'IncidentQuestions', answerType: Types.AnswerType, label: string, questionId: string, required: boolean, tagQuestionId: string, priority: number, dependentOnQuestionId?: string | null, dependentOnAnswerValue?: string | null, dependentOnTagIds?: Array<string> | null, dependentOnBrandIds?: Array<string> | null, tooltip?: string | null, actions: Array<{ [key: string]: any }>, options: Array<{ __typename?: 'AnswerOption', label: string, value: string }> }> | null }> };
+export type ListIncidentTagsQuery = { __typename?: 'Query', listIncidentTags: Array<{ __typename?: 'IncidentTags', hasChildren: boolean, label: string, parentId?: string | null, parents: Array<string>, policeReporting: boolean, tier: number, value: string, tooltip?: string | null, incidentForm?: Array<{ __typename?: 'IncidentFormOnTag', position: number, type: Types.IncidentFormField, metadata?: { [key: string]: any } | null, conditions?: Array<{ [key: string]: any }> | null }> | null, questions?: Array<{ __typename?: 'IncidentQuestions', answerType: Types.AnswerType, label: string, questionId: string, required: boolean, tagQuestionId: string, priority: number, dependentOnQuestionId?: string | null, dependentOnAnswerValue?: string | null, dependentOnTagIds?: Array<string> | null, dependentOnBrandIds?: Array<string> | null, dependentMode?: string | null, dependentOnAnswerValueArray?: Array<string> | null, tooltip?: string | null, actions: Array<{ [key: string]: any }>, options: Array<{ __typename?: 'AnswerOption', label: string, value: string }> }> | null }> };
 
 
 export const ListIncidentTagsDocument = gql`
@@ -36,6 +36,8 @@ export const ListIncidentTagsDocument = gql`
       dependentOnAnswerValue
       dependentOnTagIds
       dependentOnBrandIds
+      dependentMode
+      dependentOnAnswerValueArray
       tooltip
       actions
       options {

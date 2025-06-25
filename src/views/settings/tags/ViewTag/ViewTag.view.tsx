@@ -192,8 +192,11 @@ const ViewTag = ({
     if (found?.dependentQuestions[0]) {
       const dependentOn = found.dependentQuestions[0].tagQuestionId;
       const dependentAnswer = found.dependentQuestions[0].answer;
+      // eslint-disable-next-line prefer-destructuring
+      const dependentMatchMode = found.dependentQuestions[0].dependentMatchMode;
       return {
         dependentAnswer,
+        dependentMatchMode,
         dependentOn,
       };
     }

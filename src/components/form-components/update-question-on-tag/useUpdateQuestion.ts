@@ -6,7 +6,7 @@ import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { useBrandsQuery } from '#/views/settings/brands/graphql/queries/__generated__/brands.generated';
 import { Form, notification } from 'antd';
 import { useTagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
-import { AnswerType, TagType } from 'graphql/types';
+import { AnswerType, AnyAll, TagType } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -14,6 +14,8 @@ import { useIntl } from 'react-intl';
 import type { TagQuestion } from './UpdateQuestion.container';
 
 import errorNotification from '../../../types/mutation_notifications/error_notification';
+
+const ANSWER_SEPARATOR = '|||';
 
 interface Return {
   brands: {
@@ -30,8 +32,9 @@ interface Return {
 
 export interface FormData {
   dependantTags: string[];
-  dependentAnswer: number | string;
+  dependentAnswer: null | number | string | string[];
   dependentBrands: string[];
+  dependentMatchMode?: 'all' | 'any';
   dependentOn: string;
   newOptions: string[];
   newQuestion: string;
@@ -45,9 +48,25 @@ export interface FormData {
 
 const { useForm } = Form;
 
+export const convertAnyAllToEnum = (
+  value: 'all' | 'any' | null | undefined
+): AnyAll | null => {
+  switch (value) {
+    case 'all': {
+      return AnyAll.All;
+    }
+    case 'any': {
+      return AnyAll.Any;
+    }
+    default: {
+      return null;
+    }
+  }
+};
 interface Props {
   dependent?: {
     dependentAnswer: string;
+    dependentMatchMode?: 'all' | 'any' | null;
     dependentOn: string;
   };
   onClose: () => void;
@@ -80,8 +99,9 @@ const useUpdateQuestion = ({
   const [saving, setSaving] = useState(false);
   const [data, setData] = useState<FormData>({
     dependantTags: [],
-    dependentAnswer: '',
+    dependentAnswer: null,
     dependentBrands: [],
+    dependentMatchMode: 'any',
     dependentOn: '',
     newOptions: [],
     newQuestion: '',
@@ -156,15 +176,29 @@ const useUpdateQuestion = ({
       const checkExists = tagQuestions.find(
         (tagQ) => tagQ.tagQuestionId === dependent?.dependentOn
       );
+      const mode = checkExists ? dependent?.dependentMatchMode : undefined;
+      const checkIfArray = (value: string | undefined) => {
+        if (!value || !checkExists) return '';
+        if (value.includes('|||') || mode) {
+          return value.split(ANSWER_SEPARATOR);
+        }
 
+        return value;
+      };
+
+      console.log(checkIfArray(dependent?.dependentAnswer));
       setData({
         dependantTags:
           questionData.question.tags.find((tag) => tag.id === tagQId)
             ?.dependentTags ?? [],
-        dependentAnswer: checkExists ? dependent?.dependentAnswer || '' : '',
+        dependentAnswer: checkIfArray(dependent?.dependentAnswer),
         dependentBrands:
           questionData.question?.tags?.find((tag) => tag.id === tagQId)
             ?.dependentBrands || [],
+        dependentMatchMode: checkExists
+          ? dependent?.dependentMatchMode || 'any'
+          : undefined,
+
         dependentOn: checkExists ? dependent?.dependentOn || '' : '',
         newOptions: questionData.question?.optionsFormatted || [],
         newQuestion: questionData.question?.questionFormatted || '',
@@ -185,10 +219,13 @@ const useUpdateQuestion = ({
         dependantTags:
           questionData.question.tags.find((tag) => tag.id === tagQId)
             ?.dependentTags ?? [],
-        dependentAnswer: checkExists ? dependent?.dependentAnswer || '' : '',
+        dependentAnswer: checkIfArray(dependent?.dependentAnswer),
         dependentBrands:
           questionData.question?.tags?.find((tag) => tag.id === tagQId)
             ?.dependentBrands || [],
+        dependentMatchMode: checkExists
+          ? dependent?.dependentMatchMode || 'any'
+          : undefined,
         dependentOn: checkExists ? dependent?.dependentOn || '' : '',
         newOptions: questionData.question?.optionsFormatted || [],
         newQuestion: questionData.question?.questionFormatted || '',
@@ -227,11 +264,12 @@ const useUpdateQuestion = ({
     );
     let answerString: string | undefined;
     if (dependentOnTag) {
-      answerString =
-        typeof values.dependentAnswer === 'number'
-          ? values.dependentAnswer.toString()
-          : values.dependentAnswer.toLowerCase();
+      const raw = values.dependentAnswer;
+      answerString = Array.isArray(raw)
+        ? raw.map((item) => String(item).toLowerCase()).join(ANSWER_SEPARATOR)
+        : String(raw).toLowerCase();
     }
+
     updateQuestionOnTag(
       values.newQuestion,
       questionId,
@@ -249,7 +287,9 @@ const useUpdateQuestion = ({
         data: {
           brands: values.dependentBrands ?? [],
           dependentAnswer: answerString ?? undefined,
+          dependentMatchMode: convertAnyAllToEnum(values.dependentMatchMode),
           dependentOnQId: dependentOnTag?.questionId,
+
           dependentOnTagQId: values.dependentOn ?? undefined,
           dependentTags: values.dependantTags ?? [],
           newOptions: values.newOptions,
