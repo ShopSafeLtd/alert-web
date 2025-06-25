@@ -1,3 +1,4 @@
+import { useStoreState } from '#/state';
 import hasRolePermission from '#/utils/has-role-permission';
 import {
   AppstoreOutlined,
@@ -31,7 +32,7 @@ import Sider from 'antd/lib/layout/Sider';
 import { PermissionMethod, PermissionModel } from 'graphql/types';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, matchPath, useLocation } from 'react-router-dom';
 
 import useStyles from './SettingsSideMenu.style';
 
@@ -287,7 +288,8 @@ const SettingsSideMenu = ({
       ],
     },
   ];
-
+  const currentTheme = useStoreState((state) => state.theme.currentTheme);
+  const isDark = currentTheme === 'dark';
   const renderMenuItems = () =>
     settingsCategories.map((category, categoryIndex) => {
       const visibleItems = category.items.filter((item) =>
@@ -302,7 +304,7 @@ const SettingsSideMenu = ({
             {category.category}
           </Typography.Text>
           {visibleItems.map((item) => {
-            const isActive = location.pathname.startsWith(item.to);
+            const isActive = matchPath(item.to, location.pathname);
             return (
               <Link key={item.to} to={item.to}>
                 <div className={`${classes.item} ${isActive ? 'active' : ''}`}>
@@ -335,23 +337,31 @@ const SettingsSideMenu = ({
         size="small"
         style={{
           boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-          fontSize: '14px',
-          left: collapsed ? 65 : undefined,
+          fontSize: '10px',
+          left: collapsed ? 60 : undefined,
           position: 'absolute',
           right: collapsed ? undefined : -18,
-          top: 24,
+
+          top: 15,
           zIndex: 1000,
         }}
         type="default"
       />
       {collapsed ? (
-        <div style={{ padding: '24px 0', width: 80 }}>
+        <div
+          style={{
+            borderRight: isDark ? '1px solid #4d5b75' : '1px solid #e8e8e8',
+            height: '100vh',
+            padding: '24px 0',
+            width: 80,
+          }}
+        >
           {settingsCategories.map((category) => {
             const visibleItems = category.items.filter((item) =>
               hasRolePermission({ permission: item.permissions })
             );
             return visibleItems.map((item) => {
-              const isActive = location.pathname.startsWith(item.to);
+              const isActive = matchPath(item.to, location.pathname);
               return (
                 <Link key={item.to} to={item.to}>
                   <div
