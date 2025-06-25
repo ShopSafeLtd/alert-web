@@ -23,7 +23,7 @@ const getLogo = (props: GetLogoArgs) => {
   }
 
   if (navCollapsed) {
-    return '/img/logo.png';
+    return '/img/logo.svg';
   }
   return '/img/light-logo.svg';
 };
@@ -45,6 +45,7 @@ interface Props {
   mobileLogo?: boolean;
   logoType?: string;
   width?: number;
+  maxHeight?: number;
 }
 
 export const Logo = (props: Props) => {
@@ -60,7 +61,8 @@ export const Logo = (props: Props) => {
       style={{
         display: 'flex',
         justifyContent: 'center',
-        padding: '15px 0 20px',
+        padding: '20px 20px 10px',
+        width: '100%',
       }}
     >
       <img
@@ -70,7 +72,14 @@ export const Logo = (props: Props) => {
           logo: customLogo,
         })}
         alt={`${APP_NAME} logo`}
-        style={{ width: props.width ?? 130 }}
+        style={{
+          maxHeight: props.maxHeight ?? 60,
+          maxWidth: '100%',
+          width: 'auto',
+          height: 'auto',
+          display: 'block',
+          objectFit: 'contain',
+        }}
       />
     </div>
   );
