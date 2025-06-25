@@ -1,5 +1,4 @@
 import type { Theme } from 'configs/ThemeConfig';
-import type { IncidentPriority } from 'graphql/types';
 
 import {
   faChevronLeft,
@@ -62,16 +61,39 @@ const useStyles = createUseStyles((theme: Theme) => ({
 
 interface Props {
   currentIndex: number;
-  incidents: {
-    business: { name: string };
-    dayTime: string;
-    description: string;
+  incidents: Array<{
+    approved?: boolean | null;
+    business?: {
+      name?: null | string;
+    } | null;
+    createdBy?: {
+      fullName?: null | string;
+    } | null;
+    crimeTypes?: Array<{
+      id: string;
+      name: string;
+    }> | null;
+    customerRef?: null | string;
+    dayTime?: null | string;
+    description?: null | string;
+    groups?: Array<{
+      id: string;
+      name: string;
+    }> | null;
     id: string;
-    priority: IncidentPriority;
-    reference: string;
+    location?: {
+      full?: null | string;
+    } | null;
+    offenders?: Array<{
+      id: string;
+      name?: null | string;
+    }> | null;
+    policeRef?: null | string;
+    priority?: null | string;
+    reference?: null | string;
     subject: string;
-    totalValue: number;
-  }[];
+    totalValue?: null | number;
+  }>;
   onNavigate: (index: number) => void;
 }
 

@@ -442,7 +442,7 @@ const IncidentMap = ({
         }
 
         // Fallback: Use geographic proximity
-        const { coordinates } = clusterFeature.geometry as {
+        const { coordinates } = clusterFeature.geometry as unknown as {
           coordinates: [number, number];
         };
         const [clusterLng, clusterLat] = coordinates;

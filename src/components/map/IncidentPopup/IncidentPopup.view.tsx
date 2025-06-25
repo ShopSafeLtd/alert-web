@@ -290,7 +290,7 @@ const IncidentPopup: React.FC<Props> = ({ incident }) => {
       </div>
 
       <div className={classes.footer}>
-        <Link to={`/app/incidents/${incident.id}`}>
+        <Link to={`/app/incidents/view/${incident.id}`}>
           <Button
             className={classes.viewButton}
             icon={<FontAwesomeIcon icon={faExternalLink} />}

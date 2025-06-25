@@ -1,5 +1,4 @@
 import type { Theme } from 'configs/ThemeConfig';
-import type { IncidentPriority } from 'graphql/types';
 
 import {
   faCalendarDay,
@@ -164,16 +163,39 @@ const useStyles = createUseStyles((theme: Theme) => ({
 
 interface Props {
   currentIndex: number;
-  incidents: {
-    business: { name: string };
-    dayTime: string;
-    description: string;
+  incidents: Array<{
+    approved?: boolean | null;
+    business?: {
+      name?: null | string;
+    } | null;
+    createdBy?: {
+      fullName?: null | string;
+    } | null;
+    crimeTypes?: Array<{
+      id: string;
+      name: string;
+    }> | null;
+    customerRef?: null | string;
+    dayTime?: null | string;
+    description?: null | string;
+    groups?: Array<{
+      id: string;
+      name: string;
+    }> | null;
     id: string;
-    priority: IncidentPriority;
-    reference: string;
+    location?: {
+      full?: null | string;
+    } | null;
+    offenders?: Array<{
+      id: string;
+      name?: null | string;
+    }> | null;
+    policeRef?: null | string;
+    priority?: null | string;
+    reference?: null | string;
     subject: string;
-    totalValue: number;
-  }[];
+    totalValue?: null | number;
+  }>;
   isOpen: boolean;
   onClose: () => void;
   onNavigate: (index: number) => void;
@@ -233,19 +255,7 @@ const IncidentSidebar: React.FC<Props> = ({
       <div className={classes.content}>
         <List
           dataSource={incidents}
-          renderItem={(
-            incident: {
-              business: { name: string };
-              dayTime: string;
-              description: string;
-              id: string;
-              priority: IncidentPriority;
-              reference: string;
-              subject: string;
-              totalValue: number;
-            },
-            index
-          ) => (
+          renderItem={(incident, index) => (
             <List.Item key={incident.id} style={{ border: 'none', padding: 0 }}>
               <Card
                 className={`${classes.incidentCard} ${index === currentIndex ? 'active' : ''}`}
