@@ -3,7 +3,6 @@ import type { Theme } from 'configs/ThemeConfig';
 
 import { LocalStorageKeys, typedLocalStorage } from '#/utils';
 import { faArrowRight } from '@fortawesome/pro-light-svg-icons';
-import { faCaretDown } from '@fortawesome/pro-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Col, Dropdown, Row, Typography } from 'antd';
 import React, { useState } from 'react';
@@ -17,18 +16,16 @@ const useStyles = createUseStyles((theme: Theme) => ({
   active: {
     backgroundColor: theme.imageBackgroundColor,
   },
-  notificationCol: {
-    '&:hover': {
-      backgroundColor: theme.hoverBackground,
-    },
+  languageIcon: {
+    color: theme.headerColor,
+    fontSize: 20,
+  },
+  languageSelector: {
     alignItems: 'center',
-    borderBottom: `1px solid ${theme.borderColor}`,
-    borderTop: `1px solid ${theme.borderColor}`,
     cursor: 'pointer',
     display: 'flex',
     justifyContent: 'center',
-    paddingBottom: 10,
-    paddingTop: 10,
+    width: '100%',
   },
 }));
 
@@ -53,108 +50,126 @@ export const NavTranslations = () => {
   };
   const items = [
     {
+      flag: '🇬🇧',
       label: intl.formatMessage({
         defaultMessage: 'English 🇬🇧',
       }),
       value: 'en',
     },
     {
+      flag: '🇫🇷',
       label: intl.formatMessage({
         defaultMessage: 'French 🇫🇷',
       }),
       value: 'fr',
     },
     {
+      flag: '🇩🇪',
       label: intl.formatMessage({
         defaultMessage: 'German 🇩🇪',
       }),
       value: 'de',
     },
     {
+      flag: '🇪🇸',
       label: intl.formatMessage({
         defaultMessage: 'Spanish 🇪🇸',
       }),
       value: 'es',
     },
     {
+      flag: '🇩🇰',
       label: intl.formatMessage({
         defaultMessage: 'Danish 🇩🇰',
       }),
       value: 'da',
     },
     {
+      flag: '🇮🇹',
       label: intl.formatMessage({
         defaultMessage: 'Italian 🇮🇹',
       }),
       value: 'it',
     },
     {
+      flag: '🇳🇱',
       label: intl.formatMessage({
         defaultMessage: 'Dutch 🇳🇱',
       }),
       value: 'nl',
     },
     {
+      flag: '🇧🇪',
       label: intl.formatMessage({
         defaultMessage: 'Flemish 🇧🇪',
       }),
       value: 'rbe',
     },
     {
+      flag: '🇵🇹',
       label: intl.formatMessage({
         defaultMessage: 'Portuguese 🇵🇹',
       }),
       value: 'pt',
     },
     {
+      flag: '🇸🇪',
       label: intl.formatMessage({
         defaultMessage: 'Swedish 🇸🇪',
       }),
       value: 'sv',
     },
     {
+      flag: '🇵🇱',
       label: intl.formatMessage({
         defaultMessage: 'Polish 🇵🇱',
       }),
       value: 'pl',
     },
     {
+      flag: '🇫🇮',
       label: intl.formatMessage({
         defaultMessage: 'Finnish 🇫🇮',
       }),
       value: 'fi',
     },
     {
+      flag: '🇲🇾',
       label: intl.formatMessage({
         defaultMessage: 'Malay 🇲🇾',
       }),
       value: 'ms',
     },
     {
+      flag: '🇹🇭',
       label: intl.formatMessage({
         defaultMessage: 'Thai 🇹🇭',
       }),
       value: 'th',
     },
     {
+      flag: '🇷🇴',
       label: intl.formatMessage({
         defaultMessage: 'Romanian 🇷🇴',
       }),
       value: 'ro',
     },
     {
+      flag: '🇮🇩',
       label: intl.formatMessage({
         defaultMessage: 'Indonesian 🇮🇩',
       }),
       value: 'id',
     },
     {
+      flag: '🇭🇺',
       label: intl.formatMessage({
         defaultMessage: 'Hungarian 🇭🇺',
       }),
       value: 'hu',
     },
     {
+      flag: '🇬🇷',
       label: intl.formatMessage({
         defaultMessage: 'Greek 🇬🇷',
       }),
@@ -227,18 +242,11 @@ export const NavTranslations = () => {
       placement="topRight"
       trigger={['click']}
     >
-      <div className={classes.notificationCol}>
-        <Text ellipsis style={{ maxWidth: 120 }}>
-          {items.find((item) => item.value === locale)?.label}
-        </Text>
-        <FontAwesomeIcon
-          icon={faCaretDown}
-          style={{
-            fontSize: 18,
-            marginLeft: 10,
-            marginTop: -2,
-          }}
-        />
+      <div className={classes.languageSelector}>
+        <span style={{ fontSize: 20 }}>
+          {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
+          {items.find((item) => item.value === locale)?.flag || '🌐'}
+        </span>
       </div>
     </Dropdown>
   );
