@@ -187,6 +187,7 @@ const DateSelect = ({ defaultRange, onChange }: Props) => {
 
   useEffect(() => {
     if (customRangeOpen) {
+      console.log(dateRange);
       onChange(dateRange, selected);
     } else {
       onChange(selectedModeToDate(selected), selected);
@@ -198,6 +199,11 @@ const DateSelect = ({ defaultRange, onChange }: Props) => {
   const formatStartDate = (date: Date | null) => {
     if (!date) return null;
     return dayjs(date).hour(0).minute(0).second(1).toDate();
+  };
+
+  const formatEndDate = (date: Date | null) => {
+    if (!date) return null;
+    return dayjs(date).hour(23).minute(59).second(59).toDate();
   };
 
   return customRangeOpen ? (
@@ -212,7 +218,7 @@ const DateSelect = ({ defaultRange, onChange }: Props) => {
               value
                 ? {
                     endDate:
-                      value?.[1] ??
+                      formatEndDate(value?.[1]) ??
                       dayjs().hour(23).minute(59).minute(59).toDate(),
                     startDate:
                       formatStartDate(value?.[0]) ??
