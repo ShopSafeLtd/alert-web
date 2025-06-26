@@ -5,33 +5,19 @@ import type { IndustriesQuery } from 'graphql/industry/__generated__/industries.
 import type { IncidentMapQuery } from 'graphql/reports/queries/__generated__/incident-map.generated';
 import type { FillLayer, LineLayer, MapRef } from 'react-map-gl';
 
+import FloatingFilterPanel from '#/components/map/FloatingFilterPanel';
+import FloatingShowFiltersButton from '#/components/map/FloatingShowFiltersButton';
 import IncidentSidebar from '#/components/map/IncidentSidebar/IncidentSidebar.view';
 import MultiIncidentPopup from '#/components/map/MultiIncidentPopup/MultiIncidentPopup.view';
 import ReportsSideMenu from '#/components/reports/ReportsSideMenu/ReportsSideMenu.view';
-import DatePicker from '#/components/util-components/DatePicker';
-import {
-  Button,
-  Col,
-  Drawer,
-  Form,
-  Row,
-  Select,
-  Space,
-  Spin,
-  Switch,
-  Typography,
-} from 'antd';
+import { Col, Row, Spin } from 'antd';
 import mapboxgl from 'mapbox-gl';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { FormattedMessage, useIntl } from 'react-intl';
 import { Layer, Map as MapboxMap, Popup, Source } from 'react-map-gl';
 import { useStoreState } from 'state';
 
 import useStyles from './IncidentMap.styles';
 import policeJSON from './police-areas';
-
-const { Title } = Typography;
-const { RangePicker } = DatePicker;
 
 export const dataLayer: FillLayer = {
   id: 'data',
@@ -279,6 +265,7 @@ const IncidentMap = ({
   selectedSchemes,
 }: Props) => {
   const mapRef = useRef<MapRef>(null);
+  const mapContainerRef = useRef<HTMLDivElement>(null);
 
   const currentTheme = useStoreState((state) => state.theme.currentTheme);
 
@@ -286,7 +273,7 @@ const IncidentMap = ({
   const [showHeatmap, setShowHeatmap] = useState(false);
   const [showMarkers, setShowMarkers] = useState(true);
   const [showPolice, setShowPolice] = useState(false);
-  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [showFilterPanel, setShowFilterPanel] = useState(true);
   const [cluster, setCluster] = useState(true);
   const [selectedIncidents, setSelectedIncidents] = useState<{
     currentIndex: number;
@@ -306,8 +293,8 @@ const IncidentMap = ({
     []
   );
 
-  const toggleDrawerOpen = () => {
-    setDrawerOpen(!drawerOpen);
+  const toggleFilterPanel = () => {
+    setShowFilterPanel(!showFilterPanel);
   };
 
   const toggleCluster = () => {
@@ -664,7 +651,6 @@ const IncidentMap = ({
     mapRef.current?.moveLayer('cluster-count');
   }, [showHeatmap, showMarkers]);
 
-  const intl = useIntl();
   const [collapsed, setCollapsed] = useState(false);
 
   const classes = useStyles();
@@ -699,36 +685,12 @@ const IncidentMap = ({
         />
       </Col>
       <Col className={classes.page} flex={1}>
-        <Row align="middle" className={classes.titleContainer} gutter={16}>
-          <Col flex={1}>
-            <Title className={classes.title} level={3}>
-              {intl.formatMessage({
-                defaultMessage: 'Incident Map',
-              })}
-            </Title>
-          </Col>
-          <Col>
-            <Space>
-              <Button onClick={toggleViewMode}>
-                {viewMode === 'popup' ? (
-                  <FormattedMessage defaultMessage="Sidebar View" />
-                ) : (
-                  <FormattedMessage defaultMessage="Popup View" />
-                )}
-              </Button>
-              <Button onClick={toggleDrawerOpen}>
-                <FormattedMessage defaultMessage="Mapping Options" />
-              </Button>
-            </Space>
-          </Col>
-        </Row>
-
         {loading && data?.incidents ? (
           <div className={classes.loadingPage}>
             <Spin />
           </div>
         ) : (
-          <div className={classes.mapContainer}>
+          <div className={classes.mapContainer} ref={mapContainerRef}>
             <MapboxMap
               initialViewState={{
                 latitude: 55.37,
@@ -753,7 +715,7 @@ const IncidentMap = ({
               onMouseEnter={onMouseEnter}
               onMouseLeave={onMouseLeave}
               ref={mapRef}
-              style={{ height: 'calc(100vh - 60px)', width: '100%' }}
+              style={{ height: '100vh', width: '100%' }}
             >
               {showPolice && (
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -912,6 +874,45 @@ const IncidentMap = ({
                 </Popup>
               )}
             </MapboxMap>
+
+            {showFilterPanel && (
+              <FloatingFilterPanel
+                brandsData={brandsData}
+                brandsLoading={brandsLoading}
+                cluster={cluster}
+                containerRef={mapContainerRef}
+                groupsData={groupsData}
+                groupsLoading={groupsLoading}
+                industriesData={industriesData}
+                industriesLoading={industriesLoading}
+                onChangeBrands={onChangeBrands}
+                onChangeDateRange={onChangeDateRange}
+                onChangeGroups={onChangeGroups}
+                onChangeIndustries={onChangeIndustries}
+                onChangeSchemes={onChangeSchemes}
+                onClose={toggleFilterPanel}
+                onToggleBusinesses={toggleBusinesses}
+                onToggleCluster={toggleCluster}
+                onToggleHeatmap={toggleHeatmap}
+                onToggleMarkers={toggleMarkers}
+                onTogglePolice={togglePolice}
+                onToggleViewMode={toggleViewMode}
+                schemes={schemes}
+                selectedBrands={selectedBrands}
+                selectedGroups={selectedGroups}
+                selectedIndustries={selectedIndustries}
+                selectedSchemes={selectedSchemes}
+                showBusinesses={showBusinesses}
+                showHeatmap={showHeatmap}
+                showMarkers={showMarkers}
+                showPolice={showPolice}
+                viewMode={viewMode}
+              />
+            )}
+
+            {!showFilterPanel && (
+              <FloatingShowFiltersButton onClick={toggleFilterPanel} />
+            )}
           </div>
         )}
 
@@ -925,178 +926,6 @@ const IncidentMap = ({
           onNavigate={onNavigateIncident}
           onSelectIncident={onSelectIncident}
         />
-
-        <Drawer onClose={toggleDrawerOpen} open={drawerOpen}>
-          <Form layout="vertical">
-            <Row>
-              <Col flex={1}>
-                <Form.Item
-                  label={intl.formatMessage({
-                    defaultMessage: 'Show Businesses',
-                  })}
-                >
-                  <Switch checked={showBusinesses} onClick={toggleBusinesses} />
-                </Form.Item>
-              </Col>
-              <Col flex={1}>
-                <Form.Item
-                  label={intl.formatMessage({
-                    defaultMessage: 'Show Incidents',
-                  })}
-                >
-                  <Switch checked={showMarkers} onClick={toggleMarkers} />
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row>
-              <Col flex={1}>
-                <Form.Item
-                  label={intl.formatMessage({
-                    defaultMessage: 'Show Heatmap',
-                  })}
-                >
-                  <Switch checked={showHeatmap} onClick={toggleHeatmap} />
-                </Form.Item>
-              </Col>
-              <Col flex={1}>
-                <Form.Item
-                  label={intl.formatMessage({
-                    defaultMessage: 'Show Police Areas',
-                  })}
-                >
-                  <Switch checked={showPolice} onClick={togglePolice} />
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <Form.Item
-                  label={intl.formatMessage({
-                    defaultMessage: 'Cluster Points',
-                  })}
-                >
-                  <Switch checked={cluster} onClick={toggleCluster} />
-                </Form.Item>
-              </Col>
-            </Row>
-            <Form.Item
-              label={intl.formatMessage({
-                defaultMessage: 'Schemes',
-              })}
-            >
-              <Select
-                className={classes.groupSelect}
-                maxTagCount={2}
-                mode="multiple"
-                onChange={onChangeSchemes}
-                placeholder={intl.formatMessage({
-                  defaultMessage: 'Select Scheme',
-                })}
-                style={{ minWidth: 150 }}
-                value={selectedSchemes}
-              >
-                {schemes.map((scheme) => (
-                  <Select.Option
-                    key={scheme.scheme.id}
-                    value={scheme.scheme.id}
-                  >
-                    {scheme.scheme.name}
-                  </Select.Option>
-                ))}
-              </Select>
-            </Form.Item>
-            <Form.Item
-              label={intl.formatMessage({
-                defaultMessage: 'Groups',
-              })}
-            >
-              <Select
-                className={classes.groupSelect}
-                maxTagCount={1}
-                mode="multiple"
-                onChange={onChangeGroups}
-                placeholder={intl.formatMessage({
-                  defaultMessage: 'Select Groups',
-                })}
-                style={{ minWidth: 150 }}
-                value={selectedGroups}
-              >
-                {groupsData?.groups.map((group) => (
-                  <Select.Option
-                    key={group.id}
-                    loading={groupsLoading}
-                    value={group.id}
-                  >
-                    {group.name}
-                  </Select.Option>
-                ))}
-              </Select>
-            </Form.Item>
-            <Form.Item
-              label={intl.formatMessage({
-                defaultMessage: 'Date Filter',
-              })}
-            >
-              <RangePicker
-                onChange={(value) => {
-                  if (value && value[0] && value[1])
-                    onChangeDateRange({
-                      endDate: new Date(value[1].valueOf()),
-                      startDate: new Date(value[0].valueOf()),
-                    });
-                }}
-              />
-            </Form.Item>
-            <Form.Item
-              label={intl.formatMessage({
-                defaultMessage: 'Brands',
-              })}
-            >
-              <Select
-                className={classes.groupSelect}
-                loading={brandsLoading}
-                maxTagCount={1}
-                mode="multiple"
-                onChange={onChangeBrands}
-                placeholder={intl.formatMessage({
-                  defaultMessage: 'Brands Groups',
-                })}
-                style={{ minWidth: 150 }}
-                value={selectedBrands}
-              >
-                {brandsData?.brands.edges.map(({ node: group }) => (
-                  <Select.Option key={group.id} value={group.id}>
-                    {group.name}
-                  </Select.Option>
-                ))}
-              </Select>
-            </Form.Item>
-            <Form.Item
-              label={intl.formatMessage({
-                defaultMessage: 'Industries',
-              })}
-            >
-              <Select
-                className={classes.groupSelect}
-                loading={industriesLoading}
-                maxTagCount={1}
-                mode="multiple"
-                onChange={onChangeIndustries}
-                placeholder={intl.formatMessage({
-                  defaultMessage: 'Industries Groups',
-                })}
-                style={{ minWidth: 150 }}
-                value={selectedIndustries}
-              >
-                {industriesData?.industries.map((group) => (
-                  <Select.Option key={group.id} value={group.id}>
-                    {group.name}
-                  </Select.Option>
-                ))}
-              </Select>
-            </Form.Item>
-          </Form>
-        </Drawer>
       </Col>
     </Row>
   );

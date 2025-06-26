@@ -154,7 +154,7 @@ const ViewStockRemovalRequest = ({ requestId }: Props) => {
           <Descriptions.Item
             label={intl.formatMessage({ defaultMessage: 'Business' })}
           >
-            {data?.stockRemovalRequest.business.name}
+            {data?.stockRemovalRequest.business?.name}
           </Descriptions.Item>
         )}
         <Descriptions.Item

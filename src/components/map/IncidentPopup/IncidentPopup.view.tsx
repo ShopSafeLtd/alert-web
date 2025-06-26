@@ -293,7 +293,12 @@ const IncidentPopup: React.FC<Props> = ({ incident }) => {
         <Link to={`/app/incidents/view/${incident.id}`}>
           <Button
             className={classes.viewButton}
-            icon={<FontAwesomeIcon icon={faExternalLink} />}
+            icon={
+              <FontAwesomeIcon
+                icon={faExternalLink}
+                style={{ marginRight: 8 }}
+              />
+            }
             type="primary"
           >
             <FormattedMessage defaultMessage="View Full Details" />
