@@ -1,3 +1,4 @@
+import ExportActivitiesContainer from '#/views/data-management/export-activities/ExportActivities.container';
 import ExportChecklistsContainer from '#/views/data-management/export-checklists/exportChecklists.container';
 import ExportHome from '#/views/data-management/export-home/ExportHome.view';
 import { PermissionMethod, PermissionModel } from 'graphql/types';
@@ -47,6 +48,19 @@ const DataManagement = (): JSX.Element => (
         </PermissionCheckWrapper>
       }
       path="export-checklists"
+    />
+    <Route
+      element={
+        <PermissionCheckWrapper
+          permission={{
+            method: PermissionMethod.Read,
+            model: PermissionModel.DataExport,
+          }}
+        >
+          <ExportActivitiesContainer />
+        </PermissionCheckWrapper>
+      }
+      path="export-activities"
     />
   </Routes>
 );

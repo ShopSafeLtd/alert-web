@@ -2,6 +2,7 @@ import ToolCard from '#/components/data-management/ToolCard';
 import useSharedStyles from '#/components/data-management/shared.styles';
 import { currentPermissionsAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import {
+  faCalendarCheck,
   faCloudDownload,
   faFileExport,
   faSquareCheck,
@@ -41,6 +42,16 @@ const ExportHome = () => {
       iconColor: '#52c41a',
       title: <FormattedMessage defaultMessage="Export Checklists" />,
       to: '/app/scheme-settings/data-export/export-checklists',
+    },
+    {
+      description: (
+        <FormattedMessage defaultMessage="Export activities data to CSV format for compliance tracking and external reporting." />
+      ),
+      icon: <FontAwesomeIcon icon={faCalendarCheck} />,
+      iconBackground: '#1a4ac4',
+      iconColor: '#1a4ac4',
+      title: <FormattedMessage defaultMessage="Export Activities" />,
+      to: '/app/scheme-settings/data-export/export-activities',
     },
   ];
 

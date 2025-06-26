@@ -525,6 +525,16 @@ export type ActiveChecklistWhereUniqueInput = {
   updatedAt?: InputMaybe<DateTimeFilter>;
 };
 
+export type ActivityExportWhere = {
+  assignedUsers?: InputMaybe<Array<Scalars['String']>>;
+  businessIds?: InputMaybe<Array<Scalars['String']>>;
+  completedAt?: InputMaybe<DateRangeInput>;
+  createdAt?: InputMaybe<DateRangeInput>;
+  dueDate?: InputMaybe<DateRangeInput>;
+  groupIds?: InputMaybe<Array<Scalars['String']>>;
+  status: TodoStatusInput;
+};
+
 export type ActivityPerformance = {
   __typename?: 'ActivityPerformance';
   completed: Scalars['Boolean'];
@@ -10511,6 +10521,7 @@ export type Mutation = {
   copyOffender: Offender;
   createActionEvidence?: Maybe<Scalars['String']>;
   createActiveChecklist: ActiveChecklist;
+  createActivityCsvZip: Scalars['String'];
   createArticle: Article;
   createBlankImage: Image;
   createBlurFaces: Image;
@@ -10837,6 +10848,11 @@ export type MutationCreateActionEvidenceArgs = {
 
 export type MutationCreateActiveChecklistArgs = {
   data: CreateActiveChecklistInput;
+};
+
+
+export type MutationCreateActivityCsvZipArgs = {
+  where: ActivityExportWhere;
 };
 
 
@@ -15403,6 +15419,7 @@ export type QueryQuestionsArgs = {
   before?: InputMaybe<Scalars['String']>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
   where: QuestionsListWhere;
 };
 
