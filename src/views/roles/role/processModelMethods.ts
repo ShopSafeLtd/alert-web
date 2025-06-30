@@ -1,5 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import type { FormValues } from '#/views/roles/role/useRole';
-import type { PermissionMethod, PermissionModel } from 'graphql/types';
+import type { PermissionMethod } from 'graphql/types';
+
+import { PermissionModel } from 'graphql/types';
 
 interface ModelMethod {
   allowedMethods: PermissionMethod[];
@@ -19,10 +22,24 @@ export function processModelMethods(
   const groupedData = Object.entries(values)
     .filter(([key]) => !excludedKeys.has(key))
     .map(([key, value]) => {
-      const [model, method] = key.split(':');
+      const parts = key.split(':');
+      if (parts.length !== 2) return null;
+      // eslint-disable-next-line prefer-const
+      let [model, method] = parts;
+
+      // Normalize known lowercase/plural variants
+      if (model === 'checklists') model = 'CHECKLIST';
+      if (model === 'folders') model = 'FOLDER';
+
+      if (!Object.values(PermissionModel).includes(model as PermissionModel)) {
+        return null;
+      }
+
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       return { method, model, value };
     })
+    .filter(Boolean)
+    // @ts-expect-error - TypeScript doesn't know that `value` is boolean here
     // eslint-disable-next-line unicorn/no-array-reduce
     .reduce<Record<string, ModelMethod>>((acc, { method, model, value }) => {
       if (value) {
@@ -34,7 +51,7 @@ export function processModelMethods(
       return acc;
     }, {});
 
-  return Object.values(groupedData);
+  return Object.values(groupedData).filter(Boolean);
 }
 
 interface Method {
