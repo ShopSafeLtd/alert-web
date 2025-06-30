@@ -4,6 +4,12 @@ fragment Todos on Todo {
   completedDate
   createdAt
   completed
+  reference
+  dueDate
+  createdBy {
+    id
+    fullName
+  }
   assignedUsers {
     id
     fullName
