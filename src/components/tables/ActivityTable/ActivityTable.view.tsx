@@ -15,8 +15,11 @@ interface Props {
         completed?: boolean | null | undefined;
         completedDate?: Date | null | undefined;
         createdAt?: Date | null | undefined;
+        createdBy?: { fullName: string; id: string } | null | undefined;
+        dueDate?: Date | null | undefined;
         id: string;
         name?: null | string | undefined;
+        reference?: null | number | undefined;
       }[]
     | undefined;
 }
@@ -47,7 +50,33 @@ const ActivityTable = ({
           key: 'createdAt',
           render: (value: Date) => FormatCalendar(new Date(value), intl, true),
           title: intl.formatMessage({
-            defaultMessage: 'Start Date',
+            defaultMessage: 'Created Date',
+          }),
+        },
+        {
+          dataIndex: 'dueDate',
+          key: 'dueDate',
+          render: (value: Date) =>
+            value ? FormatCalendar(new Date(value), intl, true) : '-',
+          title: intl.formatMessage({
+            defaultMessage: 'Due Date',
+          }),
+        },
+        {
+          dataIndex: 'createdBy',
+          key: 'createdBy',
+          render: (value: { fullName: string; id: string } | null) =>
+            value ? value.fullName : '-',
+          title: intl.formatMessage({
+            defaultMessage: 'Created By',
+          }),
+        },
+        {
+          dataIndex: 'reference',
+          key: 'reference',
+          render: (value: null | number) => (value ? `#${value}` : '-'),
+          title: intl.formatMessage({
+            defaultMessage: 'Reference',
           }),
         },
         {
@@ -160,8 +189,11 @@ const ActivityTable = ({
           completed: todo.completed || false,
           completedDate: todo.completedDate,
           createdAt: todo.createdAt,
+          createdBy: todo.createdBy,
+          dueDate: todo.dueDate,
           key: todo.id,
           name: todo.name || '',
+          reference: todo.reference,
         })) || []
       }
       pagination={{

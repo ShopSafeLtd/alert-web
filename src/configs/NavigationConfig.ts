@@ -101,12 +101,12 @@ const navigationConfig: NavItem[] = [
   {
     key: 'suggestions',
     path: `${APP_PREFIX_PATH}/suggestions`,
-    title: 'Automations',
+    title: 'Compass',
     icon: faBolt,
     breadcrumb: true,
     intl: defineMessage({
-      id: 'Automations',
-      defaultMessage: 'Automations',
+      id: 'Compass',
+      defaultMessage: 'Compass',
     }),
     permission: [
       {
