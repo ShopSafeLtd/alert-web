@@ -10894,7 +10894,6 @@ export type Mutation = {
   generateStatementBody: GeneratedStatementBody;
   importStockItemCsv: Scalars['Boolean'];
   incidentImport: IncidentImportValidationResult;
-  incidentItemsCsv: Scalars['String'];
   indexExistingImages: SystemTask;
   indexFaces: SystemTask;
   indexImage: Image;
