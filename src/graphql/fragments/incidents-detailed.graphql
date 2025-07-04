@@ -31,13 +31,6 @@ fragment IncidentsDetailed on Incident {
   offenders {
     id
     name
-    reference
-    images {
-      id
-      optimised
-      position
-      rotation
-    }
   }
   createdBy {
     id
