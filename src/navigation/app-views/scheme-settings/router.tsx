@@ -23,7 +23,9 @@ const ViewDemDevice = lazy(
   () => import('views/settings/Dem/demDevices/DemDeviceDetail')
 );
 const BrandList = lazy(() => import('#/views/settings/brands/ListBrands'));
-
+const QuestionsContainer = lazy(
+  () => import('views/settings/questions/Questions.container')
+);
 const GroupList = lazy(() => import('views/settings/groups/GroupList'));
 const ViewGroup = lazy(() => import('views/settings/groups/GroupDetail'));
 const ChatGroupsList = lazy(() => import('views/settings/chats/ChatList'));
@@ -332,6 +334,19 @@ const SchemeSettings = (): JSX.Element => {
                 </PermissionCheckWrapper>
               }
               path="scheme-details"
+            />
+            <Route
+              element={
+                <PermissionCheckWrapper
+                  permission={{
+                    method: PermissionMethod.Read,
+                    model: PermissionModel.IncidentOptions,
+                  }}
+                >
+                  <QuestionsContainer />
+                </PermissionCheckWrapper>
+              }
+              path="questions/*"
             />
             <Route
               element={

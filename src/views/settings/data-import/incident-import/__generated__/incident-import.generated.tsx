@@ -8,21 +8,13 @@ export type IncidentImportMutationVariables = Types.Exact<{
 }>;
 
 
-export type IncidentImportMutation = { __typename?: 'Mutation', incidentImport: { __typename?: 'ImportResult', failed?: number | null, success: boolean, successful?: number | null, total?: number | null, results?: Array<{ __typename?: 'ImportResultDetail', error?: string | null, reference?: string | null, success: boolean, uuid: string }> | null } };
+export type IncidentImportMutation = { __typename?: 'Mutation', incidentImport: { __typename?: 'IncidentImportValidationResult', success: boolean, total: number } };
 
 
 export const IncidentImportDocument = gql`
     mutation IncidentImport($data: IncidentImportDataInput!) {
   incidentImport(data: $data) {
-    failed
-    results {
-      error
-      reference
-      success
-      uuid
-    }
     success
-    successful
     total
   }
 }

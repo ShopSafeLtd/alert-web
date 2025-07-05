@@ -1,0 +1,5 @@
+mutation DeleteQuestion($where: UniqueId!) {
+  deleteQuestion(where: $where) {
+    id
+  }
+}
