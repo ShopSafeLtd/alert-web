@@ -4,7 +4,7 @@ import { faArrowsMaximize } from '@fortawesome/pro-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Card, Col, Form, Modal, Row, Switch, Typography } from 'antd';
 import mapboxgl from 'mapbox-gl';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { createUseStyles } from 'react-jss';
 import { Layer, Map, Marker, Source } from 'react-map-gl';
@@ -139,6 +139,85 @@ const LocatingCard = ({ height, isPrinting, markers, width }: Props) => {
   const toggleMarkers = () => setShowMarkers(!showMarkers);
   const toggleHeatmap = () => setShowHeatmap(!showHeatmap);
 
+  // Calculate bounds that include all markers
+  const bounds = useMemo(() => {
+    if (!markers || markers.length === 0) return null;
+
+    const validMarkers = markers.filter(
+      (m) => m.geoLat !== null && m.geoLng !== null
+    );
+    if (validMarkers.length === 0) return null;
+
+    const lngs = validMarkers.map((m) => m.geoLng!);
+    const lats = validMarkers.map((m) => m.geoLat!);
+
+    const sw: [number, number] = [Math.min(...lngs), Math.min(...lats)];
+    const ne: [number, number] = [Math.max(...lngs), Math.max(...lats)];
+
+    return [sw, ne];
+  }, [markers]);
+
+  // Calculate initial view state based on bounds
+  const initialViewState = useMemo(() => {
+    if (!bounds) {
+      return {
+        latitude: 0,
+        longitude: 0,
+        pitch: 45,
+        zoom: 2,
+      };
+    }
+
+    const [sw, ne] = bounds;
+    const centerLng = (sw[0] + ne[0]) / 2;
+    const centerLat = (sw[1] + ne[1]) / 2;
+
+    // If single marker, use higher zoom
+    if (markers.length === 1) {
+      return {
+        latitude: centerLat,
+        longitude: centerLng,
+        pitch: 45,
+        zoom: 16,
+      };
+    }
+
+    // For multiple markers, calculate appropriate zoom level based on geographic spread
+    const lngDiff = ne[0] - sw[0];
+    const latDiff = ne[1] - sw[1];
+    const maxDiff = Math.max(lngDiff, latDiff);
+
+    // Improved zoom calculation for better handling of spread out points
+    let zoom = 16;
+    if (maxDiff > 10)
+      zoom = 3; // Continental scale
+    else if (maxDiff > 5)
+      zoom = 4; // Large country scale
+    else if (maxDiff > 2)
+      zoom = 5; // Country scale
+    else if (maxDiff > 1)
+      zoom = 6; // Large region scale
+    else if (maxDiff > 0.5)
+      zoom = 7; // Region scale
+    else if (maxDiff > 0.2)
+      zoom = 8; // State/province scale
+    else if (maxDiff > 0.1)
+      zoom = 10; // City scale
+    else if (maxDiff > 0.05)
+      zoom = 12; // District scale
+    else if (maxDiff > 0.01)
+      zoom = 14; // Neighborhood scale
+    else zoom = 15; // Local area scale
+
+    return {
+      latitude: centerLat,
+      longitude: centerLng,
+      padding: { bottom: 50, left: 50, right: 50, top: 50 },
+      pitch: 45,
+      zoom,
+    };
+  }, [bounds, markers.length]);
+
   useEffect(() => {
     mapRef.current?.moveLayer('unclustered-point');
     mapRef.current?.moveLayer('clusters');
@@ -169,8 +248,7 @@ const LocatingCard = ({ height, isPrinting, markers, width }: Props) => {
         </Text>
       </div>
       <Map
-        latitude={markers[0]?.geoLat || 0}
-        longitude={markers[0]?.geoLng || 0}
+        initialViewState={initialViewState}
         mapLib={mapboxgl}
         mapStyle={
           isDark
@@ -179,15 +257,14 @@ const LocatingCard = ({ height, isPrinting, markers, width }: Props) => {
         }
         mapboxAccessToken={import.meta.env.VITE_MAPBOX_ACCESS_TOKEN}
         onError={() => {}}
-        pitch={45}
         preserveDrawingBuffer
         style={{ height, width }}
-        zoom={16}
       >
         {markers.length === 1 &&
-          markers.map((marker) => (
+          markers.map((marker, index) => (
             <Marker
               anchor="bottom"
+              key={index}
               latitude={Number(marker.geoLat) || 0}
               longitude={Number(marker.geoLng) || 0}
             >
@@ -238,12 +315,7 @@ const LocatingCard = ({ height, isPrinting, markers, width }: Props) => {
           <Col>
             {largeOpen && (
               <Map
-                initialViewState={{
-                  latitude: markers[0]?.geoLat || 0,
-                  longitude: markers[0]?.geoLng || 0,
-                  pitch: 45,
-                  zoom: 16,
-                }}
+                initialViewState={initialViewState}
                 mapLib={mapboxgl}
                 mapStyle={
                   currentTheme === 'dark'
@@ -255,9 +327,10 @@ const LocatingCard = ({ height, isPrinting, markers, width }: Props) => {
                 style={{ height: '80vh', width: '85vw' }}
               >
                 {markers.length === 1 &&
-                  markers.map((marker) => (
+                  markers.map((marker, index) => (
                     <Marker
                       anchor="bottom"
+                      key={index}
                       latitude={Number(marker.geoLat) || 0}
                       longitude={Number(marker.geoLng) || 0}
                     >

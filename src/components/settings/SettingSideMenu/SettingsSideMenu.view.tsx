@@ -13,6 +13,7 @@ import {
   FileTextOutlined,
   LeftOutlined,
   PictureOutlined,
+  QuestionCircleOutlined,
   RightOutlined,
   SafetyOutlined,
   SettingOutlined,
@@ -139,6 +140,17 @@ const SettingsSideMenu = ({
             defaultMessage: 'DEM',
           }),
           to: '/app/scheme-settings/dem',
+        },
+        {
+          icon: <QuestionCircleOutlined />,
+          permissions: {
+            method: PermissionMethod.Read,
+            model: PermissionModel.IncidentOptions,
+          },
+          title: intl.formatMessage({
+            defaultMessage: 'Question Management',
+          }),
+          to: '/app/scheme-settings/questions',
         },
       ],
     },

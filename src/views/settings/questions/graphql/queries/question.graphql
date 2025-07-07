@@ -1,0 +1,16 @@
+query QuestionModalDetails($where: QuestionWhereUniqueInput!) {
+  question(where: $where) {
+    id
+    tags {
+      tag {
+        id
+        name
+      }
+    }
+    question
+    questionGroup {
+      id
+      name
+    }
+  }
+}
