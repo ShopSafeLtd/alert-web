@@ -303,7 +303,7 @@ const IncidentImport = () => {
         if (!url) {
           throw new Error('File upload failed');
         }
-        const { data } = await processImport({
+        await processImport({
           variables: {
             data: {
               fileUrl: url,
@@ -311,16 +311,16 @@ const IncidentImport = () => {
             },
           },
         });
-        for (const [i, record] of records.entries()) {
-          const importItem = importData[i];
-          const processedItem = data?.incidentImport.results?.find(
-            (item) => item.uuid === importItem.uuid
-          );
-
-          if (processedItem?.error) {
-            record.markAsRejected(processedItem.error);
-          }
-        }
+        // for (const [i, record] of records.entries()) {
+        //   const importItem = importData[i];
+        //   const processedItem = data?.incidentImport.results?.find(
+        //     (item) => item.uuid === importItem.uuid
+        //   );
+        //
+        //   if (processedItem?.error) {
+        //     record.markAsRejected(processedItem.error);
+        //   }
+        // }
       } catch (error) {
         console.error('Upload failed:', error);
       }
