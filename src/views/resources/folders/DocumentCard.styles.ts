@@ -10,7 +10,7 @@ const useStyles = createUseStyles((theme: Theme) => ({
     overflow: 'hidden',
   },
   card: {
-    backgroundColor: 'white',
+    // backgroundColor: 'white',
     border: `1px solid ${theme.borderColor}`,
     borderRadius: 10,
     overflow: 'hidden',
