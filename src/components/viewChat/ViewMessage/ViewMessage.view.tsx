@@ -55,7 +55,6 @@ import WatermarkImage from 'components/images/WatermarkImage.view';
 import Picker from 'emoji-picker-react';
 import { MessageItemType } from 'graphql/types';
 import React, { useEffect, useRef } from 'react';
-import InfiniteScroll from 'react-infinite-scroll-component';
 import { useIntl } from 'react-intl';
 import { createUseStyles } from 'react-jss';
 
@@ -235,15 +234,11 @@ const useStyles = createUseStyles((theme: Theme) => ({
     flexDirection: 'row-reverse',
   },
   messagesArea: {
-    '& .message-container': {
-      display: 'flex',
-      flexDirection: 'column-reverse',
-      justifyContent: 'flex-end',
-      minHeight: '100%',
-    },
     flex: 1,
+    height: 0,
     overflow: 'auto',
     padding: '16px',
+    position: 'relative',
   },
   sendButton: {
     '&:hover': {
@@ -432,15 +427,29 @@ const ViewMessages = ({
 }: Props): JSX.Element => {
   const classes = useStyles();
   const ref = useRef<HTMLDivElement | null>(null);
+  const isLoadingRef = useRef(false);
+  const previousMessageCountRef = useRef(0);
 
-  // Scroll to bottom when messages first load
+  // Scroll to bottom only when it's the initial load or when messages are reduced (e.g., after deletion)
   useEffect(() => {
-    if (ref.current && data?.chatMessages && data.chatMessages.length > 0) {
+    const currentMessageCount = data?.chatMessages?.length || 0;
+    const previousMessageCount = previousMessageCountRef.current;
+
+    // Only scroll to bottom if:
+    // 1. It's the first load (previousMessageCount was 0)
+    // 2. Messages were removed (current count < previous count)
+    if (
+      ref.current &&
+      currentMessageCount > 0 &&
+      (previousMessageCount === 0 || currentMessageCount < previousMessageCount)
+    ) {
       ref.current.scrollIntoView({
         block: 'end',
         inline: 'nearest',
       });
     }
+
+    previousMessageCountRef.current = currentMessageCount;
   }, [data?.chatMessages?.length]);
 
   // Scroll to bottom when new message is sent
@@ -463,6 +472,39 @@ const ViewMessages = ({
 
   const chatsWoDate =
     data?.chatMessages?.filter((chat) => chat?.type !== 'DATE').length || 0;
+
+  // Handle infinite scroll manually for inverse layout
+  useEffect(() => {
+    const scrollArea = document.getElementById('messages-scrollable-area');
+    if (scrollArea) {
+      const handleScroll = () => {
+        // Check if scrolled to top (or near top)
+        if (
+          scrollArea.scrollTop <= 100 &&
+          chatsWoDate < totalChats &&
+          data?.chatMessages.length !== 0 &&
+          !isLoadingRef.current
+        ) {
+          isLoadingRef.current = true;
+
+          // Save current scroll height before loading more
+          const scrollHeightBefore = scrollArea.scrollHeight;
+
+          scrolledToTop();
+
+          // After loading, maintain scroll position
+          setTimeout(() => {
+            const scrollHeightAfter = scrollArea.scrollHeight;
+            const scrollHeightDiff = scrollHeightAfter - scrollHeightBefore;
+            scrollArea.scrollTop = scrollHeightDiff;
+            isLoadingRef.current = false;
+          }, 100);
+        }
+      };
+      scrollArea.addEventListener('scroll', handleScroll);
+      return () => scrollArea.removeEventListener('scroll', handleScroll);
+    }
+  }, [scrolledToTop, chatsWoDate, totalChats, data?.chatMessages.length]);
 
   return (
     <div className={classes.messageContainer}>
@@ -490,22 +532,13 @@ const ViewMessages = ({
         </div>
       )}
 
-      <div className={classes.messagesArea}>
-        <InfiniteScroll
-          className="message-container"
-          dataLength={data?.chatMessages.length || 0}
-          hasMore={chatsWoDate < totalChats && data?.chatMessages.length !== 0}
-          height="100%"
-          inverse
-          loader={
-            <div
-              style={{ display: 'flex', justifyContent: 'center', padding: 16 }}
-            >
-              <Spin />
-            </div>
-          }
-          next={scrolledToTop}
-          scrollableTarget={classes.messagesArea}
+      <div className={classes.messagesArea} id="messages-scrollable-area">
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column-reverse',
+            minHeight: '100%',
+          }}
         >
           <div ref={ref} />
           {data?.chatMessages?.map((item) =>
@@ -617,7 +650,14 @@ const ViewMessages = ({
               </div>
             )
           )}
-        </InfiniteScroll>
+          {chatsWoDate < totalChats && data?.chatMessages.length !== 0 && (
+            <div
+              style={{ display: 'flex', justifyContent: 'center', padding: 16 }}
+            >
+              <Spin />
+            </div>
+          )}
+        </div>
       </div>
 
       <div className={classes.inputContainer}>
