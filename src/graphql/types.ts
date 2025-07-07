@@ -7319,23 +7319,6 @@ export type ImportDemEvidence = {
   tags?: InputMaybe<Array<Scalars['String']>>;
 };
 
-export type ImportResult = {
-  __typename?: 'ImportResult';
-  failed?: Maybe<Scalars['Int']>;
-  results?: Maybe<Array<ImportResultDetail>>;
-  success: Scalars['Boolean'];
-  successful?: Maybe<Scalars['Int']>;
-  total?: Maybe<Scalars['Int']>;
-};
-
-export type ImportResultDetail = {
-  __typename?: 'ImportResultDetail';
-  error?: Maybe<Scalars['String']>;
-  reference?: Maybe<Scalars['String']>;
-  success: Scalars['Boolean'];
-  uuid: Scalars['String'];
-};
-
 export enum ImportType {
   Csv = 'CSV',
   Disc = 'DISC',
@@ -7968,7 +7951,26 @@ export type IncidentImageUpdate = {
 
 export type IncidentImportDataInput = {
   fileUrl: Scalars['String'];
+  /** Minimum score (0-100) required to match an existing offender. Default is 60. */
+  minimumOffenderMatchScore?: InputMaybe<Scalars['Int']>;
   skipDuplicateCheck?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type IncidentImportValidationError = {
+  __typename?: 'IncidentImportValidationError';
+  message: Scalars['String'];
+  uuid: Scalars['String'];
+};
+
+export type IncidentImportValidationResult = {
+  __typename?: 'IncidentImportValidationResult';
+  invalid: Scalars['Int'];
+  jobId?: Maybe<Scalars['String']>;
+  message: Scalars['String'];
+  success: Scalars['Boolean'];
+  total: Scalars['Int'];
+  valid: Scalars['Int'];
+  validationErrors: Array<IncidentImportValidationError>;
 };
 
 export type IncidentItem = {
@@ -10625,7 +10627,7 @@ export type Mutation = {
   generateFeedItems: SystemTask;
   generateStatementBody: GeneratedStatementBody;
   importStockItemCsv: Scalars['Boolean'];
-  incidentImport: ImportResult;
+  incidentImport: IncidentImportValidationResult;
   indexExistingImages: SystemTask;
   indexFaces: SystemTask;
   indexImage: Image;
@@ -14299,6 +14301,7 @@ export type Query = {
   role: CustomRole;
   roles: QueryRolesConnection;
   scheme: Scheme;
+  schemeUsersRelay: QuerySchemeUsersRelayConnection;
   schemes: Array<Scheme>;
   searchOffenders: QuerySearchOffendersConnection;
   sharingBusinesses: Array<SharingBusiness>;
@@ -15513,6 +15516,20 @@ export type QuerySchemeArgs = {
 };
 
 
+export type QuerySchemeUsersRelayArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  cursor?: InputMaybe<UserSchemeWhereUniqueInput>;
+  distinct?: InputMaybe<Array<UserSchemeScalarFieldEnum>>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<UserSchemeOrderByWithRelationInput>>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<UserSchemeWhereInput>;
+};
+
+
 export type QuerySchemesArgs = {
   cursor?: InputMaybe<SchemeWhereUniqueInput>;
   distinct?: InputMaybe<Array<SchemeScalarFieldEnum>>;
@@ -16230,6 +16247,19 @@ export type QueryRolesConnectionEdge = {
   __typename?: 'QueryRolesConnectionEdge';
   cursor: Scalars['String'];
   node: CustomRole;
+};
+
+export type QuerySchemeUsersRelayConnection = {
+  __typename?: 'QuerySchemeUsersRelayConnection';
+  edges: Array<QuerySchemeUsersRelayConnectionEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type QuerySchemeUsersRelayConnectionEdge = {
+  __typename?: 'QuerySchemeUsersRelayConnectionEdge';
+  cursor: Scalars['String'];
+  node: UserScheme;
 };
 
 export type QuerySearchOffendersConnection = {

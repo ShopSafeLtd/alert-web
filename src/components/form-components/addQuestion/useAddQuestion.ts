@@ -59,6 +59,7 @@ const useAddQuestion = ({ onClose, tagQuestions }: Props): Return => {
   const [saving, setSaving] = useState(false);
   const { id } = useParams();
   const { data: questionData, loading } = useAvailableQuestionsQuery({
+    skip: !id,
     variables: {
       where: {
         id: id || '',

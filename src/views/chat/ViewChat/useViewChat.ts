@@ -98,7 +98,12 @@ const useViewChat = ({ chatId }: Props): Return => {
     }
   };
   useEffect(() => {
-    if (chatId === currentId) handleMarkAsRead(currentId);
+    if (chatId === currentId) {
+      const userChatId = data?.user.chats.find(
+        (userChat) => userChat.chat.id === chatId
+      )?.id;
+      if (userChatId) handleMarkAsRead(userChatId);
+    }
   }, [chatId, currentId]);
 
   const toggleAddChat = () => {

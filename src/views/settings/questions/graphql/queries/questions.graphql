@@ -1,0 +1,33 @@
+query QuestionManagementList(
+  $first: Int
+  $skip: Int
+  $activityQuestions: Boolean
+  $schemeId: String!
+  $search: String
+  $tagQuestions: Boolean
+  $type: [AnswerType!]
+) {
+  questions(
+    where: {
+      schemeId: $schemeId
+      activityQuestions: $activityQuestions
+      search: $search
+      tagQuestions: $tagQuestions
+      type: $type
+    }
+    first: $first
+    skip: $skip
+  ) {
+    totalCount
+    edges {
+      node {
+        id
+        model
+        activityCount
+        tagsCount
+        question
+        type
+      }
+    }
+  }
+}
