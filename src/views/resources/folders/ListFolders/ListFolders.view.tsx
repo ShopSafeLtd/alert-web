@@ -1,6 +1,6 @@
 import AddFolder from '#/components/form-components/Folders/AddFolder';
 import AddDocuments from '#/components/form-components/documents/AddDocuments';
-import Loading from '#/components/loading';
+import Loading from '#/components/shared-components/AntD/Loading';
 import { faPlus } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -234,6 +234,7 @@ const ListFolders = ({
                   </p>
                 }
                 hasMore={documentsData?.documentsNoFolder.pageInfo.hasNextPage}
+                height="calc(50vh )"
                 loader={<Loading />}
                 next={() => fetchMoreDocScroll()}
                 style={{ overflowX: 'hidden' }}

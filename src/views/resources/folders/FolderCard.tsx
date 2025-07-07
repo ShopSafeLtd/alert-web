@@ -1,6 +1,6 @@
 import { faFile, faFolderTree } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, Col, Row, Typography } from 'antd';
+import { Button, Card, Col, Row, Typography } from 'antd';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
@@ -16,11 +16,12 @@ interface Props {
     totalDocuments: number;
   };
 }
+
 const FolderCard = ({ data }: Props) => {
   const intl = useIntl();
 
   return (
-    <div style={{ backgroundColor: 'white', borderRadius: 10, paddingTop: 5 }}>
+    <Card>
       <div style={{ height: 140, margin: 10 }}>
         <Title level={4}>{data?.name}</Title>
         <Paragraph ellipsis={{ rows: 3 }}>{data?.description}</Paragraph>
@@ -91,7 +92,7 @@ const FolderCard = ({ data }: Props) => {
           </Link>
         </Col>
       </Row>
-    </div>
+    </Card>
   );
 };
 
