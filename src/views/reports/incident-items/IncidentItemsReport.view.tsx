@@ -5,10 +5,11 @@ import GroupsSelect, {
 } from '#/components/form-components/GroupsSelect/GroupsSelect.view';
 import DateSelect from '#/components/reports/DateSelect/DateSelect.view';
 import ReportsSideMenu from '#/components/reports/ReportsSideMenu/ReportsSideMenu.view';
+import Page from '#/components/shared-components/AntD/Page/Page';
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { useIncidentItemsReportQuery } from '#/views/reports/incident-items/__generated__/IncidentItemsReport.generated';
 import { useExportIncidentItemsCsvMutation } from '#/views/reports/incident-items/mutations/__generated__/generate-csv-items-export.generated';
-import { Button, Col, Form, Row, Table } from 'antd';
+import { Button, Card, Col, Form, Row, Table } from 'antd';
 import dayjs from 'dayjs';
 import { SortOrder } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
@@ -112,7 +113,7 @@ const StockItems = () => {
   };
 
   return (
-    <Row>
+    <Row wrap={false}>
       <Col style={{ width: collapsed ? 0 : undefined }}>
         <ReportsSideMenu
           collapsed={collapsed}
@@ -120,115 +121,131 @@ const StockItems = () => {
           setCollapsed={setCollapsed}
         />
       </Col>
-      <Col flex={1} style={{ height: '100vh', overflow: 'auto', padding: 20 }}>
-        <Row gutter={16} style={{ marginBottom: 15 }}>
-          <Col>
-            <Form.Item style={{ marginBottom: 0 }}>
-              <GroupsSelect
-                defaultValue={groups.map((group) => group.value)}
-                maxTagCount="responsive"
-                mode="multiple"
-                onChange={(value) => {
-                  setSelectedGroups(value || []);
-                }}
-                placeholder={intl.formatMessage({
-                  defaultMessage: 'Select Groups',
-                })}
-                style={{ width: 350 }}
-                value={selectedGroups}
-              />
-            </Form.Item>
-          </Col>
-          <Col>
-            <Form.Item style={{ marginBottom: 0 }}>
-              <DateSelect defaultRange="last7Days" onChange={setDateRange} />
-            </Form.Item>
-          </Col>
-          <Col flex={1} />
-          <Col>
-            <Button
-              disabled={exporting}
-              loading={exporting}
-              onClick={handleExportCsv}
-            >
-              <FormattedMessage defaultMessage="Download CSV" />
-            </Button>
-          </Col>
-        </Row>
-        <Table<TableItem>
-          columns={[
-            {
-              dataIndex: 'createdAt',
-              defaultSortOrder: 'descend',
-              key: 'createdAt',
-              sortDirections: ['descend', 'ascend'],
-              sorter: true,
-              title: <FormattedMessage defaultMessage="Created Date" />,
-            },
-            {
-              dataIndex: 'incidentDate',
-              key: 'incidentDate',
-              sortDirections: ['descend', 'ascend'],
-              sorter: true,
-              title: <FormattedMessage defaultMessage="Incident Date" />,
-            },
-            {
-              dataIndex: 'itemName',
-              key: 'itemName',
-              title: <FormattedMessage defaultMessage="Item Name" />,
-            },
-            {
-              dataIndex: 'itemType',
-              key: 'itemType',
-              title: <FormattedMessage defaultMessage="Item Type" />,
-            },
-            {
-              dataIndex: 'sku',
-              key: 'sku',
-              title: <FormattedMessage defaultMessage="SKU" />,
-            },
-            {
-              dataIndex: 'variant',
-              key: 'variant',
-              title: <FormattedMessage defaultMessage="Variant" />,
-            },
-            {
-              dataIndex: 'quantity',
-              key: 'quantity',
-              title: <FormattedMessage defaultMessage="Quantity" />,
-            },
-            {
-              dataIndex: 'shopName',
-              key: 'shopName',
-              title: <FormattedMessage defaultMessage="Shop Name" />,
-            },
-            {
-              dataIndex: 'siteNumber',
-              key: 'siteNumber',
-              title: <FormattedMessage defaultMessage="Site Number" />,
-            },
-          ]}
-          dataSource={data?.incidentItems.edges.map(({ node }) => ({
-            createdAt: dayjs(node.incident.createdAt).format('DD/MM/YYYY'),
-            incidentDate: dayjs(node.incident.date).format('DD/MM/YYYY'),
-            itemName: node.name ?? '',
-            itemType: node.stockItem?.goodsType?.name ?? '',
-            quantity: (node.quantity ?? 0) - (node.recoveredQuantity ?? 0),
-            shopName: node.incident.business?.name ?? '',
-            siteNumber: node.incident.business?.siteNumber ?? '',
-            sku: node.sku ?? '',
-            variant: node.stockItem?.variant ?? '',
-          }))}
-          loading={loading}
-          onChange={onTableChange}
-          pagination={{
-            defaultPageSize: 50,
-            onChange: onPageChange,
-            pageSizeOptions: [50, 100, 200, 500, 1000],
-            total: data?.incidentItems.totalCount ?? 0,
-          }}
-          size="small"
-        />
+      <Col flex={1}>
+        <Page>
+          <Row gutter={16} style={{ marginBottom: 15 }} wrap>
+            <Col>
+              <Form.Item style={{ marginBottom: 0 }}>
+                <GroupsSelect
+                  defaultValue={groups.map((group) => group.value)}
+                  maxTagCount="responsive"
+                  mode="multiple"
+                  onChange={(value) => {
+                    setSelectedGroups(value || []);
+                  }}
+                  placeholder={intl.formatMessage({
+                    defaultMessage: 'Select Groups',
+                  })}
+                  style={{ width: 350 }}
+                  value={selectedGroups}
+                />
+              </Form.Item>
+            </Col>
+            <Col>
+              <Form.Item style={{ marginBottom: 0 }}>
+                <DateSelect defaultRange="last7Days" onChange={setDateRange} />
+              </Form.Item>
+            </Col>
+            <Col flex={1} />
+
+            <Col>
+              <Button
+                disabled={exporting}
+                loading={exporting}
+                onClick={handleExportCsv}
+              >
+                <FormattedMessage defaultMessage="Download CSV" />
+              </Button>
+            </Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={24}>
+              <Card style={{ height: '100%' }}>
+                <Table<TableItem>
+                  columns={[
+                    {
+                      dataIndex: 'createdAt',
+                      defaultSortOrder: 'descend',
+                      key: 'createdAt',
+                      sortDirections: ['descend', 'ascend'],
+                      sorter: true,
+                      title: <FormattedMessage defaultMessage="Created Date" />,
+                    },
+                    {
+                      dataIndex: 'incidentDate',
+                      key: 'incidentDate',
+                      sortDirections: ['descend', 'ascend'],
+                      sorter: true,
+                      title: (
+                        <FormattedMessage defaultMessage="Incident Date" />
+                      ),
+                    },
+                    {
+                      dataIndex: 'itemName',
+                      key: 'itemName',
+                      title: <FormattedMessage defaultMessage="Item Name" />,
+                    },
+                    {
+                      dataIndex: 'itemType',
+                      key: 'itemType',
+                      title: <FormattedMessage defaultMessage="Item Type" />,
+                    },
+                    {
+                      dataIndex: 'sku',
+                      key: 'sku',
+                      title: <FormattedMessage defaultMessage="SKU" />,
+                    },
+                    {
+                      dataIndex: 'variant',
+                      key: 'variant',
+                      title: <FormattedMessage defaultMessage="Variant" />,
+                    },
+                    {
+                      dataIndex: 'quantity',
+                      key: 'quantity',
+                      title: <FormattedMessage defaultMessage="Quantity" />,
+                    },
+                    {
+                      dataIndex: 'shopName',
+                      key: 'shopName',
+                      title: <FormattedMessage defaultMessage="Shop Name" />,
+                    },
+                    {
+                      dataIndex: 'siteNumber',
+                      key: 'siteNumber',
+                      title: <FormattedMessage defaultMessage="Site Number" />,
+                    },
+                  ]}
+                  dataSource={data?.incidentItems.edges.map(({ node }) => ({
+                    createdAt: dayjs(node.incident.createdAt).format(
+                      'DD/MM/YYYY'
+                    ),
+                    incidentDate: dayjs(node.incident.date).format(
+                      'DD/MM/YYYY'
+                    ),
+                    itemName: node.name ?? '',
+                    itemType: node.stockItem?.goodsType?.name ?? '',
+                    quantity:
+                      (node.quantity ?? 0) - (node.recoveredQuantity ?? 0),
+                    shopName: node.incident.business?.name ?? '',
+                    siteNumber: node.incident.business?.siteNumber ?? '',
+                    sku: node.sku ?? '',
+                    variant: node.stockItem?.variant ?? '',
+                  }))}
+                  loading={loading}
+                  onChange={onTableChange}
+                  pagination={{
+                    defaultPageSize: 50,
+                    onChange: onPageChange,
+                    pageSizeOptions: [50, 100, 200, 500, 1000],
+                    total: data?.incidentItems.totalCount ?? 0,
+                  }}
+                  size="small"
+                />
+              </Card>
+            </Col>
+          </Row>
+        </Page>
       </Col>
     </Row>
   );
