@@ -7,12 +7,12 @@ import DateSelect from '#/components/reports/DateSelect/DateSelect.view';
 import ReportsSideMenu from '#/components/reports/ReportsSideMenu/ReportsSideMenu.view';
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { useIncidentItemsReportQuery } from '#/views/reports/incident-items/__generated__/IncidentItemsReport.generated';
+import { useExportIncidentItemsCsvMutation } from '#/views/reports/incident-items/mutations/__generated__/generate-csv-items-export.generated';
 import { Button, Col, Form, Row, Table } from 'antd';
 import dayjs from 'dayjs';
 import { SortOrder } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
 import React, { useState } from 'react';
-import { CSVLink } from 'react-csv';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 interface TableItem {
@@ -43,7 +43,7 @@ const StockItems = () => {
   const [selectedGroups, setSelectedGroups] = useState<string[]>([]);
   const [take, setTake] = useState(50);
   const [skip, setSkip] = useState(0);
-  const [csv, setCsv] = useState<string[][]>([]);
+  const [exporting, setExporting] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
   const [sort, setSort] = useState<{
     createdAt?: SortOrder;
@@ -53,33 +53,6 @@ const StockItems = () => {
   const { selectOptions: groups } = useUserGroups({});
 
   const { data, loading } = useIncidentItemsReportQuery({
-    onCompleted: () => {
-      if (data)
-        setCsv([
-          [
-            'Created Date',
-            'Incident Date',
-            'Item Name',
-            'Item Type',
-            'Quantity',
-            'Shop Name',
-            'Shop Number',
-            'SKU',
-            'Variant',
-          ],
-          ...data.incidentItems.edges.map(({ node }) => [
-            dayjs(node.incident.createdAt).format('DD/MM/YYYY'),
-            dayjs(node.incident.date).format('DD/MM/YYYY'),
-            `${node.name}`,
-            `${node.stockItem?.goodsType?.name}`,
-            `${(node.quantity ?? 0) - (node.recoveredQuantity ?? 0)}`,
-            `${node.incident.business?.name}`,
-            `${node.incident.business?.siteNumber}`,
-            `${node.sku}`,
-            `${node.stockItem?.variant}`,
-          ]),
-        ]);
-    },
     variables: {
       orderby: sort,
       skip,
@@ -92,6 +65,35 @@ const StockItems = () => {
     },
   });
 
+  const [generateCsv] = useExportIncidentItemsCsvMutation({
+    onCompleted: (data) => {
+      if (data?.incidentItemsCsv) {
+        const link = document.createElement('a');
+        link.href = data.incidentItemsCsv;
+        link.download = 'incident-items-report.csv';
+        document.body.append(link);
+        link.click();
+        link.remove();
+      }
+      setExporting(false);
+    },
+    onError: (error) => {
+      console.error('Error generating CSV:', error);
+      setExporting(false);
+    },
+    variables: {
+      where: {
+        createdAtRange: dateRange,
+        groupIds: selectedGroups.length > 0 ? selectedGroups : undefined,
+        schemeId: currentScheme,
+      },
+    },
+  });
+
+  const handleExportCsv = () => {
+    setExporting(true);
+    void generateCsv();
+  };
   const onPageChange = (page: number, pageSize: number) => {
     if (take !== pageSize) setTake(pageSize);
     setSkip(page * pageSize - pageSize);
@@ -144,11 +146,13 @@ const StockItems = () => {
           </Col>
           <Col flex={1} />
           <Col>
-            <CSVLink data={csv} filename="Stock Item Adjustment Report">
-              <Button>
-                <FormattedMessage defaultMessage="Download CSV" />
-              </Button>
-            </CSVLink>
+            <Button
+              disabled={exporting}
+              loading={exporting}
+              onClick={handleExportCsv}
+            >
+              <FormattedMessage defaultMessage="Download CSV" />
+            </Button>
           </Col>
         </Row>
         <Table<TableItem>

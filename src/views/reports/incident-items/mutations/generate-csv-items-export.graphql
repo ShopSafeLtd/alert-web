@@ -1,0 +1,3 @@
+mutation ExportIncidentItemsCsv($where: IncidentItemsWhereInput!) {
+  incidentItemsCsv(where: $where)
+}
