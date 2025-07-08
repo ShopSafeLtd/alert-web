@@ -10628,6 +10628,7 @@ export type Mutation = {
   generateStatementBody: GeneratedStatementBody;
   importStockItemCsv: Scalars['Boolean'];
   incidentImport: IncidentImportValidationResult;
+  incidentItemsCsv: Scalars['String'];
   indexExistingImages: SystemTask;
   indexFaces: SystemTask;
   indexImage: Image;
@@ -11373,6 +11374,11 @@ export type MutationImportStockItemCsvArgs = {
 
 export type MutationIncidentImportArgs = {
   data: IncidentImportDataInput;
+};
+
+
+export type MutationIncidentItemsCsvArgs = {
+  where: IncidentItemsWhereInput;
 };
 
 
