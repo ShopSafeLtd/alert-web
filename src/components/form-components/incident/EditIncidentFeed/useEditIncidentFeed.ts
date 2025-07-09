@@ -174,7 +174,6 @@ const useEditIncidentFeed = ({ incidentId, onClose }: Props): Return => {
         variables: {
           data: {
             activityAuthorised: { set: data.activityAuthorised || false },
-            approved: { set: true },
             business:
               Array.isArray(business) && business.at(0)
                 ? { connect: { id: business.at(0) ?? '' } }
