@@ -73,7 +73,7 @@ const IncidentDetails = ({ saving }: Props): JSX.Element => {
         <Col span={20}>
           <Form.Item
             label={intl.formatMessage({
-              defaultMessage: 'Description',
+              defaultMessage: 'Please describe the incident',
             })}
             name="description"
             rules={[
