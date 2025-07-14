@@ -10952,7 +10952,7 @@ export type Mutation = {
   syncBusinessPoliceForces: SyncPoliceForceResult;
   syncFeedItems: SystemTask;
   syncGeoCodes: Array<Address>;
-  syncIncidentLocations: SyncLocationsResult;
+  syncIncidentLocations: SystemTask;
   syncIncidentSchemes: SystemTask;
   syncNewSchemeTags: SystemTask;
   syncRekImages: SystemTask;
@@ -20001,14 +20001,20 @@ export type SuggestedQuestion = {
   required: Scalars['Boolean'];
 };
 
-export type SyncLocationsResult = {
-  __typename?: 'SyncLocationsResult';
-  /** URL to CSV file containing failed businesses */
+/** Result of syncing police forces for businesses based on their postcodes */
+export type SyncPoliceForceResult = {
+  __typename?: 'SyncPoliceForceResult';
+  /** Path to CSV file containing failed businesses (if any errors occurred) */
   csvUrl?: Maybe<Scalars['String']>;
+  /** Duration of the operation in milliseconds */
   duration?: Maybe<Scalars['Int']>;
+  /** Number of businesses that failed to update */
   errors?: Maybe<Scalars['Int']>;
+  /** Total number of businesses processed */
   processed?: Maybe<Scalars['Int']>;
+  /** Whether the sync operation completed successfully */
   success: Scalars['Boolean'];
+  /** Number of businesses successfully updated with police force data */
   updated?: Maybe<Scalars['Int']>;
 };
 
