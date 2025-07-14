@@ -17,7 +17,16 @@ interface ModelMethod {
  */
 export function processModelMethods(
   values: FormValues,
-  excludedKeys: Set<string> = new Set(['name', 'type', 'approvalAllowed'])
+  excludedKeys: Set<string> = new Set([
+    'name',
+    'type',
+    'approvalAllowed',
+    'checklists',
+    'folders',
+    'selectAllChecklists',
+    'selectAllFolders',
+    'parentId',
+  ])
 ): ModelMethod[] {
   const groupedData = Object.entries(values)
     .filter(([key]) => !excludedKeys.has(key))
@@ -51,7 +60,10 @@ export function processModelMethods(
       return acc;
     }, {});
 
-  return Object.values(groupedData).filter(Boolean);
+  // Filter out any entries with empty allowedMethods arrays
+  return Object.values(groupedData).filter(
+    (item) => item.allowedMethods.length > 0
+  );
 }
 
 interface Method {

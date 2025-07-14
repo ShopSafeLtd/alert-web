@@ -1241,7 +1241,6 @@ const CreateChecklistView: React.FC<Props> = ({
                                                       questionField.name,
                                                       'dependentCheck',
                                                     ]) as boolean;
-
                                                   if (!isDependentCheck) {
                                                     return null;
                                                   }
@@ -1268,7 +1267,7 @@ const CreateChecklistView: React.FC<Props> = ({
                                                       })
                                                       .filter(
                                                         (q) =>
-                                                          q?.type === 'MEDIA'
+                                                          q?.type !== 'MEDIA'
                                                       );
 
                                                   let selectedQ = qs.find(
@@ -1312,7 +1311,7 @@ const CreateChecklistView: React.FC<Props> = ({
                                                           'dependentQuestion',
                                                         ]) ?? ''
                                                       )
-                                                  )
+                                                  ) {
                                                     setFieldValue(
                                                       [
                                                         'sections',
@@ -1325,6 +1324,7 @@ const CreateChecklistView: React.FC<Props> = ({
                                                       ],
                                                       null
                                                     );
+                                                  }
                                                   return (
                                                     <Space>
                                                       <Row>

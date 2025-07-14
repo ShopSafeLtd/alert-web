@@ -1,5 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router';
+
 import View from './ViewCrimeGroup.view';
 import useViewCrimeGroup from './useViewCrimeGroup';
 
@@ -7,109 +8,109 @@ const ViewCrimeGroup = () => {
   const crimeGroupId = useParams().id || '';
 
   const {
-    data,
-    loading,
-    saving,
-    offenderIds,
-    vehicleIds,
-    addOffender,
-    toggleAddOffender,
-    addExistingOffender,
-    toggleAddExistingOffender,
-    addNewVehicle,
-    addExistingVehicle,
-    toggleAddNewVehicle,
-    toggleAddExistingVehicle,
-    onDeleteCrimeGroup,
     addAlias,
-    toggleAddAlias,
+    addDocument,
+    addExistingOffender,
+    addExistingVehicle,
+    addInvestigation,
+    addNewVehicle,
+    addOffender,
+    confirmDeleteUpdate,
+    data,
     editRights,
-    optionRowShow,
-    setOptionRowShow,
-    userId,
     editUpdate,
     editUpdateInput,
+    handleAddSuggestion,
     handleEditUpdate,
+    loadMore,
+    loading,
+    offenderIds,
+    onCompletedAddOffender,
+    onDeleteCrimeGroup,
+    onDisconnectOffender,
+    onDisconnectVehicle,
+    optionRowShow,
     replyTo,
+    saving,
     scrolledToTop,
     setEditUpdate,
     setEditUpdateInput,
+    setOptionRowShow,
     setReplyTo,
-    loadMore,
-    confirmDeleteUpdate,
-    toggleSubscribe,
     submitNewVehicle,
     submitOffender,
     submitVehicle,
     suggestedData,
-    viewSuggestedOpen,
-    toggleViewSuggested,
-    handleAddSuggestion,
+    toggleAddAlias,
     toggleAddDocument,
-    addDocument,
-    updateDocumentList,
-    updateDeleteDocument,
-    addInvestigation,
+    toggleAddExistingOffender,
+    toggleAddExistingVehicle,
     toggleAddInvestigation,
-    updateInvestigationList,
-    toggleShowIntel,
-    showIntel,
+    toggleAddNewVehicle,
+    toggleAddOffender,
+    toggleSubscribe,
+    toggleViewSuggested,
     updateAddOffenderList,
-    onCompletedAddOffender,
+    updateDeleteDocument,
+    updateDocumentList,
+    updateInvestigationList,
+    userId,
+    vehicleIds,
+    viewSuggestedOpen,
   } = useViewCrimeGroup(crimeGroupId);
 
   return (
     <View
-      data={data}
-      loading={loading}
-      saving={saving}
-      addOffender={addOffender}
-      toggleAddOffender={toggleAddOffender}
-      addExistingOffender={addExistingOffender}
-      toggleAddExistingOffender={toggleAddExistingOffender}
-      addNewVehicle={addNewVehicle}
-      addExistingVehicle={addExistingVehicle}
-      toggleAddNewVehicle={toggleAddNewVehicle}
-      toggleAddExistingVehicle={toggleAddExistingVehicle}
-      offenderIds={offenderIds}
-      vehicleIds={vehicleIds}
-      onDeleteCrimeGroup={onDeleteCrimeGroup}
       addAlias={addAlias}
-      toggleAddAlias={toggleAddAlias}
-      loadMore={loadMore}
-      scrolledToTop={scrolledToTop}
-      userId={userId}
-      replyTo={replyTo}
-      setReplyTo={setReplyTo}
+      addDocument={addDocument}
+      addExistingOffender={addExistingOffender}
+      addExistingVehicle={addExistingVehicle}
+      addInvestigation={addInvestigation}
+      addNewVehicle={addNewVehicle}
+      addOffender={addOffender}
       confirmDeleteUpdate={confirmDeleteUpdate}
+      crimeGroupId={crimeGroupId}
+      data={data}
+      editRights={editRights}
       editUpdate={editUpdate}
       editUpdateInput={editUpdateInput}
+      handleAddSuggestion={handleAddSuggestion}
       handleEditUpdate={handleEditUpdate}
+      loadMore={loadMore}
+      loading={loading}
+      offenderIds={offenderIds}
+      onCompletedAddOffender={onCompletedAddOffender}
+      onDeleteCrimeGroup={onDeleteCrimeGroup}
+      onDisconnectOffender={onDisconnectOffender}
+      onDisconnectVehicle={onDisconnectVehicle}
+      optionRowShow={optionRowShow}
+      replyTo={replyTo}
+      saving={saving}
+      scrolledToTop={scrolledToTop}
       setEditUpdate={setEditUpdate}
       setEditUpdateInput={setEditUpdateInput}
-      optionRowShow={optionRowShow}
       setOptionRowShow={setOptionRowShow}
-      editRights={editRights}
-      crimeGroupId={crimeGroupId}
-      toggleSubscribe={toggleSubscribe}
+      setReplyTo={setReplyTo}
       submitNewVehicle={submitNewVehicle}
       submitOffender={submitOffender}
       submitVehicle={submitVehicle}
       suggestedData={suggestedData}
-      viewSuggestedOpen={viewSuggestedOpen}
-      toggleViewSuggested={toggleViewSuggested}
-      handleAddSuggestion={handleAddSuggestion}
+      toggleAddAlias={toggleAddAlias}
       toggleAddDocument={toggleAddDocument}
-      addDocument={addDocument}
-      updateDocumentList={updateDocumentList}
-      updateDeleteDocument={updateDeleteDocument}
-      addInvestigation={addInvestigation}
+      toggleAddExistingOffender={toggleAddExistingOffender}
+      toggleAddExistingVehicle={toggleAddExistingVehicle}
       toggleAddInvestigation={toggleAddInvestigation}
-      updateInvestigationList={updateInvestigationList}
-      showIntel={showIntel}
-      toggleShowIntel={toggleShowIntel}
+      toggleAddNewVehicle={toggleAddNewVehicle}
+      toggleAddOffender={toggleAddOffender}
+      toggleSubscribe={toggleSubscribe}
+      toggleViewSuggested={toggleViewSuggested}
       updateAddOffenderList={updateAddOffenderList}
-      onCompletedAddOffender={onCompletedAddOffender}
+      updateDeleteDocument={updateDeleteDocument}
+      updateDocumentList={updateDocumentList}
+      updateInvestigationList={updateInvestigationList}
+      userId={userId}
+      vehicleIds={vehicleIds}
+      viewSuggestedOpen={viewSuggestedOpen}
     />
   );
 };

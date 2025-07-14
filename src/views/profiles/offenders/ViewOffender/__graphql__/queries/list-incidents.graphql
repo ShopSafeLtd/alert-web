@@ -6,21 +6,7 @@ query OffenderIncidents(
 ) {
     offender(where: $where) {
         incidents(orderBy: $orderBy, skip: $skip, take: $take) {
-            id
-            reference
-            dayTime
-            policeRef
-            subject
-            totalValue
-            totalRecoveredValue
-            location {
-                id
-                full
-            }
-            business {
-                id
-                name
-            }
+            ...IncidentsDetailed
         }
     }
 }

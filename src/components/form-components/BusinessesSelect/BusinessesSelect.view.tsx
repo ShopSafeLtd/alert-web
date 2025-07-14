@@ -172,8 +172,7 @@ const BusinessesSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
       if (extraData.businessRelay.edges.length > 0) {
         setSelectedMissingBusinesses(
           extraData.businessRelay.edges.map(({ node: option }) => ({
-            key: option.id,
-            label: (
+            children: (
               <>
                 {option.name}
                 {option.siteNumber && `(${option.siteNumber})`}
@@ -187,6 +186,10 @@ const BusinessesSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
                 ) : null}
               </>
             ),
+            key: option.id,
+            label:
+              option.name +
+              (option.siteNumber ? ` (${option.siteNumber})` : ''),
             value: option.id,
           }))
         );
@@ -360,8 +363,7 @@ const BusinessesSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
 
   const options: SelectProps['options'] = sortedData.map(
     ({ node: option }) => ({
-      key: option.id,
-      label: (
+      children: (
         <>
           {option.name}
           {option.siteNumber && `(${option.siteNumber})`}
@@ -375,6 +377,8 @@ const BusinessesSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
           ) : null}
         </>
       ),
+      key: option.id,
+      label: option.name + (option.siteNumber ? ` (${option.siteNumber})` : ''),
       value: option.id,
     })
   );
@@ -404,7 +408,7 @@ const BusinessesSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
       onSelectAll();
     }
     if (onChange && !onSelectAll) {
-      onChange(merged.map((item) => item.value as string));
+      onChange(merged.map((item: { value: string }) => item.value));
     }
   };
 

@@ -1,6 +1,7 @@
 import type * as Types from '../../../../../../../graphql/types.js';
 
 import { gql } from '@apollo/client';
+import { IncidentsDetailedFragmentDoc } from '../../../../../../../graphql/fragments/__generated__/incidents-detailed.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
 export type OffenderIncidentsQueryVariables = Types.Exact<{
@@ -11,32 +12,18 @@ export type OffenderIncidentsQueryVariables = Types.Exact<{
 }>;
 
 
-export type OffenderIncidentsQuery = { __typename?: 'Query', offender: { __typename?: 'Offender', incidents: Array<{ __typename?: 'Incident', id: string, reference?: number | null, dayTime: string, policeRef?: string | null, subject: string, totalValue: number, totalRecoveredValue: number, location?: { __typename?: 'Address', id: string, full: string } | null, business?: { __typename?: 'Business', id: string, name: string } | null }> } };
+export type OffenderIncidentsQuery = { __typename?: 'Query', offender: { __typename?: 'Offender', incidents: Array<{ __typename?: 'Incident', id: string, reference?: number | null, dayTime: string, policeRef?: string | null, customerRef?: string | null, subject: string, description: string, priority: Types.IncidentPriority, approved?: boolean | null, totalValue: number, totalRecoveredValue: number, location?: { __typename?: 'Address', id: string, full: string, geoLat?: number | null, geoLng?: number | null } | null, business?: { __typename?: 'Business', id: string, name: string } | null, crimeTypes: Array<{ __typename?: 'Tag', id: string, name: string }>, groups: Array<{ __typename?: 'Group', id: string, name: string }>, offenders: Array<{ __typename?: 'Offender', id: string, name?: string | null, reference?: number | null, images: Array<{ __typename?: 'Image', id: string, optimised?: string | null, position: Types.ImagePosition, rotation: number }> }>, createdBy: { __typename?: 'User', id: string, fullName: string } }> } };
 
 
 export const OffenderIncidentsDocument = gql`
     query OffenderIncidents($where: OffenderWhereUniqueInput!, $orderBy: [IncidentOrderByWithRelationInput!], $skip: Int, $take: Int) {
   offender(where: $where) {
     incidents(orderBy: $orderBy, skip: $skip, take: $take) {
-      id
-      reference
-      dayTime
-      policeRef
-      subject
-      totalValue
-      totalRecoveredValue
-      location {
-        id
-        full
-      }
-      business {
-        id
-        name
-      }
+      ...IncidentsDetailed
     }
   }
 }
-    `;
+    ${IncidentsDetailedFragmentDoc}`;
 export function useOffenderIncidentsQuery(baseOptions: Apollo.QueryHookOptions<OffenderIncidentsQuery, OffenderIncidentsQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<OffenderIncidentsQuery, OffenderIncidentsQueryVariables>(OffenderIncidentsDocument, options);

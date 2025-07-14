@@ -17,25 +17,8 @@ import EditCrimeGroup from '#/components/form-components/CrimeGroupSelect/crimeG
 import AddDocuments from '#/components/form-components/documents/AddDocuments';
 import AddExistingOffender from '#/components/form-components/offender/AddExistingOffender';
 import useReportPrint from '#/utils/reportPrint/usePrintReports';
-import {
-  faBell,
-  faBellSlash,
-  faCheckCircle,
-  faFileDownload,
-  faTrash,
-} from '@fortawesome/pro-light-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  Badge,
-  Button,
-  Col,
-  Drawer,
-  Modal,
-  Row,
-  Tabs,
-  Tooltip,
-  Typography,
-} from 'antd';
+// Icons removed - not used in this component
+import { Button, Col, Drawer, Modal, Row } from 'antd';
 import EditInvestigation from 'components/form-components/Investigation/EditInvestigation';
 import AddTodo from 'components/form-components/Todos/AddTodo';
 import ViewTodo from 'components/form-components/Todos/ViewTodo/Todo.container';
@@ -48,17 +31,16 @@ import AddNewOffenderSimple from 'components/form-components/offender/AddNewOffe
 import SimpleEditOffender from 'components/form-components/offender/SimpleEditOffender';
 import MultiSelectOffenders from 'components/investigations/MultiSelectOffenders';
 import MultiSelectVehicles from 'components/investigations/MultiSelectVehicles';
-import { InvestigationStatus } from 'graphql/types';
+// InvestigationStatus removed - not used
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
+// useNavigate removed - not used
 import { createUseStyles } from 'react-jss';
 
 import AddEvidence from '../../../components/form-components/documents/AddEvidence';
 import ViewDetails from './views/Details';
-import DocumentsContainer from './views/Documents/Documents.container';
-import Flow from './views/Flow/Flow.container';
 
-const { confirm } = Modal;
+// Modal confirm removed - not used
 
 interface Props {
   addCrimeGroup: boolean;
@@ -240,211 +222,42 @@ const ViewInvestigation = ({
   return (
     <div style={{ height: '100vh' }}>
       <div className={classes.sideListContent}>
-        <Tabs
-          tabBarExtraContent={
-            <Row style={{ margin: 6 }}>
-              <Col>
-                <Tooltip
-                  title={
-                    data?.investigation?.subscribed
-                      ? intl.formatMessage({
-                          defaultMessage:
-                            'Stop getting notified about updates.',
-                        })
-                      : intl.formatMessage({
-                          defaultMessage: 'Get notified about updates.',
-                        })
-                  }
-                >
-                  <Button
-                    onClick={toggleSubscribe}
-                    style={{
-                      borderBottomRightRadius: 0,
-                      borderTopRightRadius: 0,
-                    }}
-                  >
-                    <FontAwesomeIcon
-                      icon={
-                        data?.investigation?.subscribed ? faBellSlash : faBell
-                      }
-                      size="1x"
-                    />
-                  </Button>
-                </Tooltip>
-              </Col>
-              <Col>
-                <Tooltip
-                  title={intl.formatMessage({
-                    defaultMessage: 'Download investigation as PDF',
-                  })}
-                >
-                  <Button
-                    loading={isPrinting}
-                    onClick={handlePrint}
-                    style={{
-                      borderBottomRightRadius: 0,
-                      borderTopRightRadius: 0,
-                    }}
-                  >
-                    <FontAwesomeIcon icon={faFileDownload} size="1x" />
-                  </Button>
-                </Tooltip>
-              </Col>
-              <Col>
-                <Button
-                  onClick={() => {
-                    confirm({
-                      content: intl.formatMessage({
-                        defaultMessage: 'This action cannot be undone.',
-                      }),
-                      onOk() {
-                        onDeleteInvestigation();
-                      },
-                      title: intl.formatMessage({
-                        defaultMessage:
-                          'Do you want to delete the investigation?',
-                      }),
-                    });
-                  }}
-                  style={{
-                    borderBottomLeftRadius: 0,
-                    borderBottomRightRadius: 0,
-                    borderTopLeftRadius: 0,
-                    borderTopRightRadius: 0,
-                  }}
-                >
-                  <FontAwesomeIcon icon={faTrash} size="1x" />
-                </Button>
-              </Col>
-              {data?.investigation.status === InvestigationStatus.Open && (
-                <Col>
-                  <Button
-                    onClick={() => {
-                      confirm({
-                        onOk() {
-                          onCloseInvestigation();
-                        },
-                        title: intl.formatMessage({
-                          defaultMessage:
-                            'Do you want to close the investigation?',
-                        }),
-                      });
-                    }}
-                    style={{
-                      borderBottomLeftRadius: 0,
-                      borderTopLeftRadius: 0,
-                    }}
-                  >
-                    <FontAwesomeIcon
-                      icon={faCheckCircle}
-                      size="1x"
-                      style={{ marginRight: 8 }}
-                    />
-                    {intl.formatMessage({
-                      defaultMessage: 'Close Investigation',
-                    })}
-                  </Button>
-                </Col>
-              )}
-              {data?.investigation.status === InvestigationStatus.Closed && (
-                <Col>
-                  <Button
-                    onClick={() => {
-                      confirm({
-                        onOk() {
-                          onReopenInvestigation();
-                        },
-                        title: intl.formatMessage({
-                          defaultMessage:
-                            'Do you want to reopen the investigation?',
-                        }),
-                      });
-                    }}
-                    style={{
-                      borderBottomLeftRadius: 0,
-                      borderTopLeftRadius: 0,
-                    }}
-                  >
-                    <FontAwesomeIcon
-                      icon={faCheckCircle}
-                      size="1x"
-                      style={{ marginRight: 8 }}
-                    />
-                    {intl.formatMessage({
-                      defaultMessage: 'Reopen',
-                    })}
-                  </Button>
-                </Col>
-              )}
-            </Row>
-          }
-          tabBarStyle={{ marginBottom: 0 }}
-        >
-          <Tabs.TabPane
-            key="Dashboard"
-            tab={<FormattedMessage defaultMessage="Details" />}
-          >
-            <ViewDetails
-              componentRef={componentRef}
-              data={data}
-              investigationId={data?.investigation?.id || ''}
-              loading={loading}
-              onDeleteCrimeGroup={onDeleteCrimeGroup}
-              onDeleteIncident={onDeleteIncident}
-              onDeleteOffender={onDeleteOffender}
-              onDeleteVehicle={onDeleteVehicle}
-              saving={saving}
-              setCompleteTodoVisible={setCompleteTodoVisible}
-              setEditCrimeGroupData={setEditCrimeGroupData}
-              setEditOffenderData={setEditOffenderData}
-              setEditVehicleData={setEditVehicleData}
-              setViewTodoVisible={setViewTodoVisible}
-              templatesLoading={templatesLoading}
-              toggleAddCrimeGroup={toggleAddCrimeGroup}
-              toggleAddExistingCrimeGroup={toggleAddExistingCrimeGroup}
-              toggleAddExistingIncident={toggleAddExistingIncident}
-              toggleAddExistingOffender={toggleAddExistingOffender}
-              toggleAddExistingVehicle={toggleAddExistingVehicle}
-              toggleAddOffender={toggleAddOffender}
-              toggleAddTodo={toggleAddTodo}
-              toggleAddVehicle={toggleAddVehicle}
-              toggleEditInvestigation={toggleEditInvestigation}
-            />
-          </Tabs.TabPane>
-          <Tabs.TabPane
-            key="Flow"
-            tab={
-              <Typography.Text>
-                <FormattedMessage defaultMessage="Flow Map" />
-              </Typography.Text>
-            }
-          >
-            <Flow importData={data} />
-          </Tabs.TabPane>
-          <Tabs.TabPane
-            key="Documents"
-            tab={
-              <Badge
-                count={data?.investigation?.documents?.length || 0}
-                offset={[8, 0]}
-                showZero
-                size="small"
-              >
-                <Typography.Text>
-                  <FormattedMessage defaultMessage="Evidence" />
-                </Typography.Text>
-              </Badge>
-            }
-          >
-            <DocumentsContainer
-              data={data?.investigation?.documents}
-              demId={demId}
-              onDeleteDocument={onDeleteDocument}
-              toggleAddDemDocument={toggleAddDemDocument}
-              toggleAddDocument={toggleAddDocument}
-            />
-          </Tabs.TabPane>
-        </Tabs>
+        <ViewDetails
+          componentRef={componentRef}
+          data={data}
+          demId={demId}
+          handlePrint={handlePrint}
+          investigationId={data?.investigation?.id || ''}
+          isPrinting={isPrinting}
+          loading={loading}
+          onCloseInvestigation={onCloseInvestigation}
+          onDeleteCrimeGroup={onDeleteCrimeGroup}
+          onDeleteDocument={onDeleteDocument}
+          onDeleteIncident={onDeleteIncident}
+          onDeleteInvestigation={onDeleteInvestigation}
+          onDeleteOffender={onDeleteOffender}
+          onDeleteVehicle={onDeleteVehicle}
+          onReopenInvestigation={onReopenInvestigation}
+          saving={saving}
+          setCompleteTodoVisible={setCompleteTodoVisible}
+          setEditCrimeGroupData={setEditCrimeGroupData}
+          setEditOffenderData={setEditOffenderData}
+          setEditVehicleData={setEditVehicleData}
+          setViewTodoVisible={setViewTodoVisible}
+          templatesLoading={templatesLoading}
+          toggleAddCrimeGroup={toggleAddCrimeGroup}
+          toggleAddDemDocument={toggleAddDemDocument}
+          toggleAddDocument={toggleAddDocument}
+          toggleAddExistingCrimeGroup={toggleAddExistingCrimeGroup}
+          toggleAddExistingIncident={toggleAddExistingIncident}
+          toggleAddExistingOffender={toggleAddExistingOffender}
+          toggleAddExistingVehicle={toggleAddExistingVehicle}
+          toggleAddOffender={toggleAddOffender}
+          toggleAddTodo={toggleAddTodo}
+          toggleAddVehicle={toggleAddVehicle}
+          toggleEditInvestigation={toggleEditInvestigation}
+          toggleSubscribe={toggleSubscribe}
+        />
       </div>
       {/* details */}
       <Drawer

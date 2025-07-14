@@ -5,6 +5,7 @@ import {
   PUBLISHABLE_KEY,
 } from '#/providers/ClerkWithRouting';
 import { ThemeConfig } from '#/state';
+import { initializeGlobalErrorHandler } from '#/utils/globalErrorHandler';
 import React from 'react';
 import { ThemeSwitcherProvider } from 'react-css-theme-switcher/src';
 import ReactDOM from 'react-dom';
@@ -15,11 +16,17 @@ import '~/yet-another-react-lightbox/dist/styles.css';
 
 import './index.css';
 import * as serviceWorker from './serviceWorker';
+import './styles/print.css';
+import './styles/print-show-all.css';
+import './styles/print-watermark-fix.css';
 
 const themes = {
   dark: '/css/dark-theme.css',
   light: '/css/light-theme.css',
 };
+
+// Initialize global error handler
+initializeGlobalErrorHandler();
 
 window.addEventListener('vite:preloadError', () => {
   window.location.reload();

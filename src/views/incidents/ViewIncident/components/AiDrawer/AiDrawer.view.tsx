@@ -17,67 +17,92 @@ const { Paragraph, Text, Title } = Typography;
 const useStyles = createUseStyles((theme: Theme) => ({
   background: {
     backgroundColor: theme.bodyBackground,
-    padding: 15,
+    padding: 24,
   },
   card: {
+    '&:hover': {
+      boxShadow: '0 4px 16px rgba(0, 0, 0, 0.12)',
+    },
     backgroundColor: theme.componentBackground,
-    borderRadius: 15,
-    margin: 10,
-    paddingBottom: 15,
-    paddingLeft: 20,
-    paddingRight: 20,
-    paddingTop: 15,
+    borderRadius: 12,
+    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
+    margin: 12,
+    padding: 24,
+    transition: 'box-shadow 0.3s ease',
   },
   fieldTitle: {
-    fontSize: '15px !important',
-    marginBottom: '2px !important',
+    color: theme.secondaryText,
+    fontSize: '14px !important',
+    fontWeight: '500 !important',
+    marginBottom: '8px !important',
+  },
+  listItem: {
+    backgroundColor: theme.bodyBackground,
+    border: `1px solid ${theme.borderColor}`,
+    borderRadius: 6,
+    marginBottom: 8,
+    padding: '8px 12px',
   },
   sectionTitle: {
-    fontSize: '17px !important',
-    marginBottom: '2px !important',
+    fontSize: '18px !important',
+    fontWeight: '600 !important',
+    marginBottom: '16px !important',
   },
   statCard: {
-    borderRadius: 15,
-    height: 100,
+    '&:hover': {
+      transform: 'translateY(-2px)',
+    },
+    borderRadius: 12,
+    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+    height: 120,
     overflow: 'hidden',
-    padding: 20,
     position: 'relative',
-    width: 165,
+    transition: 'transform 0.3s ease',
+    width: 180,
   },
   statCardBackground: {
-    borderRadius: 15,
+    borderRadius: 12,
     height: '100%',
     left: 0,
-    opacity: 0.8,
+    opacity: 0.9,
     position: 'absolute',
     top: 0,
-    width: 165,
+    width: '100%',
     zIndex: 90,
   },
   statCardContent: {
-    borderRadius: 15,
+    borderRadius: 12,
+    display: 'flex',
+    flexDirection: 'column',
     height: '100%',
+    justifyContent: 'center',
     left: 0,
     padding: 20,
     position: 'absolute',
     top: 0,
-    width: 165,
+    width: '100%',
     zIndex: 101,
   },
   statText: {
     color: 'white !important',
-    fontSize: '25px !important',
+    fontSize: '28px !important',
+    fontWeight: '600 !important',
     marginBottom: '0px !important',
-    marginTop: '0px !important',
+    marginTop: '4px !important',
   },
   statTitle: {
-    color: 'white',
-    fontSize: '14px !important',
+    color: 'rgba(255, 255, 255, 0.9)',
+    fontSize: '13px !important',
+    fontWeight: '500 !important',
   },
   stats: {
-    padding: 10,
+    marginBottom: 24,
+  },
+  summarySection: {
+    marginBottom: 24,
   },
   text: {
+    lineHeight: 1.6,
     marginBottom: '0px !important',
   },
 }));
@@ -155,9 +180,13 @@ const IncidentAiDrawer = ({ incidentId, onClose, visible }: Props) => {
     <Drawer
       bodyStyle={{ flex: 1, padding: 0 }}
       onClose={onClose}
-      title={<FormattedMessage defaultMessage="Incident AI Report" />}
+      title={
+        <span style={{ fontSize: 18, fontWeight: 600 }}>
+          <FormattedMessage defaultMessage="AI Incident Analysis Report" />
+        </span>
+      }
       visible={visible}
-      width={1000}
+      width={1200}
     >
       {loading ? (
         <Skeleton />
@@ -225,7 +254,7 @@ const IncidentAiDrawer = ({ incidentId, onClose, visible }: Props) => {
               </div>
             </Col>
           </Row>
-          <Row>
+          <Row className={classes.summarySection}>
             <Col span={24}>
               <div className={classes.card}>
                 <Row gutter={[16, 16]}>
@@ -241,13 +270,13 @@ const IncidentAiDrawer = ({ incidentId, onClose, visible }: Props) => {
                     <Title className={classes.fieldTitle} level={4}>
                       <FormattedMessage defaultMessage="Key Observations" />
                     </Title>
-                    <Row gutter={[16, 4]}>
-                      {data?.incident.aiKeyObservations?.map((value) => (
-                        <Col span={24}>
+                    <div>
+                      {data?.incident.aiKeyObservations?.map((value, index) => (
+                        <div className={classes.listItem} key={index}>
                           <Text>{value}</Text>
-                        </Col>
+                        </div>
                       ))}
-                    </Row>
+                    </div>
                   </Col>
                   <Col span={12}>
                     <Title className={classes.fieldTitle} level={4}>
@@ -298,15 +327,15 @@ const IncidentAiDrawer = ({ incidentId, onClose, visible }: Props) => {
                   <Title className={classes.fieldTitle} level={4}>
                     <FormattedMessage defaultMessage="Key Factors" />
                   </Title>
-                  <Row gutter={[16, 4]}>
-                    {data?.incident.aiImpactAssessment?.keyFactors.map(
-                      (value) => (
-                        <Col>
+                  <div>
+                    {data?.incident.aiImpactAssessment?.keyFactors?.map(
+                      (value, index) => (
+                        <div className={classes.listItem} key={index}>
                           <Text>{value}</Text>
-                        </Col>
+                        </div>
                       )
                     )}
-                  </Row>
+                  </div>
                 </Col>
                 <Col span={24}>
                   <Title className={classes.fieldTitle} level={4}>
@@ -386,15 +415,15 @@ const IncidentAiDrawer = ({ incidentId, onClose, visible }: Props) => {
                   <Title className={classes.fieldTitle} level={4}>
                     <FormattedMessage defaultMessage="Tactics Used" />
                   </Title>
-                  <Row gutter={[16, 4]}>
-                    {data?.incident.aiBehavioralAnalysis?.tacticsUsed.map(
-                      (value) => (
-                        <Col span={24}>
+                  <div>
+                    {data?.incident.aiBehavioralAnalysis?.tacticsUsed?.map(
+                      (value, index) => (
+                        <div className={classes.listItem} key={index}>
                           <Text>{value}</Text>
-                        </Col>
+                        </div>
                       )
                     )}
-                  </Row>
+                  </div>
                 </Col>
                 <Col span={24}>
                   <Title className={classes.fieldTitle} level={4}>

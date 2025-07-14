@@ -1767,11 +1767,13 @@ const PerformanceReportLayout = ({
       case 'incidentsHeatMap': {
         return (
           <Card
+            bodyStyle={{ overflow: 'hidden', padding: 0 }}
             className={`${shouldPrint(
               data?.incidentHeatPerformance?.incidents[0]?.location?.geoLat
             )} no-break`}
             key="incidentsHeatMap"
             loading={loading}
+            style={{ overflow: 'hidden' }}
           >
             <Button
               className="cancelDrag card-remove no-print"

@@ -42,6 +42,12 @@ query ViewInvestigation($where: InvestigationWhereUniqueInput!) {
     }
     offenders {
       ...Offenders
+      totalIncidents
+      totalValue
+      latestIncident {
+        id
+        date
+      }
       images {
         id
         optimised
@@ -52,11 +58,7 @@ query ViewInvestigation($where: InvestigationWhereUniqueInput!) {
       }
     }
     incidents(orderBy: { date: desc }) {
-      ...Incidents
-      business {
-        id
-        name
-      }
+      ...IncidentsDetailed
       vehicles {
         ...Vehicles
       }

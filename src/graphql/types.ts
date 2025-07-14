@@ -1644,6 +1644,117 @@ export type ArticleWhereUniqueInput = {
   when?: InputMaybe<EnumWhenNullableFilter>;
 };
 
+export type AudioAnalyticsReport = {
+  __typename?: 'AudioAnalyticsReport';
+  averageDuration: Scalars['Float'];
+  averageQuality: Scalars['Float'];
+  dateRange: Scalars['String'];
+  enhancedModeAdoption: Scalars['Float'];
+  featureUsage: Scalars['JSON'];
+  successRate: Scalars['Float'];
+  topIssues: Array<Scalars['JSON']>;
+  totalSessions: Scalars['Int'];
+};
+
+export type AudioCustomQuestion = {
+  __typename?: 'AudioCustomQuestion';
+  id: Scalars['String'];
+  options: Array<Scalars['JSON']>;
+  priority: Scalars['Int'];
+  question: Scalars['String'];
+  questionId: Scalars['String'];
+  required: Scalars['Boolean'];
+  type: Scalars['String'];
+};
+
+export type AudioFormField = {
+  __typename?: 'AudioFormField';
+  conditions: Array<Scalars['JSON']>;
+  metadata?: Maybe<Scalars['JSON']>;
+  position: Scalars['Int'];
+  required: Scalars['Boolean'];
+  type: Scalars['String'];
+};
+
+export type AudioImageUploadResult = {
+  __typename?: 'AudioImageUploadResult';
+  detectedFaces: Array<DetectedFace>;
+  processingStatus: Scalars['String'];
+  requiresFaceSelection: Scalars['Boolean'];
+  uploadedImages: Array<Scalars['String']>;
+};
+
+export type AudioIncidentForm = {
+  __typename?: 'AudioIncidentForm';
+  fields: Array<AudioFormField>;
+  id: Scalars['String'];
+};
+
+export type AudioIncidentRequirements = {
+  __typename?: 'AudioIncidentRequirements';
+  availableBusinesses: Array<Business>;
+  connectedBusiness?: Maybe<Business>;
+  requiresBusinessSelection: Scalars['Boolean'];
+};
+
+export type AudioIncidentType = {
+  __typename?: 'AudioIncidentType';
+  customQuestions: Array<AudioCustomQuestion>;
+  description?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+  incidentForm?: Maybe<AudioIncidentForm>;
+  name: Scalars['String'];
+};
+
+export type AudioPerformanceMetrics = {
+  __typename?: 'AudioPerformanceMetrics';
+  averageLatency: Scalars['Float'];
+  errorRate: Scalars['Float'];
+  last24Hours: Scalars['JSON'];
+  operation: Scalars['String'];
+  successRate: Scalars['Float'];
+  throughput: Scalars['Float'];
+};
+
+export type AudioProcessingResult = {
+  __typename?: 'AudioProcessingResult';
+  chunkNumber?: Maybe<Scalars['Int']>;
+  processed: Scalars['Boolean'];
+  status: Scalars['String'];
+};
+
+export type AudioQualityMetrics = {
+  __typename?: 'AudioQualityMetrics';
+  confidence: Scalars['Float'];
+  duration: Scalars['Float'];
+  estimatedQuality: Scalars['String'];
+  fileSize: Scalars['Int'];
+  issues: Array<Scalars['String']>;
+  recommendations: Array<Scalars['String']>;
+};
+
+export type AudioSession = {
+  __typename?: 'AudioSession';
+  sessionId: Scalars['String'];
+  status: Scalars['String'];
+  uploadUrl: Scalars['String'];
+};
+
+export type AudioSessionMetrics = {
+  __typename?: 'AudioSessionMetrics';
+  audioQuality: Scalars['Float'];
+  chunksProcessed: Scalars['Int'];
+  enhancedModeUsed: Scalars['Boolean'];
+  facesDetected: Scalars['Int'];
+  goodsPreSelected: Scalars['Int'];
+  imagesUploaded: Scalars['Int'];
+  processingTime: Scalars['Float'];
+  questionsGenerated: Scalars['Int'];
+  sessionDuration: Scalars['Float'];
+  transcriptionConfidence: Scalars['Float'];
+  wordCount: Scalars['Int'];
+};
+
 export type Ban = {
   __typename?: 'Ban';
   active: Scalars['Boolean'];
@@ -2728,6 +2839,13 @@ export type CompleteActiveChecklistInput = {
   total?: InputMaybe<Scalars['Int']>;
 };
 
+export type CompleteAudioResult = {
+  __typename?: 'CompleteAudioResult';
+  extractedData: ExtractedIncidentData;
+  finalTranscript: Scalars['String'];
+  isReadyForSubmission: Scalars['Boolean'];
+};
+
 export enum CompleteStatus {
   Completed = 'COMPLETED',
   InProgress = 'IN_PROGRESS'
@@ -3500,6 +3618,7 @@ export type CreationBreakdown = {
 
 export type CrimeGroup = {
   __typename?: 'CrimeGroup';
+  activities: Array<Todo>;
   alias?: Maybe<Scalars['String']>;
   evidence: Array<Document>;
   groups: Array<Group>;
@@ -4631,6 +4750,15 @@ export type DependWeightInput = {
   weight: Scalars['String'];
 };
 
+export type DetectedFace = {
+  __typename?: 'DetectedFace';
+  attributes: Scalars['JSON'];
+  boundingBox: Scalars['JSON'];
+  confidence: Scalars['Float'];
+  faceId: Scalars['String'];
+  similarityMatches?: Maybe<Array<FaceMatch>>;
+};
+
 export type DeviceInfo = {
   name?: InputMaybe<Scalars['String']>;
   osName?: InputMaybe<Scalars['String']>;
@@ -4956,6 +5084,47 @@ export type DocumentsCreateRemove = {
 
 export type EnableSchemeRekognotionInput = {
   collection?: InputMaybe<SchemeRekognotionCollectionsInput>;
+};
+
+export type EnhancedAudioSession = {
+  __typename?: 'EnhancedAudioSession';
+  detectedFaces: Array<DetectedFace>;
+  faceRecognitionEnabled: Scalars['Boolean'];
+  goodsMode: Scalars['String'];
+  preSelectedGoods: Array<PreSelectedGood>;
+  preUploadedImages: Array<Scalars['String']>;
+  sessionId: Scalars['String'];
+  status: Scalars['String'];
+  uploadUrl: Scalars['String'];
+};
+
+export type EnhancedStreamAudioData = {
+  __typename?: 'EnhancedStreamAudioData';
+  audioQuality?: Maybe<AudioQualityMetrics>;
+  confidence?: Maybe<Scalars['Float']>;
+  enhancedTranscription?: Maybe<EnhancedTranscription>;
+  errorMessages?: Maybe<Array<Scalars['String']>>;
+  extractedData?: Maybe<Scalars['JSON']>;
+  formData?: Maybe<Scalars['JSON']>;
+  isComplete: Scalars['Boolean'];
+  languageDetection?: Maybe<LanguageDetectionResult>;
+  missingRequiredFields?: Maybe<Array<Scalars['String']>>;
+  partialTranscript?: Maybe<Scalars['String']>;
+  processingStage?: Maybe<Scalars['String']>;
+  sessionId: Scalars['String'];
+  status: Scalars['String'];
+  suggestedQuestions?: Maybe<Array<Scalars['JSON']>>;
+  translation?: Maybe<TranslationResult>;
+};
+
+export type EnhancedTranscription = {
+  __typename?: 'EnhancedTranscription';
+  language: Scalars['String'];
+  overallConfidence: Scalars['Float'];
+  processingTime: Scalars['Int'];
+  segments: Array<TranscriptionSegment>;
+  speakersDetected: Scalars['Int'];
+  suggestedCorrections: Array<TranscriptionCorrection>;
 };
 
 export type EnumAiSuggestionStatusNullableFilter = {
@@ -5887,6 +6056,45 @@ export type ExpoPushTokenWhereInput = {
   userId?: InputMaybe<StringFilter>;
 };
 
+export type ExtractedGoods = {
+  __typename?: 'ExtractedGoods';
+  brand?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  quantity?: Maybe<Scalars['Int']>;
+  value?: Maybe<Scalars['Float']>;
+};
+
+export type ExtractedIncidentData = {
+  __typename?: 'ExtractedIncidentData';
+  confidence?: Maybe<Scalars['Float']>;
+  datetime?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  goods?: Maybe<Array<ExtractedGoods>>;
+  incidentType?: Maybe<Scalars['String']>;
+  location?: Maybe<Scalars['String']>;
+  offenders?: Maybe<Array<ExtractedOffender>>;
+  policeInvolved?: Maybe<Scalars['Boolean']>;
+  policeRef?: Maybe<Scalars['String']>;
+  vehicles?: Maybe<Array<ExtractedVehicle>>;
+};
+
+export type ExtractedOffender = {
+  __typename?: 'ExtractedOffender';
+  age?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  gender?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+};
+
+export type ExtractedVehicle = {
+  __typename?: 'ExtractedVehicle';
+  color?: Maybe<Scalars['String']>;
+  make?: Maybe<Scalars['String']>;
+  model?: Maybe<Scalars['String']>;
+  registration?: Maybe<Scalars['String']>;
+};
+
 export type FaceDetectorComparisonInput = {
   age?: InputMaybe<Scalars['Int']>;
   boundingBox: Array<Scalars['Int']>;
@@ -5899,6 +6107,14 @@ export type FaceInput = {
   left: Scalars['Float'];
   top: Scalars['Float'];
   width: Scalars['Float'];
+};
+
+export type FaceMatch = {
+  __typename?: 'FaceMatch';
+  confidence: Scalars['Float'];
+  offenderId: Scalars['String'];
+  offenderName: Scalars['String'];
+  similarity: Scalars['Float'];
 };
 
 export enum FaceSource {
@@ -6491,6 +6707,17 @@ export type FolderWhereUniqueInput = {
   updatedAt?: InputMaybe<DateTimeFilter>;
 };
 
+export type FormData = {
+  __typename?: 'FormData';
+  CUSTOM?: Maybe<Scalars['JSON']>;
+  DETAILS?: Maybe<FormFieldDetails>;
+  GOODS?: Maybe<Array<ExtractedGoods>>;
+  OFFENDERS?: Maybe<Array<ExtractedOffender>>;
+  POLICE?: Maybe<FormFieldPolice>;
+  VEHICLES?: Maybe<Array<ExtractedVehicle>>;
+  WHERE?: Maybe<FormFieldWhere>;
+};
+
 export type FormField = {
   __typename?: 'FormField';
   conditions: Array<Scalars['JSON']>;
@@ -6504,6 +6731,13 @@ export type FormField = {
   updatedAt: Scalars['Date'];
 };
 
+export type FormFieldDetails = {
+  __typename?: 'FormFieldDetails';
+  date?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  time?: Maybe<Scalars['String']>;
+};
+
 export type FormFieldListRelationFilter = {
   every?: InputMaybe<FormFieldWhereInput>;
   none?: InputMaybe<FormFieldWhereInput>;
@@ -6512,6 +6746,12 @@ export type FormFieldListRelationFilter = {
 
 export type FormFieldOrderByRelationAggregateInput = {
   _count?: InputMaybe<SortOrder>;
+};
+
+export type FormFieldPolice = {
+  __typename?: 'FormFieldPolice';
+  reference?: Maybe<Scalars['String']>;
+  reported?: Maybe<Scalars['Boolean']>;
 };
 
 export type FormFieldScalarWhereInput = {
@@ -6536,6 +6776,12 @@ export type FormFieldScalarWhereWithAggregatesInput = {
   position?: InputMaybe<IntWithAggregatesFilter>;
   type?: InputMaybe<EnumIncidentFormFieldWithAggregatesFilter>;
   updatedAt?: InputMaybe<DateTimeWithAggregatesFilter>;
+};
+
+export type FormFieldWhere = {
+  __typename?: 'FormFieldWhere';
+  businessId?: Maybe<Scalars['String']>;
+  location?: Maybe<Scalars['String']>;
 };
 
 export type FormFieldWhereInput = {
@@ -9277,6 +9523,12 @@ export type LanguageSchemesArgs = {
   where?: InputMaybe<SchemeWhereInput>;
 };
 
+export type LanguageAlternative = {
+  __typename?: 'LanguageAlternative';
+  confidence: Scalars['Float'];
+  language: Scalars['String'];
+};
+
 export enum LanguageCode {
   Da = 'da',
   De = 'de',
@@ -9297,6 +9549,16 @@ export enum LanguageCode {
   Sv = 'sv',
   Th = 'th'
 }
+
+export type LanguageDetectionResult = {
+  __typename?: 'LanguageDetectionResult';
+  alternativeLanguages: Array<LanguageAlternative>;
+  confidence: Scalars['Float'];
+  detectedLanguage: Scalars['String'];
+  recommendedWhisperLanguage?: Maybe<Scalars['String']>;
+  supportedByWhisper: Scalars['Boolean'];
+  translationRequired: Scalars['Boolean'];
+};
 
 export type LanguageListRelationFilter = {
   every?: InputMaybe<LanguageWhereInput>;
@@ -10504,6 +10766,7 @@ export enum Model {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  addAudioIncidentGoods: Scalars['Boolean'];
   addImageIntel: Intel;
   addImagesToIncident: Incident;
   addImagesToOffender: Offender;
@@ -10517,6 +10780,7 @@ export type Mutation = {
   approveOffender: Offender;
   approveStockRemovalRequest: StockRemovalRequestApproval;
   closeInvestigation: Investigation;
+  completeAudioStream: CompleteAudioResult;
   completeChecklist: ActiveChecklist;
   copyEvidenceOnInvestigation: Document;
   copyEvidenceToAlert: Document;
@@ -10543,6 +10807,7 @@ export type Mutation = {
   createGroup: Group;
   createIncident: Incident;
   createIncidentForm: IncidentForm;
+  createIncidentFromAudioSession: Incident;
   createInvestigation: Investigation;
   createInvestigationCsvZip: Scalars['String'];
   /** NOTE: This is triggered without context externally by auth0, no way to know what scheme they are logging into. May have to add a update query one they have logged in  that updates the last login with the scheme they are logging into */
@@ -10623,6 +10888,7 @@ export type Mutation = {
   editArticle: Article;
   enableSchemeRekognition: RekCollection;
   exportInvestigationZip: Scalars['String'];
+  finalizeAudioSession: Scalars['Boolean'];
   forcedPasswordSet?: Maybe<Scalars['String']>;
   generateFeedItems: SystemTask;
   generateStatementBody: GeneratedStatementBody;
@@ -10638,6 +10904,7 @@ export type Mutation = {
   linkBusinessToScheme: Business;
   linkOrgToDem: Business;
   linkUserToDem: User;
+  mapAudioIncidentFaces: Scalars['Boolean'];
   markAsReadMessages: UserChat;
   mergeBusinessesWithSameName: Business;
   mergeOffender: Offender;
@@ -10674,12 +10941,16 @@ export type Mutation = {
   shareIncident: Incident;
   signIn: SignIn;
   signTerms: UserTerm;
+  startEnhancedAudioStream: EnhancedAudioSession;
   stockItemImport: SystemTask;
+  streamAudioChunk: AudioProcessingResult;
   subscribeToCrimeGroup: CrimeGroup;
   subscribeToIncident: Incident;
   subscribeToInvestigation: Investigation;
   subscribeToOffender: Offender;
   subscribeToVehicle: Vehicle;
+  /** Syncs police force data for all businesses in a scheme based on their postcodes. Only processes businesses that do not already have police force data assigned. */
+  syncBusinessPoliceForces: SyncPoliceForceResult;
   syncFeedItems: SystemTask;
   syncGeoCodes: Array<Address>;
   syncIncidentLocations: SystemTask;
@@ -10733,6 +11004,7 @@ export type Mutation = {
   updateUser: User;
   updateUserNotifications: Array<UserNotification>;
   updateVehicle: Vehicle;
+  uploadAudioIncidentImages: AudioImageUploadResult;
   uploadImage: Image;
   uploadToImage: Image;
   upsertBrand: Brand;
@@ -10744,6 +11016,12 @@ export type Mutation = {
   upsertIncidentForm: IncidentForm;
   upsertPermission: CustomRole;
   upsertShoe: Shoe;
+};
+
+
+export type MutationAddAudioIncidentGoodsArgs = {
+  goods: Array<PreSelectedGoodInput>;
+  sessionId: Scalars['String'];
 };
 
 
@@ -10818,6 +11096,11 @@ export type MutationApproveStockRemovalRequestArgs = {
 
 export type MutationCloseInvestigationArgs = {
   where: UniqueId;
+};
+
+
+export type MutationCompleteAudioStreamArgs = {
+  sessionId: Scalars['String'];
 };
 
 
@@ -10955,6 +11238,15 @@ export type MutationCreateIncidentArgs = {
 
 export type MutationCreateIncidentFormArgs = {
   data: IncidentFormInput;
+};
+
+
+export type MutationCreateIncidentFromAudioSessionArgs = {
+  additionalNotes?: InputMaybe<Scalars['String']>;
+  businessId?: InputMaybe<Scalars['String']>;
+  incidentDate: Scalars['String'];
+  incidentTime: Scalars['String'];
+  sessionId: Scalars['String'];
 };
 
 
@@ -11357,6 +11649,13 @@ export type MutationExportInvestigationZipArgs = {
 };
 
 
+export type MutationFinalizeAudioSessionArgs = {
+  feedbackNotes?: InputMaybe<Scalars['String']>;
+  sessionId: Scalars['String'];
+  userSatisfaction?: InputMaybe<Scalars['Int']>;
+};
+
+
 export type MutationGenerateFeedItemsArgs = {
   where: UniqueId;
 };
@@ -11423,6 +11722,12 @@ export type MutationLinkOrgToDemArgs = {
 export type MutationLinkUserToDemArgs = {
   data: UniqueId;
   where: UniqueId;
+};
+
+
+export type MutationMapAudioIncidentFacesArgs = {
+  faceOffenderMapping: Scalars['JSON'];
+  sessionId: Scalars['String'];
 };
 
 
@@ -11590,8 +11895,20 @@ export type MutationSignTermsArgs = {
 };
 
 
+export type MutationStartEnhancedAudioStreamArgs = {
+  incidentTypeId: Scalars['String'];
+  sessionId: Scalars['String'];
+};
+
+
 export type MutationStockItemImportArgs = {
   data: Array<StockItemsCreateInput>;
+};
+
+
+export type MutationStreamAudioChunkArgs = {
+  audioChunk: Scalars['String'];
+  sessionId: Scalars['String'];
 };
 
 
@@ -11617,6 +11934,14 @@ export type MutationSubscribeToOffenderArgs = {
 
 export type MutationSubscribeToVehicleArgs = {
   where: UniqueId;
+};
+
+
+export type MutationSyncBusinessPoliceForcesArgs = {
+  batchSize?: InputMaybe<Scalars['Int']>;
+  concurrentLookups?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']>;
+  schemeId: Scalars['String'];
 };
 
 
@@ -11875,6 +12200,12 @@ export type MutationUpdateUserNotificationsArgs = {
 export type MutationUpdateVehicleArgs = {
   data: VehicleUpdateInput;
   where: UniqueId;
+};
+
+
+export type MutationUploadAudioIncidentImagesArgs = {
+  imageUrls: Array<Scalars['String']>;
+  sessionId: Scalars['String'];
 };
 
 
@@ -14112,6 +14443,7 @@ export enum PoliceForce {
   NorthYorkshire = 'NORTH_YORKSHIRE',
   Nottinghamshire = 'NOTTINGHAMSHIRE',
   PoliceScotland = 'POLICE_SCOTLAND',
+  Psni = 'PSNI',
   SouthWales = 'SOUTH_WALES',
   SouthYorkshire = 'SOUTH_YORKSHIRE',
   Staffordshire = 'STAFFORDSHIRE',
@@ -14143,6 +14475,29 @@ export type PoliceSummary = {
   totalVerifiedOffenders: Scalars['Int'];
 };
 
+export type PreSelectedGood = {
+  __typename?: 'PreSelectedGood';
+  barcode?: Maybe<Scalars['String']>;
+  brand?: Maybe<Scalars['String']>;
+  goodsTypeId?: Maybe<Scalars['String']>;
+  name: Scalars['String'];
+  quantity?: Maybe<Scalars['Int']>;
+  sku?: Maybe<Scalars['String']>;
+  stockItemId?: Maybe<Scalars['String']>;
+  value?: Maybe<Scalars['Float']>;
+};
+
+export type PreSelectedGoodInput = {
+  barcode?: InputMaybe<Scalars['String']>;
+  brand?: InputMaybe<Scalars['String']>;
+  goodsTypeId?: InputMaybe<Scalars['String']>;
+  name: Scalars['String'];
+  quantity?: InputMaybe<Scalars['Int']>;
+  sku?: InputMaybe<Scalars['String']>;
+  stockItemId?: InputMaybe<Scalars['String']>;
+  value?: InputMaybe<Scalars['Float']>;
+};
+
 export type Query = {
   __typename?: 'Query';
   action: Action;
@@ -14167,6 +14522,11 @@ export type Query = {
   aiVisionStats: Array<Count>;
   article: Article;
   articles: Array<Article>;
+  audioAnalyticsReport: AudioAnalyticsReport;
+  audioDailyMetrics: Scalars['JSON'];
+  audioIncidentRequirements: AudioIncidentRequirements;
+  audioIncidentTypes: Array<AudioIncidentType>;
+  audioSessionAnalytics: AudioSessionMetrics;
   availableQuestions: Array<Question>;
   availableTaskQuestions: Array<Question>;
   ban: Ban;
@@ -14214,6 +14574,8 @@ export type Query = {
   feedRelay: QueryFeedRelayConnection;
   folder: Folder;
   folders: QueryFoldersConnection;
+  getAudioIncidentCapabilities: Scalars['JSON'];
+  getAudioIncidentSession: Scalars['JSON'];
   goodsTypes: Array<GoodsType>;
   group: Group;
   groups: Array<Group>;
@@ -14309,6 +14671,7 @@ export type Query = {
   roles: QueryRolesConnection;
   scheme: Scheme;
   schemes: Array<Scheme>;
+  searchAudioIncidentGoods: Array<StockItemCandidate>;
   searchOffenders: QuerySearchOffendersConnection;
   sharingBusinesses: Array<SharingBusiness>;
   sharingConfig: SharingConfig;
@@ -14505,6 +14868,22 @@ export type QueryArticlesArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<ArticleWhereInput>;
+};
+
+
+export type QueryAudioAnalyticsReportArgs = {
+  endDate: Scalars['String'];
+  startDate: Scalars['String'];
+};
+
+
+export type QueryAudioDailyMetricsArgs = {
+  date?: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryAudioSessionAnalyticsArgs = {
+  sessionId: Scalars['String'];
 };
 
 
@@ -14830,6 +15209,11 @@ export type QueryFoldersArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<FolderWhereInput>;
+};
+
+
+export type QueryGetAudioIncidentSessionArgs = {
+  sessionId: Scalars['String'];
 };
 
 
@@ -15535,6 +15919,13 @@ export type QuerySchemesArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<SchemeWhereInput>;
+};
+
+
+export type QuerySearchAudioIncidentGoodsArgs = {
+  barcode?: InputMaybe<Scalars['String']>;
+  limit?: InputMaybe<Scalars['Int']>;
+  searchTerm?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -19193,6 +19584,19 @@ export type StockItem = {
   variant?: Maybe<Scalars['String']>;
 };
 
+export type StockItemCandidate = {
+  __typename?: 'StockItemCandidate';
+  barcode?: Maybe<Scalars['String']>;
+  brand?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+  inStock: Scalars['Boolean'];
+  matchScore?: Maybe<Scalars['Float']>;
+  name: Scalars['String'];
+  salesPrice?: Maybe<Scalars['Float']>;
+  sku?: Maybe<Scalars['String']>;
+  variant?: Maybe<Scalars['String']>;
+};
+
 export type StockItemListRelationFilter = {
   every?: InputMaybe<StockItemWhereInput>;
   none?: InputMaybe<StockItemWhereInput>;
@@ -19454,6 +19858,19 @@ export type StockRemovalRequestsWhere = {
   status?: InputMaybe<Array<StockRemovalRequestStatus>>;
 };
 
+export type StreamAudioData = {
+  __typename?: 'StreamAudioData';
+  confidence?: Maybe<Scalars['Float']>;
+  extractedData?: Maybe<ExtractedIncidentData>;
+  formData?: Maybe<FormData>;
+  isComplete: Scalars['Boolean'];
+  missingRequiredFields?: Maybe<Array<Scalars['String']>>;
+  partialTranscript?: Maybe<Scalars['String']>;
+  sessionId: Scalars['String'];
+  status: Scalars['String'];
+  suggestedQuestions?: Maybe<Array<SuggestedQuestion>>;
+};
+
 export type StringArrayConditionInput = {
   anyAll: AnyAll;
   ids: Array<Scalars['String']>;
@@ -19549,6 +19966,7 @@ export type Subscription = {
   chatMessages: Array<MessageItem>;
   /** Subscription for new messages in a chat */
   newMessage: Message;
+  streamEnhancedAudioIncident: EnhancedStreamAudioData;
 };
 
 
@@ -19562,10 +19980,43 @@ export type SubscriptionNewMessageArgs = {
   chatId: Scalars['ID'];
 };
 
+
+export type SubscriptionStreamEnhancedAudioIncidentArgs = {
+  sessionId: Scalars['String'];
+};
+
 export type SubsectionInput = {
   order: Scalars['Int'];
   questions: Array<QuestionInput>;
   title: Scalars['String'];
+};
+
+export type SuggestedQuestion = {
+  __typename?: 'SuggestedQuestion';
+  field: Scalars['String'];
+  formField: Scalars['String'];
+  id: Scalars['String'];
+  priority: Scalars['String'];
+  question: Scalars['String'];
+  questionType?: Maybe<Scalars['String']>;
+  required: Scalars['Boolean'];
+};
+
+/** Result of syncing police forces for businesses based on their postcodes */
+export type SyncPoliceForceResult = {
+  __typename?: 'SyncPoliceForceResult';
+  /** Path to CSV file containing failed businesses (if any errors occurred) */
+  csvUrl?: Maybe<Scalars['String']>;
+  /** Duration of the operation in milliseconds */
+  duration?: Maybe<Scalars['Int']>;
+  /** Number of businesses that failed to update */
+  errors?: Maybe<Scalars['Int']>;
+  /** Total number of businesses processed */
+  processed?: Maybe<Scalars['Int']>;
+  /** Whether the sync operation completed successfully */
+  success: Scalars['Boolean'];
+  /** Number of businesses successfully updated with police force data */
+  updated?: Maybe<Scalars['Int']>;
 };
 
 export type SystemTask = {
@@ -20903,6 +21354,25 @@ export type TopContributors = {
   updatesCreated: Scalars['Int'];
 };
 
+export type TranscriptionCorrection = {
+  __typename?: 'TranscriptionCorrection';
+  confidence: Scalars['Float'];
+  original: Scalars['String'];
+  reason: Scalars['String'];
+  suggested: Scalars['String'];
+};
+
+export type TranscriptionSegment = {
+  __typename?: 'TranscriptionSegment';
+  alternatives?: Maybe<Array<Scalars['String']>>;
+  confidence: Scalars['Float'];
+  endTime: Scalars['Float'];
+  isCorrection: Scalars['Boolean'];
+  speaker?: Maybe<Scalars['String']>;
+  startTime: Scalars['Float'];
+  text: Scalars['String'];
+};
+
 export type TranslateTextInput = {
   targetLang: LanguageCode;
   text: Array<Scalars['String']>;
@@ -20911,6 +21381,15 @@ export type TranslateTextInput = {
 export type TranslatedText = {
   __typename?: 'TranslatedText';
   origText: Scalars['String'];
+  translatedText: Scalars['String'];
+};
+
+export type TranslationResult = {
+  __typename?: 'TranslationResult';
+  confidence: Scalars['Float'];
+  originalText: Scalars['String'];
+  sourceLanguage: Scalars['String'];
+  targetLanguage: Scalars['String'];
   translatedText: Scalars['String'];
 };
 

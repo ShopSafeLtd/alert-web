@@ -12,9 +12,26 @@ query CrimeGroup($where: CrimeGroupWhereUniqueInput!) {
     groups {
       id
     }
-
+    activities {
+      id
+      description
+      dueDate
+      completed
+      completedDate
+      reference
+      createdAt
+      assignedUsers {
+        id
+        fullName
+      }
+      completedBy {
+        id
+        fullName
+      }
+      name
+    }
     incidents {
-      ...Incidents
+      ...IncidentsDetailed
     }
     vehicles {
       ...Vehicles

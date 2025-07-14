@@ -3,6 +3,7 @@ import type { FilterLabels } from '#/views/settings/businesses/ListBusinesses/us
 import type { BusinessData } from 'types/DataType';
 
 import DebouncedInput from '#/utils/debounced-input';
+import { formatPoliceAreas } from '#/utils/formatPoliceAreas';
 import {
   faFilter,
   faLink,
@@ -258,6 +259,13 @@ const ListBusinesses = ({
             }),
           },
           {
+            dataIndex: 'policeArea',
+            key: 'policeArea',
+            title: intl.formatMessage({
+              defaultMessage: 'Police Area',
+            }),
+          },
+          {
             dataIndex: 'Options',
             key: 'Options',
             render: (_, record) => (
@@ -286,6 +294,7 @@ const ListBusinesses = ({
           name: item.name,
           parent: item.parent?.name,
           parentId: item.parent?.id,
+          policeArea: formatPoliceAreas(item.policeArea),
           tags: item.tags.map(({ name }) => name),
           totalUsers: item.totalUsers,
         }))}

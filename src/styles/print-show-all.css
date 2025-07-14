@@ -1,0 +1,143 @@
+/* Specific overrides to show all items during print */
+@media print {
+  /* Hide watermarks on images */
+  .watermark,
+  .watermarkText,
+  .watermark-text,
+  .image-watermark,
+  div[class*='watermark' i] {
+    display: none !important;
+    visibility: hidden !important;
+  }
+
+  /* Hide rotated text overlays (common watermark pattern) */
+  .image div[style*='rotate'],
+  .vehicleImage div[style*='rotate'],
+  .offenderImage div[style*='rotate'],
+  div[style*='position: absolute'][style*='transform'],
+  div[style*='position: absolute'][style*='rotate'] {
+    display: none !important;
+  }
+
+  /* Ensure images don't overflow */
+  .image,
+  .vehicleImage,
+  .offenderImage,
+  .offenderCard .image,
+  .vehicleCard .vehicleImage {
+    overflow: hidden !important;
+    position: relative !important;
+  }
+
+  /* Hide any absolute positioned children of images */
+  .image > *,
+  .vehicleImage > *,
+  .offenderImage > * {
+    display: none !important;
+  }
+
+  /* But keep the image background visible */
+  .image,
+  .vehicleImage,
+  .offenderImage {
+    background-image: inherit !important;
+    background-size: cover !important;
+    background-position: center !important;
+  }
+  /* Common patterns for showing limited items - force show all */
+
+  /* Pattern 1: Using array.slice(0, 4) or similar */
+  .offenderGrid .ant-row > .ant-col:nth-child(n),
+  .vehicleGrid .ant-row > .ant-col:nth-child(n) {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
+  /* Pattern 2: Using conditional rendering with showAll state */
+  [data-show-all='false'] *,
+  [data-collapsed='true'] *,
+  .collapsed-state *,
+  .minimized-state * {
+    display: block !important;
+    visibility: visible !important;
+  }
+
+  /* Pattern 3: Height-based hiding */
+  .offenderGrid,
+  .vehicleGrid,
+  .ant-row {
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  /* Pattern 4: CSS-based limiting */
+  .offenderGrid .ant-col:nth-child(n + 5):not(.show-all),
+  .vehicleGrid .ant-col:nth-child(n + 5):not(.show-all) {
+    display: block !important;
+  }
+
+  /* Pattern 5: Inline style overrides */
+  .offenderGrid .ant-col[style*='display'],
+  .vehicleGrid .ant-col[style*='display'] {
+    display: block !important;
+  }
+
+  /* Force grid to accommodate all items */
+  .offenderGrid .ant-row,
+  .vehicleGrid .ant-row {
+    flex-wrap: wrap !important;
+    height: auto !important;
+  }
+
+  /* Ensure cards within columns are visible */
+  .ant-col .offenderCard,
+  .ant-col .vehicleCard {
+    display: block !important;
+    visibility: visible !important;
+  }
+
+  /* Override any JavaScript-controlled visibility */
+  [v-show],
+  [v-if],
+  [ng-show],
+  [ng-if],
+  [x-show],
+  [x-if] {
+    display: block !important;
+  }
+
+  /* Common class names for hidden items */
+  .hidden-item,
+  .collapsed-item,
+  .minimized-item,
+  .truncated-list > *,
+  .limited-view > * {
+    display: block !important;
+    visibility: visible !important;
+  }
+
+  /* React common patterns */
+  .show-less > *,
+  .show-more-container > * {
+    display: block !important;
+  }
+
+  /* Ensure no items are hidden by overflow */
+  * {
+    overflow: visible !important;
+  }
+
+  /* Specific for grids that might use flexbox limiting */
+  .offenderGrid,
+  .vehicleGrid {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  .offenderGrid > *,
+  .vehicleGrid > * {
+    display: block !important;
+  }
+}

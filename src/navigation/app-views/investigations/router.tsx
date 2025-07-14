@@ -1,12 +1,30 @@
-import React from 'react';
-import { Route, Routes } from 'react-router';
-// import ReviewIncident from 'views/incidents/ReviewIncident ';
-import ListInvestigations from '../../../views/investigations/ListInvestigations/ListInvestigations.container';
-import ViewInvestigation from '../../../views/investigations/ViewInvestigation/ViewInvestigation.container';
-import PermissionCheckWrapper from '../../../components/PermissionCheck/PermissionCheckWrapper';
-import { PermissionMethod, PermissionModel } from 'graphql/types';
-import { useIntl } from 'react-intl';
+import Loading from '#/components/shared-components/AntD/Loading';
 import RouteWrapper from '#/navigation/utils/route-wrapper';
+import { PermissionMethod, PermissionModel } from 'graphql/types';
+import React, { Suspense, lazy } from 'react';
+import { useIntl } from 'react-intl';
+import { Route, Routes } from 'react-router';
+
+import PermissionCheckWrapper from '../../../components/PermissionCheck/PermissionCheckWrapper';
+
+const ListInvestigations = lazy(
+  () =>
+    import(
+      '../../../views/investigations/ListInvestigations/ListInvestigations.container'
+    )
+);
+const ViewInvestigation = lazy(
+  () =>
+    import(
+      '../../../views/investigations/ViewInvestigation/ViewInvestigation.container'
+    )
+);
+const FlowMapPage = lazy(
+  () => import('../../../views/investigations/ViewInvestigation/FlowMapPage')
+);
+const InvestigationsLayout = lazy(
+  () => import('../../../views/investigations/InvestigationsLayout')
+);
 
 const Investigations = (): JSX.Element => {
   const intl = useIntl();
@@ -16,34 +34,53 @@ const Investigations = (): JSX.Element => {
         defaultMessage: 'Investigations',
       })}
     >
-      <Routes>
-        <Route
-          index
-          element={
-            <PermissionCheckWrapper
-              permission={{
-                model: PermissionModel.Investigations,
-                method: PermissionMethod.Read,
-              }}
-            >
-              <ListInvestigations />
-            </PermissionCheckWrapper>
-          }
-        />
-        <Route
-          path="view/:id"
-          element={
-            <PermissionCheckWrapper
-              permission={{
-                model: PermissionModel.Investigations,
-                method: PermissionMethod.Read,
-              }}
-            >
-              <ViewInvestigation />
-            </PermissionCheckWrapper>
-          }
-        />
-      </Routes>
+      <Suspense fallback={<Loading cover="content" />}>
+        <Routes>
+          <Route
+            element={
+              <PermissionCheckWrapper
+                permission={{
+                  method: PermissionMethod.Read,
+                  model: PermissionModel.Investigations,
+                }}
+              >
+                <ListInvestigations />
+              </PermissionCheckWrapper>
+            }
+            index
+          />
+          <Route
+            element={
+              <PermissionCheckWrapper
+                permission={{
+                  method: PermissionMethod.Read,
+                  model: PermissionModel.Investigations,
+                }}
+              >
+                <InvestigationsLayout />
+              </PermissionCheckWrapper>
+            }
+            path="view/:id"
+          >
+            <Route element={<ViewInvestigation />} index />
+          </Route>
+          <Route
+            element={
+              <PermissionCheckWrapper
+                permission={{
+                  method: PermissionMethod.Read,
+                  model: PermissionModel.Investigations,
+                }}
+              >
+                <InvestigationsLayout />
+              </PermissionCheckWrapper>
+            }
+            path="view/:id/flow"
+          >
+            <Route element={<FlowMapPage />} index />
+          </Route>
+        </Routes>
+      </Suspense>
     </RouteWrapper>
   );
 };

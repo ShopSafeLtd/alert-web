@@ -1175,6 +1175,7 @@ const ViewOffender = ({
                                   markers={
                                     data?.offender?.incidents.map(
                                       (incident) => ({
+                                        ...incident,
                                         geoLat: incident.location?.geoLat,
                                         geoLng: incident.location?.geoLng,
                                       })
