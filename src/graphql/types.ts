@@ -14201,6 +14201,7 @@ export type Query = {
   customQuestionsCountGraph: CustomQuestionsGraph;
   dashboard: Dashboard;
   dashboards: QueryDashboardsConnection;
+  dateTest: Array<Scalars['String']>;
   demDevice: DemDevice;
   demDeviceModel: Array<DemDeviceModel>;
   demDevices: QueryDemDevicesConnection;
@@ -14307,7 +14308,6 @@ export type Query = {
   role: CustomRole;
   roles: QueryRolesConnection;
   scheme: Scheme;
-  schemeUsersRelay: QuerySchemeUsersRelayConnection;
   schemes: Array<Scheme>;
   searchOffenders: QuerySearchOffendersConnection;
   sharingBusinesses: Array<SharingBusiness>;
@@ -14328,6 +14328,7 @@ export type Query = {
   targetedGoodsDashboard: Array<Graph>;
   term: TermsAndCondition;
   todo: Todo;
+  todoExportRelay: QueryTodoExportRelayConnection;
   todoRelay: QueryTodoRelayConnection;
   todos: Array<Todo>;
   totalLoss: Scalars['Float'];
@@ -14720,6 +14721,11 @@ export type QueryDashboardsArgs = {
   scheme: SchemeWhereUniqueInput;
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type QueryDateTestArgs = {
+  date: Scalars['DateTime'];
 };
 
 
@@ -15522,20 +15528,6 @@ export type QuerySchemeArgs = {
 };
 
 
-export type QuerySchemeUsersRelayArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  cursor?: InputMaybe<UserSchemeWhereUniqueInput>;
-  distinct?: InputMaybe<Array<UserSchemeScalarFieldEnum>>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Array<UserSchemeOrderByWithRelationInput>>;
-  skip?: InputMaybe<Scalars['Int']>;
-  take?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<UserSchemeWhereInput>;
-};
-
-
 export type QuerySchemesArgs = {
   cursor?: InputMaybe<SchemeWhereUniqueInput>;
   distinct?: InputMaybe<Array<SchemeScalarFieldEnum>>;
@@ -15684,6 +15676,18 @@ export type QueryTermArgs = {
 
 export type QueryTodoArgs = {
   where: TodoWhereUniqueInput;
+};
+
+
+export type QueryTodoExportRelayArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<TodoOrderByWithRelationInput>>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where: TodoRelayWhereInput;
 };
 
 
@@ -16255,19 +16259,6 @@ export type QueryRolesConnectionEdge = {
   node: CustomRole;
 };
 
-export type QuerySchemeUsersRelayConnection = {
-  __typename?: 'QuerySchemeUsersRelayConnection';
-  edges: Array<QuerySchemeUsersRelayConnectionEdge>;
-  pageInfo: PageInfo;
-  totalCount: Scalars['Int'];
-};
-
-export type QuerySchemeUsersRelayConnectionEdge = {
-  __typename?: 'QuerySchemeUsersRelayConnectionEdge';
-  cursor: Scalars['String'];
-  node: UserScheme;
-};
-
 export type QuerySearchOffendersConnection = {
   __typename?: 'QuerySearchOffendersConnection';
   edges: Array<QuerySearchOffendersConnectionEdge>;
@@ -16318,6 +16309,19 @@ export type QueryStockRemovalRequestsConnectionEdge = {
   __typename?: 'QueryStockRemovalRequestsConnectionEdge';
   cursor: Scalars['String'];
   node: StockRemovalRequest;
+};
+
+export type QueryTodoExportRelayConnection = {
+  __typename?: 'QueryTodoExportRelayConnection';
+  edges: Array<QueryTodoExportRelayConnectionEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type QueryTodoExportRelayConnectionEdge = {
+  __typename?: 'QueryTodoExportRelayConnectionEdge';
+  cursor: Scalars['String'];
+  node: Todo;
 };
 
 export type QueryTodoRelayConnection = {
@@ -20782,6 +20786,7 @@ export type TodoUpdateInput = {
   completedDate?: InputMaybe<NullableSetDateHelper>;
   crimeGroupId?: InputMaybe<Scalars['String']>;
   description?: InputMaybe<Scalars['String']>;
+  disconnectBusiness?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<Array<UpdateDocument>>;
   dueDate?: InputMaybe<NullableSetDateHelper>;
   groups?: InputMaybe<RelationSet>;
