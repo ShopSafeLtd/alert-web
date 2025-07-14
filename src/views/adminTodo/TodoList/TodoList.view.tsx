@@ -11,6 +11,7 @@ import {
   currentPermissionsAtom,
   currentSchemeAtom,
 } from '#/providers/SchemeProvider/SchemeProvider';
+import DebouncedInput from '#/utils/debounced-input';
 import hasPermission from '#/utils/has-permission';
 import {
   faArrowUpRightAndArrowDownLeftFromCenter,
@@ -30,7 +31,6 @@ import {
   Col,
   Drawer,
   Dropdown,
-  Input,
   Modal,
   Popconfirm,
   Radio,
@@ -209,13 +209,14 @@ const AdminTodos = ({
     <div className="list-view">
       <Row gutter={[8, 16]} justify="end" style={{ marginBottom: 15 }}>
         <Col>
-          <Input
+          <DebouncedInput
             allowClear
-            onChange={(event) => setSearch(event.target.value)}
+            onChange={(e) => setSearch(e.target.value)}
+            // style={{ width: 350 }}
             placeholder={intl.formatMessage({
               defaultMessage: 'Search activities...',
             })}
-            // style={{ width: 350 }}
+            size="small"
           />
         </Col>
         <Col flex={1} />
