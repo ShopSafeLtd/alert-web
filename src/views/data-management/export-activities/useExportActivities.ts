@@ -76,7 +76,7 @@ export interface ExportActivitiesState {
   businessIds: string[];
   completedAt: { endDate: Date; startDate: Date } | null;
   createdAt: { endDate: Date; startDate: Date } | null;
-  data: TodoExportPreviewQuery['todoRelay']['edges'][0]['node'][];
+  data: TodoExportPreviewQuery['todoExportRelay']['edges'][0]['node'][];
   dueDate: { endDate: Date; startDate: Date } | null;
   groupIds: string[];
   progress: number;
@@ -293,12 +293,12 @@ const useExportActivities = (): Return => {
       if (data) {
         dispatch({
           payload: {
-            data: data.todoRelay.edges.map((edge) => edge.node),
+            data: data.todoExportRelay.edges.map((edge) => edge.node),
           },
           type: 'SET_DATA',
         });
         dispatch({
-          payload: data.todoRelay.totalCount,
+          payload: data.todoExportRelay.totalCount,
           type: 'SET_TOTAL',
         });
       } else {

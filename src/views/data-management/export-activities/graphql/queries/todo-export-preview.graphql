@@ -4,7 +4,12 @@ query TodoExportPreview(
   $orderBy: [TodoOrderByWithRelationInput!]
   $after: String
 ) {
-  todoRelay(where: $where, take: $take, orderBy: $orderBy, after: $after) {
+  todoExportRelay(
+    where: $where
+    take: $take
+    orderBy: $orderBy
+    after: $after
+  ) {
     edges {
       node {
         id
