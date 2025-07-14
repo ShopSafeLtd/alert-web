@@ -11,12 +11,12 @@ export type TodoExportPreviewQueryVariables = Types.Exact<{
 }>;
 
 
-export type TodoExportPreviewQuery = { __typename?: 'Query', todoRelay: { __typename?: 'QueryTodoRelayConnection', totalCount: number, edges: Array<{ __typename?: 'QueryTodoRelayConnectionEdge', node: { __typename?: 'Todo', id: string, name?: string | null, reference?: number | null, description?: string | null, dueDate?: Date | null, completedDate?: Date | null, completed?: boolean | null, createdAt: Date, type?: Types.TodoType | null, business?: { __typename?: 'Business', name: string, id: string } | null } }> } };
+export type TodoExportPreviewQuery = { __typename?: 'Query', todoExportRelay: { __typename?: 'QueryTodoExportRelayConnection', totalCount: number, edges: Array<{ __typename?: 'QueryTodoExportRelayConnectionEdge', node: { __typename?: 'Todo', id: string, name?: string | null, reference?: number | null, description?: string | null, dueDate?: Date | null, completedDate?: Date | null, completed?: boolean | null, createdAt: Date, type?: Types.TodoType | null, business?: { __typename?: 'Business', name: string, id: string } | null } }> } };
 
 
 export const TodoExportPreviewDocument = gql`
     query TodoExportPreview($where: TodoRelayWhereInput!, $take: Int, $orderBy: [TodoOrderByWithRelationInput!], $after: String) {
-  todoRelay(where: $where, take: $take, orderBy: $orderBy, after: $after) {
+  todoExportRelay(where: $where, take: $take, orderBy: $orderBy, after: $after) {
     edges {
       node {
         id
