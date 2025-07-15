@@ -61,6 +61,7 @@ import { PermissionMethod, PermissionModel } from 'graphql/types';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
+import { formatPoliceAreas } from 'utils/formatPoliceAreas';
 
 import type { ListDemBusinessEvidenceQuery } from './graphql/queries/__generated__/list-business-dem-evidence.generated';
 
@@ -268,6 +269,20 @@ const ViewBusiness = ({
                         </Link>
                       </Descriptions.Item>
                     )}
+                    <Descriptions.Item
+                      label={intl.formatMessage({
+                        defaultMessage: 'Police Force',
+                      })}
+                    >
+                      {loading ? (
+                        <Skeleton.Input style={{ height: 20 }} />
+                      ) : (
+                        formatPoliceAreas(data?.business?.policeArea) ||
+                        intl.formatMessage({
+                          defaultMessage: 'None',
+                        })
+                      )}
+                    </Descriptions.Item>
 
                     <Descriptions.Item
                       label={intl.formatMessage({

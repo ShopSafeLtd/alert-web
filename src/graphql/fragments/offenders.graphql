@@ -1,5 +1,6 @@
 fragment Offenders on Offender {
   id
+  reference
   name
   alias
   age

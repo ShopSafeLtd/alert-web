@@ -13,6 +13,7 @@ query BusinessesList(
         siteNumber
         fullName
         publicName
+        policeArea
         demId
         parent {
           id

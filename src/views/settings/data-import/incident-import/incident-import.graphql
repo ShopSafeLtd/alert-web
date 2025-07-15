@@ -1,6 +1,14 @@
 mutation IncidentImport($data: IncidentImportDataInput!) {
-  incidentImport(data: $data) {
-    success
-    total
-  }
+    incidentImport (data: $data) {
+        success
+        total
+        invalid
+        jobId
+        message
+        valid
+        validationErrors {
+            message
+            uuid
+        }
+    }
 }

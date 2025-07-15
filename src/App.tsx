@@ -127,6 +127,7 @@ export const PublicRoutes = ['/terms', '/debug', '/ext'];
 
 const App = (): JSX.Element => {
   const clerk = useClerk();
+
   if (!clerk.loaded) {
     return <LoadingScreen />;
   }

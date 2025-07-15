@@ -1,0 +1,46 @@
+fragment IncidentsDetailed on Incident {
+  id
+  reference
+  dayTime
+  policeRef
+  customerRef
+  subject
+  description
+  priority
+  approved
+  totalValue
+  totalRecoveredValue
+  location {
+    id
+    full
+    geoLat
+    geoLng
+  }
+  business {
+    id
+    name
+  }
+  crimeTypes {
+    id
+    name
+  }
+  groups {
+    id
+    name
+  }
+  offenders {
+    id
+    name
+    reference
+    images {
+      id
+      optimised
+      position
+      rotation
+    }
+  }
+  createdBy {
+    id
+    fullName
+  }
+}

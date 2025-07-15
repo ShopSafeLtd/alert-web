@@ -450,6 +450,7 @@ const ViewVehicle = ({
                               height={301}
                               markers={
                                 data?.vehicle?.incidents.map((incident) => ({
+                                  ...incident,
                                   geoLat: incident.location?.geoLat,
                                   geoLng: incident.location?.geoLng,
                                 })) || []

@@ -43,24 +43,7 @@ query ViewOffender(
     totalImages
     totalIncidents
     incidents {
-      id
-      business {
-        id
-        name
-      }
-      dayTime
-      policeNo
-      policeRef
-      reference
-      subject
-      totalRecoveredValue
-      totalValue
-      location {
-        id
-        full
-        geoLat
-        geoLng
-      }
+      ...IncidentsDetailed
     }
     customGalleries {
       id
