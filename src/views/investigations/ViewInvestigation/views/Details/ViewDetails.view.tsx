@@ -1141,7 +1141,13 @@ const ViewInvestigation = ({
                         key: 'tags',
                         onFilter: (
                           value: boolean | number | string,
-                          record: { tags: { text: string }[] }
+                          record: {
+                            fileUrl: string;
+                            key: string;
+                            name: string;
+                            tags: { text: string; value: string }[];
+                            thumbnail?: string;
+                          }
                         ) => record.tags.some((tag) => tag.text === value),
                         render: (origTags: { text: string; value: string }[]) =>
                           origTags.map((tag) => tag.text).join(', '),
