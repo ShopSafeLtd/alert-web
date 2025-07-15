@@ -9,6 +9,7 @@ import type { ViewInvestigationQuery } from 'graphql/investigations/queries/__ge
 import type { ListIncidentTagsQuery } from 'graphql/tags/queries/__generated__/list-incident-tags.generated';
 import type { TagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
 import type { CreateIncidentData } from 'graphql/types';
+import type * as Types from 'graphql/types';
 import type {
   CustomQuestion,
   CustomQuestionAction,
@@ -555,13 +556,18 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
             ...existingData.investigation.incidents,
             {
               ...res.createIncident,
+              priority: 'LOW' as Types.IncidentPriority,
               totalRecoveredValue: res.createIncident.recoveredValue || 0,
               totalValue: res.createIncident.value || 0,
             },
           ],
           offenders: [
             ...existingData.investigation.offenders,
-            ...res.createIncident.offenders,
+            ...res.createIncident.offenders.map((offender) => ({
+              ...offender,
+              totalIncidents: 0,
+              totalValue: 0,
+            })),
           ],
           vehicles: [
             ...existingData.investigation.vehicles,
