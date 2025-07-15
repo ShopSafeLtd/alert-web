@@ -94,7 +94,7 @@ const useStyles = createUseStyles((theme: Theme) => ({
     textTransform: 'uppercase',
   },
   statTitleColored: {
-    color: theme.textColorSecondary as string,
+    color: theme.secondaryText,
   },
   stats: {
     padding: 10,
@@ -196,7 +196,7 @@ const OffenderAiDrawer = ({ offenderId, onClose, visible }: Props) => {
                       'HIGH'
                         ? classes.statTextHigh
                         : data?.offender.aiRiskAssessment?.staffSafetyRisk ===
-                            'MEDIUM'
+                            'MODERATE'
                           ? classes.statTextMedium
                           : classes.statTextLow
                     }`}

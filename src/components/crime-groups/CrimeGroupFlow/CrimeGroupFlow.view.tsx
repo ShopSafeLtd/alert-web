@@ -1,5 +1,5 @@
 import type { Theme } from 'configs/ThemeConfig';
-import type { Edge, Node } from 'reactflow';
+import type { Edge, EdgeProps, Node } from 'reactflow';
 
 import { currencyAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import {
@@ -462,29 +462,10 @@ const OffenderNode = ({ data }: { data: OffenderNodeData }) => {
 };
 
 // Custom edge component for clickable labels
-interface CustomEdgeProps {
+interface CustomEdgeProps extends EdgeProps {
   data?: {
     onLabelClick?: () => void;
   };
-  id: string;
-  label?: React.ReactNode;
-  labelBgPadding?: [number, number];
-  labelBgStyle?: {
-    fill?: string;
-    fillOpacity?: number;
-    rx?: number;
-    stroke?: string;
-    strokeWidth?: number;
-  };
-  labelShowBg?: boolean;
-  labelStyle?: React.CSSProperties;
-  sourcePosition: Position;
-  sourceX: number;
-  sourceY: number;
-  style?: React.CSSProperties;
-  targetPosition: Position;
-  targetX: number;
-  targetY: number;
 }
 
 const CustomEdge: React.FC<CustomEdgeProps> = ({
@@ -495,19 +476,17 @@ const CustomEdge: React.FC<CustomEdgeProps> = ({
   labelBgStyle,
   labelShowBg,
   labelStyle,
-  sourcePosition,
+  sourcePosition: _sourcePosition,
   sourceX,
   sourceY,
   style,
-  targetPosition,
+  targetPosition: _targetPosition,
   targetX,
   targetY,
 }) => {
   const [edgePath, labelX, labelY] = getStraightPath({
-    sourcePosition,
     sourceX,
     sourceY,
-    targetPosition,
     targetX,
     targetY,
   });
@@ -545,7 +524,7 @@ const CustomEdge: React.FC<CustomEdgeProps> = ({
               style={{
                 background: labelBgStyle?.fill || '#fff',
                 border: `${labelBgStyle?.strokeWidth || 0}px solid ${labelBgStyle?.stroke || '#000'}`,
-                borderRadius: `${labelBgStyle?.rx || 0}px`,
+                borderRadius: `${(labelBgStyle as { rx?: number })?.rx || 0}px`,
                 boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
                 left: '50%',
                 opacity: labelBgStyle?.fillOpacity || 1,
@@ -1143,7 +1122,7 @@ const CrimeGroupFlow: React.FC<Props> = ({ crimeGroup, onOffenderClick }) => {
         }
 
         // Apply attractive forces for connected nodes
-        for (const [edgeId, _count] of allConnections.entries()) {
+        for (const [edgeId, count] of allConnections.entries()) {
           const [sourceId, targetId] = edgeId.split('-');
           const pos1 = nodePositions.get(sourceId);
           const pos2 = nodePositions.get(targetId);
@@ -1174,7 +1153,7 @@ const CrimeGroupFlow: React.FC<Props> = ({ crimeGroup, onOffenderClick }) => {
         }
 
         // Apply gentle gravity towards center
-        for (const pos of nodePositions) {
+        for (const pos of nodePositions.values()) {
           const dx = centerX - pos.x;
           const dy = centerY - pos.y;
           const distance = Math.hypot(dx, dy) || 1;
@@ -1185,7 +1164,7 @@ const CrimeGroupFlow: React.FC<Props> = ({ crimeGroup, onOffenderClick }) => {
         }
 
         // Update positions with velocity damping
-        for (const pos of nodePositions) {
+        for (const pos of nodePositions.values()) {
           // Apply velocity
           pos.x += pos.vx * 0.9;
           pos.y += pos.vy * 0.9;
@@ -1196,14 +1175,8 @@ const CrimeGroupFlow: React.FC<Props> = ({ crimeGroup, onOffenderClick }) => {
 
           // Keep nodes within bounds with padding
           const padding = pos.size / 2 + 20;
-          pos.x = Math.max(
-            padding,
-            Math.min(containerWidth - padding, pos.x as number)
-          );
-          pos.y = Math.max(
-            padding,
-            Math.min(containerHeight - padding, pos.y as number)
-          );
+          pos.x = Math.max(padding, Math.min(containerWidth - padding, pos.x));
+          pos.y = Math.max(padding, Math.min(containerHeight - padding, pos.y));
         }
       }
 
@@ -1507,27 +1480,24 @@ const CrimeGroupFlow: React.FC<Props> = ({ crimeGroup, onOffenderClick }) => {
             onLabelClick: () => {
               setIncidentModalData({
                 incidents: sharedIncidents.map((inc) => ({
-                  business: inc.business as unknown,
-                  description: inc.description as string,
                   id: inc.id,
                   incidentType: inc.incidentType,
                   location: inc.location,
                   occurredAt: inc.occurredAt,
                   offenders: inc.offenders,
                   reference: inc.reference,
-                  subject: inc.subject as string,
                   totalValue: inc.totalValue,
                 })),
                 offender1:
                   sourceOffender?.name ||
                   intl.formatMessage({ defaultMessage: 'Unknown' }),
                 offender1Id: sourceId,
-                offender1Reference: sourceOffender?.reference,
+                offender1Reference: sourceOffender?.reference?.toString(),
                 offender2:
                   targetOffender?.name ||
                   intl.formatMessage({ defaultMessage: 'Unknown' }),
                 offender2Id: targetId,
-                offender2Reference: targetOffender?.reference,
+                offender2Reference: targetOffender?.reference?.toString(),
               });
             },
           },
@@ -1582,7 +1552,7 @@ const CrimeGroupFlow: React.FC<Props> = ({ crimeGroup, onOffenderClick }) => {
         const connectedNodeIds = new Set<string>();
         connectedNodeIds.add(selectedNodeId); // Include the selected node itself
 
-        for (const [edgeId, _count] of allConnections.entries()) {
+        for (const [edgeId] of allConnections.entries()) {
           const [sourceId, targetId] = edgeId.split('-');
           if (sourceId === selectedNodeId) {
             connectedNodeIds.add(targetId);
@@ -1904,7 +1874,6 @@ const CrimeGroupFlow: React.FC<Props> = ({ crimeGroup, onOffenderClick }) => {
           edgeTypes={edgeTypes}
           edges={initialEdges}
           edgesFocusable={false}
-          edgesUpdatable={false}
           elementsSelectable={false}
           fitView
           key={`${layoutMode}-${viewMode}-${maxNodes}`}

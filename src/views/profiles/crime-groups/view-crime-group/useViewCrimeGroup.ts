@@ -831,8 +831,8 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
               }),
             });
           },
-          onError: (error) => {
-            errorNotification(error);
+          onError: (_error) => {
+            errorNotification();
           },
           variables: {
             data: {
@@ -867,8 +867,8 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
               }),
             });
           },
-          onError: (error) => {
-            errorNotification(error);
+          onError: (_error) => {
+            errorNotification();
           },
           variables: {
             data: {

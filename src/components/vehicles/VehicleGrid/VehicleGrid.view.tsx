@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access */
 import type { Theme } from 'configs/ThemeConfig';
+import type { ImagePosition } from 'graphql/types';
 import type { VehicleData } from 'types/DataType';
 
 import {
@@ -220,7 +221,13 @@ const VehicleCard = ({
     navigate(`/app/vehicles/view/${vehicle.id}`);
   };
 
-  const contextMenuItems = [];
+  const contextMenuItems: Array<{
+    danger?: boolean;
+    icon: React.ReactNode;
+    key: string;
+    label: string;
+    onClick: () => void;
+  }> = [];
 
   // Always add "Open in new tab" option
   contextMenuItems.push({
@@ -251,7 +258,7 @@ const VehicleCard = ({
         {vehicle.images && vehicle.images?.length > 0 ? (
           <div className={classes.image}>
             <WatermarkImage
-              position={vehicle.images[0].position}
+              position={vehicle.images[0].position as unknown as ImagePosition}
               url={vehicle.images[0].optimised || vehicle.images[0].url}
             />
           </div>
@@ -321,7 +328,14 @@ const VehicleCard = ({
                 icon={<FontAwesomeIcon icon={faEdit} />}
                 onClick={(e) => {
                   e.stopPropagation();
-                  setEditVehicleData && setEditVehicleData(vehicle);
+                  setEditVehicleData &&
+                    setEditVehicleData({
+                      ...vehicle,
+                      images: vehicle.images?.map((img) => ({
+                        ...img,
+                        position: img.position as unknown as ImagePosition,
+                      })),
+                    } as VehicleData);
                 }}
                 size="small"
                 type="text"

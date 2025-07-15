@@ -117,6 +117,11 @@ const ViewDetails = ({
 
   return (
     <View
+      _setCompleteTodoVisible={setCompleteTodoVisible}
+      _setEditOffenderData={setEditOffenderData}
+      _setEditVehicleData={setEditVehicleData}
+      _templatesLoading={templatesLoading}
+      _toggleAddTodo={toggleAddTodo}
       componentRef={componentRef}
       confirmDeleteUpdate={confirmDeleteUpdate}
       data={data}
