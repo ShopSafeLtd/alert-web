@@ -71,7 +71,7 @@ const IncidentImport = () => {
           'The name of the business to which the incident belongs to, this needs to match exactly with the existing business name to match the incident to it.',
       }),
       label: intl.formatMessage({ defaultMessage: 'Business Name' }),
-      name: 'business',
+      name: 'businessName',
       provider: 'businesses',
       transformers: 'trim',
     },
@@ -140,6 +140,7 @@ const IncidentImport = () => {
           'The total value of the goods involved in the incident.',
       }),
       label: intl.formatMessage({ defaultMessage: 'Value' }),
+      name: 'value',
       transformers: 'trim|number',
       validators: 'number',
     },
@@ -272,22 +273,22 @@ const IncidentImport = () => {
     const importData: IncidentData[] = records.map((item) => {
       const itemProperties = item.getProperties();
 
-      const typeId = itemProperties['0'];
-      const businessName = itemProperties['1'];
-      const siteNumber = itemProperties['2'];
-      const dateTime = itemProperties['3'];
-      const description = itemProperties['4'];
-      const crimeReference = itemProperties['5'];
-      const offenderDescriptions = itemProperties['6'];
-      const vehicleRegistration = itemProperties['7'];
-      const vehicleMake = itemProperties['8'];
-      const vehicleModel = itemProperties['9'];
-      const vehicleColour = itemProperties['10'];
-      const reference = itemProperties['11'];
-      const value = itemProperties['12'];
-      const goodsTypeId = itemProperties['13'];
-      const groupId = itemProperties['14'];
-      const tagIds = itemProperties['15'];
+      const typeId = itemProperties['type'];
+      const businessName = itemProperties['businessName'];
+      const siteNumber = itemProperties['siteNumber'];
+      const dateTime = itemProperties['date'];
+      const description = itemProperties['description'];
+      const crimeReference = itemProperties['crimeReference'];
+      const offenderDescriptions = itemProperties['offenderNames'];
+      const vehicleRegistration = itemProperties['vehicleRegistration'];
+      const vehicleMake = itemProperties['vehicleMake'];
+      const vehicleModel = itemProperties['vehicleModel'];
+      const vehicleColour = itemProperties['vehicleColour'];
+      const reference = itemProperties['reference'];
+      const value = itemProperties['value'];
+      const goodsTypeId = itemProperties['goodsType'];
+      const groupId = itemProperties['group'];
+      const tagIds = itemProperties['tag'];
 
       console.log(itemProperties);
       return {
@@ -318,7 +319,7 @@ const IncidentImport = () => {
         if (!url) {
           throw new Error('File upload failed');
         }
-        await processImport({
+        const result = await processImport({
           variables: {
             data: {
               fileUrl: url,
@@ -328,9 +329,10 @@ const IncidentImport = () => {
         });
         for (const [i, record] of records.entries()) {
           const importItem = importData[i];
-          const processedItem = data?.incidentImport.validationErrors?.find(
-            (item) => item.uuid === importItem.uuid
-          );
+          const processedItem =
+            result.data?.incidentImport.validationErrors?.find(
+              (item) => item.uuid === importItem.uuid
+            );
 
           if (processedItem?.message) {
             record.markAsRejected(processedItem.message);
@@ -347,7 +349,7 @@ const IncidentImport = () => {
       {goodsData && typesData ? (
         <ImportokWizard
           fields={Object.fromEntries(
-            fieldsArray.map((field, index) => [index, field])
+            fieldsArray.map((field) => [field.name, field])
           )}
           onImportReady={onImportReady}
           providers={providers}

@@ -17,7 +17,7 @@ const useStyles = createUseStyles((theme: Theme) => ({
   },
   activityAvatar: {
     '&:hover': {
-      backgroundColor: (theme.primaryHover || theme.primary) as string,
+      backgroundColor: theme.primary,
     },
     backgroundColor: theme.primary,
     color: '#fff',
@@ -44,7 +44,7 @@ const useStyles = createUseStyles((theme: Theme) => ({
     transition: 'all 0.2s ease',
   },
   activityDescription: {
-    color: theme.text as string,
+    color: theme.secondaryText,
     fontSize: 13,
     lineHeight: 1.5,
     marginBottom: '0 !important',

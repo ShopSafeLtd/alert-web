@@ -254,7 +254,13 @@ const OffenderCard = ({
     navigate(`/app/offenders/view/${offender.id}`);
   };
 
-  const contextMenuItems = [];
+  const contextMenuItems: Array<{
+    danger?: boolean;
+    icon: React.ReactNode;
+    key: string;
+    label: string;
+    onClick: () => void;
+  }> = [];
 
   // Always add "Open in new tab" option
   contextMenuItems.push({
