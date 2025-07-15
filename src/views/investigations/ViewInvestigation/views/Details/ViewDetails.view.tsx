@@ -1099,7 +1099,13 @@ const ViewInvestigation = ({
 
                 {data?.investigation?.documents &&
                 data.investigation.documents.length > 0 ? (
-                  <Table
+                  <Table<{
+                    fileUrl: string;
+                    key: string;
+                    name: string;
+                    tags: { text: string; value: string }[];
+                    thumbnail?: string;
+                  }>
                     columns={[
                       {
                         dataIndex: 'thumbnail',

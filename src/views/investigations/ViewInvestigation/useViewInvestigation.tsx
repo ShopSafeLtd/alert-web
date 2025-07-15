@@ -11,6 +11,7 @@ import type {
 import type { CreateSimpleOffenderMutation } from 'graphql/offenders/mutations/__generated__/create-simple-offender.generated';
 import type { UpdateSimpleOffenderMutation } from 'graphql/offenders/mutations/__generated__/update-simple-offender.generated';
 import type { CreateTodoMutation } from 'graphql/todos/mutations/__generated__/create-todo.generated';
+import type * as Types from 'graphql/types';
 import type {
   CrimeGroupCardData,
   OffenderData,
@@ -351,7 +352,11 @@ const useViewInvestigation = (investigationId: string): Return => {
         __typename: 'Query',
         investigation: {
           ...existingData.investigation,
-          offenders: res.updateInvestigation.offenders,
+          offenders: res.updateInvestigation.offenders.map((offender) => ({
+            ...offender,
+            totalIncidents: 0,
+            totalValue: 0,
+          })),
         },
       },
       query: ViewInvestigationDocument,
@@ -424,7 +429,11 @@ const useViewInvestigation = (investigationId: string): Return => {
           ...existingData.investigation,
           offenders: update(existingData.investigation.offenders, {
             [index]: {
-              $set: { ...res.updateOffender },
+              $set: {
+                ...res.updateOffender,
+                totalIncidents: 0,
+                totalValue: 0,
+              },
             },
           }),
         },
@@ -1349,7 +1358,20 @@ const useViewInvestigation = (investigationId: string): Return => {
               __typename: 'Query',
               investigation: {
                 ...existingData.investigation,
-                incidents: res.updateInvestigation.incidents,
+                incidents: res.updateInvestigation.incidents.map(
+                  (incident) => ({
+                    ...incident,
+                    createdBy: {
+                      __typename: 'User' as const,
+                      fullName: '',
+                      id: '',
+                    },
+                    crimeTypes: [],
+                    description: '',
+                    groups: [],
+                    priority: 'LOW' as Types.IncidentPriority,
+                  })
+                ),
               },
             },
             query: ViewInvestigationDocument,
