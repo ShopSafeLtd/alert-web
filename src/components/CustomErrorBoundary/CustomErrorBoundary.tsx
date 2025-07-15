@@ -43,7 +43,7 @@ class CustomErrorBoundary extends React.Component<Props, State> {
         }
       ).Sentry
     ) {
-      const windowWithSentry = window as {
+      const windowWithSentry = window as unknown as {
         Sentry: { captureException: (error: Error, context: object) => void };
       };
       windowWithSentry.Sentry.captureException(error, {

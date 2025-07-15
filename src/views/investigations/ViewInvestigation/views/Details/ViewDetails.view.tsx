@@ -268,12 +268,24 @@ const ViewInvestigation = ({
     if (!data?.investigation?.incidents) return [];
 
     const incidents = [...data.investigation.incidents];
-    return incidents.sort((a, b) => {
-      const dateA = new Date(a.dayTime).getTime();
-      const dateB = new Date(b.dayTime).getTime();
+    return incidents
+      .sort((a, b) => {
+        const dateA = new Date(a.dayTime).getTime();
+        const dateB = new Date(b.dayTime).getTime();
 
-      return incidentSort === 'newest' ? dateB - dateA : dateA - dateB;
-    });
+        return incidentSort === 'newest' ? dateB - dateA : dateA - dateB;
+      })
+      .map((incident) => ({
+        ...incident,
+        offenders: incident.offenders?.map((offender) => ({
+          ...offender,
+          images: offender.images?.map((img) => ({
+            ...img,
+            position: img.position as unknown as number,
+          })),
+          reference: offender.reference?.toString(),
+        })),
+      }));
   }, [data?.investigation?.incidents, incidentSort]);
 
   return (
@@ -1129,7 +1141,13 @@ const ViewInvestigation = ({
                         key: 'tags',
                         onFilter: (
                           value: boolean | number | string,
-                          record: { tags: { text: string }[] }
+                          record: {
+                            fileUrl: string;
+                            key: string;
+                            name: string;
+                            tags: { text: string; value: string }[];
+                            thumbnail?: string;
+                          }
                         ) => record.tags.some((tag) => tag.text === value),
                         render: (origTags: { text: string; value: string }[]) =>
                           origTags.map((tag) => tag.text).join(', '),
@@ -1377,14 +1395,8 @@ const ViewInvestigation = ({
                       </div>
                       <div className={classes.sidebarFooter}>
                         <UpdateBar
-                          editRights={editRights}
-                          editUpdate={editUpdate}
-                          editUpdateInput={editUpdateInput}
-                          handleEditUpdate={handleEditUpdate}
                           investigationId={investigationId}
                           replyTo={replyTo}
-                          setEditUpdate={setEditUpdate}
-                          setEditUpdateInput={setEditUpdateInput}
                           setOptionRowShow={setOptionRowShow}
                           setReplyTo={setReplyTo}
                           subscribed={data?.investigation?.subscribed || false}
@@ -1643,17 +1655,6 @@ const ViewInvestigation = ({
                                   </Row>
                                 </Col>
 
-                                {todo.description && (
-                                  <Col span={24}>
-                                    <Typography.Paragraph
-                                      className={classes.activityDescription}
-                                      ellipsis={{ expandable: true, rows: 2 }}
-                                    >
-                                      {todo.description}
-                                    </Typography.Paragraph>
-                                  </Col>
-                                )}
-
                                 {todo.assignedUsers &&
                                   todo.assignedUsers.length > 0 && (
                                     <Col span={24}>
@@ -1824,7 +1825,7 @@ const ViewInvestigation = ({
                                         </Col>
                                       )}
 
-                                      {todo.completedBy && (
+                                      {todo.completed && todo.createdBy && (
                                         <Col>
                                           <div
                                             className={
@@ -1837,11 +1838,7 @@ const ViewInvestigation = ({
                                               }
                                               size={20}
                                             >
-                                              {(
-                                                todo.completedBy as {
-                                                  fullName?: string;
-                                                }
-                                              )?.fullName
+                                              {todo.createdBy.fullName
                                                 ?.split(' ')
                                                 ?.map((n: string) => n[0])
                                                 ?.join('')
@@ -1863,11 +1860,7 @@ const ViewInvestigation = ({
                                                   classes.activityDetailValue
                                                 }
                                               >
-                                                {(
-                                                  todo.completedBy as {
-                                                    fullName?: string;
-                                                  }
-                                                )?.fullName || ''}
+                                                {todo.createdBy?.fullName || ''}
                                               </Typography.Text>
                                             </div>
                                           </div>

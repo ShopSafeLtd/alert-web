@@ -77,10 +77,7 @@ import {
 } from 'utils/offender/get-offender-desc';
 
 dayjs.extend(relativeTime);
-import {
-  ProfileUpdatedModel,
-  ProfileUpdatedType,
-} from 'types/enums/profile-update-type';
+import { ProfileUpdatedModel } from 'types/enums/profile-update-type';
 
 import CrimeGroupFlow from '../../../../components/crime-groups/CrimeGroupFlow';
 import OffenderGrid, {
@@ -563,7 +560,24 @@ const ViewCrimeGroup = ({
                     crimeGroup={{
                       alias: data.crimeGroup.alias,
                       id: data.crimeGroup.id,
-                      incidents: data.crimeGroup.incidents,
+                      incidents: data.crimeGroup.incidents.map((incident) => ({
+                        id: incident.id,
+                        incidentType: incident.crimeTypes[0]?.name || null,
+                        location: incident.location
+                          ? {
+                              address: incident.location.full,
+                              lat: incident.location.geoLat,
+                              lng: incident.location.geoLng,
+                            }
+                          : null,
+                        occurredAt: incident.dayTime,
+                        offenders: incident.offenders?.map((o) => ({
+                          id: o.id,
+                          name: o.name,
+                        })),
+                        reference: incident.reference?.toString() || null,
+                        totalValue: incident.totalValue,
+                      })),
                       offenders: data.crimeGroup.offenders.map((offender) => ({
                         id: offender.id,
                         images: offender.images,
@@ -771,7 +785,13 @@ const ViewCrimeGroup = ({
                     canDisconnect={editRights}
                     onDisconnectVehicle={onDisconnectVehicle}
                     sortBy={vehicleSortBy}
-                    vehicles={data?.crimeGroup?.vehicles}
+                    vehicles={data?.crimeGroup?.vehicles.map((vehicle) => ({
+                      ...vehicle,
+                      images: vehicle.images?.map((img) => ({
+                        ...img,
+                        position: img.position as unknown as number,
+                      })),
+                    }))}
                   />
                 ) : (
                   <Empty
@@ -788,9 +808,19 @@ const ViewCrimeGroup = ({
                 !loading ? (
                   <IncidentTable // TODO
                     hasNavigation
-                    incidents={data?.crimeGroup?.incidents.filter(
-                      (incident) => incident !== null
-                    )}
+                    incidents={data?.crimeGroup?.incidents
+                      .filter((incident) => incident !== null)
+                      .map((incident) => ({
+                        ...incident,
+                        offenders: incident.offenders?.map((offender) => ({
+                          ...offender,
+                          images: offender.images?.map((img) => ({
+                            ...img,
+                            position: img.position as unknown as number,
+                          })),
+                          reference: offender.reference?.toString(),
+                        })),
+                      }))}
                     pageSize={20}
                     title={
                       <Title level={4} style={{ margin: 0 }}>
@@ -1088,15 +1118,7 @@ const ViewCrimeGroup = ({
                     <div className={classes.sidebarFooter}>
                       <UpdateBar
                         crimeGroupId={crimeGroupId}
-                        editRights={editRights}
-                        editUpdate={editUpdate}
-                        editUpdateInput={editUpdateInput}
-                        handleEditUpdate={handleEditUpdate}
-                        profileUpdatedModel={ProfileUpdatedModel.Crime_Group}
-                        profileUpdatedType={ProfileUpdatedType.updated}
                         replyTo={replyTo}
-                        setEditUpdate={setEditUpdate}
-                        setEditUpdateInput={setEditUpdateInput}
                         setOptionRowShow={setOptionRowShow}
                         setReplyTo={setReplyTo}
                         subscribed={data?.crimeGroup?.subscribed || false}
@@ -1144,8 +1166,8 @@ const ViewCrimeGroup = ({
                                   {member.images && member.images.length > 0 ? (
                                     <div className={classes.suggestionImage}>
                                       <img
-                                        alt={member.name}
-                                        src={member.images[0].optimised}
+                                        alt={member.name || ''}
+                                        src={member.images[0].optimised || ''}
                                       />
                                     </div>
                                   ) : (
@@ -1226,29 +1248,12 @@ const ViewCrimeGroup = ({
                                             classes.suggestionIncidentType
                                           }
                                         >
-                                          {
-                                            member.associatedIncidents[0]
-                                              .incidentType
-                                          }
+                                          {member.associatedIncidents[0]
+                                            .crimeTypes?.[0]?.name ||
+                                            intl.formatMessage({
+                                              defaultMessage: 'Unknown',
+                                            })}
                                         </span>
-                                        {member.associatedIncidents[0]
-                                          .lossValue > 0 && (
-                                          <span
-                                            className={
-                                              classes.suggestionIncidentValue
-                                            }
-                                          >
-                                            {intl.formatNumber(
-                                              member.associatedIncidents[0]
-                                                .lossValue as number,
-                                              {
-                                                currency,
-                                                notation: 'compact',
-                                                style: 'currency',
-                                              }
-                                            )}
-                                          </span>
-                                        )}
                                       </div>
                                     )}
                                 </Col>

@@ -316,7 +316,7 @@ const IncidentTable = ({
                   const hasImage =
                     offender.images && offender.images.length > 0;
                   const imageUrl = hasImage
-                    ? offender.images[0].optimised
+                    ? offender.images![0].optimised
                     : null;
 
                   return (
@@ -410,7 +410,13 @@ const IncidentTable = ({
           dataIndex: 'Options',
           key: 'Options',
           render: (_, record: { key: string }) => {
-            const menuItems = [];
+            const menuItems: Array<{
+              danger?: boolean;
+              icon: React.ReactNode;
+              key: string;
+              label: string;
+              onClick: () => void;
+            }> = [];
 
             if (setEditData) {
               menuItems.push({
