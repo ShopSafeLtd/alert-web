@@ -3262,15 +3262,15 @@
   resolved "https://registry.npmjs.org/@icons/material/-/material-0.2.4.tgz"
   integrity sha512-QPcGmICAPbGLGb6F/yNf/KzKqvFx8z5qx3D1yFqVAjoFmXK35EgyW+cJ57Te3CNsmzblwtzakLGFqHPqrfb4Tw==
 
-"@importok/javascript@^2.1.2":
-  version "2.1.2"
-  resolved "https://npm.importok.io/@importok/javascript/-/javascript-2.1.2.tgz#f8e3945283dcb78ead5b89c92dcfd98910138fea"
-  integrity sha512-DqqV+p1QGn6oqy8VBvpSePCDn/7AG27GPLO/TttDto3s48NbLzmV+i0im08jAdlydG9vS+2xu5Liqtf+7s0jVA==
+"@importok/javascript@^2.3.0":
+  version "2.3.0"
+  resolved "https://npm.importok.io/@importok/javascript/-/javascript-2.3.0.tgz#a4bcf54da7f69de9898b8722fa41768c8b9a7e64"
+  integrity sha512-SXABJt7H5CnThiK5IAVvwjBhtekvAS2z50HVmUuXcYy6VhDu/BHQSOY0BNoYngKmnfneF1BWf+r2yh5n76FWCA==
 
-"@importok/react@^2.1.2":
-  version "2.1.2"
-  resolved "https://npm.importok.io/@importok/react/-/react-2.1.2.tgz#1702d025addcfd1c2d07df2539c9e3cbdca1cb96"
-  integrity sha512-qNL1y95IopPOYXEH04Dn1SkNMnv0GfPnbnZZqnH816MnnXDqR3fcSyZa2lUModqrthYrZ/C6wuiIsAtKbWajQA==
+"@importok/react@^2.3.0":
+  version "2.3.0"
+  resolved "https://npm.importok.io/@importok/react/-/react-2.3.0.tgz#929c959517c98798219061821979a8077258cec4"
+  integrity sha512-WFtXeED69+Dpq4v6AKC2i9lfUcsSSA7Ll+u2KuihAJEBfLYNRASwFOqs9LslekRbus9bXIcZP1RzM/ZZbjYYUQ==
 
 "@isaacs/cliui@^8.0.2":
   version "8.0.2"

@@ -10,6 +10,7 @@ query Business(
     demId
     siteNumber
     brands
+    policeArea
     currency
     brandsList {
       id

@@ -60,6 +60,7 @@ const IncidentImport = () => {
           'The type of the incident to be imported, this needs to match with the defined incident types in the system.',
       }),
       label: intl.formatMessage({ defaultMessage: 'Type' }),
+      name: 'type',
       provider: 'typesData',
       transformers: 'trim|as:typesData',
       validators: 'required|in:typesData',
@@ -70,17 +71,20 @@ const IncidentImport = () => {
           'The name of the business to which the incident belongs to, this needs to match exactly with the existing business name to match the incident to it.',
       }),
       label: intl.formatMessage({ defaultMessage: 'Business Name' }),
+      name: 'business',
       provider: 'businesses',
       transformers: 'trim',
     },
     {
       label: intl.formatMessage({ defaultMessage: 'Site Number' }),
+      name: 'siteNumber',
     },
     {
       description: intl.formatMessage({
         defaultMessage: 'The time and date the incident occurred.',
       }),
       label: intl.formatMessage({ defaultMessage: 'Date & Time' }),
+      name: 'date',
       transformers: 'trim',
       validators: 'required',
     },
@@ -90,6 +94,7 @@ const IncidentImport = () => {
           'The description of the incident, this can be a short description of the incident, or a detailed description of the incident, or a combination of both.',
       }),
       label: intl.formatMessage({ defaultMessage: 'Description' }),
+      name: 'description',
       validators: 'required',
     },
     {
@@ -97,21 +102,27 @@ const IncidentImport = () => {
         defaultMessage: 'Crime Reference Number provided by the police.',
       }),
       label: intl.formatMessage({ defaultMessage: 'Crime Reference' }),
+      name: 'crimeReference',
     },
     {
       label: intl.formatMessage({ defaultMessage: 'Offender Names' }),
+      name: 'offenderNames',
     },
     {
       label: intl.formatMessage({ defaultMessage: 'Vehicle Registration' }),
+      name: 'vehicleRegistration',
     },
     {
       label: intl.formatMessage({ defaultMessage: 'Vehicle Make' }),
+      name: 'vehicleMake',
     },
     {
       label: intl.formatMessage({ defaultMessage: 'Vehicle Model' }),
+      name: 'vehicleModel',
     },
     {
       label: intl.formatMessage({ defaultMessage: 'Vehicle Colour' }),
+      name: 'vehicleColour',
     },
     {
       description: intl.formatMessage({
@@ -119,6 +130,7 @@ const IncidentImport = () => {
           'Any existing reference for the incident, this can be a client defined number, a case number, etc.',
       }),
       label: intl.formatMessage({ defaultMessage: 'Reference' }),
+      name: 'reference',
       transformers: 'trim',
       validators: 'unique',
     },
@@ -137,6 +149,7 @@ const IncidentImport = () => {
           'The type of goods involved in the incident, this needs to match with the defined goods types in the system.',
       }),
       label: intl.formatMessage({ defaultMessage: 'Goods Type' }),
+      name: 'goodsType',
       provider: 'goodsData|as:goodsData',
       transformers: 'trim',
     },
@@ -145,9 +158,11 @@ const IncidentImport = () => {
         defaultMessage: 'The group to import the incident and offenders into.',
       }),
       label: intl.formatMessage({ defaultMessage: 'Group' }),
+      name: 'group',
     },
     {
       label: intl.formatMessage({ defaultMessage: 'Incident Tag' }),
+      name: 'tag',
     },
   ];
   /**
@@ -311,16 +326,16 @@ const IncidentImport = () => {
             },
           },
         });
-        // for (const [i, record] of records.entries()) {
-        //   const importItem = importData[i];
-        //   const processedItem = data?.incidentImport.results?.find(
-        //     (item) => item.uuid === importItem.uuid
-        //   );
-        //
-        //   if (processedItem?.error) {
-        //     record.markAsRejected(processedItem.error);
-        //   }
-        // }
+        for (const [i, record] of records.entries()) {
+          const importItem = importData[i];
+          const processedItem = data?.incidentImport.validationErrors?.find(
+            (item) => item.uuid === importItem.uuid
+          );
+
+          if (processedItem?.message) {
+            record.markAsRejected(processedItem.message);
+          }
+        }
       } catch (error) {
         console.error('Upload failed:', error);
       }

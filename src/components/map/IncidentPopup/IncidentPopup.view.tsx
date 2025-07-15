@@ -144,7 +144,7 @@ interface Props {
     }> | null;
     policeRef?: null | string;
     priority?: null | string;
-    reference?: null | string;
+    reference?: null | number | string;
     subject: string;
     totalValue?: null | number;
   };

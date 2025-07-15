@@ -285,7 +285,7 @@ const UserList = ({
         title={intl.formatMessage({
           defaultMessage: 'Invite New User',
         })}
-        width="600"
+        width={600}
       >
         {addUser ? (
           <AddUser
@@ -303,7 +303,7 @@ const UserList = ({
         title={intl.formatMessage({
           defaultMessage: 'Edit User',
         })}
-        width="600"
+        width={600}
       >
         {editUser ? (
           <EditUser id={editUser} onClose={() => toggleEditUser()} />

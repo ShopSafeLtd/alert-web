@@ -1,0 +1,45 @@
+query InvestigationsSideList(
+  $where: investigationRelayWhereInput!
+  $orderBy: investigationRelayOrderInput
+  $first: Int
+  $after: String
+) {
+  investigationRelay(
+    where: $where
+    orderBy: $orderBy
+    first: $first
+    after: $after
+  ) {
+    totalCount
+    edges {
+      node {
+        id
+        name
+        description
+        status
+        createdAt
+        reference
+        groups {
+          id
+          name
+        }
+        incidents {
+          id
+        }
+        offenders {
+          id
+        }
+        vehicles {
+          id
+        }
+        crimeGroups {
+          id
+        }
+      }
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+  }
+}

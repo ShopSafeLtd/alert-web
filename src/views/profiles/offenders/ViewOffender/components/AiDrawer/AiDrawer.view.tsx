@@ -33,42 +33,68 @@ const useStyles = createUseStyles((theme: Theme) => ({
     marginBottom: '2px !important',
   },
   statCard: {
-    borderRadius: 15,
-    height: 100,
+    '&:hover': {
+      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+      transform: 'translateY(-2px)',
+    },
+    backgroundColor: theme.componentBackground,
+    border: `1px solid ${theme.borderColor}`,
+    borderRadius: 12,
+    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)',
+    height: 110,
     overflow: 'hidden',
-    padding: 20,
     position: 'relative',
-    width: 165,
+    transition: 'all 0.3s ease',
+    width: 180,
   },
   statCardBackground: {
-    borderRadius: 15,
+    borderRadius: 12,
     height: '100%',
     left: 0,
-    opacity: 0.8,
+    opacity: 0.15,
     position: 'absolute',
     top: 0,
-    width: 165,
+    width: '100%',
     zIndex: 90,
   },
   statCardContent: {
-    borderRadius: 15,
+    borderRadius: 12,
+    display: 'flex',
+    flexDirection: 'column',
     height: '100%',
+    justifyContent: 'center',
     left: 0,
-    padding: 20,
+    padding: '16px 20px',
     position: 'absolute',
     top: 0,
-    width: 165,
+    width: '100%',
     zIndex: 101,
   },
   statText: {
-    color: 'white !important',
-    fontSize: '25px !important',
+    fontSize: '22px !important',
+    fontWeight: '500 !important',
+    lineHeight: '1.2 !important',
     marginBottom: '0px !important',
-    marginTop: '0px !important',
+    marginTop: '4px !important',
+  },
+  statTextHigh: {
+    color: '#cf1322 !important',
+  },
+  statTextLow: {
+    color: '#52c41a !important',
+  },
+  statTextMedium: {
+    color: '#fa8c16 !important',
   },
   statTitle: {
-    color: 'white',
-    fontSize: '14px !important',
+    fontSize: '12px !important',
+    fontWeight: '400 !important',
+    letterSpacing: '0.5px',
+    opacity: 0.8,
+    textTransform: 'uppercase',
+  },
+  statTitleColored: {
+    color: theme.textColorSecondary as string,
   },
   stats: {
     padding: 10,
@@ -86,14 +112,8 @@ interface Props {
 
 const OffenderAiDrawer = ({ offenderId, onClose, visible }: Props) => {
   const classes = useStyles();
-  const {
-    formatImpactCategory,
-    formatStaffRisk,
-    formatThreatLevel,
-    getCategoryStyle,
-    getStaffRiskStyle,
-    getThreatLevelStyle,
-  } = useEnrichmentFormatting();
+  const { formatImpactCategory, formatStaffRisk, formatThreatLevel } =
+    useEnrichmentFormatting();
 
   const { data, loading } = useOffenderAiDrawerQuery({
     variables: {
@@ -118,17 +138,21 @@ const OffenderAiDrawer = ({ offenderId, onClose, visible }: Props) => {
           <Row className={classes.stats} gutter={[16, 16]}>
             <Col>
               <div className={classes.statCard}>
-                <div
-                  className={classes.statCardBackground}
-                  style={getCategoryStyle(
-                    data?.offender.aiImpactAssessment?.category
-                  )}
-                />
                 <div className={classes.statCardContent}>
-                  <Text className={classes.statTitle}>
+                  <Text className={classes.statTitleColored}>
                     <FormattedMessage defaultMessage="Impact" />
                   </Text>
-                  <Title className={classes.statText} level={4}>
+                  <Title
+                    className={`${classes.statText} ${
+                      data?.offender.aiImpactAssessment?.category === 'HIGH'
+                        ? classes.statTextHigh
+                        : data?.offender.aiImpactAssessment?.category ===
+                            'MEDIUM'
+                          ? classes.statTextMedium
+                          : classes.statTextLow
+                    }`}
+                    level={4}
+                  >
                     {formatImpactCategory(
                       data?.offender.aiImpactAssessment?.category
                     )}
@@ -138,17 +162,21 @@ const OffenderAiDrawer = ({ offenderId, onClose, visible }: Props) => {
             </Col>
             <Col>
               <div className={classes.statCard}>
-                <div
-                  className={classes.statCardBackground}
-                  style={getThreatLevelStyle(
-                    data?.offender.aiRiskAssessment?.threatLevel
-                  )}
-                />
                 <div className={classes.statCardContent}>
-                  <Text className={classes.statTitle}>
+                  <Text className={classes.statTitleColored}>
                     <FormattedMessage defaultMessage="Risk Level" />
                   </Text>
-                  <Title className={classes.statText} level={4}>
+                  <Title
+                    className={`${classes.statText} ${
+                      data?.offender.aiRiskAssessment?.threatLevel === 'HIGH'
+                        ? classes.statTextHigh
+                        : data?.offender.aiRiskAssessment?.threatLevel ===
+                            'MEDIUM'
+                          ? classes.statTextMedium
+                          : classes.statTextLow
+                    }`}
+                    level={4}
+                  >
                     {formatThreatLevel(
                       data?.offender.aiRiskAssessment?.threatLevel
                     )}
@@ -158,17 +186,22 @@ const OffenderAiDrawer = ({ offenderId, onClose, visible }: Props) => {
             </Col>
             <Col>
               <div className={classes.statCard}>
-                <div
-                  className={classes.statCardBackground}
-                  style={getStaffRiskStyle(
-                    data?.offender.aiRiskAssessment?.staffSafetyRisk
-                  )}
-                />
                 <div className={classes.statCardContent}>
-                  <Text className={classes.statTitle}>
+                  <Text className={classes.statTitleColored}>
                     <FormattedMessage defaultMessage="Staff Safety Risk" />
                   </Text>
-                  <Title className={classes.statText} level={4}>
+                  <Title
+                    className={`${classes.statText} ${
+                      data?.offender.aiRiskAssessment?.staffSafetyRisk ===
+                      'HIGH'
+                        ? classes.statTextHigh
+                        : data?.offender.aiRiskAssessment?.staffSafetyRisk ===
+                            'MEDIUM'
+                          ? classes.statTextMedium
+                          : classes.statTextLow
+                    }`}
+                    level={4}
+                  >
                     {formatStaffRisk(
                       data?.offender.aiRiskAssessment?.staffSafetyRisk
                     )}

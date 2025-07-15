@@ -4,16 +4,25 @@ import type { Age, Build, Gender, ImagePosition, Race } from 'graphql/types';
 import type { OffenderData } from 'types/DataType';
 
 import { currencyAtom } from '#/providers/SchemeProvider/SchemeProvider';
-import { faEdit, faTrash } from '@fortawesome/pro-light-svg-icons';
+import {
+  faBuilding,
+  faCalendarAlt,
+  faEdit,
+  faExternalLink,
+  faTag,
+  faTrash,
+  faUnlink,
+  faUser,
+} from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, Col, Row, Skeleton, Typography } from 'antd';
+import { Button, Col, Dropdown, Menu, Row, Skeleton, Typography } from 'antd';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import dayjs from 'dayjs';
 import { useAtomValue } from 'jotai';
 import React, { useEffect, useRef, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { createUseStyles } from 'react-jss';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
   getOffenderAge,
   getOffenderGender,
@@ -21,107 +30,149 @@ import {
 } from 'utils/offender/get-offender-desc';
 
 const useStyles = createUseStyles((theme: Theme) => ({
-  actionRow: {
-    bottom: 10,
-    position: 'absolute',
-    right: 5,
-  },
-  hoverFadeSection: {
-    overflow: 'none',
-    paddingLeft: 15,
-    paddingRight: 15,
-    paddingTop: 2,
-    transition: 'all 1.4s ease',
-  },
-  hoverImage: {
-    backgroundPosition: 'center',
-    backgroundRepeat: 'no-repeat',
-    backgroundSize: 'cover',
-    borderBottom: `1px solid ${theme.borderColor}`,
-    borderBottomRightRadius: 5,
-    borderRight: `1px solid ${theme.borderColor}`,
-    borderTopLeftRadius: 10,
-    height: 180,
-    opacity: 0.8,
-    overflow: 'hidden',
-    width: '100%',
-  },
-  hoverImageSkeleton: {
-    '&.ant-skeleton-element .ant-skeleton-image': {
-      '& .ant-skeleton-image-svg': {
-        width: 35,
-      },
-      height: 120,
-      width: 120,
+  actionButtons: {
+    '& button': {
+      fontSize: 11,
+      height: 24,
+      minWidth: 24,
+      padding: '2px 6px',
     },
-    borderBottomRightRadius: 5,
-    borderTopLeftRadius: 10,
-    height: '100% !important',
-    width: '100% !important',
+    display: 'flex',
+    gap: 6,
+    marginTop: 8,
   },
-  hoverSection: {
-    height: '48%',
-    marginBottom: 15,
+  badge: {
+    '& .ant-badge-status-text': {
+      color: theme.secondaryText,
+      fontSize: 11,
+    },
+  },
+  cardContent: {
+    display: 'flex',
+    flex: 1,
+    flexDirection: 'column',
+    height: 220,
+    overflow: 'hidden',
+    padding: '16px 20px',
+  },
+  cardHeader: {
+    marginBottom: 8,
+  },
+  detailLabel: {
+    color: theme.secondaryText,
+    fontSize: 13,
+    marginRight: 8,
+  },
+  detailRow: {
+    '& svg': {
+      color: theme.secondaryText,
+      opacity: 0.7,
+      width: 14,
+    },
+    alignItems: 'center',
+    display: 'flex',
+    gap: 8,
+    marginBottom: 4,
+  },
+  detailText: {
+    color: theme.headerColor,
+    flex: 1,
+    fontSize: 13,
+    lineHeight: 1.4,
+    opacity: 0.85,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
   },
   image: {
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',
-    borderBottomLeftRadius: 10,
-    borderTopLeftRadius: 10,
-    height: 120,
-    opacity: 0.8,
-    overflow: 'hidden',
-    width: '100%',
+    borderBottomLeftRadius: 16,
+    borderTopLeftRadius: 16,
+    flexShrink: 0,
+    height: 220,
+    width: 160,
   },
   imageSkeleton: {
     '&.ant-skeleton-element .ant-skeleton-image': {
       '& .ant-skeleton-image-svg': {
-        width: 35,
+        width: 50,
       },
-      height: 120,
-      width: 120,
+      height: 220,
+      width: 160,
     },
-    borderBottomLeftRadius: 10,
-    borderTopLeftRadius: 10,
-    height: '120px !important',
-    width: '100% !important',
+    borderBottomLeftRadius: 16,
+    borderTopLeftRadius: 16,
+    height: '220px !important',
+    width: '160px !important',
   },
-  noWrap: { whiteSpace: 'nowrap' },
+  infoSection: {
+    flex: 1,
+    marginTop: 10,
+    overflow: 'hidden',
+  },
   offenderCard: {
+    '&:hover': {
+      borderColor: theme.primary,
+      boxShadow:
+        theme.colorScheme === 'dark'
+          ? '0 8px 24px rgba(0, 0, 0, 0.4)'
+          : '0 8px 24px rgba(0, 0, 0, 0.12)',
+      transform: 'translateY(-2px)',
+    },
+    backgroundColor: theme.componentBackground,
     border: `1px solid ${theme.borderColor}`,
-    borderRadius: 10,
+    borderRadius: 16,
     cursor: 'pointer',
-    height: 120,
-    // backgroundColor: theme.imageBackgroundColor,
-    position: 'relative',
+    display: 'flex',
+    height: 220,
+    overflow: 'hidden',
+    padding: 0,
+    transition: 'all 0.2s ease',
     width: '100%',
   },
-  offenderHover: {
-    // backgroundColor: theme.imageBackgroundColor,
-    backgroundColor: theme.componentBackground,
-    borderColor: theme.borderColor,
-    borderRadius: 10,
-    borderStyle: 'solid',
-    cursor: 'default',
-    filter: `drop-shadow(0px 0px 5px ${theme.borderColor})`,
-    overflow: 'hidden',
-    position: 'absolute',
-    transition: 'all .3s ease',
-    width: 500,
-    zIndex: 10,
-  },
-  offenderOverlayContainer: {
-    alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.4)',
-    bottom: 0,
+  offenderName: {
+    alignItems: 'baseline',
+    color: theme.headerColor,
     display: 'flex',
-    justifyContent: 'center',
-    left: 0,
-    position: 'fixed',
-    right: 0,
-    top: 0,
-    zIndex: 1000,
+    fontSize: 16,
+    fontWeight: 600,
+    gap: 8,
+    lineHeight: 1.2,
+    marginBottom: 0,
+    overflow: 'hidden',
+    width: '100%',
+  },
+  offenderRef: {
+    color: theme.secondaryText,
+    fontSize: 12,
+    fontWeight: 400,
+  },
+  statItem: {
+    flex: 1,
+    textAlign: 'center',
+  },
+  statLabel: {
+    color: theme.secondaryText,
+    display: 'block',
+    fontSize: 10,
+    letterSpacing: '0.5px',
+    marginBottom: 4,
+    textTransform: 'uppercase',
+  },
+  statValue: {
+    color: theme.headerColor,
+    display: 'block',
+    fontSize: 16,
+    fontWeight: 600,
+  },
+  statsRow: {
+    borderTop: `1px solid ${theme.borderColor}`,
+    display: 'flex',
+    gap: 20,
+    marginTop: 'auto',
+    paddingTop: 12,
   },
 }));
 
@@ -160,501 +211,359 @@ interface Offender {
   totalValue: number;
 }
 
-interface Position {
-  height: number;
-  width: number;
-  x: number;
-  y: number;
-}
-
 interface Props {
+  canDisconnect?: boolean;
   deleteRights?: boolean;
   editRights?: boolean;
   offenders?: Offender[];
   onDeleteOffender?: (id: string) => void;
+  onDisconnectOffender?: (id: string) => void;
   setEditOffenderData?: (value: OffenderData | null) => void;
+  sortBy?: string;
 }
 
 interface OffenderCardProps {
-  offender: Offender;
-  onOpenOffender: (value: Offender, position: Position) => void;
-}
-
-const OffenderCard = ({ offender, onOpenOffender }: OffenderCardProps) => {
-  const classes = useStyles();
-  const intl = useIntl();
-  const currency = useAtomValue(currencyAtom);
-
-  const ref = useRef<HTMLDivElement>(null);
-
-  const onOpen = () => {
-    const values = ref.current?.getBoundingClientRect();
-    if (values)
-      onOpenOffender(offender, {
-        height: values.height,
-        width: values.width,
-        x: values.x,
-        y: values.y,
-      });
-  };
-
-  return (
-    <Row className={classes.offenderCard} onClick={onOpen} ref={ref}>
-      <Row style={{ width: '100%' }} wrap={false}>
-        <Col span={8}>
-          {offender.images && offender.images?.length > 0 ? (
-            <div className={classes.image}>
-              <WatermarkImage
-                position={offender.images[0].position}
-                url={offender.images[0].optimised}
-              />
-            </div>
-          ) : (
-            <Skeleton.Image className={classes.imageSkeleton} />
-          )}
-        </Col>
-        <Col span={16} style={{ padding: 10 }}>
-          <Row>
-            <Typography.Text>{offender.name}</Typography.Text>
-          </Row>
-          <Row gutter={8} style={{ marginTop: 2, width: '100%' }} wrap={false}>
-            <Col>
-              <Typography.Text
-                style={{ whiteSpace: 'nowrap' }}
-                type="secondary"
-              >
-                {intl.formatMessage({
-                  defaultMessage: 'ID:',
-                  // eslint-disable-next-line formatjs/no-literal-string-in-jsx
-                })}{' '}
-                {offender.reference}
-              </Typography.Text>
-            </Col>
-            {offender.alias && offender.alias.length > 0 && (
-              <Col flex={1}>
-                <Typography.Text
-                  ellipsis
-                  style={{ width: '100%' }}
-                  type="secondary"
-                >
-                  {intl.formatMessage({
-                    defaultMessage: 'Alias:',
-                    // eslint-disable-next-line formatjs/no-literal-string-in-jsx
-                  })}{' '}
-                  {offender.alias.toString()}
-                </Typography.Text>
-              </Col>
-            )}
-          </Row>
-          <Row gutter={8} style={{ marginTop: 2 }}>
-            <Col>
-              <Typography.Text type="secondary">
-                {intl.formatMessage({
-                  defaultMessage: 'Incidents:',
-                  // eslint-disable-next-line formatjs/no-literal-string-in-jsx
-                })}{' '}
-                {offender.totalIncidents}
-              </Typography.Text>
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <Typography.Text type="secondary">
-                {intl.formatMessage({
-                  defaultMessage: 'Loss:',
-                })}
-                {intl.formatNumber(offender.totalValue || 0, {
-                  currency,
-                  style: 'currency',
-                })}
-              </Typography.Text>
-            </Col>
-          </Row>
-        </Col>
-      </Row>
-    </Row>
-  );
-};
-
-interface OffenderOverlayProps {
+  canDisconnect?: boolean;
   deleteRights?: boolean;
   editRights?: boolean;
-  offender: Offender | null;
-  onClose: () => void;
+  offender: Offender;
   onDeleteOffender?: (id: string) => void;
-  open: boolean;
-  position: Position | null;
+  onDisconnectOffender?: (id: string) => void;
   setEditOffenderData?: (value: OffenderData | null) => void;
 }
 
-const OffenderOverlay = ({
+const OffenderCard = ({
+  canDisconnect,
   deleteRights,
   editRights,
   offender,
-  onClose,
   onDeleteOffender,
-  open,
-  position,
+  onDisconnectOffender,
   setEditOffenderData,
-}: OffenderOverlayProps) => {
-  const ref = useRef<HTMLDivElement>(null);
+}: OffenderCardProps) => {
   const classes = useStyles();
   const intl = useIntl();
-
-  const [overlayPosition, setPosition] = useState<Position | null>(null);
-
-  useEffect(() => {
-    const boundingBox = ref.current?.getBoundingClientRect();
-    if (position && boundingBox) {
-      const overlayEdge = position.x + 500;
-
-      if (overlayEdge > boundingBox.width) {
-        setPosition({
-          height: 0,
-          width: 0,
-          x: position.x - (500 - position.width),
-          y: position.y,
-        });
-      } else {
-        setPosition({
-          height: 0,
-          width: 0,
-          x: position.x,
-          y: position.y,
-        });
-      }
-    }
-  }, [position]);
-
   const currency = useAtomValue(currencyAtom);
-  return open && offender ? (
-    <div className={classes.offenderOverlayContainer} ref={ref}>
-      <div
-        className={classes.offenderHover}
-        onMouseLeave={onClose}
-        style={{
-          left: overlayPosition?.x,
-          position: 'absolute',
-          top: overlayPosition?.y,
-        }}
-      >
-        <Row className={classes.hoverSection} wrap={false}>
-          <Col span={9}>
-            {offender.images && offender.images.length > 0 ? (
-              <div className={classes.hoverImage}>
-                <WatermarkImage
-                  position={offender.images[0].position}
-                  url={offender.images[0].optimised}
-                />
+  const navigate = useNavigate();
+
+  const handleCardClick = (e: React.MouseEvent) => {
+    // Prevent navigation if clicking on action buttons
+    const target = e.target as HTMLElement;
+    if (target.closest('button')) return;
+
+    navigate(`/app/offenders/view/${offender.id}`);
+  };
+
+  const contextMenuItems = [];
+
+  // Always add "Open in new tab" option
+  contextMenuItems.push({
+    icon: <FontAwesomeIcon icon={faExternalLink} />,
+    key: 'open-new-tab',
+    label: intl.formatMessage({ defaultMessage: 'Open in new tab' }),
+    onClick: () => {
+      window.open(`/app/offenders/view/${offender.id}`, '_blank');
+    },
+  });
+
+  if (canDisconnect) {
+    contextMenuItems.push({
+      icon: <FontAwesomeIcon icon={faUnlink} />,
+      key: 'disconnect',
+      label: intl.formatMessage({
+        defaultMessage: 'Disconnect from Crime Group',
+      }),
+      onClick: () => {
+        onDisconnectOffender && onDisconnectOffender(offender.id);
+      },
+    });
+  }
+
+  const renderCard = () => (
+    <div className={classes.offenderCard} onClick={handleCardClick}>
+      <div style={{ display: 'flex', flexShrink: 0, height: 220 }}>
+        {offender.images && offender.images?.length > 0 ? (
+          <div className={classes.image}>
+            <WatermarkImage
+              position={offender.images[0].position}
+              url={offender.images[0].optimised}
+            />
+          </div>
+        ) : (
+          <Skeleton.Image className={classes.imageSkeleton} />
+        )}
+      </div>
+      <div className={classes.cardContent}>
+        <div className={classes.cardHeader}>
+          <Typography.Text className={classes.offenderName}>
+            <span
+              style={{
+                flex: 1,
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              {offender.name ||
+                intl.formatMessage({ defaultMessage: 'Unknown' })}
+            </span>
+            {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
+            <span className={classes.offenderRef} style={{ flexShrink: 0 }}>
+              #{offender.reference}
+            </span>
+          </Typography.Text>
+
+          {/* Demographic info */}
+          <div className={classes.infoSection}>
+            {(offender.gender || offender.race || offender.age) && (
+              <div className={classes.detailRow}>
+                <FontAwesomeIcon icon={faUser} />
+                <Typography.Text className={classes.detailText}>
+                  {offender.gender && getOffenderGender(offender.gender)}
+                  {offender.gender && (offender.race || offender.age) && (
+                    <>{' • '}</>
+                  )}
+                  {offender.race && getOffenderRace(offender.race, true)}
+                  {offender.race && offender.age && <>{' • '}</>}
+                  {offender.age && getOffenderAge(offender.age)}
+                </Typography.Text>
               </div>
-            ) : (
-              <Skeleton.Image className={classes.hoverImageSkeleton} />
             )}
-          </Col>
-          <Col style={{ padding: '15px 20px' }}>
-            <Row>
-              <Typography.Text strong>{offender.name}</Typography.Text>
-            </Row>
-            <Row gutter={16}>
-              <Col>
-                <Row gutter={8} wrap={false}>
-                  <Col>
-                    <Typography.Text
-                      className={classes.noWrap}
-                      type="secondary"
-                    >
-                      {intl.formatMessage({
-                        defaultMessage: 'ID:',
-                      })}
-                    </Typography.Text>
-                  </Col>
-                  <Col>
-                    <Typography.Text ellipsis>
-                      {offender.reference}
-                    </Typography.Text>
-                  </Col>
-                </Row>
-              </Col>
-              {offender.alias && offender.alias.length > 0 && (
-                <Col>
-                  <Row gutter={8} wrap={false}>
-                    <Col>
-                      <Typography.Text
-                        className={classes.noWrap}
-                        type="secondary"
-                      >
-                        {intl.formatMessage({
-                          defaultMessage: 'Alias:',
-                        })}
-                      </Typography.Text>
-                    </Col>
-                    <Col>
-                      <Typography.Text ellipsis>
-                        {offender.alias.toString()}
-                      </Typography.Text>
-                    </Col>
-                  </Row>
-                </Col>
+
+            {offender.latestIncident && (
+              <div className={classes.detailRow}>
+                <FontAwesomeIcon icon={faCalendarAlt} />
+                <span className={classes.detailLabel}>
+                  {intl.formatMessage({ defaultMessage: 'Last seen:' })}
+                </span>
+                <Typography.Text className={classes.detailText}>
+                  {dayjs(offender.latestIncident.date).format('DD/MM/YYYY')}
+                </Typography.Text>
+              </div>
+            )}
+
+            {/* Known For / Targeted Info */}
+            {offender.knownFor && offender.knownFor.length > 0 && (
+              <div className={classes.detailRow}>
+                <FontAwesomeIcon icon={faTag} />
+                <span className={classes.detailLabel}>
+                  {intl.formatMessage({ defaultMessage: 'Known for:' })}
+                </span>
+                <Typography.Text className={classes.detailText}>
+                  {offender.knownFor.slice(0, 2).join(', ')}
+                  {offender.knownFor.length > 2 && (
+                    <>
+                      {' '}
+                      {intl.formatMessage(
+                        { defaultMessage: '+{count}' },
+                        { count: offender.knownFor.length - 2 }
+                      )}
+                    </>
+                  )}
+                </Typography.Text>
+              </div>
+            )}
+
+            {offender.targetedBusinesses &&
+              offender.targetedBusinesses.length > 0 && (
+                <div className={classes.detailRow}>
+                  <FontAwesomeIcon icon={faBuilding} />
+                  <span className={classes.detailLabel}>
+                    {intl.formatMessage({ defaultMessage: 'Targets:' })}
+                  </span>
+                  <Typography.Text className={classes.detailText}>
+                    {offender.targetedBusinesses
+                      .slice(0, 1)
+                      .map((b) => b.name)
+                      .join(', ')}
+                    {offender.targetedBusinesses.length > 1 && (
+                      <>
+                        {' '}
+                        {intl.formatMessage(
+                          { defaultMessage: '+{count}' },
+                          { count: offender.targetedBusinesses.length - 1 }
+                        )}
+                      </>
+                    )}
+                  </Typography.Text>
+                </div>
               )}
-            </Row>
-            <Row gutter={8} wrap={false}>
-              <Col>
-                <Typography.Text className={classes.noWrap} type="secondary">
-                  {intl.formatMessage({
-                    defaultMessage: 'Gender:',
-                  })}
-                </Typography.Text>
-              </Col>
-              <Col>
-                <Typography.Text ellipsis>
-                  {getOffenderGender(offender.gender)}
-                </Typography.Text>
-              </Col>
-            </Row>
-            <Row gutter={8} wrap={false}>
-              <Col>
-                <Typography.Text className={classes.noWrap} type="secondary">
-                  {intl.formatMessage({
-                    defaultMessage: 'Ethnicity:',
-                  })}
-                </Typography.Text>
-              </Col>
-              <Col>
-                <Typography.Text ellipsis>
-                  {getOffenderRace(offender.race)}
-                </Typography.Text>
-              </Col>
-            </Row>
-            <Row gutter={8} wrap={false}>
-              <Col>
-                <Typography.Text className={classes.noWrap} type="secondary">
-                  {intl.formatMessage({
-                    defaultMessage: 'Age:',
-                  })}
-                </Typography.Text>
-              </Col>
-              <Col>
-                <Typography.Text ellipsis>
-                  {getOffenderAge(offender.age)}
-                </Typography.Text>
-              </Col>
-            </Row>
-          </Col>
-        </Row>
-        <Row
-          className={classes.hoverFadeSection}
-          gutter={16}
-          style={{ opacity: open ? 1 : 0 }}
-        >
-          <Col>
-            <Row gutter={8} wrap={false}>
-              <Col>
-                <Typography.Text className={classes.noWrap} type="secondary">
-                  {intl.formatMessage({
-                    defaultMessage: 'Incidents:',
-                  })}
-                </Typography.Text>
-              </Col>
-              <Col>
-                <Typography.Text ellipsis>
-                  {offender.totalIncidents}
-                </Typography.Text>
-              </Col>
-            </Row>
-          </Col>
-          <Col>
-            <Row gutter={8} wrap={false}>
-              <Col>
-                <Typography.Text className={classes.noWrap} type="secondary">
-                  {intl.formatMessage({
-                    defaultMessage: 'Loss:',
-                  })}
-                </Typography.Text>
-              </Col>
-              <Col>
-                <Typography.Text ellipsis>
-                  {intl.formatNumber(offender.totalValue || 0, {
-                    currency,
-                    style: 'currency',
-                  })}
-                </Typography.Text>
-              </Col>
-            </Row>
-          </Col>
-          <Col>
-            <Row gutter={8} wrap={false}>
-              <Col>
-                <Typography.Text className={classes.noWrap} type="secondary">
-                  {intl.formatMessage({
-                    defaultMessage: 'Last incident:',
-                  })}
-                </Typography.Text>
-              </Col>
-              <Col>
-                <Typography.Text ellipsis>
-                  {offender.latestIncident
-                    ? dayjs(offender.latestIncident.date).format('DD/MM/YY')
-                    : intl.formatMessage({
-                        defaultMessage: 'none',
-                        // eslint-disable-next-line formatjs/no-literal-string-in-jsx
-                      })}
-                </Typography.Text>
-              </Col>
-            </Row>
-          </Col>
-        </Row>
-        <Row
-          className={classes.hoverFadeSection}
-          style={{ opacity: open ? 1 : 0 }}
-        >
-          <Col>
-            <Row gutter={8} wrap={false}>
-              <Col>
-                <Typography.Text className={classes.noWrap} type="secondary">
-                  {intl.formatMessage({
-                    defaultMessage: 'Known for:',
-                  })}
-                </Typography.Text>
-              </Col>
-              <Col flex={1}>
-                <Typography.Text ellipsis>
-                  {offender.knownFor && offender.knownFor.length > 0
-                    ? offender.knownFor.toString()
-                    : intl.formatMessage({
-                        defaultMessage: 'Unknown',
-                      })}
-                </Typography.Text>
-              </Col>
-            </Row>
-          </Col>
-        </Row>
-        <Row
-          className={classes.hoverFadeSection}
-          style={{ opacity: open ? 1 : 0 }}
-        >
-          <Col>
-            <Row gutter={8} wrap={false}>
-              <Col>
-                <Typography.Text className={classes.noWrap} type="secondary">
-                  {intl.formatMessage({
-                    defaultMessage: 'Businesses:',
-                  })}
-                </Typography.Text>
-              </Col>
-              <Col flex={1}>
-                <Typography.Text ellipsis>
-                  {offender.targetedBusinesses
-                    ?.map((item) => item.name)
-                    .toString()}
-                </Typography.Text>
-              </Col>
-            </Row>
-          </Col>
-        </Row>
-        <Row
-          className={classes.hoverFadeSection}
-          style={{ opacity: open ? 1 : 0 }}
-        >
-          <Row gutter={8} wrap={false}>
-            <Col>
-              <Typography.Text className={classes.noWrap} type="secondary">
-                {intl.formatMessage({
-                  defaultMessage: 'Goods:',
-                })}
-              </Typography.Text>
-            </Col>
-            <Col>
-              <Typography.Text ellipsis>
-                {offender.targetedGoods && offender.targetedGoods.length > 0
-                  ? offender.targetedGoods.toString()
-                  : intl.formatMessage({
-                      defaultMessage: 'Unknown',
-                    })}
-              </Typography.Text>
-            </Col>
-          </Row>
-        </Row>
-        <Row justify="center" style={{ marginBottom: 10, marginTop: 10 }}>
-          <Col>
-            <Link to={`/app/offenders/view/${offender.id}`}>
-              <Button size="small" type="text">
-                <FormattedMessage defaultMessage="View Offender" />
-              </Button>
-            </Link>
-          </Col>
-        </Row>
-        <Row className={classes.actionRow} gutter={8}>
-          {editRights && (
-            <Col>
+          </div>
+        </div>
+
+        {/* Stats */}
+        <div className={classes.statsRow}>
+          <div className={classes.statItem}>
+            <span className={classes.statLabel}>
+              {intl.formatMessage({ defaultMessage: 'Incidents' })}
+            </span>
+            <span className={classes.statValue}>{offender.totalIncidents}</span>
+          </div>
+          <div className={classes.statItem}>
+            <span className={classes.statLabel}>
+              {intl.formatMessage({ defaultMessage: 'Total Loss' })}
+            </span>
+            <span className={classes.statValue}>
+              {intl.formatNumber(offender.totalValue || 0, {
+                currency,
+                maximumFractionDigits: 0,
+                notation: 'compact',
+                style: 'currency',
+              })}
+            </span>
+          </div>
+        </div>
+
+        {/* Action buttons */}
+        {(editRights || deleteRights) && (
+          <div className={classes.actionButtons}>
+            {editRights && (
               <Button
-                onClick={() =>
-                  setEditOffenderData && setEditOffenderData(offender)
-                }
+                icon={<FontAwesomeIcon icon={faEdit} />}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setEditOffenderData && setEditOffenderData(offender);
+                }}
                 size="small"
                 type="text"
               >
-                <FontAwesomeIcon icon={faEdit} />
+                {intl.formatMessage({ defaultMessage: 'Edit' })}
               </Button>
-            </Col>
-          )}
-          {deleteRights && (
-            <Col>
+            )}
+            {deleteRights && (
               <Button
-                onClick={() =>
-                  onDeleteOffender && onDeleteOffender(offender.id)
-                }
+                danger
+                icon={<FontAwesomeIcon icon={faTrash} />}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onDeleteOffender && onDeleteOffender(offender.id);
+                }}
                 size="small"
                 type="text"
               >
-                <FontAwesomeIcon icon={faTrash} />
+                {intl.formatMessage({ defaultMessage: 'Delete' })}
               </Button>
-            </Col>
-          )}
-        </Row>
+            )}
+          </div>
+        )}
       </div>
     </div>
-  ) : (
-    <div />
+  );
+
+  // Always wrap the card in a dropdown for context menu
+  return (
+    <Dropdown
+      overlay={<Menu items={contextMenuItems} />}
+      trigger={['contextMenu']}
+    >
+      {renderCard()}
+    </Dropdown>
   );
 };
 
 const OffenderGrid = ({
+  canDisconnect,
   deleteRights,
   editRights,
   offenders,
   onDeleteOffender,
+  onDisconnectOffender,
   setEditOffenderData,
+  sortBy = 'lastSeen',
 }: Props): JSX.Element => {
   const rowRef = useRef<HTMLDivElement>(null);
 
   const [offendersData, setOffendersData] = useState<Offender[]>([]);
-  const [offender, setOffender] = useState<Offender | null>(null);
-  const [overlayOpen, setOverlayOpen] = useState(false);
-  const [position, setPosition] = useState<Position | null>(null);
   const [columns, setColumns] = useState(6);
   const [showAll, setShowAll] = useState(false);
 
-  const calcOffenders = (value: number) => {
-    if (offenders)
-      if (showAll) {
-        setOffendersData(offenders);
-      } else if (value === 8) {
-        setOffendersData(offenders.slice(0, 15));
-      } else if (value === 12) {
-        setOffendersData(offenders.slice(0, 10));
-      } else {
-        setOffendersData(offenders.slice(0, 16));
+  const sortOffenders = (offendersList: Offender[], sortKey: string) =>
+    [...offendersList].sort((a, b) => {
+      switch (sortKey) {
+        case 'name': {
+          return (a.name || '').localeCompare(b.name || '');
+        }
+        case 'nameDesc': {
+          return (b.name || '').localeCompare(a.name || '');
+        }
+        case 'incidents': {
+          return b.totalIncidents - a.totalIncidents;
+        }
+        case 'incidentsAsc': {
+          return a.totalIncidents - b.totalIncidents;
+        }
+        case 'value': {
+          return b.totalValue - a.totalValue;
+        }
+        case 'valueAsc': {
+          return a.totalValue - b.totalValue;
+        }
+        case 'lastSeen': {
+          if (!a.latestIncident?.date) return 1;
+          if (!b.latestIncident?.date) return -1;
+          return (
+            new Date(b.latestIncident.date).getTime() -
+            new Date(a.latestIncident.date).getTime()
+          );
+        }
+        case 'lastSeenAsc': {
+          if (!a.latestIncident?.date) return -1;
+          if (!b.latestIncident?.date) return 1;
+          return (
+            new Date(a.latestIncident.date).getTime() -
+            new Date(b.latestIncident.date).getTime()
+          );
+        }
+        default: {
+          return 0;
+        }
       }
+    });
+
+  const calcOffenders = (value: number) => {
+    if (offenders) {
+      let toDisplay = offenders;
+
+      // Apply sorting
+      toDisplay = sortOffenders(toDisplay, sortBy);
+
+      // Apply pagination
+      if (showAll) {
+        setOffendersData(toDisplay);
+      } else
+        switch (value) {
+          case 24: {
+            setOffendersData(toDisplay.slice(0, 4)); // 1 column: show 4
+
+            break;
+          }
+          case 12: {
+            setOffendersData(toDisplay.slice(0, 6)); // 2 columns: show 6
+
+            break;
+          }
+          case 8: {
+            setOffendersData(toDisplay.slice(0, 9)); // 3 columns: show 9
+
+            break;
+          }
+          default: {
+            setOffendersData(toDisplay.slice(0, 12)); // 4 columns: show 12
+          }
+        }
+    }
   };
 
   const calcColumns = () => {
     const values = rowRef.current?.getBoundingClientRect();
-    if (values && values.width < 1089 && values.width >= 830) {
-      setColumns(24 / 3);
-    } else if (values && values.width < 830) {
-      setColumns(24 / 2);
+    if (values && values.width < 768) {
+      setColumns(24); // 1 column on mobile
+    } else if (values && values.width < 1100) {
+      setColumns(12); // 2 columns on tablet
+    } else if (values && values.width < 1500) {
+      setColumns(8); // 3 columns on small desktop
     } else {
-      setColumns(24 / 4);
+      setColumns(6); // 4 columns on large desktop
     }
   };
 
@@ -677,19 +586,8 @@ const OffenderGrid = ({
 
   useEffect(() => {
     calcOffenders(columns);
-  }, [offenders, showAll, columns]);
-
-  const onCloseOffender = () => {
-    setOffender(null);
-    setOverlayOpen(false);
-    setPosition(null);
-  };
-
-  const onOpenOffender = (value: Offender, positionValue: Position) => {
-    setOffender(value);
-    setOverlayOpen(true);
-    setPosition(positionValue);
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [offenders, showAll, columns, sortBy]);
 
   const toggleShowAll = () => {
     setShowAll(!showAll);
@@ -697,33 +595,35 @@ const OffenderGrid = ({
 
   return (
     <div>
-      <OffenderOverlay
-        deleteRights={deleteRights}
-        editRights={editRights}
-        offender={offender}
-        onClose={onCloseOffender}
-        onDeleteOffender={onDeleteOffender}
-        open={overlayOpen}
-        position={position}
-        setEditOffenderData={setEditOffenderData}
-      />
-      <Row gutter={[16, 16]} ref={rowRef}>
+      <Row gutter={[24, 24]} ref={rowRef}>
         {offendersData.map((item) => (
           <Col key={item.id} span={columns}>
-            <OffenderCard offender={item} onOpenOffender={onOpenOffender} />
+            <OffenderCard
+              canDisconnect={canDisconnect}
+              deleteRights={deleteRights}
+              editRights={editRights}
+              offender={item}
+              onDeleteOffender={onDeleteOffender}
+              onDisconnectOffender={onDisconnectOffender}
+              setEditOffenderData={setEditOffenderData}
+            />
           </Col>
         ))}
       </Row>
-      <Row justify="center" style={{ marginTop: 20 }}>
-        <Col>
-          <Button danger onClick={toggleShowAll}>
-            {!showAll && (
-              <FormattedMessage defaultMessage="Show All Offenders" />
-            )}
-            {showAll && <FormattedMessage defaultMessage="Minimise Offender" />}
-          </Button>
-        </Col>
-      </Row>
+      {offenders && (offenders.length > offendersData.length || showAll) && (
+        <Row justify="center" style={{ marginTop: 20 }}>
+          <Col>
+            <Button danger onClick={toggleShowAll}>
+              {!showAll && (
+                <FormattedMessage defaultMessage="Show All Offenders" />
+              )}
+              {showAll && (
+                <FormattedMessage defaultMessage="Minimise Offender" />
+              )}
+            </Button>
+          </Col>
+        </Row>
+      )}
     </div>
   );
 };

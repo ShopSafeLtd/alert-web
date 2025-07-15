@@ -19,7 +19,7 @@ interface Return {
   next: () => void;
 }
 
-const useCrimeGroupSideList = (): Return => {
+const useCrimeGroupSideList = (searchQuery?: string): Return => {
   const schemeId = useAtomValue(currentSchemeIdAtom);
   const userId = useAtomValue(userIdAtom);
   const filterVariables = useStoreState(
@@ -30,8 +30,11 @@ const useCrimeGroupSideList = (): Return => {
     gallery,
     groups: groupsFilter,
     order,
-    search,
+    search: filterSearch,
   } = filterVariables;
+
+  // Use the passed searchQuery if provided, otherwise use the filter search
+  const search = searchQuery === undefined ? filterSearch : searchQuery;
   const variables: ListCrimeGroupsQueryVariables = {
     order: {
       updatedAt: order,

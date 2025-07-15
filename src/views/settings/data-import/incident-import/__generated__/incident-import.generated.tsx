@@ -8,7 +8,7 @@ export type IncidentImportMutationVariables = Types.Exact<{
 }>;
 
 
-export type IncidentImportMutation = { __typename?: 'Mutation', incidentImport: { __typename?: 'IncidentImportValidationResult', success: boolean, total: number } };
+export type IncidentImportMutation = { __typename?: 'Mutation', incidentImport: { __typename?: 'IncidentImportValidationResult', success: boolean, total: number, invalid: number, jobId?: string | null, message: string, valid: number, validationErrors: Array<{ __typename?: 'IncidentImportValidationError', message: string, uuid: string }> } };
 
 
 export const IncidentImportDocument = gql`
@@ -16,6 +16,14 @@ export const IncidentImportDocument = gql`
   incidentImport(data: $data) {
     success
     total
+    invalid
+    jobId
+    message
+    valid
+    validationErrors {
+      message
+      uuid
+    }
   }
 }
     `;

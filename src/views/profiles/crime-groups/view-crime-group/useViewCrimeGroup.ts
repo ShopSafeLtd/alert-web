@@ -67,6 +67,8 @@ interface Return {
   offenderIds: string[];
   onCompletedAddOffender: () => void;
   onDeleteCrimeGroup: () => void;
+  onDisconnectOffender: (offenderId: string) => void;
+  onDisconnectVehicle: (vehicleId: string) => void;
   optionRowShow: boolean;
   replyTo: {
     createdAt: string;
@@ -87,7 +89,6 @@ interface Return {
       text: string;
     } | null
   ) => void;
-  showIntel: boolean;
   submitNewVehicle: (value: VehicleData) => void;
   submitOffender: (value: OffenderSearchDetailsFragment[]) => void;
   submitVehicle: (value: string) => void;
@@ -100,7 +101,6 @@ interface Return {
   toggleAddInvestigation: () => void;
   toggleAddNewVehicle: () => void;
   toggleAddOffender: () => void;
-  toggleShowIntel: () => void;
   toggleSubscribe: () => void;
   toggleViewSuggested: () => void;
   updateAddOffenderList: MutationUpdaterFn<CreateSimpleOffenderMutation>;
@@ -136,7 +136,6 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
   const [editUpdateInput, setEditUpdateInput] = useState('');
   const [addDocument, setAddDocument] = useState(false);
   const [addInvestigation, setAddInvestigation] = useState(false);
-  const [showIntel, setShowIntel] = useState(false);
   const [editUpdate, setEditUpdate] = useState<{
     id: string;
     text: string;
@@ -810,15 +809,84 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
   const toggleAddInvestigation = () => {
     setAddInvestigation(() => !addInvestigation);
   };
-  const toggleShowIntel = () => {
-    setShowIntel(!showIntel);
-  };
   const editRights = hasRolePermission({
     permission: {
       method: PermissionMethod.Edit,
       model: PermissionModel.CrimeGroups,
     },
   });
+
+  const onDisconnectOffender = (offenderId: string) => {
+    confirm({
+      content: intl.formatMessage({
+        defaultMessage:
+          'Are you sure you want to disconnect this offender from the crime group?',
+      }),
+      onOk() {
+        void updateCrimeGroup({
+          onCompleted: () => {
+            notification.success({
+              message: intl.formatMessage({
+                defaultMessage: 'Offender disconnected successfully',
+              }),
+            });
+          },
+          onError: (error) => {
+            errorNotification(error);
+          },
+          variables: {
+            data: {
+              offenders: {
+                disconnect: [{ id: offenderId }],
+              },
+            },
+            where: {
+              id: crimeGroupId,
+            },
+          },
+        });
+      },
+      title: intl.formatMessage({
+        defaultMessage: 'Disconnect Offender from Crime Group?',
+      }),
+    });
+  };
+
+  const onDisconnectVehicle = (vehicleId: string) => {
+    confirm({
+      content: intl.formatMessage({
+        defaultMessage:
+          'Are you sure you want to disconnect this vehicle from the crime group?',
+      }),
+      onOk() {
+        void updateCrimeGroup({
+          onCompleted: () => {
+            notification.success({
+              message: intl.formatMessage({
+                defaultMessage: 'Vehicle disconnected successfully',
+              }),
+            });
+          },
+          onError: (error) => {
+            errorNotification(error);
+          },
+          variables: {
+            data: {
+              vehicles: {
+                disconnect: [{ id: vehicleId }],
+              },
+            },
+            where: {
+              id: crimeGroupId,
+            },
+          },
+        });
+      },
+      title: intl.formatMessage({
+        defaultMessage: 'Disconnect Vehicle from Crime Group?',
+      }),
+    });
+  };
   return {
     addAlias,
     addDocument,
@@ -840,6 +908,8 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
     offenderIds,
     onCompletedAddOffender,
     onDeleteCrimeGroup,
+    onDisconnectOffender,
+    onDisconnectVehicle,
     optionRowShow,
     replyTo,
     saving,
@@ -848,7 +918,6 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
     setEditUpdateInput,
     setOptionRowShow,
     setReplyTo,
-    showIntel,
     submitNewVehicle,
     submitOffender,
     submitVehicle,
@@ -860,7 +929,6 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
     toggleAddInvestigation,
     toggleAddNewVehicle,
     toggleAddOffender,
-    toggleShowIntel,
     toggleSubscribe,
     toggleViewSuggested,
     updateAddOffenderList,
