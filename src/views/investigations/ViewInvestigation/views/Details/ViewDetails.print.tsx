@@ -31,13 +31,8 @@ const ViewDetailsWithPrint = ({
   vehicleSortBy,
 }: PrintProps) => {
   const intl = useIntl();
-  const { crimeGroupStyles, offenderStyles, vehicleStyles } =
-    useGridPrintOptimization();
-
-  // Apply print styles
-  offenderStyles();
-  vehicleStyles();
-  crimeGroupStyles();
+  // Apply print styles via hook
+  useGridPrintOptimization();
 
   return (
     <>
@@ -51,22 +46,28 @@ const ViewDetailsWithPrint = ({
           }}
         >
           <h1>
-            {intl.formatMessage({ defaultMessage: 'Investigation Report:' })}{' '}
-            {data?.investigation?.name}
+            {intl.formatMessage(
+              { defaultMessage: 'Investigation Report: {name}' },
+              { name: data?.investigation?.name || '' }
+            )}
           </h1>
           <p>
             {intl.formatMessage(
-              { defaultMessage: 'Reference: INV-{reference}' },
-              { reference: String(data?.investigation?.reference || '') }
+              { defaultMessage: 'Investigation ID: {id}' },
+              { id: data?.investigation?.id || '' }
             )}
           </p>
           <p>
-            {intl.formatMessage({ defaultMessage: 'Status:' })}{' '}
-            {String(data?.investigation?.status || '')}
+            {intl.formatMessage(
+              { defaultMessage: 'Status: {status}' },
+              { status: String(data?.investigation?.status || '') }
+            )}
           </p>
           <p>
-            {intl.formatMessage({ defaultMessage: 'Generated:' })}{' '}
-            {new Date().toLocaleDateString()}
+            {intl.formatMessage(
+              { defaultMessage: 'Generated: {date}' },
+              { date: new Date().toLocaleDateString() }
+            )}
           </p>
         </div>
       </ShowOnPrint>
@@ -75,7 +76,11 @@ const ViewDetailsWithPrint = ({
       <Card
         className="offenderGridCard"
         loading={loading}
-        title={<HideOnPrint>{/* Original title with buttons */}</HideOnPrint>}
+        title={
+          <HideOnPrint>
+            <div>{/* Original title with buttons */}</div>
+          </HideOnPrint>
+        }
       >
         <ShowOnPrint>
           <h2 style={{ marginBottom: '15px' }}>
@@ -98,7 +103,6 @@ const ViewDetailsWithPrint = ({
               <OffenderGrid
                 canDisconnect={false} // Disable actions for print
                 offenders={data.investigation.offenders}
-                showAll={true} // Show all items for print
                 sortBy={sortBy}
               />
             )}
@@ -132,7 +136,6 @@ const ViewDetailsWithPrint = ({
             {data?.investigation?.vehicles && (
               <VehicleGrid
                 canDisconnect={false} // Disable actions for print
-                showAll={true} // Show all items for print
                 sortBy={vehicleSortBy}
                 vehicles={data.investigation.vehicles}
               />
@@ -160,9 +163,7 @@ const ViewDetailsWithPrint = ({
           {data?.investigation?.crimeGroups && (
             <CrimeGroupTable
               crimeGroups={data.investigation.crimeGroups}
-              loading={loading}
-              pagination={false} // Disable pagination for print
-              showActions={false} // Disable actions for print
+              deleteRights={false} // Disable actions for print
             />
           )}
         </div>
