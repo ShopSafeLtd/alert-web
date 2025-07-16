@@ -1658,7 +1658,29 @@ const ViewOffender = ({
                               {data?.offender?.incidents.length && !loading ? (
                                 <IncidentTable
                                   hasNavigation
-                                  incidents={data?.offender?.incidents || []}
+                                  incidents={
+                                    data?.offender?.incidents?.map(
+                                      (incident) => ({
+                                        ...incident,
+                                        dayTime: incident.dayTime,
+                                        offenders:
+                                          incident.offenders?.map(
+                                            (offender) => ({
+                                              ...offender,
+                                              images:
+                                                offender.images?.map((img) => ({
+                                                  id: img.id,
+                                                  optimised: img.optimised,
+                                                  position: null,
+                                                  rotation: img.rotation,
+                                                })) || null,
+                                              reference:
+                                                offender.reference?.toString(),
+                                            })
+                                          ) || [],
+                                      })
+                                    ) || []
+                                  }
                                 />
                               ) : (
                                 <Empty
