@@ -10953,6 +10953,7 @@ export type Mutation = {
   syncBusinessPoliceForces: SyncPoliceForceResult;
   syncFeedItems: SystemTask;
   syncGeoCodes: Array<Address>;
+  syncIncidentGroups: SystemTask;
   syncIncidentLocations: SystemTask;
   syncIncidentSchemes: SystemTask;
   syncNewSchemeTags: SystemTask;
@@ -11942,6 +11943,18 @@ export type MutationSyncBusinessPoliceForcesArgs = {
   concurrentLookups?: InputMaybe<Scalars['Int']>;
   limit?: InputMaybe<Scalars['Int']>;
   schemeId: Scalars['String'];
+};
+
+
+export type MutationSyncIncidentGroupsArgs = {
+  businessId: Scalars['String'];
+  groupId: Scalars['String'];
+};
+
+
+export type MutationSyncIncidentLocationsArgs = {
+  businessId: Scalars['String'];
+  groupId: Scalars['String'];
 };
 
 
