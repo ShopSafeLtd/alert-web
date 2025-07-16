@@ -29,16 +29,17 @@ query Business(
       reference
       dayTime
       date
-      crimeTypes {
+      subject
+      policeRef
+      totalValue
+      totalRecoveredValue
+      offenders {
         id
         name
-      }
-      createdBy {
-        id
-        businesses {
+        reference
+        images (take: 1) {
           id
-          name
-          fullName
+          url
         }
       }
       location {
