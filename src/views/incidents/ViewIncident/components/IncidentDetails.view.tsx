@@ -154,6 +154,22 @@ const IncidentDetails = ({ data, editRights, loading }: Props) => {
                 }}
               />
             </Descriptions.Item>
+            {/* <Descriptions.Item
+              className={classes.detail}
+              label={
+                <span>
+                  <FontAwesomeIcon
+                    className={classes.descIcon}
+                    icon={faClock}
+                  />
+                  {intl.formatMessage({
+                    defaultMessage: 'Approved By',
+                  })}
+                </span>
+              }
+            >
+              {data?.incident}
+            </Descriptions.Item> */}
             <Descriptions.Item
               className={classes.detail}
               label={

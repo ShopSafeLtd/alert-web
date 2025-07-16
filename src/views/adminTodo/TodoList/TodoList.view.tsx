@@ -379,27 +379,6 @@ const AdminTodos = ({
                 defaultMessage: 'Name',
               }),
             },
-            // {
-            //   dataIndex: 'description',
-            //   ellipsis: true,
-            //   key: 'description',
-            //   render: (value: string) => (
-            //     <Tooltip title={value}>{value}</Tooltip>
-            //   ),
-            //   title: intl.formatMessage({
-            //     defaultMessage: 'Description',
-            //   }),
-            // },
-            {
-              dataIndex: 'reference',
-              key: 'reference',
-              render: (value, record) => (
-                <Link to={`${getTodoUrl(record.todo.node)}`}>{value}</Link>
-              ),
-              title: intl.formatMessage({
-                defaultMessage: 'Alert ID',
-              }),
-            },
             {
               dataIndex: 'description',
               ellipsis: true,
@@ -411,6 +390,17 @@ const AdminTodos = ({
                 defaultMessage: 'Description',
               }),
             },
+            {
+              dataIndex: 'reference',
+              key: 'reference',
+              render: (value, record) => (
+                <Link to={`${getTodoUrl(record.todo.node)}`}>{value}</Link>
+              ),
+              title: intl.formatMessage({
+                defaultMessage: 'Alert ID',
+              }),
+            },
+
             {
               dataIndex: 'status',
               key: 'status',

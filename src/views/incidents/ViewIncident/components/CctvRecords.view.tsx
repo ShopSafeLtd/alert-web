@@ -1,6 +1,6 @@
 import type { ViewIncidentQuery } from '#/views/incidents/ViewIncident/__generated__/view-incident.generated';
 
-import { Card, Table, Typography } from 'antd';
+import { Card, Table, Tooltip, Typography } from 'antd';
 import dayjs from 'dayjs';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
@@ -63,9 +63,17 @@ const CctvRecords = ({ data, loading }: Props) =>
               ),
             title: <FormattedMessage defaultMessage="Shows Incident" />,
           },
+          {
+            dataIndex: 'description',
+            ellipsis: true,
+            key: 'description',
+            render: (value: string) => <Tooltip title={value}>{value}</Tooltip>,
+            title: <FormattedMessage defaultMessage="Description" />,
+          },
         ]}
         dataSource={data.incident.cctvRecords.map((item) => ({
           cameraNumber: item.cameraNumber,
+          description: item.description,
           endTime: item.endTime,
           key: item.id,
           showFace: item.showFace,
