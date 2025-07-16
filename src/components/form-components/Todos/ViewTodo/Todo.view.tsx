@@ -177,7 +177,48 @@ const TodoView = ({
           {todo?.todo?.description}
         </Descriptions.Item>
       </Descriptions>
+      {minimal && (
+        <>
+          <Divider style={{ marginTop: 10 }} />
+          <Typography.Title level={4}>
+            {intl.formatMessage({
+              defaultMessage: 'Completed User Details',
+            })}
+          </Typography.Title>
+          <Descriptions>
+            <Descriptions.Item
+              label={intl.formatMessage({
+                defaultMessage: 'User Name',
+              })}
+            >
+              {loading ? (
+                <Skeleton.Input style={{ height: 24 }} />
+              ) : (
+                todo?.todo?.completedBy?.fullName || ''
+              )}
+            </Descriptions.Item>
+
+            <Descriptions.Item
+              label={intl.formatMessage({
+                defaultMessage: 'Completed Date',
+              })}
+            >
+              {todo?.todo.completedDate
+                ? dayjs(todo.todo.completedDate).format('DD/MM/YY')
+                : null}
+            </Descriptions.Item>
+            <Descriptions.Item
+              label={intl.formatMessage({
+                defaultMessage: 'Description',
+              })}
+            >
+              {todo?.todo?.description}
+            </Descriptions.Item>
+          </Descriptions>
+        </>
+      )}
       <Divider style={{ marginTop: 10 }} />
+
       <Row>
         {todo?.todo.business ? (
           <Typography.Text

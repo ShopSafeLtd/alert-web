@@ -15,7 +15,12 @@ query Todo($where: TodoWhereUniqueInput!) {
     createdBy {
       id
     }
+    completedBy {
+      id
+      fullName
+    }
     dueDate
+    completedDate
     answers {
       id
       taskQuestion {

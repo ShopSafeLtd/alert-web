@@ -1,6 +1,22 @@
-import { faEye, faFlagCheckered } from '@fortawesome/pro-light-svg-icons';
+import PermissionCheckWrapper from '#/components/PermissionCheck/PermissionCheckWrapper';
+import { PermissionMethod, PermissionModel } from '#/graphql/types';
+import { useDeleteTodoMutation } from '#/views/adminTodo/graphql/mutations/__generated__/delete-todo.generated';
+import {
+  faEye,
+  faFlagCheckered,
+  faTrash,
+} from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Avatar, Button, Col, Row, Table, Tag, Tooltip } from 'antd';
+import {
+  Avatar,
+  Button,
+  Col,
+  Popconfirm,
+  Row,
+  Table,
+  Tag,
+  Tooltip,
+} from 'antd';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import FormatCalendar from 'utils/format-calendar-24h';
@@ -32,7 +48,19 @@ const ActivityTable = ({
 }: Props): JSX.Element => {
   // const classes = useStyles();
   const intl = useIntl();
-
+  const [deleteTodo] = useDeleteTodoMutation({});
+  const onDelete = (id: string) => {
+    void deleteTodo({
+      optimisticResponse: {
+        deleteTodo: {
+          id,
+        },
+      },
+      variables: {
+        id,
+      },
+    });
+  };
   return (
     <Table
       columns={[
@@ -149,36 +177,86 @@ const ActivityTable = ({
           dataIndex: 'completed',
           key: 'actions',
           render: (value: boolean, item) => (
-            <Tooltip
-              className="no-print"
-              title={
-                value
-                  ? intl.formatMessage({
-                      defaultMessage: 'View Activity',
-                    })
-                  : intl.formatMessage({
-                      defaultMessage: 'Complete Activity',
-                    })
-              }
-            >
-              <Button
-                danger={!value}
-                disabled={saving}
-                onClick={() => {
-                  if (value) setViewTodoVisible(item.key);
-                  if (!value) setCompleteTodoVisible(item.key);
+            <Row className="no-print" gutter={8}>
+              <PermissionCheckWrapper
+                permission={{
+                  method: PermissionMethod.Edit,
+                  model: PermissionModel.Tasks,
                 }}
-                size="small"
-                type={value ? 'text' : 'ghost'}
-                // icon={<FontAwesomeIcon icon={faEye} />}
+                unauthorizedElement={<div />}
               >
-                {value ? (
-                  <FontAwesomeIcon icon={faEye} />
-                ) : (
-                  <FontAwesomeIcon icon={faFlagCheckered} />
-                )}
-              </Button>
-            </Tooltip>
+                <Col>
+                  <Tooltip
+                    className="no-print"
+                    title={
+                      value
+                        ? intl.formatMessage({
+                            defaultMessage: 'View Activity',
+                          })
+                        : intl.formatMessage({
+                            defaultMessage: 'Complete Activity',
+                          })
+                    }
+                  >
+                    <Button
+                      danger={!value}
+                      disabled={saving}
+                      onClick={() => {
+                        if (value) setViewTodoVisible(item.key);
+                        if (!value) setCompleteTodoVisible(item.key);
+                      }}
+                      size="small"
+                      type={value ? 'text' : 'ghost'}
+                      // icon={<FontAwesomeIcon icon={faEye} />}
+                    >
+                      {value ? (
+                        <FontAwesomeIcon icon={faEye} />
+                      ) : (
+                        <FontAwesomeIcon icon={faFlagCheckered} />
+                      )}
+                    </Button>
+                  </Tooltip>
+                </Col>
+              </PermissionCheckWrapper>
+              <PermissionCheckWrapper
+                permission={{
+                  method: PermissionMethod.Delete,
+                  model: PermissionModel.Tasks,
+                }}
+                unauthorizedElement={<div />}
+              >
+                <Col>
+                  <Col>
+                    <Tooltip
+                      title={intl.formatMessage({
+                        defaultMessage: 'Remove Activity',
+                      })}
+                    >
+                      <Popconfirm
+                        cancelText={intl.formatMessage({
+                          defaultMessage: 'No',
+                        })}
+                        okText={intl.formatMessage({
+                          defaultMessage: 'Yes',
+                        })}
+                        onConfirm={() => onDelete(item.key)}
+                        overlayInnerStyle={{ padding: 10 }}
+                        placement="topLeft"
+                        title={intl.formatMessage({
+                          defaultMessage: 'Remove the activity?',
+                        })}
+                      >
+                        <Button
+                          disabled={saving}
+                          icon={<FontAwesomeIcon icon={faTrash} />}
+                          size="small"
+                        />
+                      </Popconfirm>
+                    </Tooltip>
+                  </Col>
+                </Col>
+              </PermissionCheckWrapper>
+            </Row>
           ),
           width: 50,
         },
