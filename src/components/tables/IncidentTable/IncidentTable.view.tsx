@@ -263,7 +263,7 @@ const IncidentTable = ({
           key: 'date',
           render: (date: string) => {
             if (!date) return '-';
-            return dayjs(date).format('DD/MM/YYYY HH:mm');
+            return date;
           },
           title: intl.formatMessage({
             defaultMessage: 'Date',
