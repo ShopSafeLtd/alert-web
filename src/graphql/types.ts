@@ -11952,12 +11952,6 @@ export type MutationSyncIncidentGroupsArgs = {
 };
 
 
-export type MutationSyncIncidentLocationsArgs = {
-  businessId: Scalars['String'];
-  groupId: Scalars['String'];
-};
-
-
 export type MutationToggleUserArgs = {
   id: Scalars['ID'];
 };
