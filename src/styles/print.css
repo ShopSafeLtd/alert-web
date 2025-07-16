@@ -116,11 +116,10 @@
     flex-wrap: wrap !important;
   }
 
-  /* Fixed column layout for print - 3 columns on A4 */
+  /* Respect react-grid-layout width configuration for print */
   .ant-row > .ant-col {
-    flex: 0 0 33.33% !important;
-    max-width: 33.33% !important;
     display: block !important;
+    /* Remove fixed width constraints to allow react-grid-layout to control width */
   }
 
   /* Offender Grid specific */
