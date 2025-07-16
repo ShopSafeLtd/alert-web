@@ -1,4 +1,3 @@
-import CustomErrorBoundary from '#/components/CustomErrorBoundary';
 import LoadingScreen from '#/components/layout-components/LoadingScreen';
 import { useTokenContext } from '#/context/token-context';
 import { useThemeLanguage } from '#/hooks/useThemeLanguage';
@@ -43,56 +42,54 @@ const Views = () => {
   } = useThemeLanguage();
 
   return (
-    <CustomErrorBoundary useSimpleFallback>
-      <div style={{ colorScheme: currentTheme }}>
-        <IntlProvider
-          locale={currentAppLocale.locale}
-          messages={messages}
-          onError={() => {}}
-        >
-          <ErrorBoundary showDialog={false}>
-            <ThemeProvider theme={theme[currentTheme]}>
-              <ConfigProvider locale={currentAppLocale.antd}>
-                <SentryRoutes>
-                  <Route element={<Navigate to="app" />} path="*" />
-                  <Route element={<Terms />} path="/terms/*" />
-                  <Route element={<DebugView />} path={'/debug/*'} />
-                  <Route
-                    element={
-                      <>
-                        <SignedOut>
-                          <Navigate to={GenerateSignInRedirect()} />
-                        </SignedOut>
-                        <SignedIn>
-                          <React.Suspense fallback={<LoadingScreen />}>
-                            {token ? <AppLayout /> : <LoadingScreen />}
-                          </React.Suspense>
-                        </SignedIn>
-                      </>
-                    }
-                    path="/app/*"
-                  />
-                  <Route
-                    element={
-                      <>
-                        <SignedOut>
-                          <LoginView />
-                        </SignedOut>
-                        <SignedIn>
-                          <Navigate to="/app" />
-                        </SignedIn>
-                      </>
-                    }
-                    path={'/sign-in/*'}
-                  />
-                  <Route element={<GuestLayout />} path="/ext/*" />
-                </SentryRoutes>
-              </ConfigProvider>
-            </ThemeProvider>
-          </ErrorBoundary>
-        </IntlProvider>
-      </div>
-    </CustomErrorBoundary>
+    <div style={{ colorScheme: currentTheme }}>
+      <IntlProvider
+        locale={currentAppLocale.locale}
+        messages={messages}
+        onError={() => {}}
+      >
+        <ErrorBoundary showDialog={false}>
+          <ThemeProvider theme={theme[currentTheme]}>
+            <ConfigProvider locale={currentAppLocale.antd}>
+              <SentryRoutes>
+                <Route element={<Navigate to="app" />} path="*" />
+                <Route element={<Terms />} path="/terms/*" />
+                <Route element={<DebugView />} path={'/debug/*'} />
+                <Route
+                  element={
+                    <>
+                      <SignedOut>
+                        <Navigate to={GenerateSignInRedirect()} />
+                      </SignedOut>
+                      <SignedIn>
+                        <React.Suspense fallback={<LoadingScreen />}>
+                          {token ? <AppLayout /> : <LoadingScreen />}
+                        </React.Suspense>
+                      </SignedIn>
+                    </>
+                  }
+                  path="/app/*"
+                />
+                <Route
+                  element={
+                    <>
+                      <SignedOut>
+                        <LoginView />
+                      </SignedOut>
+                      <SignedIn>
+                        <Navigate to="/app" />
+                      </SignedIn>
+                    </>
+                  }
+                  path={'/sign-in/*'}
+                />
+                <Route element={<GuestLayout />} path="/ext/*" />
+              </SentryRoutes>
+            </ConfigProvider>
+          </ThemeProvider>
+        </ErrorBoundary>
+      </IntlProvider>
+    </div>
   );
 };
 
