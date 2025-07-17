@@ -239,6 +239,9 @@ const StockItemSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
     },
   });
 
+  console.log('StockItemSelect data:', data);
+  console.log('StockItemSelect variables:', variables);
+
   const next = () => {
     void fetchMore({
       updateQuery: (prev, { fetchMoreResult }) => {
@@ -314,7 +317,7 @@ const StockItemSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
         };
       },
       variables: {
-        after: data?.stockItemsSearch?.hasMore,
+        // after: data?.stockItemsSearch?.hasMore,
         take: 30,
         where: {
           currency,
