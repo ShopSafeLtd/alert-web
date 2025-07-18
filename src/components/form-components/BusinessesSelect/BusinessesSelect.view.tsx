@@ -108,6 +108,9 @@ const filterOption = (inputValue: string, option?: DefaultOptionType) => {
 
     return labelText.toLowerCase().includes(inputValue.toLowerCase());
   }
+  if (typeof option.label === 'string') {
+    return option.label.toLowerCase().includes(inputValue.toLowerCase());
+  }
   return false;
 };
 
