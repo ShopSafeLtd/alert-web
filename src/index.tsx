@@ -15,9 +15,6 @@ import '~/yet-another-react-lightbox/dist/styles.css';
 
 import './index.css';
 import * as serviceWorker from './serviceWorker';
-import './styles/print.css';
-import './styles/print-show-all.css';
-import './styles/print-watermark-fix.css';
 
 const themes = {
   dark: '/css/dark-theme.css',
