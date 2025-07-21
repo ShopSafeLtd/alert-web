@@ -123,8 +123,16 @@ const useStyles = createUseStyles({
 const IncidentReportPrint = () => {
   const classes = useStyles();
   const rawdata = localStorage.getItem('data') || '{}';
+
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const incidentData: IncidentReport = JSON.parse(rawdata);
+  const initials = incidentData.reporter.name
+    .split(' ')
+    .map((part) => part[0]?.toUpperCase())
+    .join('');
+
+  const generateImagesStatement = (index: number) =>
+    `${initials}-${index.toString().padStart(3, '0')}`;
   return (
     <div>
       <div className={classes.page}>
@@ -264,12 +272,17 @@ const IncidentReportPrint = () => {
         <div className={classes.section}>
           <div className={classes.title}>Images</div>
           {incidentData.images.map((image, index) => (
-            <img
-              alt={`Incident image ${index + 1}`}
-              className={classes.imageUrl}
-              key={index}
-              src={image}
-            />
+            <>
+              <img
+                alt={`Incident image ${index + 1}`}
+                className={classes.imageUrl}
+                key={index}
+                src={image}
+              />
+              <div>
+                <strong>{generateImagesStatement(index)}</strong>
+              </div>
+            </>
           ))}
         </div>
       </div>
