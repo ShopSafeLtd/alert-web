@@ -8199,6 +8199,8 @@ export type IncidentImportDataInput = {
   fileUrl: Scalars['String'];
   /** Minimum score (0-100) required to match an existing offender. Default is 60. */
   minimumOffenderMatchScore?: InputMaybe<Scalars['Int']>;
+  /** Minimum name similarity score (0-30) required for offender matching. Default is 15. Set higher (e.g., 25-28) for near-identical matches only. */
+  nameMatchThreshold?: InputMaybe<Scalars['Int']>;
   skipDuplicateCheck?: InputMaybe<Scalars['Boolean']>;
 };
 
@@ -11952,6 +11954,12 @@ export type MutationSyncIncidentGroupsArgs = {
 };
 
 
+export type MutationSyncIncidentLocationsArgs = {
+  businessId: Scalars['String'];
+  groupId: Scalars['String'];
+};
+
+
 export type MutationToggleUserArgs = {
   id: Scalars['ID'];
 };
@@ -14569,6 +14577,7 @@ export type Query = {
   dashboard: Dashboard;
   dashboards: QueryDashboardsConnection;
   dateTest: Array<Scalars['String']>;
+  dateTestParser: Array<Scalars['String']>;
   demDevice: DemDevice;
   demDeviceModel: Array<DemDeviceModel>;
   demDevices: QueryDemDevicesConnection;
@@ -15112,6 +15121,13 @@ export type QueryDashboardsArgs = {
 
 export type QueryDateTestArgs = {
   date: Scalars['DateTime'];
+  parseUKDateTest?: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryDateTestParserArgs = {
+  date?: InputMaybe<Scalars['String']>;
+  time?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -21697,6 +21713,7 @@ export type UpdateQuestionOnActivityInput = {
   origOptions?: InputMaybe<Array<Scalars['String']>>;
   origQuestion: Scalars['String'];
   questionId: Scalars['String'];
+  type?: InputMaybe<AnswerType>;
 };
 
 export type UpdateQuestionOnTagInput = {
