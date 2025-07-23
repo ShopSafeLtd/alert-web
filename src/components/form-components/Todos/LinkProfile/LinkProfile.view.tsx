@@ -104,7 +104,13 @@ const LinkProfile = ({
   ].filter(Boolean);
 
   // Build menu items for dropdown
-  const menuItems = [];
+  const menuItems: Array<{
+    disabled?: boolean;
+    icon: React.ReactNode;
+    key: string;
+    label: string;
+    onClick: () => void;
+  }> = [];
 
   if (
     hasRolePermission({
