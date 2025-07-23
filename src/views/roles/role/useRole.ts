@@ -104,6 +104,7 @@ export function useRole(id: string | undefined, create: boolean): Props {
 
       // Then set the new role's values
       form.setFieldsValue({
+        approvalAllowed: iData.role.approvalTier,
         checklists: iData.role.checklists.map(({ id }) => id) || [],
         folders: iData.role.folders.map(({ id }) => id) || [],
         name: iData.role.name,
@@ -194,6 +195,8 @@ export function useRole(id: string | undefined, create: boolean): Props {
   });
   const onFinish = (values: FormValues) => {
     setSubmitting(true);
+
+    console.log(values);
 
     const result = processModelMethods(values);
 

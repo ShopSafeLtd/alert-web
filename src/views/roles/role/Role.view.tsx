@@ -488,14 +488,14 @@ const RoleView = ({
                                 style={{ marginBottom: 0 }}
                                 valuePropName="checked"
                               >
-                                <Switch
+                                <Button
                                   disabled={loading}
                                   loading={loading}
-                                  onChange={(checked) =>
-                                    onFoldersToggle(checked)
-                                  }
+                                  onClick={() => onFoldersToggle(true)}
                                   style={{ paddingBottom: -20 }}
-                                />
+                                >
+                                  <FormattedMessage defaultMessage="Select All" />
+                                </Button>
                               </Form.Item>
                             </Col>
                           </Row>
@@ -548,20 +548,13 @@ const RoleView = ({
                             </Col>
 
                             <Col>
-                              <Form.Item
-                                name="selectAllChecklists"
-                                style={{ marginBottom: 0 }}
-                                valuePropName="checked"
+                              <Button
+                                disabled={loading}
+                                loading={loading}
+                                onClick={() => onChecklistsToggle(true)}
                               >
-                                <Switch
-                                  disabled={loading}
-                                  loading={loading}
-                                  onChange={(checked) =>
-                                    onChecklistsToggle(checked)
-                                  }
-                                  style={{ paddingBottom: -20 }}
-                                />
-                              </Form.Item>
+                                <FormattedMessage defaultMessage="Select All" />
+                              </Button>
                             </Col>
                           </Row>
 

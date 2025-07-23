@@ -21,8 +21,6 @@ export function processModelMethods(
     'name',
     'type',
     'approvalAllowed',
-    'checklists',
-    'folders',
     'selectAllChecklists',
     'selectAllFolders',
     'parentId',
