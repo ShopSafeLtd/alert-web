@@ -4241,6 +4241,31 @@ export type CustomGalleryWhereUniqueInput = {
   vehicles?: InputMaybe<VehicleListRelationFilter>;
 };
 
+export type CustomGraphInput = {
+  dataType: DataType;
+  /** Period for date grouping when using dateRange on X-axis */
+  datePeriod?: InputMaybe<DatePeriod>;
+  /** Filter by business IDs */
+  filterBusinesses?: InputMaybe<Array<Scalars['String']>>;
+  /** Number of days to look back */
+  filterDatePeriod?: InputMaybe<Scalars['Int']>;
+  /** Filter by group IDs */
+  filterGroups?: InputMaybe<Array<Scalars['String']>>;
+  /** Filter by user IDs */
+  filterUsers?: InputMaybe<Array<Scalars['String']>>;
+  graphType: GraphType;
+  /** Number of records to return (e.g., number of businesses, number of date periods) */
+  numberOfRecords?: InputMaybe<Scalars['Int']>;
+  /** X-axis type (e.g., dateRange, businesses, status) */
+  xAxis: Scalars['String'];
+  /** Label for the X-axis */
+  xAxisLabel: Scalars['String'];
+  /** Y-axis type (e.g., count, value) */
+  yAxis: Scalars['String'];
+  /** Label for the Y-axis */
+  yAxisLabel: Scalars['String'];
+};
+
 export type CustomQuestionsCountGraphInput = {
   brandIds?: InputMaybe<Array<Scalars['String']>>;
   businessIds?: InputMaybe<Array<Scalars['String']>>;
@@ -4464,6 +4489,20 @@ export type DataCard = {
   total: Scalars['Float'];
   totalDuration: Scalars['String'];
 };
+
+export enum DataType {
+  Activities = 'activities',
+  Incidents = 'incidents',
+  Offenders = 'offenders'
+}
+
+export enum DatePeriod {
+  Day = 'day',
+  Month = 'month',
+  Quarter = 'quarter',
+  Week = 'week',
+  Year = 'year'
+}
 
 export type DateRangeInput = {
   endDate: Scalars['Date'];
@@ -7008,6 +7047,13 @@ export type Graph = {
   label: Scalars['String'];
   value: Scalars['Float'];
 };
+
+export enum GraphType {
+  Area = 'area',
+  Bar = 'bar',
+  Line = 'line',
+  Pie = 'pie'
+}
 
 export type Group = {
   __typename?: 'Group';
@@ -14573,6 +14619,7 @@ export type Query = {
   currentUser?: Maybe<User>;
   customGalleriesRelay: QueryCustomGalleriesRelayConnection;
   customGallery: CustomGallery;
+  customGraph: Array<Graph>;
   customQuestionsCountGraph: CustomQuestionsGraph;
   dashboard: Dashboard;
   dashboards: QueryDashboardsConnection;
@@ -15094,6 +15141,11 @@ export type QueryCustomGalleriesRelayArgs = {
 
 export type QueryCustomGalleryArgs = {
   where: CustomGalleryWhereUniqueInput;
+};
+
+
+export type QueryCustomGraphArgs = {
+  input: CustomGraphInput;
 };
 
 

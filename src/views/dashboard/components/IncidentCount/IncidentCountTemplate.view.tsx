@@ -1,9 +1,10 @@
+import type { AvailableDashboardElements } from '#/state/dashboard-model';
+
+import { faTrash } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Card, Statistic } from 'antd';
 import React from 'react';
 import { useIntl } from 'react-intl';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/pro-light-svg-icons';
-import type { AvailableDashboardElements } from '#/state/dashboard-model';
 
 const IncidentCount = ({
   removeItem,
@@ -16,17 +17,16 @@ const IncidentCount = ({
   return (
     <Card style={{ height: '100%' }}>
       <Button
-        type="primary"
-        style={{ position: 'absolute', top: 10, right: 10, zIndex: 10 }}
-        onClick={() => removeItem('incidentCount')}
         icon={<FontAwesomeIcon icon={faTrash} />}
+        onClick={() => removeItem('incidentCount')}
+        style={{ position: 'absolute', right: 10, top: 10, zIndex: 10 }}
       />
       <Statistic
+        loading={loading}
         title={intl.formatMessage({
           defaultMessage: 'Incident Count',
         })}
         value={data}
-        loading={loading}
       />
     </Card>
   );

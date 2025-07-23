@@ -1,10 +1,11 @@
-import React from 'react';
-import { Button, Card, Col, Row, Skeleton, Typography } from 'antd';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faTrash } from '@fortawesome/pro-light-svg-icons';
-import useStyles from '#/views/dashboard/components/AdminTodos/AdminTodos.styles';
-import { useIntl } from 'react-intl';
 import type { AvailableDashboardElements } from '#/state/dashboard-model';
+
+import useStyles from '#/views/dashboard/components/AdminTodos/AdminTodos.styles';
+import { faPlus, faTrash } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Card, Col, Row, Skeleton, Typography } from 'antd';
+import React from 'react';
+import { useIntl } from 'react-intl';
 
 const { Title } = Typography;
 
@@ -30,17 +31,16 @@ const AdminTodosTemplate = ({
   return (
     <Col
       style={{
-        height: 'inherit',
         display: 'flex',
         flexDirection: 'column',
+        height: 'inherit',
         overflow: 'hidden',
       }}
     >
       <Button
-        type="primary"
-        style={{ position: 'absolute', top: 10, right: 10, zIndex: 10 }}
-        onClick={() => removeItem('adminTodos')}
         icon={<FontAwesomeIcon icon={faTrash} />}
+        onClick={() => removeItem('adminTodos')}
+        style={{ position: 'absolute', right: 10, top: 10, zIndex: 10 }}
       />
       <Card
         bodyStyle={{
@@ -51,8 +51,8 @@ const AdminTodosTemplate = ({
         <Row
           align="middle"
           gutter={8}
-          wrap={false}
           style={{ margin: '10px 0 10px 5px' }}
+          wrap={false}
         >
           <Col style={{ minWidth: 'min-content' }}>
             <Title className={classes.title} style={{ fontSize: 16 }}>
@@ -65,12 +65,12 @@ const AdminTodosTemplate = ({
 
           <Col>
             <Button
-              type="text"
-              style={{ marginRight: -5 }}
               danger
               icon={
                 <FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />
               }
+              style={{ marginRight: -5 }}
+              type="text"
             >
               {intl.formatMessage({
                 defaultMessage: 'New',
@@ -80,9 +80,9 @@ const AdminTodosTemplate = ({
         </Row>
       </Card>
       <Row
-        gutter={[8, 8]}
         align="stretch"
-        style={{ padding: 10, alignItems: 'stretch' }}
+        gutter={[8, 8]}
+        style={{ alignItems: 'stretch', padding: 10 }}
       >
         {Array.from({ length: 5 }).map((_, index) => (
           // eslint-disable-next-line react/no-array-index-key

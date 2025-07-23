@@ -1,10 +1,15 @@
 import type { AvailableDashboardElements } from '#/state/dashboard-model';
+import type {
+  ComponentMetadata,
+  DashboardGraphMetadata,
+} from '#/types/dashboard-metadata';
 
 import Loading from '#/components/shared-components/AntD/Loading';
 import { generateHeight } from '#/views/dashboard/Dashboard.context';
 import ActiveOffendersTemplate from '#/views/dashboard/components/ActiveOffenders/ActiveOffendersTemplate';
 import AdminTodosTemplate from '#/views/dashboard/components/AdminTodos/AdminTodosTemplate';
 import ArticlesSection from '#/views/dashboard/components/ArticlesSection/ArticlesSectionTemplate';
+import DashboardGraphTemplate from '#/views/dashboard/components/DashboardGraph/DashboardGraphTemplate';
 import DayOfWeekBar from '#/views/dashboard/components/DayOfWeek/DayOfWeekGraphTemplate';
 import DraftIncidentsTemplate from '#/views/dashboard/components/DraftIncidents/DraftIncidentsTemplate';
 import FeedItemCol from '#/views/dashboard/components/FeedItems/FeedItemColTemplate';
@@ -16,7 +21,14 @@ import SearchRow from '#/views/dashboard/components/SearchRow/SearchRowTemplate'
 import TargetedGoodsGraph from '#/views/dashboard/components/TargetedGoods/TargetedGoodsTemplate';
 import { useUpdateDashboardTemplateMutation } from '#/views/dashboard-management/graphql/mutations/__generated__/dashboard.generated';
 import { useDashboardTemplateQuery } from '#/views/dashboard-management/graphql/queries/__generated__/dashboard-template.generated';
-import { Button, Drawer, Input, Space } from 'antd';
+import {
+  faArrowLeft,
+  faBars,
+  faSave,
+  faTextHeight,
+} from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Card, Drawer, Input, Space } from 'antd';
 import React, { useEffect, useMemo, useState } from 'react';
 import Marquee from 'react-fast-marquee';
 import RGL, { WidthProvider } from 'react-grid-layout';
@@ -26,6 +38,13 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import DashboardSelectorDrawer from '../../../components/dashboard/elements/DashboardElementSelector.view';
 import TimeOfDay from '../../dashboard/components/TimeOfDay/TimeOfDayTemplate.view';
+
+// Helper function to get the base element type from an ID
+const getElementType = (id: string): AvailableDashboardElements => {
+  // Handle IDs like "dashboardGraph-1", "dashboardGraph-2", etc.
+  const match = id.match(/^([^-]+)(?:-\d+)?$/);
+  return (match ? match[1] : id) as AvailableDashboardElements;
+};
 
 const ViewDashboardEditor = () => {
   const { id: DashboardId } = useParams();
@@ -46,10 +65,14 @@ const ViewDashboardEditor = () => {
   };
   const intl = useIntl();
   const [marquee, setMarquee] = useState<null | string>(null);
+  const [componentDrawerOpen, setComponentDrawerOpen] = useState(false);
+  const [componentMetadata, setComponentMetadata] = useState<ComponentMetadata>(
+    {}
+  );
   // eslint-disable-next-line func-call-spacing
   const [layout, setLayout] = useState<
     ({
-      i: AvailableDashboardElements;
+      i: string;
     } & RGL.Layout)[]
   >([
     {
@@ -73,11 +96,21 @@ const ViewDashboardEditor = () => {
   useEffect(() => {
     if (initData) {
       const Ids: string[] = [];
+      const metadataObj: ComponentMetadata = {};
       const initLayout = initData.dashboard.layout.map((item) => {
         Ids.push(item.id);
+        // Load metadata if it exists
+        if (item.metadata) {
+          try {
+            // Parse metadata if it's a string, otherwise use as-is
+            metadataObj[item.i] = item.metadata as DashboardGraphMetadata;
+          } catch (error) {
+            console.error('Failed to parse metadata for item', item.i, error);
+          }
+        }
         return {
           h: item.h,
-          i: item.i as AvailableDashboardElements,
+          i: item.i,
           maxH: item.maxH ?? undefined,
           maxW: item.maxW ?? undefined,
           minH: item.minH ?? 2,
@@ -89,6 +122,7 @@ const ViewDashboardEditor = () => {
           y: item.y,
         };
       });
+      setComponentMetadata(metadataObj);
       if (initLayout.some(({ i }) => i === 'searchRow')) {
         setLayout([
           {
@@ -151,6 +185,7 @@ const ViewDashboardEditor = () => {
                   i,
                   maxH,
                   maxW,
+                  metadata: componentMetadata[i] || undefined,
                   minH,
                   minW,
                   moved,
@@ -182,149 +217,120 @@ const ViewDashboardEditor = () => {
 
   const removeItem = (item: string) => {
     setLayout(layout.filter((i) => i.i !== item));
+    // Also remove the metadata for this component
+    setComponentMetadata((prev) => {
+      const newMetadata = { ...prev };
+      delete newMetadata[item];
+      return newMetadata;
+    });
   };
-  const layoutItems: { [key in AvailableDashboardElements]: JSX.Element } = {
-    activeOffender: (
-      <div
-        key="activeOffender"
-        style={{
-          overflow: 'hidden',
-          padding: 15,
-        }}
-      >
-        <ActiveOffendersTemplate removeItem={removeItem} />
-      </div>
-    ),
-    adminTodos: (
-      <div
-        key="adminTodos"
-        style={{
-          overflow: 'hidden',
-          padding: 15,
-        }}
-      >
-        <AdminTodosTemplate removeItem={removeItem} />
-      </div>
-    ),
-    articlesSection: (
-      <div
-        key="articlesSection"
-        style={{
-          overflow: 'hidden',
-          padding: 15,
-        }}
-      >
-        <ArticlesSection
-          removeItem={removeItem}
-          w={layout.find(({ i }) => i === 'articlesSection')?.w ?? 0}
-        />
-      </div>
-    ),
-    dayOfWeekBar: (
-      <div
-        key="dayOfWeekBar"
-        style={{
-          overflow: 'hidden',
-          padding: 15,
-        }}
-      >
-        <DayOfWeekBar removeItem={removeItem} />
-      </div>
-    ),
-    draftIncidents: (
-      <div
-        key="draftIncidents"
-        style={{
-          overflow: 'hidden',
-          padding: 15,
-        }}
-      >
-        <DraftIncidentsTemplate removeItem={removeItem} />
-      </div>
-    ),
-    feedItemCol: (
-      <div
-        key="feedItemCol"
-        style={{
-          overflow: 'hidden',
-          padding: 15,
-        }}
-      >
-        <FeedItemCol removeItem={removeItem} />
-      </div>
-    ),
-    incidentCount: (
-      <div
-        key="incidentCount"
-        style={{
-          overflow: 'hidden',
-          padding: 15,
-        }}
-      >
-        <IncidentCount removeItem={removeItem} />
-      </div>
-    ),
 
-    incidentValue: (
-      <div
-        key="incidentValue"
-        style={{
-          overflow: 'hidden',
-          padding: 15,
-        }}
-      >
-        <IncidentValue removeItem={removeItem} />
-      </div>
-    ),
-    latestIncident: (
-      <div
-        key="latestIncident"
-        style={{
-          overflow: 'hidden',
-          padding: 15,
-        }}
-      >
-        <LatestIncident removeItem={removeItem} />
-      </div>
-    ),
-    latestIncidents: (
-      <div
-        key="latestIncidents"
-        style={{
-          overflow: 'hidden',
-          padding: 15,
-        }}
-      >
-        <LatestIncidentsTemplate removeItem={removeItem} />
-      </div>
-    ),
-    searchRow: (
-      <div key="searchRow">
-        <SearchRow />
-      </div>
-    ),
-    targetedGoods: (
-      <div
-        key="targetedGoods"
-        style={{
-          overflow: 'hidden',
-          padding: 15,
-        }}
-      >
-        <TargetedGoodsGraph removeItem={removeItem} />
-      </div>
-    ),
-    timeOfDayBar: (
-      <div
-        key="timeOfDayBar"
-        style={{
-          overflow: 'hidden',
-          padding: 15,
-        }}
-      >
-        <TimeOfDay removeItem={removeItem} />
-      </div>
-    ),
+  // Create element based on type
+  const updateComponentMetadata = (
+    componentId: string,
+    metadata: DashboardGraphMetadata
+  ) => {
+    setComponentMetadata((prev) => ({
+      ...prev,
+      [componentId]: metadata,
+    }));
+  };
+
+  const createElement = (
+    elementId: string,
+    elementType: AvailableDashboardElements
+  ) => {
+    const removeItemHandler = () => removeItem(elementId);
+    const metadata = componentMetadata[elementId] || {};
+
+    switch (elementType) {
+      case 'activeOffender': {
+        return <ActiveOffendersTemplate removeItem={removeItemHandler} />;
+      }
+      case 'adminTodos': {
+        return <AdminTodosTemplate removeItem={removeItemHandler} />;
+      }
+      case 'articlesSection': {
+        return (
+          <ArticlesSection
+            removeItem={removeItemHandler}
+            w={layout.find(({ i }) => i === elementId)?.w ?? 0}
+          />
+        );
+      }
+      case 'dashboardGraph': {
+        return (
+          <DashboardGraphTemplate
+            elementId={elementId}
+            metadata={metadata}
+            removeItem={removeItemHandler}
+            updateMetadata={(data: DashboardGraphMetadata) =>
+              updateComponentMetadata(elementId, data)
+            }
+          />
+        );
+      }
+      case 'dayOfWeekBar': {
+        return (
+          <DayOfWeekBar
+            _metadata={metadata}
+            _updateMetadata={(data: DashboardGraphMetadata) =>
+              updateComponentMetadata(elementId, data)
+            }
+            elementId={elementId}
+            removeItem={removeItemHandler}
+          />
+        );
+      }
+      case 'draftIncidents': {
+        return <DraftIncidentsTemplate removeItem={removeItemHandler} />;
+      }
+      case 'feedItemCol': {
+        return <FeedItemCol removeItem={removeItemHandler} />;
+      }
+      case 'incidentCount': {
+        return <IncidentCount removeItem={removeItemHandler} />;
+      }
+      case 'incidentValue': {
+        return <IncidentValue removeItem={removeItemHandler} />;
+      }
+      case 'latestIncident': {
+        return <LatestIncident removeItem={removeItemHandler} />;
+      }
+      case 'latestIncidents': {
+        return <LatestIncidentsTemplate removeItem={removeItemHandler} />;
+      }
+      case 'searchRow': {
+        return <SearchRow />;
+      }
+      case 'targetedGoods': {
+        return (
+          <TargetedGoodsGraph
+            _metadata={metadata}
+            _updateMetadata={(data: DashboardGraphMetadata) =>
+              updateComponentMetadata(elementId, data)
+            }
+            elementId={elementId}
+            removeItem={removeItemHandler}
+          />
+        );
+      }
+      case 'timeOfDayBar': {
+        return (
+          <TimeOfDay
+            _metadata={metadata}
+            _updateMetadata={(data: DashboardGraphMetadata) =>
+              updateComponentMetadata(elementId, data)
+            }
+            elementId={elementId}
+            removeItem={removeItemHandler}
+          />
+        );
+      }
+      default: {
+        return null;
+      }
+    }
   };
 
   const ReactGridLayout = useMemo(() => WidthProvider(RGL), []);
@@ -332,17 +338,17 @@ const ViewDashboardEditor = () => {
   const [droppingItem, setDroppingItem] = useState<
     | {
         h: number;
-        i: AvailableDashboardElements;
+        i: string;
         w: number;
       }
     | undefined
   >(undefined);
   const onDrop = (
     lay: ({
-      i: AvailableDashboardElements;
+      i: string;
     } & RGL.Layout)[],
     _layoutItem: {
-      i: AvailableDashboardElements;
+      i: string;
     } & RGL.Layout,
     _event: never
   ) => {
@@ -365,48 +371,55 @@ const ViewDashboardEditor = () => {
     );
   return (
     <>
-      <Button
-        onClick={() => navigate('/app/manage-dashboard')}
-        style={{
-          bottom: 140,
-          position: 'absolute',
-          right: 100,
-          zIndex: 10_000,
+      {/* Floating Toolbar */}
+      <Card
+        bodyStyle={{
+          padding: '8px 16px',
         }}
-        type="default"
-      >
-        {intl.formatMessage({
-          defaultMessage: 'Back',
-        })}
-      </Button>
-      <Button
-        onClick={onSubmit}
         style={{
-          bottom: 140,
-          position: 'absolute',
+          bottom: 20,
+          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
+          position: 'fixed',
           right: 20,
-          zIndex: 10_000,
+          zIndex: 999,
         }}
-        type="primary"
       >
-        {intl.formatMessage({
-          defaultMessage: 'Save',
-        })}
-      </Button>
-      <Button
-        onClick={showDrawer}
-        style={{
-          bottom: 80,
-          position: 'absolute',
-          right: 20,
-          zIndex: 10_000,
-        }}
-        type="default"
-      >
-        {intl.formatMessage({
-          defaultMessage: 'Edit/Add banner',
-        })}
-      </Button>
+        <Space size="middle">
+          <Button
+            icon={
+              <FontAwesomeIcon icon={faArrowLeft} style={{ marginRight: 8 }} />
+            }
+            onClick={() => navigate('/app/manage-dashboard')}
+            type="default"
+          >
+            {intl.formatMessage({ defaultMessage: 'Back' })}
+          </Button>
+          <Button
+            icon={<FontAwesomeIcon icon={faBars} style={{ marginRight: 8 }} />}
+            onClick={() => setComponentDrawerOpen(!componentDrawerOpen)}
+            type="default"
+          >
+            {intl.formatMessage({ defaultMessage: 'Add Components' })}
+          </Button>
+          <Button
+            icon={
+              <FontAwesomeIcon icon={faTextHeight} style={{ marginRight: 8 }} />
+            }
+            onClick={showDrawer}
+            type="default"
+          >
+            {intl.formatMessage({ defaultMessage: 'Edit Banner' })}
+          </Button>
+          <Button
+            icon={<FontAwesomeIcon icon={faSave} style={{ marginRight: 8 }} />}
+            onClick={onSubmit}
+            type="primary"
+          >
+            {intl.formatMessage({ defaultMessage: 'Save Dashboard' })}
+          </Button>
+        </Space>
+      </Card>
+
       <div
         className="feed-container"
         style={{
@@ -423,9 +436,10 @@ const ViewDashboardEditor = () => {
           </Marquee>
         ) : null}
         <DashboardSelectorDrawer
-          droppingItem={droppingItem}
           layout={layout}
+          open={componentDrawerOpen}
           setDroppingItem={setDroppingItem}
+          setOpen={setComponentDrawerOpen}
         />
         <ReactGridLayout
           autoSize={true}
@@ -441,16 +455,30 @@ const ViewDashboardEditor = () => {
           onLayoutChange={(e) =>
             setLayout(
               e as ({
-                i: AvailableDashboardElements;
+                i: string;
               } & RGL.Layout)[]
             )
           }
           rowHeight={generateHeight()}
           style={{ minHeight: '100vh' }}
         >
-          {Object.values(layoutItems).map((l) => {
-            if (layout.some(({ i }) => i === l.key)) return l;
-            return null;
+          {layout.map((layoutItem) => {
+            const elementType = getElementType(layoutItem.i);
+            const element = createElement(layoutItem.i, elementType);
+
+            if (!element) return null;
+
+            return (
+              <div
+                key={layoutItem.i}
+                style={{
+                  overflow: 'hidden',
+                  padding: elementType === 'searchRow' ? 0 : 15,
+                }}
+              >
+                {element}
+              </div>
+            );
           })}
         </ReactGridLayout>
 

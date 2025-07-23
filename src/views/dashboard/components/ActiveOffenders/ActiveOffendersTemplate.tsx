@@ -1,9 +1,10 @@
-import React from 'react';
-import { Button, Card, Col, Row, Skeleton, Typography } from 'antd';
-import { useIntl } from 'react-intl';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/pro-light-svg-icons';
 import type { AvailableDashboardElements } from '#/state/dashboard-model';
+
+import { faTrash } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Card, Col, Row, Skeleton, Typography } from 'antd';
+import React from 'react';
+import { useIntl } from 'react-intl';
 
 const { Title } = Typography;
 
@@ -15,23 +16,22 @@ const ActiveOffendersTemplate = ({
   const intl = useIntl();
   return (
     <Card
-      style={{ height: '100%', margin: 0, overflow: 'hidden' }}
       bodyStyle={{
         height: 'calc(100%)',
       }}
+      style={{ height: '100%', margin: 0, overflow: 'hidden' }}
     >
       <Button
-        type="primary"
-        style={{ position: 'absolute', top: 10, right: 10, zIndex: 10 }}
-        onClick={() => removeItem('activeOffender')}
         icon={<FontAwesomeIcon icon={faTrash} />}
+        onClick={() => removeItem('activeOffender')}
+        style={{ position: 'absolute', right: 10, top: 10, zIndex: 10 }}
       />
       <Title
         level={4}
         style={{
           fontSize: 16,
-          marginTop: -10,
           marginBottom: 10,
+          marginTop: -10,
         }}
       >
         {intl.formatMessage({
@@ -58,9 +58,9 @@ const ActiveOffendersTemplate = ({
               active
               shape="square"
               style={{
+                borderRadius: '0.625rem',
                 height: 140,
                 width: 140,
-                borderRadius: '0.625rem',
               }}
             />
           </Col>

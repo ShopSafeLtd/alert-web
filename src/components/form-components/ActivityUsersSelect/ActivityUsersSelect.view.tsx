@@ -2,10 +2,8 @@ import type { UsersSelectQueryVariables } from '#/components/form-components/Use
 import type { SizeType } from 'antd/lib/config-provider/SizeContext';
 import type { LabeledValue, SelectProps } from 'antd/lib/select';
 
-import {
-  useUsersSelectLazyQuery,
-  useUsersSelectQuery,
-} from '#/components/form-components/UsersSelect/__generated__/users-select-query.generated';
+import { useActivityUsersSelectQuery } from '#/components/form-components/ActivityUsersSelect/__generated__/activity-users-select-query.generated';
+import { useUsersSelectLazyQuery } from '#/components/form-components/UsersSelect/__generated__/users-select-query.generated';
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { Select } from 'antd';
 import { QueryMode, SortOrder } from 'graphql/types';
@@ -107,7 +105,7 @@ const UsersManySelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
     SelectProps['options']
   >([]);
 
-  const { data, fetchMore, loading } = useUsersSelectQuery({
+  const { data, fetchMore, loading } = useActivityUsersSelectQuery({
     onCompleted: () => {
       setFetchingMore(false);
     },
@@ -134,7 +132,7 @@ const UsersManySelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
 
   const [fetchMissing] = useUsersSelectLazyQuery({
     onCompleted: (extraData) => {
-      if (extraData.listUsers.users.length > 0) {
+      if (extraData.listUsers?.users.length > 0) {
         setSelectedMissingUsers(
           extraData.listUsers.users.map((option) => ({
             key: option.id,
@@ -149,7 +147,7 @@ const UsersManySelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
   useEffect(() => {
     if (initialValues.length > 0) {
       const missing = initialValues.filter(
-        (item) => !data?.listUsers.users.some((node) => node.id === item)
+        (item) => !data?.users.some((node) => node.id === item)
       );
       if (missing.length > 0) {
         void fetchMissing({
@@ -175,22 +173,20 @@ const UsersManySelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
         setFetchingMore(false);
 
         if (!fetchMoreResult) return prev;
-        const prevIds = prev.listUsers?.users.map((node) => node.id);
+        const prevIds = prev?.users.map((node) => node.id);
         return {
-          listUsers: {
-            ...fetchMoreResult.listUsers,
-            users: [
-              ...(prev.listUsers?.users || []),
-              ...(fetchMoreResult.listUsers?.users.filter(
-                (node) => !prevIds?.includes(node.id)
-              ) || []),
-            ],
+          ...fetchMoreResult,
+          users: {
+            ...(prev?.users || []),
+            ...(fetchMoreResult?.users.filter(
+              (node) => !prevIds?.includes(node.id)
+            ) || []),
           },
         };
       },
       variables: {
         orderBy: { fullName: SortOrder.Asc },
-        skip: data?.listUsers.users.length,
+        skip: data?.users.length,
         take: 30,
         where: {
           fullName: {
@@ -214,7 +210,8 @@ const UsersManySelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
     if (
       !loading &&
       target.scrollTop + target.offsetHeight === target.scrollHeight &&
-      (data?.listUsers.users.length || 0) < (data?.listUsers.total || 0)
+      data?.users &&
+      data.users.length === take
     ) {
       next();
       target.scrollTo({ top: target.scrollHeight });
@@ -229,17 +226,14 @@ const UsersManySelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
         setFetchingMore(false);
 
         if (!fetchMoreResult) return prev;
-        const prevIds = prev.listUsers?.users.map((node) => node.id);
+        const prevIds = prev.users?.map((node) => node.id) || [];
         return {
-          listUsers: {
-            ...fetchMoreResult.listUsers,
-            users: [
-              ...(prev.listUsers?.users || []),
-              ...(fetchMoreResult.listUsers?.users.filter(
-                (node) => !prevIds?.includes(node.id)
-              ) || []),
-            ],
-          },
+          users: [
+            ...(prev.users || []),
+            ...(fetchMoreResult.users?.filter(
+              (node) => !prevIds.includes(node.id)
+            ) || []),
+          ],
         };
       },
       variables: {
@@ -247,7 +241,6 @@ const UsersManySelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
 
         take: 50,
         where: {
-          ...queryVars?.where,
           fullName: {
             contains: searchTerm,
             mode: QueryMode.Insensitive,
@@ -296,7 +289,7 @@ const UsersManySelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
     [debounce, handleChange]
   );
 
-  const sortedData = [...(data?.listUsers?.users || [])];
+  const sortedData = [...(data?.users || [])];
 
   const options: SelectProps['options'] = sortedData.map((option) => ({
     key: option.id,

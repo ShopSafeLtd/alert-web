@@ -6,7 +6,7 @@ import { action } from 'easy-peasy';
 
 export type DashboardLayout = {
   layout: ({
-    i: AvailableDashboardElements;
+    i: string;
   } & RGL.Layout)[];
   marquee: null | string;
 };
@@ -140,7 +140,6 @@ const dashboardModel: DashboardModel = {
   setEndDate: action((state, payload) => {
     state.endDate = payload;
   }),
-
   setSchemeLayouts: action((state, payload) => {
     state.schemeLayouts = payload;
     state.isSet = true;
@@ -159,6 +158,7 @@ export type AvailableDashboardElements =
   | 'activeOffender'
   | 'adminTodos'
   | 'articlesSection'
+  | 'dashboardGraph'
   | 'dayOfWeekBar'
   | 'draftIncidents'
   | 'feedItemCol'
