@@ -250,10 +250,15 @@ export function useRole(id: string | undefined, create: boolean): Props {
   };
 
   const clearAll = () => {
+    // Filter out disabled items (Automations, Vision, Vision Settings)
+    const enabledRoleItems = roleItems.filter((item) => !item.disabled);
+    const enabledSettingsChildren = settings[0].children.filter(
+      (item) => !item.disabled
+    );
     const permissionEntries: [string, boolean][] = [
       [`${PermissionModel.Settings}:${PermissionMethod.Read}`, false],
-      ...createPermissionEntries(roleItems, false),
-      ...createPermissionEntries(settings[0].children, false),
+      ...createPermissionEntries(enabledRoleItems, false),
+      ...createPermissionEntries(enabledSettingsChildren, false),
     ];
 
     form.setFieldsValue(Object.fromEntries(permissionEntries));
@@ -265,10 +270,15 @@ export function useRole(id: string | undefined, create: boolean): Props {
     });
   };
   const setAll = () => {
+    // Filter out disabled items (Automations, Vision, Vision Settings)
+    const enabledRoleItems = roleItems.filter((item) => !item.disabled);
+    const enabledSettingsChildren = settings[0].children.filter(
+      (item) => !item.disabled
+    );
     const permissionEntries: [string, boolean][] = [
       [`${PermissionModel.Settings}:${PermissionMethod.Read}`, true],
-      ...createPermissionEntries(roleItems, true),
-      ...createPermissionEntries(settings[0].children, true),
+      ...createPermissionEntries(enabledRoleItems, true),
+      ...createPermissionEntries(enabledSettingsChildren, true),
     ];
 
     form.setFieldsValue(Object.fromEntries(permissionEntries));
@@ -281,18 +291,26 @@ export function useRole(id: string | undefined, create: boolean): Props {
   };
 
   const clearAllSettings = () => {
+    // Filter out disabled items (Vision Settings)
+    const enabledSettingsChildren = settings[0].children.filter(
+      (item) => !item.disabled
+    );
     form.setFieldsValue({
       ...Object.fromEntries(
-        settings[0].children.flatMap((item) =>
+        enabledSettingsChildren.flatMap((item) =>
           item.methods.map((method) => [`${item.key}:${method.key}`, false])
         )
       ),
     });
   };
   const setAllSettings = () => {
+    // Filter out disabled items (Vision Settings)
+    const enabledSettingsChildren = settings[0].children.filter(
+      (item) => !item.disabled
+    );
     form.setFieldsValue({
       ...Object.fromEntries(
-        settings[0].children.flatMap((item) =>
+        enabledSettingsChildren.flatMap((item) =>
           item.methods.map((method) => [`${item.key}:${method.key}`, true])
         )
       ),
