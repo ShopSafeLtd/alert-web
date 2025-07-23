@@ -24,7 +24,6 @@ const IncidentValue = ({
         icon={<FontAwesomeIcon icon={faTrash} />}
         onClick={() => removeItem('incidentValue')}
         style={{ position: 'absolute', right: 10, top: 10, zIndex: 10 }}
-        type="primary"
       />
       <Statistic
         loading={loading}

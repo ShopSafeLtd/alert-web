@@ -25,6 +25,7 @@ query CurrentSchemeProvider($where: UserSchemeWhereUniqueInput!) {
         w
         x
         y
+        metadata
       }
     }
     scheme {

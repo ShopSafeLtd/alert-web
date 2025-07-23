@@ -119,6 +119,7 @@ const useUpdateQuestion = ({
           origOptions: data.origOptions,
           origQuestion: data.origQuestion,
           questionId,
+          type: values.type === data.type ? undefined : values.type,
         },
       },
     });

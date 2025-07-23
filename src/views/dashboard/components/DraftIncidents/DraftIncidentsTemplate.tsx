@@ -41,7 +41,6 @@ const DraftIncidentsTemplate = ({
         icon={<FontAwesomeIcon icon={faTrash} />}
         onClick={() => removeItem('latestIncidents')}
         style={{ position: 'absolute', right: 10, top: 10, zIndex: 10 }}
-        type="primary"
       />
       <Card
         bodyStyle={{

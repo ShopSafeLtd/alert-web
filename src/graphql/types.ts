@@ -4241,6 +4241,31 @@ export type CustomGalleryWhereUniqueInput = {
   vehicles?: InputMaybe<VehicleListRelationFilter>;
 };
 
+export type CustomGraphInput = {
+  dataType: DataType;
+  /** Period for date grouping when using dateRange on X-axis */
+  datePeriod?: InputMaybe<DatePeriod>;
+  /** Filter by business IDs */
+  filterBusinesses?: InputMaybe<Array<Scalars['String']>>;
+  /** Number of days to look back */
+  filterDatePeriod?: InputMaybe<Scalars['Int']>;
+  /** Filter by group IDs */
+  filterGroups?: InputMaybe<Array<Scalars['String']>>;
+  /** Filter by user IDs */
+  filterUsers?: InputMaybe<Array<Scalars['String']>>;
+  graphType: GraphType;
+  /** Number of records to return (e.g., number of businesses, number of date periods) */
+  numberOfRecords?: InputMaybe<Scalars['Int']>;
+  /** X-axis type (e.g., dateRange, businesses, status) */
+  xAxis: Scalars['String'];
+  /** Label for the X-axis */
+  xAxisLabel: Scalars['String'];
+  /** Y-axis type (e.g., count, value) */
+  yAxis: Scalars['String'];
+  /** Label for the Y-axis */
+  yAxisLabel: Scalars['String'];
+};
+
 export type CustomQuestionsCountGraphInput = {
   brandIds?: InputMaybe<Array<Scalars['String']>>;
   businessIds?: InputMaybe<Array<Scalars['String']>>;
@@ -4464,6 +4489,20 @@ export type DataCard = {
   total: Scalars['Float'];
   totalDuration: Scalars['String'];
 };
+
+export enum DataType {
+  Activities = 'activities',
+  Incidents = 'incidents',
+  Offenders = 'offenders'
+}
+
+export enum DatePeriod {
+  Day = 'day',
+  Month = 'month',
+  Quarter = 'quarter',
+  Week = 'week',
+  Year = 'year'
+}
 
 export type DateRangeInput = {
   endDate: Scalars['Date'];
@@ -7009,6 +7048,13 @@ export type Graph = {
   value: Scalars['Float'];
 };
 
+export enum GraphType {
+  Area = 'area',
+  Bar = 'bar',
+  Line = 'line',
+  Pie = 'pie'
+}
+
 export type Group = {
   __typename?: 'Group';
   approver: Array<User>;
@@ -8199,6 +8245,8 @@ export type IncidentImportDataInput = {
   fileUrl: Scalars['String'];
   /** Minimum score (0-100) required to match an existing offender. Default is 60. */
   minimumOffenderMatchScore?: InputMaybe<Scalars['Int']>;
+  /** Minimum name similarity score (0-30) required for offender matching. Default is 15. Set higher (e.g., 25-28) for near-identical matches only. */
+  nameMatchThreshold?: InputMaybe<Scalars['Int']>;
   skipDuplicateCheck?: InputMaybe<Scalars['Boolean']>;
 };
 
@@ -11952,6 +12000,12 @@ export type MutationSyncIncidentGroupsArgs = {
 };
 
 
+export type MutationSyncIncidentLocationsArgs = {
+  businessId: Scalars['String'];
+  groupId: Scalars['String'];
+};
+
+
 export type MutationToggleUserArgs = {
   id: Scalars['ID'];
 };
@@ -14565,10 +14619,12 @@ export type Query = {
   currentUser?: Maybe<User>;
   customGalleriesRelay: QueryCustomGalleriesRelayConnection;
   customGallery: CustomGallery;
+  customGraph: Array<Graph>;
   customQuestionsCountGraph: CustomQuestionsGraph;
   dashboard: Dashboard;
   dashboards: QueryDashboardsConnection;
   dateTest: Array<Scalars['String']>;
+  dateTestParser: Array<Scalars['String']>;
   demDevice: DemDevice;
   demDeviceModel: Array<DemDeviceModel>;
   demDevices: QueryDemDevicesConnection;
@@ -15088,6 +15144,11 @@ export type QueryCustomGalleryArgs = {
 };
 
 
+export type QueryCustomGraphArgs = {
+  input: CustomGraphInput;
+};
+
+
 export type QueryCustomQuestionsCountGraphArgs = {
   where: CustomQuestionsCountGraphInput;
 };
@@ -15112,6 +15173,13 @@ export type QueryDashboardsArgs = {
 
 export type QueryDateTestArgs = {
   date: Scalars['DateTime'];
+  parseUKDateTest?: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryDateTestParserArgs = {
+  date?: InputMaybe<Scalars['String']>;
+  time?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -21697,6 +21765,7 @@ export type UpdateQuestionOnActivityInput = {
   origOptions?: InputMaybe<Array<Scalars['String']>>;
   origQuestion: Scalars['String'];
   questionId: Scalars['String'];
+  type?: InputMaybe<AnswerType>;
 };
 
 export type UpdateQuestionOnTagInput = {

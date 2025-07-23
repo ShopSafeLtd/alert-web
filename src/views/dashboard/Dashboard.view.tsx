@@ -1,4 +1,5 @@
 import type { AvailableDashboardElements } from '#/state/dashboard-model';
+import type { DashboardGraphMetadata } from '#/types/dashboard-metadata';
 import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
 
 import { Drawer } from 'antd';
@@ -28,165 +29,77 @@ import {
   TargetedGoodsContainer,
   TimeOfDay,
 } from './components';
+import DashboardGraphWrapper from './components/DashboardGraph/DashboardGraphWrapper';
 
-const DashboardComponents: Map<AvailableDashboardElements, JSX.Element> =
-  new Map([
-    [
-      'activeOffender',
-      <div
-        key="activeOffender"
-        style={{
-          margin: 10,
-          padding: 10,
-        }}
-      >
-        <ActiveOffenders />
-      </div>,
-    ],
-    [
-      'adminTodos',
-      <div
-        key="adminTodos"
-        style={{
-          margin: 10,
-          padding: 10,
-        }}
-      >
-        <AdminTodos />
-      </div>,
-    ],
-    [
-      'articlesSection',
-      <div
-        key="articlesSection"
-        style={{
-          margin: 10,
-          padding: 10,
-        }}
-      >
-        <ArticlesSection />
-      </div>,
-    ],
-    [
-      'dayOfWeekBar',
-      <div
-        key="dayOfWeekBar"
-        style={{
-          margin: 10,
-          padding: 10,
-        }}
-      >
-        <DayOfWeek />
-      </div>,
-    ],
-    [
-      'draftIncidents',
-      <div
-        key="draftIncidents"
-        style={{
-          margin: 10,
-          padding: 10,
-        }}
-      >
-        <DraftIncidents />
-      </div>,
-    ],
-    [
-      'feedItemCol',
-      <div
-        key="feedItemCol"
-        style={{
-          margin: 10,
-          padding: 10,
-        }}
-      >
-        <FeedItemCol />
-      </div>,
-    ],
-    [
-      'incidentCount',
-      <div
-        key="incidentCount"
-        style={{
-          margin: 10,
-          padding: 10,
-        }}
-      >
-        <IncidentCount />
-      </div>,
-    ],
-    [
-      'incidentValue',
-      <div
-        key="incidentValue"
-        style={{
-          margin: 10,
-          padding: 10,
-        }}
-      >
-        <IncidentValues />
-      </div>,
-    ],
-    [
-      'latestIncident',
-      <div
-        key="latestIncident"
-        style={{
-          margin: 10,
-          padding: 10,
-        }}
-      >
-        <LatestIncident />
-      </div>,
-    ],
-    [
-      'latestIncidents',
-      <div
-        key="latestIncidents"
-        style={{
-          margin: 10,
-          padding: 10,
-        }}
-      >
-        <LatestIncidents />
-      </div>,
-    ],
-    [
-      'searchRow',
-      <div
-        key="searchRow"
-        style={{
-          margin: 10,
-          padding: 10,
-        }}
-      />,
-    ],
-    ['searchRow', <div key="searchRow" />],
-    [
-      'targetedGoods',
-      <div
-        key="targetedGoods"
-        style={{
-          margin: 10,
-          padding: 10,
-        }}
-      >
-        <TargetedGoodsContainer />
-      </div>,
-    ],
-    [
-      'timeOfDayBar',
-      <div
-        key="timeOfDayBar"
-        style={{
-          margin: 10,
-          padding: 10,
-        }}
-      >
-        <TimeOfDay />
-      </div>,
-    ],
-  ]);
+// Helper function to get the base element type from an ID
+const getElementType = (id: string): AvailableDashboardElements => {
+  // Handle IDs like "dashboardGraph-1", "dashboardGraph-2", etc.
+  const match = id.match(/^([^-]+)(?:-\d+)?$/);
+  return (match ? match[1] : id) as AvailableDashboardElements;
+};
+
+// Create element based on type
+const createElement = (
+  elementId: string,
+  elementType: AvailableDashboardElements,
+  metadata?: DashboardGraphMetadata,
+  gridHeight?: number
+) => {
+  switch (elementType) {
+    case 'activeOffender': {
+      return <ActiveOffenders />;
+    }
+    case 'adminTodos': {
+      return <AdminTodos />;
+    }
+    case 'articlesSection': {
+      return <ArticlesSection />;
+    }
+    case 'dashboardGraph': {
+      // Use wrapper that handles both metadata and non-metadata cases
+      return (
+        <DashboardGraphWrapper
+          elementId={elementId}
+          gridHeight={gridHeight}
+          metadata={metadata}
+        />
+      );
+    }
+    case 'dayOfWeekBar': {
+      return <DayOfWeek />;
+    }
+    case 'draftIncidents': {
+      return <DraftIncidents />;
+    }
+    case 'feedItemCol': {
+      return <FeedItemCol />;
+    }
+    case 'incidentCount': {
+      return <IncidentCount />;
+    }
+    case 'incidentValue': {
+      return <IncidentValues />;
+    }
+    case 'latestIncident': {
+      return <LatestIncident />;
+    }
+    case 'latestIncidents': {
+      return <LatestIncidents />;
+    }
+    case 'searchRow': {
+      return <SearchRow />;
+    }
+    case 'targetedGoods': {
+      return <TargetedGoodsContainer />;
+    }
+    case 'timeOfDayBar': {
+      return <TimeOfDay />;
+    }
+    default: {
+      return null;
+    }
+  }
+};
 
 const FeedItem = (): JSX.Element => {
   const {
@@ -210,16 +123,6 @@ const FeedItem = (): JSX.Element => {
   const intl = useIntl();
 
   const ReactGridLayout = useMemo(() => WidthProvider(RGL), []);
-
-  const layoutWithComponents = useMemo(
-    () =>
-      layout
-        ?.filter((item) => item.i !== 'searchRow')
-        .map((item) =>
-          DashboardComponents.get(item.i as AvailableDashboardElements)
-        ) ?? [],
-    [layout]
-  );
 
   return (
     <div
@@ -261,7 +164,57 @@ const FeedItem = (): JSX.Element => {
         }}
         useCSSTransforms={false}
       >
-        {...layoutWithComponents}
+        {layout
+          .filter((item) => item.i !== 'searchRow')
+          .map((layoutItem) => {
+            const elementType = getElementType(layoutItem.i);
+
+            // Parse metadata if it exists (only for components that support it)
+            let metadata: DashboardGraphMetadata | undefined;
+            if (layoutItem.metadata && elementType === 'dashboardGraph') {
+              try {
+                metadata =
+                  typeof layoutItem.metadata === 'string'
+                    ? (JSON.parse(
+                        layoutItem.metadata
+                      ) as DashboardGraphMetadata)
+                    : layoutItem.metadata;
+              } catch (error) {
+                console.error(
+                  'Failed to parse metadata for item',
+                  layoutItem.i,
+                  error
+                );
+              }
+            }
+
+            // Calculate the actual pixel height for this grid item
+            const gridItemHeight = layoutItem.h * generateHeight();
+            const component = createElement(
+              layoutItem.i,
+              elementType,
+              metadata,
+              gridItemHeight
+            );
+
+            if (!component) return null;
+
+            return (
+              <div
+                key={layoutItem.i}
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  height: '100%',
+                  margin: 10,
+                  overflow: 'hidden',
+                  padding: elementType === 'searchRow' ? 0 : 10,
+                }}
+              >
+                {component}
+              </div>
+            );
+          })}
       </ReactGridLayout>
       <Drawer
         onClose={toggleSortFilter}

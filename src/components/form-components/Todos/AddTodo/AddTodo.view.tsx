@@ -138,10 +138,17 @@ const AddTodo = ({
     <>
       <Form
         form={form}
-        initialValues={{ assignedUsers: [], business: businessId }}
+        initialValues={{
+          assignedUsers: [],
+          business: businessId,
+          completed: false,
+        }}
         layout="vertical"
         onFinish={onSubmit}
       >
+        <Form.Item hidden name="completed">
+          <input type="hidden" />
+        </Form.Item>
         <Row justify="start">
           <Col span={10}>
             <Form.Item
@@ -587,6 +594,7 @@ const AddTodo = ({
                       return;
                     }
 
+                    form.setFieldValue('completed', false);
                     onSubmit(data);
                   }}
                 >
@@ -599,8 +607,11 @@ const AddTodo = ({
             <Col>
               <Button
                 disabled={saving}
-                htmlType="submit"
                 loading={saving}
+                onClick={() => {
+                  form.setFieldValue('completed', true);
+                  form.submit();
+                }}
                 type="primary"
               >
                 {intl.formatMessage({
