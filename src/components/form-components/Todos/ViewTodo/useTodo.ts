@@ -57,6 +57,7 @@ interface Return {
     users: { id: string; name: string; timeTaken: number }[]
   ) => void;
   setUsers: (users: { id: string; name: string; timeTaken: number }[]) => void;
+  taskTimeTracking: boolean | undefined;
   todo: TodoQuery | undefined;
   toggleActionsOpen: () => void;
   updateChecklistsList: (value: ChecklistData | undefined) => void;
@@ -83,10 +84,10 @@ const useTodo = ({
   updateTodo?: (value: boolean, i?: string) => void;
 }): Return => {
   const [form] = useForm();
-  const activityAssignToUser =
-    useAtomValue(currentSchemeAtom)?.activityAssignToUser;
-  const schemeRequireAuthorised =
-    useAtomValue(currentSchemeAtom).requireActivityAuthorised;
+  const currentScheme = useAtomValue(currentSchemeAtom);
+  const activityAssignToUser = currentScheme?.activityAssignToUser;
+  const schemeRequireAuthorised = currentScheme?.requireActivityAuthorised;
+  const taskTimeTracking = currentScheme?.taskTimeTracking;
   // const currentUser = useAtomValue(currentUserAtom);
   const currentUser = useAtomValue(userIdAtom);
   const userSchemes = useAtomValue(userSchemesAtom);
@@ -519,6 +520,7 @@ const useTodo = ({
     saving,
     setAvailableUsers,
     setUsers,
+    taskTimeTracking,
     todo,
     toggleActionsOpen,
     updateChecklistsList: setChecklistsData,

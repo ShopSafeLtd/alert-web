@@ -1360,7 +1360,7 @@ const CreateChecklistView: React.FC<Props> = ({
                                                             options={qs
                                                               .filter(
                                                                 (qItem) =>
-                                                                  qItem?.type ===
+                                                                  qItem?.type !==
                                                                   'MEDIA'
                                                               )
                                                               .map((qItem) => ({
