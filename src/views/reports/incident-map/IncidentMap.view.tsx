@@ -10,6 +10,8 @@ import FloatingShowFiltersButton from '#/components/map/FloatingShowFiltersButto
 import IncidentSidebar from '#/components/map/IncidentSidebar/IncidentSidebar.view';
 import MultiIncidentPopup from '#/components/map/MultiIncidentPopup/MultiIncidentPopup.view';
 import ReportsSideMenu from '#/components/reports/ReportsSideMenu/ReportsSideMenu.view';
+import LondonPoliceLayer from '#/views/reports/incident-map/layers/londonArea';
+import PoliceLayer from '#/views/reports/incident-map/layers/policeArea';
 import { Col, Row, Spin } from 'antd';
 import mapboxgl from 'mapbox-gl';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
@@ -17,7 +19,6 @@ import { Layer, Map as MapboxMap, Popup, Source } from 'react-map-gl';
 import { useStoreState } from 'state';
 
 import useStyles from './IncidentMap.styles';
-import policeJSON from './police-areas';
 
 export const dataLayer: FillLayer = {
   id: 'data',
@@ -38,24 +39,6 @@ export const lineLayer: LineLayer = {
   source: 'police-data',
   type: 'line',
 };
-
-const PoliceDataLayer = (
-  <Layer
-    id="policeData"
-    paint={{ 'fill-color': '#3288bd', 'fill-opacity': 0.5 }}
-    source="police-data"
-    type="fill"
-  />
-);
-
-const PoliceLineLayer = (
-  <Layer
-    id="policeLine"
-    paint={{ 'line-color': '#000', 'line-width': 1 }}
-    source="police-data"
-    type="line"
-  />
-);
 
 const ClusterLayer = (
   <Layer
@@ -268,11 +251,12 @@ const IncidentMap = ({
   const mapContainerRef = useRef<HTMLDivElement>(null);
 
   const currentTheme = useStoreState((state) => state.theme.currentTheme);
-
+  const [multiColour, setMultiColour] = useState<'multi' | 'single'>('single');
   const [showBusinesses, setShowBusinesses] = useState(false);
   const [showHeatmap, setShowHeatmap] = useState(false);
   const [showMarkers, setShowMarkers] = useState(true);
   const [showPolice, setShowPolice] = useState(false);
+  const [showLondonPolice, toggleShowLondonPolice] = useState(false);
   const [showFilterPanel, setShowFilterPanel] = useState(true);
   const [cluster, setCluster] = useState(true);
   const [selectedIncidents, setSelectedIncidents] = useState<{
@@ -292,6 +276,10 @@ const IncidentMap = ({
     }),
     []
   );
+
+  const setShowLondonPolice = () => {
+    toggleShowLondonPolice(!showLondonPolice);
+  };
 
   const toggleFilterPanel = () => {
     setShowFilterPanel(!showFilterPanel);
@@ -675,6 +663,7 @@ const IncidentMap = ({
     };
   }, [currentTheme]);
 
+  console.log(showLondonPolice);
   return (
     <Row>
       <Col style={{ width: collapsed ? 0 : undefined }}>
@@ -717,14 +706,11 @@ const IncidentMap = ({
               ref={mapRef}
               style={{ height: '100vh', width: '100%' }}
             >
-              {showPolice && (
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore Polygon / multipolygon issue
-                <Source data={policeJSON} id="police-data" type="geojson">
-                  {PoliceDataLayer}
-                  {PoliceLineLayer}
-                </Source>
-              )}
+              <PoliceLayer colourMode={multiColour} visible={showPolice} />
+              <LondonPoliceLayer
+                colourMode={multiColour}
+                visible={showLondonPolice}
+              />
               {showMarkers && (
                 <Source
                   cluster={cluster}
@@ -885,6 +871,7 @@ const IncidentMap = ({
                 groupsLoading={groupsLoading}
                 industriesData={industriesData}
                 industriesLoading={industriesLoading}
+                multiColour={multiColour}
                 onChangeBrands={onChangeBrands}
                 onChangeDateRange={onChangeDateRange}
                 onChangeGroups={onChangeGroups}
@@ -902,8 +889,11 @@ const IncidentMap = ({
                 selectedGroups={selectedGroups}
                 selectedIndustries={selectedIndustries}
                 selectedSchemes={selectedSchemes}
+                setMultiColour={setMultiColour}
+                setShowLondonPolice={setShowLondonPolice}
                 showBusinesses={showBusinesses}
                 showHeatmap={showHeatmap}
+                showLondonPolice={showLondonPolice}
                 showMarkers={showMarkers}
                 showPolice={showPolice}
                 viewMode={viewMode}
