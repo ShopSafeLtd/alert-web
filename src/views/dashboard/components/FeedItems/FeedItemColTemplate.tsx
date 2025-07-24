@@ -23,7 +23,6 @@ const FeedItemCol = ({
         icon={<FontAwesomeIcon icon={faTrash} />}
         onClick={() => removeItem('feedItemCol')}
         style={{ position: 'absolute', right: 10, top: 10, zIndex: 10 }}
-        type="primary"
       />
       <Typography.Title>
         {intl.formatMessage({

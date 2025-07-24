@@ -15,6 +15,7 @@ query DashboardTemplate($where: DashboardWhereUniqueInput!) {
       w
       x
       y
+      metadata
     }
     name
     roles {

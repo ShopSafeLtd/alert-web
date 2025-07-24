@@ -3,389 +3,389 @@ import type { AvailableDashboardElements } from '#/state/dashboard-model';
 import type { Dispatch, SetStateAction } from 'react';
 import type RGL from 'react-grid-layout';
 
-import ActiveOffendersTemplate from '#/views/dashboard/components/ActiveOffenders/ActiveOffendersTemplate';
-import AdminTodosTemplate from '#/views/dashboard/components/AdminTodos/AdminTodosTemplate';
-import ArticlesSection from '#/views/dashboard/components/ArticlesSection/ArticlesSectionTemplate';
-import DayOfWeekBar from '#/views/dashboard/components/DayOfWeek/DayOfWeekGraphTemplate';
-import DraftIncidentsTemplate from '#/views/dashboard/components/DraftIncidents/DraftIncidentsTemplate';
-import FeedItemCol from '#/views/dashboard/components/FeedItems/FeedItemColTemplate';
-import IncidentCount from '#/views/dashboard/components/IncidentCount/IncidentCountTemplate.view';
-import IncidentValue from '#/views/dashboard/components/IncidentValues/IncidentValueTemplate.view';
-import LatestIncident from '#/views/dashboard/components/LatestIncident/LatestIncidentTemplate.view';
-import LatestIncidentsTemplate from '#/views/dashboard/components/LatestIncidents/LatestIncidentsTemplate';
-import TargetedGoodsGraph from '#/views/dashboard/components/TargetedGoods/TargetedGoodsTemplate';
-import TimeOfDay from '#/views/dashboard/components/TimeOfDay/TimeOfDayTemplate.view';
-import { Button, Col, Divider, Drawer, Row, Space } from 'antd';
-import React, { useState } from 'react';
+import {
+  faBoxes,
+  faCalendarAlt,
+  faChartBar,
+  faClock,
+  faDollarSign,
+  faExclamationTriangle,
+  faGripVertical,
+  faHashtag,
+  faListAlt,
+  faNewspaper,
+  faTasks,
+  faUsers,
+} from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Card, Col, Drawer, Row, Space, Typography } from 'antd';
+import React from 'react';
 import { useIntl } from 'react-intl';
 
-const removeItem = (_: AvailableDashboardElements) => {};
-
 const DashboardSelectorDrawer = ({
-  droppingItem,
   layout,
+  open,
   setDroppingItem,
+  setOpen,
 }: {
-  droppingItem:
-    | { h: number; i: AvailableDashboardElements; w: number }
-    | undefined;
   layout: RGL.Layout[];
+  open: boolean;
   setDroppingItem: Dispatch<
-    SetStateAction<
-      { h: number; i: AvailableDashboardElements; w: number } | undefined
-    >
+    SetStateAction<{ h: number; i: string; w: number } | undefined>
   >;
+  setOpen: (open: boolean) => void;
 }) => {
-  const usedKeys = new Set(
-    layout.map(({ i }) => i).filter((i) => i !== droppingItem?.i)
-  );
-  const [open, setOpen] = useState(false);
+  // Generate unique ID for new elements
+  const generateUniqueId = (baseType: AvailableDashboardElements): string => {
+    const existingIds = layout
+      .map(({ i }) => i)
+      .filter((id) => id === baseType || id.startsWith(`${baseType}-`));
 
-  const showDrawer = () => {
-    setOpen(!open);
+    // If no existing elements of this type, return the base type
+    if (existingIds.length === 0) {
+      return baseType;
+    }
+
+    // Find all numbers from existing IDs
+    const numbers = existingIds
+      .map((id) => {
+        // Handle base ID without suffix as 0
+        if (id === baseType) return 0;
+
+        const match = id.match(new RegExp(`^${baseType}-(\\d+)$`));
+        return match ? Number.parseInt(match[1], 10) : -1;
+      })
+      .filter((n) => n >= 0);
+
+    // Find the next available number
+    let counter = 1;
+    if (numbers.length > 0) {
+      counter = Math.max(...numbers) + 1;
+    }
+
+    return `${baseType}-${counter}`;
   };
-
   const onClose = () => {
     setOpen(false);
   };
-  const dragStyle = {
-    cursor: 'grab',
-    height: 190,
-    overflow: 'hidden',
-    transform: 'translate3d(0, 0, 0)',
-    width: 300,
-  };
 
   const intl = useIntl();
-  return (
-    <>
-      <Button
-        onClick={showDrawer}
-        style={{
-          bottom: 20,
-          position: 'absolute',
-          right: 20,
-          zIndex: 10_000,
-        }}
-        type="default"
-      >
-        {intl.formatMessage({
-          defaultMessage: 'Open component drawer',
-        })}
-      </Button>
 
-      <Drawer
-        closeIcon={null}
-        extra={
-          <Space>
-            <Button onClick={onClose} type="primary">
-              {intl.formatMessage({ defaultMessage: 'Close' })}
-            </Button>
-          </Space>
+  // Component configuration with metadata
+  const components: Array<{
+    category: string;
+    defaultSize: { h: number; w: number };
+    description: string;
+    icon: typeof faChartBar;
+    id: AvailableDashboardElements;
+    name: string;
+  }> = [
+    {
+      category: 'Analytics',
+      defaultSize: { h: 5, w: 3 },
+      description: intl.formatMessage({
+        defaultMessage: 'Configurable data visualization',
+      }),
+      icon: faChartBar,
+      id: 'dashboardGraph',
+      name: intl.formatMessage({ defaultMessage: 'Custom Graph' }),
+    },
+    {
+      category: 'Metrics',
+      defaultSize: { h: 3, w: 2 },
+      description: intl.formatMessage({
+        defaultMessage: 'Total number of incidents',
+      }),
+      icon: faHashtag,
+      id: 'incidentCount',
+      name: intl.formatMessage({ defaultMessage: 'Incident Count' }),
+    },
+    {
+      category: 'Metrics',
+      defaultSize: { h: 3, w: 2 },
+      description: intl.formatMessage({
+        defaultMessage: 'Total value of incidents',
+      }),
+      icon: faDollarSign,
+      id: 'incidentValue',
+      name: intl.formatMessage({ defaultMessage: 'Incident Value' }),
+    },
+    {
+      category: 'Analytics',
+      defaultSize: { h: 5, w: 3 },
+      description: intl.formatMessage({
+        defaultMessage: 'Incidents by day of week',
+      }),
+      icon: faCalendarAlt,
+      id: 'dayOfWeekBar',
+      name: intl.formatMessage({ defaultMessage: 'Day of Week' }),
+    },
+    {
+      category: 'Analytics',
+      defaultSize: { h: 3, w: 3 },
+      description: intl.formatMessage({ defaultMessage: 'Incidents by hour' }),
+      icon: faClock,
+      id: 'timeOfDayBar',
+      name: intl.formatMessage({ defaultMessage: 'Time of Day' }),
+    },
+    {
+      category: 'Analytics',
+      defaultSize: { h: 3, w: 3 },
+      description: intl.formatMessage({
+        defaultMessage: 'Most frequently targeted items',
+      }),
+      icon: faBoxes,
+      id: 'targetedGoods',
+      name: intl.formatMessage({ defaultMessage: 'Targeted Goods' }),
+    },
+    {
+      category: 'Offenders',
+      defaultSize: { h: 5, w: 3 },
+      description: intl.formatMessage({
+        defaultMessage: 'Recently active offenders',
+      }),
+      icon: faUsers,
+      id: 'activeOffender',
+      name: intl.formatMessage({ defaultMessage: 'Active Offenders' }),
+    },
+    {
+      category: 'Metrics',
+      defaultSize: { h: 3, w: 3 },
+      description: intl.formatMessage({
+        defaultMessage: 'Most recent incident details',
+      }),
+      icon: faExclamationTriangle,
+      id: 'latestIncident',
+      name: intl.formatMessage({ defaultMessage: 'Latest Incident' }),
+    },
+    {
+      category: 'Incidents',
+      defaultSize: { h: 3, w: 3 },
+      description: intl.formatMessage({
+        defaultMessage: 'List of recent incidents',
+      }),
+      icon: faListAlt,
+      id: 'latestIncidents',
+      name: intl.formatMessage({ defaultMessage: 'Latest Incidents' }),
+    },
+    {
+      category: 'Incidents',
+      defaultSize: { h: 3, w: 3 },
+      description: intl.formatMessage({
+        defaultMessage: 'Pending draft incidents',
+      }),
+      icon: faExclamationTriangle,
+      id: 'draftIncidents',
+      name: intl.formatMessage({ defaultMessage: 'Draft Incidents' }),
+    },
+    {
+      category: 'Content',
+      defaultSize: { h: 5, w: 3 },
+      description: intl.formatMessage({
+        defaultMessage: 'Latest articles and news',
+      }),
+      icon: faNewspaper,
+      id: 'articlesSection',
+      name: intl.formatMessage({ defaultMessage: 'Articles' }),
+    },
+    {
+      category: 'Content',
+      defaultSize: { h: 5, w: 3 },
+      description: intl.formatMessage({
+        defaultMessage: 'Recent activity stream',
+      }),
+      icon: faListAlt,
+      id: 'feedItemCol',
+      name: intl.formatMessage({ defaultMessage: 'Activity Feed' }),
+    },
+    {
+      category: 'Management',
+      defaultSize: { h: 5, w: 3 },
+      description: intl.formatMessage({
+        defaultMessage: 'Administrative to-do items',
+      }),
+      icon: faTasks,
+      id: 'adminTodos',
+      name: intl.formatMessage({ defaultMessage: 'Admin Tasks' }),
+    },
+  ];
+
+  // Group components by category
+  const groupedComponents: Record<string, typeof components> = {};
+  for (const component of components) {
+    if (!groupedComponents[component.category]) {
+      groupedComponents[component.category] = [];
+    }
+    groupedComponents[component.category].push(component);
+  }
+
+  // Category order and colors
+  const categoryConfig: Record<string, { color: string; order: number }> = {
+    Analytics: { color: '#52c41a', order: 2 },
+    Content: { color: '#722ed1', order: 5 },
+    Incidents: { color: '#fa8c16', order: 3 },
+    Management: { color: '#13c2c2', order: 6 },
+    Metrics: { color: '#1890ff', order: 1 },
+    Offenders: { color: '#f5222d', order: 4 },
+  };
+
+  const sortedCategories = Object.keys(groupedComponents).sort(
+    (a, b) =>
+      (categoryConfig[a]?.order || 999) - (categoryConfig[b]?.order || 999)
+  );
+
+  return (
+    <Drawer
+      bodyStyle={{ padding: '16px' }}
+      closeIcon={null}
+      extra={
+        <Space>
+          <Button onClick={onClose} type="primary">
+            {intl.formatMessage({ defaultMessage: 'Close' })}
+          </Button>
+        </Space>
+      }
+      mask={false}
+      onClose={onClose}
+      open={open}
+      placement="left"
+      title={
+        <Space direction="vertical" size={4}>
+          <Typography.Title level={4} style={{ margin: 0 }}>
+            {intl.formatMessage({ defaultMessage: 'Dashboard Components' })}
+          </Typography.Title>
+          <Typography.Text style={{ fontSize: 13 }} type="secondary">
+            {intl.formatMessage({
+              defaultMessage: 'Drag components to add them to your dashboard',
+            })}
+          </Typography.Text>
+        </Space>
+      }
+      width={420}
+    >
+      {sortedCategories.map((category) => (
+        <div key={category} style={{ marginBottom: 28 }}>
+          <div
+            style={{
+              alignItems: 'center',
+              display: 'flex',
+              gap: 8,
+              marginBottom: 12,
+            }}
+          >
+            <Typography.Title level={4} style={{ fontSize: 18, margin: 0 }}>
+              {category}
+            </Typography.Title>
+            <Typography.Text style={{ fontSize: 13 }} type="secondary">
+              {intl.formatMessage(
+                { defaultMessage: '({count})' },
+                { count: groupedComponents[category].length }
+              )}
+            </Typography.Text>
+          </div>
+
+          <Row gutter={[12, 12]}>
+            {groupedComponents[category].map((component) => (
+              <Col key={component.id} span={24}>
+                <Card
+                  bodyStyle={{
+                    padding: '12px 16px',
+                  }}
+                  className="dashboard-component-card"
+                  draggable
+                  hoverable
+                  onDragStart={(e) => {
+                    e.dataTransfer.setData('text/plain', '');
+                    const uniqueId = generateUniqueId(component.id);
+                    setDroppingItem({
+                      h: component.defaultSize.h,
+                      i: uniqueId,
+                      w: component.defaultSize.w,
+                    });
+                  }}
+                  style={{
+                    cursor: 'grab',
+                    transition: 'all 0.3s',
+                  }}
+                >
+                  <Row align="middle" gutter={12}>
+                    <Col flex="none">
+                      <FontAwesomeIcon
+                        icon={faGripVertical}
+                        style={{
+                          color: '#bfbfbf',
+                          fontSize: 14,
+                        }}
+                      />
+                    </Col>
+                    <Col flex="none">
+                      <div
+                        style={{
+                          alignItems: 'center',
+                          background: `${categoryConfig[category]?.color}15`,
+                          borderRadius: 6,
+                          display: 'flex',
+                          height: 32,
+                          justifyContent: 'center',
+                          width: 32,
+                        }}
+                      >
+                        <FontAwesomeIcon
+                          icon={component.icon}
+                          style={{
+                            color: categoryConfig[category]?.color,
+                            fontSize: 16,
+                          }}
+                        />
+                      </div>
+                    </Col>
+                    <Col flex="auto">
+                      <Space direction="vertical" size={0}>
+                        <Typography.Text strong style={{ fontSize: 14 }}>
+                          {component.name}
+                        </Typography.Text>
+                        <Typography.Text
+                          style={{ fontSize: 12 }}
+                          type="secondary"
+                        >
+                          {component.description}
+                        </Typography.Text>
+                      </Space>
+                    </Col>
+                  </Row>
+                </Card>
+              </Col>
+            ))}
+          </Row>
+        </div>
+      ))}
+
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+        .dashboard-component-card {
+          border: 1px solid rgba(0, 0, 0, 0.06);
         }
-        mask={false}
-        onClose={onClose}
-        open={open && !droppingItem}
-        placement="left"
-        title={intl.formatMessage({
-          defaultMessage: 'Drag Items to Add',
-        })}
-        width={400}
-      >
-        <Row gutter={[12, 12]}>
-          <Col hidden={usedKeys.has('activeOffender')} span={24}>
-            <div
-              className="droppable-element"
-              draggable
-              key="activeOffender"
-              // @see https://bugzilla.mozilla.org/show_bug.cgi?id=568313
-              onDragStart={(e) => {
-                e.dataTransfer.setData('text/plain', '');
-                setDroppingItem({
-                  h: 5,
-                  i: 'activeOffender',
-                  w: 3,
-                });
-              }}
-              // this is a hack for firefox
-              // Firefox requires some kind of initialization
-              // which we can do by adding this attribute
-              style={dragStyle}
-              unselectable="on"
-            >
-              <ActiveOffendersTemplate removeItem={removeItem} />
-            </div>
-            <Divider
-              style={{ marginBottom: 10, marginTop: 10 }}
-              type="horizontal"
-            />
-          </Col>
-          <Col hidden={usedKeys.has('adminTodos')} span={24}>
-            <div
-              className="droppable-element"
-              draggable
-              key="adminTodos"
-              onDragStart={(e) => {
-                e.dataTransfer.setData('text/plain', '');
-                setDroppingItem({
-                  h: 5,
-                  i: 'adminTodos',
-                  w: 3,
-                });
-              }}
-              style={dragStyle}
-              unselectable="on"
-            >
-              <AdminTodosTemplate removeItem={removeItem} />
-            </div>
-            <Divider
-              style={{ marginBottom: 10, marginTop: 10 }}
-              type="horizontal"
-            />
-          </Col>
-          <Col hidden={usedKeys.has('articlesSection')} span={24}>
-            <div
-              className="droppable-element"
-              draggable
-              key="articlesSection"
-              onDragEnd={() => setDroppingItem(undefined)}
-              onDragStart={(e) => {
-                setDroppingItem({
-                  h: 5,
-                  i: 'articlesSection',
-                  w: 3,
-                });
-                e.dataTransfer.setData('text/plain', '');
-              }}
-              style={dragStyle}
-              unselectable="on"
-            >
-              <ArticlesSection removeItem={removeItem} w={0} />
-            </div>
-            <Divider
-              style={{ marginBottom: 10, marginTop: 10 }}
-              type="horizontal"
-            />
-          </Col>
-          <Col hidden={usedKeys.has('dayOfWeekBar')} span={24}>
-            <div
-              className="droppable-element"
-              draggable
-              key="dayOfWeekBar"
-              onDragEnd={() => setDroppingItem(undefined)}
-              onDragStart={(e) => {
-                setDroppingItem({
-                  h: 5,
-                  i: 'dayOfWeekBar',
-                  w: 3,
-                });
-                e.dataTransfer.setData('text/plain', '');
-              }}
-              style={dragStyle}
-              unselectable="on"
-            >
-              <DayOfWeekBar removeItem={removeItem} />
-            </div>
-            <Divider
-              style={{ marginBottom: 10, marginTop: 10 }}
-              type="horizontal"
-            />
-          </Col>
-          <Col hidden={usedKeys.has('feedItemCol')} span={24}>
-            <div
-              className="droppable-element"
-              draggable
-              key="feedItemCol"
-              onDragEnd={() => setDroppingItem(undefined)}
-              onDragStart={(e) => {
-                setDroppingItem({
-                  h: 5,
-                  i: 'feedItemCol',
-                  w: 3,
-                });
-                e.dataTransfer.setData('text/plain', '');
-              }}
-              style={dragStyle}
-              unselectable="on"
-            >
-              <FeedItemCol removeItem={removeItem} />
-            </div>
-            <Divider
-              style={{ marginBottom: 10, marginTop: 10 }}
-              type="horizontal"
-            />
-          </Col>
-          <Col hidden={usedKeys.has('incidentCount')} span={24}>
-            <div
-              className="droppable-element"
-              draggable
-              key="incidentCount"
-              onDragEnd={() => setDroppingItem(undefined)}
-              onDragStart={(e) => {
-                setDroppingItem({
-                  h: 3,
-                  i: 'incidentCount',
-                  w: 2,
-                });
-                e.dataTransfer.setData('text/plain', '');
-              }}
-              style={dragStyle}
-              unselectable="on"
-            >
-              <IncidentCount removeItem={removeItem} />
-            </div>
-            <Divider
-              style={{ marginBottom: 10, marginTop: 10 }}
-              type="horizontal"
-            />
-          </Col>
-          <Col hidden={usedKeys.has('incidentValue')} span={24}>
-            <div
-              className="droppable-element"
-              draggable
-              key="incidentValue"
-              onDragEnd={() => setDroppingItem(undefined)}
-              onDragStart={(e) => {
-                setDroppingItem({
-                  h: 3,
-                  i: 'incidentValue',
-                  w: 2,
-                });
-                e.dataTransfer.setData('text/plain', '');
-              }}
-              style={dragStyle}
-              unselectable="on"
-            >
-              <IncidentValue removeItem={removeItem} />
-            </div>
-            <Divider
-              style={{ marginBottom: 10, marginTop: 10 }}
-              type="horizontal"
-            />
-          </Col>
-          <Col hidden={usedKeys.has('latestIncident')} span={24}>
-            <div
-              className="droppable-element"
-              draggable
-              key="latestIncident"
-              onDragEnd={() => setDroppingItem(undefined)}
-              onDragStart={(e) => {
-                setDroppingItem({
-                  h: 3,
-                  i: 'latestIncident',
-                  w: 3,
-                });
-                e.dataTransfer.setData('text/plain', '');
-              }}
-              style={dragStyle}
-              unselectable="on"
-            >
-              <LatestIncident removeItem={removeItem} />
-            </div>
-            <Divider
-              style={{ marginBottom: 10, marginTop: 10 }}
-              type="horizontal"
-            />
-          </Col>
-          <Col hidden={usedKeys.has('latestIncidents')} span={24}>
-            <div
-              className="droppable-element"
-              draggable
-              key="latestIncidents"
-              onDragEnd={() => setDroppingItem(undefined)}
-              onDragStart={(e) => {
-                setDroppingItem({
-                  h: 3,
-                  i: 'latestIncidents',
-                  w: 3,
-                });
-                e.dataTransfer.setData('text/plain', '');
-              }}
-              style={dragStyle}
-              unselectable="on"
-            >
-              <LatestIncidentsTemplate removeItem={removeItem} />
-            </div>
-            <Divider
-              style={{ marginBottom: 10, marginTop: 10 }}
-              type="horizontal"
-            />
-          </Col>
-          <Col hidden={usedKeys.has('draftIncidents')} span={24}>
-            <div
-              className="droppable-element"
-              draggable
-              key="draftIncidents"
-              onDragEnd={() => setDroppingItem(undefined)}
-              onDragStart={(e) => {
-                setDroppingItem({
-                  h: 3,
-                  i: 'draftIncidents',
-                  w: 3,
-                });
-                e.dataTransfer.setData('text/plain', '');
-              }}
-              style={dragStyle}
-              unselectable="on"
-            >
-              <DraftIncidentsTemplate removeItem={removeItem} />
-            </div>
-            <Divider
-              style={{ marginBottom: 10, marginTop: 10 }}
-              type="horizontal"
-            />
-          </Col>
-          <Col hidden={usedKeys.has('targetedGoods')} span={24}>
-            <div
-              className="droppable-element"
-              draggable
-              key="targetedGoods"
-              onDragEnd={() => setDroppingItem(undefined)}
-              onDragStart={(e) => {
-                setDroppingItem({
-                  h: 3,
-                  i: 'targetedGoods',
-                  w: 3,
-                });
-                e.dataTransfer.setData('text/plain', '');
-              }}
-              style={dragStyle}
-              unselectable="on"
-            >
-              <TargetedGoodsGraph removeItem={removeItem} />
-            </div>
-            <Divider
-              style={{ marginBottom: 10, marginTop: 10 }}
-              type="horizontal"
-            />
-          </Col>
-          <Col hidden={usedKeys.has('timeOfDayBar')} span={24}>
-            <div
-              className="droppable-element"
-              draggable
-              key="timeOfDayBar"
-              onDragEnd={() => setDroppingItem(undefined)}
-              onDragStart={(e) => {
-                setDroppingItem({
-                  h: 3,
-                  i: 'timeOfDayBar',
-                  w: 3,
-                });
-                e.dataTransfer.setData('text/plain', '');
-              }}
-              style={dragStyle}
-              unselectable="on"
-            >
-              <TimeOfDay removeItem={removeItem} />
-            </div>
-            <Divider
-              style={{ marginBottom: 10, marginTop: 10 }}
-              type="horizontal"
-            />
-          </Col>
-        </Row>
-      </Drawer>
-    </>
+        @media (prefers-color-scheme: dark) {
+          .dashboard-component-card {
+            border: 1px solid rgba(255, 255, 255, 0.12);
+          }
+        }
+        .ant-theme-dark .dashboard-component-card {
+          border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+        .dashboard-component-card:hover {
+          border-color: #1890ff !important;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+        .dashboard-component-card:active {
+          cursor: grabbing;
+          opacity: 0.8;
+        }
+      `,
+        }}
+      />
+    </Drawer>
   );
 };
 

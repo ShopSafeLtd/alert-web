@@ -22,7 +22,6 @@ const ViewTodo = ({
   updateTodo?: (value: boolean, i?: string) => void;
 }) => {
   const {
-    actionsOpen,
     availableUsers,
     checklistsData,
     crimeGroupsData,
@@ -39,8 +38,8 @@ const ViewTodo = ({
     saving,
     setAvailableUsers,
     setUsers,
+    taskTimeTracking,
     todo,
-    toggleActionsOpen,
     updateChecklistsList,
     updateCrimeGroupsList,
     updateIncidentList,
@@ -57,7 +56,6 @@ const ViewTodo = ({
 
   return (
     <View
-      actionsOpen={actionsOpen}
       availableUsers={availableUsers}
       checklistsData={checklistsData}
       confirmText={confirmText}
@@ -77,8 +75,8 @@ const ViewTodo = ({
       saving={saving}
       setAvailableUsers={setAvailableUsers}
       setUsers={setUsers}
+      taskTimeTracking={taskTimeTracking}
       todo={todo}
-      toggleActionsOpen={toggleActionsOpen}
       updateChecklistsList={updateChecklistsList}
       updateCrimeGroupsList={updateCrimeGroupsList}
       updateIncidentList={updateIncidentList}

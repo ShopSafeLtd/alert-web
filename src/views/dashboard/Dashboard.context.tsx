@@ -2,6 +2,7 @@
 import type { AvailableDashboardElements } from '#/state/dashboard-model';
 import type { FeedItemFilters } from '#/state/data-model';
 import type { DateType } from '#/types/DataType';
+import type { DashboardGraphMetadata } from '#/types/dashboard-metadata';
 import type { Model } from 'graphql/types';
 import type { ReactNode } from 'react';
 import type RGL from 'react-grid-layout';
@@ -66,6 +67,7 @@ const DashboardContext = createContext<DashboardContextT | undefined>(
 );
 export type DashboardLayout = {
   i: AvailableDashboardElements;
+  metadata?: DashboardGraphMetadata | string; // Metadata for configurable components
 } & RGL.Layout;
 // Create a custom hook to use the context
 export const useDashboardContext = () => {
@@ -251,7 +253,7 @@ export const DashboardProvider: React.FC<{
       groups,
       groupsLoading,
       intl,
-      layout: dashboardLayout.layout,
+      layout: dashboardLayout.layout as DashboardLayout[],
       lightBoxOpen,
       lightboxElements,
       marqueeString,

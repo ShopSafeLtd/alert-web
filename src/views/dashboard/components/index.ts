@@ -1,6 +1,8 @@
 export { default as ActiveOffenders } from './ActiveOffenders/ActiveOffenderRow';
 export { default as AdminTodos } from './AdminTodos';
 export { default as ArticlesSection } from './ArticlesSection';
+export { default as DashboardGraph } from './DashboardGraph/DashboardGraph.container';
+export { default as DashboardGraphTemplate } from './DashboardGraph/DashboardGraphTemplate';
 export { default as DashboardInfiniteScroll } from './DashboardInfiniteScroll';
 export { default as DayOfWeek } from './DayOfWeek/DayOfWeek.container';
 export { default as DraftIncidents } from './DraftIncidents/DraftIncidents.container';

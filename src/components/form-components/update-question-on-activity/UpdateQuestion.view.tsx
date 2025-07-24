@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access,unicorn/no-useless-promise-resolve-reject,consistent-return,@typescript-eslint/no-unsafe-call */
 import type { FormInstance } from 'antd';
 
-import { Button, Card, Col, Form, Input, Row } from 'antd';
+import { Button, Card, Col, Form, Input, Row, Select } from 'antd';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
@@ -26,7 +26,7 @@ const UpdateQuestionView = ({
   onSubmit,
   saving,
 }: AddQuestionViewProps) => {
-  const answerType = data.type;
+  const answerType = Form.useWatch('type', form) || data.type;
   const opt = data.newOptions || [];
   const intl = useIntl();
 
@@ -51,93 +51,137 @@ const UpdateQuestionView = ({
 
       {(answerType === AnswerType.Select ||
         answerType === AnswerType.SelectSingle) && (
-        <Card
-          style={{
-            maxHeight: 500,
-            overflow: 'auto',
-          }}
-          title={intl.formatMessage({
-            defaultMessage: 'Options',
-          })}
-        >
-          <Form.List
-            initialValue={opt}
-            name="newOptions"
-            rules={[
-              {
-                validator: async (_, options) => {
-                  if (
-                    answerType !== AnswerType.Select &&
-                    answerType !== AnswerType.SelectSingle
-                  )
-                    return;
-                  if (!options || options.length < 2) {
-                    return Promise.reject(
-                      new Error(
-                        intl.formatMessage({
-                          defaultMessage: 'Please add at least 2 options',
-                        })
-                      )
-                    );
-                  }
-                  if (options.some((o: null | string | undefined) => !o)) {
-                    return Promise.reject(
-                      new Error(
-                        intl.formatMessage({
-                          defaultMessage: 'Please fill all options',
-                        })
-                      )
-                    );
-                  }
-                },
-              },
-            ]}
+        <>
+          <Card
+            style={{
+              maxHeight: 500,
+              overflow: 'auto',
+            }}
+            title={intl.formatMessage({
+              defaultMessage: 'Options',
+            })}
           >
-            {(fields, { add, remove }, { errors }) => (
-              <>
-                {fields.map((field) => (
-                  <Row gutter={10} key={field.key}>
-                    <Col span={20}>
-                      <Form.Item
-                        // eslint-disable-next-line react/jsx-props-no-spreading
-                        {...field}
-                        name={[field.name]}
-                      >
-                        <Input />
-                      </Form.Item>
-                    </Col>
-                    <Col span={4}>
-                      <Button onClick={() => remove(field.name)}>
-                        {intl.formatMessage({
-                          defaultMessage: 'Remove',
-                        })}
-                      </Button>
-                    </Col>
-                  </Row>
-                ))}
-                <Form.Item>
-                  <Button
-                    block
-                    icon={
-                      <i
-                        aria-hidden="true"
-                        className="fa fa-plus"
-                        style={{ color: '#1890ff' }}
-                      />
+            <Form.Item
+              label={intl.formatMessage({
+                defaultMessage: 'Type',
+              })}
+              name="type"
+              required
+              rules={[
+                {
+                  message: intl.formatMessage({
+                    defaultMessage: 'Please select a type',
+                  }),
+                  required: true,
+                },
+              ]}
+            >
+              <Select
+                options={[
+                  {
+                    label: intl.formatMessage({
+                      defaultMessage: 'Select',
+                    }),
+                    value: AnswerType.Select,
+                  },
+                  {
+                    label: intl.formatMessage({
+                      defaultMessage: 'Select Single',
+                    }),
+                    value: AnswerType.SelectSingle,
+                  },
+                ]}
+              />
+            </Form.Item>
+          </Card>
+          <Card
+            style={{
+              maxHeight: 500,
+              overflow: 'auto',
+            }}
+            title={intl.formatMessage({
+              defaultMessage: 'Options',
+            })}
+          >
+            <Form.List
+              initialValue={opt}
+              name="newOptions"
+              rules={[
+                {
+                  validator: async (_, options) => {
+                    if (
+                      answerType !== AnswerType.Select &&
+                      answerType !== AnswerType.SelectSingle
+                    )
+                      return;
+                    if (!options || options.length < 2) {
+                      return Promise.reject(
+                        new Error(
+                          intl.formatMessage({
+                            defaultMessage: 'Please add at least 2 options',
+                          })
+                        )
+                      );
                     }
-                    onClick={() => add()}
-                    type="dashed"
-                  >
-                    {intl.formatMessage({
-                      defaultMessage: 'Add Option',
-                    })}
-                  </Button>
-                  <Form.ErrorList errors={errors} />
-                </Form.Item>
-              </>
-            )}
-          </Form.List>
-        </Card>
+                    if (options.some((o: null | string | undefined) => !o)) {
+                      return Promise.reject(
+                        new Error(
+                          intl.formatMessage({
+                            defaultMessage: 'Please fill all options',
+                          })
+                        )
+                      );
+                    }
+                  },
+                },
+              ]}
+            >
+              {(fields, { add, remove }, { errors }) => (
+                <>
+                  {fields.map((field) => (
+                    <Row gutter={10} key={field.key}>
+                      <Col span={20}>
+                        <Form.Item
+                          // eslint-disable-next-line react/jsx-props-no-spreading
+                          {...field}
+                          name={[field.name]}
+                        >
+                          <Input />
+                        </Form.Item>
+                      </Col>
+                      <Col span={4}>
+                        <Button onClick={() => remove(field.name)}>
+                          {intl.formatMessage({
+                            defaultMessage: 'Remove',
+                          })}
+                        </Button>
+                      </Col>
+                    </Row>
+                  ))}
+                  <Form.Item>
+                    <Button
+                      block
+                      icon={
+                        <i
+                          aria-hidden="true"
+                          className="fa fa-plus"
+                          style={{ color: '#1890ff' }}
+                        />
+                      }
+                      onClick={() => add()}
+                      type="dashed"
+                    >
+                      {intl.formatMessage({
+                        defaultMessage: 'Add Option',
+                      })}
+                    </Button>
+                    <Form.ErrorList errors={errors} />
+                  </Form.Item>
+                </>
+              )}
+            </Form.List>
+          </Card>
+        </>
       )}
 
       <Form.Item>

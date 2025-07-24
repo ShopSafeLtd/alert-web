@@ -1,0 +1,6 @@
+query customGraph ($input: CustomGraphInput!) {
+    customGraph(input: $input) {
+        label
+        value
+    }
+}
