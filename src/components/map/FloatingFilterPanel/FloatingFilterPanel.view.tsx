@@ -3,6 +3,7 @@ import type { SchemeGroupsQuery } from 'graphql/groups/queries/__generated__/sch
 import type { IndustriesQuery } from 'graphql/industry/__generated__/industries.generated';
 
 import DatePicker from '#/components/util-components/DatePicker';
+import { usePresetDateRanges } from '#/views/data-management/export-activities/useExportActivities';
 import {
   faChevronDown,
   faChevronUp,
@@ -16,7 +17,6 @@ import { FormattedMessage, useIntl } from 'react-intl';
 
 import useStyles from './FloatingFilterPanel.styles';
 
-const { RangePicker } = DatePicker;
 const { Text } = Typography;
 
 interface Position {
@@ -33,35 +33,39 @@ interface Props {
   groupsLoading: boolean;
   industriesData: IndustriesQuery | undefined;
   industriesLoading: boolean;
+  multiColour: 'multi' | 'single';
   onChangeBrands: (value: string[]) => void;
   onChangeDateRange: (value: { endDate: Date; startDate: Date }) => void;
   onChangeGroups: (value: string[]) => void;
-  onChangeIndustries: (value: string[]) => void;
 
+  onChangeIndustries: (value: string[]) => void;
   onChangeSchemes: (value: string[]) => void;
   // Panel control
   onClose?: () => void;
-  onToggleBusinesses: () => void;
 
+  onToggleBusinesses: () => void;
   onToggleCluster: () => void;
   onToggleHeatmap: () => void;
   onToggleMarkers: () => void;
-  onTogglePolice: () => void;
 
+  onTogglePolice: () => void;
   onToggleViewMode: () => void;
   // Filter data and handlers
   schemes: { scheme: { id: string; name: string } }[];
   selectedBrands: string[];
-  selectedGroups: string[];
 
+  selectedGroups: string[];
   selectedIndustries: string[];
   selectedSchemes: string[];
+  setMultiColour: (value: 'multi' | 'single') => void;
+
+  setShowLondonPolice: () => void;
+
   // Display toggles
   showBusinesses: boolean;
   showHeatmap: boolean;
-
+  showLondonPolice: boolean;
   showMarkers: boolean;
-
   showPolice: boolean;
   viewMode: 'popup' | 'sidebar';
 }
@@ -77,6 +81,7 @@ const FloatingFilterPanel: React.FC<Props> = ({
   groupsLoading,
   industriesData,
   industriesLoading,
+  multiColour,
   onChangeBrands,
   onChangeDateRange,
   onChangeGroups,
@@ -94,8 +99,11 @@ const FloatingFilterPanel: React.FC<Props> = ({
   selectedGroups,
   selectedIndustries,
   selectedSchemes,
+  setMultiColour,
+  setShowLondonPolice,
   showBusinesses,
   showHeatmap,
+  showLondonPolice,
   showMarkers,
   showPolice,
   viewMode,
@@ -120,8 +128,13 @@ const FloatingFilterPanel: React.FC<Props> = ({
       try {
         const { collapsed: storedCollapsed, position: storedPosition } =
           JSON.parse(stored) as { collapsed?: boolean; position?: Position };
+        console.log(storedPosition);
         if (storedPosition) {
-          setPosition(storedPosition);
+          // Elliot suggestion, felt weird it teleporting around when you open and close the panel
+          setPosition({
+            x: 38,
+            y: 38,
+          });
           hasStoredPosition = true;
         }
         if (typeof storedCollapsed === 'boolean') {
@@ -258,6 +271,7 @@ const FloatingFilterPanel: React.FC<Props> = ({
     selectedBrands.length,
     selectedIndustries.length,
   ].reduce((sum, count) => sum + (count > 0 ? 1 : 0), 0);
+  const ranges = usePresetDateRanges();
 
   return (
     <div
@@ -382,6 +396,28 @@ const FloatingFilterPanel: React.FC<Props> = ({
                   size="small"
                 />
               </div>
+              <div className={classes.switchRow}>
+                <Text className={classes.switchLabel}>
+                  <FormattedMessage defaultMessage="Show London Police Areas" />
+                </Text>
+                <Switch
+                  checked={showLondonPolice}
+                  onChange={setShowLondonPolice}
+                  size="small"
+                />
+              </div>
+              <div className={classes.switchRow}>
+                <Text className={classes.switchLabel}>
+                  <FormattedMessage defaultMessage="Multi-colour Areas" />
+                </Text>
+                <Switch
+                  checked={multiColour === 'multi'}
+                  onChange={() =>
+                    setMultiColour(multiColour === 'multi' ? 'single' : 'multi')
+                  }
+                  size="small"
+                />
+              </div>
 
               <div className={classes.switchRow}>
                 <Text className={classes.switchLabel}>
@@ -418,7 +454,7 @@ const FloatingFilterPanel: React.FC<Props> = ({
                 label={intl.formatMessage({ defaultMessage: 'Date Range' })}
                 style={{ marginBottom: '12px' }}
               >
-                <RangePicker
+                <DatePicker.RangePicker
                   onChange={(value) => {
                     if (value && value[0] && value[1])
                       onChangeDateRange({
@@ -426,6 +462,7 @@ const FloatingFilterPanel: React.FC<Props> = ({
                         startDate: new Date(value[0].valueOf()),
                       });
                   }}
+                  ranges={ranges}
                   size="small"
                   style={{ width: '100%' }}
                 />
