@@ -257,6 +257,7 @@ const IncidentMap = ({
   const [showMarkers, setShowMarkers] = useState(true);
   const [showPolice, setShowPolice] = useState(false);
   const [showLondonPolice, toggleShowLondonPolice] = useState(false);
+  const [useBcu, toggleUseBcu] = useState(false);
   const [showFilterPanel, setShowFilterPanel] = useState(true);
   const [cluster, setCluster] = useState(true);
   const [selectedIncidents, setSelectedIncidents] = useState<{
@@ -267,6 +268,10 @@ const IncidentMap = ({
   } | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [viewMode, setViewMode] = useState<'popup' | 'sidebar'>('popup');
+
+  const setUseBcu = () => {
+    toggleUseBcu(!useBcu);
+  };
 
   // Helper function to convert GraphQL incident to component incident type
   const adaptIncidentForComponent = useCallback(
@@ -674,7 +679,6 @@ const IncidentMap = ({
     };
   }, [currentTheme]);
 
-  console.log(showLondonPolice);
   return (
     <Row>
       <Col style={{ width: collapsed ? 0 : undefined }}>
@@ -720,6 +724,8 @@ const IncidentMap = ({
               <PoliceLayer colourMode={multiColour} visible={showPolice} />
               <LondonPoliceLayer
                 colourMode={multiColour}
+                mapRef={mapRef}
+                useBcuColour={useBcu}
                 visible={showLondonPolice}
               />
               {showMarkers && (
@@ -902,11 +908,13 @@ const IncidentMap = ({
                 selectedSchemes={selectedSchemes}
                 setMultiColour={setMultiColour}
                 setShowLondonPolice={setShowLondonPolice}
+                setUseBcu={setUseBcu}
                 showBusinesses={showBusinesses}
                 showHeatmap={showHeatmap}
                 showLondonPolice={showLondonPolice}
                 showMarkers={showMarkers}
                 showPolice={showPolice}
+                useBcu={useBcu}
                 viewMode={viewMode}
               />
             )}

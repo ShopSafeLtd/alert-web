@@ -61,12 +61,14 @@ interface Props {
 
   setShowLondonPolice: () => void;
 
+  setUseBcu: () => void;
   // Display toggles
   showBusinesses: boolean;
   showHeatmap: boolean;
   showLondonPolice: boolean;
   showMarkers: boolean;
   showPolice: boolean;
+  useBcu: boolean;
   viewMode: 'popup' | 'sidebar';
 }
 
@@ -101,11 +103,13 @@ const FloatingFilterPanel: React.FC<Props> = ({
   selectedSchemes,
   setMultiColour,
   setShowLondonPolice,
+  setUseBcu,
   showBusinesses,
   showHeatmap,
   showLondonPolice,
   showMarkers,
   showPolice,
+  useBcu,
   viewMode,
 }) => {
   const classes = useStyles();
@@ -396,6 +400,7 @@ const FloatingFilterPanel: React.FC<Props> = ({
                   size="small"
                 />
               </div>
+
               <div className={classes.switchRow}>
                 <Text className={classes.switchLabel}>
                   <FormattedMessage defaultMessage="Show London Police Areas" />
@@ -405,6 +410,12 @@ const FloatingFilterPanel: React.FC<Props> = ({
                   onChange={setShowLondonPolice}
                   size="small"
                 />
+              </div>
+              <div className={classes.switchRow}>
+                <Text className={classes.switchLabel}>
+                  <FormattedMessage defaultMessage="BCU-colour Areas" />
+                </Text>
+                <Switch checked={useBcu} onChange={setUseBcu} size="small" />
               </div>
               <div className={classes.switchRow}>
                 <Text className={classes.switchLabel}>

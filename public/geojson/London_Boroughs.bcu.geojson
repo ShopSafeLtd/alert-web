@@ -12,7 +12,9 @@
         "nonld_area": 0,
         "ons_inner": "F",
         "sub_2011": "South",
-        "color": "hsl(326, 70%, 60%)"
+        "color": "#CC79A7",
+        "bcu": "South West",
+        "regionColor": "#F0E442"
       },
       "geometry": {
         "type": "Polygon",
@@ -5116,7 +5118,9 @@
         "nonld_area": 0,
         "ons_inner": "F",
         "sub_2011": "South",
-        "color": "hsl(0, 70%, 60%)"
+        "color": "#56B4E9",
+        "bcu": "South Area",
+        "regionColor": "#AD8BC9"
       },
       "geometry": {
         "type": "Polygon",
@@ -12876,7 +12880,9 @@
         "nonld_area": 0,
         "ons_inner": "F",
         "sub_2011": "South",
-        "color": "hsl(93, 70%, 60%)"
+        "color": "#E69F00",
+        "bcu": "South Area",
+        "regionColor": "#AD8BC9"
       },
       "geometry": {
         "type": "Polygon",
@@ -27276,7 +27282,9 @@
         "nonld_area": 60.755,
         "ons_inner": "F",
         "sub_2011": "West",
-        "color": "hsl(274, 70%, 60%)"
+        "color": "#8DA0CB",
+        "bcu": "West Area",
+        "regionColor": "#66C2A5"
       },
       "geometry": {
         "type": "Polygon",
@@ -35196,7 +35204,9 @@
         "nonld_area": 0,
         "ons_inner": "F",
         "sub_2011": "West",
-        "color": "hsl(95, 70%, 60%)"
+        "color": "#0072B2",
+        "bcu": "West Area",
+        "regionColor": "#66C2A5"
       },
       "geometry": {
         "type": "Polygon",
@@ -41476,7 +41486,9 @@
         "nonld_area": 210.763,
         "ons_inner": "F",
         "sub_2011": "East",
-        "color": "hsl(10, 70%, 60%)"
+        "color": "#AD8BC9",
+        "bcu": "East Area",
+        "regionColor": "#0072B2"
       },
       "geometry": {
         "type": "Polygon",
@@ -51264,7 +51276,9 @@
         "nonld_area": 0,
         "ons_inner": "F",
         "sub_2011": "West",
-        "color": "hsl(117, 70%, 60%)"
+        "color": "#009E73",
+        "bcu": "West Area",
+        "regionColor": "#66C2A5"
       },
       "geometry": {
         "type": "Polygon",
@@ -65324,7 +65338,9 @@
         "nonld_area": 0,
         "ons_inner": "F",
         "sub_2011": "West",
-        "color": "hsl(224, 70%, 60%)"
+        "color": "#FC8D62",
+        "bcu": "North West",
+        "regionColor": "#CC79A7"
       },
       "geometry": {
         "type": "Polygon",
@@ -68900,7 +68916,9 @@
         "nonld_area": 0,
         "ons_inner": "F",
         "sub_2011": "West",
-        "color": "hsl(333, 70%, 60%)"
+        "color": "#D55E00",
+        "bcu": "North West",
+        "regionColor": "#CC79A7"
       },
       "geometry": {
         "type": "Polygon",
@@ -74288,7 +74306,9 @@
         "nonld_area": 0,
         "ons_inner": "F",
         "sub_2011": "North",
-        "color": "hsl(143, 70%, 60%)"
+        "color": "#66C2A5",
+        "bcu": "North West",
+        "regionColor": "#CC79A7"
       },
       "geometry": {
         "type": "Polygon",
@@ -81248,7 +81268,9 @@
         "nonld_area": 16.795,
         "ons_inner": "T",
         "sub_2011": "East",
-        "color": "hsl(77, 70%, 60%)"
+        "color": "#999999",
+        "bcu": "South East",
+        "regionColor": "#E69F00"
       },
       "geometry": {
         "type": "Polygon",
@@ -87448,7 +87470,9 @@
         "nonld_area": 310.785,
         "ons_inner": "F",
         "sub_2011": "East",
-        "color": "hsl(1, 70%, 60%)"
+        "color": "#F0E442",
+        "bcu": "South East",
+        "regionColor": "#E69F00"
       },
       "geometry": {
         "type": "Polygon",
@@ -92900,7 +92924,9 @@
         "nonld_area": 370.619,
         "ons_inner": "F",
         "sub_2011": "East",
-        "color": "hsl(101, 70%, 60%)"
+        "color": "#CC79A7",
+        "bcu": "South East",
+        "regionColor": "#E69F00"
       },
       "geometry": {
         "type": "Polygon",
@@ -98856,7 +98882,9 @@
         "nonld_area": 0,
         "ons_inner": "F",
         "sub_2011": "North",
-        "color": "hsl(308, 70%, 60%)"
+        "color": "#56B4E9",
+        "bcu": "North Area",
+        "regionColor": "#D55E00"
       },
       "geometry": {
         "type": "Polygon",
@@ -104388,7 +104416,9 @@
         "nonld_area": 0,
         "ons_inner": "F",
         "sub_2011": "East",
-        "color": "hsl(232, 70%, 60%)"
+        "color": "#E69F00",
+        "bcu": "North East",
+        "regionColor": "#FC8D62"
       },
       "geometry": {
         "type": "Polygon",
@@ -110760,7 +110790,9 @@
         "nonld_area": 43.927,
         "ons_inner": "T",
         "sub_2011": "Central",
-        "color": "hsl(37, 70%, 60%)"
+        "color": "#8DA0CB",
+        "bcu": "South Central",
+        "regionColor": "#8DA0CB"
       },
       "geometry": {
         "type": "Polygon",
@@ -115004,7 +115036,9 @@
         "nonld_area": 2.3,
         "ons_inner": "F",
         "sub_2011": "East",
-        "color": "hsl(264, 70%, 60%)"
+        "color": "#0072B2",
+        "bcu": "East Area",
+        "regionColor": "#0072B2"
       },
       "geometry": {
         "type": "Polygon",
@@ -121448,7 +121482,9 @@
         "nonld_area": 0,
         "ons_inner": "F",
         "sub_2011": "South",
-        "color": "hsl(4, 70%, 60%)"
+        "color": "#AD8BC9",
+        "bcu": "South Area",
+        "regionColor": "#AD8BC9"
       },
       "geometry": {
         "type": "Polygon",
@@ -126000,7 +126036,9 @@
         "nonld_area": 135.443,
         "ons_inner": "F",
         "sub_2011": "South",
-        "color": "hsl(260, 70%, 60%)"
+        "color": "#009E73",
+        "bcu": "South West",
+        "regionColor": "#F0E442"
       },
       "geometry": {
         "type": "Polygon",
@@ -132540,7 +132578,9 @@
         "nonld_area": 0,
         "ons_inner": "F",
         "sub_2011": "South",
-        "color": "hsl(318, 70%, 60%)"
+        "color": "#FC8D62",
+        "bcu": "South West",
+        "regionColor": "#F0E442"
       },
       "geometry": {
         "type": "Polygon",
@@ -137232,7 +137272,9 @@
         "nonld_area": 95.6,
         "ons_inner": "T",
         "sub_2011": "South",
-        "color": "hsl(258, 70%, 60%)"
+        "color": "#D55E00",
+        "bcu": "South West",
+        "regionColor": "#F0E442"
       },
       "geometry": {
         "type": "Polygon",
@@ -141648,7 +141690,9 @@
         "nonld_area": 75.648,
         "ons_inner": "T",
         "sub_2011": "West",
-        "color": "hsl(31, 70%, 60%)"
+        "color": "#66C2A5",
+        "bcu": "Central West",
+        "regionColor": "#56B4E9"
       },
       "geometry": {
         "type": "Polygon",
@@ -144804,7 +144848,9 @@
         "nonld_area": 105.139,
         "ons_inner": "T",
         "sub_2011": "Central",
-        "color": "hsl(296, 70%, 60%)"
+        "color": "#999999",
+        "bcu": "South Central",
+        "regionColor": "#8DA0CB"
       },
       "geometry": {
         "type": "Polygon",
@@ -149184,7 +149230,9 @@
         "nonld_area": 25.994,
         "ons_inner": "T",
         "sub_2011": "Central",
-        "color": "hsl(124, 70%, 60%)"
+        "color": "#F0E442",
+        "bcu": "Central West",
+        "regionColor": "#56B4E9"
       },
       "geometry": {
         "type": "Polygon",
@@ -151536,7 +151584,9 @@
         "nonld_area": 24.546,
         "ons_inner": "T",
         "sub_2011": "Central",
-        "color": "hsl(330, 70%, 60%)"
+        "color": "#CC79A7",
+        "bcu": "City of London",
+        "regionColor": "#0072B2"
       },
       "geometry": {
         "type": "Polygon",
@@ -152912,7 +152962,9 @@
         "nonld_area": 54.308,
         "ons_inner": "T",
         "sub_2011": "Central",
-        "color": "hsl(237, 70%, 60%)"
+        "color": "#56B4E9",
+        "bcu": "Central West",
+        "regionColor": "#56B4E9"
       },
       "geometry": {
         "type": "Polygon",
@@ -155556,7 +155608,9 @@
         "nonld_area": 0,
         "ons_inner": "T",
         "sub_2011": "Central",
-        "color": "hsl(299, 70%, 60%)"
+        "color": "#E69F00",
+        "bcu": "Central North",
+        "regionColor": "#999999"
       },
       "geometry": {
         "type": "Polygon",
@@ -158916,7 +158970,9 @@
         "nonld_area": 178.867,
         "ons_inner": "T",
         "sub_2011": "East",
-        "color": "hsl(219, 70%, 60%)"
+        "color": "#8DA0CB",
+        "bcu": "Central East",
+        "regionColor": "#009E73"
       },
       "geometry": {
         "type": "Polygon",
@@ -162768,7 +162824,9 @@
         "nonld_area": 0,
         "ons_inner": "T",
         "sub_2011": "Central",
-        "color": "hsl(286, 70%, 60%)"
+        "color": "#0072B2",
+        "bcu": "Central North",
+        "regionColor": "#999999"
       },
       "geometry": {
         "type": "Polygon",
@@ -165196,7 +165254,9 @@
         "nonld_area": 0,
         "ons_inner": "T",
         "sub_2011": "East",
-        "color": "hsl(120, 70%, 60%)"
+        "color": "#AD8BC9",
+        "bcu": "Central East",
+        "regionColor": "#009E73"
       },
       "geometry": {
         "type": "Polygon",
@@ -169084,7 +169144,9 @@
         "nonld_area": 0,
         "ons_inner": "T",
         "sub_2011": "North",
-        "color": "hsl(247, 70%, 60%)"
+        "color": "#009E73",
+        "bcu": "North Area",
+        "regionColor": "#D55E00"
       },
       "geometry": {
         "type": "Polygon",
@@ -174204,7 +174266,9 @@
         "nonld_area": 237.637,
         "ons_inner": "T",
         "sub_2011": "East",
-        "color": "hsl(68, 70%, 60%)"
+        "color": "#FC8D62",
+        "bcu": "North East",
+        "regionColor": "#FC8D62"
       },
       "geometry": {
         "type": "Polygon",
@@ -178640,7 +178704,9 @@
         "nonld_area": 169.15,
         "ons_inner": "F",
         "sub_2011": "East",
-        "color": "hsl(123, 70%, 60%)"
+        "color": "#D55E00",
+        "bcu": "East Area",
+        "regionColor": "#0072B2"
       },
       "geometry": {
         "type": "Polygon",
