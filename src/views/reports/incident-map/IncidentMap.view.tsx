@@ -638,8 +638,19 @@ const IncidentMap = ({
     mapRef.current?.moveLayer('clusters');
     mapRef.current?.moveLayer('cluster-count');
   }, [showHeatmap, showMarkers]);
-
   const [collapsed, setCollapsed] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (mapRef.current) {
+        mapRef.current.resize();
+      }
+    };
+
+    const rAF = requestAnimationFrame(handleResize);
+
+    return () => cancelAnimationFrame(rAF);
+  }, [collapsed]);
 
   const classes = useStyles();
 
