@@ -257,6 +257,7 @@ const IncidentMap = ({
   const [showMarkers, setShowMarkers] = useState(true);
   const [showPolice, setShowPolice] = useState(false);
   const [showLondonPolice, toggleShowLondonPolice] = useState(false);
+  const [useBcu, toggleUseBcu] = useState(false);
   const [showFilterPanel, setShowFilterPanel] = useState(true);
   const [cluster, setCluster] = useState(true);
   const [selectedIncidents, setSelectedIncidents] = useState<{
@@ -267,6 +268,10 @@ const IncidentMap = ({
   } | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [viewMode, setViewMode] = useState<'popup' | 'sidebar'>('popup');
+
+  const setUseBcu = () => {
+    toggleUseBcu(!useBcu);
+  };
 
   // Helper function to convert GraphQL incident to component incident type
   const adaptIncidentForComponent = useCallback(
@@ -637,7 +642,8 @@ const IncidentMap = ({
     mapRef.current?.moveLayer('unclustered-point');
     mapRef.current?.moveLayer('clusters');
     mapRef.current?.moveLayer('cluster-count');
-  }, [showHeatmap, showMarkers]);
+  }, [showHeatmap, showMarkers, showPolice, useBcu, showLondonPolice]);
+
   const [collapsed, setCollapsed] = useState(false);
 
   useEffect(() => {
@@ -674,7 +680,14 @@ const IncidentMap = ({
     };
   }, [currentTheme]);
 
-  console.log(showLondonPolice);
+  const incidentCoords =
+    data?.incidents
+      ?.map((incident) => ({
+        lat: incident.location?.geoLat || 0,
+        lng: incident.location?.geoLng || 0,
+      }))
+      ?.filter((coord) => coord.lng !== 0 && coord.lat !== 0) || [];
+
   return (
     <Row>
       <Col style={{ width: collapsed ? 0 : undefined }}>
@@ -717,11 +730,6 @@ const IncidentMap = ({
               ref={mapRef}
               style={{ height: '100vh', width: '100%' }}
             >
-              <PoliceLayer colourMode={multiColour} visible={showPolice} />
-              <LondonPoliceLayer
-                colourMode={multiColour}
-                visible={showLondonPolice}
-              />
               {showMarkers && (
                 <Source
                   cluster={cluster}
@@ -799,6 +807,19 @@ const IncidentMap = ({
                   {!cluster && IncidentCountLayer}
                 </Source>
               )}
+              <PoliceLayer
+                colourMode={multiColour}
+                incidents={incidentCoords}
+                mapRef={mapRef}
+                visible={showPolice}
+              />
+              <LondonPoliceLayer
+                colourMode={multiColour}
+                incidents={incidentCoords}
+                mapRef={mapRef}
+                useBcuColour={useBcu}
+                visible={showLondonPolice}
+              />
               <Source
                 data={{
                   features:
@@ -902,11 +923,13 @@ const IncidentMap = ({
                 selectedSchemes={selectedSchemes}
                 setMultiColour={setMultiColour}
                 setShowLondonPolice={setShowLondonPolice}
+                setUseBcu={setUseBcu}
                 showBusinesses={showBusinesses}
                 showHeatmap={showHeatmap}
                 showLondonPolice={showLondonPolice}
                 showMarkers={showMarkers}
                 showPolice={showPolice}
+                useBcu={useBcu}
                 viewMode={viewMode}
               />
             )}
