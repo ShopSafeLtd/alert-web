@@ -2,7 +2,10 @@ import type { FeatureCollection } from 'geojson';
 import type { Expression } from 'mapbox-gl';
 import type { FillLayer, LineLayer, MapRef } from 'react-map-gl';
 
+import booleanPointInPolygon from '@turf/boolean-point-in-polygon';
+import { point } from '@turf/helpers';
 import React, { useEffect, useState } from 'react';
+import { FormattedMessage } from 'react-intl';
 import { Layer, Popup, Source } from 'react-map-gl';
 
 const lineLayer: LineLayer = {
@@ -17,11 +20,16 @@ const lineLayer: LineLayer = {
 
 const LondonPoliceLayer = ({
   colourMode,
+  incidents,
   mapRef,
   useBcuColour,
   visible,
 }: {
   colourMode: 'multi' | 'single';
+  incidents: {
+    lat: number;
+    lng: number;
+  }[];
   mapRef: React.RefObject<MapRef>;
   useBcuColour: boolean;
   visible: boolean;
@@ -29,6 +37,7 @@ const LondonPoliceLayer = ({
   const [data, setData] = useState<FeatureCollection | null>(null);
   const [hoverInfo, setHoverInfo] = useState<{
     bcu: string;
+    incidentCount: number;
     lat: number;
     lng: number;
     name: string;
@@ -65,13 +74,30 @@ const LondonPoliceLayer = ({
         layers: ['london-police-fill'],
       });
       if (features.length > 0) {
-        const feature = features[0];
-        const { bcu, name } = feature.properties as {
+        const featureData = features[0];
+        const { bcu, name } = featureData.properties as {
           bcu: string;
           name: string;
         };
         const [lng, lat] = e.lngLat.toArray();
-        setHoverInfo({ bcu, lat, lng, name });
+        let count = 0;
+        const boroughFeature = {
+          geometry: featureData.geometry as
+            | GeoJSON.MultiPolygon
+            | GeoJSON.Polygon,
+          properties: featureData.properties,
+          type: 'Feature',
+        } as GeoJSON.Feature<GeoJSON.MultiPolygon | GeoJSON.Polygon>;
+        for (const { lat: ilat, lng: ilng } of incidents) {
+          const incidentPoint = point([
+            ilng,
+            ilat,
+          ]) as GeoJSON.Feature<GeoJSON.Point>;
+          if (booleanPointInPolygon(incidentPoint, boroughFeature)) {
+            count += 1;
+          }
+        }
+        setHoverInfo({ bcu, incidentCount: count, lat, lng, name });
       } else {
         setHoverInfo(null);
       }
@@ -86,7 +112,7 @@ const LondonPoliceLayer = ({
       map.off('mousemove', 'london-police-fill', handleMouseMove);
       map.off('mouseleave', 'london-police-fill', handleMouseLeave);
     };
-  }, [data, mapRef]);
+  }, [data, mapRef, incidents]);
 
   useEffect(() => {
     fetch('/geojson/London_Boroughs.bcu.geojson')
@@ -97,7 +123,6 @@ const LondonPoliceLayer = ({
       });
   }, []);
 
-  console.log('LondonPoliceLayer data:', !!data, 'visible:', visible);
   if (!data || !visible) return null;
 
   return (
@@ -118,6 +143,10 @@ const LondonPoliceLayer = ({
             <strong>{hoverInfo.bcu}</strong>
             <br />
             {hoverInfo.name}
+            <br />
+            {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
+            <FormattedMessage defaultMessage="Incidents " />{' '}
+            {hoverInfo.incidentCount}
           </div>
         </Popup>
       )}

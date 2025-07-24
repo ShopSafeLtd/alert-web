@@ -13,7 +13,6 @@ import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { createUseStyles } from 'react-jss';
 import { Link } from 'react-router-dom';
-import { formatDate } from 'utils';
 
 const { Text, Title } = Typography;
 
@@ -229,10 +228,7 @@ const IncidentPopup: React.FC<Props> = ({ incident }) => {
             <Text>
               {(() => {
                 try {
-                  const date = new Date(incident.dayTime);
-                  return Number.isNaN(date.getTime())
-                    ? 'Invalid date'
-                    : formatDate(date);
+                  return incident.dayTime ?? 'Invalid date';
                 } catch (error) {
                   console.error('Date parsing error:', error, incident.dayTime);
                   return 'Invalid date';
@@ -254,7 +250,7 @@ const IncidentPopup: React.FC<Props> = ({ incident }) => {
           </div>
         )}
 
-        {incident.totalValue && incident.totalValue > 0 && (
+        {incident.totalValue && incident.totalValue > 0 ? (
           <div className={classes.infoRow}>
             <FontAwesomeIcon icon={faTag} />
             <Text>
@@ -264,7 +260,7 @@ const IncidentPopup: React.FC<Props> = ({ incident }) => {
               />
             </Text>
           </div>
-        )}
+        ) : null}
 
         {(incident.crimeTypes?.length ||
           incident.groups?.length ||

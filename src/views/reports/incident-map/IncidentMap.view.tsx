@@ -642,7 +642,8 @@ const IncidentMap = ({
     mapRef.current?.moveLayer('unclustered-point');
     mapRef.current?.moveLayer('clusters');
     mapRef.current?.moveLayer('cluster-count');
-  }, [showHeatmap, showMarkers]);
+  }, [showHeatmap, showMarkers, showPolice, useBcu, showLondonPolice]);
+
   const [collapsed, setCollapsed] = useState(false);
 
   useEffect(() => {
@@ -678,6 +679,14 @@ const IncidentMap = ({
       style.remove();
     };
   }, [currentTheme]);
+
+  const incidentCoords =
+    data?.incidents
+      ?.map((incident) => ({
+        lat: incident.location?.geoLat || 0,
+        lng: incident.location?.geoLng || 0,
+      }))
+      ?.filter((coord) => coord.lng !== 0 && coord.lat !== 0) || [];
 
   return (
     <Row>
@@ -721,13 +730,6 @@ const IncidentMap = ({
               ref={mapRef}
               style={{ height: '100vh', width: '100%' }}
             >
-              <PoliceLayer colourMode={multiColour} visible={showPolice} />
-              <LondonPoliceLayer
-                colourMode={multiColour}
-                mapRef={mapRef}
-                useBcuColour={useBcu}
-                visible={showLondonPolice}
-              />
               {showMarkers && (
                 <Source
                   cluster={cluster}
@@ -805,6 +807,19 @@ const IncidentMap = ({
                   {!cluster && IncidentCountLayer}
                 </Source>
               )}
+              <PoliceLayer
+                colourMode={multiColour}
+                incidents={incidentCoords}
+                mapRef={mapRef}
+                visible={showPolice}
+              />
+              <LondonPoliceLayer
+                colourMode={multiColour}
+                incidents={incidentCoords}
+                mapRef={mapRef}
+                useBcuColour={useBcu}
+                visible={showLondonPolice}
+              />
               <Source
                 data={{
                   features:

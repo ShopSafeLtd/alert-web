@@ -403,7 +403,7 @@ const FloatingFilterPanel: React.FC<Props> = ({
 
               <div className={classes.switchRow}>
                 <Text className={classes.switchLabel}>
-                  <FormattedMessage defaultMessage="Show London Police Areas" />
+                  <FormattedMessage defaultMessage="Show Met BCU Areas" />
                 </Text>
                 <Switch
                   checked={showLondonPolice}
