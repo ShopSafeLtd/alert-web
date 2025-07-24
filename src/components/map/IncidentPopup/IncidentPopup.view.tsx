@@ -165,15 +165,6 @@ const IncidentPopup: React.FC<Props> = ({ incident }) => {
   const classes = useStyles();
   const intl = useIntl();
 
-  // Debug logging to see what we're getting
-  console.log('IncidentPopup received incident:', {
-    dayTime: incident.dayTime,
-    fullIncident: incident,
-    id: incident.id,
-    subject: incident.subject,
-    totalValue: incident.totalValue,
-  });
-
   const location =
     incident.business?.name ||
     incident.location?.full ||
