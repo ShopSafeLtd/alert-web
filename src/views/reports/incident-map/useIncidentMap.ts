@@ -1,19 +1,19 @@
+import type { IncidentSimpleMapQuery } from '#/views/reports/incident-map/graphql/queries/__generated__/incident-map.generated';
 import type { BrandsQuery } from '#/views/settings/brands/graphql/queries/__generated__/brands.generated';
 import type { BusinessLocationsQuery } from 'graphql/businesses/queries/__generated__/business-locations.generated';
 import type { SchemeGroupsQuery } from 'graphql/groups/queries/__generated__/scheme-groups.generated';
 import type { IndustriesQuery } from 'graphql/industry/__generated__/industries.generated';
-import type { IncidentMapQuery } from 'graphql/reports/queries/__generated__/incident-map.generated';
 
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import {
   userIdAtom,
   userSchemesAtom,
 } from '#/providers/UserProvider/UserProvider';
+import { useIncidentSimpleMapQuery } from '#/views/reports/incident-map/graphql/queries/__generated__/incident-map.generated';
 import { useBrandsQuery } from '#/views/settings/brands/graphql/queries/__generated__/brands.generated';
 import { useBusinessLocationsQuery } from 'graphql/businesses/queries/__generated__/business-locations.generated';
 import { useSchemeGroupsQuery } from 'graphql/groups/queries/__generated__/scheme-groups.generated';
 import { useIndustriesQuery } from 'graphql/industry/__generated__/industries.generated';
-import { useIncidentMapQuery } from 'graphql/reports/queries/__generated__/incident-map.generated';
 import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 
@@ -21,7 +21,7 @@ interface Return {
   brandsData: BrandsQuery | undefined;
   brandsLoading: boolean;
   businessData: BusinessLocationsQuery | undefined;
-  data: IncidentMapQuery | undefined;
+  data: IncidentSimpleMapQuery | undefined;
   groupsData: SchemeGroupsQuery | undefined;
   groupsLoading: boolean;
   industriesData: IndustriesQuery | undefined;
@@ -71,7 +71,7 @@ const useIncidentMap = (): Return => {
     },
   });
 
-  const { data, loading } = useIncidentMapQuery({
+  const { data, loading } = useIncidentSimpleMapQuery({
     variables: {
       where: {
         date: dateRange

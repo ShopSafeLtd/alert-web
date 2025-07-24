@@ -1,5 +1,6 @@
 import type { Theme } from 'configs/ThemeConfig';
 
+import { useIncidentsMapDetailsListQuery } from '#/views/reports/incident-map/graphql/queries/__generated__/incidents-details-list.generated';
 import {
   faCalendarDay,
   faExclamationTriangle,
@@ -9,8 +10,9 @@ import {
   faTimes,
 } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, Card, List, Typography } from 'antd';
-import React from 'react';
+import { Button, Card, List, Spin, Typography } from 'antd';
+import React, { useEffect, useMemo, useState } from 'react';
+import InfiniteScroll from 'react-infinite-scroll-component';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { createUseStyles } from 'react-jss';
 import { Link } from 'react-router-dom';
@@ -163,48 +165,18 @@ const useStyles = createUseStyles((theme: Theme) => ({
 
 interface Props {
   currentIndex: number;
-  incidents: Array<{
-    approved?: boolean | null;
-    business?: {
-      name?: null | string;
-    } | null;
-    createdBy?: {
-      fullName?: null | string;
-    } | null;
-    crimeTypes?: Array<{
-      id: string;
-      name: string;
-    }> | null;
-    customerRef?: null | string;
-    dayTime?: null | string;
-    description?: null | string;
-    groups?: Array<{
-      id: string;
-      name: string;
-    }> | null;
-    id: string;
-    location?: {
-      full?: null | string;
-    } | null;
-    offenders?: Array<{
-      id: string;
-      name?: null | string;
-    }> | null;
-    policeRef?: null | string;
-    priority?: null | string;
-    reference?: null | string;
-    subject: string;
-    totalValue?: null | number;
-  }>;
+  incidents: string[];
   isOpen: boolean;
   onClose: () => void;
   onNavigate: (index: number) => void;
   onSelectIncident: (index: number) => void;
 }
 
+const ITEMS_PER_PAGE = 10;
+
 const IncidentSidebar: React.FC<Props> = ({
   currentIndex,
-  incidents,
+  incidents: allIncidentIds,
   isOpen,
   onClose,
   onSelectIncident,
@@ -212,7 +184,65 @@ const IncidentSidebar: React.FC<Props> = ({
   const classes = useStyles();
   const intl = useIntl();
 
-  if (incidents.length === 0) {
+  const [loadedCount, setLoadedCount] = useState(ITEMS_PER_PAGE);
+
+  const initialIds = useMemo(
+    () => allIncidentIds.slice(0, ITEMS_PER_PAGE),
+    [allIncidentIds]
+  );
+
+  useEffect(() => {
+    setLoadedCount(ITEMS_PER_PAGE);
+  }, [allIncidentIds]);
+
+  const { data, fetchMore, loading } = useIncidentsMapDetailsListQuery({
+    variables: {
+      ids: initialIds,
+    },
+  });
+
+  const incidents =
+    data?.incidentMapRelay?.edges?.map((edge) => edge.node) ?? [];
+
+  const hasMore = loadedCount < allIncidentIds.length;
+
+  const loadMoreIncidents = async () => {
+    if (!hasMore || loading) return;
+
+    const nextBatch = allIncidentIds.slice(
+      loadedCount,
+      loadedCount + ITEMS_PER_PAGE
+    );
+
+    if (nextBatch.length === 0) return;
+
+    try {
+      await fetchMore({
+        updateQuery: (prev, { fetchMoreResult }) => {
+          if (!fetchMoreResult) return prev;
+          return {
+            incidentMapRelay: {
+              ...fetchMoreResult.incidentMapRelay,
+              edges: [
+                ...(prev.incidentMapRelay?.edges || []),
+                ...(fetchMoreResult.incidentMapRelay?.edges || []),
+              ],
+            },
+          };
+        },
+
+        variables: {
+          ids: nextBatch,
+        },
+      });
+
+      setLoadedCount((prev) => prev + nextBatch.length);
+    } catch (error) {
+      console.error('Error loading more incidents:', error);
+    }
+  };
+
+  if (allIncidentIds.length === 0) {
     return (
       <div className={`${classes.sidebar} ${isOpen ? 'open' : ''}`}>
         <div className={classes.header}>
@@ -239,8 +269,10 @@ const IncidentSidebar: React.FC<Props> = ({
       <div className={classes.header}>
         <Title className={classes.title} level={4}>
           <FormattedMessage
-            defaultMessage="Incidents {var}"
-            values={{ var: incidents.length }}
+            defaultMessage="Incidents: {total}"
+            values={{
+              total: allIncidentIds.length,
+            }}
           />
         </Title>
         <Button
@@ -252,96 +284,139 @@ const IncidentSidebar: React.FC<Props> = ({
         />
       </div>
 
-      <div className={classes.content}>
-        <List
-          dataSource={incidents}
-          renderItem={(incident, index) => (
-            <List.Item key={incident.id} style={{ border: 'none', padding: 0 }}>
-              <Card
-                className={`${classes.incidentCard} ${index === currentIndex ? 'active' : ''}`}
-                onClick={() => onSelectIncident(index)}
-                size="small"
+      <div className={classes.content} id="incident-scroll-container">
+        {loading && incidents.length === 0 ? (
+          <div style={{ padding: '40px 0', textAlign: 'center' }}>
+            <Spin size="large" />
+          </div>
+        ) : (
+          <InfiniteScroll
+            dataLength={incidents.length}
+            endMessage={
+              <div
+                style={{
+                  color: '#999',
+                  padding: '20px 0',
+                  textAlign: 'center',
+                }}
               >
-                <div className={classes.cardHeader}>
-                  <div style={{ flex: 1 }}>
-                    <Title className={classes.cardTitle} level={5}>
-                      {incident.subject ||
-                        intl.formatMessage({
-                          defaultMessage: 'Untitled Incident',
-                        })}
-                    </Title>
-                    {incident.reference && (
-                      <Text className={classes.reference}>
-                        <FormattedMessage
-                          defaultMessage="Ref: {var}"
-                          values={{ var: incident.reference }}
+                <FormattedMessage defaultMessage="All incidents loaded" />
+              </div>
+            }
+            hasMore={hasMore}
+            loader={
+              <div style={{ padding: '20px 0', textAlign: 'center' }}>
+                <Spin />
+                <div style={{ color: '#666', marginTop: 8 }}>
+                  <FormattedMessage defaultMessage="Loading more incidents..." />
+                </div>
+              </div>
+            }
+            next={loadMoreIncidents}
+            scrollableTarget="incident-scroll-container"
+            style={{ overflow: 'visible' }}
+          >
+            <List
+              dataSource={incidents}
+              renderItem={(incident, index) => (
+                <List.Item
+                  key={incident.id}
+                  style={{ border: 'none', padding: 0 }}
+                >
+                  <Card
+                    className={`${classes.incidentCard} ${index === currentIndex ? 'active' : ''}`}
+                    onClick={() => onSelectIncident(index)}
+                    size="small"
+                    style={{
+                      flex: 1,
+                      width: '100%',
+                    }}
+                  >
+                    <div className={classes.cardHeader}>
+                      <div style={{ flex: 1 }}>
+                        <Title className={classes.cardTitle} level={5}>
+                          {incident.subject ||
+                            intl.formatMessage({
+                              defaultMessage: 'Untitled Incident',
+                            })}
+                        </Title>
+                        {incident.reference && (
+                          <Text className={classes.reference}>
+                            <FormattedMessage
+                              defaultMessage="Ref: {var}"
+                              values={{ var: incident.reference }}
+                            />
+                          </Text>
+                        )}
+                      </div>
+                      <Link
+                        target={'_blank'}
+                        to={`/app/incidents/view/${incident.id}`}
+                      >
+                        <Button
+                          className={classes.viewButton}
+                          icon={<FontAwesomeIcon icon={faExternalLink} />}
+                          onClick={(e) => e.stopPropagation()}
+                          size="small"
+                          type="text"
                         />
+                      </Link>
+                    </div>
+
+                    {incident.description && (
+                      <Text className={classes.description}>
+                        {incident.description.length > 100
+                          ? // eslint-disable-next-line formatjs/no-literal-string-in-jsx
+                            `${incident.description.slice(0, 100)}...`
+                          : incident.description}
                       </Text>
                     )}
-                  </div>
-                  <Link to={`/app/incidents/${incident.id}`}>
-                    <Button
-                      className={classes.viewButton}
-                      icon={<FontAwesomeIcon icon={faExternalLink} />}
-                      onClick={(e) => e.stopPropagation()}
-                      size="small"
-                      type="text"
-                    />
-                  </Link>
-                </div>
 
-                {incident.description && (
-                  <Text className={classes.description}>
-                    {incident.description.length > 100
-                      ? // eslint-disable-next-line formatjs/no-literal-string-in-jsx
-                        `${incident.description.slice(0, 100)}...`
-                      : incident.description}
-                  </Text>
-                )}
-
-                <div className={classes.metaInfo}>
-                  {incident.business?.name && (
-                    <div>
-                      <FontAwesomeIcon icon={faMapMarkerAlt} />
-                      {incident.business.name}
+                    <div className={classes.metaInfo}>
+                      {incident.business?.name && (
+                        <div>
+                          <FontAwesomeIcon icon={faMapMarkerAlt} />
+                          {incident.business.name}
+                        </div>
+                      )}
+                      {incident.dayTime && (
+                        <div>
+                          <FontAwesomeIcon icon={faCalendarDay} />
+                          {(() => {
+                            try {
+                              const date = new Date(incident.dayTime);
+                              return Number.isNaN(date.getTime())
+                                ? 'Invalid date'
+                                : formatDate(date);
+                            } catch {
+                              return 'Invalid date';
+                            }
+                          })()}
+                        </div>
+                      )}
+                      {incident.priority && (
+                        <div>
+                          <FontAwesomeIcon icon={faExclamationTriangle} />
+                          <FormattedMessage
+                            defaultMessage="{var} Priority"
+                            values={{ var: incident.priority }}
+                          />
+                        </div>
+                      )}
+                      {incident.totalValue && incident.totalValue > 0 && (
+                        <div>
+                          {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
+                          <FontAwesomeIcon icon={faPoundSign} />£
+                          {incident.totalValue.toLocaleString()}
+                        </div>
+                      )}
                     </div>
-                  )}
-                  {incident.dayTime && (
-                    <div>
-                      <FontAwesomeIcon icon={faCalendarDay} />
-                      {(() => {
-                        try {
-                          const date = new Date(incident.dayTime);
-                          return Number.isNaN(date.getTime())
-                            ? 'Invalid date'
-                            : formatDate(date);
-                        } catch {
-                          return 'Invalid date';
-                        }
-                      })()}
-                    </div>
-                  )}
-                  {incident.priority && (
-                    <div>
-                      <FontAwesomeIcon icon={faExclamationTriangle} />
-                      <FormattedMessage
-                        defaultMessage="{var} Priority"
-                        values={{ var: incident.priority }}
-                      />
-                    </div>
-                  )}
-                  {incident.totalValue && incident.totalValue > 0 && (
-                    <div>
-                      {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
-                      <FontAwesomeIcon icon={faPoundSign} />£
-                      {incident.totalValue.toLocaleString()}
-                    </div>
-                  )}
-                </div>
-              </Card>
-            </List.Item>
-          )}
-        />
+                  </Card>
+                </List.Item>
+              )}
+            />
+          </InfiniteScroll>
+        )}
       </div>
     </div>
   );
