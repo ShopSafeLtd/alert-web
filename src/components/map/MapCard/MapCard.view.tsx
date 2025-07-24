@@ -513,7 +513,6 @@ const LocatingCard = ({ height, isPrinting, markers, width }: Props) => {
     handleMapClick,
     handleMouseEnter,
     handleMouseLeave,
-    navigateIncident,
     selectedIncidents,
   } = useMapInteractions(mapRef, incidentsData, { enableClustering: true });
 
@@ -825,6 +824,7 @@ const LocatingCard = ({ height, isPrinting, markers, width }: Props) => {
                         textAlign: 'center',
                       }}
                     >
+                      {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
                       {cluster.incidents.length}{' '}
                       {intl.formatMessage({ defaultMessage: 'Incidents' })}
                     </div>
@@ -863,15 +863,9 @@ const LocatingCard = ({ height, isPrinting, markers, width }: Props) => {
             }}
           >
             <MultiIncidentPopup
-              currentIndex={selectedIncidents.currentIndex}
-              incidents={selectedIncidents.incidents.map((incident) => ({
-                ...incident,
-                reference: incident.reference?.toString() ?? undefined,
-                subject:
-                  incident.subject ||
-                  intl.formatMessage({ defaultMessage: 'Incident' }),
-              }))}
-              onNavigate={navigateIncident}
+              incidents={selectedIncidents.incidents.map(
+                (incident) => incident.id
+              )}
             />
           </Popup>
         )}
@@ -1039,6 +1033,7 @@ const LocatingCard = ({ height, isPrinting, markers, width }: Props) => {
                             textAlign: 'center',
                           }}
                         >
+                          {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
                           {cluster.incidents.length}{' '}
                           {intl.formatMessage({ defaultMessage: 'Incidents' })}
                         </div>
@@ -1165,15 +1160,9 @@ const LocatingCard = ({ height, isPrinting, markers, width }: Props) => {
                   }}
                 >
                   <MultiIncidentPopup
-                    currentIndex={selectedIncidents.currentIndex}
-                    incidents={selectedIncidents.incidents.map((incident) => ({
-                      ...incident,
-                      reference: incident.reference?.toString() ?? undefined,
-                      subject:
-                        incident.subject ||
-                        intl.formatMessage({ defaultMessage: 'Incident' }),
-                    }))}
-                    onNavigate={navigateIncident}
+                    incidents={selectedIncidents.incidents.map(
+                      (incident) => incident.id
+                    )}
                   />
                 </Popup>
               )}
