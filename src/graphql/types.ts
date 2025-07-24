@@ -8468,6 +8468,10 @@ export type IncidentListRelationFilter = {
   some?: InputMaybe<IncidentWhereInput>;
 };
 
+export type IncidentMapRelayWhere = {
+  ids: Array<Scalars['String']>;
+};
+
 export type IncidentOffenderImages = {
   create?: InputMaybe<Array<UploadIncidentOffenderImage>>;
 };
@@ -10966,6 +10970,8 @@ export type Mutation = {
   recycleTag: Tag;
   recycleUnusedImages: SystemTask;
   refreshAuth: RefreshAuth;
+  /** Refresh the incident_data_view materialized view */
+  refreshIncidentDataView: Scalars['Boolean'];
   registerPushToken: ExpoPushToken;
   rejectStockRemovalRequest: StockRemovalRequestApproval;
   removeQuestionFromTag: TagQuestion;
@@ -14650,6 +14656,7 @@ export type Query = {
   incidentFeed: Array<Incident>;
   incidentHeatPerformance: ListIncidentsHeatPerformance;
   incidentItems: QueryIncidentItemsConnection;
+  incidentMapRelay: QueryIncidentMapRelayConnection;
   incidentMonthGraph: Array<Graph>;
   incidentRelaySimple: QueryIncidentRelaySimpleConnection;
   incidentTableReport: ListIncidentPerformance;
@@ -15365,6 +15372,15 @@ export type QueryIncidentItemsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where: IncidentItemsWhereInput;
+};
+
+
+export type QueryIncidentMapRelayArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where: IncidentMapRelayWhere;
 };
 
 
@@ -16579,6 +16595,19 @@ export type QueryIncidentItemsConnectionEdge = {
   __typename?: 'QueryIncidentItemsConnectionEdge';
   cursor: Scalars['String'];
   node: IncidentItem;
+};
+
+export type QueryIncidentMapRelayConnection = {
+  __typename?: 'QueryIncidentMapRelayConnection';
+  edges: Array<QueryIncidentMapRelayConnectionEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type QueryIncidentMapRelayConnectionEdge = {
+  __typename?: 'QueryIncidentMapRelayConnectionEdge';
+  cursor: Scalars['String'];
+  node: Incident;
 };
 
 export type QueryIncidentRelaySimpleConnection = {

@@ -1,0 +1,49 @@
+query IncidentsMapDetailsList($ids: [String!]!) {
+  incidentMapRelay(where: { ids: $ids }) {
+    edges {
+      node {
+        id
+        subject
+        reference
+        policeRef
+        customerRef
+        dayTime
+        description
+        priority
+        approved
+        totalValue
+        location {
+          id
+          geoLat
+          geoLng
+          full
+        }
+        business {
+          id
+          name
+        }
+        images {
+          id
+          optimised
+          url
+        }
+        crimeTypes {
+          id
+          name
+        }
+        groups {
+          id
+          name
+        }
+        offenders {
+          id
+          name
+        }
+        createdBy {
+          id
+          fullName
+        }
+      }
+    }
+  }
+}

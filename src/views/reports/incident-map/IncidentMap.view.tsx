@@ -1,3 +1,4 @@
+import type { IncidentSimpleMapQuery } from '#/views/reports/incident-map/graphql/queries/__generated__/incident-map.generated';
 import type { BrandsQuery } from '#/views/settings/brands/graphql/queries/__generated__/brands.generated';
 import type { BusinessLocationsQuery } from 'graphql/businesses/queries/__generated__/business-locations.generated';
 import type { SchemeGroupsQuery } from 'graphql/groups/queries/__generated__/scheme-groups.generated';
@@ -208,7 +209,7 @@ interface Props {
   brandsData: BrandsQuery | undefined;
   brandsLoading: boolean;
   businessData: BusinessLocationsQuery | undefined;
-  data: IncidentMapQuery | undefined;
+  data: IncidentSimpleMapQuery | undefined;
   groupsData: SchemeGroupsQuery | undefined;
   groupsLoading: boolean;
   industriesData: IndustriesQuery | undefined;
@@ -262,7 +263,7 @@ const IncidentMap = ({
   const [cluster, setCluster] = useState(true);
   const [selectedIncidents, setSelectedIncidents] = useState<{
     currentIndex: number;
-    incidents: IncidentMapQuery['incidents'];
+    incidents: IncidentSimpleMapQuery['incidents'];
     latitude: number;
     longitude: number;
   } | null>(null);
@@ -272,15 +273,6 @@ const IncidentMap = ({
   const setUseBcu = () => {
     toggleUseBcu(!useBcu);
   };
-
-  // Helper function to convert GraphQL incident to component incident type
-  const adaptIncidentForComponent = useCallback(
-    (incident: IncidentMapQuery['incidents'][number]) => ({
-      ...incident,
-      reference: incident.reference?.toString() || null,
-    }),
-    []
-  );
 
   const setShowLondonPolice = () => {
     toggleShowLondonPolice(!showLondonPolice);
@@ -319,7 +311,7 @@ const IncidentMap = ({
 
   const onOpenSidebar = useCallback(
     (
-      incidents: IncidentMapQuery['incidents'],
+      incidents: IncidentSimpleMapQuery['incidents'],
       longitude: number,
       latitude: number,
       currentIndex: number = 0
@@ -354,7 +346,7 @@ const IncidentMap = ({
   const getIncidentsFromCluster = useCallback(
     async (
       clusterFeature: mapboxgl.MapboxGeoJSONFeature
-    ): Promise<IncidentMapQuery['incidents']> => {
+    ): Promise<IncidentSimpleMapQuery['incidents']> => {
       if (!mapRef.current || !data?.incidents) return [];
 
       try {
@@ -370,7 +362,7 @@ const IncidentMap = ({
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         const clusterId = clusterFeature.properties?.cluster_id;
         if (clusterId !== undefined && 'getClusterLeaves' in source) {
-          return new Promise<IncidentMapQuery['incidents']>((resolve) => {
+          return new Promise<IncidentSimpleMapQuery['incidents']>((resolve) => {
             // Type assertion needed for Mapbox clustering extension
             // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment
             const clusterSource = source as any;
@@ -760,7 +752,7 @@ const IncidentMap = ({
                         // When clustering is disabled, group incidents by location manually
                         const locationGroups = new Map<
                           string,
-                          IncidentMapQuery['incidents'][number][]
+                          IncidentSimpleMapQuery['incidents'][number][]
                         >();
                         for (const incident of data.incidents) {
                           const lng = incident.location?.geoLng || 0;
@@ -883,11 +875,9 @@ const IncidentMap = ({
                   onClose={() => setSelectedIncidents(null)}
                 >
                   <MultiIncidentPopup
-                    currentIndex={selectedIncidents.currentIndex}
-                    incidents={selectedIncidents.incidents.map(
-                      adaptIncidentForComponent
-                    )}
-                    onNavigate={onNavigateIncident}
+                    incidents={
+                      selectedIncidents?.incidents.map((item) => item.id) || []
+                    }
                   />
                 </Popup>
               )}
@@ -942,9 +932,7 @@ const IncidentMap = ({
 
         <IncidentSidebar
           currentIndex={selectedIncidents?.currentIndex || 0}
-          incidents={
-            selectedIncidents?.incidents.map(adaptIncidentForComponent) || []
-          }
+          incidents={selectedIncidents?.incidents.map((item) => item.id) || []}
           isOpen={sidebarOpen}
           onClose={onCloseSidebar}
           onNavigate={onNavigateIncident}

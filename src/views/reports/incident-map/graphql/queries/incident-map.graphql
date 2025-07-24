@@ -1,0 +1,11 @@
+query IncidentSimpleMap($where: IncidentWhereInput!) {
+  incidents(where: $where) {
+    id
+    location {
+      id
+      geoLat
+      geoLng
+      full
+    }
+  }
+}
