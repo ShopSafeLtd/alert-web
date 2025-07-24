@@ -2,17 +2,15 @@ import type { Theme } from 'configs/ThemeConfig';
 
 import {
   faCalendarAlt,
-  faExternalLink,
   faMapPin,
   faTag,
   faUser,
 } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Badge, Button, Tag, Typography } from 'antd';
+import { Badge, Tag, Typography } from 'antd';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { createUseStyles } from 'react-jss';
-import { Link } from 'react-router-dom';
 
 const { Text, Title } = Typography;
 
@@ -283,23 +281,6 @@ const IncidentPopup: React.FC<Props> = ({ incident }) => {
             ))}
           </div>
         )}
-      </div>
-
-      <div className={classes.footer}>
-        <Link to={`/app/incidents/view/${incident.id}`}>
-          <Button
-            className={classes.viewButton}
-            icon={
-              <FontAwesomeIcon
-                icon={faExternalLink}
-                style={{ marginRight: 8 }}
-              />
-            }
-            type="primary"
-          >
-            <FormattedMessage defaultMessage="View Full Details" />
-          </Button>
-        </Link>
       </div>
     </div>
   );
