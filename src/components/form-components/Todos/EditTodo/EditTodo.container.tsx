@@ -31,6 +31,7 @@ const EditTodo = ({ initData, onClose, todoId }: Props): JSX.Element => {
     setAddQuestion,
     setAvailableUsers,
     setUsers,
+    taskTimeTracking,
     templatesData,
     templatesLoading,
     todoLoading,
@@ -70,6 +71,7 @@ const EditTodo = ({ initData, onClose, todoId }: Props): JSX.Element => {
       setAddQuestion={setAddQuestion}
       setAvailableUsers={setAvailableUsers}
       setUsers={setUsers}
+      taskTimeTracking={taskTimeTracking}
       templatesData={templatesData}
       templatesLoading={templatesLoading}
       update={update}

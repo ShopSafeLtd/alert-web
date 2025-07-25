@@ -19,10 +19,37 @@ interface PermissionSchema {
 }
 
 /**
+ * Custom hook that returns a function to check permissions
+ * @returns {function} - Function that checks if user has the permission
+ */
+const useHasRolePermission = () => {
+  const permissions = useAtomValue(currentPermissionsAtom);
+
+  return ({ permission }: Permission): boolean => {
+    if (!permissions) {
+      return false;
+    }
+
+    // Handle the case when permission is an array
+    if (Array.isArray(permission)) {
+      return permission.some((perm) =>
+        checkSinglePermission(perm, permissions)
+      );
+    }
+
+    // Handle the case when permission is a single object
+    return checkSinglePermission(permission, permissions);
+  };
+};
+
+/**
+ * @deprecated Use useHasRolePermission hook instead
  * @param {Permission} params - Object containing the permission you want to check
  * @returns {boolean} - Returns true if the user has the permission
  */
 const hasRolePermission = ({ permission }: Permission): boolean => {
+  // This function is deprecated and will cause hooks errors
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const permissions = useAtomValue(currentPermissionsAtom);
 
   if (!permissions) {
@@ -65,3 +92,4 @@ const checkSinglePermission = (
 };
 
 export default hasRolePermission;
+export { useHasRolePermission };
