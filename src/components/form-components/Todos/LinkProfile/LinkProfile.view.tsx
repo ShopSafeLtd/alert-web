@@ -12,7 +12,7 @@ import IncidentDetailCard from '#/components/MessageInput/MessageCard/IncidentDe
 import InvestigationDetailCard from '#/components/MessageInput/MessageCard/InvestigationDetailCard';
 import OffenderDetailCard from '#/components/MessageInput/MessageCard/OffenderDetailCard';
 import { PermissionMethod, PermissionModel } from '#/graphql/types';
-import hasRolePermission from '#/utils/has-role-permission';
+import { useHasRolePermission } from '#/utils/has-role-permission';
 import {
   AlertOutlined,
   CheckSquareOutlined,
@@ -80,6 +80,7 @@ const LinkProfile = ({
   const intl = useIntl();
   const screens = useBreakpoint();
   const classes = useStyles();
+  const hasRolePermission = useHasRolePermission();
 
   const [linkIncident, setLinkIncident] = useState(false);
   const [linkOffender, setLinkOffender] = useState(false);
@@ -93,6 +94,38 @@ const LinkProfile = ({
   const toggleLinkCrimeGroup = () => setLinkCrimeGroup(!linkCrimeGroup);
   const toggleLinkInvestigation = () =>
     setLinkInvestigation(!linkInvestigation);
+
+  // Check permissions once at the top level
+  const canReadIncidents = hasRolePermission({
+    permission: {
+      method: PermissionMethod.Read,
+      model: PermissionModel.Incidents,
+    },
+  });
+  const canReadOffenders = hasRolePermission({
+    permission: {
+      method: PermissionMethod.Read,
+      model: PermissionModel.Offenders,
+    },
+  });
+  const canReadInvestigations = hasRolePermission({
+    permission: {
+      method: PermissionMethod.Read,
+      model: PermissionModel.Investigations,
+    },
+  });
+  const canReadCrimeGroups = hasRolePermission({
+    permission: {
+      method: PermissionMethod.Read,
+      model: PermissionModel.CrimeGroups,
+    },
+  });
+  const canReadChecklists = hasRolePermission({
+    permission: {
+      method: PermissionMethod.Read,
+      model: PermissionModel.Checklist,
+    },
+  });
 
   // Count linked items
   const linkedItems = [
@@ -111,41 +144,6 @@ const LinkProfile = ({
     label: string;
     onClick: () => void;
   }> = [];
-
-  const canReadIncidents = hasRolePermission({
-    permission: {
-      method: PermissionMethod.Read,
-      model: PermissionModel.Incidents,
-    },
-  });
-
-  const canReadOffenders = hasRolePermission({
-    permission: {
-      method: PermissionMethod.Read,
-      model: PermissionModel.Offenders,
-    },
-  });
-
-  const canReadInvestigations = hasRolePermission({
-    permission: {
-      method: PermissionMethod.Read,
-      model: PermissionModel.Investigations,
-    },
-  });
-
-  const canReadCrimeGroups = hasRolePermission({
-    permission: {
-      method: PermissionMethod.Read,
-      model: PermissionModel.CrimeGroups,
-    },
-  });
-
-  const canReadChecklists = hasRolePermission({
-    permission: {
-      method: PermissionMethod.Read,
-      model: PermissionModel.Checklist,
-    },
-  });
 
   if (canReadIncidents) {
     menuItems.push({

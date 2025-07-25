@@ -24,5 +24,27 @@ mutation UpdateTodoDetails($data: TodoUpdateInput!, $where: UniqueId!) {
       url
       fileType
     }
+    incident {
+      id
+      reference
+      subject
+    }
+    offender {
+      id
+      name
+    }
+    investigation {
+      id
+      name
+    }
+    crimeGroup {
+      id
+      alias
+      reference
+    }
+    checklist {
+      id
+      name
+    }
   }
 }

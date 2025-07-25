@@ -65,6 +65,7 @@ interface Props {
     users: { id: string; name: string; timeTaken: number }[]
   ) => void;
   setUsers: (users: { id: string; name: string; timeTaken: number }[]) => void;
+  taskTimeTracking: boolean | undefined;
   templatesData: QuestionGroupOnSchemeQuery | undefined;
   templatesLoading: boolean;
   update: (id: string, question: string) => void;
@@ -101,6 +102,7 @@ const EditTodo = ({
   setAddQuestion,
   setAvailableUsers,
   setUsers,
+  taskTimeTracking,
   templatesData,
   templatesLoading,
   update,
@@ -290,75 +292,77 @@ Props): JSX.Element => {
         {questions && questions.length > 0 ? (
           <Divider style={{ marginTop: 10 }} />
         ) : null}
-        <Row>
-          <Col span={24}>
-            {users.length > 0 && (
-              <Typography.Title level={4}>
-                {intl.formatMessage({
-                  defaultMessage: 'Time Tracking',
-                })}
-              </Typography.Title>
-            )}
-            <Row>
-              <Col flex={1}>
-                {users.map((user) => (
-                  <Form.Item
-                    colon
-                    key={user.id}
-                    label={user.name}
-                    name={user.id}
-                    required={false}
-                    rules={[
-                      {
-                        message: intl.formatMessage({
-                          defaultMessage: 'Please add a time for this user.',
-                        }),
-                        required: true,
-                      },
-                    ]}
-                  >
-                    <InputNumber
-                      addonAfter={intl.formatMessage({
-                        defaultMessage: 'mins',
-                      })}
-                      disabled={saving}
-                      min={0}
-                    />
-                  </Form.Item>
-                ))}
-              </Col>
+        {taskTimeTracking && (
+          <Row>
+            <Col span={24}>
               {users.length > 0 && (
-                <Col>
-                  <Typography.Paragraph
-                    style={{ fontWeight: 600, marginBottom: 5 }}
-                  >
-                    {intl.formatMessage({
-                      defaultMessage: 'Add Another User',
-                    })}
-                  </Typography.Paragraph>
-                  <Select
-                    disabled={saving}
-                    onSelect={(value) => {
-                      const user = availableUsers.find((u) => u.id === value);
-                      if (user) {
-                        setUsers([...users, user]);
-                        setAvailableUsers(
-                          availableUsers.filter((u) => u.id !== value)
-                        );
-                      }
-                    }}
-                    options={availableUsers.map((user) => ({
-                      label: user.name,
-                      value: user.id,
-                    }))}
-                    style={{ width: 200 }}
-                    value={null}
-                  />
-                </Col>
+                <Typography.Title level={4}>
+                  {intl.formatMessage({
+                    defaultMessage: 'Time Tracking',
+                  })}
+                </Typography.Title>
               )}
-            </Row>
-          </Col>
-        </Row>
+              <Row>
+                <Col flex={1}>
+                  {users.map((user) => (
+                    <Form.Item
+                      colon
+                      key={user.id}
+                      label={user.name}
+                      name={user.id}
+                      required={false}
+                      rules={[
+                        {
+                          message: intl.formatMessage({
+                            defaultMessage: 'Please add a time for this user.',
+                          }),
+                          required: true,
+                        },
+                      ]}
+                    >
+                      <InputNumber
+                        addonAfter={intl.formatMessage({
+                          defaultMessage: 'mins',
+                        })}
+                        disabled={saving}
+                        min={0}
+                      />
+                    </Form.Item>
+                  ))}
+                </Col>
+                {users.length > 0 && (
+                  <Col>
+                    <Typography.Paragraph
+                      style={{ fontWeight: 600, marginBottom: 5 }}
+                    >
+                      {intl.formatMessage({
+                        defaultMessage: 'Add Another User',
+                      })}
+                    </Typography.Paragraph>
+                    <Select
+                      disabled={saving}
+                      onSelect={(value) => {
+                        const user = availableUsers.find((u) => u.id === value);
+                        if (user) {
+                          setUsers([...users, user]);
+                          setAvailableUsers(
+                            availableUsers.filter((u) => u.id !== value)
+                          );
+                        }
+                      }}
+                      options={availableUsers.map((user) => ({
+                        label: user.name,
+                        value: user.id,
+                      }))}
+                      style={{ width: 200 }}
+                      value={null}
+                    />
+                  </Col>
+                )}
+              </Row>
+            </Col>
+          </Row>
+        )}
         <LinkProfile
           checklistsData={checklistsData}
           crimeGroupsData={crimeGroupsData}

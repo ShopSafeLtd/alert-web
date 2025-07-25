@@ -17,7 +17,7 @@
     "upload-i18n-jds": "npx simplelocalize upload --apiKey 8eaa9D27853EED17270e6aa36041A237AD59da934f0cd75b  --uploadPath lang-brands-updated.json --uploadFormat simplelocalize-json --languageKey en_US",
     "download-i18n": "simplelocalize download --apiKey e79c3F36e902c75AD5dDdddc9c4FaCF48804d6fd8Dc25Ba5  --downloadPath ./public/translations/{lang}.json  --downloadFormat single-language-json",
     "e": "npx eslint .",
-    "validate-build": "NODE_OPTIONS='--max-old-space-size=8192' && tsc --noEmit && vite build --ssr",
+    "validate-build": "NODE_OPTIONS='--max-old-space-size=8192' && tsc --noEmit && vite build",
     "clean:graphql": "find ./src -type f -path '*/graphql/*' \\( -name '*.generated.ts' -o -name '*.generated.tsx' \\) -exec rm -f {} + && graphql-codegen --config codegen.yml",
     "generate": "graphql-codegen --config codegen.yml"
   },

@@ -59,6 +59,7 @@ const AddTodo = ({
     setAddQuestion,
     setAvailableUsers,
     setUsers,
+    taskTimeTracking,
     templatesData,
     templatesLoading,
 
@@ -112,6 +113,7 @@ const AddTodo = ({
       setAddQuestion={setAddQuestion}
       setAvailableUsers={setAvailableUsers}
       setUsers={setUsers}
+      taskTimeTracking={taskTimeTracking}
       templatesData={templatesData}
       templatesLoading={templatesLoading}
       update={update}
