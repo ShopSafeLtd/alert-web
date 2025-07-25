@@ -86,6 +86,7 @@ interface Return {
     value: { id: string; question: string; type: AnswerType }[]
   ) => void;
   setUsers: (users: { id: string; name: string; timeTaken: number }[]) => void;
+  taskTimeTracking: boolean | undefined;
   templatesData: QuestionGroupOnSchemeQuery | undefined;
   templatesLoading: boolean;
   todoData: EditTodoQuery | undefined;
@@ -104,8 +105,9 @@ const useEditTodo = ({ initData, onClose, todoId }: Props): Return => {
   const [form] = useForm<FormData>();
   const intl = useIntl();
   const schemeId = useAtomValue(currentSchemeIdAtom);
-  const activityAssignToUser =
-    useAtomValue(currentSchemeAtom)?.activityAssignToUser;
+  const currentScheme = useAtomValue(currentSchemeAtom);
+  const activityAssignToUser = currentScheme?.activityAssignToUser;
+  const taskTimeTracking = currentScheme?.taskTimeTracking;
   const userId = useAtomValue(userIdAtom);
   const [saving, setSaving] = useState(false);
   const [addQuestion, setAddQuestion] = useState(false);
@@ -365,6 +367,15 @@ const useEditTodo = ({ initData, onClose, todoId }: Props): Return => {
     }));
 
     const answerIds = todoData?.todo?.answers?.map(({ id: aId }) => aId);
+
+    // Handle disconnect logic for linked entities
+    const originalIncidentId = todoData?.todo?.incident?.id;
+    const originalOffenderId = todoData?.todo?.offender?.id;
+    const originalInvestigationId = todoData?.todo?.investigation?.id;
+    const originalCrimeGroupId = todoData?.todo?.crimeGroup?.id;
+    const originalChecklistId = todoData?.todo?.checklist?.id;
+    const originalBusinessId = todoData?.todo?.business?.id;
+
     void updateTodo({
       variables: {
         data: {
@@ -381,15 +392,30 @@ const useEditTodo = ({ initData, onClose, todoId }: Props): Return => {
                 : undefined,
           },
           assignedUsers: { set: data.assignedUsers.map((id) => ({ id })) },
+          // Handle business with special disconnect logic
           businessId: data.business.length > 0 ? data.business[0] : undefined,
-          checklistId: checklistsData?.id,
+          // Handle linked entities - set to null to disconnect
+          checklistId:
+            checklistsData?.id === undefined
+              ? originalChecklistId
+                ? null
+                : undefined
+              : checklistsData.id,
+
           completed: data.completed
             ? {
                 set: data.completed,
               }
             : undefined,
-          crimeGroupId: crimeGroupsData?.id,
+          crimeGroupId:
+            crimeGroupsData?.id === undefined
+              ? originalCrimeGroupId
+                ? null
+                : undefined
+              : crimeGroupsData.id,
           description: data.description,
+          disconnectBusiness:
+            originalBusinessId && data.business.length === 0 ? true : undefined,
           documents: {
             // @ts-expect-error TODO fix this date issue Wait to check
             deleted:
@@ -408,10 +434,25 @@ const useEditTodo = ({ initData, onClose, todoId }: Props): Return => {
           },
           dueDate: { set: data.dueDate },
           groups: { set: data.groups.map((id) => ({ id })) },
-          incidentId: incidentsData?.id,
-          investigationId: investigationsData?.id,
+          incidentId:
+            incidentsData?.id === undefined
+              ? originalIncidentId
+                ? null
+                : undefined
+              : incidentsData.id,
+          investigationId:
+            investigationsData?.id === undefined
+              ? originalInvestigationId
+                ? null
+                : undefined
+              : investigationsData.id,
           name: data.name,
-          offenderId: offendersData?.id,
+          offenderId:
+            offendersData?.id === undefined
+              ? originalOffenderId
+                ? null
+                : undefined
+              : offendersData.id,
           questions: {
             create:
               selectedQuestions && selectedQuestions.length > 0
@@ -517,6 +558,7 @@ const useEditTodo = ({ initData, onClose, todoId }: Props): Return => {
     setSelectedIds,
     setSelectedQuestions,
     setUsers,
+    taskTimeTracking,
     templatesData,
     templatesLoading,
     todoData,

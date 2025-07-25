@@ -102,6 +102,7 @@ interface Return {
   ) => void;
 
   setUsers: (users: { id: string; name: string; timeTaken: number }[]) => void;
+  taskTimeTracking: boolean | undefined;
   templatesData: QuestionGroupOnSchemeQuery | undefined;
   templatesLoading: boolean;
   update: (id: string, question: string) => void;
@@ -129,8 +130,9 @@ const useAddTodo = ({
   const [form] = useForm<FormData>();
   const intl = useIntl();
   const schemeId = useAtomValue(currentSchemeIdAtom);
-  const activityAssignToUser =
-    useAtomValue(currentSchemeAtom)?.activityAssignToUser;
+  const currentScheme = useAtomValue(currentSchemeAtom);
+  const activityAssignToUser = currentScheme?.activityAssignToUser;
+  const taskTimeTracking = currentScheme?.taskTimeTracking;
 
   const userId = useAtomValue(userIdAtom);
   const [saving, setSaving] = useState(false);
@@ -561,6 +563,7 @@ const useAddTodo = ({
     setSelectedIds,
     setSelectedQuestions,
     setUsers,
+    taskTimeTracking,
     templatesData,
     templatesLoading,
     update,
