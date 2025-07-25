@@ -18,7 +18,7 @@ import {
   CheckSquareOutlined,
   DownOutlined,
   FolderOpenOutlined,
-  LinkOutlined, // Used for card title icon
+  LinkOutlined,
   PlusOutlined,
   TeamOutlined,
   UserOutlined,
@@ -112,14 +112,42 @@ const LinkProfile = ({
     onClick: () => void;
   }> = [];
 
-  if (
-    hasRolePermission({
-      permission: {
-        method: PermissionMethod.Read,
-        model: PermissionModel.Incidents,
-      },
-    })
-  ) {
+  const canReadIncidents = hasRolePermission({
+    permission: {
+      method: PermissionMethod.Read,
+      model: PermissionModel.Incidents,
+    },
+  });
+
+  const canReadOffenders = hasRolePermission({
+    permission: {
+      method: PermissionMethod.Read,
+      model: PermissionModel.Offenders,
+    },
+  });
+
+  const canReadInvestigations = hasRolePermission({
+    permission: {
+      method: PermissionMethod.Read,
+      model: PermissionModel.Investigations,
+    },
+  });
+
+  const canReadCrimeGroups = hasRolePermission({
+    permission: {
+      method: PermissionMethod.Read,
+      model: PermissionModel.CrimeGroups,
+    },
+  });
+
+  const canReadChecklists = hasRolePermission({
+    permission: {
+      method: PermissionMethod.Read,
+      model: PermissionModel.Checklist,
+    },
+  });
+
+  if (canReadIncidents) {
     menuItems.push({
       disabled: incidentsData !== undefined,
       icon: <AlertOutlined />,
@@ -129,14 +157,7 @@ const LinkProfile = ({
     });
   }
 
-  if (
-    hasRolePermission({
-      permission: {
-        method: PermissionMethod.Read,
-        model: PermissionModel.Offenders,
-      },
-    })
-  ) {
+  if (canReadOffenders) {
     menuItems.push({
       icon: <UserOutlined />,
       key: 'offender',
@@ -145,14 +166,7 @@ const LinkProfile = ({
     });
   }
 
-  if (
-    hasRolePermission({
-      permission: {
-        method: PermissionMethod.Read,
-        model: PermissionModel.Investigations,
-      },
-    })
-  ) {
+  if (canReadInvestigations) {
     menuItems.push({
       icon: <FolderOpenOutlined />,
       key: 'investigation',
@@ -161,14 +175,7 @@ const LinkProfile = ({
     });
   }
 
-  if (
-    hasRolePermission({
-      permission: {
-        method: PermissionMethod.Read,
-        model: PermissionModel.CrimeGroups,
-      },
-    })
-  ) {
+  if (canReadCrimeGroups) {
     menuItems.push({
       icon: <TeamOutlined />,
       key: 'crimeGroup',
@@ -177,14 +184,7 @@ const LinkProfile = ({
     });
   }
 
-  if (
-    hasRolePermission({
-      permission: {
-        method: PermissionMethod.Read,
-        model: PermissionModel.Checklist,
-      },
-    })
-  ) {
+  if (canReadChecklists) {
     menuItems.push({
       icon: <CheckSquareOutlined />,
       key: 'checklist',
@@ -232,189 +232,157 @@ const LinkProfile = ({
         {/* Linked Items Display */}
         {linkedItems.length > 0 ? (
           <Row gutter={[16, 16]}>
-            {hasRolePermission({
-              permission: {
-                method: PermissionMethod.Read,
-                model: PermissionModel.Incidents,
-              },
-            }) &&
-              incidentsData && (
-                <Col lg={12} xs={24}>
-                  <Card
-                    className={classes.linkedItemCard}
-                    extra={
-                      !saving && (
-                        <Button
-                          danger
-                          onClick={() => updateIncidentList(undefined)}
-                          size="small"
-                          type="text"
-                        >
-                          {intl.formatMessage({ defaultMessage: 'Remove' })}
-                        </Button>
-                      )
-                    }
-                    hoverable
-                    size="small"
-                    title={
-                      <Space>
-                        <AlertOutlined style={{ color: '#ff4d4f' }} />
-                        {intl.formatMessage({ defaultMessage: 'Incident' })}
-                      </Space>
-                    }
-                  >
-                    <IncidentDetailCard incident={incidentsData} />
-                  </Card>
-                </Col>
-              )}
+            {canReadIncidents && incidentsData && (
+              <Col lg={12} xs={24}>
+                <Card
+                  className={classes.linkedItemCard}
+                  extra={
+                    !saving && (
+                      <Button
+                        danger
+                        onClick={() => updateIncidentList(undefined)}
+                        size="small"
+                        type="text"
+                      >
+                        {intl.formatMessage({ defaultMessage: 'Remove' })}
+                      </Button>
+                    )
+                  }
+                  hoverable
+                  size="small"
+                  title={
+                    <Space>
+                      <AlertOutlined style={{ color: '#ff4d4f' }} />
+                      {intl.formatMessage({ defaultMessage: 'Incident' })}
+                    </Space>
+                  }
+                >
+                  <IncidentDetailCard incident={incidentsData} />
+                </Card>
+              </Col>
+            )}
 
-            {hasRolePermission({
-              permission: {
-                method: PermissionMethod.Read,
-                model: PermissionModel.Offenders,
-              },
-            }) &&
-              offendersData && (
-                <Col lg={12} xs={24}>
-                  <Card
-                    className={classes.linkedItemCard}
-                    extra={
-                      !saving && (
-                        <Button
-                          danger
-                          onClick={() => updateOffendersList(undefined)}
-                          size="small"
-                          type="text"
-                        >
-                          {intl.formatMessage({ defaultMessage: 'Remove' })}
-                        </Button>
-                      )
-                    }
-                    hoverable
-                    size="small"
-                    title={
-                      <Space>
-                        <UserOutlined style={{ color: '#fa8c16' }} />
-                        {intl.formatMessage({ defaultMessage: 'Offender' })}
-                      </Space>
-                    }
-                  >
-                    <OffenderDetailCard offender={offendersData} />
-                  </Card>
-                </Col>
-              )}
+            {canReadOffenders && offendersData && (
+              <Col lg={12} xs={24}>
+                <Card
+                  className={classes.linkedItemCard}
+                  extra={
+                    !saving && (
+                      <Button
+                        danger
+                        onClick={() => updateOffendersList(undefined)}
+                        size="small"
+                        type="text"
+                      >
+                        {intl.formatMessage({ defaultMessage: 'Remove' })}
+                      </Button>
+                    )
+                  }
+                  hoverable
+                  size="small"
+                  title={
+                    <Space>
+                      <UserOutlined style={{ color: '#fa8c16' }} />
+                      {intl.formatMessage({ defaultMessage: 'Offender' })}
+                    </Space>
+                  }
+                >
+                  <OffenderDetailCard offender={offendersData} />
+                </Card>
+              </Col>
+            )}
 
-            {hasRolePermission({
-              permission: {
-                method: PermissionMethod.Read,
-                model: PermissionModel.Investigations,
-              },
-            }) &&
-              investigationsData && (
-                <Col lg={12} xs={24}>
-                  <Card
-                    className={classes.linkedItemCard}
-                    extra={
-                      !saving && (
-                        <Button
-                          danger
-                          onClick={() => updateInvestigationList(undefined)}
-                          size="small"
-                          type="text"
-                        >
-                          {intl.formatMessage({ defaultMessage: 'Remove' })}
-                        </Button>
-                      )
-                    }
-                    hoverable
-                    size="small"
-                    title={
-                      <Space>
-                        <FolderOpenOutlined style={{ color: '#1890ff' }} />
-                        {intl.formatMessage({
-                          defaultMessage: 'Investigation',
-                        })}
-                      </Space>
-                    }
-                  >
-                    <InvestigationDetailCard
-                      investigation={investigationsData}
-                    />
-                  </Card>
-                </Col>
-              )}
+            {canReadInvestigations && investigationsData && (
+              <Col lg={12} xs={24}>
+                <Card
+                  className={classes.linkedItemCard}
+                  extra={
+                    !saving && (
+                      <Button
+                        danger
+                        onClick={() => updateInvestigationList(undefined)}
+                        size="small"
+                        type="text"
+                      >
+                        {intl.formatMessage({ defaultMessage: 'Remove' })}
+                      </Button>
+                    )
+                  }
+                  hoverable
+                  size="small"
+                  title={
+                    <Space>
+                      <FolderOpenOutlined style={{ color: '#1890ff' }} />
+                      {intl.formatMessage({
+                        defaultMessage: 'Investigation',
+                      })}
+                    </Space>
+                  }
+                >
+                  <InvestigationDetailCard investigation={investigationsData} />
+                </Card>
+              </Col>
+            )}
 
-            {hasRolePermission({
-              permission: {
-                method: PermissionMethod.Read,
-                model: PermissionModel.CrimeGroups,
-              },
-            }) &&
-              crimeGroupsData && (
-                <Col lg={12} xs={24}>
-                  <Card
-                    className={classes.linkedItemCard}
-                    extra={
-                      !saving && (
-                        <Button
-                          danger
-                          onClick={() => updateCrimeGroupsList(undefined)}
-                          size="small"
-                          type="text"
-                        >
-                          {intl.formatMessage({ defaultMessage: 'Remove' })}
-                        </Button>
-                      )
-                    }
-                    hoverable
-                    size="small"
-                    title={
-                      <Space>
-                        <TeamOutlined style={{ color: '#722ed1' }} />
-                        {intl.formatMessage({ defaultMessage: 'Crime Group' })}
-                      </Space>
-                    }
-                  >
-                    <CrimeGroupDetailCard crimeGroup={crimeGroupsData} />
-                  </Card>
-                </Col>
-              )}
+            {canReadCrimeGroups && crimeGroupsData && (
+              <Col lg={12} xs={24}>
+                <Card
+                  className={classes.linkedItemCard}
+                  extra={
+                    !saving && (
+                      <Button
+                        danger
+                        onClick={() => updateCrimeGroupsList(undefined)}
+                        size="small"
+                        type="text"
+                      >
+                        {intl.formatMessage({ defaultMessage: 'Remove' })}
+                      </Button>
+                    )
+                  }
+                  hoverable
+                  size="small"
+                  title={
+                    <Space>
+                      <TeamOutlined style={{ color: '#722ed1' }} />
+                      {intl.formatMessage({ defaultMessage: 'Crime Group' })}
+                    </Space>
+                  }
+                >
+                  <CrimeGroupDetailCard crimeGroup={crimeGroupsData} />
+                </Card>
+              </Col>
+            )}
 
-            {hasRolePermission({
-              permission: {
-                method: PermissionMethod.Read,
-                model: PermissionModel.Checklist,
-              },
-            }) &&
-              checklistsData && (
-                <Col lg={12} xs={24}>
-                  <Card
-                    className={classes.linkedItemCard}
-                    extra={
-                      !saving && (
-                        <Button
-                          danger
-                          onClick={() => updateChecklistsList(undefined)}
-                          size="small"
-                          type="text"
-                        >
-                          {intl.formatMessage({ defaultMessage: 'Remove' })}
-                        </Button>
-                      )
-                    }
-                    hoverable
-                    size="small"
-                    title={
-                      <Space>
-                        <CheckSquareOutlined style={{ color: '#52c41a' }} />
-                        {intl.formatMessage({ defaultMessage: 'Checklist' })}
-                      </Space>
-                    }
-                  >
-                    <ChecklistDetailCard checklist={checklistsData} />
-                  </Card>
-                </Col>
-              )}
+            {canReadChecklists && checklistsData && (
+              <Col lg={12} xs={24}>
+                <Card
+                  className={classes.linkedItemCard}
+                  extra={
+                    !saving && (
+                      <Button
+                        danger
+                        onClick={() => updateChecklistsList(undefined)}
+                        size="small"
+                        type="text"
+                      >
+                        {intl.formatMessage({ defaultMessage: 'Remove' })}
+                      </Button>
+                    )
+                  }
+                  hoverable
+                  size="small"
+                  title={
+                    <Space>
+                      <CheckSquareOutlined style={{ color: '#52c41a' }} />
+                      {intl.formatMessage({ defaultMessage: 'Checklist' })}
+                    </Space>
+                  }
+                >
+                  <ChecklistDetailCard checklist={checklistsData} />
+                </Card>
+              </Col>
+            )}
           </Row>
         ) : (
           <Empty
