@@ -3,12 +3,19 @@ import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view'
 import {
   faClock,
   faEdit,
+  faEllipsisV,
+  faExternalLink,
+  faFile,
+  faFileExcel,
+  faFileImage,
+  faFilePdf,
+  faFileWord,
   faPrint,
   faTrash,
   faUser,
 } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, Card, Col, List, Row, Typography } from 'antd';
+import { Button, Card, Col, Dropdown, Menu, Row, Typography } from 'antd';
 import InlineWatermarkProcessor from 'components/images/InlineWatermarkProcessor';
 import WatermarkSlide from 'components/images/WatermartkSlide.view';
 import React from 'react';
@@ -16,18 +23,20 @@ import { useIntl } from 'react-intl';
 import FormatCalendar from 'utils/format-calendar-24h';
 import Lightbox from 'yet-another-react-lightbox';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom'; // Import useIntl hook
-import PermissionCheckWrapper from '#/components/PermissionCheck/PermissionCheckWrapper';
+import type { Theme } from 'configs/ThemeConfig';
+
+import hasRolePermission from '#/utils/has-role-permission';
 import { PermissionMethod, PermissionModel } from 'graphql/types';
 import { createUseStyles } from 'react-jss';
 
 import type { ReturnProps as Props } from './types/ViewArticle';
 
 import IncidentCard from '../../../components/incidents/IncidentCard';
-import OffenderCard from '../../../components/offenders/OffenderCard';
+import OffenderGrid from '../../../components/offenders/OffenderGrid';
 
 const { Text, Title } = Typography;
 
-const useStyles = createUseStyles(() => ({
+const useStyles = createUseStyles((theme: Theme) => ({
   articleContent: {
     '& .article-content': {
       '& img': {
@@ -51,6 +60,38 @@ const useStyles = createUseStyles(() => ({
   },
   detailsContainer: {
     height: '100%',
+  },
+  documentCard: {
+    '&:hover': {
+      borderColor: theme.primary,
+      boxShadow:
+        theme.colorScheme === 'dark'
+          ? '0 4px 12px rgba(0, 0, 0, 0.3)'
+          : '0 4px 12px rgba(0, 0, 0, 0.1)',
+    },
+    backgroundColor: theme.componentBackground,
+    border: `1px solid ${theme.borderColor}`,
+    cursor: 'pointer',
+    height: '100%',
+    textAlign: 'center',
+    transition: 'all 0.3s ease',
+  },
+  documentIcon: {
+    color: theme.primary,
+    marginBottom: 8,
+    opacity: 0.8,
+  },
+  documentOpenIcon: {
+    color: theme.secondaryText,
+  },
+  documentOpenText: {
+    color: theme.secondaryText,
+    fontSize: 14,
+  },
+  documentTitle: {
+    color: theme.headerColor,
+    textAlign: 'center',
+    width: '100%',
   },
   viewArticle: {
     display: 'flex',
@@ -78,155 +119,115 @@ const ViewArticleView = ({
 
   // Image click handling is now managed by InlineWatermarkProcessor
 
+  const menuItems = [
+    {
+      icon: <FontAwesomeIcon icon={faPrint} />,
+      key: 'print',
+      label: intl.formatMessage({ defaultMessage: 'Print' }),
+      onClick: handlePrint,
+      permission: {
+        method: PermissionMethod.Edit,
+        model: PermissionModel.Articles,
+      },
+    },
+    {
+      icon: <FontAwesomeIcon icon={faEdit} />,
+      key: 'edit',
+      label: intl.formatMessage({ defaultMessage: 'Edit Bulletin' }),
+      onClick: editArticle,
+      permission: {
+        method: PermissionMethod.Edit,
+        model: PermissionModel.Articles,
+      },
+    },
+    {
+      icon: <FontAwesomeIcon icon={faTrash} />,
+      key: 'delete',
+      label: intl.formatMessage({ defaultMessage: 'Delete Bulletin' }),
+      onClick: onDeleteArticle,
+      permission: {
+        method: PermissionMethod.Delete,
+        model: PermissionModel.Articles,
+      },
+    },
+  ].filter((item) => hasRolePermission({ permission: item.permission }));
+
   return (
     <>
       <div className={classes.viewArticle}>
         <Row className={classes.content}>
           <Col className={classes.detailsContainer} span={24}>
-            <Row justify="end" style={{ padding: '10px 20px 15px' }}>
-              <PermissionCheckWrapper
-                permission={{
-                  method: PermissionMethod.Edit,
-                  model: PermissionModel.Articles,
-                }}
-                unauthorizedElement={<div />}
-              >
-                <Col style={{ marginRight: 10 }}>
-                  <Button onClick={handlePrint}>
-                    <FontAwesomeIcon
-                      icon={faPrint}
-                      style={{ marginRight: 10 }}
-                    />
-                    {intl.formatMessage({
-                      defaultMessage: 'Print',
-                    })}
-                  </Button>
-                </Col>
-              </PermissionCheckWrapper>
-              <PermissionCheckWrapper
-                permission={{
-                  method: PermissionMethod.Edit,
-                  model: PermissionModel.Articles,
-                }}
-                unauthorizedElement={<div />}
-              >
-                <Col style={{ marginRight: 10 }}>
-                  <Button onClick={editArticle}>
-                    <FontAwesomeIcon
-                      icon={faEdit}
-                      style={{ marginRight: 10 }}
-                    />
-                    {intl.formatMessage({
-                      defaultMessage: 'Edit Bulletin',
-                    })}
-                  </Button>
-                </Col>
-              </PermissionCheckWrapper>
-              <PermissionCheckWrapper
-                permission={{
-                  method: PermissionMethod.Delete,
-                  model: PermissionModel.Articles,
-                }}
-                unauthorizedElement={<div />}
-              >
-                <Col>
-                  <Button onClick={onDeleteArticle}>
-                    <FontAwesomeIcon
-                      icon={faTrash}
-                      style={{ marginRight: 10 }}
-                    />
-                    {intl.formatMessage({
-                      defaultMessage: 'Delete Bulletin',
-                    })}
-                  </Button>
-                </Col>
-              </PermissionCheckWrapper>
-            </Row>
             <Card
               loading={loading}
               style={{
                 marginLeft: 20,
                 marginRight: 20,
+                marginTop: 10,
               }}
             >
-              <Title level={2}>{data?.article?.title}</Title>
-              <Row gutter={60} style={{ marginBottom: 5 }}>
+              <Row align="middle" justify="space-between">
+                <Col>
+                  <Title level={2} style={{ margin: 0 }}>
+                    {data?.article?.title}
+                  </Title>
+                </Col>
+                {menuItems.length > 0 && (
+                  <Col>
+                    <Dropdown
+                      arrow={{ pointAtCenter: true }}
+                      overlay={<Menu items={menuItems} />}
+                      placement="bottomRight"
+                      trigger={['click']}
+                    >
+                      <Button
+                        icon={<FontAwesomeIcon icon={faEllipsisV} size="lg" />}
+                        type="text"
+                      />
+                    </Dropdown>
+                  </Col>
+                )}
+              </Row>
+              <Row gutter={30} style={{ marginBottom: 20, marginTop: 20 }}>
                 <Col>
                   <FontAwesomeIcon
-                    className="feedItem-card-icon"
                     icon={faUser}
                     size="sm"
-                    style={{ marginRight: 5 }}
+                    style={{ color: '#72849a', marginRight: 8 }}
                   />
-                  <Text
-                    style={{
-                      fontSize: 16,
-                      fontWeight: 400,
-                    }}
-                  >
-                    {intl.formatMessage({
-                      defaultMessage: 'Author:',
-                    })}
+                  <Text style={{ color: '#72849a', marginRight: 5 }}>
+                    {intl.formatMessage({ defaultMessage: 'Author:' })}
                   </Text>
-                  <Text>{data?.article?.createdBy?.fullName}</Text>
+                  <Text strong>{data?.article?.createdBy?.fullName}</Text>
                 </Col>
+                {data?.article?.completedAt && (
+                  <Col>
+                    <FontAwesomeIcon
+                      icon={faClock}
+                      size="sm"
+                      style={{ color: '#72849a', marginRight: 8 }}
+                    />
+                    <Text style={{ color: '#72849a', marginRight: 5 }}>
+                      {intl.formatMessage({ defaultMessage: 'Published:' })}
+                    </Text>
+                    <Text strong>
+                      {FormatCalendar(data?.article?.completedAt, intl)}
+                    </Text>
+                  </Col>
+                )}
                 <Col>
                   <FontAwesomeIcon
-                    className="feedItem-card-icon"
                     icon={faClock}
-                    style={{ marginRight: 5 }}
+                    size="sm"
+                    style={{ color: '#72849a', marginRight: 8 }}
                   />
-                  {data?.article?.completedAt ? (
-                    <>
-                      <Text
-                        style={{
-                          fontSize: 16,
-                          fontWeight: 400,
-                        }}
-                      >
-                        {intl.formatMessage({
-                          defaultMessage: 'Published:',
-                        })}
-                      </Text>
-                      <Text>
-                        {FormatCalendar(data?.article?.completedAt, intl)}
-                      </Text>
-                    </>
-                  ) : (
-                    <>
-                      <Text
-                        style={{
-                          fontSize: 16,
-                          fontWeight: 400,
-                        }}
-                      >
-                        {intl.formatMessage({
-                          defaultMessage: 'Updated:',
-                        })}
-                      </Text>
-                      <Text>
-                        {FormatCalendar(data?.article?.updatedAt as Date, intl)}
-                      </Text>
-                    </>
+                  <Text style={{ color: '#72849a', marginRight: 5 }}>
+                    {intl.formatMessage({ defaultMessage: 'Updated:' })}
+                  </Text>
+                  {data?.article?.updatedAt && (
+                    <Text strong>
+                      {FormatCalendar(data.article.updatedAt, intl)}
+                    </Text>
                   )}
-                  {data?.article?.completedAt &&
-                    data?.article?.completedAt !== data?.article?.updatedAt && (
-                      <>
-                        <Text
-                          style={{
-                            fontSize: 16,
-                            fontWeight: 400,
-                          }}
-                        >
-                          {intl.formatMessage({
-                            defaultMessage: '| Updated:',
-                          })}
-                        </Text>
-                        <Text>
-                          {FormatCalendar(data?.article?.updatedAt, intl)}
-                        </Text>
-                      </>
-                    )}
                 </Col>
               </Row>
               <Row gutter={60} style={{ marginBottom: 5 }}>
@@ -295,43 +296,120 @@ const ViewArticleView = ({
                       defaultMessage: 'Offenders',
                     })}
                   </Typography.Title>
-                  <Row>
-                    {data?.article?.rows[0].columns[0].offenders.map((el) => (
-                      <Col key={el?.id} lg={12} md={12} sm={24} xl={8} xxl={6}>
-                        <OffenderCard
-                          isArticle
-                          offender={el}
-                          openLightbox={openLightbox}
-                        />
-                      </Col>
-                    ))}
-                  </Row>
+                  <OffenderGrid
+                    offenders={data?.article?.rows[0].columns[0].offenders.map(
+                      (el) => ({
+                        ...el,
+                        latestIncident: el?.latestIncident
+                          ? {
+                              date: new Date(
+                                el.latestIncident.date ||
+                                  el.latestIncident.dayTime
+                              ),
+                              id: el.latestIncident.id,
+                            }
+                          : null,
+                        totalIncidents: el?.totalIncidents || 0,
+                        totalValue: el?.totalValue || 0,
+                      })
+                    )}
+                  />
                 </Card>
               )}
             {data?.article?.documents &&
               data?.article?.documents.length > 0 && (
-                <List
-                  dataSource={data?.article?.documents}
-                  grid={{
-                    column: 4,
-                    gutter: 16,
-                  }}
-                  renderItem={(item) => (
-                    <List.Item>
-                      <Card>
-                        <Typography.Title level={4}>
-                          <a href={item.url} rel="noreferrer" target="_blank">
-                            {item.name}
-                          </a>
-                        </Typography.Title>
-                      </Card>
-                    </List.Item>
-                  )}
+                <Card
                   style={{
                     marginLeft: 20,
                     marginRight: 20,
+                    marginTop: 20,
                   }}
-                />
+                >
+                  <Typography.Title level={2}>
+                    {intl.formatMessage({
+                      defaultMessage: 'Documents',
+                    })}
+                  </Typography.Title>
+                  <Row gutter={[16, 16]}>
+                    {data?.article?.documents.map((item) => {
+                      const getFileIcon = () => {
+                        const fileName = item.name.toLowerCase();
+                        if (fileName.endsWith('.pdf')) return faFilePdf;
+                        if (
+                          fileName.endsWith('.doc') ||
+                          fileName.endsWith('.docx')
+                        )
+                          return faFileWord;
+                        if (
+                          fileName.endsWith('.xls') ||
+                          fileName.endsWith('.xlsx')
+                        )
+                          return faFileExcel;
+                        if (
+                          fileName.endsWith('.jpg') ||
+                          fileName.endsWith('.jpeg') ||
+                          fileName.endsWith('.png') ||
+                          fileName.endsWith('.gif')
+                        )
+                          return faFileImage;
+                        return faFile;
+                      };
+
+                      return (
+                        <Col key={item.id} lg={6} md={8} sm={12} xs={24}>
+                          <a
+                            href={item.url}
+                            rel="noreferrer"
+                            style={{ textDecoration: 'none' }}
+                            target="_blank"
+                          >
+                            <Card
+                              bodyStyle={{
+                                alignItems: 'center',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                gap: 12,
+                                padding: '24px 16px',
+                              }}
+                              className={classes.documentCard}
+                              hoverable
+                            >
+                              <FontAwesomeIcon
+                                className={classes.documentIcon}
+                                icon={getFileIcon()}
+                                size="3x"
+                              />
+                              <Typography.Text
+                                className={classes.documentTitle}
+                                ellipsis={{ tooltip: item.name }}
+                                strong
+                              >
+                                {item.name}
+                              </Typography.Text>
+                              <Row
+                                align="middle"
+                                style={{ gap: 4, marginTop: 'auto' }}
+                              >
+                                <Typography.Text
+                                  className={classes.documentOpenText}
+                                >
+                                  {intl.formatMessage({
+                                    defaultMessage: 'Open',
+                                  })}
+                                </Typography.Text>
+                                <FontAwesomeIcon
+                                  className={classes.documentOpenIcon}
+                                  icon={faExternalLink}
+                                  size="sm"
+                                />
+                              </Row>
+                            </Card>
+                          </a>
+                        </Col>
+                      );
+                    })}
+                  </Row>
+                </Card>
               )}
           </Col>
         </Row>

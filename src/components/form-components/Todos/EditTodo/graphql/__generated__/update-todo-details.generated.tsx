@@ -9,7 +9,7 @@ export type UpdateTodoDetailsMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateTodoDetailsMutation = { __typename?: 'Mutation', updateTodo: { __typename?: 'Todo', id: string, name?: string | null, description?: string | null, dueDate?: Date | null, completed?: boolean | null, authorised?: boolean | null, assignedUsers: Array<{ __typename?: 'User', id: string, fullName: string }>, business?: { __typename?: 'Business', id: string } | null, groups: Array<{ __typename?: 'Group', id: string, name: string }>, evidence: Array<{ __typename?: 'Document', id: string, name: string, url: string, fileType?: Types.FileType | null }> } };
+export type UpdateTodoDetailsMutation = { __typename?: 'Mutation', updateTodo: { __typename?: 'Todo', id: string, name?: string | null, description?: string | null, dueDate?: Date | null, completed?: boolean | null, authorised?: boolean | null, assignedUsers: Array<{ __typename?: 'User', id: string, fullName: string }>, business?: { __typename?: 'Business', id: string } | null, groups: Array<{ __typename?: 'Group', id: string, name: string }>, evidence: Array<{ __typename?: 'Document', id: string, name: string, url: string, fileType?: Types.FileType | null }>, incident?: { __typename?: 'Incident', id: string, reference?: number | null, subject: string } | null, offender?: { __typename?: 'Offender', id: string, name?: string | null } | null, investigation?: { __typename?: 'Investigation', id: string, name: string } | null, crimeGroup?: { __typename?: 'CrimeGroup', id: string, alias?: string | null, reference?: number | null } | null, checklist?: { __typename?: 'ActiveChecklist', id: string, name?: string | null } | null } };
 
 
 export const UpdateTodoDetailsDocument = gql`
@@ -37,6 +37,28 @@ export const UpdateTodoDetailsDocument = gql`
       name
       url
       fileType
+    }
+    incident {
+      id
+      reference
+      subject
+    }
+    offender {
+      id
+      name
+    }
+    investigation {
+      id
+      name
+    }
+    crimeGroup {
+      id
+      alias
+      reference
+    }
+    checklist {
+      id
+      name
     }
   }
 }

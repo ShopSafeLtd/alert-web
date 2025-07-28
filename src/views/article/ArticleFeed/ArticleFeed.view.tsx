@@ -186,7 +186,7 @@ const Article = ({
           >
             <Row
               align="stretch"
-              gutter={[8, 16]}
+              gutter={[8, 8]}
               style={{
                 alignItems: 'stretch',
                 overflowX: 'hidden',
