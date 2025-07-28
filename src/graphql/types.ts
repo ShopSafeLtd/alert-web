@@ -21342,6 +21342,12 @@ export type TodoUpdateInput = {
   crimeGroupId?: InputMaybe<Scalars['String']>;
   description?: InputMaybe<Scalars['String']>;
   disconnectBusiness?: InputMaybe<Scalars['Boolean']>;
+  disconnectChecklist?: InputMaybe<Scalars['Boolean']>;
+  disconnectCrimeGroup?: InputMaybe<Scalars['Boolean']>;
+  disconnectIncident?: InputMaybe<Scalars['Boolean']>;
+  disconnectInvestigation?: InputMaybe<Scalars['Boolean']>;
+  disconnectOffender?: InputMaybe<Scalars['Boolean']>;
+  disconnectVehicle?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<Array<UpdateDocument>>;
   dueDate?: InputMaybe<NullableSetDateHelper>;
   groups?: InputMaybe<RelationSet>;

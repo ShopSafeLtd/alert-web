@@ -62,14 +62,16 @@ const ArticleCard = ({ article, openLightbox }: Props): JSX.Element => {
           <FontAwesomeIcon
             className={classes.imageExpand}
             icon={faArrowsMaximize}
-            onClick={() =>
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
               openLightbox(
                 images.map((image) => ({
                   src: image.optimised || '',
                 })) || [],
                 0
-              )
-            }
+              );
+            }}
             size="lg"
           />
         )}

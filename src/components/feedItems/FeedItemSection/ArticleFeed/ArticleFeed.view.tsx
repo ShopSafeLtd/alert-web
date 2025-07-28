@@ -42,69 +42,76 @@ const ArticleFeed = ({
   const intl = useIntl();
   const classes = useStyles();
   return (
-    <Row key={id || ''} wrap={false}>
-      {image ? (
-        <Col
-          onClick={() =>
-            openLightbox(
-              [
-                {
-                  src: image.optimised || '',
-                },
-              ],
-              0
-            )
-          }
-          style={{ cursor: 'pointer', zIndex: 2 }}
-        >
-          <ImageContainer
-            position={image.position}
-            rotation={image.rotation}
-            src={image.optimised || image.url || ''}
-          />
-        </Col>
-      ) : null}
+    <Link style={{ display: 'block' }} to={`/app/article/view/${id || ''}`}>
+      <Row key={id || ''} wrap={false}>
+        {image ? (
+          <Col
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              openLightbox(
+                [
+                  {
+                    src: image.optimised || '',
+                  },
+                ],
+                0
+              );
+            }}
+            style={{ cursor: 'pointer', zIndex: 2 }}
+          >
+            <ImageContainer
+              position={image.position}
+              rotation={image.rotation}
+              src={image.optimised || image.url || ''}
+            />
+          </Col>
+        ) : null}
 
-      <Col className={classes.contentContainer} flex={1}>
-        <Row align="middle" className={classes.contentHeader} wrap={false}>
-          <Col flex={1}>
-            <Title ellipsis level={4} style={{ fontSize: 16, margin: 0 }}>
-              <FontAwesomeIcon className={classes.icon} icon={faNewspaper} />
-              {feedItem?.message}
-            </Title>
-          </Col>
-          <Col>
-            {adminRights && (
-              <Button
-                disabled={saving}
-                icon={
-                  <FontAwesomeIcon icon={faTrash} style={{ marginBottom: 2 }} />
-                }
-                onClick={() => {
-                  confirm({
-                    content: intl.formatMessage({
-                      defaultMessage: 'This action cannot be undone.',
-                    }),
-                    onOk() {
-                      onDeleteFeedItem(feedItem?.id || '');
-                    },
-                    title: intl.formatMessage({
-                      defaultMessage: 'Do you want to delete the feed item?',
-                    }),
-                  });
-                }}
-                size="small"
-                style={{
-                  height: 28,
-                  width: 25,
-                }}
-                type="text"
-              />
-            )}
-          </Col>
-        </Row>
-        <Divider style={{ margin: 0 }} />
-        <Link to={`/app/article/view/${id || ''}`}>
+        <Col className={classes.contentContainer} flex={1}>
+          <Row align="middle" className={classes.contentHeader} wrap={false}>
+            <Col flex={1}>
+              <Title ellipsis level={4} style={{ fontSize: 16, margin: 0 }}>
+                <FontAwesomeIcon className={classes.icon} icon={faNewspaper} />
+                {feedItem?.message}
+              </Title>
+            </Col>
+            <Col>
+              {adminRights && (
+                <Button
+                  disabled={saving}
+                  icon={
+                    <FontAwesomeIcon
+                      icon={faTrash}
+                      style={{ marginBottom: 2 }}
+                    />
+                  }
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    confirm({
+                      content: intl.formatMessage({
+                        defaultMessage: 'This action cannot be undone.',
+                      }),
+                      onOk() {
+                        onDeleteFeedItem(feedItem?.id || '');
+                      },
+                      title: intl.formatMessage({
+                        defaultMessage: 'Do you want to delete the feed item?',
+                      }),
+                    });
+                  }}
+                  size="small"
+                  style={{
+                    height: 28,
+                    width: 25,
+                  }}
+                  type="text"
+                />
+              )}
+            </Col>
+          </Row>
+          <Divider style={{ margin: 0 }} />
           <div className={classes.content}>
             <Title ellipsis italic level={4} style={{ marginBottom: 2 }}>
               {priority === ArticlePriority.High && (
@@ -151,9 +158,9 @@ const ArticleFeed = ({
               </Col>
             </Row>
           </div>
-        </Link>
-      </Col>
-    </Row>
+        </Col>
+      </Row>
+    </Link>
   );
 };
 

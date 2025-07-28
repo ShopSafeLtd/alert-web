@@ -117,24 +117,31 @@ const ArticleCard = ({
   );
 
   return (
-    <div className={classes.card}>
-      {menuItems.length > 0 && (
-        <Dropdown
-          arrow={{ pointAtCenter: true }}
-          overlay={<Menu items={menuItems} />}
-          placement="bottomRight"
-          trigger={['click']}
-        >
-          <Button className={classes.menuButton}>
-            <FontAwesomeIcon
-              icon={faEllipsisV}
-              // size="5x"
-              style={{ height: '100%' }}
-            />
-          </Button>
-        </Dropdown>
-      )}
-      {/* <div className={classes.tags}>
+    <Link style={{ textDecoration: 'none' }} to={`/app/article/view/${id}`}>
+      <div className={classes.card}>
+        {menuItems.length > 0 && (
+          <Dropdown
+            arrow={{ pointAtCenter: true }}
+            overlay={<Menu items={menuItems} />}
+            placement="bottomRight"
+            trigger={['click']}
+          >
+            <Button
+              className={classes.menuButton}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+              }}
+            >
+              <FontAwesomeIcon
+                icon={faEllipsisV}
+                // size="5x"
+                style={{ height: '100%' }}
+              />
+            </Button>
+          </Dropdown>
+        )}
+        {/* <div className={classes.tags}>
         <Row gutter={8}>
           {tags?.slice(0, 2).map((tag) => (
             <Col key={tag.id}>
@@ -158,64 +165,74 @@ const ArticleCard = ({
           )}
         </Row>
       </div> */}
-      {images && images.length > 0 ? (
-        <Carousel ref={imagesRef}>
-          {images.map((image) => (
-            <div className={classes.image} key={id}>
-              <WatermarkImage
-                position={image.position}
-                rotation={image.rotation}
-                showWatermark={watermarkImage}
-                url={image.optimised}
+        {images && images.length > 0 ? (
+          <Carousel ref={imagesRef}>
+            {images.map((image) => (
+              <div className={classes.image} key={id}>
+                <WatermarkImage
+                  position={image.position}
+                  rotation={image.rotation}
+                  showWatermark={watermarkImage}
+                  url={image.optimised}
+                />
+              </div>
+            ))}
+          </Carousel>
+        ) : (
+          <SkeletonImage height={250} />
+        )}
+        {images && images.length > 1 && (
+          <Row className={classes.controls}>
+            <Col>
+              <FontAwesomeIcon
+                className={classes.control}
+                icon={faAngleLeft}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  imagesRef.current?.prev();
+                }}
               />
-            </div>
-          ))}
-        </Carousel>
-      ) : (
-        <SkeletonImage height={250} />
-      )}
-      {images && images.length > 1 && (
-        <Row className={classes.controls}>
-          <Col>
-            <FontAwesomeIcon
-              className={classes.control}
-              icon={faAngleLeft}
-              onClick={() => imagesRef.current?.prev()}
-            />
-          </Col>
-          <Col flex={1} />
-          <Col>
-            <FontAwesomeIcon
-              className={classes.control}
-              icon={faAngleRight}
-              onClick={() => imagesRef.current?.next()}
-            />
-          </Col>
-        </Row>
-      )}
-      {images && images.length > 0 && (
-        <FontAwesomeIcon
-          className={classes.imageExpand}
-          icon={faArrowsMaximize}
-          onClick={() =>
-            openLightbox(
-              images.map((image) => ({
-                src: image.optimised || '',
-              })) || [],
-              0
-            )
-          }
-          size="lg"
-        />
-      )}
-      {status === CompleteStatus.InProgress && (
-        <Tag className={classes.status} color="processing">
-          {intl.formatMessage({
-            defaultMessage: 'In Progress',
-          })}
-        </Tag>
-      )}
-      {/* {status === CompleteStatus.InProgress ? (
+            </Col>
+            <Col flex={1} />
+            <Col>
+              <FontAwesomeIcon
+                className={classes.control}
+                icon={faAngleRight}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  imagesRef.current?.next();
+                }}
+              />
+            </Col>
+          </Row>
+        )}
+        {images && images.length > 0 && (
+          <FontAwesomeIcon
+            className={classes.imageExpand}
+            icon={faArrowsMaximize}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              openLightbox(
+                images.map((image) => ({
+                  src: image.optimised || '',
+                })) || [],
+                0
+              );
+            }}
+            size="lg"
+          />
+        )}
+        {status === CompleteStatus.InProgress && (
+          <Tag className={classes.status} color="processing">
+            {intl.formatMessage({
+              defaultMessage: 'In Progress',
+            })}
+          </Tag>
+        )}
+        {/* {status === CompleteStatus.InProgress ? (
         <Tag className={classes.status} color="processing">
           {intl.formatMessage({
             defaultMessage: 'In Progress',
@@ -228,51 +245,51 @@ const ArticleCard = ({
           })}
         </Tag>
       )} */}
-      <div className={classes.content}>
-        <div className={classes.details}>
-          <Title
-            ellipsis={{
-              rows: 2,
-              tooltip: title?.replace(/^\S/, (s) => s.toUpperCase()),
-            }}
-            level={4}
-          >
-            {priority === ArticlePriority.High && (
+        <div className={classes.content}>
+          <div className={classes.details}>
+            <Title
+              ellipsis={{
+                rows: 2,
+                tooltip: title?.replace(/^\S/, (s) => s.toUpperCase()),
+              }}
+              level={4}
+            >
+              {priority === ArticlePriority.High && (
+                <FontAwesomeIcon
+                  className="feedItem-card-icon"
+                  icon={faExclamationCircle}
+                  size="sm"
+                  style={{ marginRight: 8 }}
+                />
+              )}
+              {title?.replace(/^\S/, (s) => s.toUpperCase())}
+            </Title>
+
+            <Paragraph ellipsis={{ rows: 3 }}>{previewText}</Paragraph>
+          </div>
+
+          <Row>
+            <Col flex={1}>
               <FontAwesomeIcon
                 className="feedItem-card-icon"
-                icon={faExclamationCircle}
+                icon={faUser}
                 size="sm"
-                style={{ marginRight: 8 }}
+                style={{ marginRight: 5 }}
               />
-            )}
-            {title?.replace(/^\S/, (s) => s.toUpperCase())}
-          </Title>
-
-          <Paragraph ellipsis={{ rows: 3 }}>{previewText}</Paragraph>
-        </div>
-
-        <Row style={{ marginBottom: 5 }}>
-          <Col flex={1}>
-            <FontAwesomeIcon
-              className="feedItem-card-icon"
-              icon={faUser}
-              size="sm"
-              style={{ marginRight: 5 }}
-            />
-            <Text>{createdBy?.fullName}</Text>
-          </Col>
-          <Col>
-            <FontAwesomeIcon
-              className="feedItem-card-icon"
-              icon={faClock}
-              size="sm"
-              style={{ marginRight: 5 }}
-            />
-            {/* @ts-expect-error TODO fix */}
-            <Text>{FormatCalendar(updatedAt, intl)}</Text>
-          </Col>
-        </Row>
-        {/* {groups && groups.length > 0 ? (
+              <Text>{createdBy?.fullName}</Text>
+            </Col>
+            <Col>
+              <FontAwesomeIcon
+                className="feedItem-card-icon"
+                icon={faClock}
+                size="sm"
+                style={{ marginRight: 5 }}
+              />
+              {/* @ts-expect-error TODO fix */}
+              <Text>{FormatCalendar(updatedAt, intl)}</Text>
+            </Col>
+          </Row>
+          {/* {groups && groups.length > 0 ? (
           <Row wrap={false} className={classes.tagRow}>
             {groups.map((group) => (
               <Col key={group.id}>
@@ -285,21 +302,9 @@ const ArticleCard = ({
         ) : (
           <div style={{ marginBottom: 5 }} />
         )} */}
-
-        <Row justify="center" style={{ marginBottom: -5, padding: 0 }}>
-          <Col>
-            {/* eslint-disable-next-line @typescript-eslint/restrict-template-expressions */}
-            <Link to={`/app/article/view/${id}`}>
-              <Button size="small" type="text">
-                {intl.formatMessage({
-                  defaultMessage: 'View Full Article',
-                })}
-              </Button>
-            </Link>
-          </Col>
-        </Row>
+        </div>
       </div>
-    </div>
+    </Link>
   );
 };
 

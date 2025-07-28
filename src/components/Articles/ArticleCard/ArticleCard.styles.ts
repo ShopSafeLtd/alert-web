@@ -4,19 +4,25 @@ import { createUseStyles } from 'react-jss';
 
 const useStyles = createUseStyles((theme: Theme) => ({
   card: {
+    '&:hover': {
+      borderColor: theme.primary,
+      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+    },
+    backgroundColor: theme.componentBackground,
     border: `1px solid ${theme.borderColor}`,
     borderRadius: 10,
-    height: 480,
+    cursor: 'pointer',
+    height: 460,
     margin: '5px 5px 10px 5px',
     marginBottom: 10,
     overflow: 'hidden',
-    paddingBottom: 10,
+    transition: 'box-shadow 0.3s ease, border-color 0.3s ease',
   },
   content: {
     display: 'flex',
     flexDirection: 'column',
     // height: 220,
-    margin: '10px 20px 0px',
+    margin: '20px 20px 0px',
   },
   control: {
     color: '#fff',

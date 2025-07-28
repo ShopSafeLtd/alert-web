@@ -54,6 +54,21 @@ query Article($where: ArticleWhereUniqueInput!) {
         }
         offenders {
           ...OffenderCard
+          age
+          gender
+          race
+          build
+          dateOfBirth
+          alias
+          targetedBusinesses {
+            id
+            name
+          }
+          latestIncident {
+            id
+            date
+            dayTime
+          }
           lastActive {
             id
             dayTime

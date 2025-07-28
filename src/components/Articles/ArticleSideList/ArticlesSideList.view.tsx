@@ -1,7 +1,7 @@
 import type { ListArticlesQuery } from '#/graphql/article/queries/__generated__/list_articles.generated';
 
 import ArticleFilter from '#/components/Articles/ArticleFilter';
-import ArticleCard from '#/components/feedItems/Articles/ArticleCard';
+import ArticleSideCard from '#/components/Articles/ArticleSideCard';
 import InfiniteSideScrollList from '#/components/side-list/InfiniteSideList';
 import { faFilter } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -32,9 +32,9 @@ const ArticlesSection = ({
 }: Props): JSX.Element => {
   const intl = useIntl();
   const articleItems = data?.articles.map((article) => (
-    <Col span={24} style={{ marginBottom: 10 }}>
-      <SideListItem current={current === article.id} loading={loading} noCard>
-        <ArticleCard article={article} key={article.id} />
+    <Col key={article.id} span={24}>
+      <SideListItem current={current === article.id} loading={loading}>
+        <ArticleSideCard article={article} />
       </SideListItem>
     </Col>
   ));

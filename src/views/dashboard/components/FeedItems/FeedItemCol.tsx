@@ -1,3 +1,5 @@
+import type { Theme } from 'configs/ThemeConfig';
+
 import ArticleFeed from '#/components/feedItems/FeedItemSection/ArticleFeed';
 import BanFeed from '#/components/feedItems/FeedItemSection/BanFeed';
 import CrimeGroupFeed from '#/components/feedItems/FeedItemSection/CrimeGroupFeed';
@@ -12,8 +14,25 @@ import useFeedItems from '#/views/dashboard/components/FeedItems/useFeedItems';
 import { Card, Col, Empty } from 'antd';
 import { FeedItemType } from 'graphql/types';
 import React from 'react';
+import { createUseStyles } from 'react-jss';
+
+const useStyles = createUseStyles((theme: Theme) => ({
+  feedCard: {
+    '& .ant-card-body': {
+      borderRadius: 10,
+      margin: 0,
+      maxHeight: 130,
+      overflow: 'hidden',
+      padding: 0,
+    },
+    backgroundColor: theme.componentBackground,
+    marginBottom: 20,
+    width: '99%',
+  },
+}));
 
 const FeedItemCol = () => {
+  const classes = useStyles();
   const {
     adminRights,
     intl,
@@ -51,19 +70,9 @@ const FeedItemCol = () => {
         >
           {feedItems.map(({ node: feedItem }) => (
             <Card
-              bodyStyle={{
-                borderRadius: 10,
-                margin: 0,
-                maxHeight: 130,
-                overflow: 'hidden',
-                padding: 0,
-              }}
+              className={classes.feedCard}
               key={feedItem?.id}
               loading={loading}
-              style={{
-                marginBottom: 20,
-                width: '99%',
-              }}
             >
               <>
                 {/* create new incident/offender */}
