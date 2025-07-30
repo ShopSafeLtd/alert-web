@@ -67,12 +67,15 @@ const useIncidentGoods = ({
       const fullBusiness = businessesData.listBusinesses.businesses.find(
         ({ id }) => id === business.value
       );
-      if (fullBusiness?.division) setDivision(fullBusiness.division);
-      if (fullBusiness?.currency) {
-        setBusinessCurrency(fullBusiness?.currency);
-      }
+      // Always set the values, even if undefined/null to clear previous values
+      setDivision(fullBusiness?.division || undefined);
+      setBusinessCurrency(fullBusiness?.currency || null);
+    } else {
+      // Clear values when no business is selected
+      setDivision(undefined);
+      setBusinessCurrency(null);
     }
-  }, [business]);
+  }, [business, businessesData]);
   const goods = Form.useWatch('goods', form) || [];
   const onAddItem = (data: StockItemValue) => {
     form.setFieldsValue({
