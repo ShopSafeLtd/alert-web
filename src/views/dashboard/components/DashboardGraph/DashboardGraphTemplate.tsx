@@ -1133,15 +1133,33 @@ const DashboardGraph = ({
 
         const generateIncidentLabel = (index: number, xAxis: IncidentXAxis) => {
           const generator = labelGenerators.incident[xAxis];
+          if (!generator) {
+            console.warn(
+              `No label generator found for incident xAxis: ${xAxis}`
+            );
+            return `Item ${index + 1}`;
+          }
           return generator(index);
         };
 
         const generateActivityLabel = (index: number, xAxis: ActivityXAxis) => {
           const generator = labelGenerators.activity[xAxis];
+          if (!generator) {
+            console.warn(
+              `No label generator found for activity xAxis: ${xAxis}`
+            );
+            return `Item ${index + 1}`;
+          }
           return generator(index);
         };
 
         const generateLabel = (index: number) => {
+          // Validate displayXAxis exists
+          if (!displayXAxis) {
+            console.warn('displayXAxis is undefined');
+            return `Item ${index + 1}`;
+          }
+
           // Handle date range cases for both data types
           if (
             (displayDataType === DataType.incidents &&
