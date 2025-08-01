@@ -387,11 +387,14 @@ const useAddTodo = ({
         update: updateMutation,
         variables: {
           data: {
+            QuestionGroup: questionGroup
+              ? { connect: { id: questionGroup } }
+              : undefined,
+
             assignedUsers:
               data.assignedUsers && data.assignedUsers.length > 0
                 ? { connect: data.assignedUsers.map((id) => ({ id })) }
                 : undefined,
-
             business: businessId
               ? { connect: { id: businessId } }
               : data.businesses && data.businesses.length > 0
@@ -402,6 +405,9 @@ const useAddTodo = ({
             createdBy: { connect: { id: userId } },
             crimeGroup: getId(crimeGroupId, crimeGroupsData?.id),
             description: data.description,
+
+            // investigation: investigationId
+            //   ? { connect: { id: investigationId } }
             documents:
               documentList.map((file) => ({
                 fileType: file.type || '',
@@ -409,15 +415,12 @@ const useAddTodo = ({
                 origFileName: file.fileName || '',
                 url: file.url || '',
               })) || [],
-
-            // investigation: investigationId
-            //   ? { connect: { id: investigationId } }
             //   : investigationsData
             dueDate: data.dueDate,
             groups: data.groups ? data.groups.map((id) => ({ id })) : [],
+
             //     ? { connect: { id: investigationsData.id } }
             incident: getId(incidentId, incidentsData?.id),
-
             //     : undefined,
             investigation: getId(investigationId, investigationsData?.id),
             name: data.name,
