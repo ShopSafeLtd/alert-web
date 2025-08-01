@@ -162,7 +162,10 @@ const MapCard = ({ height, isPrinting, viewport, width }: Props) => {
             onClose={toggleLargeOpen}
             open={largeOpen}
             uneditable
-            viewportData={viewport}
+            viewportData={{
+              latitude: viewport.latitude,
+              longitude: viewport.longitude,
+            }}
           />
         </>
       ) : (
