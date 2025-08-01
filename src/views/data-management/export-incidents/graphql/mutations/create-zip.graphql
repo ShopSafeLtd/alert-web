@@ -1,3 +1,7 @@
-mutation CreateCsvZip($where: IncidentExportInput!) {
-  createCsvZip(where: $where)
+mutation queueIncidentCsvExport($where: IncidentExportInput!) {
+  queueIncidentCsvExport(where: $where) {
+    estimatedTime
+    jobId
+    message
+  }
 }

@@ -3,10 +3,10 @@ import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect
 import { faSquareCheck } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
+  Alert,
   Button,
   Card,
   Col,
-  Progress,
   Row,
   Select,
   Statistic,
@@ -47,6 +47,7 @@ interface Props {
   dispatch: React.Dispatch<Action>;
   getZip: () => void;
   loading: boolean;
+  mutationLoading: boolean;
   selectedGroups: string[];
   state: ExportIncidentsState;
 }
@@ -56,6 +57,7 @@ const ExportIncidentsView = ({
   dispatch,
   getZip,
   loading,
+  mutationLoading,
   selectedGroups,
   state,
 }: Props) => {
@@ -207,41 +209,37 @@ const ExportIncidentsView = ({
             <Col
               style={{
                 display: 'flex',
+                gap: 8,
                 justifyContent: 'flex-end',
               }}
             >
               <Button
-                disabled={selectedGroups.length === 0}
+                disabled={selectedGroups.length === 0 || mutationLoading}
+                loading={mutationLoading}
                 onClick={getZip}
                 type="primary"
               >
                 {intl.formatMessage({
-                  defaultMessage: 'Generate Zip',
+                  defaultMessage: 'Export Data',
                 })}
               </Button>
             </Col>
-            <Col flex={1}>
-              {state.progress > 0 && (
-                <Progress
-                  percent={state.progress}
-                  size="small"
-                  style={{
-                    marginTop: 10,
-                  }}
-                />
-              )}
-            </Col>
-            <Col>
-              {state.zipFile && (
-                <a download href={state.zipFile}>
-                  {intl.formatMessage({
-                    defaultMessage: 'Download Zip',
-                  })}
-                </a>
-              )}
-            </Col>
           </Col>
         </Row>
+        {state.jobSubmitted && (
+          <Alert
+            description={intl.formatMessage({
+              defaultMessage:
+                'Your data export request has been submitted. You will receive an email notification when the export is complete.',
+            })}
+            message={intl.formatMessage({
+              defaultMessage: 'Export Request Submitted',
+            })}
+            showIcon
+            style={{ marginBottom: 16, marginTop: 16 }}
+            type="success"
+          />
+        )}
         {selectedGroups.length === 0 && (
           <Card bodyStyle={{ padding: 30 }}>
             <Row justify={'center'}>

@@ -153,10 +153,8 @@ const ViewIncident = ({
                                 height={194}
                                 isPrinting={isPrinting}
                                 viewport={{
-                                  latitude:
-                                    data?.incident?.location?.geoLat ?? 0,
-                                  longitude:
-                                    data?.incident?.location?.geoLng ?? 0,
+                                  latitude: data?.incident?.location?.geoLat,
+                                  longitude: data?.incident?.location?.geoLng,
                                 }}
                                 width="100%"
                               />
