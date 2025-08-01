@@ -1,6 +1,9 @@
-import { faArrowsMaximize } from '@fortawesome/pro-light-svg-icons';
+import {
+  faArrowsMaximize,
+  faMapLocationDot,
+} from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Card, Spin, Typography } from 'antd';
+import { Card, Typography } from 'antd';
 import mapboxgl from 'mapbox-gl';
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -23,6 +26,38 @@ const useStyles = createUseStyles({
   },
   clickableOverlay: {
     cursor: 'pointer',
+  },
+  emptyState: {
+    alignItems: 'center',
+    backgroundColor: ({ isDark }: { isDark: boolean }) =>
+      isDark ? 'rgba(255, 255, 255, 0.04)' : 'rgba(0, 0, 0, 0.02)',
+    borderRadius: 10,
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+    justifyContent: 'center',
+    minHeight: 'inherit',
+    padding: 24,
+    width: '100%',
+  },
+  emptyStateDescription: {
+    color: ({ isDark }: { isDark: boolean }) =>
+      isDark ? 'rgba(255, 255, 255, 0.45)' : 'rgba(0, 0, 0, 0.45)',
+    fontSize: 12,
+    textAlign: 'center',
+  },
+  emptyStateIcon: {
+    color: ({ isDark }: { isDark: boolean }) =>
+      isDark ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.25)',
+    marginBottom: 12,
+  },
+  emptyStateTitle: {
+    color: ({ isDark }: { isDark: boolean }) =>
+      isDark ? 'rgba(255, 255, 255, 0.65)' : 'rgba(0, 0, 0, 0.65)',
+    fontSize: 14,
+    fontWeight: 500,
+    marginBottom: 4,
+    textAlign: 'center',
   },
   mapOverlay: {
     '&:hover': {
@@ -54,17 +89,20 @@ const useStyles = createUseStyles({
 interface Props {
   height: number | string;
   isPrinting?: boolean;
-  viewport: { latitude: number; longitude: number };
+  viewport: {
+    latitude: null | number | undefined;
+    longitude: null | number | undefined;
+  };
   width: number | string;
 }
 
 const MapCard = ({ height, isPrinting, viewport, width }: Props) => {
   const intl = useIntl();
-  const classes = useStyles();
   const currentTheme = useStoreState((state) => state.theme.currentTheme);
+  const isDark = currentTheme === 'dark' && !isPrinting;
+  const classes = useStyles({ isDark });
   const [largeOpen, setLargeOpen] = useState(false);
   const toggleLargeOpen = () => setLargeOpen(!largeOpen);
-  const isDark = currentTheme === 'dark' && !isPrinting;
 
   return (
     <Card
@@ -76,7 +114,10 @@ const MapCard = ({ height, isPrinting, viewport, width }: Props) => {
       }}
       className="no-break"
     >
-      {viewport.latitude && viewport.longitude ? (
+      {viewport.latitude !== null &&
+      viewport.latitude !== undefined &&
+      viewport.longitude !== null &&
+      viewport.longitude !== undefined ? (
         <>
           <div
             className={classes.mapOverlay}
@@ -93,17 +134,18 @@ const MapCard = ({ height, isPrinting, viewport, width }: Props) => {
             </Text>
           </div>
           <Map
+            latitude={viewport.latitude}
+            longitude={viewport.longitude}
             mapLib={mapboxgl}
-            mapboxAccessToken={import.meta.env.VITE_MAPBOX_ACCESS_TOKEN}
-            onError={() => {}}
-            preserveDrawingBuffer
-            {...viewport}
             mapStyle={
               isDark
                 ? 'mapbox://styles/wgarrod/clgkseekj009o01qz193sacyp'
                 : 'mapbox://styles/wgarrod/clgkn5gb7007u01qmahuhbi6o'
             }
+            mapboxAccessToken={import.meta.env.VITE_MAPBOX_ACCESS_TOKEN}
+            onError={() => {}}
             pitch={45}
+            preserveDrawingBuffer
             style={{ height, width }}
             zoom={15}
           >
@@ -124,10 +166,23 @@ const MapCard = ({ height, isPrinting, viewport, width }: Props) => {
           />
         </>
       ) : (
-        <div style={{ height, width }}>
-          <div className={classes.spin}>
-            <Spin size="large" />
-          </div>
+        <div className={classes.emptyState} style={{ height, width }}>
+          <FontAwesomeIcon
+            className={classes.emptyStateIcon}
+            icon={faMapLocationDot}
+            size="3x"
+          />
+          <Text className={classes.emptyStateTitle}>
+            {intl.formatMessage({
+              defaultMessage: 'No Location Available',
+            })}
+          </Text>
+          <Text className={classes.emptyStateDescription}>
+            {intl.formatMessage({
+              defaultMessage:
+                'GPS coordinates are not available for this incident',
+            })}
+          </Text>
         </div>
       )}
     </Card>
