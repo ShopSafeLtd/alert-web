@@ -303,8 +303,8 @@ export interface NewLocationData {
 
 export interface ViewportData {
   full?: string;
-  latitude: null | number | undefined;
-  longitude: null | number | undefined;
+  latitude: number;
+  longitude: number;
   transitionDuration?: number;
   zoom?: number;
   // street?: string;
