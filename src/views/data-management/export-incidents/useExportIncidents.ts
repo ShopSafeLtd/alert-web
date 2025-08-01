@@ -1,13 +1,13 @@
 import type { Dispatch } from 'react';
 
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
-import { useCreateCsvZipMutation } from '#/views/data-management/export-incidents/graphql/mutations/__generated__/create-zip.generated';
+import { useQueueIncidentCsvExportMutation } from '#/views/data-management/export-incidents/graphql/mutations/__generated__/create-zip.generated';
 import { usePreviewIncidentExportQuery } from '#/views/data-management/export-incidents/graphql/queries/__generated__/export-incidents-preview.generated';
 import { useExportFiltersQuery } from '#/views/data-management/export-incidents/graphql/queries/__generated__/scheme-details.generated';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import { useAtomValue } from 'jotai/index';
-import { useEffect, useReducer, useRef } from 'react';
+import { useReducer } from 'react';
 
 dayjs.extend(utc);
 
@@ -15,6 +15,7 @@ interface Return {
   dispatch: Dispatch<Action>;
   getZip: () => void;
   loading: boolean;
+  mutationLoading: boolean;
   selectedGroups: string[];
   state: ExportIncidentsState;
 }
@@ -27,6 +28,7 @@ export interface SelectOption {
 export type ActionType =
   | 'ALL_BUSINESSES'
   | 'SET_DATA'
+  | 'SET_JOB_SUBMITTED'
   | 'SET_OPTIONS'
   | 'SET_PROGRESS'
   | 'SET_ZIP_FILE'
@@ -42,6 +44,11 @@ export type Action = {
   payload:
     | { [key in Options]: SelectOption[] }
     | { data: ExportIncidentsState['data'] }
+    | {
+        estimatedTime: null | string | undefined;
+        jobId: null | string;
+        jobSubmitted: boolean;
+      }
     | Date
     | boolean
     | null
@@ -71,7 +78,10 @@ export interface ExportIncidentsState {
     vehicleCount: number;
   };
   endDate: Date;
+  estimatedTime: null | string | undefined;
   groupIds: string[];
+  jobId: null | string;
+  jobSubmitted: boolean;
   progress: number;
   skip: number;
   startDate: Date;
@@ -96,7 +106,10 @@ const useExportIncidents = (): Return => {
       vehicleCount: 0,
     },
     endDate: new Date(),
+    estimatedTime: null,
     groupIds: [],
+    jobId: null,
+    jobSubmitted: false,
     progress: 0,
     skip: 0,
     startDate: new Date(Date.now() - 1000 * 60 * 60 * 24 * 30),
@@ -189,6 +202,15 @@ const useExportIncidents = (): Return => {
         return { ...state, allBusinesses, businessIds: [], zipFile: null };
       }
 
+      case 'SET_JOB_SUBMITTED': {
+        const { estimatedTime, jobId, jobSubmitted } = action.payload as {
+          estimatedTime: null | string | undefined;
+          jobId: null | string;
+          jobSubmitted: boolean;
+        };
+        return { ...state, estimatedTime, jobId, jobSubmitted };
+      }
+
       default: {
         return state;
       }
@@ -263,38 +285,30 @@ const useExportIncidents = (): Return => {
     },
   });
 
-  const animationFrameRef = useRef<null | number>(null);
-
-  const [createZip] = useCreateCsvZipMutation({
-    onCompleted: (d) => {
-      if (d && d.createCsvZip) {
-        dispatch({
-          payload: d.createCsvZip,
-          type: 'SET_ZIP_FILE',
-        });
-        dispatch({
-          payload: 100,
-          type: 'SET_PROGRESS',
-        });
-
-        const link = document.createElement('a');
-        link.href = d.createCsvZip;
-        link.download = `export-incidents-${dayjs().format('YYYY-MM-DD')}.zip`;
-        document.body.append(link);
-        link.click();
-        link.remove();
-      }
-    },
-  });
+  const [createZip, { loading: mutationLoading }] =
+    useQueueIncidentCsvExportMutation({
+      onCompleted: (d) => {
+        if (d && d.queueIncidentCsvExport) {
+          dispatch({
+            payload: {
+              estimatedTime: d.queueIncidentCsvExport.estimatedTime,
+              jobId: d.queueIncidentCsvExport.jobId,
+              jobSubmitted: true,
+            },
+            type: 'SET_JOB_SUBMITTED',
+          });
+        }
+      },
+    });
 
   const getZip = () => {
     dispatch({
-      payload: null,
-      type: 'SET_ZIP_FILE',
-    });
-    dispatch({
-      payload: 0,
-      type: 'SET_PROGRESS',
+      payload: {
+        estimatedTime: null,
+        jobId: null,
+        jobSubmitted: false,
+      },
+      type: 'SET_JOB_SUBMITTED',
     });
 
     void createZip({
@@ -310,49 +324,13 @@ const useExportIncidents = (): Return => {
         },
       },
     });
-
-    // Start the animation when the button is clicked
-    const targetProgress = 80;
-    const startTime = Date.now();
-    const duration = 15_000;
-
-    const updateProgress = () => {
-      const currentTime = Date.now();
-      const elapsedTime = currentTime - startTime;
-
-      if (elapsedTime >= duration) {
-        dispatch({
-          payload: targetProgress,
-          type: 'SET_PROGRESS',
-        });
-      } else {
-        const newProgress = (elapsedTime / duration) * targetProgress;
-
-        dispatch({
-          payload: Math.floor(newProgress),
-          type: 'SET_PROGRESS',
-        });
-        animationFrameRef.current = requestAnimationFrame(updateProgress);
-      }
-    };
-
-    updateProgress();
   };
-
-  useEffect(
-    () => () => {
-      // Clean up the animation frame when the component unmounts or the button is clicked again
-      if (animationFrameRef.current !== null) {
-        cancelAnimationFrame(animationFrameRef.current);
-      }
-    },
-    []
-  );
 
   return {
     dispatch,
     getZip,
     loading: loading || filtersLoading,
+    mutationLoading,
     selectedGroups: state.groupIds,
     state,
   };
