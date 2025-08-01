@@ -1755,16 +1755,6 @@ export type AudioSessionMetrics = {
   wordCount: Scalars['Int'];
 };
 
-export type AvailableExportColumns = {
-  __typename?: 'AvailableExportColumns';
-  /** Crime type columns */
-  crimeTypeColumns: Array<ExportColumn>;
-  /** Custom question columns */
-  customQuestionColumns: Array<ExportColumn>;
-  /** Standard incident fields */
-  standardColumns: Array<ExportColumn>;
-};
-
 export type Ban = {
   __typename?: 'Ban';
   active: Scalars['Boolean'];
@@ -6105,26 +6095,6 @@ export type ExpoPushTokenWhereInput = {
   userId?: InputMaybe<StringFilter>;
 };
 
-export type ExportColumn = {
-  __typename?: 'ExportColumn';
-  /** Category of the column */
-  category: ExportColumnCategory;
-  /** Unique identifier for the column */
-  id: Scalars['String'];
-  /** Whether this column is included by default */
-  isDefault: Scalars['Boolean'];
-  /** Display name for the column */
-  name: Scalars['String'];
-  /** Sort priority for custom questions */
-  priority?: Maybe<Scalars['Int']>;
-};
-
-export enum ExportColumnCategory {
-  CrimeType = 'CRIME_TYPE',
-  CustomQuestion = 'CUSTOM_QUESTION',
-  Standard = 'STANDARD'
-}
-
 export type ExtractedGoods = {
   __typename?: 'ExtractedGoods';
   brand?: Maybe<Scalars['String']>;
@@ -8112,8 +8082,6 @@ export type IncidentExportInput = {
   crimeGroupIds: Array<Scalars['String']>;
   dateRange: DateRangeInput;
   groupIds: Array<Scalars['String']>;
-  /** If true, includes all active custom questions as columns even if they have no answers */
-  includeAllCustomQuestions?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type IncidentForm = {
@@ -14632,7 +14600,6 @@ export type Query = {
   audioIncidentRequirements: AudioIncidentRequirements;
   audioIncidentTypes: Array<AudioIncidentType>;
   audioSessionAnalytics: AudioSessionMetrics;
-  availableIncidentExportColumns: AvailableExportColumns;
   availableQuestions: Array<Question>;
   availableTaskQuestions: Array<Question>;
   ban: Ban;
@@ -14993,11 +14960,6 @@ export type QueryAudioDailyMetricsArgs = {
 
 export type QueryAudioSessionAnalyticsArgs = {
   sessionId: Scalars['String'];
-};
-
-
-export type QueryAvailableIncidentExportColumnsArgs = {
-  maxCrimeTypes?: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -21201,6 +21163,7 @@ export type TodoGroupsArgs = {
 };
 
 export type TodoCreateInput = {
+  QuestionGroup?: InputMaybe<ConnectHelper>;
   assignedUsers?: InputMaybe<ConnectOnlyArrayHelper>;
   authorised?: InputMaybe<Scalars['Boolean']>;
   business?: InputMaybe<ConnectHelper>;
@@ -21401,6 +21364,7 @@ export type TodoUpdateInput = {
   disconnectIncident?: InputMaybe<Scalars['Boolean']>;
   disconnectInvestigation?: InputMaybe<Scalars['Boolean']>;
   disconnectOffender?: InputMaybe<Scalars['Boolean']>;
+  disconnectQuestionGroup?: InputMaybe<Scalars['Boolean']>;
   disconnectVehicle?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<Array<UpdateDocument>>;
   dueDate?: InputMaybe<NullableSetDateHelper>;
@@ -21409,6 +21373,7 @@ export type TodoUpdateInput = {
   investigationId?: InputMaybe<Scalars['String']>;
   name?: InputMaybe<Scalars['String']>;
   offenderId?: InputMaybe<Scalars['String']>;
+  questionGroupId?: InputMaybe<Scalars['String']>;
   questions?: InputMaybe<TaskQuestionUpdateManyWithoutTaskNestedInput>;
   schemes?: InputMaybe<NullableConnectArrayHelper>;
   similarOffenderIds?: InputMaybe<Array<Scalars['String']>>;
