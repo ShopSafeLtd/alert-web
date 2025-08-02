@@ -64,6 +64,10 @@ query Todo($where: TodoWhereUniqueInput!) {
     }
     description
     id
+    groups {
+      id
+      name
+    }
 
     checklist {
       id
