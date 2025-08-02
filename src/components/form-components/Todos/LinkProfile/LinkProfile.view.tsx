@@ -79,7 +79,7 @@ const LinkProfile = ({
 }: Props): JSX.Element => {
   const intl = useIntl();
   const screens = useBreakpoint();
-  const classes = useStyles();
+  const classes = useStyles() as Record<string, string>;
   const hasRolePermission = useHasRolePermission();
 
   const [linkIncident, setLinkIncident] = useState(false);
@@ -194,7 +194,7 @@ const LinkProfile = ({
   return (
     <>
       <Card
-        className={`${classes.linkedProfilesCard} todo-linked-profiles`}
+        className={`${classes.todoSectionCard} todo-linked-profiles`}
         extra={
           !minimal && (
             <Dropdown
@@ -232,31 +232,13 @@ const LinkProfile = ({
           <Row gutter={[16, 16]}>
             {canReadIncidents && incidentsData && (
               <Col lg={12} xs={24}>
-                <Card
-                  className={classes.linkedItemCard}
-                  extra={
-                    !saving && (
-                      <Button
-                        danger
-                        onClick={() => updateIncidentList(undefined)}
-                        size="small"
-                        type="text"
-                      >
-                        {intl.formatMessage({ defaultMessage: 'Remove' })}
-                      </Button>
-                    )
+                <IncidentDetailCard
+                  incident={incidentsData}
+                  onDelete={
+                    saving ? undefined : () => updateIncidentList(undefined)
                   }
-                  hoverable
-                  size="small"
-                  title={
-                    <Space>
-                      <AlertOutlined style={{ color: '#ff4d4f' }} />
-                      {intl.formatMessage({ defaultMessage: 'Incident' })}
-                    </Space>
-                  }
-                >
-                  <IncidentDetailCard incident={incidentsData} />
-                </Card>
+                  saving={saving}
+                />
               </Col>
             )}
 

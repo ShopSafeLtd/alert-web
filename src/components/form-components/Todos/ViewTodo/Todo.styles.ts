@@ -23,12 +23,9 @@ const useStyles = createUseStyles((theme: Theme) => ({
 
   // Card styling with theme-aware backgrounds
   todoSectionCard: {
-    '& .ant-card-body': {
-      backgroundColor: theme.componentBackground,
-    },
+    '& .ant-card-body': {},
     '& .ant-card-head': {
-      backgroundColor: theme.componentBackground,
-      borderBottom: `1px solid ${theme.borderColor}`,
+      borderBottom: 'none !important',
       borderRadius: '8px 8px 0 0',
     },
     // Inner cards with different shade
@@ -36,6 +33,7 @@ const useStyles = createUseStyles((theme: Theme) => ({
       backgroundColor: theme.cardSubsectionBackground,
       border: `1px solid ${theme.borderColor}`,
       borderRadius: '6px',
+      borderTop: 'none',
     },
     '&.todo-evidence': {
       '&::before': {
@@ -76,7 +74,10 @@ const useStyles = createUseStyles((theme: Theme) => ({
       },
       borderLeft: `1px solid ${theme.borderColor}`,
     },
-    backgroundColor: theme.componentBackground,
+    backgroundColor:
+      theme.colorScheme === 'dark'
+        ? 'rgba(255, 255, 255, 0.12)'
+        : 'rgba(0, 0, 0, 0.02)',
     border: `1px solid ${theme.borderColor}`,
     borderRadius: '8px',
     overflow: 'hidden',

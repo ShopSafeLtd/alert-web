@@ -1,6 +1,7 @@
 import type { IncidentCardData } from 'types/DataType';
 
 import { currencyAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import { useStoreState } from '#/state';
 import {
   faCircleXmark,
   faClock,
@@ -13,10 +14,10 @@ import {
   Button,
   Card,
   Col,
-  Descriptions,
   Popconfirm,
   Row,
   Skeleton,
+  Space,
   Typography,
 } from 'antd';
 import WatermarkImage from 'components/images/WatermarkImage.view';
@@ -24,7 +25,7 @@ import { useAtomValue } from 'jotai';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
-const { Title } = Typography;
+const { Text, Title } = Typography;
 
 interface Props {
   incident: IncidentCardData;
@@ -41,17 +42,23 @@ const IncidentDetailCard = ({
 }: Props) => {
   const intl = useIntl();
   const currency = useAtomValue(currencyAtom);
+  const currentTheme = useStoreState((state) => state.theme.currentTheme);
+
   return (
     <Card
       bodyStyle={{
         padding: 0,
       }}
       size="small"
-      // style={{
-      //   width: 350,
-      // }}
+      style={{
+        backgroundColor: currentTheme === 'dark' ? '#1b2531' : '#FFF',
+        border: '1px solid var(--ant-color-border)',
+        borderRadius: 8,
+        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.08)',
+        overflow: 'hidden',
+      }}
     >
-      <Row gutter={5} wrap={false}>
+      <Row gutter={5} style={{ position: 'relative' }} wrap={false}>
         {onDelete && (
           <Popconfirm
             cancelText={intl.formatMessage({
@@ -67,11 +74,11 @@ const IncidentDetailCard = ({
             trigger="click"
           >
             <Button
+              danger
               disabled={saving}
-              icon={<FontAwesomeIcon icon={faCircleXmark} size="lg" />}
-              shape="circle"
+              icon={<FontAwesomeIcon icon={faCircleXmark} />}
               size="small"
-              style={{ position: 'absolute', right: 0, top: 0, zIndex: 100 }}
+              style={{ position: 'absolute', right: 8, top: 8, zIndex: 100 }}
               type="text"
             />
           </Popconfirm>
@@ -97,77 +104,67 @@ const IncidentDetailCard = ({
             marginTop: 10,
           }}
         >
-          <Title level={4}> {incident.subject}</Title>
+          <Title level={4} style={{ marginBottom: 12 }}>
+            {incident.subject}
+          </Title>
 
-          <Descriptions column={1} size="small">
-            <Descriptions.Item
-              label={
-                <span>
-                  <FontAwesomeIcon
-                    icon={faIdCardClip}
-                    style={{ marginRight: 5 }}
-                  />
-                  {intl.formatMessage({
-                    defaultMessage: 'ID',
-                  })}
-                </span>
-              }
-              style={{ paddingBottom: 0 }}
-            >
-              {incident.reference}
-            </Descriptions.Item>
+          <Space direction="vertical" size={8} style={{ width: '100%' }}>
+            <div>
+              <Text style={{ fontSize: 12 }} type="secondary">
+                <FontAwesomeIcon
+                  icon={faIdCardClip}
+                  style={{ marginRight: 5 }}
+                />
+                {intl.formatMessage({ defaultMessage: 'ID' })}
+              </Text>
+              <div>
+                <Text strong>{incident.reference}</Text>
+              </div>
+            </div>
+
             {incident?.policeRef && (
-              <Descriptions.Item
-                label={
-                  <span>
-                    <FontAwesomeIcon
-                      icon={faFileSpreadsheet}
-                      style={{ marginRight: 8 }}
-                    />
-                    {intl.formatMessage({
-                      defaultMessage: 'Crime No.',
-                    })}
-                  </span>
-                }
-                style={{ paddingBottom: 0 }}
-              >
-                {incident?.policeRef}
-              </Descriptions.Item>
-            )}
-            <Descriptions.Item
-              label={
-                <span>
+              <div>
+                <Text style={{ fontSize: 12 }} type="secondary">
                   <FontAwesomeIcon
-                    icon={faSterlingSign}
-                    style={{ marginRight: 10 }}
+                    icon={faFileSpreadsheet}
+                    style={{ marginRight: 8 }}
                   />
-                  {intl.formatMessage({
-                    defaultMessage: 'Loss',
-                  })}
-                </span>
-              }
-              style={{ paddingBottom: 0 }}
-            >
-              {intl.formatNumber(incident?.totalValue || 0, {
-                currency,
-                style: 'currency',
-              })}
-            </Descriptions.Item>
+                  {intl.formatMessage({ defaultMessage: 'Crime No.' })}
+                </Text>
+                <div>
+                  <Text strong>{incident.policeRef}</Text>
+                </div>
+              </div>
+            )}
 
-            <Descriptions.Item
-              label={
-                <span>
-                  <FontAwesomeIcon icon={faClock} style={{ marginRight: 5 }} />
-                  {intl.formatMessage({
-                    defaultMessage: 'Created At',
+            <div>
+              <Text style={{ fontSize: 12 }} type="secondary">
+                <FontAwesomeIcon
+                  icon={faSterlingSign}
+                  style={{ marginRight: 10 }}
+                />
+                {intl.formatMessage({ defaultMessage: 'Loss' })}
+              </Text>
+              <div>
+                <Text strong>
+                  {intl.formatNumber(incident?.totalValue || 0, {
+                    currency,
+                    style: 'currency',
                   })}
-                </span>
-              }
-              style={{ paddingBottom: 0 }}
-            >
-              {incident.dayTime}
-            </Descriptions.Item>
-          </Descriptions>
+                </Text>
+              </div>
+            </div>
+
+            <div>
+              <Text style={{ fontSize: 12 }} type="secondary">
+                <FontAwesomeIcon icon={faClock} style={{ marginRight: 5 }} />
+                {intl.formatMessage({ defaultMessage: 'Created At' })}
+              </Text>
+              <div>
+                <Text strong>{incident.dayTime}</Text>
+              </div>
+            </div>
+          </Space>
         </Col>
       </Row>
     </Card>

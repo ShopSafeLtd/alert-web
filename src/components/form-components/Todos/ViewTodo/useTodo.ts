@@ -249,16 +249,15 @@ const useTodo = ({
         fullName: SortOrder.Asc,
       },
       where: {
-        businesses: todo?.todo?.business?.id
-          ? {
-              some: {
-                id: {
-                  equals: todo?.todo?.business?.id,
-                },
-              },
-            }
-          : undefined,
-
+        // businesses: todo?.todo?.business?.id
+        //   ? {
+        //       some: {
+        //         id: {
+        //           equals: todo?.todo?.business?.id,
+        //         },
+        //       },
+        //     }
+        //   : undefined,
         groups: {
           some: {
             users: {
