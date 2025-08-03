@@ -223,15 +223,6 @@ Props): JSX.Element => {
                 defaultMessage: 'Groups',
               })}
               name="groups"
-              rules={[
-                {
-                  message: intl.formatMessage({
-                    defaultMessage:
-                      'Please select at least one group for a user.',
-                  }),
-                  required: true,
-                },
-              ]}
             >
               <Select
                 disabled={saving}

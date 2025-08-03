@@ -24,9 +24,11 @@ import {
   QuestionCircleOutlined,
   UploadOutlined,
 } from '@ant-design/icons';
+import { faCheckCircle } from '@fortawesome/pro-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  Affix,
   Alert,
+  Avatar,
   Badge,
   Button,
   Card,
@@ -43,6 +45,7 @@ import {
   Space,
   Tag,
   Timeline,
+  Tooltip,
   Typography,
   Upload,
 } from 'antd';
@@ -55,6 +58,10 @@ import type { FormData } from './useTodo';
 import CustomQuestions from '../../../../views/incidents/AddIncident/components/IncidentCustom/CustomQuestion.view';
 import LinkProfile from '../LinkProfile';
 import useStyles from './Todo.styles';
+
+interface TodoWithGroups extends NonNullable<TodoQuery['todo']> {
+  groups?: Array<{ id: string; name: string }>;
+}
 
 const { useBreakpoint } = Grid;
 
@@ -188,81 +195,182 @@ const TodoView = ({
         />
       )}
 
-      {/* Task Overview Card */}
-      <Card
-        className={classes.todoSectionCard}
-        style={{ marginBottom: 16 }}
-        title={intl.formatMessage({ defaultMessage: 'Task Overview' })}
+      {/* Task Overview */}
+      <div
+        style={{
+          alignItems: 'center',
+          display: 'flex',
+          justifyContent: 'space-between',
+          marginBottom: 16,
+        }}
       >
-        <Descriptions bordered={!screens.xs} column={{ md: 3, sm: 2, xs: 1 }}>
-          <Descriptions.Item
-            label={intl.formatMessage({ defaultMessage: 'Name' })}
+        <Typography.Title level={4} style={{ margin: 0 }}>
+          {todo?.todo?.name ||
+            intl.formatMessage({ defaultMessage: 'Task Overview' })}
+        </Typography.Title>
+        {!minimal && (
+          <Button
+            disabled={saving}
+            icon={
+              <FontAwesomeIcon
+                icon={faCheckCircle}
+                style={{ marginRight: 8 }}
+              />
+            }
+            loading={saving}
+            onClick={() => form.submit()}
+            style={{ borderColor: '#52c41a', color: '#52c41a' }}
           >
-            {todo?.todo?.name || <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
-          </Descriptions.Item>
-          <Descriptions.Item
-            label={intl.formatMessage({ defaultMessage: 'Alert ID' })}
-          >
-            {todo?.todo?.reference || <FormattedMessage defaultMessage="-" />}
-          </Descriptions.Item>
-          <Descriptions.Item
-            label={intl.formatMessage({ defaultMessage: 'Created At' })}
-          >
-            {todo?.todo ? (
-              dayjs(todo.todo.createdAt).format('DD/MM/YY')
-            ) : (
-              <FormattedMessage defaultMessage="-" />
-            )}
-          </Descriptions.Item>
-          <Descriptions.Item
-            label={intl.formatMessage({ defaultMessage: 'Due Date' })}
-          >
-            {todo?.todo ? (
-              <Space>
-                {dayjs(todo.todo.dueDate).format('DD/MM/YY')}
-                {dayjs().isAfter(dayjs(todo.todo.dueDate)) && !minimal && (
-                  <Tag color="error">
-                    <FormattedMessage defaultMessage="Overdue" />
-                  </Tag>
-                )}
+            {confirmText ||
+              intl.formatMessage({
+                defaultMessage: 'Complete Activity',
+              })}
+          </Button>
+        )}
+      </div>
+
+      <Descriptions
+        bordered={!screens.xs}
+        column={{ md: 2, sm: 2, xs: 1 }}
+        style={{
+          borderRadius: 8,
+          marginBottom: 16,
+        }}
+      >
+        <Descriptions.Item
+          label={intl.formatMessage({ defaultMessage: 'Alert ID' })}
+        >
+          {todo?.todo?.reference || <FormattedMessage defaultMessage="-" />}
+        </Descriptions.Item>
+        <Descriptions.Item
+          label={intl.formatMessage({ defaultMessage: 'Business' })}
+        >
+          {todo?.todo?.business?.name || (
+            <FormattedMessage defaultMessage="-" />
+          )}
+        </Descriptions.Item>
+        <Descriptions.Item
+          label={intl.formatMessage({ defaultMessage: 'Created At' })}
+        >
+          {todo?.todo ? (
+            dayjs(todo.todo.createdAt).format('DD/MM/YY')
+          ) : (
+            <FormattedMessage defaultMessage="-" />
+          )}
+        </Descriptions.Item>
+        <Descriptions.Item
+          label={intl.formatMessage({ defaultMessage: 'Due Date' })}
+        >
+          {todo?.todo ? (
+            <Space>
+              {dayjs(todo.todo.dueDate).format('DD/MM/YY')}
+              {dayjs().isAfter(dayjs(todo.todo.dueDate)) && !minimal && (
+                <Tag color="error">
+                  <FormattedMessage defaultMessage="Overdue" />
+                </Tag>
+              )}
+            </Space>
+          ) : (
+            <FormattedMessage defaultMessage="-" />
+          )}
+        </Descriptions.Item>
+        <Descriptions.Item
+          label={intl.formatMessage({ defaultMessage: 'Groups' })}
+          span={2}
+        >
+          {(() => {
+            const todoData = todo?.todo as TodoWithGroups | undefined;
+            return todoData?.groups && todoData.groups.length > 0 ? (
+              <Space wrap>
+                {todoData.groups.map((group) => (
+                  <Tag key={group.id}>{group.name}</Tag>
+                ))}
               </Space>
             ) : (
               <FormattedMessage defaultMessage="-" />
-            )}
-          </Descriptions.Item>
-          <Descriptions.Item
-            label={intl.formatMessage({ defaultMessage: 'Description' })}
-            span={screens.md ? 2 : 1}
-          >
-            {todo?.todo?.description || <FormattedMessage defaultMessage="-" />}
-          </Descriptions.Item>
-        </Descriptions>
-
-        {/* Business and Location Info */}
-        {todo?.todo?.business && (
+            );
+          })()}
+        </Descriptions.Item>
+        <Descriptions.Item
+          label={intl.formatMessage({ defaultMessage: 'Assigned Users' })}
+          span={2}
+        >
+          {todo?.todo?.assignedUsers && todo.todo.assignedUsers.length > 0 ? (
+            <Avatar.Group maxCount={5}>
+              {todo.todo.assignedUsers.map((user) => (
+                <Tooltip key={user.id} title={user.fullName}>
+                  <Avatar style={{ backgroundColor: '#1890ff' }}>
+                    {user.fullName
+                      ?.split(' ')
+                      .map((n) => n[0])
+                      .join('')
+                      .toUpperCase()}
+                  </Avatar>
+                </Tooltip>
+              ))}
+            </Avatar.Group>
+          ) : (
+            <FormattedMessage defaultMessage="-" />
+          )}
+        </Descriptions.Item>
+        <Descriptions.Item
+          label={intl.formatMessage({ defaultMessage: 'Description' })}
+          span={2}
+        >
+          {todo?.todo?.description || <FormattedMessage defaultMessage="-" />}
+        </Descriptions.Item>
+        {todo?.todo?.completedBy && (
           <>
-            <Divider />
-            <Space direction="vertical" style={{ width: '100%' }}>
-              <Typography.Text strong>
-                <FormattedMessage defaultMessage="Business:" />
-                {todo.todo.business.name}
-              </Typography.Text>
-
-              {todo.todo.business.locations?.[0]?.geoLat &&
-                todo.todo.business.locations?.[0]?.geoLng && (
-                  <MapCard
-                    height={screens.xs ? 200 : 300}
-                    viewport={{
-                      latitude: todo.todo.business.locations[0].geoLat,
-                      longitude: todo.todo.business.locations[0].geoLng,
-                    }}
-                    width="100%"
-                  />
-                )}
-            </Space>
+            <Descriptions.Item
+              label={intl.formatMessage({ defaultMessage: 'Completed By' })}
+            >
+              <Space>
+                <Avatar size="small" style={{ backgroundColor: '#52c41a' }}>
+                  {todo.todo.completedBy.fullName
+                    ?.split(' ')
+                    .map((n) => n[0])
+                    .join('')
+                    .toUpperCase()}
+                </Avatar>
+                <span>{todo.todo.completedBy.fullName}</span>
+              </Space>
+            </Descriptions.Item>
+            <Descriptions.Item
+              label={intl.formatMessage({ defaultMessage: 'Completed On' })}
+            >
+              {todo.todo.completedDate ? (
+                dayjs(todo.todo.completedDate).format('DD/MM/YY HH:mm')
+              ) : (
+                <FormattedMessage defaultMessage="-" />
+              )}
+            </Descriptions.Item>
           </>
         )}
-      </Card>
+      </Descriptions>
+
+      {/* Business Location Map */}
+      {todo?.todo?.business?.locations?.[0]?.geoLat &&
+        todo?.todo?.business?.locations?.[0]?.geoLng &&
+        todo.todo.business.locations[0].geoLat !== 0 &&
+        todo.todo.business.locations[0].geoLng !== 0 && (
+          <div
+            style={{
+              border: '1px solid var(--ant-color-border)',
+              borderRadius: 8,
+              marginBottom: 16,
+              overflow: 'hidden',
+            }}
+          >
+            <MapCard
+              height={screens.xs ? 200 : 300}
+              viewport={{
+                latitude: todo.todo.business.locations[0].geoLat,
+                longitude: todo.todo.business.locations[0].geoLng,
+              }}
+              width="100%"
+            />
+          </div>
+        )}
 
       {/* Form Section */}
       <Form
@@ -296,15 +404,62 @@ const TodoView = ({
             <Card
               className={`${classes.todoSectionCard} todo-time-tracking`}
               title={
-                <Space>
-                  <ClockCircleOutlined style={{ fontSize: 18 }} />
-                  {intl.formatMessage({ defaultMessage: 'Time Tracking' })}
-                  {users.length > 0 && (
-                    <Tag color="red">
-                      {intl.formatMessage({ defaultMessage: 'Required' })}
-                    </Tag>
+                <div
+                  style={{
+                    alignItems: 'center',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    width: '100%',
+                  }}
+                >
+                  <Space>
+                    <ClockCircleOutlined style={{ fontSize: 18 }} />
+                    {intl.formatMessage({ defaultMessage: 'Time Tracking' })}
+                    {users.length > 0 && (
+                      <Tag color="red">
+                        {intl.formatMessage({ defaultMessage: 'Required' })}
+                      </Tag>
+                    )}
+                  </Space>
+                  {!minimal && (
+                    <Space align="center">
+                      <Typography.Text
+                        style={{ fontSize: 14, fontWeight: 'normal' }}
+                      >
+                        {intl.formatMessage({ defaultMessage: 'Add user:' })}
+                      </Typography.Text>
+                      <Select
+                        disabled={minimal || availableUsers.length === 0}
+                        onSelect={(value) => {
+                          const user = availableUsers.find(
+                            (u) => u.id === value
+                          );
+                          if (user) {
+                            setUsers([...users, user]);
+                            setAvailableUsers(
+                              availableUsers.filter((u) => u.id !== value)
+                            );
+                          }
+                        }}
+                        options={availableUsers.map((user) => ({
+                          label: user.name,
+                          value: user.id,
+                        }))}
+                        placeholder={
+                          availableUsers.length === 0
+                            ? intl.formatMessage({
+                                defaultMessage: 'No users available',
+                              })
+                            : intl.formatMessage({
+                                defaultMessage: 'Select user',
+                              })
+                        }
+                        style={{ width: 200 }}
+                        value={null}
+                      />
+                    </Space>
                   )}
-                </Space>
+                </div>
               }
             >
               {users.length === 0 ? (
@@ -315,11 +470,10 @@ const TodoView = ({
                 />
               ) : (
                 <Row gutter={[16, 16]}>
-                  <Col md={16} xs={24}>
-                    {users.map((user) => (
+                  {users.map((user) => (
+                    <Col key={user.id} md={8} sm={12} xs={24}>
                       <Form.Item
                         colon
-                        key={user.id}
                         label={user.name}
                         name={user.id}
                         rules={[
@@ -340,40 +494,8 @@ const TodoView = ({
                           style={{ width: '100%' }}
                         />
                       </Form.Item>
-                    ))}
-                  </Col>
-                  <Col md={8} xs={24}>
-                    <Card type="inner">
-                      <Typography.Paragraph strong style={{ marginBottom: 12 }}>
-                        {intl.formatMessage({
-                          defaultMessage: 'Add Another User',
-                        })}
-                      </Typography.Paragraph>
-                      <Select
-                        disabled={minimal}
-                        onSelect={(value) => {
-                          const user = availableUsers.find(
-                            (u) => u.id === value
-                          );
-                          if (user) {
-                            setUsers([...users, user]);
-                            setAvailableUsers(
-                              availableUsers.filter((u) => u.id !== value)
-                            );
-                          }
-                        }}
-                        options={availableUsers.map((user) => ({
-                          label: user.name,
-                          value: user.id,
-                        }))}
-                        placeholder={intl.formatMessage({
-                          defaultMessage: 'Select user',
-                        })}
-                        style={{ width: '100%' }}
-                        value={null}
-                      />
-                    </Card>
-                  </Col>
+                    </Col>
+                  ))}
                 </Row>
               )}
             </Card>
@@ -413,29 +535,47 @@ const TodoView = ({
             }
           >
             <Form.Item name="documents">
-              <Upload
-                // eslint-disable-next-line react/jsx-props-no-spreading
-                {...documentUploadProps}
-                disabled={minimal}
-                fileList={documentList}
-                listType="picture-card"
-              >
-                {!minimal && documentList.length < 8 && (
-                  <div>
-                    <UploadOutlined style={{ fontSize: 20 }} />
-                    <div style={{ marginTop: 8 }}>
-                      {intl.formatMessage({ defaultMessage: 'Upload' })}
+              {documentList.length === 0 ? (
+                <Upload.Dragger
+                  // eslint-disable-next-line react/jsx-props-no-spreading
+                  {...documentUploadProps}
+                  disabled={minimal}
+                  fileList={documentList}
+                >
+                  <p className="ant-upload-drag-icon">
+                    <UploadOutlined
+                      style={{ color: '#1890ff', fontSize: 48 }}
+                    />
+                  </p>
+                  <p className="ant-upload-text">
+                    {intl.formatMessage({
+                      defaultMessage: 'Click or drag files to upload evidence',
+                    })}
+                  </p>
+                  <p className="ant-upload-hint">
+                    {intl.formatMessage({
+                      defaultMessage:
+                        'Support for single or bulk upload. Max 8 files.',
+                    })}
+                  </p>
+                </Upload.Dragger>
+              ) : (
+                <Upload
+                  // eslint-disable-next-line react/jsx-props-no-spreading
+                  {...documentUploadProps}
+                  disabled={minimal}
+                  fileList={documentList}
+                  listType="picture-card"
+                >
+                  {!minimal && documentList.length < 8 && (
+                    <div>
+                      <UploadOutlined style={{ fontSize: 20 }} />
+                      <div style={{ marginTop: 8 }}>
+                        {intl.formatMessage({ defaultMessage: 'Upload' })}
+                      </div>
                     </div>
-                  </div>
-                )}
-              </Upload>
-              {documentList.length === 0 && (
-                <Empty
-                  description={intl.formatMessage({
-                    defaultMessage: 'No evidence uploaded',
-                  })}
-                  style={{ marginTop: 16 }}
-                />
+                  )}
+                </Upload>
               )}
             </Form.Item>
           </Card>
@@ -473,44 +613,6 @@ const TodoView = ({
               ))}
             </Timeline>
           </Card>
-        )}
-
-        {/* Action Buttons - Fixed at bottom when not minimal */}
-        {!minimal && (
-          <Affix offsetBottom={0}>
-            <div
-              className={classes.actionBarGlassed}
-              style={{
-                marginBottom: -24,
-                marginLeft: -24,
-                marginRight: -24,
-                marginTop: 16,
-                padding: '24px 32px 32px',
-              }}
-            >
-              <Row align="middle" justify="end">
-                <Col>
-                  <Space>
-                    <Button disabled={saving} onClick={onClose} size="large">
-                      {intl.formatMessage({ defaultMessage: 'Cancel' })}
-                    </Button>
-                    <Button
-                      disabled={saving}
-                      htmlType="submit"
-                      loading={saving}
-                      size="large"
-                      type="primary"
-                    >
-                      {confirmText ||
-                        intl.formatMessage({
-                          defaultMessage: 'Complete Activity',
-                        })}
-                    </Button>
-                  </Space>
-                </Col>
-              </Row>
-            </div>
-          </Affix>
         )}
       </Form>
 
