@@ -1,0 +1,353 @@
+/* Print-specific styles for Crime Group View */
+
+/* Hide print-only elements on screen */
+@media screen {
+  .print-only-title {
+    display: none !important;
+  }
+}
+
+@media print {
+  /* Page setup */
+  @page {
+    size: A4;
+    margin: 20mm;
+  }
+
+  /* Global print styles */
+  body {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  /* Hide navigation and interactive elements */
+  .page-container > div > div:first-child, /* Side list */
+  .ant-drawer,
+  .ant-tooltip,
+  .ant-modal {
+    display: none !important;
+  }
+
+  /* Hide buttons but keep space */
+  button,
+  .ant-btn {
+    visibility: hidden !important;
+    height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+  }
+
+  /* But ensure dropdown content (cards) are visible */
+  .ant-dropdown {
+    position: static !important;
+    display: block !important;
+  }
+
+  .ant-dropdown > div {
+    display: block !important;
+  }
+
+  /* Crime group header bar - only show title */
+  .crime-group-header-bar {
+    border-bottom: 2px solid #000;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+  }
+
+  .crime-group-header-bar > div:not(:first-child) {
+    display: none !important;
+  }
+
+  /* Make title prominent */
+  .crime-group-page-title {
+    color: #000 !important;
+    font-size: 28px !important;
+    font-weight: bold !important;
+    text-align: center !important;
+  }
+
+  .crime-group-page-subtitle {
+    color: #666 !important;
+    font-size: 16px !important;
+    text-align: center !important;
+  }
+
+  /* Stat cards styling */
+  .crime-group-stats-card {
+    background-color: #fff !important;
+    border: 1px solid #000 !important;
+    page-break-inside: avoid;
+  }
+
+  .crime-group-stats-card .ant-statistic-title {
+    color: #000 !important;
+    font-weight: 600 !important;
+  }
+
+  .crime-group-stats-card .ant-statistic-content {
+    color: #000 !important;
+  }
+
+  /* Hide React Flow */
+  .crime-group-flow-container {
+    display: none !important;
+  }
+
+  /* Grid containers must be visible */
+  .offender-grid-container,
+  .vehicle-grid-container,
+  .offender-grid-container > *,
+  .vehicle-grid-container > * {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
+  /* Offender and Vehicle grids - override to show all */
+  .offender-grid-container .ant-row > .ant-col,
+  .vehicle-grid-container .ant-row > .ant-col {
+    display: block !important;
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+    margin-bottom: 15px !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: static !important;
+  }
+
+  /* Override any column widths */
+  .offender-grid-container .ant-col-6,
+  .offender-grid-container .ant-col-8,
+  .offender-grid-container .ant-col-12,
+  .offender-grid-container .ant-col-24,
+  .vehicle-grid-container .ant-col-6,
+  .vehicle-grid-container .ant-col-8,
+  .vehicle-grid-container .ant-col-12,
+  .vehicle-grid-container .ant-col-24 {
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Force all nested divs to be visible */
+  .offender-grid-container *,
+  .vehicle-grid-container * {
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
+  /* Offender cards full width and better layout */
+  .offender-card,
+  [class*='offenderCard'] {
+    width: 100% !important;
+    page-break-inside: avoid;
+    margin-bottom: 15px;
+    display: flex !important;
+    flex-direction: row !important;
+    border: 1px solid #000 !important;
+    min-height: 100px !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    background-color: #fff !important;
+  }
+
+  /* Vehicle cards full width and better layout */
+  .vehicle-card,
+  [class*='vehicleCard'] {
+    width: 100% !important;
+    page-break-inside: avoid;
+    margin-bottom: 15px;
+    display: flex !important;
+    flex-direction: row !important;
+    border: 1px solid #000 !important;
+    min-height: 100px !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    background-color: #fff !important;
+  }
+
+  /* Adjust card content for print */
+  [class*='cardContent'] {
+    flex: 1 !important;
+    padding: 10px !important;
+  }
+
+  /* Card text should be black */
+  [class*='offenderName'],
+  [class*='vehicleName'],
+  [class*='detailText'],
+  [class*='detailLabel'] {
+    color: #000 !important;
+  }
+
+  /* Ensure all item rows are visible */
+  .offender-grid-container .ant-row,
+  .vehicle-grid-container .ant-row {
+    display: flex !important;
+    flex-wrap: wrap !important;
+  }
+
+  /* Ensure the main card sections are visible */
+  .ant-card:has(.offender-grid-container),
+  .ant-card:has(.vehicle-grid-container) {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
+  /* Ensure all cards inside dropdowns are visible */
+  .offender-grid-container .ant-dropdown,
+  .vehicle-grid-container .ant-dropdown {
+    position: static !important;
+    display: block !important;
+  }
+
+  .offender-grid-container .ant-dropdown > div,
+  .vehicle-grid-container .ant-dropdown > div {
+    display: block !important;
+    width: 100% !important;
+  }
+
+  /* Card images smaller for print */
+  .offender-card img,
+  .vehicle-card img,
+  [class*='offenderCard'] img,
+  [class*='vehicleCard'] img {
+    max-height: 80px !important;
+    max-width: 80px !important;
+    object-fit: cover !important;
+  }
+
+  /* Image containers */
+  [class*='image'] {
+    width: 80px !important;
+    height: 80px !important;
+    flex-shrink: 0 !important;
+  }
+
+  /* Skeleton images should be hidden in print */
+  .ant-skeleton-image {
+    display: none !important;
+  }
+
+  /* Tables styling */
+  .ant-table {
+    page-break-inside: auto;
+  }
+
+  .ant-table-row {
+    page-break-inside: avoid;
+  }
+
+  /* Hide map for print */
+  .map-card {
+    display: none !important;
+  }
+
+  /* Evidence section */
+  .ant-card {
+    page-break-inside: avoid;
+    margin-bottom: 20px;
+  }
+
+  /* Hide sidebars */
+  .crime-group-sidebar {
+    display: none !important;
+  }
+
+  /* Main content full width */
+  .crime-group-details-content {
+    border-right: none !important;
+    padding: 0 !important;
+    width: 100% !important;
+  }
+
+  /* Sort selects and action buttons */
+  .ant-select,
+  .ant-dropdown-trigger {
+    display: none !important;
+  }
+
+  /* Ensure text is readable - but be selective */
+  .ant-statistic-title,
+  .ant-statistic-content,
+  .ant-typography,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  span,
+  div {
+    color: #000 !important;
+  }
+
+  /* Background should be white for cards */
+  .ant-card,
+  [class*='statsCard'] {
+    background-color: #fff !important;
+  }
+
+  /* Cards should have borders */
+  .ant-card {
+    border: 1px solid #000 !important;
+  }
+
+  /* Headers within cards */
+  .ant-typography h4 {
+    color: #000 !important;
+    font-weight: bold !important;
+  }
+
+  /* Collapse all sections to show full content */
+  .ant-collapse-content-hidden {
+    display: block !important;
+  }
+
+  /* Show all offenders/vehicles */
+  .show-more-button {
+    display: none !important;
+  }
+
+  .collapsed-items {
+    display: block !important;
+  }
+
+  /* Force show all items */
+  .print-show-all {
+    display: block !important;
+  }
+
+  /* Map card should be hidden */
+  .map-card,
+  [class*='MapCard'] {
+    display: none !important;
+  }
+
+  /* Hide the right sidebar */
+  [class*='rightSidebar'] {
+    display: none !important;
+  }
+
+  /* Ensure content spans full width */
+  .page-container > div {
+    width: 100% !important;
+  }
+
+  /* Fix button text visibility */
+  .ant-btn {
+    display: none !important;
+  }
+
+  /* Print-specific title */
+  .print-only-title {
+    display: block !important;
+    color: #000 !important;
+    font-size: 24px !important;
+    font-weight: bold !important;
+    text-align: center !important;
+    margin-bottom: 20px !important;
+  }
+}
