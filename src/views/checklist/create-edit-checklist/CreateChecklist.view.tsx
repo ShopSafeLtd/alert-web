@@ -4,6 +4,7 @@ import type { FormInstance } from 'antd';
 import BusinessesSelect from '#/components/form-components/BusinessesSelect/BusinessesSelect.view';
 import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
 import RoleSelect from '#/components/form-components/Roles/RoleSelect';
+import UsersSelect from '#/components/form-components/UsersSelect/UsersSelectFetchMore.view';
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { PlusOutlined } from '@ant-design/icons';
 import {
@@ -54,7 +55,6 @@ interface Props {
   ) => void;
   loading: boolean;
   onFinish: (data: FormData) => void;
-  users: SelectOption[];
 }
 const indexToLetter = (num: number) => (num + 10).toString(36).toUpperCase();
 
@@ -102,7 +102,6 @@ const CreateChecklistView: React.FC<Props> = ({
   handleSectionChange,
   loading,
   onFinish,
-  users,
 }) => {
   const intl = useIntl();
   const { id } = useParams();
@@ -178,15 +177,12 @@ const CreateChecklistView: React.FC<Props> = ({
                 })}
                 name="userIds"
               >
-                <Select
+                <UsersSelect
                   maxTagCount="responsive"
                   mode="multiple"
-                  optionFilterProp="label"
-                  options={users}
                   placeholder={intl.formatMessage({
                     defaultMessage: 'Users',
                   })}
-                  showSearch
                 />
               </Form.Item>
             </Col>
