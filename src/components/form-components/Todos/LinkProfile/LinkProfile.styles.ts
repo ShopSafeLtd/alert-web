@@ -27,11 +27,17 @@ const useStyles = createUseStyles((theme: Theme) => ({
   linkedProfilesCard: {
     '&.ant-card': {
       '& .ant-card-body': {
-        backgroundColor: theme.componentBackground,
+        backgroundColor:
+          theme.colorScheme === 'dark'
+            ? 'rgba(255, 255, 255, 0.12)'
+            : 'rgba(0, 0, 0, 0.02)',
       },
       '& .ant-card-head': {
-        backgroundColor: theme.componentBackground,
-        borderBottom: `1px solid ${theme.borderColor}`,
+        backgroundColor:
+          theme.colorScheme === 'dark'
+            ? 'rgba(255, 255, 255, 0.12)'
+            : 'rgba(0, 0, 0, 0.02)',
+        borderBottom: 'none !important',
         borderRadius: '8px 8px 0 0',
       },
       '&.todo-linked-profiles': {
@@ -47,7 +53,10 @@ const useStyles = createUseStyles((theme: Theme) => ({
         },
         border: `1px solid ${theme.borderColor}`,
       },
-      backgroundColor: theme.componentBackground,
+      backgroundColor:
+        theme.colorScheme === 'dark'
+          ? 'rgba(255, 255, 255, 0.12)'
+          : 'rgba(0, 0, 0, 0.02)',
       border: `1px solid ${theme.borderColor}`,
       borderRadius: '8px',
       overflow: 'hidden',

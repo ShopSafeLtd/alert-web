@@ -186,6 +186,13 @@ const useEditTodo = ({ initData, onClose, todoId }: Props): Return => {
             url: document.url,
           }))
         );
+
+      // Initialize time tracking form fields
+      if (todo?.timeTaken && todo.timeTaken.length > 0) {
+        for (const timeEntry of todo.timeTaken) {
+          form.setFieldValue(timeEntry.user.id, timeEntry.timeTaken);
+        }
+      }
     },
     variables: {
       where: {
@@ -310,15 +317,19 @@ const useEditTodo = ({ initData, onClose, todoId }: Props): Return => {
           .filter((id) => !users.some((user) => user.id === id))
           .map((id) => {
             const fullUser = usersData.users.find((user) => user.id === id);
+            // Find existing time data for this user
+            const existingTimeData = todoData?.todo?.timeTaken?.find(
+              (timeEntry) => timeEntry.user.id === id
+            );
             return {
               id,
               name: fullUser?.fullName || '',
-              timeTaken: 0,
+              timeTaken: existingTimeData?.timeTaken || 0,
             };
           }),
       ]);
     }
-  }, [assignedUsers, usersData]);
+  }, [assignedUsers, usersData, todoData]);
 
   const [updateTodo] = useUpdateTodoDetailsMutation({
     onCompleted: () => {
@@ -433,7 +444,7 @@ const useEditTodo = ({ initData, onClose, todoId }: Props): Return => {
                 : undefined,
           },
           dueDate: { set: data.dueDate },
-          groups: { set: data.groups.map((id) => ({ id })) },
+          groups: { set: (data.groups || []).map((id) => ({ id })) },
           incidentId:
             incidentsData?.id === undefined
               ? originalIncidentId
