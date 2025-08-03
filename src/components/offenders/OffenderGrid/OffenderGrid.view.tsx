@@ -29,6 +29,8 @@ import {
   getOffenderRace,
 } from 'utils/offender/get-offender-desc';
 
+import { usePrintShowAll } from './usePrintShowAll';
+
 const useStyles = createUseStyles((theme: Theme) => ({
   actionButtons: {
     '& button': {
@@ -482,6 +484,39 @@ const OffenderGrid = ({
   const [offendersData, setOffendersData] = useState<Offender[]>([]);
   const [columns, setColumns] = useState(6);
   const [showAll, setShowAll] = useState(false);
+  const [, forceUpdate] = useState({});
+
+  // Force show all items when printing
+  usePrintShowAll(setShowAll);
+
+  // Additional check for print mode using body class
+  useEffect(() => {
+    const checkForPrintMode = () => {
+      if (document.body.classList.contains('print-mode')) {
+        console.log(
+          '[OffenderGrid] print-mode detected, setting showAll to true'
+        );
+        setShowAll(true);
+        // Force re-render
+        forceUpdate({});
+      }
+    };
+
+    // Check immediately
+    checkForPrintMode();
+
+    // Set up MutationObserver to watch for class changes
+    const observer = new MutationObserver(() => {
+      checkForPrintMode();
+    });
+
+    observer.observe(document.body, {
+      attributeFilter: ['class'],
+      attributes: true,
+    });
+
+    return () => observer.disconnect();
+  }, [columns]);
 
   const sortOffenders = (offendersList: Offender[], sortKey: string) =>
     [...offendersList].sort((a, b) => {
@@ -527,6 +562,14 @@ const OffenderGrid = ({
     });
 
   const calcOffenders = (value: number) => {
+    console.log(
+      '[calcOffenders] called with showAll:',
+      showAll,
+      'columns:',
+      value,
+      'total offenders:',
+      offenders?.length
+    );
     if (offenders) {
       let toDisplay = offenders;
 
@@ -534,7 +577,17 @@ const OffenderGrid = ({
       toDisplay = sortOffenders(toDisplay, sortBy);
 
       // Apply pagination
-      if (showAll) {
+      // Force show all if in print mode
+      const isPrintMode =
+        document.body.classList.contains('print-mode') ||
+        window.matchMedia('print').matches;
+
+      if (showAll || isPrintMode) {
+        console.log(
+          '[calcOffenders] showAll or print mode is true, displaying all',
+          toDisplay.length,
+          'offenders'
+        );
         setOffendersData(toDisplay);
       } else
         switch (value) {
@@ -599,22 +652,41 @@ const OffenderGrid = ({
     setShowAll(!showAll);
   };
 
+  console.log(
+    '[OffenderGrid render] showAll:',
+    showAll,
+    'offenders:',
+    offenders?.length,
+    'offendersData:',
+    offendersData.length
+  );
+
   return (
     <div>
       <Row gutter={[24, 24]} ref={rowRef}>
-        {offendersData.map((item) => (
-          <Col key={item.id} span={columns}>
-            <OffenderCard
-              canDisconnect={canDisconnect}
-              deleteRights={deleteRights}
-              editRights={editRights}
-              offender={item}
-              onDeleteOffender={onDeleteOffender}
-              onDisconnectOffender={onDisconnectOffender}
-              setEditOffenderData={setEditOffenderData}
-            />
-          </Col>
-        ))}
+        {/* Always render ALL offenders, but hide extras with CSS when not showing all */}
+        {offenders &&
+          offenders.map((item, index) => (
+            <Col
+              className={`offender-col offender-col-${index}`}
+              key={item.id}
+              span={columns}
+              style={{
+                display:
+                  !showAll && index >= offendersData.length ? 'none' : 'block',
+              }}
+            >
+              <OffenderCard
+                canDisconnect={canDisconnect}
+                deleteRights={deleteRights}
+                editRights={editRights}
+                offender={item}
+                onDeleteOffender={onDeleteOffender}
+                onDisconnectOffender={onDisconnectOffender}
+                setEditOffenderData={setEditOffenderData}
+              />
+            </Col>
+          ))}
       </Row>
       {offenders && (offenders.length > offendersData.length || showAll) && (
         <Row justify="center" style={{ marginTop: 20 }}>

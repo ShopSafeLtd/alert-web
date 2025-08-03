@@ -3,6 +3,58 @@ import type { Theme } from 'configs/ThemeConfig';
 import { createUseStyles } from 'react-jss';
 
 const useStyles = createUseStyles((theme: Theme) => ({
+  // Print-specific styles
+  '@media print': {
+    // Full width for cards in print
+    '& .ant-card': {
+      pageBreakInside: 'avoid',
+    },
+    '& .ant-statistic-content': {
+      color: '#000 !important',
+    },
+
+    // Make all stat cards visible by forcing colors
+    '& .ant-statistic-title': {
+      color: '#000 !important',
+    },
+
+    // Adjust main content
+    detailsContent: {
+      borderRight: 'none !important',
+      padding: '0 !important',
+    },
+
+    // Show crime group name at top of print
+    printTitle: {
+      display: 'block',
+      fontSize: 24,
+      fontWeight: 'bold',
+      marginBottom: 20,
+      textAlign: 'center',
+    },
+
+    // Hide react flow component
+    reactFlowContainer: {
+      display: 'none !important',
+    },
+    // Hide sidebars and navigation elements
+    rightSidebar: {
+      display: 'none !important',
+    },
+
+    sidebarToggle: {
+      display: 'none !important',
+    },
+
+    // Ensure stat cards have proper background
+    statsCard: {
+      '& .ant-card-body': {
+        backgroundColor: '#fff !important',
+      },
+      backgroundColor: '#fff !important',
+      border: '1px solid #000 !important',
+    },
+  },
   // Activities styles
   activitiesList: {
     display: 'flex',
@@ -124,6 +176,7 @@ const useStyles = createUseStyles((theme: Theme) => ({
   crimeGroupTitle: {
     marginBottom: '8px !important',
   },
+
   desc: {
     marginBottom: 30,
     width: '100%',
@@ -188,6 +241,13 @@ const useStyles = createUseStyles((theme: Theme) => ({
 
   headerTitle: {
     marginBottom: '0px !important',
+  },
+
+  // Hide in print
+  hidePrint: {
+    '@media print': {
+      display: 'none !important',
+    },
   },
 
   icon: { marginRight: 5 },
@@ -390,12 +450,40 @@ const useStyles = createUseStyles((theme: Theme) => ({
     margin: '0 !important',
   },
 
+  // Print title that's hidden on screen
+  printTitle: {
+    '@media screen': {
+      display: 'none !important',
+    },
+    color: '#000',
+    display: 'block',
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+
+  // React flow container to hide in print
+  reactFlowContainer: {
+    '@media print': {
+      display: 'none !important',
+    },
+  },
+
   // Permanent Sidebar Styles
   rightSidebar: {
     flex: '0 0 auto',
     height: '100vh',
     position: 'sticky',
     top: 0,
+  },
+
+  // Show only in print
+  showPrint: {
+    '@media screen': {
+      display: 'none !important',
+    },
+    display: 'block',
   },
 
   sidebar: {
@@ -629,13 +717,13 @@ const useStyles = createUseStyles((theme: Theme) => ({
   suggestionImage: {
     '& img': {
       borderRadius: 8,
-      height: 60,
+      height: 100,
       objectFit: 'cover',
-      width: 60,
+      width: 100,
     },
-    height: 60,
+    height: 100,
     overflow: 'hidden',
-    width: 60,
+    width: 100,
   },
 
   suggestionImagePlaceholder: {
@@ -648,9 +736,9 @@ const useStyles = createUseStyles((theme: Theme) => ({
     color: theme.secondaryText,
     display: 'flex',
     fontSize: 24,
-    height: 60,
+    height: 100,
     justifyContent: 'center',
-    width: 60,
+    width: 100,
   },
 
   suggestionIncidentDetail: {
