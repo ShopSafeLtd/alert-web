@@ -9,7 +9,7 @@ export type BusinessTagsQueryVariables = Types.Exact<{
 }>;
 
 
-export type BusinessTagsQuery = { __typename?: 'Query', tags: Array<{ __typename?: 'Tag', id: string, name: string }> };
+export type BusinessTagsQuery = { __typename?: 'Query', tags: Array<{ __typename?: 'Tag', id?: string | null, name?: string | null }> };
 
 
 export const BusinessTagsDocument = gql`

@@ -11,7 +11,7 @@ export type BusinessesSelectQueryVariables = Types.Exact<{
 }>;
 
 
-export type BusinessesSelectQuery = { __typename?: 'Query', listBusinesses: { __typename?: 'ListBusinesses', total: number, businesses: Array<{ __typename?: 'Business', id: string, name: string, siteNumber?: string | null }> } };
+export type BusinessesSelectQuery = { __typename?: 'Query', listBusinesses: { __typename?: 'ListBusinesses', total: number, businesses: Array<{ __typename?: 'Business', id: string, name?: string | null, siteNumber?: string | null }> } };
 
 
 export const BusinessesSelectDocument = gql`

@@ -14,7 +14,7 @@ export type QuestionManagementListQueryVariables = Types.Exact<{
 }>;
 
 
-export type QuestionManagementListQuery = { __typename?: 'Query', questions: { __typename?: 'QueryQuestionsConnection', totalCount: number, edges: Array<{ __typename?: 'QueryQuestionsConnectionEdge', node: { __typename?: 'Question', id: string, model: Types.QuestionModel, activityCount: number, tagsCount: number, question: string, type: Types.AnswerType } }> } };
+export type QuestionManagementListQuery = { __typename?: 'Query', questions: { __typename?: 'QueryQuestionsConnection', totalCount: number, edges: Array<{ __typename?: 'QueryQuestionsConnectionEdge', node: { __typename?: 'Question', id?: string | null, model?: Types.QuestionModel | null, activityCount: number, tagsCount: number, question?: string | null, type?: Types.AnswerType | null } }> } };
 
 
 export const QuestionManagementListDocument = gql`

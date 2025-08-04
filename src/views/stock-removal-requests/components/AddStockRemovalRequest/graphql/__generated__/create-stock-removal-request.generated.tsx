@@ -8,7 +8,7 @@ export type CreateStockRemovalRequestMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateStockRemovalRequestMutation = { __typename?: 'Mutation', createStockRemovalRequest: { __typename?: 'StockRemovalRequest', id: string, createdAt: Date, title: string, status: Types.StockRemovalRequestStatus, reference?: number | null, approvers: Array<{ __typename?: 'StockRemovalRequestApproval', status: Types.StockRemovalRequestApprovalStatus, user: { __typename?: 'User', id: string, fullName: string } }> } };
+export type CreateStockRemovalRequestMutation = { __typename?: 'Mutation', createStockRemovalRequest?: { __typename?: 'StockRemovalRequest', id: string, createdAt?: Date | null, title: string, status: Types.StockRemovalRequestStatus, reference?: number | null, approvers?: Array<{ __typename?: 'StockRemovalRequestApproval', status: Types.StockRemovalRequestApprovalStatus, user?: { __typename?: 'User', id?: string | null, fullName: string } | null }> | null } | null };
 
 
 export const CreateStockRemovalRequestDocument = gql`

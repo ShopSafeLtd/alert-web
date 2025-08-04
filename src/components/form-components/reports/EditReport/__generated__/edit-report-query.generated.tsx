@@ -8,7 +8,7 @@ export type EditReportTemplateQueryVariables = Types.Exact<{
 }>;
 
 
-export type EditReportTemplateQuery = { __typename?: 'Query', reportTemplate: { __typename?: 'ReportTemplate', id: string, name: string, description?: string | null, type: Types.ReportType, reportGroup: { __typename?: 'ReportGroup', id: string }, groups: Array<{ __typename?: 'Group', id: string, name: string }> } };
+export type EditReportTemplateQuery = { __typename?: 'Query', reportTemplate: { __typename?: 'ReportTemplate', id?: string | null, name?: string | null, description?: string | null, type?: Types.ReportType | null, reportGroup?: { __typename?: 'ReportGroup', id?: string | null } | null, groups?: Array<{ __typename?: 'Group', id: string, name: string }> | null } };
 
 
 export const EditReportTemplateDocument = gql`

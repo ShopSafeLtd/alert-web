@@ -8,7 +8,7 @@ export type DeleteChatMutationVariables = Types.Exact<{
 }>;
 
 
-export type DeleteChatMutation = { __typename?: 'Mutation', deleteChat: { __typename?: 'Chat', id: string } };
+export type DeleteChatMutation = { __typename?: 'Mutation', deleteChat?: { __typename?: 'Chat', id: string } | null };
 
 
 export const DeleteChatDocument = gql`

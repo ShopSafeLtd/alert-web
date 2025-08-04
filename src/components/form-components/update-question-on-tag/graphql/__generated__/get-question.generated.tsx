@@ -8,7 +8,7 @@ export type QuestionDetailsQueryVariables = Types.Exact<{
 }>;
 
 
-export type QuestionDetailsQuery = { __typename?: 'Query', question: { __typename?: 'Question', id: string, questionFormatted: string, question: string, optionsFormatted?: Array<string> | null, type: Types.AnswerType, options: Array<{ [key: string]: any }>, tags: Array<{ __typename?: 'TagQuestion', dependentTags: Array<string>, id: string, dependentBrands: Array<string>, tooltip?: string | null, roles: Array<{ __typename?: 'CustomRole', id: string }> }> } };
+export type QuestionDetailsQuery = { __typename?: 'Query', question: { __typename?: 'Question', id?: string | null, questionFormatted?: string | null, question?: string | null, optionsFormatted?: Array<string> | null, type?: Types.AnswerType | null, options?: Array<{ [key: string]: any }> | null, tags?: Array<{ __typename?: 'TagQuestion', dependentTags?: Array<string> | null, id?: string | null, dependentBrands?: Array<string> | null, tooltip?: string | null, roles?: Array<{ __typename?: 'CustomRole', id: string }> | null }> | null } };
 
 
 export const QuestionDetailsDocument = gql`

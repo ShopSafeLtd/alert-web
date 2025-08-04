@@ -8,7 +8,7 @@ export type DismissAiSuggestionMutationVariables = Types.Exact<{
 }>;
 
 
-export type DismissAiSuggestionMutation = { __typename?: 'Mutation', dismissAiSuggestion: { __typename?: 'AISuggestion', id: string } };
+export type DismissAiSuggestionMutation = { __typename?: 'Mutation', dismissAiSuggestion?: { __typename?: 'AISuggestion', id: string } | null };
 
 
 export const DismissAiSuggestionDocument = gql`

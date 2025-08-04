@@ -8,7 +8,7 @@ export type DashboardTemplateQueryVariables = Types.Exact<{
 }>;
 
 
-export type DashboardTemplateQuery = { __typename?: 'Query', dashboard: { __typename?: 'Dashboard', id: string, runningBanner?: string | null, name?: string | null, layout: Array<{ __typename?: 'DashboardLayout', h: number, i: string, id: string, maxH?: number | null, maxW?: number | null, minH?: number | null, minW?: number | null, moved: boolean, static: boolean, w: number, x: number, y: number, metadata?: { [key: string]: any } | null }>, roles: Array<{ __typename?: 'CustomRole', id: string, name: string }> } };
+export type DashboardTemplateQuery = { __typename?: 'Query', dashboard: { __typename?: 'Dashboard', id?: string | null, runningBanner?: string | null, name?: string | null, layout?: Array<{ __typename?: 'DashboardLayout', h?: number | null, i?: string | null, id?: string | null, maxH?: number | null, maxW?: number | null, minH?: number | null, minW?: number | null, moved?: boolean | null, static?: boolean | null, w?: number | null, x?: number | null, y?: number | null, metadata?: { [key: string]: any } | null }> | null, roles?: Array<{ __typename?: 'CustomRole', id: string, name: string }> | null } };
 
 
 export const DashboardTemplateDocument = gql`

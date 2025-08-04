@@ -9,7 +9,7 @@ export type UpdateUserDisableMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateUserDisableMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', id: string, disabled: boolean } };
+export type UpdateUserDisableMutation = { __typename?: 'Mutation', updateUser?: { __typename?: 'User', id?: string | null, disabled?: boolean | null } | null };
 
 
 export const UpdateUserDisableDocument = gql`

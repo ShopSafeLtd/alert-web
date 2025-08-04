@@ -6,7 +6,7 @@ const defaultOptions = {} as const;
 export type UserSettingsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type UserSettingsQuery = { __typename?: 'Query', currentUser?: { __typename?: 'User', id: string, messagePush: boolean, offenderPush: boolean, subscribedIncidentOnly: boolean, incidentEmail: boolean, incidentPush: boolean, subscribedOffenderOnly: boolean, offenderEmail: boolean } | null };
+export type UserSettingsQuery = { __typename?: 'Query', currentUser?: { __typename?: 'User', id?: string | null, messagePush?: boolean | null, offenderPush?: boolean | null, subscribedIncidentOnly?: boolean | null, incidentEmail?: boolean | null, incidentPush?: boolean | null, subscribedOffenderOnly?: boolean | null, offenderEmail?: boolean | null } | null };
 
 
 export const UserSettingsDocument = gql`

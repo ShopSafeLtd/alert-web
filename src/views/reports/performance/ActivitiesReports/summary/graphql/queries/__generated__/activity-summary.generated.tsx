@@ -8,7 +8,7 @@ export type ActivitySummaryQueryVariables = Types.Exact<{
 }>;
 
 
-export type ActivitySummaryQuery = { __typename?: 'Query', activitySummary: { __typename?: 'ActivitySummary', total: number, percentComplete: string, overdue: number, completed: number } };
+export type ActivitySummaryQuery = { __typename?: 'Query', activitySummary: { __typename?: 'ActivitySummary', total?: number | null, percentComplete?: string | null, overdue?: number | null, completed?: number | null } };
 
 
 export const ActivitySummaryDocument = gql`

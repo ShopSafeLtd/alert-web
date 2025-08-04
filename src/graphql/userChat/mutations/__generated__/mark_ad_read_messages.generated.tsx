@@ -8,7 +8,7 @@ export type MarkAsReadMessagesMutationVariables = Types.Exact<{
 }>;
 
 
-export type MarkAsReadMessagesMutation = { __typename?: 'Mutation', markAsReadMessages: { __typename?: 'UserChat', id: string } };
+export type MarkAsReadMessagesMutation = { __typename?: 'Mutation', markAsReadMessages?: { __typename?: 'UserChat', id?: string | null } | null };
 
 
 export const MarkAsReadMessagesDocument = gql`

@@ -10,7 +10,7 @@ export type UpdateVehicleImagesMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateVehicleImagesMutation = { __typename?: 'Mutation', updateVehicle: { __typename?: 'Vehicle', id: string, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: Types.ImagePosition, rotation: number, primary?: boolean | null, policeImage?: boolean | null, card?: string | null }> } };
+export type UpdateVehicleImagesMutation = { __typename?: 'Mutation', updateVehicle?: { __typename?: 'Vehicle', id?: string | null, images: Array<{ __typename?: 'Image', id?: string | null, url?: string | null, optimised?: string | null, position?: Types.ImagePosition | null, rotation?: number | null, primary?: boolean | null, policeImage?: boolean | null, card?: string | null }> } | null };
 
 
 export const UpdateVehicleImagesDocument = gql`

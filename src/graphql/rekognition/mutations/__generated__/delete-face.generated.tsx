@@ -8,7 +8,7 @@ export type DeleteFaceMutationVariables = Types.Exact<{
 }>;
 
 
-export type DeleteFaceMutation = { __typename?: 'Mutation', deleteFace: { __typename?: 'RekFace', id: string, faceId?: string | null } };
+export type DeleteFaceMutation = { __typename?: 'Mutation', deleteFace?: { __typename?: 'RekFace', id?: string | null, faceId?: string | null } | null };
 
 
 export const DeleteFaceDocument = gql`

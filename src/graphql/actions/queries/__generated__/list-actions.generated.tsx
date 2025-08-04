@@ -11,7 +11,7 @@ export type ListActionsQueryVariables = Types.Exact<{
 }>;
 
 
-export type ListActionsQuery = { __typename?: 'Query', listActions: { __typename?: 'ListActions', total: number, actions: Array<{ __typename?: 'Action', id: string, description?: string | null, dataType: Types.Model, reason?: string | null, createdAt: Date, byUser: { __typename?: 'User', id: string, fullName: string, businesses: Array<{ __typename?: 'Business', fullName: string, id: string, name: string }> } }> } };
+export type ListActionsQuery = { __typename?: 'Query', listActions?: { __typename?: 'ListActions', total: number, actions: Array<{ __typename?: 'Action', id: string, description?: string | null, dataType: Types.Model, reason?: string | null, createdAt?: Date | null, byUser: { __typename?: 'User', id?: string | null, fullName: string, businesses: Array<{ __typename?: 'Business', fullName?: string | null, id: string, name?: string | null }> } }> } | null };
 
 
 export const ListActionsDocument = gql`

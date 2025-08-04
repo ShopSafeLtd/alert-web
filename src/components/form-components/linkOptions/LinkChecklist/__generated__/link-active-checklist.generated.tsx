@@ -13,7 +13,7 @@ export type LinkActiveChecklistsQueryVariables = Types.Exact<{
 }>;
 
 
-export type LinkActiveChecklistsQuery = { __typename?: 'Query', activeChecklists: { __typename?: 'QueryActiveChecklistsConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', endCursor?: string | null }, edges: Array<{ __typename?: 'QueryActiveChecklistsConnectionEdge', node: { __typename?: 'ActiveChecklist', id: string, name?: string | null, percentageScore: string, percentComplete: number, status: Types.ChecklistStatus, business?: { __typename?: 'Business', name: string, id: string } | null } }> } };
+export type LinkActiveChecklistsQuery = { __typename?: 'Query', activeChecklists?: { __typename?: 'QueryActiveChecklistsConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', endCursor?: string | null }, edges: Array<{ __typename?: 'QueryActiveChecklistsConnectionEdge', node: { __typename?: 'ActiveChecklist', id: string, name?: string | null, percentageScore?: string | null, percentComplete: number, status: Types.ChecklistStatus, business?: { __typename?: 'Business', name?: string | null, id: string } | null } }> } | null };
 
 
 export const LinkActiveChecklistsDocument = gql`

@@ -10,7 +10,7 @@ export type PreviewChecklistExportQueryVariables = Types.Exact<{
 }>;
 
 
-export type PreviewChecklistExportQuery = { __typename?: 'Query', activeChecklistExportPreview: { __typename?: 'QueryActiveChecklistExportPreviewConnection', totalCount: number, edges: Array<{ __typename?: 'QueryActiveChecklistExportPreviewConnectionEdge', node: { __typename?: 'ActiveChecklist', id: string, name?: string | null, percentageScore: string, percentComplete: number, status: Types.ChecklistStatus, updatedAt: Date, completedAt?: Date | null, document?: { __typename?: 'Document', id: string, url: string } | null, business?: { __typename?: 'Business', name: string, id: string } | null } }> } };
+export type PreviewChecklistExportQuery = { __typename?: 'Query', activeChecklistExportPreview?: { __typename?: 'QueryActiveChecklistExportPreviewConnection', totalCount: number, edges: Array<{ __typename?: 'QueryActiveChecklistExportPreviewConnectionEdge', node: { __typename?: 'ActiveChecklist', id: string, name?: string | null, percentageScore?: string | null, percentComplete: number, status: Types.ChecklistStatus, updatedAt?: Date | null, completedAt?: Date | null, document?: { __typename?: 'Document', id?: string | null, url?: string | null } | null, business?: { __typename?: 'Business', name?: string | null, id: string } | null } }> } | null };
 
 
 export const PreviewChecklistExportDocument = gql`

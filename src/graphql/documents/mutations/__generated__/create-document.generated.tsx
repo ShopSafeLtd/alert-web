@@ -8,7 +8,7 @@ export type CreateDocumentMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateDocumentMutation = { __typename?: 'Mutation', createDocument: { __typename?: 'Document', id: string, name: string, thumbnailUrl?: string | null, url: string, createdAt: Date, updatedAt: Date, tags: Array<{ __typename?: 'Tag', id: string, name: string }>, folder?: { __typename?: 'Folder', id: string, name: string } | null } };
+export type CreateDocumentMutation = { __typename?: 'Mutation', createDocument?: { __typename?: 'Document', id?: string | null, name?: string | null, thumbnailUrl?: string | null, url?: string | null, createdAt?: Date | null, updatedAt?: Date | null, tags: Array<{ __typename?: 'Tag', id?: string | null, name?: string | null }>, folder?: { __typename?: 'Folder', id?: string | null, name: string } | null } | null };
 
 
 export const CreateDocumentDocument = gql`

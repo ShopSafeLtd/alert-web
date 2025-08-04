@@ -8,7 +8,7 @@ export type CreateCustomGalleryMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateCustomGalleryMutation = { __typename?: 'Mutation', createCustomGallery: { __typename?: 'CustomGallery', id: string, name: string, description?: string | null, groups: Array<{ __typename?: 'Group', id: string }> } };
+export type CreateCustomGalleryMutation = { __typename?: 'Mutation', createCustomGallery?: { __typename?: 'CustomGallery', id?: string | null, name?: string | null, description?: string | null, groups: Array<{ __typename?: 'Group', id: string }> } | null };
 
 
 export const CreateCustomGalleryDocument = gql`

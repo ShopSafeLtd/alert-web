@@ -8,7 +8,7 @@ export type DemGroupsSelectQueryVariables = Types.Exact<{
 }>;
 
 
-export type DemGroupsSelectQuery = { __typename?: 'Query', demGroups: { __typename?: 'QueryDemGroupsConnection', totalCount: number, edges: Array<{ __typename?: 'QueryDemGroupsConnectionEdge', node: { __typename?: 'DemGroup', id: string, name: string } }>, pageInfo: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage: boolean } } };
+export type DemGroupsSelectQuery = { __typename?: 'Query', demGroups: { __typename?: 'QueryDemGroupsConnection', totalCount: number, edges: Array<{ __typename?: 'QueryDemGroupsConnectionEdge', node: { __typename?: 'DemGroup', id?: string | null, name?: string | null } }>, pageInfo: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage: boolean } } };
 
 
 export const DemGroupsSelectDocument = gql`

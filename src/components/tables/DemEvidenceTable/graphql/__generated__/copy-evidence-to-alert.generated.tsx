@@ -8,7 +8,7 @@ export type CopyEvidenceToAlertMutationVariables = Types.Exact<{
 }>;
 
 
-export type CopyEvidenceToAlertMutation = { __typename?: 'Mutation', copyEvidenceToAlert: { __typename?: 'Document', id: string, name: string, thumbnailUrl?: string | null, url: string, createdAt: Date, updatedAt: Date } };
+export type CopyEvidenceToAlertMutation = { __typename?: 'Mutation', copyEvidenceToAlert?: { __typename?: 'Document', id?: string | null, name?: string | null, thumbnailUrl?: string | null, url?: string | null, createdAt?: Date | null, updatedAt?: Date | null } | null };
 
 
 export const CopyEvidenceToAlertDocument = gql`

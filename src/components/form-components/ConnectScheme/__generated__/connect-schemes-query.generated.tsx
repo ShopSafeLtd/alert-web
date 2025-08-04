@@ -9,7 +9,7 @@ export type ConnectSchemesQueryVariables = Types.Exact<{
 }>;
 
 
-export type ConnectSchemesQuery = { __typename?: 'Query', schemes: Array<{ __typename?: 'Scheme', id: string, name: string }> };
+export type ConnectSchemesQuery = { __typename?: 'Query', schemes: Array<{ __typename?: 'Scheme', id?: string | null, name?: string | null }> };
 
 
 export const ConnectSchemesDocument = gql`

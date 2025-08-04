@@ -8,7 +8,7 @@ export type QueueIncidentCsvExportMutationVariables = Types.Exact<{
 }>;
 
 
-export type QueueIncidentCsvExportMutation = { __typename?: 'Mutation', queueIncidentCsvExport: { __typename?: 'QueuedIncidentExportResult', estimatedTime?: string | null, jobId: string, message: string } };
+export type QueueIncidentCsvExportMutation = { __typename?: 'Mutation', queueIncidentCsvExport?: { __typename?: 'QueuedIncidentExportResult', estimatedTime?: string | null, jobId: string, message: string } | null };
 
 
 export const QueueIncidentCsvExportDocument = gql`

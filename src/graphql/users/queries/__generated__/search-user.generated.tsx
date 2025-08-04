@@ -8,7 +8,7 @@ export type SearchUserQueryVariables = Types.Exact<{
 }>;
 
 
-export type SearchUserQuery = { __typename?: 'Query', user: { __typename?: 'User', id: string, fullName: string, email?: string | null, publicName: boolean, reportToAllBusinesses?: boolean | null, businesses: Array<{ __typename?: 'Business', id: string, name: string, locations: Array<{ __typename?: 'Address', id: string, full: string }> }>, addresses: Array<{ __typename?: 'Address', id: string, postcode?: string | null, street?: string | null, townCity?: string | null, building?: string | null, county?: string | null }> } };
+export type SearchUserQuery = { __typename?: 'Query', user: { __typename?: 'User', id?: string | null, fullName: string, email?: string | null, publicName?: boolean | null, reportToAllBusinesses?: boolean | null, businesses: Array<{ __typename?: 'Business', id: string, name?: string | null, locations: Array<{ __typename?: 'Address', id: string, full?: string | null }> }>, addresses: Array<{ __typename?: 'Address', id: string, postcode?: string | null, street?: string | null, townCity?: string | null, building?: string | null, county?: string | null }> } };
 
 
 export const SearchUserDocument = gql`

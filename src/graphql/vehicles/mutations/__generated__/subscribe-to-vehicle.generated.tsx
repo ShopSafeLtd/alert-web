@@ -8,7 +8,7 @@ export type SubscribeToVehicleMutationVariables = Types.Exact<{
 }>;
 
 
-export type SubscribeToVehicleMutation = { __typename?: 'Mutation', subscribeToVehicle: { __typename?: 'Vehicle', id: string, subscribed: boolean } };
+export type SubscribeToVehicleMutation = { __typename?: 'Mutation', subscribeToVehicle?: { __typename?: 'Vehicle', id?: string | null, subscribed?: boolean | null } | null };
 
 
 export const SubscribeToVehicleDocument = gql`

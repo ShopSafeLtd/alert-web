@@ -9,7 +9,7 @@ export type UpdateBusinessLocationMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateBusinessLocationMutation = { __typename?: 'Mutation', updateBusiness: { __typename?: 'Business', id: string, locations: Array<{ __typename?: 'Address', id: string, building?: string | null, street?: string | null, townCity?: string | null, county?: string | null, postcode?: string | null, geoLng?: number | null, geoLat?: number | null, full: string }> } };
+export type UpdateBusinessLocationMutation = { __typename?: 'Mutation', updateBusiness?: { __typename?: 'Business', id: string, locations: Array<{ __typename?: 'Address', id: string, building?: string | null, street?: string | null, townCity?: string | null, county?: string | null, postcode?: string | null, geoLng?: number | null, geoLat?: number | null, full?: string | null }> } | null };
 
 
 export const UpdateBusinessLocationDocument = gql`

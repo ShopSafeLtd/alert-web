@@ -12,7 +12,7 @@ export type UpdateIncidentMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateIncidentMutation = { __typename?: 'Mutation', updateIncident: { __typename?: 'Incident', id: string, subject: string, description: string, dayTime: string, date: Date, time: Date, value?: number | null, recoveredValue?: number | null, policeReported: boolean, policeRef?: string | null, policeInvolved: boolean, activityAuthorised: boolean, subscribed: boolean, priority: Types.IncidentPriority, customerRef?: string | null, approved?: boolean | null, business?: { __typename?: 'Business', id: string, name: string } | null, crimeTypes: Array<{ __typename?: 'Tag', id: string, name: string }>, location?: { __typename?: 'Address', id: string, building?: string | null, street?: string | null, townCity?: string | null, county?: string | null, postcode?: string | null, geoLat?: number | null, geoLng?: number | null, full: string, alias?: string | null } | null, createdBy: { __typename?: 'User', id: string, fullName: string, businesses: Array<{ __typename?: 'Business', fullName: string, id: string, name: string }> }, images: Array<{ __typename?: 'Image', id: string, optimised?: string | null, position: Types.ImagePosition, rotation: number, url?: string | null, card?: string | null }>, groups: Array<{ __typename?: 'Group', id: string, name: string }>, offenders: Array<{ __typename?: 'Offender', id: string, reference?: number | null, name?: string | null, alias: Array<string>, age?: Types.Age | null, gender?: Types.Gender | null, race?: Types.Race | null, build?: Types.Build | null, height?: Types.Height | null, hair?: string | null, peculiarities?: string | null, comment?: string | null, dateSource?: string | null, dateOfBirth?: Date | null, idVerified: boolean, idSource?: Types.IdSource | null, knownFor: Array<string>, targetedGoods: Array<string>, justification?: string | null, infoSource?: string | null, images: Array<{ __typename?: 'Image', isFace?: boolean | null, id: string, url?: string | null, optimised?: string | null, position: Types.ImagePosition, rotation: number }>, tags: Array<{ __typename?: 'Tag', id: string, name: string }> }> } };
+export type UpdateIncidentMutation = { __typename?: 'Mutation', updateIncident?: { __typename?: 'Incident', id?: string | null, subject?: string | null, description?: string | null, dayTime: string, date?: Date | null, time?: Date | null, value?: number | null, recoveredValue?: number | null, policeReported?: boolean | null, policeRef?: string | null, policeInvolved?: boolean | null, activityAuthorised?: boolean | null, subscribed?: boolean | null, priority: Types.IncidentPriority, customerRef?: string | null, approved?: boolean | null, business?: { __typename?: 'Business', id: string, name?: string | null } | null, answers: Array<{ __typename?: 'Answer', id: string, answer: string, type: Types.AnswerType, tagQuestion?: { __typename?: 'TagQuestion', id?: string | null, priority?: number | null, dependentQuestions?: Array<{ [key: string]: any }> | null, question?: { __typename?: 'Question', id?: string | null, question?: string | null } | null } | null }>, crimeTypes?: Array<{ __typename?: 'Tag', id?: string | null, name?: string | null }> | null, location?: { __typename?: 'Address', id: string, building?: string | null, street?: string | null, townCity?: string | null, county?: string | null, postcode?: string | null, geoLat?: number | null, geoLng?: number | null, full?: string | null, alias?: string | null } | null, createdBy: { __typename?: 'User', id?: string | null, fullName: string, businesses: Array<{ __typename?: 'Business', fullName?: string | null, id: string, name?: string | null }> }, images: Array<{ __typename?: 'Image', id?: string | null, optimised?: string | null, position?: Types.ImagePosition | null, rotation?: number | null, url?: string | null, card?: string | null }>, groups: Array<{ __typename?: 'Group', id: string, name: string }>, offenders: Array<{ __typename?: 'Offender', id?: string | null, reference?: number | null, name?: string | null, alias: Array<string>, age?: Types.Age | null, gender?: Types.Gender | null, race?: Types.Race | null, build?: Types.Build | null, height?: Types.Height | null, hair?: string | null, peculiarities?: string | null, comment?: string | null, dateSource?: string | null, dateOfBirth?: Date | null, idVerified?: boolean | null, idSource?: Types.IdSource | null, knownFor: Array<string>, targetedGoods: Array<string>, justification?: string | null, infoSource?: string | null, images: Array<{ __typename?: 'Image', isFace?: boolean | null, id?: string | null, url?: string | null, optimised?: string | null, position?: Types.ImagePosition | null, rotation?: number | null }>, tags: Array<{ __typename?: 'Tag', id?: string | null, name?: string | null }> }> } | null };
 
 
 export const UpdateIncidentDocument = gql`
@@ -23,6 +23,20 @@ export const UpdateIncidentDocument = gql`
     business {
       id
       name
+    }
+    answers(orderBy: {tagQuestion: {priority: desc}}) {
+      id
+      answer
+      tagQuestion {
+        id
+        priority
+        dependentQuestions
+        question {
+          id
+          question
+        }
+      }
+      type
     }
     description
     dayTime

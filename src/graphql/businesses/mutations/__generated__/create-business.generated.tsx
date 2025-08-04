@@ -8,7 +8,7 @@ export type CreateBusinessMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateBusinessMutation = { __typename?: 'Mutation', createBusiness: { __typename?: 'Business', id: string, name: string, fullName: string, publicName: boolean, policeArea: Array<Types.PoliceForce>, siteNumber?: string | null, demId?: string | null, totalUsers: number, parent?: { __typename?: 'Business', id: string, name: string } | null, locations: Array<{ __typename?: 'Address', id: string, full: string }>, groups: Array<{ __typename?: 'Group', id: string, name: string }>, tags: Array<{ __typename?: 'Tag', id: string, name: string }> } };
+export type CreateBusinessMutation = { __typename?: 'Mutation', createBusiness?: { __typename?: 'Business', id: string, name?: string | null, fullName?: string | null, publicName: boolean, policeArea?: Array<Types.PoliceForce> | null, siteNumber?: string | null, demId?: string | null, totalUsers: number, parent?: { __typename?: 'Business', id: string, name?: string | null } | null, locations: Array<{ __typename?: 'Address', id: string, full?: string | null }>, groups: Array<{ __typename?: 'Group', id: string, name: string }>, tags: Array<{ __typename?: 'Tag', id?: string | null, name?: string | null }> } | null };
 
 
 export const CreateBusinessDocument = gql`

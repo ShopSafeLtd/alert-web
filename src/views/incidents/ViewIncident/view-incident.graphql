@@ -46,6 +46,8 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
         question {
           id
           question
+          options
+          optionsFormatted
         }
       }
       type

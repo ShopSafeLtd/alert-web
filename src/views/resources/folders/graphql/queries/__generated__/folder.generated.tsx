@@ -9,7 +9,7 @@ export type FolderQueryVariables = Types.Exact<{
 }>;
 
 
-export type FolderQuery = { __typename?: 'Query', folder: { __typename?: 'Folder', id: string, name: string, description?: string | null, totalDocuments: number, totalChildFolders: number, documents: Array<{ __typename?: 'Document', id: string, name: string, url: string, thumbnailUrl?: string | null, createdAt: Date, tags: Array<{ __typename?: 'Tag', id: string, name: string }> }>, childFolders: Array<{ __typename?: 'Folder', id: string, name: string, description?: string | null, totalDocuments: number, totalChildFolders: number, documents: Array<{ __typename?: 'Document', id: string, name: string, url: string, thumbnailUrl?: string | null, createdAt: Date, tags: Array<{ __typename?: 'Tag', id: string, name: string }> }> }> } };
+export type FolderQuery = { __typename?: 'Query', folder: { __typename?: 'Folder', id?: string | null, name: string, description?: string | null, totalDocuments?: number | null, totalChildFolders?: number | null, documents: Array<{ __typename?: 'Document', id?: string | null, name?: string | null, url?: string | null, thumbnailUrl?: string | null, createdAt?: Date | null, tags: Array<{ __typename?: 'Tag', id?: string | null, name?: string | null }> }>, childFolders: Array<{ __typename?: 'Folder', id?: string | null, name: string, description?: string | null, totalDocuments?: number | null, totalChildFolders?: number | null, documents: Array<{ __typename?: 'Document', id?: string | null, name?: string | null, url?: string | null, thumbnailUrl?: string | null, createdAt?: Date | null, tags: Array<{ __typename?: 'Tag', id?: string | null, name?: string | null }> }> }> } };
 
 
 export const FolderDocument = gql`

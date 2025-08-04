@@ -8,7 +8,7 @@ export type SetPasswordMutationVariables = Types.Exact<{
 }>;
 
 
-export type SetPasswordMutation = { __typename?: 'Mutation', setPassword: { __typename?: 'User', id: string } };
+export type SetPasswordMutation = { __typename?: 'Mutation', setPassword?: { __typename?: 'User', id?: string | null } | null };
 
 
 export const SetPasswordDocument = gql`

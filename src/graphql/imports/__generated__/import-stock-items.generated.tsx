@@ -8,7 +8,7 @@ export type StockItemImportMutationVariables = Types.Exact<{
 }>;
 
 
-export type StockItemImportMutation = { __typename?: 'Mutation', stockItemImport: { __typename?: 'SystemTask', success: boolean } };
+export type StockItemImportMutation = { __typename?: 'Mutation', stockItemImport?: { __typename?: 'SystemTask', success?: boolean | null } | null };
 
 
 export const StockItemImportDocument = gql`

@@ -10,7 +10,7 @@ export type QuestionGroupOnSchemeQueryVariables = Types.Exact<{
 }>;
 
 
-export type QuestionGroupOnSchemeQuery = { __typename?: 'Query', scheme: { __typename?: 'Scheme', questionGroups: Array<{ __typename?: 'QuestionGroup', id: string, name: string, description?: string | null, defaultDueDate: number, questions: Array<{ __typename?: 'Question', questionFormatted: string, id: string, type: Types.AnswerType, optionsFormFormatted?: Array<{ __typename?: 'AnswerOption', label: string, value: string }> | null }> }> } };
+export type QuestionGroupOnSchemeQuery = { __typename?: 'Query', scheme: { __typename?: 'Scheme', questionGroups: Array<{ __typename?: 'QuestionGroup', id?: string | null, name?: string | null, description?: string | null, defaultDueDate?: number | null, questions?: Array<{ __typename?: 'Question', questionFormatted?: string | null, id?: string | null, type?: Types.AnswerType | null, optionsFormFormatted?: Array<{ __typename?: 'AnswerOption', label: string, value: string }> | null }> | null }> } };
 
 
 export const QuestionGroupOnSchemeDocument = gql`

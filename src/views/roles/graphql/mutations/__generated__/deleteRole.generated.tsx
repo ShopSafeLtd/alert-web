@@ -8,7 +8,7 @@ export type DeleteRoleMutationVariables = Types.Exact<{
 }>;
 
 
-export type DeleteRoleMutation = { __typename?: 'Mutation', deleteRole: { __typename?: 'CustomRole', id: string } };
+export type DeleteRoleMutation = { __typename?: 'Mutation', deleteRole?: { __typename?: 'CustomRole', id: string } | null };
 
 
 export const DeleteRoleDocument = gql`

@@ -8,7 +8,7 @@ export type TotalLossQueryVariables = Types.Exact<{
 }>;
 
 
-export type TotalLossQuery = { __typename?: 'Query', totalLoss: number };
+export type TotalLossQuery = { __typename?: 'Query', totalLoss?: number | null };
 
 
 export const TotalLossDocument = gql`

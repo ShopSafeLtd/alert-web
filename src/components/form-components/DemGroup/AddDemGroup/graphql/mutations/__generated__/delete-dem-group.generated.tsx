@@ -8,7 +8,7 @@ export type DeleteDemGroupMutationVariables = Types.Exact<{
 }>;
 
 
-export type DeleteDemGroupMutation = { __typename?: 'Mutation', deleteDemGroup: { __typename?: 'DemGroup', id: string, name: string } };
+export type DeleteDemGroupMutation = { __typename?: 'Mutation', deleteDemGroup?: { __typename?: 'DemGroup', id?: string | null, name?: string | null } | null };
 
 
 export const DeleteDemGroupDocument = gql`

@@ -8,7 +8,7 @@ export type ApproveAiSuggestionMutationVariables = Types.Exact<{
 }>;
 
 
-export type ApproveAiSuggestionMutation = { __typename?: 'Mutation', approveAiSuggestion: { __typename?: 'AISuggestion', id: string } };
+export type ApproveAiSuggestionMutation = { __typename?: 'Mutation', approveAiSuggestion?: { __typename?: 'AISuggestion', id: string } | null };
 
 
 export const ApproveAiSuggestionDocument = gql`

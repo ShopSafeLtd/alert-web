@@ -11,7 +11,7 @@ export type UpdateVehicleDetailsMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateVehicleDetailsMutation = { __typename?: 'Mutation', updateVehicle: { __typename?: 'Vehicle', id: string, make?: string | null, model?: string | null, registration?: string | null, reference?: number | null, updatedAt: Date, colour?: string | null, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: Types.ImagePosition, rotation: number, primary?: boolean | null, policeImage?: boolean | null, card?: string | null }>, customGalleries: Array<{ __typename?: 'CustomGallery', id: string, name: string }>, groups: Array<{ __typename?: 'Group', id: string, name: string }> } };
+export type UpdateVehicleDetailsMutation = { __typename?: 'Mutation', updateVehicle?: { __typename?: 'Vehicle', id?: string | null, make?: string | null, model?: string | null, registration?: string | null, reference?: number | null, updatedAt?: Date | null, colour?: string | null, images: Array<{ __typename?: 'Image', id?: string | null, url?: string | null, optimised?: string | null, position?: Types.ImagePosition | null, rotation?: number | null, primary?: boolean | null, policeImage?: boolean | null, card?: string | null }>, customGalleries: Array<{ __typename?: 'CustomGallery', id?: string | null, name?: string | null }>, groups: Array<{ __typename?: 'Group', id: string, name: string }> } | null };
 
 
 export const UpdateVehicleDetailsDocument = gql`

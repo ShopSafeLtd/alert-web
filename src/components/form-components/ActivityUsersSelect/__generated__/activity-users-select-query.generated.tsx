@@ -10,7 +10,7 @@ export type ActivityUsersSelectQueryVariables = Types.Exact<{
 }>;
 
 
-export type ActivityUsersSelectQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string, fullName: string }> };
+export type ActivityUsersSelectQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id?: string | null, fullName: string }> };
 
 
 export const ActivityUsersSelectDocument = gql`

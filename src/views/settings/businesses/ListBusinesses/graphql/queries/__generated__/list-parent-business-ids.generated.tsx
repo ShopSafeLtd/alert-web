@@ -12,7 +12,7 @@ export type ParentBusinessesListQueryVariables = Types.Exact<{
 }>;
 
 
-export type ParentBusinessesListQuery = { __typename?: 'Query', businessRelay: { __typename?: 'QueryBusinessRelayConnection', totalCount: number, edges: Array<{ __typename?: 'QueryBusinessRelayConnectionEdge', node: { __typename?: 'Business', id: string, name: string } }> } };
+export type ParentBusinessesListQuery = { __typename?: 'Query', businessRelay?: { __typename?: 'QueryBusinessRelayConnection', totalCount: number, edges: Array<{ __typename?: 'QueryBusinessRelayConnectionEdge', node: { __typename?: 'Business', id: string, name?: string | null } }> } | null };
 
 
 export const ParentBusinessesListDocument = gql`

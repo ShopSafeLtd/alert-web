@@ -8,7 +8,7 @@ export type SchemeSharingQueryVariables = Types.Exact<{
 }>;
 
 
-export type SchemeSharingQuery = { __typename?: 'Query', scheme: { __typename?: 'Scheme', id: string, connectedToSchemes: Array<{ __typename?: 'Scheme', id: string, name: string }> } };
+export type SchemeSharingQuery = { __typename?: 'Query', scheme: { __typename?: 'Scheme', id?: string | null, connectedToSchemes?: Array<{ __typename?: 'Scheme', id?: string | null, name?: string | null }> | null } };
 
 
 export const SchemeSharingDocument = gql`

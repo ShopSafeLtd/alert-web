@@ -11,7 +11,7 @@ export type UserListChecklistQueryVariables = Types.Exact<{
 }>;
 
 
-export type UserListChecklistQuery = { __typename?: 'Query', listUsers: { __typename?: 'ListUsers', users: Array<{ __typename?: 'User', id: string, fullName: string }> } };
+export type UserListChecklistQuery = { __typename?: 'Query', listUsers: { __typename?: 'ListUsers', users: Array<{ __typename?: 'User', id?: string | null, fullName: string }> } };
 
 
 export const UserListChecklistDocument = gql`

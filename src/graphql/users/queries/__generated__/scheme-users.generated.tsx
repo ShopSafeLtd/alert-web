@@ -16,7 +16,7 @@ export type SchemeUsersQueryVariables = Types.Exact<{
 }>;
 
 
-export type SchemeUsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string, fullName: string, newUser: boolean, disabled: boolean, businesses: Array<{ __typename?: 'Business', id: string, name: string, fullName: string }>, schemes: Array<{ __typename?: 'UserScheme', id: string, role: Types.Role }> }> };
+export type SchemeUsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id?: string | null, fullName: string, newUser?: boolean | null, disabled?: boolean | null, businesses: Array<{ __typename?: 'Business', id: string, name?: string | null, fullName?: string | null }>, schemes: Array<{ __typename?: 'UserScheme', id?: string | null, role?: Types.Role | null }> }> };
 
 
 export const SchemeUsersDocument = gql`

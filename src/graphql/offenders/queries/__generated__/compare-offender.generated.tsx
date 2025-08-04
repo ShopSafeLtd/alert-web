@@ -8,7 +8,7 @@ export type ViewOffenderCompareQueryVariables = Types.Exact<{
 }>;
 
 
-export type ViewOffenderCompareQuery = { __typename?: 'Query', offender: { __typename?: 'Offender', id: string, updatedAt: Date, age?: Types.Age | null, build?: Types.Build | null, height?: Types.Height | null, dateOfBirth?: Date | null, dateSource?: string | null, hair?: string | null, gender?: Types.Gender | null, name?: string | null, race?: Types.Race | null, peculiarities?: string | null, images: Array<{ __typename?: 'Image', id: string, optimised?: string | null, position: Types.ImagePosition, rotation: number }>, tags: Array<{ __typename?: 'Tag', id: string, name: string }>, lastActive?: { __typename?: 'Incident', id: string, dayTime: string } | null } };
+export type ViewOffenderCompareQuery = { __typename?: 'Query', offender: { __typename?: 'Offender', id?: string | null, updatedAt?: Date | null, age?: Types.Age | null, build?: Types.Build | null, height?: Types.Height | null, dateOfBirth?: Date | null, dateSource?: string | null, hair?: string | null, gender?: Types.Gender | null, name?: string | null, race?: Types.Race | null, peculiarities?: string | null, images: Array<{ __typename?: 'Image', id?: string | null, optimised?: string | null, position?: Types.ImagePosition | null, rotation?: number | null }>, tags: Array<{ __typename?: 'Tag', id?: string | null, name?: string | null }>, lastActive?: { __typename?: 'Incident', id?: string | null, dayTime: string } | null } };
 
 
 export const ViewOffenderCompareDocument = gql`

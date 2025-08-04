@@ -8,7 +8,7 @@ export type SendInviteMutationVariables = Types.Exact<{
 }>;
 
 
-export type SendInviteMutation = { __typename?: 'Mutation', sendInvite: { __typename?: 'User', id: string, newUser: boolean } };
+export type SendInviteMutation = { __typename?: 'Mutation', sendInvite?: { __typename?: 'User', id?: string | null, newUser?: boolean | null } | null };
 
 
 export const SendInviteDocument = gql`

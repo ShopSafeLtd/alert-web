@@ -8,7 +8,7 @@ export type CreateActivityCsvZipMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateActivityCsvZipMutation = { __typename?: 'Mutation', createActivityCsvZip: string };
+export type CreateActivityCsvZipMutation = { __typename?: 'Mutation', createActivityCsvZip?: string | null };
 
 
 export const CreateActivityCsvZipDocument = gql`

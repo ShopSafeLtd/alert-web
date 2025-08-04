@@ -9,7 +9,7 @@ export type ListSessionsQueryVariables = Types.Exact<{
 }>;
 
 
-export type ListSessionsQuery = { __typename?: 'Query', user: { __typename?: 'User', sessions: Array<{ __typename?: 'Session', locationLng?: number | null, locationLat?: number | null, createdAt: Date, app: Types.AppType, id: string }> } };
+export type ListSessionsQuery = { __typename?: 'Query', user: { __typename?: 'User', sessions: Array<{ __typename?: 'Session', locationLng?: number | null, locationLat?: number | null, createdAt?: Date | null, app?: Types.AppType | null, id: string }> } };
 
 
 export const ListSessionsDocument = gql`

@@ -9,7 +9,7 @@ export type UpdateOffenderJustificationMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateOffenderJustificationMutation = { __typename?: 'Mutation', updateOffender: { __typename?: 'Offender', id: string, justification?: string | null } };
+export type UpdateOffenderJustificationMutation = { __typename?: 'Mutation', updateOffender?: { __typename?: 'Offender', id?: string | null, justification?: string | null } | null };
 
 
 export const UpdateOffenderJustificationDocument = gql`

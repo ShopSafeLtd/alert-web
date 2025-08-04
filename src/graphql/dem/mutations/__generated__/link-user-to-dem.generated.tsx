@@ -9,7 +9,7 @@ export type LinkUserToDemMutationVariables = Types.Exact<{
 }>;
 
 
-export type LinkUserToDemMutation = { __typename?: 'Mutation', linkUserToDem: { __typename?: 'User', id: string, demId?: string | null } };
+export type LinkUserToDemMutation = { __typename?: 'Mutation', linkUserToDem?: { __typename?: 'User', id?: string | null, demId?: string | null } | null };
 
 
 export const LinkUserToDemDocument = gql`

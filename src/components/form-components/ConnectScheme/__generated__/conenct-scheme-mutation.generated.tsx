@@ -8,7 +8,7 @@ export type SetSchemeSharingMutationVariables = Types.Exact<{
 }>;
 
 
-export type SetSchemeSharingMutation = { __typename?: 'Mutation', setSchemeSharing: { __typename?: 'Scheme', id: string, name: string, connectedToSchemes: Array<{ __typename?: 'Scheme', id: string, name: string }> } };
+export type SetSchemeSharingMutation = { __typename?: 'Mutation', setSchemeSharing?: { __typename?: 'Scheme', id?: string | null, name?: string | null, connectedToSchemes?: Array<{ __typename?: 'Scheme', id?: string | null, name?: string | null }> | null } | null };
 
 
 export const SetSchemeSharingDocument = gql`

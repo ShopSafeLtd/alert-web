@@ -8,7 +8,7 @@ export type SetDefaultTemplateMutationVariables = Types.Exact<{
 }>;
 
 
-export type SetDefaultTemplateMutation = { __typename?: 'Mutation', setDefaultTemplate?: { __typename?: 'ReportTemplate', id: string, default: boolean } | null };
+export type SetDefaultTemplateMutation = { __typename?: 'Mutation', setDefaultTemplate?: { __typename?: 'ReportTemplate', id?: string | null, default?: boolean | null } | null };
 
 
 export const SetDefaultTemplateDocument = gql`

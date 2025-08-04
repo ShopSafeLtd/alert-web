@@ -11,7 +11,7 @@ export type DemGroupsQueryVariables = Types.Exact<{
 }>;
 
 
-export type DemGroupsQuery = { __typename?: 'Query', demGroups: { __typename?: 'QueryDemGroupsConnection', totalCount: number, edges: Array<{ __typename?: 'QueryDemGroupsConnectionEdge', node: { __typename?: 'DemGroup', id: string, name: string, demId: string, totalDevices: number, demDevices: Array<{ __typename?: 'DemDevice', id: string, name: string }> } }> } };
+export type DemGroupsQuery = { __typename?: 'Query', demGroups: { __typename?: 'QueryDemGroupsConnection', totalCount: number, edges: Array<{ __typename?: 'QueryDemGroupsConnectionEdge', node: { __typename?: 'DemGroup', id?: string | null, name?: string | null, demId?: string | null, totalDevices?: number | null, demDevices?: Array<{ __typename?: 'DemDevice', id?: string | null, name?: string | null }> | null } }> } };
 
 
 export const DemGroupsDocument = gql`
