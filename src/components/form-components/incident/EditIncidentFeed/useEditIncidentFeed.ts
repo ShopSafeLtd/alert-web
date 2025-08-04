@@ -54,7 +54,6 @@ interface Props {
 }
 
 interface Return {
-  crimeTypes: { label: string; value: string }[];
   data:
     | Exclude<EditIncidentFeedQuery['incident'], null | undefined>
     | null
@@ -241,10 +240,6 @@ const useEditIncidentFeed = ({ incidentId, onClose }: Props): Return => {
   };
 
   return {
-    crimeTypes:
-      tagsData?.tags
-        .filter((item) => item.type === TagType.IncidentCrimeType)
-        .map((tag) => ({ label: tag.name, value: tag.id })) || [],
     data: incidentData?.incident,
     groups,
     groupsLoading,
