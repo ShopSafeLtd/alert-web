@@ -11,7 +11,7 @@ export type ListBusinessesChecklistQueryVariables = Types.Exact<{
 }>;
 
 
-export type ListBusinessesChecklistQuery = { __typename?: 'Query', listBusinesses: { __typename?: 'ListBusinesses', total: number, businesses: Array<{ __typename?: 'Business', id: string, name: string }> } };
+export type ListBusinessesChecklistQuery = { __typename?: 'Query', listBusinesses: { __typename?: 'ListBusinesses', total: number, businesses: Array<{ __typename?: 'Business', id: string, name?: string | null }> } };
 
 
 export const ListBusinessesChecklistDocument = gql`

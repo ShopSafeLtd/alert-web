@@ -8,7 +8,7 @@ export type UserEngagementQueryVariables = Types.Exact<{
 }>;
 
 
-export type UserEngagementQuery = { __typename?: 'Query', listUserContribution: { __typename?: 'ListUserContribution', total: number, userContributions: Array<{ __typename?: 'UserContribution', name: string, businesses: Array<string>, totalIncidents: number, totalOffenders: number, totalUpdates: number, totalMessages: number, totalLogins: number, lastLogin: string, groups?: Array<string> | null }> } };
+export type UserEngagementQuery = { __typename?: 'Query', listUserContribution: { __typename?: 'ListUserContribution', total: number, userContributions: Array<{ __typename?: 'UserContribution', name: string, businesses?: Array<string> | null, totalIncidents: number, totalOffenders: number, totalUpdates: number, totalMessages: number, totalLogins: number, lastLogin?: string | null, groups?: Array<string> | null }> } };
 
 
 export const UserEngagementDocument = gql`

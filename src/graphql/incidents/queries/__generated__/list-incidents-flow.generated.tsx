@@ -8,7 +8,7 @@ export type ListIncidentsFlowQueryVariables = Types.Exact<{
 }>;
 
 
-export type ListIncidentsFlowQuery = { __typename?: 'Query', incidents: Array<{ __typename?: 'Incident', dayTime: string, subject: string, id: string }> };
+export type ListIncidentsFlowQuery = { __typename?: 'Query', incidents: Array<{ __typename?: 'Incident', dayTime: string, subject?: string | null, id?: string | null }> };
 
 
 export const ListIncidentsFlowDocument = gql`

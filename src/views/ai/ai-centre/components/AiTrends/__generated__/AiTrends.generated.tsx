@@ -10,7 +10,7 @@ export type AiTrendsQueryVariables = Types.Exact<{
 }>;
 
 
-export type AiTrendsQuery = { __typename?: 'Query', aiSuggestions: { __typename?: 'QueryAiSuggestionsConnection', edges: Array<{ __typename?: 'QueryAiSuggestionsConnectionEdge', node: { __typename?: 'AISuggestion', id: string, title: string, description?: string | null, type?: Types.AiSuggestionType | null, createdAt: Date } }> } };
+export type AiTrendsQuery = { __typename?: 'Query', aiSuggestions?: { __typename?: 'QueryAiSuggestionsConnection', edges: Array<{ __typename?: 'QueryAiSuggestionsConnectionEdge', node: { __typename?: 'AISuggestion', id: string, title: string, description?: string | null, type?: Types.AiSuggestionType | null, createdAt?: Date | null } }> } | null };
 
 
 export const AiTrendsDocument = gql`

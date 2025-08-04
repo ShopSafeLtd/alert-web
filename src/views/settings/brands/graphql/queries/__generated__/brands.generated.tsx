@@ -11,7 +11,7 @@ export type BrandsQueryVariables = Types.Exact<{
 }>;
 
 
-export type BrandsQuery = { __typename?: 'Query', brands: { __typename?: 'QueryBrandsConnection', totalCount: number, edges: Array<{ __typename?: 'QueryBrandsConnectionEdge', node: { __typename?: 'Brand', id: string, name: string, description?: string | null, businessCount: number } }> } };
+export type BrandsQuery = { __typename?: 'Query', brands: { __typename?: 'QueryBrandsConnection', totalCount: number, edges: Array<{ __typename?: 'QueryBrandsConnectionEdge', node: { __typename?: 'Brand', id?: string | null, name?: string | null, description?: string | null, businessCount: number } }> } };
 
 
 export const BrandsDocument = gql`

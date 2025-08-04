@@ -8,7 +8,7 @@ export type DeleteReportTemplateMutationVariables = Types.Exact<{
 }>;
 
 
-export type DeleteReportTemplateMutation = { __typename?: 'Mutation', deleteReportTemplate?: { __typename?: 'ReportTemplate', id: string, reportGroup: { __typename?: 'ReportGroup', id: string } } | null };
+export type DeleteReportTemplateMutation = { __typename?: 'Mutation', deleteReportTemplate?: { __typename?: 'ReportTemplate', id?: string | null, reportGroup?: { __typename?: 'ReportGroup', id?: string | null } | null } | null };
 
 
 export const DeleteReportTemplateDocument = gql`

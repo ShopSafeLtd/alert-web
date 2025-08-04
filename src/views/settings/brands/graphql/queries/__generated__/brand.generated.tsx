@@ -8,7 +8,7 @@ export type BrandQueryVariables = Types.Exact<{
 }>;
 
 
-export type BrandQuery = { __typename?: 'Query', brand: { __typename?: 'Brand', name: string, id: string, description?: string | null, businesses: Array<{ __typename?: 'Business', id: string, name: string }>, scheme: { __typename?: 'Scheme', id: string } } };
+export type BrandQuery = { __typename?: 'Query', brand: { __typename?: 'Brand', name?: string | null, id?: string | null, description?: string | null, businesses?: Array<{ __typename?: 'Business', id: string, name?: string | null }> | null, scheme?: { __typename?: 'Scheme', id?: string | null } | null } };
 
 
 export const BrandDocument = gql`

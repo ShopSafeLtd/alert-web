@@ -9,7 +9,7 @@ export type UpdateOneStatementTemplateMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateOneStatementTemplateMutation = { __typename?: 'Mutation', updateOneStatementTemplate: { __typename?: 'StatementTemplate', id: string, name: string, content: string, schemes: Array<{ __typename?: 'Scheme', id: string, name: string }> } };
+export type UpdateOneStatementTemplateMutation = { __typename?: 'Mutation', updateOneStatementTemplate: { __typename?: 'StatementTemplate', id?: string | null, name?: string | null, content?: string | null, schemes?: Array<{ __typename?: 'Scheme', id?: string | null, name?: string | null }> | null } };
 
 
 export const UpdateOneStatementTemplateDocument = gql`

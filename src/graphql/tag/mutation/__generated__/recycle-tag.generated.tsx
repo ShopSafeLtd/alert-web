@@ -8,7 +8,7 @@ export type RecycleTagMutationVariables = Types.Exact<{
 }>;
 
 
-export type RecycleTagMutation = { __typename?: 'Mutation', recycleTag: { __typename?: 'Tag', id: string } };
+export type RecycleTagMutation = { __typename?: 'Mutation', recycleTag?: { __typename?: 'Tag', id?: string | null } | null };
 
 
 export const RecycleTagDocument = gql`

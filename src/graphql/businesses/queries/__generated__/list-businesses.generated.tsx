@@ -11,7 +11,7 @@ export type ListBusinessesQueryVariables = Types.Exact<{
 }>;
 
 
-export type ListBusinessesQuery = { __typename?: 'Query', listBusinesses: { __typename?: 'ListBusinesses', total: number, businesses: Array<{ __typename?: 'Business', id: string, name: string, siteNumber?: string | null, fullName: string, publicName: boolean, policeArea: Array<Types.PoliceForce>, demId?: string | null, totalUsers: number, parent?: { __typename?: 'Business', id: string, name: string } | null, locations: Array<{ __typename?: 'Address', id: string, full: string }>, groups: Array<{ __typename?: 'Group', id: string, name: string }>, tags: Array<{ __typename?: 'Tag', id: string, name: string }> }> } };
+export type ListBusinessesQuery = { __typename?: 'Query', listBusinesses: { __typename?: 'ListBusinesses', total: number, businesses: Array<{ __typename?: 'Business', id: string, name?: string | null, siteNumber?: string | null, fullName?: string | null, publicName: boolean, policeArea?: Array<Types.PoliceForce> | null, demId?: string | null, totalUsers: number, parent?: { __typename?: 'Business', id: string, name?: string | null } | null, locations: Array<{ __typename?: 'Address', id: string, full?: string | null }>, groups: Array<{ __typename?: 'Group', id: string, name: string }>, tags: Array<{ __typename?: 'Tag', id?: string | null, name?: string | null }> }> } };
 
 
 export const ListBusinessesDocument = gql`

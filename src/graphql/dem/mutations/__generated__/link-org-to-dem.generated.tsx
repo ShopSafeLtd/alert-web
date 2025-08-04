@@ -9,7 +9,7 @@ export type LinkOrgToDemMutationVariables = Types.Exact<{
 }>;
 
 
-export type LinkOrgToDemMutation = { __typename?: 'Mutation', linkOrgToDem: { __typename?: 'Business', id: string, name: string, demId?: string | null, parent?: { __typename?: 'Business', id: string, name: string } | null, locations: Array<{ __typename?: 'Address', id: string, full: string }> } };
+export type LinkOrgToDemMutation = { __typename?: 'Mutation', linkOrgToDem?: { __typename?: 'Business', id: string, name?: string | null, demId?: string | null, parent?: { __typename?: 'Business', id: string, name?: string | null } | null, locations: Array<{ __typename?: 'Address', id: string, full?: string | null }> } | null };
 
 
 export const LinkOrgToDemDocument = gql`

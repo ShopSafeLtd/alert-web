@@ -12,12 +12,12 @@ interface Props extends TreeSelectProps {
   allowClear?: boolean;
   className?: string;
   maxTagCount?: 'responsive' | number;
-  multiple: boolean;
-  onChange?: (value: string[]) => void;
+  multiple?: boolean;
+  onChange?: (value: string | string[]) => void;
   placeholder?: string;
   size?: SizeType;
   style?: React.CSSProperties;
-  value?: string[];
+  value?: string | string[];
 }
 
 const IncidentTypesSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
@@ -42,34 +42,55 @@ const IncidentTypesSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
     },
   });
 
-  const treeData = useMemo(
-    () =>
-      data?.listIncidentTags
-        .filter((tag) => tag.tier === 0)
-        .map((tag) => ({
-          children: data?.listIncidentTags
-            .filter((tag2) => tag2.parentId === tag.value)
-            .map((tag2) => ({
-              children: data?.listIncidentTags
-                .filter((tag3) => tag3.parentId === tag2.value)
-                .map((tag3) => ({
-                  label: tag3.label,
-                  value: tag3.value,
-                })),
-              label: tag2.label,
-              value: tag2.value,
-            })),
-          label: tag.label,
-          value: tag.value,
-        })),
-    [data]
-  );
+  const { hasNestedStructure, treeData } = useMemo(() => {
+    if (!data?.listIncidentTags) {
+      return { hasNestedStructure: false, treeData: [] };
+    }
 
-  const onTreeChange = (items: string[]) => {
-    console.log(items);
-    if (props.treeCheckable) {
-      if (onChange) onChange(items);
-    } else if (onChange) onChange(items);
+    // Check if any tag has children (nested structure)
+    const hasNested = data.listIncidentTags.some((tag) =>
+      data.listIncidentTags.some((otherTag) => otherTag.parentId === tag.value)
+    );
+
+    const tree = data.listIncidentTags
+      .filter((tag) => tag.tier === 0)
+      .sort((a, b) => a.label.localeCompare(b.label))
+      .map((tag) => ({
+        children: data.listIncidentTags
+          .filter((tag2) => tag2.parentId === tag.value)
+          .sort((a, b) => a.label.localeCompare(b.label))
+          .map((tag2) => ({
+            children: data.listIncidentTags
+              .filter((tag3) => tag3.parentId === tag2.value)
+              .sort((a, b) => a.label.localeCompare(b.label))
+              .map((tag3) => ({
+                label: tag3.label,
+                value: tag3.value,
+              })),
+            label: tag2.label,
+            value: tag2.value,
+          })),
+        label: tag.label,
+        value: tag.value,
+      }));
+
+    return { hasNestedStructure: hasNested, treeData: tree };
+  }, [data]);
+
+  // Determine if multiple selection should be allowed
+  const allowMultiple = multiple === undefined ? !hasNestedStructure : multiple;
+
+  const onTreeChange = (items: string | string[]) => {
+    if (onChange) {
+      if (allowMultiple && !Array.isArray(items)) {
+        onChange([items]);
+      } else if (!allowMultiple && Array.isArray(items)) {
+        // For single selection with treeCheckable, take the last selected item
+        onChange(items.length > 0 ? items.at(-1) : '');
+      } else {
+        onChange(items);
+      }
+    }
   };
 
   return (
@@ -80,7 +101,7 @@ const IncidentTypesSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
       dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
       loading={loading}
       maxTagCount={maxTagCount}
-      multiple={multiple}
+      multiple={allowMultiple}
       onChange={onTreeChange}
       optionFilterProp="label"
       placeholder={placeholder}

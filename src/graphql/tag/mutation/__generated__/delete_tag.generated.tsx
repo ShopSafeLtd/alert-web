@@ -8,7 +8,7 @@ export type DeleteTagMutationVariables = Types.Exact<{
 }>;
 
 
-export type DeleteTagMutation = { __typename?: 'Mutation', deleteTag: { __typename?: 'Tag', id: string } };
+export type DeleteTagMutation = { __typename?: 'Mutation', deleteTag?: { __typename?: 'Tag', id?: string | null } | null };
 
 
 export const DeleteTagDocument = gql`

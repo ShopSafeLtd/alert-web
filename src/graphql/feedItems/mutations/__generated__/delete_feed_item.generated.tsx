@@ -8,7 +8,7 @@ export type DeleteFeedItemMutationVariables = Types.Exact<{
 }>;
 
 
-export type DeleteFeedItemMutation = { __typename?: 'Mutation', deleteFeedItem: { __typename?: 'FeedItem', id: string } };
+export type DeleteFeedItemMutation = { __typename?: 'Mutation', deleteFeedItem?: { __typename?: 'FeedItem', id?: string | null } | null };
 
 
 export const DeleteFeedItemDocument = gql`

@@ -8,7 +8,7 @@ export type ReopenInvestigationMutationVariables = Types.Exact<{
 }>;
 
 
-export type ReopenInvestigationMutation = { __typename?: 'Mutation', reopenInvestigation: { __typename?: 'Investigation', id: string, status: Types.InvestigationStatus } };
+export type ReopenInvestigationMutation = { __typename?: 'Mutation', reopenInvestigation?: { __typename?: 'Investigation', id?: string | null, status?: Types.InvestigationStatus | null } | null };
 
 
 export const ReopenInvestigationDocument = gql`

@@ -9,7 +9,7 @@ export type GroupQueryVariables = Types.Exact<{
 }>;
 
 
-export type GroupQuery = { __typename?: 'Query', group: { __typename?: 'Group', id: string, name: string, description?: string | null, users: Array<{ __typename?: 'User', id: string, fullName: string, businesses: Array<{ __typename?: 'Business', fullName: string, id: string, name: string }> }>, approver: Array<{ __typename?: 'User', id: string, fullName: string }>, offenderSettings?: { __typename?: 'OffenderSettings', name: boolean, alias: boolean, ethnicity: boolean, gender: boolean, build: boolean, height: boolean, hair: boolean, age: boolean, dateOfBirth: boolean, dateOfBirthSource: boolean, idVerified: boolean, peculiarities: boolean, comment: boolean, images: boolean } | null } };
+export type GroupQuery = { __typename?: 'Query', group: { __typename?: 'Group', id: string, name: string, description?: string | null, users: Array<{ __typename?: 'User', id?: string | null, fullName: string, businesses: Array<{ __typename?: 'Business', fullName?: string | null, id: string, name?: string | null }> }>, approver: Array<{ __typename?: 'User', id?: string | null, fullName: string }>, offenderSettings?: { __typename?: 'OffenderSettings', name?: boolean | null, alias?: boolean | null, ethnicity?: boolean | null, gender?: boolean | null, build?: boolean | null, height?: boolean | null, hair?: boolean | null, age?: boolean | null, dateOfBirth?: boolean | null, dateOfBirthSource?: boolean | null, idVerified?: boolean | null, peculiarities?: boolean | null, comment?: boolean | null, images?: boolean | null } | null } };
 
 
 export const GroupDocument = gql`

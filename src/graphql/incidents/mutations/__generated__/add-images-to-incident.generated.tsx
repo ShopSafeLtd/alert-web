@@ -9,7 +9,7 @@ export type AddImagesToIncidentMutationVariables = Types.Exact<{
 }>;
 
 
-export type AddImagesToIncidentMutation = { __typename?: 'Mutation', addImagesToIncident: { __typename?: 'Incident', id: string, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, card?: string | null, position: Types.ImagePosition, rotation: number }> } };
+export type AddImagesToIncidentMutation = { __typename?: 'Mutation', addImagesToIncident?: { __typename?: 'Incident', id?: string | null, images: Array<{ __typename?: 'Image', id?: string | null, url?: string | null, optimised?: string | null, card?: string | null, position?: Types.ImagePosition | null, rotation?: number | null }> } | null };
 
 
 export const AddImagesToIncidentDocument = gql`

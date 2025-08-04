@@ -11,7 +11,7 @@ export type DocumentsQueryVariables = Types.Exact<{
 }>;
 
 
-export type DocumentsQuery = { __typename?: 'Query', documents: { __typename?: 'QueryDocumentsConnection', totalCount: number, edges: Array<{ __typename?: 'QueryDocumentsConnectionEdge', node: { __typename?: 'Document', id: string, name: string, url: string, fileType?: Types.FileType | null, tags: Array<{ __typename?: 'Tag', id: string, name: string }> } }> } };
+export type DocumentsQuery = { __typename?: 'Query', documents: { __typename?: 'QueryDocumentsConnection', totalCount: number, edges: Array<{ __typename?: 'QueryDocumentsConnectionEdge', node: { __typename?: 'Document', id?: string | null, name?: string | null, url?: string | null, fileType?: Types.FileType | null, tags: Array<{ __typename?: 'Tag', id?: string | null, name?: string | null }> } }> } };
 
 
 export const DocumentsDocument = gql`

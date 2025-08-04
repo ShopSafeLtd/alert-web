@@ -11,7 +11,7 @@ export type AiOffendersQueryVariables = Types.Exact<{
 }>;
 
 
-export type AiOffendersQuery = { __typename?: 'Query', listOffendersRelay: { __typename?: 'QueryListOffendersRelayConnection', edges: Array<{ __typename?: 'QueryListOffendersRelayConnectionEdge', node: { __typename?: 'Offender', id: string, name?: string | null, images: Array<{ __typename?: 'Image', id: string, url?: string | null }>, tags: Array<{ __typename?: 'Tag', id: string, name: string }> } }> } };
+export type AiOffendersQuery = { __typename?: 'Query', listOffendersRelay?: { __typename?: 'QueryListOffendersRelayConnection', edges: Array<{ __typename?: 'QueryListOffendersRelayConnectionEdge', node: { __typename?: 'Offender', id?: string | null, name?: string | null, images: Array<{ __typename?: 'Image', id?: string | null, url?: string | null }>, tags: Array<{ __typename?: 'Tag', id?: string | null, name?: string | null }> } }> } | null };
 
 
 export const AiOffendersDocument = gql`

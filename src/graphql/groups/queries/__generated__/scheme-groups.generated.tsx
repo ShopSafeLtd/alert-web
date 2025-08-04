@@ -9,7 +9,7 @@ export type SchemeGroupsQueryVariables = Types.Exact<{
 }>;
 
 
-export type SchemeGroupsQuery = { __typename?: 'Query', groups: Array<{ __typename?: 'Group', id: string, name: string, description?: string | null, scheme: { __typename?: 'Scheme', id: string, name: string }, approver: Array<{ __typename?: 'User', id: string, fullName: string }> }> };
+export type SchemeGroupsQuery = { __typename?: 'Query', groups: Array<{ __typename?: 'Group', id: string, name: string, description?: string | null, scheme: { __typename?: 'Scheme', id?: string | null, name?: string | null }, approver: Array<{ __typename?: 'User', id?: string | null, fullName: string }> }> };
 
 
 export const SchemeGroupsDocument = gql`

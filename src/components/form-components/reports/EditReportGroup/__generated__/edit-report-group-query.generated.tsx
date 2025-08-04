@@ -8,7 +8,7 @@ export type EditReportGroupQueryVariables = Types.Exact<{
 }>;
 
 
-export type EditReportGroupQuery = { __typename?: 'Query', reportGroup: { __typename?: 'ReportGroup', id: string, name: string, order: number, groups: Array<{ __typename?: 'Group', id: string }> } };
+export type EditReportGroupQuery = { __typename?: 'Query', reportGroup: { __typename?: 'ReportGroup', id?: string | null, name?: string | null, order?: number | null, groups?: Array<{ __typename?: 'Group', id: string }> | null } };
 
 
 export const EditReportGroupDocument = gql`

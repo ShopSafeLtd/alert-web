@@ -11,7 +11,7 @@ export type TagsSelectQueryVariables = Types.Exact<{
 }>;
 
 
-export type TagsSelectQuery = { __typename?: 'Query', listTags: { __typename?: 'ListTags', total: number, tags: Array<{ __typename?: 'Tag', id: string, name: string }> } };
+export type TagsSelectQuery = { __typename?: 'Query', listTags: { __typename?: 'ListTags', total: number, tags: Array<{ __typename?: 'Tag', id?: string | null, name?: string | null }> } };
 
 
 export const TagsSelectDocument = gql`

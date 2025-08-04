@@ -8,7 +8,7 @@ export type GenerateStatementBodyMutationVariables = Types.Exact<{
 }>;
 
 
-export type GenerateStatementBodyMutation = { __typename?: 'Mutation', generateStatementBody: { __typename?: 'GeneratedStatementBody', statement: string } };
+export type GenerateStatementBodyMutation = { __typename?: 'Mutation', generateStatementBody?: { __typename?: 'GeneratedStatementBody', statement: string } | null };
 
 
 export const GenerateStatementBodyDocument = gql`

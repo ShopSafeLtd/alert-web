@@ -11,7 +11,7 @@ export type LinkInvestigationsQueryVariables = Types.Exact<{
 }>;
 
 
-export type LinkInvestigationsQuery = { __typename?: 'Query', investigationRelay: { __typename?: 'QueryInvestigationRelayConnection', totalCount: number, edges: Array<{ __typename?: 'QueryInvestigationRelayConnectionEdge', node: { __typename?: 'Investigation', id: string, name: string, status: Types.InvestigationStatus, createdAt: Date, reference?: number | null, closedAt?: Date | null } }> } };
+export type LinkInvestigationsQuery = { __typename?: 'Query', investigationRelay?: { __typename?: 'QueryInvestigationRelayConnection', totalCount: number, edges: Array<{ __typename?: 'QueryInvestigationRelayConnectionEdge', node: { __typename?: 'Investigation', id?: string | null, name?: string | null, status?: Types.InvestigationStatus | null, createdAt?: Date | null, reference?: number | null, closedAt?: Date | null } }> } | null };
 
 
 export const LinkInvestigationsDocument = gql`

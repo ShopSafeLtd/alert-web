@@ -11,7 +11,7 @@ export type ListLoginEventsQueryVariables = Types.Exact<{
 }>;
 
 
-export type ListLoginEventsQuery = { __typename?: 'Query', listLoginEvents: { __typename?: 'ListLoginEvents', total: number, loginEvents: Array<{ __typename?: 'LoginEvent', id: string, createdAt: Date, loginTime: Date, user: { __typename?: 'User', id: string, fullName: string, firstLetter: string, businesses: Array<{ __typename?: 'Business', id: string, name: string }> } }> } };
+export type ListLoginEventsQuery = { __typename?: 'Query', listLoginEvents: { __typename?: 'ListLoginEvents', total: number, loginEvents: Array<{ __typename?: 'LoginEvent', id?: string | null, createdAt?: Date | null, loginTime?: Date | null, user?: { __typename?: 'User', id?: string | null, fullName: string, firstLetter?: string | null, businesses: Array<{ __typename?: 'Business', id: string, name?: string | null }> } | null }> } };
 
 
 export const ListLoginEventsDocument = gql`

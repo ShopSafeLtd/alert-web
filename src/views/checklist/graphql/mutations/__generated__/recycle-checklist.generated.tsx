@@ -8,7 +8,7 @@ export type RecycleChecklistMutationVariables = Types.Exact<{
 }>;
 
 
-export type RecycleChecklistMutation = { __typename?: 'Mutation', recycleChecklist: { __typename?: 'Checklist', id: string } };
+export type RecycleChecklistMutation = { __typename?: 'Mutation', recycleChecklist?: { __typename?: 'Checklist', id: string } | null };
 
 
 export const RecycleChecklistDocument = gql`

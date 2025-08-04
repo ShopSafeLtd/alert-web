@@ -11,7 +11,7 @@ export type ListBusinessesSelectQueryVariables = Types.Exact<{
 }>;
 
 
-export type ListBusinessesSelectQuery = { __typename?: 'Query', businessRelay: { __typename?: 'QueryBusinessRelayConnection', totalCount: number, edges: Array<{ __typename?: 'QueryBusinessRelayConnectionEdge', node: { __typename?: 'Business', id: string, name: string, locations: Array<{ __typename?: 'Address', id: string, full: string }> } }> } };
+export type ListBusinessesSelectQuery = { __typename?: 'Query', businessRelay?: { __typename?: 'QueryBusinessRelayConnection', totalCount: number, edges: Array<{ __typename?: 'QueryBusinessRelayConnectionEdge', node: { __typename?: 'Business', id: string, name?: string | null, locations: Array<{ __typename?: 'Address', id: string, full?: string | null }> } }> } | null };
 
 
 export const ListBusinessesSelectDocument = gql`

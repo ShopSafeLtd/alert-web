@@ -8,7 +8,7 @@ export type AiVisionCamerasQueryVariables = Types.Exact<{
 }>;
 
 
-export type AiVisionCamerasQuery = { __typename?: 'Query', aiVisionCameras: { __typename?: 'QueryAiVisionCamerasConnection', edges: Array<{ __typename?: 'QueryAiVisionCamerasConnectionEdge', node: { __typename?: 'AIVisionCamera', id: string, make?: string | null, model?: string | null, serialNumber?: string | null, business: { __typename?: 'Business', id: string, name: string } } }> } };
+export type AiVisionCamerasQuery = { __typename?: 'Query', aiVisionCameras?: { __typename?: 'QueryAiVisionCamerasConnection', edges: Array<{ __typename?: 'QueryAiVisionCamerasConnectionEdge', node: { __typename?: 'AIVisionCamera', id: string, make?: string | null, model?: string | null, serialNumber?: string | null, business: { __typename?: 'Business', id: string, name?: string | null } } }> } | null };
 
 
 export const AiVisionCamerasDocument = gql`

@@ -10,7 +10,7 @@ export type AiVisionEventsQueryVariables = Types.Exact<{
 }>;
 
 
-export type AiVisionEventsQuery = { __typename?: 'Query', aiVisionEvents: { __typename?: 'QueryAiVisionEventsConnection', edges: Array<{ __typename?: 'QueryAiVisionEventsConnectionEdge', node: { __typename?: 'AIVisionEvent', id: string, createdAt: Date, matchFound?: boolean | null, type?: Types.AiVisionEventType | null, business: { __typename?: 'Business', id: string, name: string }, camera: { __typename?: 'AIVisionCamera', id: string, serialNumber?: string | null } } }> } };
+export type AiVisionEventsQuery = { __typename?: 'Query', aiVisionEvents?: { __typename?: 'QueryAiVisionEventsConnection', edges: Array<{ __typename?: 'QueryAiVisionEventsConnectionEdge', node: { __typename?: 'AIVisionEvent', id: string, createdAt?: Date | null, matchFound?: boolean | null, type?: Types.AiVisionEventType | null, business: { __typename?: 'Business', id: string, name?: string | null }, camera: { __typename?: 'AIVisionCamera', id: string, serialNumber?: string | null } } }> } | null };
 
 
 export const AiVisionEventsDocument = gql`

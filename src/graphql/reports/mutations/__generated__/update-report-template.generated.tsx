@@ -10,7 +10,7 @@ export type UpdateReportTemplateMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateReportTemplateMutation = { __typename?: 'Mutation', updateReportTemplate: { __typename?: 'ReportTemplate', description?: string | null, id: string, metaData: Array<{ [key: string]: any }>, default: boolean, name: string, type: Types.ReportType, layout: Array<{ __typename?: 'ReportLayout', id: string, createdAt: Date, updatedAt: Date, h: number, w: number, x: number, y: number, maxW?: number | null, maxH?: number | null, minW?: number | null, minH?: number | null, static: boolean, moved: boolean, i: string }> } };
+export type UpdateReportTemplateMutation = { __typename?: 'Mutation', updateReportTemplate: { __typename?: 'ReportTemplate', description?: string | null, id?: string | null, metaData?: Array<{ [key: string]: any }> | null, default?: boolean | null, name?: string | null, type?: Types.ReportType | null, layout?: Array<{ __typename?: 'ReportLayout', id?: string | null, createdAt?: Date | null, updatedAt?: Date | null, h?: number | null, w?: number | null, x?: number | null, y?: number | null, maxW?: number | null, maxH?: number | null, minW?: number | null, minH?: number | null, static?: boolean | null, moved?: boolean | null, i?: string | null }> | null } };
 
 
 export const UpdateReportTemplateDocument = gql`

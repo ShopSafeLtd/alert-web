@@ -9,7 +9,7 @@ export type CreateInvestigationMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateInvestigationMutation = { __typename?: 'Mutation', createInvestigation: { __typename?: 'Investigation', id: string, name: string, description?: string | null, status: Types.InvestigationStatus, createdAt: Date, closedAt?: Date | null, reference?: number | null, groups: Array<{ __typename?: 'Group', id: string, name: string }> } };
+export type CreateInvestigationMutation = { __typename?: 'Mutation', createInvestigation?: { __typename?: 'Investigation', id?: string | null, name?: string | null, description?: string | null, status?: Types.InvestigationStatus | null, createdAt?: Date | null, closedAt?: Date | null, reference?: number | null, groups: Array<{ __typename?: 'Group', id: string, name: string }> } | null };
 
 
 export const CreateInvestigationDocument = gql`

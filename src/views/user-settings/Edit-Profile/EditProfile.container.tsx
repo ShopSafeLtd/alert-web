@@ -10,7 +10,6 @@ const EditProfile = (): JSX.Element => {
     loading,
     onClose,
     onSubmit,
-    resetConfirm,
     saving,
     userDefaultGroups,
   } = useEditProfile();
@@ -22,7 +21,6 @@ const EditProfile = (): JSX.Element => {
       loading={loading}
       onClose={onClose}
       onSubmit={onSubmit}
-      resetConfirm={resetConfirm}
       saving={saving}
       userDefaultGroups={userDefaultGroups}
     />

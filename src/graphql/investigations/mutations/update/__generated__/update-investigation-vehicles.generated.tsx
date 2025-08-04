@@ -11,7 +11,7 @@ export type UpdateInvestigationVehiclesMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateInvestigationVehiclesMutation = { __typename?: 'Mutation', updateInvestigation: { __typename?: 'Investigation', id: string, vehicles: Array<{ __typename?: 'Vehicle', id: string, reference?: number | null, colour?: string | null, model?: string | null, make?: string | null, registration?: string | null }> } };
+export type UpdateInvestigationVehiclesMutation = { __typename?: 'Mutation', updateInvestigation?: { __typename?: 'Investigation', id?: string | null, vehicles: Array<{ __typename?: 'Vehicle', id?: string | null, reference?: number | null, colour?: string | null, model?: string | null, make?: string | null, registration?: string | null }> } | null };
 
 
 export const UpdateInvestigationVehiclesDocument = gql`

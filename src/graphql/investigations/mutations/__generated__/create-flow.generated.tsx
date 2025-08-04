@@ -8,7 +8,7 @@ export type CreateFlowMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateFlowMutation = { __typename?: 'Mutation', createFlow: { __typename?: 'Flow', id: string, name: string, description?: string | null } };
+export type CreateFlowMutation = { __typename?: 'Mutation', createFlow?: { __typename?: 'Flow', id?: string | null, name?: string | null, description?: string | null } | null };
 
 
 export const CreateFlowDocument = gql`

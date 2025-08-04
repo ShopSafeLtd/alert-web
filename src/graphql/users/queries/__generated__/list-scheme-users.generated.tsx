@@ -12,7 +12,7 @@ export type ListSchemeUsersQueryVariables = Types.Exact<{
 }>;
 
 
-export type ListSchemeUsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string, fullName: string, firstLetter: string, origName: string, origFirstLetter: string, email?: string | null, publicName: boolean, reportToAllBusinesses?: boolean | null, status?: Types.UserStatus | null, businesses: Array<{ __typename?: 'Business', id: string, name: string, fullName: string }>, groups: Array<{ __typename?: 'Group', id: string, name: string }>, schemes: Array<{ __typename?: 'UserScheme', id: string, role: Types.Role, scheme: { __typename?: 'Scheme', id: string } }>, approverGroups: Array<{ __typename?: 'Group', id: string, name: string }> }> };
+export type ListSchemeUsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id?: string | null, fullName: string, firstLetter?: string | null, origName?: string | null, origFirstLetter?: string | null, email?: string | null, publicName?: boolean | null, reportToAllBusinesses?: boolean | null, status?: Types.UserStatus | null, businesses: Array<{ __typename?: 'Business', id: string, name?: string | null, fullName?: string | null }>, groups: Array<{ __typename?: 'Group', id: string, name: string }>, schemes: Array<{ __typename?: 'UserScheme', id?: string | null, role?: Types.Role | null, scheme?: { __typename?: 'Scheme', id?: string | null } | null }>, approverGroups: Array<{ __typename?: 'Group', id: string, name: string }> }> };
 
 
 export const ListSchemeUsersDocument = gql`

@@ -9,7 +9,7 @@ export type UpdateFlowMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateFlowMutation = { __typename?: 'Mutation', updateFlow: { __typename?: 'Flow', id: string, name: string, description?: string | null, edges: Array<{ __typename?: 'FlowEdge', id: string, type: string, markerEnd: { [key: string]: any }, source: string, sourceHandle?: string | null, target: string, targetHandle?: string | null }>, nodes: Array<{ __typename?: 'FlowNode', id: string, type: string, data: { [key: string]: any }, height: number, width: number, style: { __typename?: 'Style', height: number, width: number }, position: { __typename?: 'XY', x: number, y: number }, positionAbsolute: { __typename?: 'XY', x: number, y: number } }> } };
+export type UpdateFlowMutation = { __typename?: 'Mutation', updateFlow?: { __typename?: 'Flow', id?: string | null, name?: string | null, description?: string | null, edges?: Array<{ __typename?: 'FlowEdge', id?: string | null, type?: string | null, markerEnd?: { [key: string]: any } | null, source?: string | null, sourceHandle?: string | null, target?: string | null, targetHandle?: string | null }> | null, nodes?: Array<{ __typename?: 'FlowNode', id?: string | null, type?: string | null, data?: { [key: string]: any } | null, height?: number | null, width?: number | null, style?: { __typename?: 'Style', height: number, width: number } | null, position?: { __typename?: 'XY', x: number, y: number } | null, positionAbsolute?: { __typename?: 'XY', x: number, y: number } | null }> | null } | null };
 
 
 export const UpdateFlowDocument = gql`

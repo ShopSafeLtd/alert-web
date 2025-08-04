@@ -9,7 +9,7 @@ export type DemDeviceQueryVariables = Types.Exact<{
 }>;
 
 
-export type DemDeviceQuery = { __typename?: 'Query', demDevice: { __typename?: 'DemDevice', id: string, demId: string, createdAt: Date, serialNumber?: string | null, name: string, evidence: Array<{ __typename?: 'Document', id: string, name: string, url: string, fileType?: Types.FileType | null }>, demGroups: Array<{ __typename?: 'DemGroup', id: string, name: string }>, business: { __typename?: 'Business', id: string, name: string } } };
+export type DemDeviceQuery = { __typename?: 'Query', demDevice: { __typename?: 'DemDevice', id?: string | null, demId?: string | null, createdAt?: Date | null, serialNumber?: string | null, name?: string | null, evidence?: Array<{ __typename?: 'Document', id?: string | null, name?: string | null, url?: string | null, fileType?: Types.FileType | null }> | null, demGroups?: Array<{ __typename?: 'DemGroup', id?: string | null, name?: string | null }> | null, business?: { __typename?: 'Business', id: string, name?: string | null } | null } };
 
 
 export const DemDeviceDocument = gql`

@@ -8,7 +8,7 @@ export type CreateOneQuestionGroupMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateOneQuestionGroupMutation = { __typename?: 'Mutation', createOneQuestionGroup: { __typename?: 'QuestionGroup', id: string, name: string, description?: string | null, defaultDueDate: number, questions: Array<{ __typename?: 'Question', questionFormatted: string, id: string }> } };
+export type CreateOneQuestionGroupMutation = { __typename?: 'Mutation', createOneQuestionGroup: { __typename?: 'QuestionGroup', id?: string | null, name?: string | null, description?: string | null, defaultDueDate?: number | null, questions?: Array<{ __typename?: 'Question', questionFormatted?: string | null, id?: string | null }> | null } };
 
 
 export const CreateOneQuestionGroupDocument = gql`

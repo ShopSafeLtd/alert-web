@@ -8,7 +8,7 @@ export type DeleteOneWorkflowMutationVariables = Types.Exact<{
 }>;
 
 
-export type DeleteOneWorkflowMutation = { __typename?: 'Mutation', deleteOneWorkflow?: { __typename?: 'Workflow', id: string } | null };
+export type DeleteOneWorkflowMutation = { __typename?: 'Mutation', deleteOneWorkflow?: { __typename?: 'Workflow', id?: string | null } | null };
 
 
 export const DeleteOneWorkflowDocument = gql`

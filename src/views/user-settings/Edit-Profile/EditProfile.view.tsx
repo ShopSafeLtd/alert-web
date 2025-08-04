@@ -30,7 +30,6 @@ interface Props {
   loading: boolean;
   onClose: () => void;
   onSubmit: (value: FormData) => void;
-  resetConfirm: () => void;
   saving: boolean;
   userDefaultGroups: string[] | undefined;
 }
@@ -40,7 +39,6 @@ const EditProfile = ({
   loading,
   onClose,
   onSubmit,
-  resetConfirm: _,
   saving,
   userDefaultGroups,
 }: Props): JSX.Element => {
@@ -49,8 +47,8 @@ const EditProfile = ({
     ?.disablePassword;
 
   const schemes = data?.currentUser?.schemes.map(({ scheme }) => ({
-    label: scheme.name,
-    value: scheme.id,
+    label: scheme?.name,
+    value: scheme?.id,
   }));
 
   return (

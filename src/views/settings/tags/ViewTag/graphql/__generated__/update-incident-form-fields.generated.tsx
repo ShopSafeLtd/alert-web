@@ -8,7 +8,7 @@ export type UpsertIncidentFormMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpsertIncidentFormMutation = { __typename?: 'Mutation', upsertIncidentForm: { __typename?: 'IncidentForm', id: string } };
+export type UpsertIncidentFormMutation = { __typename?: 'Mutation', upsertIncidentForm?: { __typename?: 'IncidentForm', id?: string | null } | null };
 
 
 export const UpsertIncidentFormDocument = gql`

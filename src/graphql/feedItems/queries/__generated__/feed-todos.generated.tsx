@@ -12,7 +12,7 @@ export type FeedTodosQueryVariables = Types.Exact<{
 }>;
 
 
-export type FeedTodosQuery = { __typename?: 'Query', listTodos: { __typename?: 'ListTodos', totalUserTodos: number, uncompletedTotal: number, uncompletedTodos: Array<{ __typename?: 'Todo', description?: string | null, id: string, name?: string | null, dueDate?: Date | null, completed?: boolean | null, authorised?: boolean | null, type?: Types.TodoType | null, vehicleId?: string | null, offenderId?: string | null, crimeGroupId?: string | null, incidentId?: string | null, investigationId?: string | null, chatId?: string | null, similarOffenderIds: Array<string> }> } };
+export type FeedTodosQuery = { __typename?: 'Query', listTodos: { __typename?: 'ListTodos', totalUserTodos: number, uncompletedTotal: number, uncompletedTodos: Array<{ __typename?: 'Todo', description?: string | null, id?: string | null, name?: string | null, dueDate?: Date | null, completed?: boolean | null, authorised?: boolean | null, type?: Types.TodoType | null, vehicleId?: string | null, offenderId?: string | null, crimeGroupId?: string | null, incidentId?: string | null, investigationId?: string | null, chatId?: string | null, similarOffenderIds?: Array<string> | null }> } };
 
 
 export const FeedTodosDocument = gql`

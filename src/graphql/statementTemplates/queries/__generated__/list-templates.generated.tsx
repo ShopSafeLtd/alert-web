@@ -8,7 +8,7 @@ export type ListStatementTemplatesQueryVariables = Types.Exact<{
 }>;
 
 
-export type ListStatementTemplatesQuery = { __typename?: 'Query', statementTemplates: Array<{ __typename?: 'StatementTemplate', id: string, name: string, content: string, schemes: Array<{ __typename?: 'Scheme', id: string, name: string }> }> };
+export type ListStatementTemplatesQuery = { __typename?: 'Query', statementTemplates: Array<{ __typename?: 'StatementTemplate', id?: string | null, name?: string | null, content?: string | null, schemes?: Array<{ __typename?: 'Scheme', id?: string | null, name?: string | null }> | null }> };
 
 
 export const ListStatementTemplatesDocument = gql`

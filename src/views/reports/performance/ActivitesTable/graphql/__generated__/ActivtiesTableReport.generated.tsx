@@ -11,7 +11,7 @@ export type ActivitiesTableReportQueryVariables = Types.Exact<{
 }>;
 
 
-export type ActivitiesTableReportQuery = { __typename?: 'Query', todoRelay: { __typename?: 'QueryTodoRelayConnection', totalCount: number, edges: Array<{ __typename?: 'QueryTodoRelayConnectionEdge', node: { __typename?: 'Todo', id: string, name?: string | null, dueDate?: Date | null, createdAt: Date, completed?: boolean | null, type?: Types.TodoType | null, completedDate?: Date | null, business?: { __typename?: 'Business', id: string, name: string } | null, assignedUsers: Array<{ __typename?: 'User', id: string, fullName: string }> } }> } };
+export type ActivitiesTableReportQuery = { __typename?: 'Query', todoRelay?: { __typename?: 'QueryTodoRelayConnection', totalCount: number, edges: Array<{ __typename?: 'QueryTodoRelayConnectionEdge', node: { __typename?: 'Todo', id?: string | null, name?: string | null, dueDate?: Date | null, createdAt?: Date | null, completed?: boolean | null, type?: Types.TodoType | null, completedDate?: Date | null, business?: { __typename?: 'Business', id: string, name?: string | null } | null, assignedUsers: Array<{ __typename?: 'User', id?: string | null, fullName: string }> } }> } | null };
 
 
 export const ActivitiesTableReportDocument = gql`

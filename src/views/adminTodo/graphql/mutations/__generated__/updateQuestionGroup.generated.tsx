@@ -9,7 +9,7 @@ export type UpdateQuestionGroupMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateQuestionGroupMutation = { __typename?: 'Mutation', updateOneQuestionGroup: { __typename?: 'QuestionGroup', id: string } };
+export type UpdateQuestionGroupMutation = { __typename?: 'Mutation', updateOneQuestionGroup: { __typename?: 'QuestionGroup', id?: string | null } };
 
 
 export const UpdateQuestionGroupDocument = gql`

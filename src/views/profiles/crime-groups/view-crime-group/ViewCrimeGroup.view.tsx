@@ -101,7 +101,7 @@ const MemoizedCrimeGroupFlow = React.memo(
         id: data.crimeGroup.id,
         incidents: data.crimeGroup.incidents.map((incident) => ({
           id: incident.id,
-          incidentType: incident.crimeTypes[0]?.name || null,
+          incidentType: incident.crimeTypes?.at(0)?.name || null,
           location: incident.location
             ? {
                 address: incident.location.full,

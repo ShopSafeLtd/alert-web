@@ -11,7 +11,7 @@ export type ListBusinessUsersQueryVariables = Types.Exact<{
 }>;
 
 
-export type ListBusinessUsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string, fullName: string, status?: Types.UserStatus | null, publicName: boolean, sessions: Array<{ __typename?: 'Session', createdAt: Date }>, groups: Array<{ __typename?: 'Group', id: string, name: string }> }> };
+export type ListBusinessUsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id?: string | null, fullName: string, status?: Types.UserStatus | null, publicName?: boolean | null, sessions: Array<{ __typename?: 'Session', createdAt?: Date | null }>, groups: Array<{ __typename?: 'Group', id: string, name: string }> }> };
 
 
 export const ListBusinessUsersDocument = gql`

@@ -9,7 +9,7 @@ export type CreateUserinAuth0MutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateUserinAuth0Mutation = { __typename?: 'Mutation', createUserInAuth0?: { __typename?: 'UserNewAuth0', message: string } | null };
+export type CreateUserinAuth0Mutation = { __typename?: 'Mutation', createUserInAuth0?: { __typename?: 'UserNewAuth0', message?: string | null } | null };
 
 
 export const CreateUserinAuth0Document = gql`

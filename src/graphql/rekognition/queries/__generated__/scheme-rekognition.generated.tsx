@@ -8,7 +8,7 @@ export type SchemeRekognitionQueryVariables = Types.Exact<{
 }>;
 
 
-export type SchemeRekognitionQuery = { __typename?: 'Query', scheme: { __typename?: 'Scheme', id: string, facialRecognition: boolean, facialDetection: boolean, facialRedaction: boolean, rekCollections: Array<{ __typename?: 'RekCollection', id: string, name: string }> } };
+export type SchemeRekognitionQuery = { __typename?: 'Query', scheme: { __typename?: 'Scheme', id?: string | null, facialRecognition?: boolean | null, facialDetection?: boolean | null, facialRedaction?: boolean | null, rekCollections: Array<{ __typename?: 'RekCollection', id?: string | null, name?: string | null }> } };
 
 
 export const SchemeRekognitionDocument = gql`

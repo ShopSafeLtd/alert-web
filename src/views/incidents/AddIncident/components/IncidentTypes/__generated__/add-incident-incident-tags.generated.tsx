@@ -9,7 +9,7 @@ export type AddIncidentTagsQueryVariables = Types.Exact<{
 }>;
 
 
-export type AddIncidentTagsQuery = { __typename?: 'Query', tags: Array<{ __typename?: 'Tag', id: string, name: string, description: string, type: Types.TagType }> };
+export type AddIncidentTagsQuery = { __typename?: 'Query', tags: Array<{ __typename?: 'Tag', id?: string | null, name?: string | null, description?: string | null, type?: Types.TagType | null }> };
 
 
 export const AddIncidentTagsDocument = gql`

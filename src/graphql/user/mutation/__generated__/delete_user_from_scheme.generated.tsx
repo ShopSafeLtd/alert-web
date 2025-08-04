@@ -9,7 +9,7 @@ export type DeleteUserFromSchemeMutationVariables = Types.Exact<{
 }>;
 
 
-export type DeleteUserFromSchemeMutation = { __typename?: 'Mutation', deleteUserFromScheme?: { __typename?: 'User', id: string } | null };
+export type DeleteUserFromSchemeMutation = { __typename?: 'Mutation', deleteUserFromScheme?: { __typename?: 'User', id?: string | null } | null };
 
 
 export const DeleteUserFromSchemeDocument = gql`

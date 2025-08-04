@@ -8,7 +8,7 @@ export type UpdateUserNotificationsMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateUserNotificationsMutation = { __typename?: 'Mutation', updateUserNotifications: Array<{ __typename?: 'UserNotification', id: string, read: boolean, createdAt: Date, notification: { __typename?: 'Notification', id: string, crimeGroupId?: string | null, createdAt: Date, chatId?: string | null, body?: string | null, articleId?: string | null, incidentId?: string | null, investigationId?: string | null, offenderId?: string | null, title?: string | null, type?: Types.Model | null, vehicleId?: string | null, userId?: string | null, schemes: Array<{ __typename?: 'Scheme', id: string }>, ban?: { __typename?: 'Ban', id: string, offender: { __typename?: 'Offender', id: string } } | null } }> };
+export type UpdateUserNotificationsMutation = { __typename?: 'Mutation', updateUserNotifications?: Array<{ __typename?: 'UserNotification', id?: string | null, read?: boolean | null, createdAt?: Date | null, notification?: { __typename?: 'Notification', id?: string | null, crimeGroupId?: string | null, createdAt?: Date | null, chatId?: string | null, body?: string | null, articleId?: string | null, incidentId?: string | null, investigationId?: string | null, offenderId?: string | null, title?: string | null, type?: Types.Model | null, vehicleId?: string | null, userId?: string | null, schemes?: Array<{ __typename?: 'Scheme', id?: string | null }> | null, ban?: { __typename?: 'Ban', id: string, offender: { __typename?: 'Offender', id?: string | null } } | null } | null }> | null };
 
 
 export const UpdateUserNotificationsDocument = gql`

@@ -6,7 +6,7 @@ const defaultOptions = {} as const;
 export type AiVisionStatsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type AiVisionStatsQuery = { __typename?: 'Query', aiVisionStats: Array<{ __typename?: 'Count', count: Array<number>, name: string }> };
+export type AiVisionStatsQuery = { __typename?: 'Query', aiVisionStats?: Array<{ __typename?: 'Count', count: Array<number>, name: string }> | null };
 
 
 export const AiVisionStatsDocument = gql`
