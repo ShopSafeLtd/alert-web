@@ -8,7 +8,7 @@ export type IndexImageMutationVariables = Types.Exact<{
 }>;
 
 
-export type IndexImageMutation = { __typename?: 'Mutation', indexImage: { __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: Types.ImagePosition, rotation: number, faces: Array<{ __typename?: 'RekFace', id: string, confidence?: number | null, boundingHeight?: number | null, boundingLeft?: number | null, boundingTop?: number | null, boundingWidth?: number | null, offender: { __typename?: 'Offender', id: string, name?: string | null }, rekMatchedSearches: Array<{ __typename?: 'RekMatch', id: string }> }> } };
+export type IndexImageMutation = { __typename?: 'Mutation', indexImage: { __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: Types.ImagePosition, rotation: number, faces: Array<{ __typename?: 'RekFace', id: string, confidence?: number | null, boundingHeight?: number | null, boundingLeft?: number | null, boundingTop?: number | null, boundingWidth?: number | null, offender?: { __typename?: 'Offender', id: string, name?: string | null } | null, rekMatchedSearches: Array<{ __typename?: 'RekMatch', id: string }> }> } };
 
 
 export const IndexImageDocument = gql`

@@ -85,7 +85,10 @@ const IncidentFilter = ({
     });
   };
 
-  const setCrimeTypesFilter = (values: string[]) => {
+  const setCrimeTypesFilter = (values: string | string[]) => {
+    if (typeof values === 'string') {
+      values = [values];
+    }
     setIncidentsState({
       order,
       pagination,

@@ -8,7 +8,7 @@ export type CreateReportTemplateMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateReportTemplateMutation = { __typename?: 'Mutation', createReportTemplate: { __typename?: 'ReportTemplate', id: string, metaData: Array<{ [key: string]: any }>, default: boolean, description?: string | null, name: string, type: Types.ReportType, reportGroup: { __typename?: 'ReportGroup', id: string }, layout: Array<{ __typename?: 'ReportLayout', id: string, createdAt: Date, updatedAt: Date, h: number, w: number, x: number, y: number, maxW?: number | null, maxH?: number | null, minW?: number | null, minH?: number | null, static: boolean, moved: boolean, i: string }> } };
+export type CreateReportTemplateMutation = { __typename?: 'Mutation', createReportTemplate: { __typename?: 'ReportTemplate', id: string, metaData: Array<{ [key: string]: any }>, default: boolean, description?: string | null, name: string, type: Types.ReportType, reportGroup?: { __typename?: 'ReportGroup', id: string } | null, layout: Array<{ __typename?: 'ReportLayout', id: string, createdAt: Date, updatedAt: Date, h: number, w: number, x: number, y: number, maxW?: number | null, maxH?: number | null, minW?: number | null, minH?: number | null, static: boolean, moved: boolean, i: string }> } };
 
 export type ReportTemplatesFragment = { __typename?: 'ReportTemplate', id: string, metaData: Array<{ [key: string]: any }>, default: boolean, description?: string | null, name: string, type: Types.ReportType, layout: Array<{ __typename?: 'ReportLayout', id: string, createdAt: Date, updatedAt: Date, h: number, w: number, x: number, y: number, maxW?: number | null, maxH?: number | null, minW?: number | null, minH?: number | null, static: boolean, moved: boolean, i: string }> };
 

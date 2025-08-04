@@ -10,7 +10,6 @@ interface Props {
 
 const EditIncidentFeed = ({ incidentId, onClose }: Props): JSX.Element => {
   const {
-    crimeTypes,
     data,
     groups,
     groupsLoading,
@@ -28,7 +27,6 @@ const EditIncidentFeed = ({ incidentId, onClose }: Props): JSX.Element => {
 
   return (
     <View
-      crimeTypes={crimeTypes}
       data={data}
       groups={groups}
       groupsLoading={groupsLoading}

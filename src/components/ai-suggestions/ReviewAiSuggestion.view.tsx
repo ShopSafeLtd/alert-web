@@ -150,21 +150,22 @@ const ReviewAiSuggestion = ({
             </Col>
             <Col className={styles.imageDetails} span={24}>
               <Typography.Title level={4} style={{ marginBottom: 0 }}>
-                {data?.aiSuggestion.rekMatch?.matchedOffender.name}
+                {data?.aiSuggestion.rekMatch?.matchedOffender?.name || ''}
               </Typography.Title>
               <Typography.Text type="secondary">
                 <FormattedMessage
                   defaultMessage="Alert ID: {var1}"
                   values={{
-                    var1: data?.aiSuggestion.rekMatch?.matchedOffender
-                      .reference,
+                    var1:
+                      data?.aiSuggestion.rekMatch?.matchedOffender?.reference ||
+                      '',
                   }}
                 />
               </Typography.Text>
               <Row justify="center" style={{ marginTop: 20 }}>
                 <Col>
                   <Link
-                    to={`/app/offenders/view/${data?.aiSuggestion.rekMatch?.matchedOffender.id}`}
+                    to={`/app/offenders/view/${data?.aiSuggestion.rekMatch?.matchedOffender?.id}`}
                   >
                     <Button type="text">
                       <FormattedMessage defaultMessage="View Full Profile" />

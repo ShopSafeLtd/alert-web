@@ -165,7 +165,7 @@ export const currentPermissionsAtom = atom(
   () => {}
 );
 export const isAdminAtom = atom(
-  (get) => get(currentUserSchemeAtom).orignalPermissions.admin,
+  (get) => !!get(currentUserSchemeAtom).orignalPermissions?.admin,
   () => {}
 );
 export const currentSchemeBusinessesAtom = atom(

@@ -19,6 +19,8 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import { createUseStyles } from 'react-jss';
 import { useNavigate } from 'react-router-dom';
 
+import { usePrintShowAll } from '../../offenders/OffenderGrid/usePrintShowAll';
+
 const useStyles = createUseStyles((theme: Theme) => ({
   actionButtons: {
     '& button': {
@@ -389,6 +391,9 @@ const VehicleGrid = ({
   const [vehiclesData, setVehiclesData] = useState<Vehicle[]>([]);
   const [columns, setColumns] = useState(6);
   const [showAll, setShowAll] = useState(false);
+
+  // Force show all items when printing
+  usePrintShowAll(setShowAll);
 
   const sortVehicles = (vehiclesList: Vehicle[], sortKey: string) =>
     [...vehiclesList].sort((a, b) => {

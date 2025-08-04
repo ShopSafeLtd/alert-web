@@ -1004,6 +1004,12 @@ export type AnswerCount = {
   count: Scalars['Int'];
 };
 
+export type AnswerCreateWithoutIncidentInput = {
+  answer: Scalars['String'];
+  tagId: Scalars['String'];
+  type: AnswerType;
+};
+
 export type AnswerListRelationFilter = {
   every?: InputMaybe<AnswerWhereInput>;
   none?: InputMaybe<AnswerWhereInput>;
@@ -1088,12 +1094,29 @@ export enum AnswerType {
   Time = 'TIME'
 }
 
+export type AnswerUpdateManyWithoutIncidentInput = {
+  create?: InputMaybe<Array<AnswerCreateWithoutIncidentInput>>;
+  deleteMany?: InputMaybe<Array<AnswerScalarWhereInput>>;
+  set?: InputMaybe<Array<AnswerCreateWithoutIncidentInput>>;
+  update?: InputMaybe<Array<AnswerUpdateWithWhereUniqueWithoutIncidentInput>>;
+};
+
 export type AnswerUpdateManyWithoutTaskQuestionNestedInputFields = {
   create?: InputMaybe<Array<TaskQuestionCreateAnswer>>;
 };
 
 export type AnswerUpdateManyWithoutTodoNestedInput = {
   deleteMany?: InputMaybe<Array<AnswerScalarWhereInput>>;
+};
+
+export type AnswerUpdateWithWhereUniqueWithoutIncidentInput = {
+  data: AnswerUpdateWithoutIncidentInput;
+  where: AnswerWhereUniqueInput;
+};
+
+export type AnswerUpdateWithoutIncidentInput = {
+  answer?: InputMaybe<Scalars['String']>;
+  type?: InputMaybe<AnswerType>;
 };
 
 export type AnswerWeight = {
@@ -1974,7 +1997,7 @@ export type Brand = {
   businesses: Array<Business>;
   description?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
-  industry: Industry;
+  industry?: Maybe<Industry>;
   name: Scalars['String'];
   recycled: Scalars['Boolean'];
   scheme: Scheme;
@@ -4292,11 +4315,11 @@ export type CustomRole = {
   approvalTier: Scalars['Boolean'];
   checklists: Array<Checklist>;
   createdAt: Scalars['DateTime'];
-  dashboard: Dashboard;
+  dashboard?: Maybe<Dashboard>;
   folders: Array<Folder>;
   id: Scalars['ID'];
   name: Scalars['String'];
-  parent: CustomRole;
+  parent?: Maybe<CustomRole>;
   parentId?: Maybe<Scalars['String']>;
   permissions: Array<Permission>;
   scheme: Scheme;
@@ -4576,7 +4599,7 @@ export type DemCompany = {
 
 export type DemDevice = {
   __typename?: 'DemDevice';
-  business: Business;
+  business?: Maybe<Business>;
   businessId?: Maybe<Scalars['String']>;
   createdAt: Scalars['Date'];
   demGroups: Array<DemGroup>;
@@ -6643,7 +6666,7 @@ export type Folder = {
   parentFolder?: Maybe<Folder>;
   parentFolderId?: Maybe<Scalars['String']>;
   roles: Array<CustomRole>;
-  scheme: Scheme;
+  scheme?: Maybe<Scheme>;
   schemeId?: Maybe<Scalars['String']>;
   totalChildFolders: Scalars['Int'];
   totalDocuments: Scalars['Int'];
@@ -6762,7 +6785,7 @@ export type FormField = {
   conditions: Array<Scalars['JSON']>;
   createdAt: Scalars['Date'];
   id: Scalars['ID'];
-  incidentForm: IncidentForm;
+  incidentForm?: Maybe<IncidentForm>;
   metadata?: Maybe<Scalars['JSON']>;
   position: Scalars['Int'];
   tooltip?: Maybe<Scalars['String']>;
@@ -7620,11 +7643,11 @@ export enum ImportType {
 
 export type Impression = {
   __typename?: 'Impression';
-  article: Article;
+  article?: Maybe<Article>;
   createdAt: Scalars['Date'];
   id: Scalars['ID'];
-  incident: Incident;
-  offender: Offender;
+  incident?: Maybe<Incident>;
+  offender?: Maybe<Offender>;
   updatedAt: Scalars['Date'];
   user: User;
 };
@@ -8708,6 +8731,7 @@ export type IncidentTotal = {
 
 export type IncidentUpdateInput = {
   activityAuthorised?: InputMaybe<NullableSetBooleanHelper>;
+  answers?: InputMaybe<AnswerUpdateManyWithoutIncidentInput>;
   approved?: InputMaybe<SetBooleanHelper>;
   business?: InputMaybe<NullableConnectDisconnectHelper>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutIncidents>;
@@ -8952,15 +8976,15 @@ export type Intel = {
   __typename?: 'Intel';
   createdAt: Scalars['Date'];
   createdBy: User;
-  crimeGroup: CrimeGroup;
+  crimeGroup?: Maybe<CrimeGroup>;
   id: Scalars['ID'];
-  image: Image;
-  incident: Incident;
-  offender: Offender;
-  replies: Array<Intel>;
-  replyTo: Intel;
+  image?: Maybe<Image>;
+  incident?: Maybe<Incident>;
+  offender?: Maybe<Offender>;
+  replies?: Maybe<Array<Intel>>;
+  replyTo?: Maybe<Intel>;
   replyToString?: Maybe<Scalars['String']>;
-  suggestedOffender: Offender;
+  suggestedOffender?: Maybe<Offender>;
   text?: Maybe<Scalars['String']>;
   type: IntelType;
   updatedAt: Scalars['Date'];
@@ -9935,7 +9959,7 @@ export type LocationUpsert = {
 export type LoginEvent = {
   __typename?: 'LoginEvent';
   createdAt: Scalars['Date'];
-  geoIp: GeoIp;
+  geoIp?: Maybe<GeoIp>;
   id: Scalars['ID'];
   ipAddress: Scalars['String'];
   loginTime: Scalars['Date'];
@@ -10070,7 +10094,7 @@ export type Mg11 = {
   height?: Maybe<Scalars['String']>;
   homeTel?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
-  incident: Incident;
+  incident?: Maybe<Incident>;
   incidentId?: Maybe<Scalars['String']>;
   interviewerSignature?: Maybe<Scalars['String']>;
   leafletReceived?: Maybe<Scalars['Boolean']>;
@@ -10081,7 +10105,7 @@ export type Mg11 = {
   mobileTel?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
   occupation?: Maybe<Scalars['String']>;
-  pdf: Document;
+  pdf?: Maybe<Document>;
   postcode?: Maybe<Scalars['String']>;
   prefContact?: Maybe<Scalars['String']>;
   specialMeasures?: Maybe<Scalars['Boolean']>;
@@ -10092,7 +10116,7 @@ export type Mg11 = {
   updatedAt: Scalars['Date'];
   urn?: Maybe<Scalars['String']>;
   visualRecording?: Maybe<Scalars['Boolean']>;
-  witness: Contact;
+  witness?: Maybe<Contact>;
   witnessId?: Maybe<Scalars['String']>;
   witnessServiceDisclose?: Maybe<Scalars['Boolean']>;
   witnessSignature?: Maybe<Scalars['String']>;
@@ -10970,7 +10994,6 @@ export type Mutation = {
   recycleOffender: Offender;
   recycleTag: Tag;
   recycleUnusedImages: SystemTask;
-  refreshAuth: RefreshAuth;
   /** Refresh the incident_data_view materialized view */
   refreshIncidentDataView: Scalars['Boolean'];
   registerPushToken: ExpoPushToken;
@@ -10978,7 +11001,6 @@ export type Mutation = {
   removeQuestionFromTag: TagQuestion;
   removeUserFromBusiness: Business;
   reopenInvestigation: Investigation;
-  resetPassword: ResetPassword;
   restoreAllRecycledItems: SystemTask;
   restoreDemEvidence?: Maybe<Scalars['String']>;
   restoreIncident: Incident;
@@ -10994,7 +11016,6 @@ export type Mutation = {
   setSchemeSharing: Scheme;
   shareData: SystemTask;
   shareIncident: Incident;
-  signIn: SignIn;
   signTerms: UserTerm;
   startEnhancedAudioStream: EnhancedAudioSession;
   stockItemImport: SystemTask;
@@ -11842,11 +11863,6 @@ export type MutationRecycleTagArgs = {
 };
 
 
-export type MutationRefreshAuthArgs = {
-  data: RefreshAuthData;
-};
-
-
 export type MutationRegisterPushTokenArgs = {
   data: RegisterPushTokenData;
 };
@@ -11871,11 +11887,6 @@ export type MutationRemoveUserFromBusinessArgs = {
 
 export type MutationReopenInvestigationArgs = {
   where: UniqueId;
-};
-
-
-export type MutationResetPasswordArgs = {
-  data: ResetPasswordData;
 };
 
 
@@ -11943,11 +11954,6 @@ export type MutationShareDataArgs = {
 
 export type MutationShareIncidentArgs = {
   where: UniqueId;
-};
-
-
-export type MutationSignInArgs = {
-  data: SignInData;
 };
 
 
@@ -17135,7 +17141,7 @@ export type RadialValueGraph = {
 export type RecycledItem = {
   __typename?: 'RecycledItem';
   deletedAt: Scalars['Date'];
-  deletedBy: User;
+  deletedBy?: Maybe<User>;
   expiresAt: Scalars['Date'];
   id: Scalars['ID'];
   incident?: Maybe<Incident>;
@@ -17259,10 +17265,6 @@ export type RefreshAuth = {
   accessToken: Scalars['String'];
 };
 
-export type RefreshAuthData = {
-  refreshToken: Scalars['String'];
-};
-
 export type RegisterPushTokenData = {
   token: Scalars['String'];
 };
@@ -17368,7 +17370,7 @@ export type RekFace = {
   id: Scalars['String'];
   image: Image;
   imageId: Scalars['String'];
-  offender: Offender;
+  offender?: Maybe<Offender>;
   qualityBrightness?: Maybe<Scalars['Float']>;
   qualitySharpness?: Maybe<Scalars['Float']>;
   rekMatchedFaces: Array<RekMatchedFace>;
@@ -17520,9 +17522,9 @@ export type RekMatch = {
   avgSimilarity: Scalars['Float'];
   createdAt: Scalars['Date'];
   id: Scalars['String'];
-  incident: Incident;
+  incident?: Maybe<Incident>;
   matchedFaces: Array<RekMatchedFace>;
-  matchedOffender: Offender;
+  matchedOffender?: Maybe<Offender>;
   rekFaceId: Scalars['String'];
   searchedFace: RekFace;
   searchedOffender?: Maybe<Offender>;
@@ -17885,7 +17887,7 @@ export type ReportTemplate = {
   metaData: Array<Scalars['JSON']>;
   name: Scalars['String'];
   nameTranslations: Array<Scalars['JSON']>;
-  reportGroup: ReportGroup;
+  reportGroup?: Maybe<ReportGroup>;
   schemes: Array<Scheme>;
   type: ReportType;
   updatedAt: Scalars['Date'];
@@ -18035,11 +18037,6 @@ export type ReportsCentreWhereInput = {
 export type ResetPassword = {
   __typename?: 'ResetPassword';
   message: Scalars['String'];
-};
-
-export type ResetPasswordData = {
-  auth0Id?: InputMaybe<Scalars['String']>;
-  userId?: InputMaybe<Scalars['String']>;
 };
 
 export enum Role {
@@ -19530,11 +19527,6 @@ export type SignIn = {
   refreshToken: Scalars['String'];
 };
 
-export type SignInData = {
-  email: Scalars['String'];
-  password: Scalars['String'];
-};
-
 export type SignTermsInput = {
   signature: Scalars['String'];
   termsId: Scalars['String'];
@@ -19693,7 +19685,7 @@ export type StockItem = {
   costPriceStandard?: Maybe<Scalars['Float']>;
   createdAt: Scalars['Date'];
   division?: Maybe<Scalars['String']>;
-  goodsType: GoodsType;
+  goodsType?: Maybe<GoodsType>;
   goodsTypeId?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   name?: Maybe<Scalars['String']>;
@@ -20172,7 +20164,7 @@ export type Tag = {
   recycleBin?: Maybe<RecycledItem>;
   recycled?: Maybe<Scalars['Boolean']>;
   roles: Array<CustomRole>;
-  scheme: Scheme;
+  scheme?: Maybe<Scheme>;
   schemeId?: Maybe<Scalars['String']>;
   schemes: Array<Scheme>;
   tagQuestions: Array<TagQuestion>;
@@ -23277,7 +23269,7 @@ export type UserScheme = {
   id: Scalars['String'];
   isAdmin: Scalars['Boolean'];
   notificationCount: Scalars['Int'];
-  orignalPermissions: CustomRole;
+  orignalPermissions?: Maybe<CustomRole>;
   permissions: Array<Permissions>;
   permissionsId?: Maybe<Scalars['String']>;
   recycled: Scalars['Boolean'];

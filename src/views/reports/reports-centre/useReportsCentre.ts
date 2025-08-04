@@ -128,14 +128,14 @@ const useReportsCentre = (): Return => {
           data: {
             reportsCentre: update(existingTemplates.reportsCentre, {
               [existingTemplates.reportsCentre.findIndex(
-                (item) => item.id === d.deleteReportTemplate?.reportGroup.id
+                (item) => item.id === d.deleteReportTemplate?.reportGroup?.id
               )]: {
                 reports: {
                   $set:
                     existingTemplates.reportsCentre
                       .find(
                         (item) =>
-                          item.id === d.deleteReportTemplate?.reportGroup.id
+                          item.id === d.deleteReportTemplate?.reportGroup?.id
                       )
                       ?.reports.filter(
                         (report) => report.id !== d.deleteReportTemplate?.id

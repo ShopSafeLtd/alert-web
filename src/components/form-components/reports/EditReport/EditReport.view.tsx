@@ -31,7 +31,7 @@ const EditReport = ({ onClose, reportId }: Props) => {
         description: data.reportTemplate.description ?? '',
         groups: data.reportTemplate.groups.map(({ id }) => id),
         name: data.reportTemplate.name ?? '',
-        reportGroupId: data.reportTemplate.reportGroup.id,
+        reportGroupId: data.reportTemplate.reportGroup?.id,
       });
     },
     variables: {

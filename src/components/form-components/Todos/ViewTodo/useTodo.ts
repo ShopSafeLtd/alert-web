@@ -18,7 +18,6 @@ import { useTodoQuery } from '#/components/form-components/Todos/ViewTodo/graphq
 import {
   currentSchemeAtom,
   currentSchemeIdAtom,
-  // currentUserAtom,
 } from '#/providers/SchemeProvider/SchemeProvider';
 import {
   userIdAtom,
@@ -165,7 +164,7 @@ const useTodo = ({
               onCompleted: ({ user }) => {
                 const parentRoleIds = new Set(
                   user.schemes
-                    .map((scheme) => scheme.orignalPermissions.parentId)
+                    .map((scheme) => scheme.orignalPermissions?.parentId)
                     .filter(Boolean)
                 );
                 const hasCommonRole = [...userRoleIds].some((roleId) =>
