@@ -8,16 +8,13 @@ import {
   currentSchemeDefaultGroups,
   currentUserAtom,
 } from '#/providers/UserProvider/UserProvider';
-import { Modal, notification } from 'antd';
-import { useResetPasswordMutation } from 'graphql/auth/mutations/__generated__/reset_password.generated';
+import { notification } from 'antd';
 import { useUpdateUserMutation } from 'graphql/user/mutation/__generated__/update_user.generated';
 import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
 import errorNotification from 'types/mutation_notifications/error_notification';
-
-const { confirm } = Modal;
 
 export interface FormData {
   bulletinEmails: boolean;
@@ -39,7 +36,6 @@ interface Return {
   loading: boolean;
   onClose: () => void;
   onSubmit: (value: FormData) => void;
-  resetConfirm: () => void;
   saving: boolean;
   userDefaultGroups: string[] | undefined;
 }
@@ -138,34 +134,12 @@ const useEditProfile = (): Return => {
     }
   };
 
-  const [resetPassword] = useResetPasswordMutation();
-  const resetConfirm = () => {
-    confirm({
-      content: intl.formatMessage({
-        defaultMessage: 'You will receive a reset email.',
-      }),
-      async onOk() {
-        await resetPassword({
-          variables: {
-            data: {
-              userId,
-            },
-          },
-        });
-      },
-      title: intl.formatMessage({
-        defaultMessage: 'Do you Want to reset your password?',
-      }),
-    });
-  };
-
   return {
     data: userData,
     groups,
     loading,
     onClose,
     onSubmit,
-    resetConfirm,
     saving,
     userDefaultGroups: defaultGroups?.map(({ id }) => id),
   };

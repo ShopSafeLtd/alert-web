@@ -8,7 +8,7 @@ export type DemGroupQueryVariables = Types.Exact<{
 }>;
 
 
-export type DemGroupQuery = { __typename?: 'Query', demGroup: { __typename?: 'DemGroup', id: string, name: string, demId: string, totalDevices: number, demDevices: Array<{ __typename?: 'DemDevice', id: string, name: string, business: { __typename?: 'Business', id: string, name: string } }> } };
+export type DemGroupQuery = { __typename?: 'Query', demGroup: { __typename?: 'DemGroup', id: string, name: string, demId: string, totalDevices: number, demDevices: Array<{ __typename?: 'DemDevice', id: string, name: string, business?: { __typename?: 'Business', id: string, name: string } | null }> } };
 
 
 export const DemGroupDocument = gql`

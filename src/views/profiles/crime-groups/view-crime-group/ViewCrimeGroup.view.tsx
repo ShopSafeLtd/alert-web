@@ -67,7 +67,7 @@ import VehicleGrid, {
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { useAtomValue } from 'jotai';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { calcAge } from 'utils';
 import {
@@ -84,10 +84,65 @@ import OffenderGrid, {
   OffenderSortSelect,
   useOffenderSort,
 } from '../../../../components/offenders/OffenderGrid';
+import './ViewCrimeGroup.print.v2.styles.css';
 import useStyles from './ViewCrimeGroup.styles';
 
 const { Title } = Typography;
 const { confirm } = Modal;
+
+// Memoized CrimeGroupFlow to prevent unnecessary re-renders
+const MemoizedCrimeGroupFlow = React.memo(
+  ({ data }: { data: CrimeGroupQuery }) => {
+    const crimeGroupData = useMemo(() => {
+      if (!data?.crimeGroup) return null;
+
+      return {
+        alias: data.crimeGroup.alias,
+        id: data.crimeGroup.id,
+        incidents: data.crimeGroup.incidents.map((incident) => ({
+          id: incident.id,
+          incidentType: incident.crimeTypes?.at(0)?.name || null,
+          location: incident.location
+            ? {
+                address: incident.location.full,
+                lat: incident.location.geoLat,
+                lng: incident.location.geoLng,
+              }
+            : null,
+          occurredAt: incident.dayTime,
+          offenders: incident.offenders?.map((o) => ({
+            id: o.id,
+            name: o.name,
+          })),
+          reference: incident.reference?.toString() || null,
+          totalValue: incident.totalValue,
+        })),
+        offenders: data.crimeGroup.offenders.map((offender) => ({
+          id: offender.id,
+          images: offender.images,
+          name: offender.name,
+          reference: offender.reference,
+          totalIncidents: offender.totalIncidents || 0,
+          totalValue: offender.totalValue || 0,
+        })),
+        reference: data.crimeGroup.reference,
+      };
+    }, [data?.crimeGroup]);
+
+    const handleOffenderClick = React.useCallback((offenderId: string) => {
+      window.open(`/app/offenders/view/${offenderId}`, '_blank');
+    }, []);
+
+    if (!crimeGroupData) return null;
+
+    return (
+      <CrimeGroupFlow
+        crimeGroup={crimeGroupData}
+        onOffenderClick={handleOffenderClick}
+      />
+    );
+  }
+);
 
 interface Props {
   addAlias: boolean;
@@ -226,6 +281,7 @@ const ViewCrimeGroup = ({
   );
   const [selectedActivity, setSelectedActivity] = useState<null | string>(null);
   const [_viewportWidth, setViewportWidth] = useState(window.innerWidth);
+  const [isPrintMode, setIsPrintMode] = useState(false);
 
   // Track viewport width for responsive behavior
   useEffect(() => {
@@ -235,6 +291,37 @@ const ViewCrimeGroup = ({
 
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Detect print mode
+  useEffect(() => {
+    const handleBeforePrint = () => {
+      setIsPrintMode(true);
+      // Add print mode class to body for CSS targeting
+      document.body.classList.add('print-mode');
+    };
+
+    const handleAfterPrint = () => {
+      setIsPrintMode(false);
+      // Remove print mode class
+      document.body.classList.remove('print-mode');
+    };
+
+    window.addEventListener('beforeprint', handleBeforePrint);
+    window.addEventListener('afterprint', handleAfterPrint);
+
+    // Also check media query
+    const mediaQueryList = window.matchMedia('print');
+    if (mediaQueryList.matches) {
+      setIsPrintMode(true);
+      document.body.classList.add('print-mode');
+    }
+
+    return () => {
+      window.removeEventListener('beforeprint', handleBeforePrint);
+      window.removeEventListener('afterprint', handleAfterPrint);
+      document.body.classList.remove('print-mode');
+    };
   }, []);
 
   // Force collapse the side list whenever the right sidebar is open
@@ -310,15 +397,21 @@ const ViewCrimeGroup = ({
             onExpandRequest={() => setSidebarExpanded(false)}
           />
         </Col>
-        <Col className={classes.detailsContent} flex={1}>
+        <Col
+          className={`${classes.detailsContent} crime-group-details-content`}
+          flex={1}
+        >
           <Row
             align="middle"
-            className={classes.headerBar}
+            className={`${classes.headerBar} crime-group-header-bar`}
             justify="space-between"
           >
             <Col flex={1}>
               <div className={classes.pageHeader}>
-                <Typography.Title className={classes.pageTitle} level={3}>
+                <Typography.Title
+                  className={`${classes.pageTitle} crime-group-page-title`}
+                  level={3}
+                >
                   {data?.crimeGroup?.alias ||
                     intl.formatMessage(
                       { defaultMessage: 'Crime Group {reference}' },
@@ -326,7 +419,9 @@ const ViewCrimeGroup = ({
                     )}
                 </Typography.Title>
                 {data?.crimeGroup?.alias && (
-                  <Typography.Text className={classes.pageSubtitle}>
+                  <Typography.Text
+                    className={`${classes.pageSubtitle} crime-group-page-subtitle`}
+                  >
                     {intl.formatMessage(
                       { defaultMessage: 'CG-{reference}' },
                       { reference: data?.crimeGroup?.reference || '' }
@@ -483,9 +578,35 @@ const ViewCrimeGroup = ({
           </Row>
           <div className={classes.content}>
             <div className={classes.details} ref={componentRef}>
+              {/* Print-only title */}
+              <div className="print-only-title" style={{ display: 'none' }}>
+                <h1>
+                  {data?.crimeGroup?.alias ||
+                    intl.formatMessage(
+                      { defaultMessage: 'Crime Group {reference}' },
+                      { reference: data?.crimeGroup?.reference || '' }
+                    )}
+                </h1>
+                {data?.crimeGroup?.alias && (
+                  <p>
+                    {intl.formatMessage(
+                      { defaultMessage: 'CG-{reference}' },
+                      { reference: data?.crimeGroup?.reference || '' }
+                    )}
+                  </p>
+                )}
+              </div>
               <Row gutter={[16, 16]} style={{ marginBottom: 20 }}>
                 <Col lg={4} md={8} sm={12} xs={24}>
-                  <Card className={classes.statsCard} loading={loading}>
+                  <Card
+                    className={`${classes.statsCard} crime-group-stats-card`}
+                    loading={loading}
+                    style={
+                      isPrintMode
+                        ? { backgroundColor: '#fff', boxShadow: 'none' }
+                        : {}
+                    }
+                  >
                     <Statistic
                       title={intl.formatMessage({
                         defaultMessage: 'Total Incidents',
@@ -495,7 +616,15 @@ const ViewCrimeGroup = ({
                   </Card>
                 </Col>
                 <Col lg={5} md={8} sm={12} xs={24}>
-                  <Card className={classes.statsCard} loading={loading}>
+                  <Card
+                    className={`${classes.statsCard} crime-group-stats-card`}
+                    loading={loading}
+                    style={
+                      isPrintMode
+                        ? { backgroundColor: '#fff', boxShadow: 'none' }
+                        : {}
+                    }
+                  >
                     <Statistic
                       title={intl.formatMessage({
                         defaultMessage: 'Total Offenders',
@@ -505,7 +634,15 @@ const ViewCrimeGroup = ({
                   </Card>
                 </Col>
                 <Col lg={5} md={8} sm={12} xs={24}>
-                  <Card className={classes.statsCard} loading={loading}>
+                  <Card
+                    className={`${classes.statsCard} crime-group-stats-card`}
+                    loading={loading}
+                    style={
+                      isPrintMode
+                        ? { backgroundColor: '#fff', boxShadow: 'none' }
+                        : {}
+                    }
+                  >
                     <Statistic
                       title={intl.formatMessage({
                         defaultMessage: 'Total Loss',
@@ -523,7 +660,15 @@ const ViewCrimeGroup = ({
                   </Card>
                 </Col>
                 <Col lg={5} md={8} sm={12} xs={24}>
-                  <Card className={classes.statsCard} loading={loading}>
+                  <Card
+                    className={`${classes.statsCard} crime-group-stats-card`}
+                    loading={loading}
+                    style={
+                      isPrintMode
+                        ? { backgroundColor: '#fff', boxShadow: 'none' }
+                        : {}
+                    }
+                  >
                     <Statistic
                       title={intl.formatMessage({
                         defaultMessage: 'Value Recovered',
@@ -541,7 +686,15 @@ const ViewCrimeGroup = ({
                   </Card>
                 </Col>
                 <Col lg={5} md={8} sm={12} xs={24}>
-                  <Card className={classes.statsCard} loading={loading}>
+                  <Card
+                    className={`${classes.statsCard} crime-group-stats-card`}
+                    loading={loading}
+                    style={
+                      isPrintMode
+                        ? { backgroundColor: '#fff', boxShadow: 'none' }
+                        : {}
+                    }
+                  >
                     <Statistic
                       title={intl.formatMessage({
                         defaultMessage: 'Loss Rate',
@@ -556,45 +709,9 @@ const ViewCrimeGroup = ({
 
               {data?.crimeGroup?.offenders &&
                 data.crimeGroup.offenders.length > 0 && (
-                  <CrimeGroupFlow
-                    crimeGroup={{
-                      alias: data.crimeGroup.alias,
-                      id: data.crimeGroup.id,
-                      incidents: data.crimeGroup.incidents.map((incident) => ({
-                        id: incident.id,
-                        incidentType: incident.crimeTypes[0]?.name || null,
-                        location: incident.location
-                          ? {
-                              address: incident.location.full,
-                              lat: incident.location.geoLat,
-                              lng: incident.location.geoLng,
-                            }
-                          : null,
-                        occurredAt: incident.dayTime,
-                        offenders: incident.offenders?.map((o) => ({
-                          id: o.id,
-                          name: o.name,
-                        })),
-                        reference: incident.reference?.toString() || null,
-                        totalValue: incident.totalValue,
-                      })),
-                      offenders: data.crimeGroup.offenders.map((offender) => ({
-                        id: offender.id,
-                        images: offender.images,
-                        name: offender.name,
-                        reference: offender.reference,
-                        totalIncidents: offender.totalIncidents || 0,
-                        totalValue: offender.totalValue || 0,
-                      })),
-                      reference: data.crimeGroup.reference,
-                    }}
-                    onOffenderClick={(offenderId) => {
-                      window.open(
-                        `/app/offenders/view/${offenderId}`,
-                        '_blank'
-                      );
-                    }}
-                  />
+                  <div className="crime-group-flow-container">
+                    <MemoizedCrimeGroupFlow data={data} />
+                  </div>
                 )}
 
               <Card loading={loading}>
@@ -683,12 +800,14 @@ const ViewCrimeGroup = ({
                 </Row>
 
                 {data?.crimeGroup?.offenders.length && !loading ? (
-                  <OffenderGrid
-                    canDisconnect={editRights}
-                    offenders={data?.crimeGroup?.offenders}
-                    onDisconnectOffender={onDisconnectOffender}
-                    sortBy={sortBy}
-                  />
+                  <div className="offender-grid-container">
+                    <OffenderGrid
+                      canDisconnect={editRights}
+                      offenders={data?.crimeGroup?.offenders}
+                      onDisconnectOffender={onDisconnectOffender}
+                      sortBy={sortBy}
+                    />
+                  </div>
                 ) : (
                   <Empty
                     description={intl.formatMessage({
@@ -781,18 +900,20 @@ const ViewCrimeGroup = ({
                 </Row>
 
                 {data?.crimeGroup?.vehicles.length && !loading ? (
-                  <VehicleGrid
-                    canDisconnect={editRights}
-                    onDisconnectVehicle={onDisconnectVehicle}
-                    sortBy={vehicleSortBy}
-                    vehicles={data?.crimeGroup?.vehicles.map((vehicle) => ({
-                      ...vehicle,
-                      images: vehicle.images?.map((img) => ({
-                        ...img,
-                        position: img.position as unknown as number,
-                      })),
-                    }))}
-                  />
+                  <div className="vehicle-grid-container">
+                    <VehicleGrid
+                      canDisconnect={editRights}
+                      onDisconnectVehicle={onDisconnectVehicle}
+                      sortBy={vehicleSortBy}
+                      vehicles={data?.crimeGroup?.vehicles.map((vehicle) => ({
+                        ...vehicle,
+                        images: vehicle.images?.map((img) => ({
+                          ...img,
+                          position: img.position as unknown as number,
+                        })),
+                      }))}
+                    />
+                  </div>
                 ) : (
                   <Empty
                     description={intl.formatMessage({
@@ -1162,7 +1283,7 @@ const ViewCrimeGroup = ({
                               size="small"
                             >
                               <Row align="middle" gutter={12}>
-                                <Col flex="0 0 60px">
+                                <Col flex="0 0 100px">
                                   {member.images && member.images.length > 0 ? (
                                     <div className={classes.suggestionImage}>
                                       <img

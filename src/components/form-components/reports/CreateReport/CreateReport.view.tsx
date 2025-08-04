@@ -151,7 +151,7 @@ const CreateReport = ({ onClose }: Props) => {
           data: {
             reportsCentre: update(existingTemplates.reportsCentre, {
               [existingTemplates.reportsCentre.findIndex(
-                (item) => item.id === d.createReportTemplate.reportGroup.id
+                (item) => item.id === d.createReportTemplate.reportGroup?.id
               )]: {
                 reports: {
                   $push: [

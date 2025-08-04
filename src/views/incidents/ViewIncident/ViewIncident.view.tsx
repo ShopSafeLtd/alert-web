@@ -175,6 +175,8 @@ const ViewIncident = ({
                           />
                           <Answers
                             data={data}
+                            editRights={editRights}
+                            incidentId={incidentId}
                             isPrinting={isPrinting}
                             loading={loading}
                           />

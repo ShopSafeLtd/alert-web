@@ -60,7 +60,7 @@ import LinkProfile from '../LinkProfile';
 import useStyles from './Todo.styles';
 
 interface TodoWithGroups extends NonNullable<TodoQuery['todo']> {
-  groups?: Array<{ id: string; name: string }>;
+  groups: { id: string; name: string }[];
 }
 
 const { useBreakpoint } = Grid;

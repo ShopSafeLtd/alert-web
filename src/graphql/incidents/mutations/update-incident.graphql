@@ -6,6 +6,20 @@ mutation updateIncident($where: UniqueId!, $data: IncidentUpdateInput!) {
       id
       name
     }
+    answers(orderBy: { tagQuestion: { priority: desc } }) {
+      id
+      answer
+      tagQuestion {
+        id
+        priority
+        dependentQuestions
+        question {
+          id
+          question
+        }
+      }
+      type
+    }
     description
     dayTime
     date

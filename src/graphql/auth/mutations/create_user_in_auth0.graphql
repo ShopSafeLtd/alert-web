@@ -1,5 +1,0 @@
-mutation createUserinAuth0($id: String!, $password: String!) {
-  createUserInAuth0(id: $id, password: $password) {
-    message
-  }
-}

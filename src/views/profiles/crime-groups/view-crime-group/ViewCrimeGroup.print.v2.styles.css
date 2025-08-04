@@ -1,0 +1,575 @@
+/* Print-specific styles for Crime Group View - Version 2 */
+
+/* Hide print-only elements on screen */
+@media screen {
+  .print-only-title {
+    display: none !important;
+  }
+}
+
+@media print {
+  /* Page setup */
+  @page {
+    size: A4;
+    margin: 20mm;
+  }
+
+  /* Global print styles */
+  body {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  /* Force light mode appearance using filters for dark theme elements */
+  html[data-theme='dark'] *,
+  body.dark-mode *,
+  .dark-theme *,
+  [class*='dark'] {
+    filter: invert(0) !important;
+  }
+
+  /* Force light mode theme variables for Ant Design */
+  body,
+  .ant-layout {
+    --ant-primary-color: #1890ff !important;
+    --ant-border-color-base: #d9d9d9 !important;
+    --ant-component-background: #fff !important;
+    --ant-body-background: #fff !important;
+    --ant-text-color: #000 !important;
+    --ant-text-color-secondary: #666 !important;
+    --ant-heading-color: #000 !important;
+  }
+
+  /* Override JSS dark mode styles with attribute selectors */
+  [class*='statsCard'],
+  [class*='suggestionCard'],
+  [class*='offenderCard'],
+  [class*='vehicleCard'],
+  [class*='activityCard'] {
+    border: 1px solid #d9d9d9 !important;
+    background-color: #fff !important;
+    color: #000 !important;
+  }
+
+  /* Target Ant Design components specifically in dark mode */
+  .ant-layout-content[style*='background'],
+  .ant-card[style*='background'],
+  div[style*='background-color'],
+  div[style*='border-color'] {
+    background-color: #fff !important;
+    border-color: #d9d9d9 !important;
+  }
+
+  /* Hide navigation elements only */
+  .page-container > div > div:first-child /* Side list */ {
+    display: none !important;
+  }
+
+  /* Hide ALL buttons globally - but not images */
+  button:not(img),
+  .ant-btn,
+  [type='button'],
+  [role='button']:not(img),
+  .ant-btn-group,
+  [class*='button']:not([class*='image']),
+  [class*='Button']:not([class*='Image']),
+  a.ant-btn {
+    display: none !important;
+  }
+
+  /* Ensure images are never hidden */
+  img {
+    display: block !important;
+    visibility: visible !important;
+  }
+
+  /* Crime group header bar */
+  .crime-group-header-bar {
+    border-bottom: 2px solid #000;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+  }
+
+  /* Make title prominent */
+  .crime-group-page-title {
+    color: #000 !important;
+    font-size: 28px !important;
+    font-weight: bold !important;
+    text-align: center !important;
+  }
+
+  .crime-group-page-subtitle {
+    color: #666 !important;
+    font-size: 16px !important;
+    text-align: center !important;
+  }
+
+  /* Print-only title */
+  .print-only-title {
+    display: block !important;
+    color: #000 !important;
+    font-size: 24px !important;
+    font-weight: bold !important;
+    text-align: center !important;
+    margin-bottom: 20px !important;
+  }
+
+  /* Override theme-specific styles when in print mode */
+  body.print-mode [class*='dark'],
+  body.print-mode [class*='Dark'],
+  .print-mode [class*='statsCard'],
+  .print-mode .ant-card {
+    background-color: #fff !important;
+    border-color: #d9d9d9 !important;
+    color: #000 !important;
+  }
+
+  /* Stat cards styling - target all possible selectors */
+  .crime-group-stats-card,
+  .ant-card.crime-group-stats-card,
+  div.crime-group-stats-card,
+  [class*='statsCard-'],
+  .print-mode .crime-group-stats-card {
+    background-color: #fff !important;
+    border: 1px solid #d9d9d9 !important;
+    page-break-inside: avoid;
+    box-shadow: none !important;
+  }
+
+  /* Force override inline styles */
+  .crime-group-stats-card[style] {
+    border: 1px solid #d9d9d9 !important;
+    background: #fff !important;
+  }
+
+  .crime-group-stats-card .ant-statistic-title {
+    color: #000 !important;
+    font-weight: 600 !important;
+  }
+
+  .crime-group-stats-card .ant-statistic-content {
+    color: #000 !important;
+  }
+
+  /* Hide React Flow */
+  .crime-group-flow-container {
+    display: none !important;
+  }
+
+  /* Make grids full width */
+  .offender-grid-container,
+  .vehicle-grid-container {
+    width: 100% !important;
+  }
+
+  /* Override column widths - two columns for compact layout */
+  .offender-grid-container .ant-col,
+  .vehicle-grid-container .ant-col {
+    flex: 0 0 48% !important;
+    max-width: 48% !important;
+    display: inline-block !important;
+    margin-bottom: 8px !important;
+    margin-right: 2% !important;
+    vertical-align: top !important;
+  }
+
+  /* Every second column has no right margin */
+  .offender-grid-container .ant-col:nth-child(2n),
+  .vehicle-grid-container .ant-col:nth-child(2n) {
+    margin-right: 0 !important;
+  }
+
+  /* CRITICAL: Force ALL ant-col elements to display, even those hidden by React */
+  .offender-grid-container .ant-col:nth-child(n),
+  .vehicle-grid-container .ant-col:nth-child(n) {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
+  /* WORKAROUND: Hide the "Show All" button and force display of all items */
+  .offender-grid-container + div button,
+  .vehicle-grid-container + div button {
+    display: none !important;
+  }
+
+  /* Force all ant-col elements to show by overriding any inline styles */
+  .offender-grid-container .ant-col,
+  .vehicle-grid-container .ant-col {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: static !important;
+    transform: none !important;
+  }
+
+  /* Force ALL offender columns to display, overriding inline styles */
+  .offender-col {
+    display: block !important;
+  }
+
+  /* Offender and vehicle cards - compact for print */
+  [class*='offenderCard'],
+  [class*='vehicleCard'] {
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: row !important;
+    border: 1px solid #d9d9d9 !important;
+    background-color: #fff !important;
+    page-break-inside: avoid;
+    margin-bottom: 10px !important;
+    min-height: 100px !important;
+    height: auto !important;
+    align-items: stretch !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    border-radius: 6px !important;
+    box-shadow: none !important;
+  }
+
+  /* Ensure card containers show all content */
+  [class*='offenderCard'] > div:not(:first-child),
+  [class*='vehicleCard'] > div:not(:first-child) {
+    height: auto !important;
+    min-height: auto !important;
+    overflow: visible !important;
+    flex: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 16px !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Make the entire card structure stretch - but only image wrapper has no padding */
+  [class*='offenderCard'] > div:first-child,
+  [class*='vehicleCard'] > div:first-child {
+    display: flex !important;
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Card images - visible and properly sized */
+  [class*='offenderCard'] img,
+  [class*='vehicleCard'] img {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
+  /* Image wrapper divs - smaller for compact print */
+  [class*='offenderCard'] > div:first-child,
+  [class*='vehicleCard'] > div:first-child {
+    width: 80px !important;
+    height: 100% !important;
+    min-height: 100px !important;
+    flex-shrink: 0 !important;
+    display: flex !important;
+    align-items: stretch !important;
+    position: relative !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border-top-left-radius: 6px !important;
+    border-bottom-left-radius: 6px !important;
+    overflow: hidden !important;
+  }
+
+  /* Image containers - compact for print */
+  [class*='image-'],
+  [class*='offenderCard'] [class*='image'],
+  [class*='vehicleCard'] [class*='image'] {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    border-top-left-radius: 6px !important;
+    border-bottom-left-radius: 6px !important;
+    display: block !important;
+    overflow: hidden !important;
+  }
+
+  /* Watermark images should also be visible */
+  [class*='watermark'],
+  [class*='Watermark'] {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
+  /* Handle skeleton placeholders - compact for print */
+  .ant-skeleton,
+  .ant-skeleton-image,
+  [class*='imageSkeleton'] {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    background: #f0f0f0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-top-left-radius: 6px !important;
+    border-bottom-left-radius: 6px !important;
+  }
+
+  /* Ensure proper nesting of image elements */
+  [class*='offenderCard'] > div:first-child > *,
+  [class*='vehicleCard'] > div:first-child > * {
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  /* Card content - compact padding for print */
+  [class*='cardContent'] {
+    flex: 1 !important;
+    padding: 8px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    height: 100% !important;
+    justify-content: space-between !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Ensure content wrapper also has padding */
+  [class*='offenderCard'] > div:last-child,
+  [class*='vehicleCard'] > div:last-child {
+    padding: 16px !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Force padding on all content divs that are not image wrappers */
+  [class*='offenderCard'] > div:nth-child(2),
+  [class*='vehicleCard'] > div:nth-child(2) {
+    padding: 8px !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Card header - compact for print */
+  [class*='cardHeader'] {
+    display: block !important;
+    width: 100% !important;
+    margin-bottom: 4px !important;
+    padding-bottom: 2px !important;
+  }
+
+  /* Remove borders from most content elements but keep header border */
+  [class*='cardContent'] *:not([class*='cardHeader']) {
+    border: none !important;
+  }
+
+  /* Text visibility - compact for print */
+  [class*='offenderName'],
+  [class*='vehicleName'] {
+    color: #000 !important;
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: unset !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    margin-bottom: 4px !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+  }
+
+  [class*='detailText'],
+  [class*='detailLabel'] {
+    color: #000 !important;
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: unset !important;
+    flex-shrink: 0 !important;
+    font-size: 10px !important;
+    line-height: 1.2 !important;
+  }
+
+  [class*='statLabel'],
+  [class*='statValue'] {
+    color: #000 !important;
+    white-space: nowrap !important;
+    overflow: visible !important;
+    text-align: center !important;
+    display: block !important;
+    width: 100% !important;
+    font-size: 9px !important;
+    line-height: 1.2 !important;
+  }
+
+  [class*='statValue'] {
+    font-weight: 600 !important;
+    font-size: 11px !important;
+  }
+
+  /* Ensure all detail rows are visible - compact */
+  [class*='detailRow'] {
+    display: flex !important;
+    overflow: visible !important;
+    white-space: normal !important;
+    width: 100% !important;
+    margin-bottom: 2px !important;
+    padding: 1px 0 !important;
+    align-items: flex-start !important;
+    gap: 4px !important;
+  }
+
+  /* Detail rows text should wrap properly */
+  [class*='detailRow'] [class*='detailText'] {
+    flex: 1 !important;
+    word-break: break-word !important;
+  }
+
+  /* Info sections - compact for print */
+  [class*='infoSection'] {
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: visible !important;
+    width: 100% !important;
+    padding: 2px 0 !important;
+    margin-bottom: 4px !important;
+  }
+
+  /* Stats row - compact for print */
+  [class*='statsRow'] {
+    display: flex !important;
+    overflow: visible !important;
+    white-space: normal !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    margin-top: auto !important;
+    padding-top: 4px !important;
+    flex-wrap: wrap !important;
+    border-top: 1px solid #f0f0f0 !important;
+  }
+
+  /* Individual stat items - compact */
+  [class*='statItem'] {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    flex: 1 !important;
+    text-align: center !important;
+    min-width: 40px !important;
+    padding: 2px !important;
+  }
+
+  /* Ensure minimum card height for images - compact */
+  [class*='offenderCard'] {
+    min-height: 100px !important;
+  }
+
+  [class*='vehicleCard'] {
+    min-height: 100px !important;
+  }
+
+  /* Hide interactive elements that might not be buttons */
+  [class*='actionButtons'],
+  .ant-dropdown-menu {
+    display: none !important;
+  }
+
+  /* Hide map */
+  [class*='MapCard'] {
+    display: none !important;
+  }
+
+  /* Tables */
+  .ant-table {
+    page-break-inside: auto;
+  }
+
+  .ant-table-row {
+    page-break-inside: avoid;
+  }
+
+  /* General card styling - ensure light mode colors but no borders by default */
+  .ant-card {
+    background-color: #fff !important;
+    page-break-inside: avoid;
+    margin-bottom: 20px;
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  /* Remove all box shadows globally */
+  *,
+  *::before,
+  *::after {
+    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+    -moz-box-shadow: none !important;
+  }
+
+  /* Remove the aggressive border overrides that cause double borders */
+
+  /* Ensure light mode table borders */
+  .ant-table,
+  .ant-table-thead > tr > th,
+  .ant-table-tbody > tr > td,
+  .ant-table-bordered,
+  .ant-table-bordered .ant-table-cell {
+    border-color: #f0f0f0 !important;
+  }
+
+  /* Light mode dividers and separators */
+  .ant-divider,
+  hr {
+    border-color: #d9d9d9 !important;
+    background-color: #d9d9d9 !important;
+  }
+
+  /* Headers */
+  .ant-typography h4 {
+    color: #000 !important;
+    font-weight: bold !important;
+  }
+
+  /* Main content area */
+  .crime-group-details-content {
+    border-right: none !important;
+    padding: 0 !important;
+    width: 100% !important;
+  }
+
+  /* Hide sidebars */
+  [class*='rightSidebar'],
+  [class*='sidebarToggle'] {
+    display: none !important;
+  }
+
+  /* Section cards (main containers) - ensure no borders */
+  .ant-card {
+    border: none !important;
+  }
+
+  /* Remove the extra borders and outlines */
+  * {
+    outline: none !important;
+  }
+
+  /* Remove pseudo-element borders */
+  *::after,
+  *::before {
+    border: none !important;
+  }
+
+  /* Only apply borders to specific cards that need them */
+  .crime-group-stats-card {
+    border: 1px solid #d9d9d9 !important;
+  }
+
+  [class*='offenderCard'],
+  [class*='vehicleCard'] {
+    border: 1px solid #000 !important;
+  }
+}
