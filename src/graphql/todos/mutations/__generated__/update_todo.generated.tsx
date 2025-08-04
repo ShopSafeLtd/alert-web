@@ -9,7 +9,7 @@ export type UpdateTodoMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateTodoMutation = { __typename?: 'Mutation', updateTodo?: { __typename?: 'Todo', type?: Types.TodoType | null, description?: string | null, dueDate?: Date | null, completedDate?: Date | null, completed?: boolean | null, authorised?: boolean | null, id?: string | null, name?: string | null, similarOffenderIds?: Array<string> | null, createdBy?: { __typename?: 'User', id?: string | null, fullName: string } | null, completedBy?: { __typename?: 'User', id?: string | null, fullName: string } | null, assignedUsers: Array<{ __typename?: 'User', id?: string | null, fullName: string }> } | null };
+export type UpdateTodoMutation = { __typename?: 'Mutation', updateTodo: { __typename?: 'Todo', type?: Types.TodoType | null, description?: string | null, dueDate?: Date | null, completedDate?: Date | null, completed?: boolean | null, authorised?: boolean | null, id: string, name?: string | null, similarOffenderIds: Array<string>, createdBy?: { __typename?: 'User', id: string, fullName: string } | null, completedBy?: { __typename?: 'User', id: string, fullName: string } | null, assignedUsers: Array<{ __typename?: 'User', id: string, fullName: string }> } };
 
 
 export const UpdateTodoDocument = gql`

@@ -9,7 +9,7 @@ export type UserParentRolesQueryVariables = Types.Exact<{
 }>;
 
 
-export type UserParentRolesQuery = { __typename?: 'Query', user: { __typename?: 'User', id?: string | null, fullName: string, schemes: Array<{ __typename?: 'UserScheme', id?: string | null, schemeId?: string | null, orignalPermissions?: { __typename?: 'CustomRole', id: string, parentId?: string | null } | null }> } };
+export type UserParentRolesQuery = { __typename?: 'Query', user: { __typename?: 'User', id: string, fullName: string, schemes: Array<{ __typename?: 'UserScheme', id: string, schemeId: string, orignalPermissions?: { __typename?: 'CustomRole', id: string, parentId?: string | null } | null }> } };
 
 
 export const UserParentRolesDocument = gql`

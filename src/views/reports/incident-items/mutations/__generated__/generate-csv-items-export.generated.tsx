@@ -8,7 +8,7 @@ export type ExportIncidentItemsCsvMutationVariables = Types.Exact<{
 }>;
 
 
-export type ExportIncidentItemsCsvMutation = { __typename?: 'Mutation', incidentItemsCsv?: string | null };
+export type ExportIncidentItemsCsvMutation = { __typename?: 'Mutation', incidentItemsCsv: string };
 
 
 export const ExportIncidentItemsCsvDocument = gql`

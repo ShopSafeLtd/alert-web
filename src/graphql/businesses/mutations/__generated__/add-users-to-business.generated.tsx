@@ -11,7 +11,7 @@ export type AddUsersToBusinessMutationVariables = Types.Exact<{
 }>;
 
 
-export type AddUsersToBusinessMutation = { __typename?: 'Mutation', addUsersToBusiness: { __typename?: 'Business', id: string, name?: string | null, users: Array<{ __typename?: 'User', id?: string | null, fullName: string, status?: Types.UserStatus | null, publicName?: boolean | null, groups: Array<{ __typename?: 'Group', id: string, name: string }> }> } };
+export type AddUsersToBusinessMutation = { __typename?: 'Mutation', addUsersToBusiness: { __typename?: 'Business', id: string, name: string, users: Array<{ __typename?: 'User', id: string, fullName: string, status?: Types.UserStatus | null, publicName: boolean, groups: Array<{ __typename?: 'Group', id: string, name: string }> }> } };
 
 
 export const AddUsersToBusinessDocument = gql`

@@ -166,13 +166,13 @@ const AiSuggestionCard = ({ data, onDismissSuggestion, onReview }: Props) => {
               </Col>
               <Col className={styles.imageDetails} flex={1}>
                 <Typography.Title level={4} style={{ marginBottom: 0 }}>
-                  {data.rekMatch?.matchedOffender.name}
+                  {data.rekMatch?.matchedOffender?.name || ''}
                 </Typography.Title>
                 <Typography.Text type="secondary">
                   <FormattedMessage
                     defaultMessage="Alert ID: {var1}"
                     values={{
-                      var1: data.rekMatch?.matchedOffender.reference,
+                      var1: data.rekMatch?.matchedOffender?.reference || '',
                     }}
                   />
                 </Typography.Text>

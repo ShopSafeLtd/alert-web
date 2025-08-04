@@ -8,7 +8,7 @@ export type CreateOneBusinessImpactMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateOneBusinessImpactMutation = { __typename?: 'Mutation', createOneBusinessImpact?: { __typename?: 'Document', id?: string | null, name?: string | null } | null };
+export type CreateOneBusinessImpactMutation = { __typename?: 'Mutation', createOneBusinessImpact: { __typename?: 'Document', id: string, name: string } };
 
 
 export const CreateOneBusinessImpactDocument = gql`

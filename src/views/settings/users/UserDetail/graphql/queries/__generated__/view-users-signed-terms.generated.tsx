@@ -8,7 +8,7 @@ export type TermQueryVariables = Types.Exact<{
 }>;
 
 
-export type TermQuery = { __typename?: 'Query', term: { __typename?: 'TermsAndCondition', content?: string | null, version?: number | null } };
+export type TermQuery = { __typename?: 'Query', term: { __typename?: 'TermsAndCondition', content: string, version: number } };
 
 
 export const TermDocument = gql`

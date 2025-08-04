@@ -8,7 +8,7 @@ export type CreateSessionMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateSessionMutation = { __typename?: 'Mutation', createSession?: { __typename?: 'Session', id: string } | null };
+export type CreateSessionMutation = { __typename?: 'Mutation', createSession: { __typename?: 'Session', id: string } };
 
 
 export const CreateSessionDocument = gql`

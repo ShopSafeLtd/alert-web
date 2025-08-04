@@ -9,7 +9,7 @@ export type AgreeTermsMutationVariables = Types.Exact<{
 }>;
 
 
-export type AgreeTermsMutation = { __typename?: 'Mutation', updateUser?: { __typename?: 'User', id?: string | null, newUser?: boolean | null, termsSigned?: boolean | null } | null };
+export type AgreeTermsMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', id: string, newUser: boolean, termsSigned: boolean } };
 
 
 export const AgreeTermsDocument = gql`

@@ -11,7 +11,7 @@ export type FoldersSelectQueryVariables = Types.Exact<{
 }>;
 
 
-export type FoldersSelectQuery = { __typename?: 'Query', folders: { __typename?: 'QueryFoldersConnection', totalCount: number, edges: Array<{ __typename?: 'QueryFoldersConnectionEdge', node: { __typename?: 'Folder', id?: string | null, name: string, childFolders: Array<{ __typename?: 'Folder', id?: string | null, name: string }> } }>, pageInfo: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage: boolean } } };
+export type FoldersSelectQuery = { __typename?: 'Query', folders: { __typename?: 'QueryFoldersConnection', totalCount: number, edges: Array<{ __typename?: 'QueryFoldersConnectionEdge', node: { __typename?: 'Folder', id: string, name: string, childFolders: Array<{ __typename?: 'Folder', id: string, name: string }> } }>, pageInfo: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage: boolean } } };
 
 
 export const FoldersSelectDocument = gql`

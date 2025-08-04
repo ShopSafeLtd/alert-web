@@ -8,7 +8,7 @@ export type CreateSimpleVehicleMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateSimpleVehicleMutation = { __typename?: 'Mutation', createVehicle?: { __typename?: 'Vehicle', id?: string | null, reference?: number | null, colour?: string | null, model?: string | null, make?: string | null, registration?: string | null, images: Array<{ __typename?: 'Image', id?: string | null, url?: string | null, policeImage?: boolean | null, primary?: boolean | null, position?: Types.ImagePosition | null, rotation?: number | null, optimised?: string | null }> } | null };
+export type CreateSimpleVehicleMutation = { __typename?: 'Mutation', createVehicle: { __typename?: 'Vehicle', id: string, reference?: number | null, colour?: string | null, model?: string | null, make?: string | null, registration?: string | null, images: Array<{ __typename?: 'Image', id: string, url?: string | null, policeImage?: boolean | null, primary?: boolean | null, position: Types.ImagePosition, rotation: number, optimised?: string | null }> } };
 
 
 export const CreateSimpleVehicleDocument = gql`

@@ -8,7 +8,7 @@ export type SchemeGroupsSelectQueryVariables = Types.Exact<{
 }>;
 
 
-export type SchemeGroupsSelectQuery = { __typename?: 'Query', userGroupRelay?: { __typename?: 'QueryUserGroupRelayConnection', totalCount: number, edges: Array<{ __typename?: 'QueryUserGroupRelayConnectionEdge', node: { __typename?: 'Group', id: string, name: string, scheme: { __typename?: 'Scheme', id?: string | null, name?: string | null } } }>, pageInfo: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage: boolean } } | null };
+export type SchemeGroupsSelectQuery = { __typename?: 'Query', userGroupRelay: { __typename?: 'QueryUserGroupRelayConnection', totalCount: number, edges: Array<{ __typename?: 'QueryUserGroupRelayConnectionEdge', node: { __typename?: 'Group', id: string, name: string, scheme: { __typename?: 'Scheme', id: string, name: string } } }>, pageInfo: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage: boolean } } };
 
 
 export const SchemeGroupsSelectDocument = gql`

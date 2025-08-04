@@ -8,7 +8,7 @@ export type IncidentActivityAuthorisedQueryVariables = Types.Exact<{
 }>;
 
 
-export type IncidentActivityAuthorisedQuery = { __typename?: 'Query', incident: { __typename?: 'Incident', id?: string | null, activityAuthorised?: boolean | null } };
+export type IncidentActivityAuthorisedQuery = { __typename?: 'Query', incident: { __typename?: 'Incident', id: string, activityAuthorised: boolean } };
 
 
 export const IncidentActivityAuthorisedDocument = gql`

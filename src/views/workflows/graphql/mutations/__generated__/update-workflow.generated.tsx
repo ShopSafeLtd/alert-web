@@ -9,7 +9,7 @@ export type UpdateOneWorkflowMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateOneWorkflowMutation = { __typename?: 'Mutation', updateOneWorkflow: { __typename?: 'Workflow', id?: string | null, name?: string | null, trigger?: Types.WorkflowTrigger | null, triggerModels?: Types.Model | null, actions?: Array<{ __typename?: 'WorkflowAction', type?: Types.WorkflowActionType | null, outputModel?: Types.Model | null, timesRun?: number | null }> | null } };
+export type UpdateOneWorkflowMutation = { __typename?: 'Mutation', updateOneWorkflow: { __typename?: 'Workflow', id: string, name: string, trigger: Types.WorkflowTrigger, triggerModels: Types.Model, actions: Array<{ __typename?: 'WorkflowAction', type: Types.WorkflowActionType, outputModel?: Types.Model | null, timesRun: number }> } };
 
 
 export const UpdateOneWorkflowDocument = gql`

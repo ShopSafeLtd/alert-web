@@ -14,7 +14,7 @@ export type DashboardTemplatesQueryVariables = Types.Exact<{
 }>;
 
 
-export type DashboardTemplatesQuery = { __typename?: 'Query', dashboards?: { __typename?: 'QueryDashboardsConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null }, edges: Array<{ __typename?: 'QueryDashboardsConnectionEdge', node: { __typename?: 'Dashboard', defaultAdmin?: boolean | null, defaultUser?: boolean | null, id?: string | null, name?: string | null, scheme?: { __typename?: 'Scheme', id?: string | null, name?: string | null } | null, roles?: Array<{ __typename?: 'CustomRole', id: string, name: string }> | null } }> } | null };
+export type DashboardTemplatesQuery = { __typename?: 'Query', dashboards: { __typename?: 'QueryDashboardsConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null }, edges: Array<{ __typename?: 'QueryDashboardsConnectionEdge', node: { __typename?: 'Dashboard', defaultAdmin: boolean, defaultUser: boolean, id: string, name?: string | null, scheme: { __typename?: 'Scheme', id: string, name: string }, roles: Array<{ __typename?: 'CustomRole', id: string, name: string }> } }> } };
 
 
 export const DashboardTemplatesDocument = gql`

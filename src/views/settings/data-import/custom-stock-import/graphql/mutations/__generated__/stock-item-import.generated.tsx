@@ -8,7 +8,7 @@ export type ImportStockItemCsvMutationVariables = Types.Exact<{
 }>;
 
 
-export type ImportStockItemCsvMutation = { __typename?: 'Mutation', importStockItemCsv?: boolean | null };
+export type ImportStockItemCsvMutation = { __typename?: 'Mutation', importStockItemCsv: boolean };
 
 
 export const ImportStockItemCsvDocument = gql`

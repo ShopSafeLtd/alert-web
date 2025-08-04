@@ -9,7 +9,7 @@ export type ListStockItemsQueryVariables = Types.Exact<{
 }>;
 
 
-export type ListStockItemsQuery = { __typename?: 'Query', listStockItems: { __typename?: 'ListStockItems', total: number, stockItems: Array<{ __typename?: 'StockItem', id?: string | null, barcode?: string | null, brand?: string | null, costPriceLocal?: number | null, costPriceStandard?: number | null, division?: string | null, name?: string | null, salesPriceLocal?: number | null, salesPriceStandard?: number | null, sku?: string | null }> } };
+export type ListStockItemsQuery = { __typename?: 'Query', listStockItems: { __typename?: 'ListStockItems', total: number, stockItems: Array<{ __typename?: 'StockItem', id: string, barcode?: string | null, brand?: string | null, costPriceLocal?: number | null, costPriceStandard?: number | null, division?: string | null, name?: string | null, salesPriceLocal?: number | null, salesPriceStandard?: number | null, sku?: string | null }> } };
 
 
 export const ListStockItemsDocument = gql`

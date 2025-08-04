@@ -506,6 +506,9 @@ const PerformanceReport = ({
                   maxTagCount="responsive"
                   multiple
                   onChange={(value) => {
+                    if (typeof value === 'string') {
+                      value = [value];
+                    }
                     setIncidentTypeIds(value || []);
                   }}
                   placeholder={intl.formatMessage({

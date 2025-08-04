@@ -6,7 +6,7 @@ const defaultOptions = {} as const;
 export type DemDeviceModelQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type DemDeviceModelQuery = { __typename?: 'Query', demDeviceModel: Array<{ __typename?: 'DemDeviceModel', id?: string | null, name?: string | null }> };
+export type DemDeviceModelQuery = { __typename?: 'Query', demDeviceModel: Array<{ __typename?: 'DemDeviceModel', id: string, name: string }> };
 
 
 export const DemDeviceModelDocument = gql`

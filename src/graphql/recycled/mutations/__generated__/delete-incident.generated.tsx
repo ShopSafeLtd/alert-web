@@ -8,7 +8,7 @@ export type DeleteIncidentMutationVariables = Types.Exact<{
 }>;
 
 
-export type DeleteIncidentMutation = { __typename?: 'Mutation', deleteIncident?: { __typename?: 'Incident', id?: string | null } | null };
+export type DeleteIncidentMutation = { __typename?: 'Mutation', deleteIncident: { __typename?: 'Incident', id: string } };
 
 
 export const DeleteIncidentDocument = gql`

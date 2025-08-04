@@ -8,7 +8,7 @@ export type SignTermsMutationVariables = Types.Exact<{
 }>;
 
 
-export type SignTermsMutation = { __typename?: 'Mutation', signTerms?: { __typename?: 'UserTerm', id?: string | null } | null };
+export type SignTermsMutation = { __typename?: 'Mutation', signTerms: { __typename?: 'UserTerm', id: string } };
 
 
 export const SignTermsDocument = gql`

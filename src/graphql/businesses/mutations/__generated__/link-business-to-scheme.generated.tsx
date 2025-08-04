@@ -9,7 +9,7 @@ export type LinkBusinessToSchemeMutationVariables = Types.Exact<{
 }>;
 
 
-export type LinkBusinessToSchemeMutation = { __typename?: 'Mutation', linkBusinessToScheme?: { __typename?: 'Business', id: string, name?: string | null, fullName?: string | null, publicName: boolean, policeArea?: Array<Types.PoliceForce> | null, demId?: string | null, totalUsers: number, parent?: { __typename?: 'Business', id: string, name?: string | null, fullName?: string | null, publicName: boolean } | null, locations: Array<{ __typename?: 'Address', id: string, full?: string | null }>, groups: Array<{ __typename?: 'Group', id: string, name: string }>, tags: Array<{ __typename?: 'Tag', id?: string | null, name?: string | null }> } | null };
+export type LinkBusinessToSchemeMutation = { __typename?: 'Mutation', linkBusinessToScheme: { __typename?: 'Business', id: string, name: string, fullName: string, publicName: boolean, policeArea: Array<Types.PoliceForce>, demId?: string | null, totalUsers: number, parent?: { __typename?: 'Business', id: string, name: string, fullName: string, publicName: boolean } | null, locations: Array<{ __typename?: 'Address', id: string, full: string }>, groups: Array<{ __typename?: 'Group', id: string, name: string }>, tags: Array<{ __typename?: 'Tag', id: string, name: string }> } };
 
 
 export const LinkBusinessToSchemeDocument = gql`

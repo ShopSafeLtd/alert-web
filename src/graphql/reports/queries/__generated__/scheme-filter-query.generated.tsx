@@ -8,7 +8,7 @@ export type SchemeReportFiltersQueryVariables = Types.Exact<{
 }>;
 
 
-export type SchemeReportFiltersQuery = { __typename?: 'Query', schemes: Array<{ __typename?: 'Scheme', crimeGroups: Array<{ __typename?: 'CrimeGroup', id: string, alias?: string | null, ref?: string | null }>, offenders: Array<{ __typename?: 'Offender', id?: string | null, name?: string | null, reference?: number | null }> }> };
+export type SchemeReportFiltersQuery = { __typename?: 'Query', schemes: Array<{ __typename?: 'Scheme', crimeGroups: Array<{ __typename?: 'CrimeGroup', id: string, alias?: string | null, ref: string }>, offenders: Array<{ __typename?: 'Offender', id: string, name?: string | null, reference?: number | null }> }> };
 
 
 export const SchemeReportFiltersDocument = gql`

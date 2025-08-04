@@ -9,7 +9,7 @@ export type CreateUpdateChecklistMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateUpdateChecklistMutation = { __typename?: 'Mutation', createUpdateChecklist?: { __typename?: 'Checklist', id: string } | null };
+export type CreateUpdateChecklistMutation = { __typename?: 'Mutation', createUpdateChecklist: { __typename?: 'Checklist', id: string } };
 
 
 export const CreateUpdateChecklistDocument = gql`

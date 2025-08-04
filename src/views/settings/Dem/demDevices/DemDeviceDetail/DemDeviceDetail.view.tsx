@@ -167,8 +167,8 @@ const DemDeviceDetail = ({
             label={<FormattedMessage defaultMessage="Business" />}
             style={{ paddingBottom: 8 }}
           >
-            <Link to={`/app/businesses/view/${data?.demDevice.business.id}`}>
-              {data?.demDevice.business.name}
+            <Link to={`/app/businesses/view/${data?.demDevice.business?.id}`}>
+              {data?.demDevice.business?.name}
             </Link>
           </Descriptions.Item>
 
@@ -214,7 +214,7 @@ const DemDeviceDetail = ({
           <AddDemDevice
             editData={{
               ...data?.demDevice,
-              business: data?.demDevice.business.id || '',
+              business: data?.demDevice.business?.id || '',
               demGroups: data?.demDevice.demGroups.map(({ id }) => id) || [],
               id: data?.demDevice.id || '',
               name: data?.demDevice.name || '',

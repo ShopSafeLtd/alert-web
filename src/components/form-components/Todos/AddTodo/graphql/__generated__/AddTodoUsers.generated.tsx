@@ -10,7 +10,7 @@ export type AddTodoUsersQueryVariables = Types.Exact<{
 }>;
 
 
-export type AddTodoUsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id?: string | null, fullName: string }> };
+export type AddTodoUsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string, fullName: string }> };
 
 
 export const AddTodoUsersDocument = gql`

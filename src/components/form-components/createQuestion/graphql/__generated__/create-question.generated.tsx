@@ -9,7 +9,7 @@ export type CreateQuestionMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateQuestionMutation = { __typename?: 'Mutation', addQuestion?: { __typename?: 'Question', id?: string | null, questionFormatted?: string | null, type?: Types.AnswerType | null } | null };
+export type CreateQuestionMutation = { __typename?: 'Mutation', addQuestion: { __typename?: 'Question', id: string, questionFormatted: string, type: Types.AnswerType } };
 
 
 export const CreateQuestionDocument = gql`

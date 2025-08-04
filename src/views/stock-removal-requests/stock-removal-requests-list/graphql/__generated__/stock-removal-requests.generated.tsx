@@ -11,7 +11,7 @@ export type StockRemovalRequestsQueryVariables = Types.Exact<{
 }>;
 
 
-export type StockRemovalRequestsQuery = { __typename?: 'Query', stockRemovalRequests?: { __typename?: 'QueryStockRemovalRequestsConnection', totalCount: number, edges: Array<{ __typename?: 'QueryStockRemovalRequestsConnectionEdge', node: { __typename?: 'StockRemovalRequest', id: string, createdAt?: Date | null, title: string, status: Types.StockRemovalRequestStatus, reference?: number | null, approvers?: Array<{ __typename?: 'StockRemovalRequestApproval', status: Types.StockRemovalRequestApprovalStatus, user?: { __typename?: 'User', id?: string | null, fullName: string } | null }> | null } }> } | null };
+export type StockRemovalRequestsQuery = { __typename?: 'Query', stockRemovalRequests: { __typename?: 'QueryStockRemovalRequestsConnection', totalCount: number, edges: Array<{ __typename?: 'QueryStockRemovalRequestsConnectionEdge', node: { __typename?: 'StockRemovalRequest', id: string, createdAt: Date, title: string, status: Types.StockRemovalRequestStatus, reference?: number | null, approvers: Array<{ __typename?: 'StockRemovalRequestApproval', status: Types.StockRemovalRequestApprovalStatus, user: { __typename?: 'User', id: string, fullName: string } }> } }> } };
 
 
 export const StockRemovalRequestsDocument = gql`

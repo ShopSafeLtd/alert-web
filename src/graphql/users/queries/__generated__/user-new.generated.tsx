@@ -8,7 +8,7 @@ export type UserNewQueryVariables = Types.Exact<{
 }>;
 
 
-export type UserNewQuery = { __typename?: 'Query', userNew: { __typename?: 'UserNew', id?: string | null, email?: string | null, newUser?: boolean | null, hasAuth0Id?: boolean | null } };
+export type UserNewQuery = { __typename?: 'Query', userNew: { __typename?: 'UserNew', id: string, email?: string | null, newUser: boolean, hasAuth0Id: boolean } };
 
 
 export const UserNewDocument = gql`

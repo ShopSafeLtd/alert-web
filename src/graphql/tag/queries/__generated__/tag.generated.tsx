@@ -8,7 +8,7 @@ export type TagQueryVariables = Types.Exact<{
 }>;
 
 
-export type TagQuery = { __typename?: 'Query', tag: { __typename?: 'Tag', id?: string | null, name?: string | null, description?: string | null, crimeType?: Types.CrimeType | null, type?: Types.TagType | null, roles?: Array<{ __typename?: 'CustomRole', id: string }> | null } };
+export type TagQuery = { __typename?: 'Query', tag: { __typename?: 'Tag', id: string, name: string, description: string, crimeType?: Types.CrimeType | null, type: Types.TagType, roles: Array<{ __typename?: 'CustomRole', id: string }> } };
 
 
 export const TagDocument = gql`

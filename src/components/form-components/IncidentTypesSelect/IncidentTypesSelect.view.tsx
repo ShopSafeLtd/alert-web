@@ -86,7 +86,7 @@ const IncidentTypesSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
         onChange([items]);
       } else if (!allowMultiple && Array.isArray(items)) {
         // For single selection with treeCheckable, take the last selected item
-        onChange(items.length > 0 ? items.at(-1) : '');
+        onChange(items.length > 0 ? items.at(-1) || '' : '');
       } else {
         onChange(items);
       }

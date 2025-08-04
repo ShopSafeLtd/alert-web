@@ -9,7 +9,7 @@ export type CreateMg11MutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateMg11Mutation = { __typename?: 'Mutation', createMg11?: { __typename?: 'MG11', id?: string | null } | null };
+export type CreateMg11Mutation = { __typename?: 'Mutation', createMg11: { __typename?: 'MG11', id: string } };
 
 
 export const CreateMg11Document = gql`

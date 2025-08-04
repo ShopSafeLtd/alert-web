@@ -11,7 +11,7 @@ export type ListDemBusinessEvidenceQueryVariables = Types.Exact<{
 }>;
 
 
-export type ListDemBusinessEvidenceQuery = { __typename?: 'Query', listDemBusinessEvidence: { __typename?: 'ListDemEvidenceRelay', totalCount: number, edges: Array<{ __typename?: 'DemEvidenceNode', node: { __typename?: 'DemEvidenceNew', type?: string | null, thumbnailUrl?: string | null, recordedAt?: Date | null, playbackUrl?: string | null, id: string, importance?: string | null, officerName?: string | null, duration?: string | null } }>, pageInfo: { __typename?: 'PageInfoRelay', endCursor?: string | null, hasNextPage?: boolean | null } } };
+export type ListDemBusinessEvidenceQuery = { __typename?: 'Query', listDemBusinessEvidence: { __typename?: 'ListDemEvidenceRelay', totalCount: number, edges: Array<{ __typename?: 'DemEvidenceNode', node: { __typename?: 'DemEvidenceNew', type?: string | null, thumbnailUrl?: string | null, recordedAt?: Date | null, playbackUrl?: string | null, id: string, importance?: string | null, officerName?: string | null, duration?: string | null } }>, pageInfo: { __typename?: 'PageInfoRelay', endCursor: string, hasNextPage: boolean } } };
 
 
 export const ListDemBusinessEvidenceDocument = gql`

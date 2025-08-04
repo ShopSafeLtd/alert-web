@@ -11,7 +11,7 @@ export type TodoExportPreviewQueryVariables = Types.Exact<{
 }>;
 
 
-export type TodoExportPreviewQuery = { __typename?: 'Query', todoExportRelay?: { __typename?: 'QueryTodoExportRelayConnection', totalCount: number, edges: Array<{ __typename?: 'QueryTodoExportRelayConnectionEdge', node: { __typename?: 'Todo', id?: string | null, name?: string | null, reference?: number | null, description?: string | null, dueDate?: Date | null, completedDate?: Date | null, completed?: boolean | null, createdAt?: Date | null, type?: Types.TodoType | null, business?: { __typename?: 'Business', name?: string | null, id: string } | null } }> } | null };
+export type TodoExportPreviewQuery = { __typename?: 'Query', todoExportRelay: { __typename?: 'QueryTodoExportRelayConnection', totalCount: number, edges: Array<{ __typename?: 'QueryTodoExportRelayConnectionEdge', node: { __typename?: 'Todo', id: string, name?: string | null, reference?: number | null, description?: string | null, dueDate?: Date | null, completedDate?: Date | null, completed?: boolean | null, createdAt: Date, type?: Types.TodoType | null, business?: { __typename?: 'Business', name: string, id: string } | null } }> } };
 
 
 export const TodoExportPreviewDocument = gql`

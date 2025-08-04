@@ -84,11 +84,11 @@ const DemDeviceList = ({
     .map((el) => ({ text: el?.name || '', value: el?.id || '' }));
 
   const businessIds = new Set(
-    data?.demDevices.edges.map(({ node }) => node.business.id)
+    data?.demDevices.edges.map(({ node }) => node.business?.id)
   );
   const businessData = data?.demDevices.edges.map(({ node }) => node.business);
   const businessFilter = [...businessIds]
-    .map((id) => businessData?.find((el) => el.id === id))
+    .map((id) => businessData?.find((el) => el?.id === id))
     .map((el) => ({ text: el?.name || '', value: el?.id || '' }));
 
   return (
@@ -237,11 +237,11 @@ const DemDeviceList = ({
           },
         ]}
         dataSource={data?.demDevices.edges.map(({ node: demDevice }) => ({
-          business: demDevice.business,
+          business: demDevice.business || undefined,
           createdAt: demDevice.createdAt,
           demDevice: {
             ...demDevice,
-            business: demDevice.business.id,
+            business: demDevice.business?.id || '',
             demGroups: demDevice.demGroups.map(({ id }) => id),
           },
           demGroups: demDevice.demGroups,

@@ -8,7 +8,7 @@ export type CreateTermsAndConditionsMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateTermsAndConditionsMutation = { __typename?: 'Mutation', createTermsAndConditions?: { __typename?: 'TermsAndCondition', id?: string | null, content?: string | null } | null };
+export type CreateTermsAndConditionsMutation = { __typename?: 'Mutation', createTermsAndConditions: { __typename?: 'TermsAndCondition', id: string, content: string } };
 
 
 export const CreateTermsAndConditionsDocument = gql`

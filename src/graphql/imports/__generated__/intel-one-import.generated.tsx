@@ -8,7 +8,7 @@ export type IntelOneImportDataMutationVariables = Types.Exact<{
 }>;
 
 
-export type IntelOneImportDataMutation = { __typename?: 'Mutation', intelOneImportData?: { __typename?: 'SystemTask', success?: boolean | null } | null };
+export type IntelOneImportDataMutation = { __typename?: 'Mutation', intelOneImportData: { __typename?: 'SystemTask', success: boolean } };
 
 
 export const IntelOneImportDataDocument = gql`

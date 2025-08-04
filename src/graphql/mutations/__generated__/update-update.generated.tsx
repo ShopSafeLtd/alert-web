@@ -9,7 +9,7 @@ export type UpdateUpdateMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateUpdateMutation = { __typename?: 'Mutation', updateUpdate?: { __typename?: 'Update', id?: string | null, text?: string | null } | null };
+export type UpdateUpdateMutation = { __typename?: 'Mutation', updateUpdate: { __typename?: 'Update', id: string, text?: string | null } };
 
 
 export const UpdateUpdateDocument = gql`

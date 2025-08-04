@@ -9,7 +9,7 @@ export type UpdateChatMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateChatMutation = { __typename?: 'Mutation', updateChat?: { __typename?: 'Chat', id: string, name: string, description?: string | null, members: Array<{ __typename?: 'UserChat', user?: { __typename?: 'User', id?: string | null, fullName: string, businesses: Array<{ __typename?: 'Business', fullName?: string | null, id: string, name?: string | null }> } | null }> } | null };
+export type UpdateChatMutation = { __typename?: 'Mutation', updateChat: { __typename?: 'Chat', id: string, name: string, description?: string | null, members: Array<{ __typename?: 'UserChat', user: { __typename?: 'User', id: string, fullName: string, businesses: Array<{ __typename?: 'Business', fullName: string, id: string, name: string }> } }> } };
 
 
 export const UpdateChatDocument = gql`

@@ -11,7 +11,7 @@ export type BusinessesSideListQueryVariables = Types.Exact<{
 }>;
 
 
-export type BusinessesSideListQuery = { __typename?: 'Query', businessRelay?: { __typename?: 'QueryBusinessRelayConnection', totalCount: number, edges: Array<{ __typename?: 'QueryBusinessRelayConnectionEdge', node: { __typename?: 'Business', id: string, name?: string | null, siteNumber?: string | null, locations: Array<{ __typename?: 'Address', full?: string | null }> } }>, pageInfo: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage: boolean } } | null };
+export type BusinessesSideListQuery = { __typename?: 'Query', businessRelay: { __typename?: 'QueryBusinessRelayConnection', totalCount: number, edges: Array<{ __typename?: 'QueryBusinessRelayConnectionEdge', node: { __typename?: 'Business', id: string, name: string, siteNumber?: string | null, locations: Array<{ __typename?: 'Address', full: string }> } }>, pageInfo: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage: boolean } } };
 
 
 export const BusinessesSideListDocument = gql`

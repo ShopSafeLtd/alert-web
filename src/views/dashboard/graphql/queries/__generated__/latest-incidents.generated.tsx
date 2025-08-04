@@ -10,7 +10,7 @@ export type LatestIncidentsQueryVariables = Types.Exact<{
 }>;
 
 
-export type LatestIncidentsQuery = { __typename?: 'Query', latestIncidents?: { __typename?: 'QueryLatestIncidentsConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null }, edges: Array<{ __typename?: 'QueryLatestIncidentsConnectionEdge', node: { __typename?: 'Incident', referenceStr?: string | null, date?: Date | null, id?: string | null, description?: string | null } }> } | null };
+export type LatestIncidentsQuery = { __typename?: 'Query', latestIncidents: { __typename?: 'QueryLatestIncidentsConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null }, edges: Array<{ __typename?: 'QueryLatestIncidentsConnectionEdge', node: { __typename?: 'Incident', referenceStr?: string | null, date: Date, id: string, description: string } }> } };
 
 
 export const LatestIncidentsDocument = gql`

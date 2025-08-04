@@ -13,7 +13,7 @@ export type ListOffendersFeedQueryVariables = Types.Exact<{
 }>;
 
 
-export type ListOffendersFeedQuery = { __typename?: 'Query', listOffenders: { __typename?: 'ListOffenders', total: number, offenders: Array<{ __typename?: 'Offender', id?: string | null, reference?: number | null, name?: string | null, feedImage?: { __typename?: 'Image', id?: string | null, low?: string | null, position?: Types.ImagePosition | null, rotation?: number | null } | null }> } };
+export type ListOffendersFeedQuery = { __typename?: 'Query', listOffenders: { __typename?: 'ListOffenders', total: number, offenders: Array<{ __typename?: 'Offender', id: string, reference?: number | null, name?: string | null, feedImage?: { __typename?: 'Image', id: string, low?: string | null, position: Types.ImagePosition, rotation: number } | null }> } };
 
 
 export const ListOffendersFeedDocument = gql`

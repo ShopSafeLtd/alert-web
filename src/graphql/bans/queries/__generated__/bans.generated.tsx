@@ -8,7 +8,7 @@ export type BansQueryVariables = Types.Exact<{
 }>;
 
 
-export type BansQuery = { __typename?: 'Query', bans: Array<{ __typename?: 'Ban', id: string, location: string, startDate?: Date | null, endDate?: Date | null, description?: string | null }> };
+export type BansQuery = { __typename?: 'Query', bans: Array<{ __typename?: 'Ban', id: string, location: string, startDate: Date, endDate: Date, description?: string | null }> };
 
 
 export const BansDocument = gql`

@@ -1,7 +1,7 @@
 import type * as Types from '../../types.js';
 
 import { gql } from '@apollo/client';
-export type TodosFragment = { __typename?: 'Todo', id?: string | null, name?: string | null, completedDate?: Date | null, createdAt?: Date | null, completed?: boolean | null, reference?: number | null, dueDate?: Date | null, createdBy?: { __typename?: 'User', id?: string | null, fullName: string } | null, assignedUsers: Array<{ __typename?: 'User', id?: string | null, fullName: string }> };
+export type TodosFragment = { __typename?: 'Todo', id: string, name?: string | null, completedDate?: Date | null, createdAt: Date, completed?: boolean | null, reference?: number | null, dueDate?: Date | null, createdBy?: { __typename?: 'User', id: string, fullName: string } | null, assignedUsers: Array<{ __typename?: 'User', id: string, fullName: string }> };
 
 export const TodosFragmentDoc = gql`
     fragment Todos on Todo {

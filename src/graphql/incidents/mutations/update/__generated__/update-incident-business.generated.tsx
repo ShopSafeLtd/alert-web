@@ -9,7 +9,7 @@ export type UpdateIncidentBusinessMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateIncidentBusinessMutation = { __typename?: 'Mutation', updateIncidentBusiness?: { __typename?: 'Incident', id?: string | null, business?: { __typename?: 'Business', id: string, name?: string | null } | null, groups: Array<{ __typename?: 'Group', id: string, name: string }> } | null };
+export type UpdateIncidentBusinessMutation = { __typename?: 'Mutation', updateIncidentBusiness: { __typename?: 'Incident', id: string, business?: { __typename?: 'Business', id: string, name: string } | null, groups: Array<{ __typename?: 'Group', id: string, name: string }> } };
 
 
 export const UpdateIncidentBusinessDocument = gql`

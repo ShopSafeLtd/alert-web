@@ -8,7 +8,7 @@ export type CurrentSchemeTermsQueryVariables = Types.Exact<{
 }>;
 
 
-export type CurrentSchemeTermsQuery = { __typename?: 'Query', scheme: { __typename?: 'Scheme', currentTerms?: { __typename?: 'TermsAndCondition', id?: string | null, content?: string | null } | null } };
+export type CurrentSchemeTermsQuery = { __typename?: 'Query', scheme: { __typename?: 'Scheme', currentTerms?: { __typename?: 'TermsAndCondition', id: string, content: string } | null } };
 
 
 export const CurrentSchemeTermsDocument = gql`

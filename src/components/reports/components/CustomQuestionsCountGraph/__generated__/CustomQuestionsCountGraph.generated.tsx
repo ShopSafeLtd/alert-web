@@ -8,7 +8,7 @@ export type CustomQuestionsCountGraphQueryVariables = Types.Exact<{
 }>;
 
 
-export type CustomQuestionsCountGraphQuery = { __typename?: 'Query', customQuestionsCountGraph: { __typename?: 'CustomQuestionsGraph', title: string, data?: Array<{ __typename?: 'Graph', label: string, value: number }> | null } };
+export type CustomQuestionsCountGraphQuery = { __typename?: 'Query', customQuestionsCountGraph: { __typename?: 'CustomQuestionsGraph', title: string, data: Array<{ __typename?: 'Graph', label: string, value: number }> } };
 
 
 export const CustomQuestionsCountGraphDocument = gql`

@@ -10,7 +10,7 @@ export type OffenderVisionQueryVariables = Types.Exact<{
 }>;
 
 
-export type OffenderVisionQuery = { __typename?: 'Query', aiVisionMatches?: { __typename?: 'QueryAiVisionMatchesConnection', totalCount: number, edges: Array<{ __typename?: 'QueryAiVisionMatchesConnectionEdge', node: { __typename?: 'AIVisionMatch', id: string, priority: Types.AiVisionMatchPriority, confidenceRating: Types.AiVisionMatchConfidence, createdAt?: Date | null, business: { __typename?: 'Business', id: string, name?: string | null } } }> } | null };
+export type OffenderVisionQuery = { __typename?: 'Query', aiVisionMatches: { __typename?: 'QueryAiVisionMatchesConnection', totalCount: number, edges: Array<{ __typename?: 'QueryAiVisionMatchesConnectionEdge', node: { __typename?: 'AIVisionMatch', id: string, priority: Types.AiVisionMatchPriority, confidenceRating: Types.AiVisionMatchConfidence, createdAt: Date, business: { __typename?: 'Business', id: string, name: string } } }> } };
 
 
 export const OffenderVisionDocument = gql`

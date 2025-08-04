@@ -8,7 +8,7 @@ export type CreateActiveChecklistMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateActiveChecklistMutation = { __typename?: 'Mutation', createActiveChecklist?: { __typename?: 'ActiveChecklist', id: string } | null };
+export type CreateActiveChecklistMutation = { __typename?: 'Mutation', createActiveChecklist: { __typename?: 'ActiveChecklist', id: string } };
 
 
 export const CreateActiveChecklistDocument = gql`

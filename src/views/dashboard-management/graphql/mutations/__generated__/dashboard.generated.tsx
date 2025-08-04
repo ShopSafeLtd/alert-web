@@ -8,14 +8,14 @@ export type CreateDashboardMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateDashboardMutation = { __typename?: 'Mutation', createDashboard: { __typename?: 'Dashboard', id?: string | null, name?: string | null, roles?: Array<{ __typename?: 'CustomRole', name: string, id: string }> | null } };
+export type CreateDashboardMutation = { __typename?: 'Mutation', createDashboard: { __typename?: 'Dashboard', id: string, name?: string | null, roles: Array<{ __typename?: 'CustomRole', name: string, id: string }> } };
 
 export type DeleteDashboardMutationVariables = Types.Exact<{
   where: Types.DashboardWhereUniqueInput;
 }>;
 
 
-export type DeleteDashboardMutation = { __typename?: 'Mutation', deleteDashboardTemplate?: { __typename?: 'Dashboard', id?: string | null } | null };
+export type DeleteDashboardMutation = { __typename?: 'Mutation', deleteDashboardTemplate?: { __typename?: 'Dashboard', id: string } | null };
 
 export type UpdateDashboardTemplateMutationVariables = Types.Exact<{
   data: Types.DashboardTemplateUpdateInput;
@@ -23,7 +23,7 @@ export type UpdateDashboardTemplateMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateDashboardTemplateMutation = { __typename?: 'Mutation', updateDashboardTemplate: { __typename?: 'Dashboard', name?: string | null, id?: string | null, roles?: Array<{ __typename?: 'CustomRole', name: string, id: string }> | null } };
+export type UpdateDashboardTemplateMutation = { __typename?: 'Mutation', updateDashboardTemplate: { __typename?: 'Dashboard', name?: string | null, id: string, roles: Array<{ __typename?: 'CustomRole', name: string, id: string }> } };
 
 
 export const CreateDashboardDocument = gql`

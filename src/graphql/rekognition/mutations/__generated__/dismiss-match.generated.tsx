@@ -8,7 +8,7 @@ export type DismissMatchMutationVariables = Types.Exact<{
 }>;
 
 
-export type DismissMatchMutation = { __typename?: 'Mutation', dismissMatch?: { __typename?: 'RekMatch', id?: string | null } | null };
+export type DismissMatchMutation = { __typename?: 'Mutation', dismissMatch: { __typename?: 'RekMatch', id: string } };
 
 
 export const DismissMatchDocument = gql`

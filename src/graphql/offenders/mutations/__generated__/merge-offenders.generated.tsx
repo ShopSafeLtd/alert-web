@@ -8,7 +8,7 @@ export type MergeOffendersMutationVariables = Types.Exact<{
 }>;
 
 
-export type MergeOffendersMutation = { __typename?: 'Mutation', mergeOffender?: { __typename?: 'Offender', id?: string | null } | null };
+export type MergeOffendersMutation = { __typename?: 'Mutation', mergeOffender: { __typename?: 'Offender', id: string } };
 
 
 export const MergeOffendersDocument = gql`

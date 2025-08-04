@@ -6,7 +6,7 @@ const defaultOptions = {} as const;
 export type UserContactQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type UserContactQuery = { __typename?: 'Query', userContact?: { __typename?: 'Contact', id: string, address?: string | null, dobPlace?: string | null, formerName?: string | null, gender?: string | null, height?: string | null, homeTel?: string | null, mobileTel?: string | null, occupation?: string | null, postcode?: string | null, prefContact?: string | null, updatedAt?: Date | null, workTel?: string | null, user?: { __typename?: 'User', email?: string | null, fullName: string, id?: string | null } | null } | null };
+export type UserContactQuery = { __typename?: 'Query', userContact?: { __typename?: 'Contact', id: string, address?: string | null, dobPlace?: string | null, formerName?: string | null, gender?: string | null, height?: string | null, homeTel?: string | null, mobileTel?: string | null, occupation?: string | null, postcode?: string | null, prefContact?: string | null, updatedAt: Date, workTel?: string | null, user?: { __typename?: 'User', email?: string | null, fullName: string, id: string } | null } | null };
 
 
 export const UserContactDocument = gql`

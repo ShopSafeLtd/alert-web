@@ -8,7 +8,7 @@ export type TargetedGoodsDashboardQueryVariables = Types.Exact<{
 }>;
 
 
-export type TargetedGoodsDashboardQuery = { __typename?: 'Query', targetedGoodsDashboard?: Array<{ __typename?: 'Graph', value: number, label: string }> | null };
+export type TargetedGoodsDashboardQuery = { __typename?: 'Query', targetedGoodsDashboard: Array<{ __typename?: 'Graph', value: number, label: string }> };
 
 
 export const TargetedGoodsDashboardDocument = gql`

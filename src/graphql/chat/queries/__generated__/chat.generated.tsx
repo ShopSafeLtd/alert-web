@@ -8,7 +8,7 @@ export type ChatQueryVariables = Types.Exact<{
 }>;
 
 
-export type ChatQuery = { __typename?: 'Query', chat: { __typename?: 'Chat', id: string, name: string, description?: string | null, totalMembers: number, totalMessages: number, members: Array<{ __typename?: 'UserChat', id?: string | null, user?: { __typename?: 'User', id?: string | null, fullName: string, firstLetter?: string | null, origFirstLetter?: string | null, origName?: string | null, businesses: Array<{ __typename?: 'Business', fullName?: string | null, id: string, name?: string | null }> } | null }> } };
+export type ChatQuery = { __typename?: 'Query', chat: { __typename?: 'Chat', id: string, name: string, description?: string | null, totalMembers: number, totalMessages: number, members: Array<{ __typename?: 'UserChat', id: string, user: { __typename?: 'User', id: string, fullName: string, firstLetter: string, origFirstLetter: string, origName: string, businesses: Array<{ __typename?: 'Business', fullName: string, id: string, name: string }> } }> } };
 
 
 export const ChatDocument = gql`

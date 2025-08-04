@@ -8,7 +8,7 @@ export type AddressesQueryVariables = Types.Exact<{
 }>;
 
 
-export type AddressesQuery = { __typename?: 'Query', addresses: Array<{ __typename?: 'Address', id: string, building?: string | null, street?: string | null, townCity?: string | null, county?: string | null, postcode?: string | null, primary?: boolean | null, full?: string | null }> };
+export type AddressesQuery = { __typename?: 'Query', addresses: Array<{ __typename?: 'Address', id: string, building?: string | null, street?: string | null, townCity?: string | null, county?: string | null, postcode?: string | null, primary?: boolean | null, full: string }> };
 
 
 export const AddressesDocument = gql`

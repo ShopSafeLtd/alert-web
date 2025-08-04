@@ -8,7 +8,7 @@ export type UnsubscribeFromOffenderMutationVariables = Types.Exact<{
 }>;
 
 
-export type UnsubscribeFromOffenderMutation = { __typename?: 'Mutation', unsubscribeFromOffender?: { __typename?: 'Offender', id?: string | null, subscribed?: boolean | null } | null };
+export type UnsubscribeFromOffenderMutation = { __typename?: 'Mutation', unsubscribeFromOffender: { __typename?: 'Offender', id: string, subscribed: boolean } };
 
 
 export const UnsubscribeFromOffenderDocument = gql`

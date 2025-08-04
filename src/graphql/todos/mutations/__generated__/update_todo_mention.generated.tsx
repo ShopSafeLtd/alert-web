@@ -8,7 +8,7 @@ export type UpdateTodoMentionMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateTodoMentionMutation = { __typename?: 'Mutation', updateTodoMention?: Array<{ __typename?: 'Todo', id?: string | null }> | null };
+export type UpdateTodoMentionMutation = { __typename?: 'Mutation', updateTodoMention: Array<{ __typename?: 'Todo', id: string }> };
 
 
 export const UpdateTodoMentionDocument = gql`

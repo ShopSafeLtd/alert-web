@@ -9,7 +9,7 @@ export type UpdateOffenderCustomGalleriesMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateOffenderCustomGalleriesMutation = { __typename?: 'Mutation', updateOffender?: { __typename?: 'Offender', id?: string | null, customGalleries: Array<{ __typename?: 'CustomGallery', id?: string | null, name?: string | null }> } | null };
+export type UpdateOffenderCustomGalleriesMutation = { __typename?: 'Mutation', updateOffender: { __typename?: 'Offender', id: string, customGalleries: Array<{ __typename?: 'CustomGallery', id: string, name: string }> } };
 
 
 export const UpdateOffenderCustomGalleriesDocument = gql`

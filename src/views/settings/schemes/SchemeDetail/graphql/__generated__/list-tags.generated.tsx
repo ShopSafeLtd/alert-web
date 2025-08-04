@@ -8,7 +8,7 @@ export type ListSchemeTagsQueryVariables = Types.Exact<{
 }>;
 
 
-export type ListSchemeTagsQuery = { __typename?: 'Query', listTags: { __typename?: 'ListTags', tags: Array<{ __typename?: 'Tag', id?: string | null, name?: string | null, parentTag?: { __typename?: 'Tag', id?: string | null } | null }> } };
+export type ListSchemeTagsQuery = { __typename?: 'Query', listTags: { __typename?: 'ListTags', tags: Array<{ __typename?: 'Tag', id: string, name: string, parentTag?: { __typename?: 'Tag', id: string } | null }> } };
 
 
 export const ListSchemeTagsDocument = gql`

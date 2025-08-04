@@ -11,7 +11,7 @@ export type LatestVehiclesQueryVariables = Types.Exact<{
 }>;
 
 
-export type LatestVehiclesQuery = { __typename?: 'Query', latestVehicles?: { __typename?: 'QueryLatestVehiclesConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null }, edges: Array<{ __typename?: 'QueryLatestVehiclesConnectionEdge', node: { __typename?: 'Vehicle', id?: string | null, registration?: string | null, model?: string | null, make?: string | null, images: Array<{ __typename?: 'Image', low?: string | null }> } }> } | null };
+export type LatestVehiclesQuery = { __typename?: 'Query', latestVehicles: { __typename?: 'QueryLatestVehiclesConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null }, edges: Array<{ __typename?: 'QueryLatestVehiclesConnectionEdge', node: { __typename?: 'Vehicle', id: string, registration?: string | null, model?: string | null, make?: string | null, images: Array<{ __typename?: 'Image', low?: string | null }> } }> } };
 
 
 export const LatestVehiclesDocument = gql`

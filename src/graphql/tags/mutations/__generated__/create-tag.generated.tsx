@@ -8,7 +8,7 @@ export type CreateTagMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateTagMutation = { __typename?: 'Mutation', createTag: { __typename?: 'Tag', id?: string | null, name?: string | null, description?: string | null, type?: Types.TagType | null, crimeType?: Types.CrimeType | null } };
+export type CreateTagMutation = { __typename?: 'Mutation', createTag: { __typename?: 'Tag', id: string, name: string, description: string, type: Types.TagType, crimeType?: Types.CrimeType | null } };
 
 
 export const CreateTagDocument = gql`

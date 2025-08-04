@@ -9,7 +9,7 @@ export type CreateBlurFacesMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateBlurFacesMutation = { __typename?: 'Mutation', createBlurFaces?: { __typename?: 'Image', id?: string | null, optimised?: string | null, url?: string | null, position?: Types.ImagePosition | null, rotation?: number | null, primary?: boolean | null, policeImage?: boolean | null } | null };
+export type CreateBlurFacesMutation = { __typename?: 'Mutation', createBlurFaces: { __typename?: 'Image', id: string, optimised?: string | null, url?: string | null, position: Types.ImagePosition, rotation: number, primary?: boolean | null, policeImage?: boolean | null } };
 
 
 export const CreateBlurFacesDocument = gql`

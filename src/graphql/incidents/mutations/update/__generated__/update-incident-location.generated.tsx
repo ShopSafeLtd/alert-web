@@ -10,7 +10,7 @@ export type UpdateIncidentLocationMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateIncidentLocationMutation = { __typename?: 'Mutation', updateIncident?: { __typename?: 'Incident', id?: string | null, location?: { __typename?: 'Address', id: string, building?: string | null, street?: string | null, townCity?: string | null, county?: string | null, postcode?: string | null, geoLat?: number | null, geoLng?: number | null, full?: string | null, alias?: string | null } | null } | null };
+export type UpdateIncidentLocationMutation = { __typename?: 'Mutation', updateIncident: { __typename?: 'Incident', id: string, location?: { __typename?: 'Address', id: string, building?: string | null, street?: string | null, townCity?: string | null, county?: string | null, postcode?: string | null, geoLat?: number | null, geoLng?: number | null, full: string, alias?: string | null } | null } };
 
 
 export const UpdateIncidentLocationDocument = gql`

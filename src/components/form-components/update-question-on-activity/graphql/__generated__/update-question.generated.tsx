@@ -8,7 +8,7 @@ export type UpdateQuestionOnActivityMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateQuestionOnActivityMutation = { __typename?: 'Mutation', updateQuestionOnActivity?: { __typename?: 'Question', question?: string | null, id?: string | null, optionsFormatted?: Array<string> | null, type?: Types.AnswerType | null, options?: Array<{ [key: string]: any }> | null } | null };
+export type UpdateQuestionOnActivityMutation = { __typename?: 'Mutation', updateQuestionOnActivity: { __typename?: 'Question', question: string, id: string, optionsFormatted?: Array<string> | null, type: Types.AnswerType, options: Array<{ [key: string]: any }> } };
 
 
 export const UpdateQuestionOnActivityDocument = gql`

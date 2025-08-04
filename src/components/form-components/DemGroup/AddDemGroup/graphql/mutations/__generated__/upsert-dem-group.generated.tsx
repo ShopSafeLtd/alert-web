@@ -8,7 +8,7 @@ export type UpsertDemGroupMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpsertDemGroupMutation = { __typename?: 'Mutation', upsertDemGroup?: { __typename?: 'DemGroup', id?: string | null, name?: string | null, demId?: string | null, totalDevices?: number | null, demDevices?: Array<{ __typename?: 'DemDevice', id?: string | null, name?: string | null }> | null } | null };
+export type UpsertDemGroupMutation = { __typename?: 'Mutation', upsertDemGroup: { __typename?: 'DemGroup', id: string, name: string, demId: string, totalDevices: number, demDevices: Array<{ __typename?: 'DemDevice', id: string, name: string }> } };
 
 
 export const UpsertDemGroupDocument = gql`

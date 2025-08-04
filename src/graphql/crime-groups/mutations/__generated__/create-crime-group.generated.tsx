@@ -8,7 +8,7 @@ export type CreateCrimeGroupMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateCrimeGroupMutation = { __typename?: 'Mutation', createCrimeGroup?: { __typename?: 'CrimeGroup', id: string, reference?: number | null, totalIncidents?: number | null, totalOffenders: number, totalRecoveredValue?: number | null, totalTheftSuccess?: number | null, totalValue?: number | null, alias?: string | null, updatedAt?: Date | null } | null };
+export type CreateCrimeGroupMutation = { __typename?: 'Mutation', createCrimeGroup: { __typename?: 'CrimeGroup', id: string, reference?: number | null, totalIncidents: number, totalOffenders: number, totalRecoveredValue: number, totalTheftSuccess: number, totalValue: number, alias?: string | null, updatedAt: Date } };
 
 
 export const CreateCrimeGroupDocument = gql`

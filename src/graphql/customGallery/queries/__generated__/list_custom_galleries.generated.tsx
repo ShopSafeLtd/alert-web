@@ -11,7 +11,7 @@ export type ListCustomGalleriesQueryVariables = Types.Exact<{
 }>;
 
 
-export type ListCustomGalleriesQuery = { __typename?: 'Query', customGalleriesRelay?: { __typename?: 'QueryCustomGalleriesRelayConnection', totalCount: number, edges: Array<{ __typename?: 'QueryCustomGalleriesRelayConnectionEdge', node: { __typename?: 'CustomGallery', description?: string | null, id?: string | null, name?: string | null } }> } | null };
+export type ListCustomGalleriesQuery = { __typename?: 'Query', customGalleriesRelay: { __typename?: 'QueryCustomGalleriesRelayConnection', totalCount: number, edges: Array<{ __typename?: 'QueryCustomGalleriesRelayConnectionEdge', node: { __typename?: 'CustomGallery', description?: string | null, id: string, name: string } }> } };
 
 
 export const ListCustomGalleriesDocument = gql`

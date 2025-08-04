@@ -8,7 +8,7 @@ export type UnsubscribeFromIncidentMutationVariables = Types.Exact<{
 }>;
 
 
-export type UnsubscribeFromIncidentMutation = { __typename?: 'Mutation', unsubscribeFromIncident?: { __typename?: 'Incident', id?: string | null, subscribed?: boolean | null } | null };
+export type UnsubscribeFromIncidentMutation = { __typename?: 'Mutation', unsubscribeFromIncident: { __typename?: 'Incident', id: string, subscribed: boolean } };
 
 
 export const UnsubscribeFromIncidentDocument = gql`

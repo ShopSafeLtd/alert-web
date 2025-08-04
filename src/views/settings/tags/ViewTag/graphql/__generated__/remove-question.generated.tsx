@@ -8,7 +8,7 @@ export type RemoveQuestionFromTagMutationVariables = Types.Exact<{
 }>;
 
 
-export type RemoveQuestionFromTagMutation = { __typename?: 'Mutation', removeQuestionFromTag?: { __typename?: 'TagQuestion', id?: string | null } | null };
+export type RemoveQuestionFromTagMutation = { __typename?: 'Mutation', removeQuestionFromTag: { __typename?: 'TagQuestion', id: string } };
 
 
 export const RemoveQuestionFromTagDocument = gql`

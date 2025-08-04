@@ -9,7 +9,7 @@ export type UpdateOffenderCrimeGroupsMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateOffenderCrimeGroupsMutation = { __typename?: 'Mutation', updateOffender?: { __typename?: 'Offender', id?: string | null, crimeGroups: Array<{ __typename?: 'CrimeGroup', id: string, reference?: number | null, alias?: string | null, totalIncidents?: number | null, totalOffenders: number, totalRecoveredValue?: number | null, totalTheftSuccess?: number | null, totalValue?: number | null }> } | null };
+export type UpdateOffenderCrimeGroupsMutation = { __typename?: 'Mutation', updateOffender: { __typename?: 'Offender', id: string, crimeGroups: Array<{ __typename?: 'CrimeGroup', id: string, reference?: number | null, alias?: string | null, totalIncidents: number, totalOffenders: number, totalRecoveredValue: number, totalTheftSuccess: number, totalValue: number }> } };
 
 
 export const UpdateOffenderCrimeGroupsDocument = gql`

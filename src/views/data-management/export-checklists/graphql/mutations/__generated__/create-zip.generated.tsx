@@ -9,7 +9,7 @@ export type CreateChecklistCsvZipMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateChecklistCsvZipMutation = { __typename?: 'Mutation', createChecklistCsvZip?: string | null };
+export type CreateChecklistCsvZipMutation = { __typename?: 'Mutation', createChecklistCsvZip: string };
 
 
 export const CreateChecklistCsvZipDocument = gql`

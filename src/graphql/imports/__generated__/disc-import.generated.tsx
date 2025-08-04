@@ -8,7 +8,7 @@ export type DiscImportDataMutationVariables = Types.Exact<{
 }>;
 
 
-export type DiscImportDataMutation = { __typename?: 'Mutation', discImportData?: { __typename?: 'SystemTask', success?: boolean | null } | null };
+export type DiscImportDataMutation = { __typename?: 'Mutation', discImportData: { __typename?: 'SystemTask', success: boolean } };
 
 
 export const DiscImportDataDocument = gql`

@@ -7,6 +7,7 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 
 import type { DemGroupQuery } from '../graphql/queries/__generated__/dem-group.generated';
+
 const { confirm } = Modal;
 
 interface Props {
@@ -104,7 +105,7 @@ const DemGroupDetail = ({
             },
           ]}
           dataSource={data?.demGroup.demDevices.map((device) => ({
-            business: device.business.name,
+            business: device.business?.name,
             key: device.id,
             name: device.name,
           }))}

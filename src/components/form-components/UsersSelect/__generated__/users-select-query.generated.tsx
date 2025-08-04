@@ -11,7 +11,7 @@ export type UsersSelectQueryVariables = Types.Exact<{
 }>;
 
 
-export type UsersSelectQuery = { __typename?: 'Query', listUsers: { __typename?: 'ListUsers', total: number, users: Array<{ __typename?: 'User', id?: string | null, fullName: string }> } };
+export type UsersSelectQuery = { __typename?: 'Query', listUsers: { __typename?: 'ListUsers', total: number, users: Array<{ __typename?: 'User', id: string, fullName: string }> } };
 
 
 export const UsersSelectDocument = gql`

@@ -8,7 +8,7 @@ export type RoleQueryVariables = Types.Exact<{
 }>;
 
 
-export type RoleQuery = { __typename?: 'Query', role: { __typename?: 'CustomRole', id: string, name: string, usersCount: number, approvalTier?: boolean | null, type: Types.Role, parentId?: string | null, permissions: Array<{ __typename?: 'Permission', allowedMethods: Array<Types.PermissionMethod>, model: Types.PermissionModel }>, folders?: Array<{ __typename?: 'Folder', id?: string | null, name: string, childFolders: Array<{ __typename?: 'Folder', id?: string | null, name: string }> }> | null, checklists?: Array<{ __typename?: 'Checklist', id: string, title: string }> | null, users: Array<{ __typename?: 'UserScheme', user?: { __typename?: 'User', fullName: string, id?: string | null, email?: string | null } | null }> } };
+export type RoleQuery = { __typename?: 'Query', role: { __typename?: 'CustomRole', id: string, name: string, usersCount: number, approvalTier: boolean, type: Types.Role, parentId?: string | null, permissions: Array<{ __typename?: 'Permission', allowedMethods: Array<Types.PermissionMethod>, model: Types.PermissionModel }>, folders: Array<{ __typename?: 'Folder', id: string, name: string, childFolders: Array<{ __typename?: 'Folder', id: string, name: string }> }>, checklists: Array<{ __typename?: 'Checklist', id: string, title: string }>, users: Array<{ __typename?: 'UserScheme', user: { __typename?: 'User', fullName: string, id: string, email?: string | null } }> } };
 
 
 export const RoleDocument = gql`

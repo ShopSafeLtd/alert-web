@@ -11,7 +11,7 @@ export type IncidentItemsReportQueryVariables = Types.Exact<{
 }>;
 
 
-export type IncidentItemsReportQuery = { __typename?: 'Query', incidentItems?: { __typename?: 'QueryIncidentItemsConnection', totalCount: number, edges: Array<{ __typename?: 'QueryIncidentItemsConnectionEdge', node: { __typename?: 'IncidentItem', id?: string | null, name?: string | null, quantity?: number | null, recoveredQuantity?: number | null, sku?: string | null, incident?: { __typename?: 'Incident', id?: string | null, date?: Date | null, createdAt?: Date | null, business?: { __typename?: 'Business', id: string, name?: string | null, siteNumber?: string | null } | null } | null, stockItem?: { __typename?: 'StockItem', variant?: string | null, goodsType?: { __typename?: 'GoodsType', id?: string | null, name?: string | null } | null } | null } }> } | null };
+export type IncidentItemsReportQuery = { __typename?: 'Query', incidentItems: { __typename?: 'QueryIncidentItemsConnection', totalCount: number, edges: Array<{ __typename?: 'QueryIncidentItemsConnectionEdge', node: { __typename?: 'IncidentItem', id: string, name?: string | null, quantity?: number | null, recoveredQuantity?: number | null, sku?: string | null, incident: { __typename?: 'Incident', id: string, date: Date, createdAt: Date, business?: { __typename?: 'Business', id: string, name: string, siteNumber?: string | null } | null }, stockItem?: { __typename?: 'StockItem', variant?: string | null, goodsType?: { __typename?: 'GoodsType', id: string, name: string } | null } | null } }> } };
 
 
 export const IncidentItemsReportDocument = gql`

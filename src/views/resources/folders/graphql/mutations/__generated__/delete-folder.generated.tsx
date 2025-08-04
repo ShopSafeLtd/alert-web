@@ -8,7 +8,7 @@ export type DeleteFolderMutationVariables = Types.Exact<{
 }>;
 
 
-export type DeleteFolderMutation = { __typename?: 'Mutation', deleteFolder?: { __typename?: 'Folder', id?: string | null } | null };
+export type DeleteFolderMutation = { __typename?: 'Mutation', deleteFolder: { __typename?: 'Folder', id: string } };
 
 
 export const DeleteFolderDocument = gql`

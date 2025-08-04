@@ -8,7 +8,7 @@ export type AvailableTaskQuestionsQueryVariables = Types.Exact<{
 }>;
 
 
-export type AvailableTaskQuestionsQuery = { __typename?: 'Query', availableTaskQuestions: Array<{ __typename?: 'Question', id?: string | null, questionFormatted?: string | null, question?: string | null, optionsFormatted?: Array<string> | null, type?: Types.AnswerType | null, options?: Array<{ [key: string]: any }> | null }> };
+export type AvailableTaskQuestionsQuery = { __typename?: 'Query', availableTaskQuestions: Array<{ __typename?: 'Question', id: string, questionFormatted: string, question: string, optionsFormatted?: Array<string> | null, type: Types.AnswerType, options: Array<{ [key: string]: any }> }> };
 
 
 export const AvailableTaskQuestionsDocument = gql`

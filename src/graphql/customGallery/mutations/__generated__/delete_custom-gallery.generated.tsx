@@ -8,7 +8,7 @@ export type DeleteCustomGalleryMutationVariables = Types.Exact<{
 }>;
 
 
-export type DeleteCustomGalleryMutation = { __typename?: 'Mutation', deleteCustomGallery?: { __typename?: 'CustomGallery', id?: string | null } | null };
+export type DeleteCustomGalleryMutation = { __typename?: 'Mutation', deleteCustomGallery: { __typename?: 'CustomGallery', id: string } };
 
 
 export const DeleteCustomGalleryDocument = gql`

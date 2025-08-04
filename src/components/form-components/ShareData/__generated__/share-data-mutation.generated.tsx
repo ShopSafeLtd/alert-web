@@ -8,7 +8,7 @@ export type ShareDataMutationVariables = Types.Exact<{
 }>;
 
 
-export type ShareDataMutation = { __typename?: 'Mutation', shareData?: { __typename?: 'SystemTask', success?: boolean | null } | null };
+export type ShareDataMutation = { __typename?: 'Mutation', shareData: { __typename?: 'SystemTask', success: boolean } };
 
 
 export const ShareDataDocument = gql`

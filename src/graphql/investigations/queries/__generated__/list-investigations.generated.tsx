@@ -11,7 +11,7 @@ export type ListInvestigationsQueryVariables = Types.Exact<{
 }>;
 
 
-export type ListInvestigationsQuery = { __typename?: 'Query', listInvestigations: { __typename?: 'ListInvestigations', total: number, investigations: Array<{ __typename?: 'Investigation', id?: string | null, name?: string | null, description?: string | null, status?: Types.InvestigationStatus | null }> } };
+export type ListInvestigationsQuery = { __typename?: 'Query', listInvestigations: { __typename?: 'ListInvestigations', total: number, investigations: Array<{ __typename?: 'Investigation', id: string, name: string, description?: string | null, status: Types.InvestigationStatus }> } };
 
 
 export const ListInvestigationsDocument = gql`

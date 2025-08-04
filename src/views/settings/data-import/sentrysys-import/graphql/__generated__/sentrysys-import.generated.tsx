@@ -8,7 +8,7 @@ export type SentrysysImportDataMutationVariables = Types.Exact<{
 }>;
 
 
-export type SentrysysImportDataMutation = { __typename?: 'Mutation', sentrysysImportData?: { __typename?: 'SystemTask', success?: boolean | null } | null };
+export type SentrysysImportDataMutation = { __typename?: 'Mutation', sentrysysImportData: { __typename?: 'SystemTask', success: boolean } };
 
 
 export const SentrysysImportDataDocument = gql`

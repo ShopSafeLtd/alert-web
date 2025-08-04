@@ -9,7 +9,7 @@ export type ArticlesQueryVariables = Types.Exact<{
 }>;
 
 
-export type ArticlesQuery = { __typename?: 'Query', articles: Array<{ __typename?: 'Article', previewImage?: string | null, previewText?: string | null, priority: Types.ArticlePriority, watermarkImage: boolean, title: string, updatedAt?: Date | null, id: string, tags: Array<{ __typename?: 'Tag', id?: string | null, name?: string | null }>, images: Array<{ __typename?: 'Image', id?: string | null, url?: string | null, optimised?: string | null, card?: string | null, position?: Types.ImagePosition | null, rotation?: number | null }>, image?: { __typename?: 'Image', id?: string | null, url?: string | null, optimised?: string | null, card?: string | null } | null, createdBy: { __typename?: 'User', fullName: string, id?: string | null, businesses: Array<{ __typename?: 'Business', fullName?: string | null, id: string, name?: string | null }> } }> };
+export type ArticlesQuery = { __typename?: 'Query', articles: Array<{ __typename?: 'Article', previewImage?: string | null, previewText?: string | null, priority: Types.ArticlePriority, watermarkImage: boolean, title: string, updatedAt: Date, id: string, tags: Array<{ __typename?: 'Tag', id: string, name: string }>, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, card?: string | null, position: Types.ImagePosition, rotation: number }>, image?: { __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, card?: string | null } | null, createdBy: { __typename?: 'User', fullName: string, id: string, businesses: Array<{ __typename?: 'Business', fullName: string, id: string, name: string }> } }> };
 
 
 export const ArticlesDocument = gql`

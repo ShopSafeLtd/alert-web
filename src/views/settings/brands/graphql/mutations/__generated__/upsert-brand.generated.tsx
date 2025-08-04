@@ -8,7 +8,7 @@ export type UpsertBrandMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpsertBrandMutation = { __typename?: 'Mutation', upsertBrand?: { __typename?: 'Brand', id?: string | null, name?: string | null, businessCount: number, description?: string | null } | null };
+export type UpsertBrandMutation = { __typename?: 'Mutation', upsertBrand: { __typename?: 'Brand', id: string, name: string, businessCount: number, description?: string | null } };
 
 
 export const UpsertBrandDocument = gql`

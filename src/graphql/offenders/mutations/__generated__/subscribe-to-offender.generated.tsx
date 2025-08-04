@@ -8,7 +8,7 @@ export type SubscribeToOffenderMutationVariables = Types.Exact<{
 }>;
 
 
-export type SubscribeToOffenderMutation = { __typename?: 'Mutation', subscribeToOffender?: { __typename?: 'Offender', id?: string | null, subscribed?: boolean | null } | null };
+export type SubscribeToOffenderMutation = { __typename?: 'Mutation', subscribeToOffender: { __typename?: 'Offender', id: string, subscribed: boolean } };
 
 
 export const SubscribeToOffenderDocument = gql`

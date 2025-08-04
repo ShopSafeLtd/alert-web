@@ -8,7 +8,7 @@ export type ReportsCentreQueryVariables = Types.Exact<{
 }>;
 
 
-export type ReportsCentreQuery = { __typename?: 'Query', reportsCentre: Array<{ __typename?: 'ReportGroup', id?: string | null, name?: string | null, order?: number | null, reports?: Array<{ __typename?: 'ReportTemplate', id?: string | null, name?: string | null, description?: string | null, type?: Types.ReportType | null }> | null }> };
+export type ReportsCentreQuery = { __typename?: 'Query', reportsCentre: Array<{ __typename?: 'ReportGroup', id: string, name: string, order: number, reports: Array<{ __typename?: 'ReportTemplate', id: string, name: string, description?: string | null, type: Types.ReportType }> }> };
 
 
 export const ReportsCentreDocument = gql`

@@ -1,4 +1,5 @@
 import type { ViewIncidentQuery } from '#/views/incidents/ViewIncident/__generated__/view-incident.generated';
+import type { UpdateIncidentMutationVariables } from 'graphql/incidents/mutations/__generated__/update-incident.generated';
 
 import DatePicker from '#/components/util-components/DatePicker';
 import formatAnswer from '#/utils/format-answer';
@@ -107,7 +108,7 @@ const Answers = ({
         return;
       }
 
-      const mutationVariables = {
+      const mutationVariables: UpdateIncidentMutationVariables = {
         data: {
           answers: {
             update: changedAnswers,
@@ -350,7 +351,7 @@ const Answers = ({
           type: answer.type,
         })),
     [data]
-  );
+  ) as AnswerData[] | undefined;
 
   return data?.incident && data.incident.answers.length > 0 ? (
     <Card loading={loading}>

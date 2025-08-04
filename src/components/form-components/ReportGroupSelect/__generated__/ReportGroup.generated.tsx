@@ -10,7 +10,7 @@ export type ReportGroupsSelectQueryVariables = Types.Exact<{
 }>;
 
 
-export type ReportGroupsSelectQuery = { __typename?: 'Query', reportGroups?: { __typename?: 'QueryReportGroupsConnection', totalCount: number, edges: Array<{ __typename?: 'QueryReportGroupsConnectionEdge', node: { __typename?: 'ReportGroup', id?: string | null, name?: string | null } }>, pageInfo: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage: boolean } } | null };
+export type ReportGroupsSelectQuery = { __typename?: 'Query', reportGroups: { __typename?: 'QueryReportGroupsConnection', totalCount: number, edges: Array<{ __typename?: 'QueryReportGroupsConnectionEdge', node: { __typename?: 'ReportGroup', id: string, name: string } }>, pageInfo: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage: boolean } } };
 
 
 export const ReportGroupsSelectDocument = gql`

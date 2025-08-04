@@ -9,7 +9,7 @@ export type RestoreOffenderMutationVariables = Types.Exact<{
 }>;
 
 
-export type RestoreOffenderMutation = { __typename?: 'Mutation', restoreOffender?: { __typename?: 'Offender', id?: string | null, recycled?: boolean | null } | null };
+export type RestoreOffenderMutation = { __typename?: 'Mutation', restoreOffender: { __typename?: 'Offender', id: string, recycled: boolean } };
 
 
 export const RestoreOffenderDocument = gql`

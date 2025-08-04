@@ -8,7 +8,7 @@ export type ExportFiltersQueryVariables = Types.Exact<{
 }>;
 
 
-export type ExportFiltersQuery = { __typename?: 'Query', scheme: { __typename?: 'Scheme', schemeTags: Array<{ __typename?: 'Tag', id?: string | null, name?: string | null }> } };
+export type ExportFiltersQuery = { __typename?: 'Query', scheme: { __typename?: 'Scheme', schemeTags: Array<{ __typename?: 'Tag', id: string, name: string }> } };
 
 
 export const ExportFiltersDocument = gql`

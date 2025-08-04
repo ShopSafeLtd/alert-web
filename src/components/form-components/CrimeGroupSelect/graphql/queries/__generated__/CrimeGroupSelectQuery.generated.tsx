@@ -11,7 +11,7 @@ export type CrimeGroupsSelectQueryVariables = Types.Exact<{
 }>;
 
 
-export type CrimeGroupsSelectQuery = { __typename?: 'Query', crimeGroups?: { __typename?: 'QueryCrimeGroupsConnection', totalCount: number, edges: Array<{ __typename?: 'QueryCrimeGroupsConnectionEdge', node: { __typename?: 'CrimeGroup', id: string, alias?: string | null, reference?: number | null } }>, pageInfo: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage: boolean } } | null };
+export type CrimeGroupsSelectQuery = { __typename?: 'Query', crimeGroups: { __typename?: 'QueryCrimeGroupsConnection', totalCount: number, edges: Array<{ __typename?: 'QueryCrimeGroupsConnectionEdge', node: { __typename?: 'CrimeGroup', id: string, alias?: string | null, reference?: number | null } }>, pageInfo: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage: boolean } } };
 
 
 export const CrimeGroupsSelectDocument = gql`

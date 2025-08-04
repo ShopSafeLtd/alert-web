@@ -1,7 +1,7 @@
 import type * as Types from '../../types.js';
 
 import { gql } from '@apollo/client';
-export type IncidentUpdateCardsFragment = { __typename?: 'Incident', id?: string | null, reference?: number | null, dayTime: string, policeRef?: string | null, subject?: string | null, totalValue?: number | null, totalRecoveredValue?: number | null, location?: { __typename?: 'Address', id: string, full?: string | null, geoLat?: number | null, geoLng?: number | null } | null };
+export type IncidentUpdateCardsFragment = { __typename?: 'Incident', id: string, reference?: number | null, dayTime: string, policeRef?: string | null, subject: string, totalValue: number, totalRecoveredValue: number, location?: { __typename?: 'Address', id: string, full: string, geoLat?: number | null, geoLng?: number | null } | null };
 
 export const IncidentUpdateCardsFragmentDoc = gql`
     fragment IncidentUpdateCards on Incident {

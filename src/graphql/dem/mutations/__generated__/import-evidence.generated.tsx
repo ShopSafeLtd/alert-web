@@ -9,7 +9,7 @@ export type CopyEvidenceMutationVariables = Types.Exact<{
 }>;
 
 
-export type CopyEvidenceMutation = { __typename?: 'Mutation', copyEvidenceOnInvestigation?: { __typename?: 'Document', id?: string | null, name?: string | null, url?: string | null, thumbnailUrl?: string | null, tags: Array<{ __typename?: 'Tag', id?: string | null, name?: string | null }>, investigation: Array<{ __typename?: 'Investigation', id?: string | null, name?: string | null }> } | null };
+export type CopyEvidenceMutation = { __typename?: 'Mutation', copyEvidenceOnInvestigation: { __typename?: 'Document', id: string, name: string, url: string, thumbnailUrl?: string | null, tags: Array<{ __typename?: 'Tag', id: string, name: string }>, investigation: Array<{ __typename?: 'Investigation', id: string, name: string }> } };
 
 
 export const CopyEvidenceDocument = gql`

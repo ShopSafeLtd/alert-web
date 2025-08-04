@@ -8,7 +8,7 @@ export type ListGoodsTypesQueryVariables = Types.Exact<{
 }>;
 
 
-export type ListGoodsTypesQuery = { __typename?: 'Query', listGoodsTypes: { __typename?: 'ListGoodsTypes', total: number, goodsTypes: Array<{ __typename?: 'GoodsType', id?: string | null, name?: string | null }> } };
+export type ListGoodsTypesQuery = { __typename?: 'Query', listGoodsTypes: { __typename?: 'ListGoodsTypes', total: number, goodsTypes: Array<{ __typename?: 'GoodsType', id: string, name: string }> } };
 
 
 export const ListGoodsTypesDocument = gql`

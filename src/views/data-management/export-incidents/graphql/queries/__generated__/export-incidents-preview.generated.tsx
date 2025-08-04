@@ -10,7 +10,7 @@ export type PreviewIncidentExportQueryVariables = Types.Exact<{
 }>;
 
 
-export type PreviewIncidentExportQuery = { __typename?: 'Query', previewIncidentExport: { __typename?: 'IncidentExport', activityCount: number, incidentCount: number, incidentItemsCount: number, offenderCount: number, vehicleCount: number, incidents: Array<{ __typename?: 'Incident', id?: string | null, date?: Date | null, description?: string | null }> } };
+export type PreviewIncidentExportQuery = { __typename?: 'Query', previewIncidentExport: { __typename?: 'IncidentExport', activityCount: number, incidentCount: number, incidentItemsCount: number, offenderCount: number, vehicleCount: number, incidents: Array<{ __typename?: 'Incident', id: string, date: Date, description: string }> } };
 
 
 export const PreviewIncidentExportDocument = gql`

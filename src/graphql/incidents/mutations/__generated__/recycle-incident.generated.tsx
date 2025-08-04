@@ -8,7 +8,7 @@ export type RecycleIncidentMutationVariables = Types.Exact<{
 }>;
 
 
-export type RecycleIncidentMutation = { __typename?: 'Mutation', recycleIncident?: { __typename?: 'Incident', id?: string | null } | null };
+export type RecycleIncidentMutation = { __typename?: 'Mutation', recycleIncident: { __typename?: 'Incident', id: string } };
 
 
 export const RecycleIncidentDocument = gql`

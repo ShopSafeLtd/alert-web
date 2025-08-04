@@ -8,7 +8,7 @@ export type ApproveStockRequestMutationVariables = Types.Exact<{
 }>;
 
 
-export type ApproveStockRequestMutation = { __typename?: 'Mutation', approveStockRemovalRequest?: { __typename?: 'StockRemovalRequestApproval', id: string, status: Types.StockRemovalRequestApprovalStatus, user?: { __typename?: 'User', id?: string | null, fullName: string } | null } | null };
+export type ApproveStockRequestMutation = { __typename?: 'Mutation', approveStockRemovalRequest: { __typename?: 'StockRemovalRequestApproval', id: string, status: Types.StockRemovalRequestApprovalStatus, user: { __typename?: 'User', id: string, fullName: string } } };
 
 
 export const ApproveStockRequestDocument = gql`

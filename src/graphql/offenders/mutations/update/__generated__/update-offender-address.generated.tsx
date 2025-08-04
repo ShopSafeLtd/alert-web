@@ -10,7 +10,7 @@ export type UpdateOffenderAddressesMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateOffenderAddressesMutation = { __typename?: 'Mutation', updateOffender?: { __typename?: 'Offender', id?: string | null, addresses: Array<{ __typename?: 'Address', id: string, building?: string | null, street?: string | null, townCity?: string | null, county?: string | null, postcode?: string | null, geoLat?: number | null, geoLng?: number | null, full?: string | null, alias?: string | null }> } | null };
+export type UpdateOffenderAddressesMutation = { __typename?: 'Mutation', updateOffender: { __typename?: 'Offender', id: string, addresses: Array<{ __typename?: 'Address', id: string, building?: string | null, street?: string | null, townCity?: string | null, county?: string | null, postcode?: string | null, geoLat?: number | null, geoLng?: number | null, full: string, alias?: string | null }> } };
 
 
 export const UpdateOffenderAddressesDocument = gql`

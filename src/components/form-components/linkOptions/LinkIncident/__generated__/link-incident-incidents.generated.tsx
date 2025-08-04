@@ -16,7 +16,7 @@ export type LinkIncidentIncidentsQueryVariables = Types.Exact<{
 }>;
 
 
-export type LinkIncidentIncidentsQuery = { __typename?: 'Query', incidentsRelay?: { __typename?: 'QueryIncidentsRelayConnection', totalCount: number, edges: Array<{ __typename?: 'QueryIncidentsRelayConnectionEdge', node: { __typename?: 'Incident', id?: string | null, reference?: number | null, date?: Date | null, dayTime: string, description?: string | null, subject?: string | null, totalImages?: number | null, policeRef?: string | null, totalRecoveredValue?: number | null, totalValue?: number | null, location?: { __typename?: 'Address', full?: string | null } | null, business?: { __typename?: 'Business', name?: string | null } | null, offenders: Array<{ __typename?: 'Offender', id?: string | null, name?: string | null }> } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null } } | null };
+export type LinkIncidentIncidentsQuery = { __typename?: 'Query', incidentsRelay: { __typename?: 'QueryIncidentsRelayConnection', totalCount: number, edges: Array<{ __typename?: 'QueryIncidentsRelayConnectionEdge', node: { __typename?: 'Incident', id: string, reference?: number | null, date: Date, dayTime: string, description: string, subject: string, totalImages: number, policeRef?: string | null, totalRecoveredValue: number, totalValue: number, location?: { __typename?: 'Address', full: string } | null, business?: { __typename?: 'Business', name: string } | null, offenders: Array<{ __typename?: 'Offender', id: string, name?: string | null }> } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null } } };
 
 
 export const LinkIncidentIncidentsDocument = gql`

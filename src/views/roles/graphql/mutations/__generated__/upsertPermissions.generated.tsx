@@ -8,7 +8,7 @@ export type UpsertPermissionMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpsertPermissionMutation = { __typename?: 'Mutation', upsertPermission?: { __typename?: 'CustomRole', id: string } | null };
+export type UpsertPermissionMutation = { __typename?: 'Mutation', upsertPermission: { __typename?: 'CustomRole', id: string } };
 
 
 export const UpsertPermissionDocument = gql`
