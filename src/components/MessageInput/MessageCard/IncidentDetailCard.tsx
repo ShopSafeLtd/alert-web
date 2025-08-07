@@ -29,6 +29,7 @@ const { Text, Title } = Typography;
 
 interface Props {
   incident: IncidentCardData;
+  onClick?: (id: string) => void;
   onDelete?: (value: string | undefined) => void;
   saving?: boolean;
   triggerLightbox?: (elements: { src: string }[], index: number) => void;
@@ -36,6 +37,7 @@ interface Props {
 
 const IncidentDetailCard = ({
   incident,
+  onClick,
   onDelete,
   saving,
   triggerLightbox,
@@ -49,13 +51,17 @@ const IncidentDetailCard = ({
       bodyStyle={{
         padding: 0,
       }}
+      className={onClick ? 'incident-detail-card-clickable' : ''}
+      onClick={onClick ? () => onClick(incident.id) : undefined}
       size="small"
       style={{
         backgroundColor: currentTheme === 'dark' ? '#1b2531' : '#FFF',
         border: '1px solid var(--ant-color-border)',
         borderRadius: 8,
         boxShadow: '0 2px 4px rgba(0, 0, 0, 0.08)',
+        cursor: onClick ? 'pointer' : 'default',
         overflow: 'hidden',
+        transition: 'all 0.2s ease',
       }}
     >
       <Row gutter={5} style={{ position: 'relative' }} wrap={false}>
@@ -77,6 +83,7 @@ const IncidentDetailCard = ({
               danger
               disabled={saving}
               icon={<FontAwesomeIcon icon={faCircleXmark} />}
+              onClick={(e) => e.stopPropagation()}
               size="small"
               style={{ position: 'absolute', right: 8, top: 8, zIndex: 100 }}
               type="text"
@@ -87,7 +94,7 @@ const IncidentDetailCard = ({
           {incident.images && incident.images.length > 0 ? (
             <div style={{ height: 140, width: 140 }}>
               <WatermarkImage
-                triggerLightbox={triggerLightbox}
+                triggerLightbox={onClick ? undefined : triggerLightbox}
                 url={
                   incident.images[0].optimised || incident.images[0].url || ''
                 }
