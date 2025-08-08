@@ -2,6 +2,7 @@ import ToolCard from '#/components/data-management/ToolCard';
 import useSharedStyles from '#/components/data-management/shared.styles';
 import { currentPermissionsAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import {
+  faBuildings,
   faCalendarCheck,
   faCloudDownload,
   faFileExport,
@@ -52,6 +53,16 @@ const ExportHome = () => {
       iconColor: '#1a4ac4',
       title: <FormattedMessage defaultMessage="Export Activities" />,
       to: '/app/scheme-settings/data-export/export-activities',
+    },
+    {
+      description: (
+        <FormattedMessage defaultMessage="Export businesses data to CSV format for compliance tracking and external reporting." />
+      ),
+      icon: <FontAwesomeIcon icon={faBuildings} />,
+      iconBackground: '#1a4ac4',
+      iconColor: '#1a4ac4',
+      title: <FormattedMessage defaultMessage="Export Businesses" />,
+      to: '/app/scheme-settings/data-export/export-businesses',
     },
   ];
 

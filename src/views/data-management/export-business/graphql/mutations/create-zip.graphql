@@ -1,0 +1,3 @@
+mutation ExportBusinesses($where: BusinessWhereInput!) {
+  createBusinessCsvZip(where: $where)
+}
