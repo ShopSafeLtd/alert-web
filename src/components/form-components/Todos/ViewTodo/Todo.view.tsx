@@ -52,6 +52,7 @@ import {
 import dayjs from 'dayjs';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
+import { useNavigate } from 'react-router-dom';
 
 import type { FormData } from './useTodo';
 
@@ -129,6 +130,7 @@ const TodoView = ({
   const intl = useIntl();
   const screens = useBreakpoint();
   const classes = useStyles();
+  const navigate = useNavigate();
 
   const questions = todo?.todo?.questions.map(({ id, question }) => {
     form.setFieldValue(
@@ -647,7 +649,15 @@ const TodoView = ({
                     size="small"
                     title={intl.formatMessage({ defaultMessage: 'Incident' })}
                   >
-                    <IncidentDetailCard incident={incidentsData} />
+                    <IncidentDetailCard
+                      incident={incidentsData}
+                      onClick={(id) => {
+                        onClose();
+                        setTimeout(() => {
+                          navigate(`/app/incidents/view/${id}`);
+                        }, 100);
+                      }}
+                    />
                   </Card>
                 </Col>
               )}

@@ -129,6 +129,8 @@ export type Action = {
   description?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   reason?: Maybe<Scalars['String']>;
+  reference?: Maybe<Scalars['Int']>;
+  type: ActionType;
 };
 
 export type ActionListRelationFilter = {
@@ -212,6 +214,8 @@ export enum ActionScalarFieldEnum {
 
 export enum ActionType {
   Add = 'ADD',
+  Approved = 'APPROVED',
+  Completed = 'COMPLETED',
   Create = 'CREATE',
   Delete = 'DELETE',
   Disable = 'DISABLE',
@@ -223,6 +227,7 @@ export enum ActionType {
   Remove = 'REMOVE',
   ResetPassword = 'RESET_PASSWORD',
   Restore = 'RESTORE',
+  SaveDraft = 'SAVE_DRAFT',
   Update = 'UPDATE',
   View = 'VIEW'
 }
@@ -7749,6 +7754,7 @@ export type ImpressionWhereUniqueInput = {
 export type Incident = {
   __typename?: 'Incident';
   actionableScore: Scalars['Int'];
+  actions: Array<Action>;
   activityAuthorised: Scalars['Boolean'];
   aiBehavioralAnalysis?: Maybe<AiBehavioralAnalysis>;
   aiImpactAssessment?: Maybe<AiImpactAssessment>;
@@ -17122,6 +17128,7 @@ export enum Race {
   Ic4 = 'IC4',
   Ic5 = 'IC5',
   Ic6 = 'IC6',
+  Ic9 = 'IC9',
   Unknown = 'UNKNOWN'
 }
 
@@ -24473,6 +24480,7 @@ export enum WorkflowTrigger {
   Completed = 'COMPLETED',
   Created = 'CREATED',
   Cron = 'CRON',
+  Recycle = 'RECYCLE',
   Updated = 'UPDATED'
 }
 

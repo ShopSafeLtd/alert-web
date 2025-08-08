@@ -41,6 +41,7 @@ import LinkIncident from 'components/form-components/linkOptions/LinkIncident';
 import LinkOffender from 'components/form-components/offender/AddExistingOffender';
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
+import { useNavigate } from 'react-router-dom';
 
 import LinkInvestigation from '../../Investigation/LinkInvestigation';
 import LinkChecklist from '../../linkOptions/LinkChecklist';
@@ -81,6 +82,7 @@ const LinkProfile = ({
   const screens = useBreakpoint();
   const classes = useStyles() as Record<string, string>;
   const hasRolePermission = useHasRolePermission();
+  const navigate = useNavigate();
 
   const [linkIncident, setLinkIncident] = useState(false);
   const [linkOffender, setLinkOffender] = useState(false);
@@ -234,6 +236,7 @@ const LinkProfile = ({
               <Col lg={12} xs={24}>
                 <IncidentDetailCard
                   incident={incidentsData}
+                  onClick={(id) => navigate(`/app/incidents/view/${id}`)}
                   onDelete={
                     saving ? undefined : () => updateIncidentList(undefined)
                   }
