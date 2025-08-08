@@ -130,19 +130,7 @@ const ExportBusinessesView = ({
           </Col>
         </Row>
         <Row gutter={[10, 10]} style={{ marginBottom: 10 }}>
-          <Col span={2}>
-            <Typography.Text>
-              {intl.formatMessage(
-                {
-                  defaultMessage: 'Total Businesses: {count}',
-                },
-                {
-                  count: data?.businessRelay.totalCount || 0,
-                }
-              )}
-            </Typography.Text>
-          </Col>
-          <Col span={14} />
+          <Col span={16} />
           <Col flex={1}>
             {state.progress > 0 && (
               <Progress percent={state.progress} size="small" />
@@ -158,6 +146,23 @@ const ExportBusinessesView = ({
             )}
           </Col>
         </Row>
+        <Typography.Title level={2}>
+          <FormattedMessage defaultMessage="Preview" />
+        </Typography.Title>
+        <Typography.Text
+          style={{
+            marginBottom: 10,
+          }}
+        >
+          {intl.formatMessage(
+            {
+              defaultMessage: 'Total Businesses: {count}',
+            },
+            {
+              count: data?.businessRelay.totalCount || 0,
+            }
+          )}
+        </Typography.Text>
         <Table<TableData>
           columns={[
             {
@@ -243,9 +248,7 @@ const ExportBusinessesView = ({
             totalUsers: item.totalUsers,
           }))}
           loading={loading}
-          pagination={{
-            total: data?.businessRelay.totalCount,
-          }}
+          pagination={false}
           size="small"
         />
       </Page>
