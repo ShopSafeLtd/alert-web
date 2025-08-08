@@ -59,8 +59,8 @@ const ExportHome = () => {
         <FormattedMessage defaultMessage="Export businesses data to CSV format for compliance tracking and external reporting." />
       ),
       icon: <FontAwesomeIcon icon={faBuildings} />,
-      iconBackground: '#1a4ac4',
-      iconColor: '#1a4ac4',
+      iconBackground: '#faad14',
+      iconColor: '#faad14',
       title: <FormattedMessage defaultMessage="Export Businesses" />,
       to: '/app/scheme-settings/data-export/export-businesses',
     },
