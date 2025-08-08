@@ -2429,6 +2429,7 @@ export type BusinessWhereInput = {
   name?: InputMaybe<StringFilter>;
   parent?: InputMaybe<BusinessWhereInput>;
   parentId?: InputMaybe<StringNullableFilter>;
+  policeArea?: InputMaybe<EnumPoliceForceNullableListFilter>;
   publicName?: InputMaybe<BoolFilter>;
   recycled?: InputMaybe<BoolFilter>;
   reference?: InputMaybe<IntNullableFilter>;
@@ -5794,6 +5795,14 @@ export type EnumPermissionModelListFilter = {
   in?: InputMaybe<Array<PermissionModel>>;
   not?: InputMaybe<PermissionModel>;
   notIn?: InputMaybe<Array<PermissionModel>>;
+};
+
+export type EnumPoliceForceNullableListFilter = {
+  equals?: InputMaybe<Array<PoliceForce>>;
+  has?: InputMaybe<PoliceForce>;
+  hasEvery?: InputMaybe<Array<PoliceForce>>;
+  hasSome?: InputMaybe<Array<PoliceForce>>;
+  isEmpty?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type EnumPoliceResponseTimeNullableFilter = {
@@ -10874,6 +10883,7 @@ export type Mutation = {
   createBlankImage: Image;
   createBlurFaces: Image;
   createBusiness: Business;
+  createBusinessCsvZip: Scalars['String'];
   createChat: Chat;
   createChecklistCsvZip: Scalars['String'];
   createCollection: RekCollection;
@@ -11245,6 +11255,11 @@ export type MutationCreateBlurFacesArgs = {
 
 export type MutationCreateBusinessArgs = {
   data: CreateBusinessDataInput;
+};
+
+
+export type MutationCreateBusinessCsvZipArgs = {
+  where: BusinessWhereInput;
 };
 
 
