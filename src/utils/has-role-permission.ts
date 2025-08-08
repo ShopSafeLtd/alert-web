@@ -43,7 +43,6 @@ const useHasRolePermission = () => {
 };
 
 /**
- * @deprecated Use useHasRolePermission hook instead
  * @param {Permission} params - Object containing the permission you want to check
  * @returns {boolean} - Returns true if the user has the permission
  */

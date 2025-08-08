@@ -10,6 +10,10 @@ fragment Todos on Todo {
     id
     fullName
   }
+  completedBy {
+    id
+    fullName
+  }
   assignedUsers {
     id
     fullName
