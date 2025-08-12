@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-argument */
 import type { OffenderData } from '#/components/form-components/offender/AddExistingOffender/AddExistingOffender.container';
 import type { SelectProps, UploadProps } from 'antd';
+import { Form } from 'antd';
 import type { UploadFile } from 'antd/es/upload/interface';
 import type { Editor } from 'tinymce';
 
@@ -11,7 +12,6 @@ import {
   userIdAtom,
   userSchemesAtom,
 } from '#/providers/UserProvider/UserProvider';
-import { Form } from 'antd';
 import { useCreateArticleMutation } from 'graphql/article/mutations/__generated__/create-article.generated';
 import { useEditArticleMutation } from 'graphql/article/mutations/__generated__/edit-article.generated';
 import { useArticleQuery } from 'graphql/article/queries/__generated__/view-article.generated';
@@ -88,6 +88,8 @@ const useCreateEditArticle = (): Props => {
   const [previewText, setPreviewText] = useState<string>('');
   const [previewImage, setPreviewImage] = useState<string>('');
   const [imageList, setImageList] = useState<UploadFile[]>([]);
+  // Ref to hold the initial/baseline image pathnames (ignoring query strings)
+  const initialImagePathsRef = useRef<Set<string>>(new Set());
 
   const [selectedGroups, setSelectedGroups] = useState<string[]>([]);
   const [categories, setCategories] = useState<SelectProps['options']>([]);
@@ -104,7 +106,11 @@ const useCreateEditArticle = (): Props => {
   );
 
   useEffect(() => {
-    if (!articleId) setInitialValue('<p>Create a new document here...</p>');
+    if (!articleId) {
+      setInitialValue('<p>Create a new document here...</p>');
+      // For new docs, clear the baseline image set
+      initialImagePathsRef.current = new Set();
+    }
   }, []);
 
   const navigate = useNavigate();
@@ -188,6 +194,23 @@ const useCreateEditArticle = (): Props => {
           url: image || '',
         })) || []
       );
+      // Capture baseline image pathnames (ignore query strings) for diffing later
+      try {
+        const initialPaths = imageSrcs.map((src) => {
+          try {
+            return new URL(src, window.location.href).pathname;
+          } catch {
+            return src;
+          }
+        });
+        initialImagePathsRef.current = new Set(initialPaths);
+        // eslint-disable-next-line no-console
+        console.log('DEBUG initialImagePathsRef', [
+          ...initialImagePathsRef.current,
+        ]);
+      } catch {
+        initialImagePathsRef.current = new Set();
+      }
 
       form.setFieldsValue({
         categories:
@@ -304,7 +327,7 @@ const useCreateEditArticle = (): Props => {
 
   const categoriesChange = (values: { value: string }[]) => {
     const formattedValues: string[] = [];
-    // eslint-disable-next-line no-restricted-syntax
+
     for (const value of values) {
       const found = categories?.find(
         (category) => category.value === value.value
@@ -385,9 +408,26 @@ const useCreateEditArticle = (): Props => {
       const images = doc.body.querySelectorAll('img');
       const imageSrcs = [...images].map((image) => image.src);
 
-      const newImages = imageSrcs.filter(
-        (src) => !imageList.map((image) => image.url).includes(src)
-      );
+      // Use the baseline (initial) image paths captured at load, ignoring query strings
+      const baselinePaths = [...initialImagePathsRef.current];
+      // DEBUG: log baselinePaths and imageSrcs
+      // eslint-disable-next-line no-console
+      console.log('DEBUG baselinePaths', baselinePaths);
+      // eslint-disable-next-line no-console
+      console.log('DEBUG imageSrcs', imageSrcs);
+
+      const newImages = imageSrcs.filter((src) => {
+        const containsTemp = src.includes('/temp/');
+        let pathname = src;
+        try {
+          pathname = new URL(src, window.location.href).pathname;
+        } catch {
+          // keep as-is if URL constructor fails (e.g., data URLs)
+        }
+        return containsTemp && !baselinePaths.includes(pathname);
+      });
+      // DEBUG: log newImages
+      // eslint-disable-next-line no-console
       const newImageList =
         newImages.map((src) => ({
           filename: `${generateUid()}.${imageTypeFromUrl(src)}`,
@@ -493,7 +533,6 @@ const useCreateEditArticle = (): Props => {
 
       xhr.addEventListener('load', () => {
         if (xhr.status === 403) {
-          // eslint-disable-next-line prefer-promise-reject-errors
           reject({ message: `HTTP Error: ${xhr.status}`, remove: true });
           return;
         }
