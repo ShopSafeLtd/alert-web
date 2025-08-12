@@ -28,7 +28,7 @@ import {
   faCloudUpload,
 } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, Typography } from 'antd';
+import { Button, Tooltip, Typography } from 'antd';
 import Sider from 'antd/lib/layout/Sider';
 import { PermissionMethod, PermissionModel } from 'graphql/types';
 import React from 'react';
@@ -364,6 +364,7 @@ const SettingsSideMenu = ({
           style={{
             borderRight: isDark ? '1px solid #4d5b75' : '1px solid #e8e8e8',
             height: '100vh',
+            overflow: 'auto',
             padding: '24px 0',
             width: 80,
           }}
@@ -375,30 +376,32 @@ const SettingsSideMenu = ({
             return visibleItems.map((item) => {
               const isActive = matchPath(item.to, location.pathname);
               return (
-                <Link key={item.to} to={item.to}>
-                  <div
-                    style={{
-                      background: isActive
-                        ? 'rgba(222, 68, 54, 0.08)'
-                        : 'transparent',
-                      borderLeft: isActive
-                        ? '3px solid #de4436'
-                        : '3px solid transparent',
-                      cursor: 'pointer',
-                      padding: '12px 0',
-                      textAlign: 'center',
-                    }}
-                  >
-                    <span
+                <Tooltip title={item.title}>
+                  <Link key={item.to} to={item.to}>
+                    <div
                       style={{
-                        color: isActive ? '#de4436' : '#7284a8',
-                        fontSize: 18,
+                        background: isActive
+                          ? 'rgba(222, 68, 54, 0.08)'
+                          : 'transparent',
+                        borderLeft: isActive
+                          ? '3px solid #de4436'
+                          : '3px solid transparent',
+                        cursor: 'pointer',
+                        padding: '12px 0',
+                        textAlign: 'center',
                       }}
                     >
-                      {item.icon}
-                    </span>
-                  </div>
-                </Link>
+                      <span
+                        style={{
+                          color: isActive ? '#de4436' : '#7284a8',
+                          fontSize: 18,
+                        }}
+                      >
+                        {item.icon}
+                      </span>
+                    </div>
+                  </Link>
+                </Tooltip>
               );
             });
           })}
