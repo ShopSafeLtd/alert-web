@@ -1,0 +1,5 @@
+query divisionsOnScheme($id: String!) {
+    scheme(where: {id: $id}) {
+        divisions
+    }
+}

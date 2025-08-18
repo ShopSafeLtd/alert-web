@@ -2,6 +2,25 @@ image: node:20
 clone:
   depth: full
 pipelines:
+  branches:
+    dev:
+      - step:
+          name: Mark Development Deployment
+          deployment: development
+          script:
+            - echo "Marking deployment to development environment"
+    staging:
+      - step:
+          name: Mark Staging Deployment
+          deployment: staging
+          script:
+            - echo "Marking deployment to staging environment"
+    master:
+      - step:
+          name: Mark Production Deployment
+          deployment: production
+          script:
+            - echo "Marking deployment to production environment"
   custom: # Pipelines that can only be triggered manually
     translations:
       - step:

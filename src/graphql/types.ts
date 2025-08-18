@@ -7846,6 +7846,7 @@ export type Incident = {
   recoveredValue?: Maybe<Scalars['Float']>;
   recycleBin?: Maybe<RecycledItem>;
   recycleDate: Scalars['Date'];
+  recycleExtendedTo?: Maybe<Scalars['Date']>;
   recycled: Scalars['Boolean'];
   ref: Scalars['String'];
   reference?: Maybe<Scalars['Int']>;
@@ -13354,6 +13355,7 @@ export type Offender = {
   race?: Maybe<Race>;
   recycleBin?: Maybe<RecycledItem>;
   recycleDate: Scalars['Date'];
+  recycleExtendedTo?: Maybe<Scalars['Date']>;
   recycled: Scalars['Boolean'];
   ref?: Maybe<Scalars['String']>;
   reference?: Maybe<Scalars['Int']>;
@@ -18116,6 +18118,7 @@ export type Scheme = {
   defaultSubscribedOffenderOnly: Scalars['Boolean'];
   disableGalleryOnNative: Scalars['Boolean'];
   disablePassword: Scalars['Boolean'];
+  divisions: Array<Scalars['String']>;
   documents: Array<Document>;
   dontAutoSetTimeDate: Scalars['Boolean'];
   draftIncidents: Scalars['Boolean'];
