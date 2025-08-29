@@ -3,7 +3,10 @@ import type { FilterLabels } from '#/views/settings/businesses/ListBusinesses/us
 import type { BusinessData } from 'types/DataType';
 
 import DebouncedInput from '#/utils/debounced-input';
-import { formatPoliceAreas } from '#/utils/formatPoliceAreas';
+import {
+  formatPoliceAreas,
+  formatPoliceForceLabel,
+} from '#/utils/formatPoliceAreas';
 import {
   faFilter,
   faLink,
@@ -30,6 +33,7 @@ import { useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 
 import useStyles from './ListBusinesses.styles';
+import { PoliceForce } from 'graphql/types';
 
 interface TableData {
   key: string;
@@ -66,6 +70,8 @@ interface Props {
   toggleAddVisible: () => void;
   toggleFiltersOpen: () => void;
   toggleLinkVisible: () => void;
+  policeAreaFilter: PoliceForce[];
+  setPoliceAreaFilter: (value: PoliceForce[]) => void;
 }
 
 const ListBusinesses = ({
@@ -94,6 +100,8 @@ const ListBusinesses = ({
   toggleAddVisible,
   toggleFiltersOpen,
   toggleLinkVisible,
+  policeAreaFilter,
+  setPoliceAreaFilter,
 }: Props) => {
   const classNames = useStyles();
   const intl = useIntl();
@@ -421,6 +429,34 @@ const ListBusinesses = ({
                 />
               </Form.Item>
             </Col>
+            <Typography.Paragraph className={classNames.filtersTitle}>
+              {intl.formatMessage({ defaultMessage: 'Police Areas' })}
+            </Typography.Paragraph>
+            <Row gutter={16}>
+              <Col span={24}>
+                <Typography.Paragraph className={classNames.selectTitle}>
+                  {intl.formatMessage({
+                    defaultMessage: 'Incident has happened in:',
+                  })}
+                </Typography.Paragraph>
+                <Select
+                  className={classNames.select}
+                  mode="multiple"
+                  onChange={setPoliceAreaFilter}
+                  placeholder={intl.formatMessage({
+                    defaultMessage: 'Select Police Areas',
+                  })}
+                  style={{ width: '100%' }}
+                  value={policeAreaFilter}
+                >
+                  {Object.values(PoliceForce).map((force) => (
+                    <Select.Option key={force} value={force}>
+                      {formatPoliceForceLabel(force)}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Col>
+            </Row>
           </Row>
         </Form>
       </Drawer>

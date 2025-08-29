@@ -2489,6 +2489,19 @@ export type CctvRecord = {
   updatedAt: Scalars['Date'];
 };
 
+export type CentralCoopIdInput = {
+  id: Scalars['String'];
+};
+
+export type CentralCoopImportDataInput = {
+  /** Optional mapping of CSV/Excel columns to incident fields */
+  columnMapping?: InputMaybe<IncidentColumnMapping>;
+  /** Base64 encoded CSV/Excel data or file content as string (auto-detects format) */
+  csvData: Scalars['String'];
+  groups?: InputMaybe<Array<CentralCoopIdInput>>;
+  scheme: CentralCoopIdInput;
+};
+
 export type ChangePositionAndReqInput = {
   tags: Array<UpdateTagQuestionInput>;
 };
@@ -5148,6 +5161,42 @@ export type DocumentWhereUniqueInput = {
 export type DocumentsCreateRemove = {
   create?: InputMaybe<Array<DocumentIncidentCreate>>;
   remove: Array<Scalars['String']>;
+};
+
+export type DunelmColumnMapping = {
+  assaultTypeColumn?: InputMaybe<Scalars['String']>;
+  cameraNumbersColumn?: InputMaybe<Scalars['String']>;
+  cctvAvailableColumn?: InputMaybe<Scalars['String']>;
+  crimeReferenceColumn?: InputMaybe<Scalars['String']>;
+  dateTimeColumn?: InputMaybe<Scalars['String']>;
+  descriptionColumn?: InputMaybe<Scalars['String']>;
+  locationColumn?: InputMaybe<Scalars['String']>;
+  locationInStoreColumn?: InputMaybe<Scalars['String']>;
+  numberColumn?: InputMaybe<Scalars['String']>;
+  policeActionColumn?: InputMaybe<Scalars['String']>;
+  policeAttendedColumn?: InputMaybe<Scalars['String']>;
+  productPropertyColumn?: InputMaybe<Scalars['String']>;
+  reportedToPoliceColumn?: InputMaybe<Scalars['String']>;
+  suspectNameColumn?: InputMaybe<Scalars['String']>;
+  typeLevel1Column?: InputMaybe<Scalars['String']>;
+  typeLevel2Column?: InputMaybe<Scalars['String']>;
+  valueColumn?: InputMaybe<Scalars['String']>;
+  vehicleMakeColumn?: InputMaybe<Scalars['String']>;
+  vehicleRegColumn?: InputMaybe<Scalars['String']>;
+  vehicleUsedColumn?: InputMaybe<Scalars['String']>;
+};
+
+export type DunelmIdInput = {
+  id: Scalars['String'];
+};
+
+export type DunelmImportDataInput = {
+  /** Optional mapping of CSV/Excel columns to incident fields */
+  columnMapping?: InputMaybe<DunelmColumnMapping>;
+  /** Base64 encoded CSV/Excel data or file content as string (auto-detects format) */
+  fileData: Scalars['String'];
+  groups?: InputMaybe<Array<DunelmIdInput>>;
+  scheme: DunelmIdInput;
 };
 
 export type EnableSchemeRekognotionInput = {
@@ -7847,6 +7896,7 @@ export type Incident = {
   recycleBin?: Maybe<RecycledItem>;
   recycleDate: Scalars['Date'];
   recycleExtendedTo?: Maybe<Scalars['Date']>;
+  recycleInfo?: Maybe<RecycleExtenstion>;
   recycled: Scalars['Boolean'];
   ref: Scalars['String'];
   reference?: Maybe<Scalars['Int']>;
@@ -8099,6 +8149,23 @@ export type IncidentVehiclesArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<VehicleWhereInput>;
+};
+
+export type IncidentColumnMapping = {
+  cctvAvailableColumn?: InputMaybe<Scalars['String']>;
+  crimeTypeColumn?: InputMaybe<Scalars['String']>;
+  dateTimeColumn?: InputMaybe<Scalars['String']>;
+  descriptionColumn?: InputMaybe<Scalars['String']>;
+  locationColumn?: InputMaybe<Scalars['String']>;
+  offenderColumn?: InputMaybe<Scalars['String']>;
+  outcomeColumn?: InputMaybe<Scalars['String']>;
+  policeAttendedColumn?: InputMaybe<Scalars['String']>;
+  policeContactedColumn?: InputMaybe<Scalars['String']>;
+  policeRefColumn?: InputMaybe<Scalars['String']>;
+  referenceColumn?: InputMaybe<Scalars['String']>;
+  reporterColumn?: InputMaybe<Scalars['String']>;
+  valueColumn?: InputMaybe<Scalars['String']>;
+  violenceInvolvedColumn?: InputMaybe<Scalars['String']>;
 };
 
 export type IncidentConnectOne = {
@@ -10871,6 +10938,7 @@ export type Mutation = {
   approveIncident: Incident;
   approveOffender: Offender;
   approveStockRemovalRequest: StockRemovalRequestApproval;
+  centralCoopImportData: SystemTask;
   closeInvestigation: Investigation;
   completeAudioStream: CompleteAudioResult;
   completeChecklist: ActiveChecklist;
@@ -10978,9 +11046,12 @@ export type Mutation = {
   discImportData: SystemTask;
   dismissAiSuggestion: AiSuggestion;
   dismissMatch: RekMatch;
+  dunelmImportData: SystemTask;
   editArticle: Article;
   enableSchemeRekognition: RekCollection;
   exportInvestigationZip: Scalars['String'];
+  extendIncident: Incident;
+  extendOffender: Offender;
   finalizeAudioSession: Scalars['Boolean'];
   forcedPasswordSet?: Maybe<Scalars['String']>;
   generateFeedItems: SystemTask;
@@ -11002,6 +11073,7 @@ export type Mutation = {
   mergeBusinessesWithSameName: Business;
   mergeOffender: Offender;
   mySafetyImportData: SystemTask;
+  nextImportData: SystemTask;
   queueIncidentCsvExport: QueuedIncidentExportResult;
   recycleActiveChecklist: ActiveChecklist;
   recycleChecklist: Checklist;
@@ -11185,6 +11257,11 @@ export type MutationApproveOffenderArgs = {
 
 export type MutationApproveStockRemovalRequestArgs = {
   where: UniqueId;
+};
+
+
+export type MutationCentralCoopImportDataArgs = {
+  data: CentralCoopImportDataInput;
 };
 
 
@@ -11731,6 +11808,11 @@ export type MutationDismissMatchArgs = {
 };
 
 
+export type MutationDunelmImportDataArgs = {
+  data: DunelmImportDataInput;
+};
+
+
 export type MutationEditArticleArgs = {
   data: CreateArticleInput;
   where: UniqueId;
@@ -11744,6 +11826,18 @@ export type MutationEnableSchemeRekognitionArgs = {
 
 
 export type MutationExportInvestigationZipArgs = {
+  where: UniqueId;
+};
+
+
+export type MutationExtendIncidentArgs = {
+  date?: InputMaybe<Scalars['Date']>;
+  where: UniqueId;
+};
+
+
+export type MutationExtendOffenderArgs = {
+  date?: InputMaybe<Scalars['Date']>;
   where: UniqueId;
 };
 
@@ -11847,6 +11941,11 @@ export type MutationMergeOffenderArgs = {
 
 export type MutationMySafetyImportDataArgs = {
   data: MySafetyImportDataInput;
+};
+
+
+export type MutationNextImportDataArgs = {
+  data: NextImportDataInput;
 };
 
 
@@ -12937,6 +13036,33 @@ export type NestedStringWithAggregatesFilter = {
   startsWith?: InputMaybe<Scalars['String']>;
 };
 
+export type NextColumnMapping = {
+  dateColumn?: InputMaybe<Scalars['String']>;
+  incidentDetailsColumn?: InputMaybe<Scalars['String']>;
+  locationColumn?: InputMaybe<Scalars['String']>;
+  policeAttendedColumn?: InputMaybe<Scalars['String']>;
+  policeRefColumn?: InputMaybe<Scalars['String']>;
+  refColumn?: InputMaybe<Scalars['String']>;
+  typeColumn?: InputMaybe<Scalars['String']>;
+  valueRecoveredColumn?: InputMaybe<Scalars['String']>;
+  valueTotalColumn?: InputMaybe<Scalars['String']>;
+  violenceOrAbuseColumn?: InputMaybe<Scalars['String']>;
+  whereInStoreColumn?: InputMaybe<Scalars['String']>;
+};
+
+export type NextIdInput = {
+  id: Scalars['String'];
+};
+
+export type NextImportDataInput = {
+  /** Optional mapping of CSV/Excel columns to incident fields */
+  columnMapping?: InputMaybe<NextColumnMapping>;
+  /** Base64 encoded CSV/Excel data or file content as string (auto-detects format) */
+  fileData: Scalars['String'];
+  groups?: InputMaybe<Array<NextIdInput>>;
+  scheme: NextIdInput;
+};
+
 export type NodePosition = {
   __typename?: 'NodePosition';
   x: Scalars['Float'];
@@ -13356,6 +13482,7 @@ export type Offender = {
   recycleBin?: Maybe<RecycledItem>;
   recycleDate: Scalars['Date'];
   recycleExtendedTo?: Maybe<Scalars['Date']>;
+  recycleInfo?: Maybe<RecycleExtenstion>;
   recycled: Scalars['Boolean'];
   ref?: Maybe<Scalars['String']>;
   reference?: Maybe<Scalars['Int']>;
@@ -15388,6 +15515,7 @@ export type QueryIncidentFeedArgs = {
   first?: InputMaybe<Scalars['Int']>;
   groups?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   order?: InputMaybe<IncidentOrderByWithRelationInput>;
+  policeAreas?: InputMaybe<Array<PoliceForce>>;
   schemeId: Scalars['String'];
   search?: InputMaybe<Scalars['String']>;
 };
@@ -15461,6 +15589,7 @@ export type QueryIncidentsRelayArgs = {
   groups?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   last?: InputMaybe<Scalars['Int']>;
   order?: InputMaybe<IncidentOrderByWithRelationInput>;
+  policeAreas?: InputMaybe<Array<PoliceForce>>;
   schemeId: Scalars['String'];
   search?: InputMaybe<Scalars['String']>;
   skip?: InputMaybe<Scalars['Int']>;
@@ -15745,6 +15874,7 @@ export type QueryListOffendersRelayArgs = {
   last?: InputMaybe<Scalars['Int']>;
   order?: InputMaybe<OffenderOrderByWithRelationInput>;
   orderByValue?: InputMaybe<SortOrder>;
+  policeAreas?: InputMaybe<Array<PoliceForce>>;
   scheme?: InputMaybe<SchemeWhereUniqueInput>;
   skip?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<OffenderWhereInput>;
@@ -15805,6 +15935,7 @@ export type QueryListUsersArgs = {
 
 export type QueryListVehiclesArgs = {
   order?: InputMaybe<VehicleOrderByWithRelationInput>;
+  policeAreas?: InputMaybe<Array<PoliceForce>>;
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<VehicleWhereInput>;
@@ -17160,6 +17291,12 @@ export type RadialValueGraph = {
   data: Array<Graph>;
   label: Scalars['String'];
   value: Scalars['Float'];
+};
+
+export type RecycleExtenstion = {
+  __typename?: 'RecycleExtenstion';
+  preservedTill?: Maybe<Scalars['Date']>;
+  recycleDate?: Maybe<Scalars['Date']>;
 };
 
 export type RecycledItem = {

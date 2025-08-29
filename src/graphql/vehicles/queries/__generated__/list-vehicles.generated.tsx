@@ -8,6 +8,7 @@ export type ListVehiclesQueryVariables = Types.Exact<{
   skip?: Types.InputMaybe<Types.Scalars['Int']>;
   where?: Types.InputMaybe<Types.VehicleWhereInput>;
   order?: Types.InputMaybe<Types.VehicleOrderByWithRelationInput>;
+  policeAreas?: Types.InputMaybe<Array<Types.PoliceForce> | Types.PoliceForce>;
 }>;
 
 
@@ -15,8 +16,14 @@ export type ListVehiclesQuery = { __typename?: 'Query', listVehicles: { __typena
 
 
 export const ListVehiclesDocument = gql`
-    query ListVehicles($take: Int, $skip: Int, $where: VehicleWhereInput, $order: VehicleOrderByWithRelationInput) {
-  listVehicles(take: $take, skip: $skip, where: $where, order: $order) {
+    query ListVehicles($take: Int, $skip: Int, $where: VehicleWhereInput, $order: VehicleOrderByWithRelationInput, $policeAreas: [PoliceForce!]) {
+  listVehicles(
+    take: $take
+    skip: $skip
+    where: $where
+    order: $order
+    policeAreas: $policeAreas
+  ) {
     vehicles {
       id
       make
@@ -54,11 +61,11 @@ export const ListVehiclesDocument = gql`
 }
     `;
 export function useListVehiclesQuery(baseOptions?: Apollo.QueryHookOptions<ListVehiclesQuery, ListVehiclesQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
+        const options = {...defaultOptions, ...baseOptions};
         return Apollo.useQuery<ListVehiclesQuery, ListVehiclesQueryVariables>(ListVehiclesDocument, options);
       }
 export function useListVehiclesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ListVehiclesQuery, ListVehiclesQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
+          const options = {...defaultOptions, ...baseOptions};
           return Apollo.useLazyQuery<ListVehiclesQuery, ListVehiclesQueryVariables>(ListVehiclesDocument, options);
         }
 export type ListVehiclesQueryHookResult = ReturnType<typeof useListVehiclesQuery>;

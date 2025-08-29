@@ -7,12 +7,13 @@ import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect
 import DatePicker from '#/components/util-components/DatePicker';
 import { Button, Col, Form, Input, Row, Select, Typography } from 'antd';
 import dayjs from 'dayjs';
-import { Age, Build, Gender, Race } from 'graphql/types';
+import { Age, Build, Gender, PoliceForce, Race } from 'graphql/types';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import { OffenderSort } from 'state';
 
 import useStyles from './OffenderFilter.styles';
+import { formatPoliceForceLabel } from '#/utils/formatPoliceAreas';
 
 const { RangePicker } = DatePicker;
 const { useForm } = Form;
@@ -39,6 +40,7 @@ interface Props {
   setPeculiarities: (value: string) => void;
   setSex: (value: Gender[]) => void;
   setWarnings: (value: string[]) => void;
+  setPoliceAreas: (value: PoliceForce[]) => void;
   tags: { label: string; value: string }[];
   tagsLoading: boolean;
   variables: OffenderFilters;
@@ -66,6 +68,7 @@ const OffenderFilter = ({
   tags,
   tagsLoading,
   variables,
+  setPoliceAreas,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const [form] = useForm<FormData>();
@@ -83,6 +86,7 @@ const OffenderFilter = ({
     peculiarities,
     sex,
     warnings,
+    policeAreas,
   } = variables;
   return (
     <Form<FormData>
@@ -223,6 +227,34 @@ const OffenderFilter = ({
             {tags.map((tag) => (
               <Select.Option key={tag.value} value={tag.value}>
                 {tag.label}
+              </Select.Option>
+            ))}
+          </Select>
+        </Col>
+      </Row>
+      <Typography.Paragraph className={classes.filtersTitle}>
+        {intl.formatMessage({ defaultMessage: 'Police Areas' })}
+      </Typography.Paragraph>
+      <Row gutter={16}>
+        <Col span={24}>
+          <Typography.Paragraph className={classes.selectTitle}>
+            {intl.formatMessage({
+              defaultMessage: 'Incident has happened in:',
+            })}
+          </Typography.Paragraph>
+          <Select
+            className={classes.select}
+            mode="multiple"
+            onChange={setPoliceAreas}
+            placeholder={intl.formatMessage({
+              defaultMessage: 'Select Police Areas',
+            })}
+            style={{ width: '100%' }}
+            value={policeAreas}
+          >
+            {Object.values(PoliceForce).map((force) => (
+              <Select.Option key={force} value={force}>
+                {formatPoliceForceLabel(force)}
               </Select.Option>
             ))}
           </Select>

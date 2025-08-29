@@ -23,10 +23,12 @@ const ListVehicles = () => {
     toggleAddInvestigation,
     toggleSortFilter,
     variables,
+    setPoliceAreas,
   } = useListVehicles();
 
   return (
     <View
+      setPoliceAreas={setPoliceAreas}
       addInvestigation={addInvestigation}
       clearFilters={clearFilters}
       customGalleriesData={customGalleriesData}

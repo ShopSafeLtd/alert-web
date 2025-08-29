@@ -12,6 +12,7 @@ export type IncidentsFeedQueryVariables = Types.Exact<{
   where?: Types.InputMaybe<Types.IncidentWhereInput>;
   schemeId: Types.Scalars['String'];
   approved?: Types.InputMaybe<Types.Scalars['Boolean']>;
+  policeAreas?: Types.InputMaybe<Array<Types.PoliceForce> | Types.PoliceForce>;
 }>;
 
 
@@ -19,7 +20,7 @@ export type IncidentsFeedQuery = { __typename?: 'Query', incidentsRelay: { __typ
 
 
 export const IncidentsFeedDocument = gql`
-    query IncidentsFeed($order: IncidentOrderByWithRelationInput, $search: String, $first: Int, $after: String, $where: IncidentWhereInput, $schemeId: String!, $approved: Boolean) {
+    query IncidentsFeed($order: IncidentOrderByWithRelationInput, $search: String, $first: Int, $after: String, $where: IncidentWhereInput, $schemeId: String!, $approved: Boolean, $policeAreas: [PoliceForce!]) {
   incidentsRelay(
     order: $order
     first: $first
@@ -28,6 +29,7 @@ export const IncidentsFeedDocument = gql`
     where: $where
     schemeId: $schemeId
     approved: $approved
+    policeAreas: $policeAreas
   ) {
     edges {
       node {
@@ -42,11 +44,11 @@ export const IncidentsFeedDocument = gql`
 }
     ${IncidentCardFragmentDoc}`;
 export function useIncidentsFeedQuery(baseOptions: Apollo.QueryHookOptions<IncidentsFeedQuery, IncidentsFeedQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
+        const options = {...defaultOptions, ...baseOptions};
         return Apollo.useQuery<IncidentsFeedQuery, IncidentsFeedQueryVariables>(IncidentsFeedDocument, options);
       }
 export function useIncidentsFeedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<IncidentsFeedQuery, IncidentsFeedQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
+          const options = {...defaultOptions, ...baseOptions};
           return Apollo.useLazyQuery<IncidentsFeedQuery, IncidentsFeedQueryVariables>(IncidentsFeedDocument, options);
         }
 export type IncidentsFeedQueryHookResult = ReturnType<typeof useIncidentsFeedQuery>;

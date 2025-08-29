@@ -1,29 +1,31 @@
 query IncidentsFeed(
-  $order: IncidentOrderByWithRelationInput
-  $search: String
-  $first: Int
-  $after: String
-  $where: IncidentWhereInput
-  $schemeId: String!
-  $approved: Boolean
+    $order: IncidentOrderByWithRelationInput
+    $search: String
+    $first: Int
+    $after: String
+    $where: IncidentWhereInput
+    $schemeId: String!
+    $approved: Boolean
+    $policeAreas: [PoliceForce!]
 ) {
-  incidentsRelay(
-    order: $order
-    first: $first
-    after: $after
-    search: $search
-    where: $where
-    schemeId: $schemeId
-    approved: $approved
-  ) {
-    edges {
-      node {
-        ...IncidentCard
-      }
+    incidentsRelay(
+        order: $order
+        first: $first
+        after: $after
+        search: $search
+        where: $where
+        schemeId: $schemeId
+        approved: $approved
+        policeAreas: $policeAreas
+    ) {
+        edges {
+            node {
+                ...IncidentCard
+            }
+        }
+        pageInfo {
+            hasNextPage
+            endCursor
+        }
     }
-    pageInfo {
-      hasNextPage
-      endCursor
-    }
-  }
 }

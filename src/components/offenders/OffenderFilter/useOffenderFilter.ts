@@ -1,13 +1,13 @@
 import type { SearchBusinessesQuery } from 'graphql/businesses/queries/__generated__/search-businesses.generated';
-import type { Age, Build, Gender, Race } from 'graphql/types';
+import { useSearchBusinessesQuery } from 'graphql/businesses/queries/__generated__/search-businesses.generated';
+import type { Age, Build, Gender, PoliceForce, Race } from 'graphql/types';
+import { Model, SortOrder } from 'graphql/types';
 import type { OffenderFilters } from 'state/data-model';
 import type { DateType } from 'types/DataType';
 
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import publicOffenderDob from '#/utils/public-offender-dob';
-import { useSearchBusinessesQuery } from 'graphql/businesses/queries/__generated__/search-businesses.generated';
 import { useTagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
-import { Model, SortOrder } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
 import { OffenderSort, useStoreActions, useStoreState } from 'state';
 
@@ -32,6 +32,7 @@ interface Return {
   tags: { label: string; value: string }[];
   tagsLoading: boolean;
   variables: OffenderFilters;
+  setPoliceAreas: (value: PoliceForce[]) => void;
 }
 
 const useOffenderFilter = (): Return => {
@@ -205,6 +206,17 @@ const useOffenderFilter = (): Return => {
     });
   };
 
+  const setPoliceAreas = (values: PoliceForce[]) => {
+    setOffendersState({
+      order,
+      pagination,
+      variables: {
+        ...variables,
+        policeAreas: values,
+      },
+    });
+  };
+
   const clearFilters = () => {
     setOffendersState({
       order: OffenderSort.updatedAtDesc,
@@ -224,6 +236,7 @@ const useOffenderFilter = (): Return => {
         search: '',
         sex: [],
         warnings: [],
+        policeAreas: [],
       },
     });
   };
@@ -250,6 +263,7 @@ const useOffenderFilter = (): Return => {
       tagsData?.tags.map((tag) => ({ label: tag.name, value: tag.id })) || [],
     tagsLoading,
     variables,
+    setPoliceAreas,
   };
 };
 

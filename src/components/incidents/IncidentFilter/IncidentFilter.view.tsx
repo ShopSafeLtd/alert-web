@@ -13,6 +13,8 @@ import { useIntl } from 'react-intl';
 import { IncidentSort, useStoreActions, useStoreState } from 'state';
 
 import useStyles from './IncidentFilter.styles';
+import { PoliceForce } from 'graphql/types';
+import { formatPoliceForceLabel } from '#/utils/formatPoliceAreas';
 
 const { RangePicker } = DatePicker;
 const { useForm } = Form;
@@ -29,7 +31,6 @@ interface Props {
 
 const IncidentFilter = ({
   clearFilters,
-
   setPeculiarities,
 }: Props): JSX.Element => {
   const classes = useStyles();
@@ -130,6 +131,17 @@ const IncidentFilter = ({
     });
   };
 
+  const setPoliceAreasFilter = (values: PoliceForce[]) => {
+    setIncidentsState({
+      order,
+      pagination,
+      variables: {
+        ...variables,
+        policeAreas: values,
+      },
+    });
+  };
+
   const {
     businesses: businessesValue,
     createdAt: createdAtFilter,
@@ -139,6 +151,7 @@ const IncidentFilter = ({
     groups,
     incidentDate: incidentDateFilter,
     peculiarities,
+    policeAreas,
     // priority,
   } = variables;
 
@@ -386,6 +399,35 @@ const IncidentFilter = ({
               style={{ width: '100%' }}
               value={businessesValue}
             />
+          </Col>
+        </Row>
+
+        <Typography.Paragraph className={classes.filtersTitle}>
+          {intl.formatMessage({ defaultMessage: 'Police Areas' })}
+        </Typography.Paragraph>
+        <Row gutter={16}>
+          <Col span={24}>
+            <Typography.Paragraph className={classes.selectTitle}>
+              {intl.formatMessage({
+                defaultMessage: 'Incident has happened in:',
+              })}
+            </Typography.Paragraph>
+            <Select
+              className={classes.select}
+              mode="multiple"
+              onChange={setPoliceAreasFilter}
+              placeholder={intl.formatMessage({
+                defaultMessage: 'Select Police Areas',
+              })}
+              style={{ width: '100%' }}
+              value={policeAreas}
+            >
+              {Object.values(PoliceForce).map((force) => (
+                <Select.Option key={force} value={force}>
+                  {formatPoliceForceLabel(force)}
+                </Select.Option>
+              ))}
+            </Select>
           </Col>
         </Row>
 
