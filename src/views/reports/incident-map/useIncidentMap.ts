@@ -30,12 +30,16 @@ interface Return {
   onChangeBrands: (value: string[]) => void;
   onChangeDateRange: (value: { endDate: Date; startDate: Date }) => void;
   onChangeGroups: (value: string[]) => void;
+  onChangeIncidentTypes: (value: string[]) => void;
   onChangeIndustries: (value: string[]) => void;
+  onChangePoliceAreas: (value: string[]) => void;
   onChangeSchemes: (value: string[]) => void;
   schemes: { scheme: { id: string; name: string } }[];
   selectedBrands: string[];
   selectedGroups: string[];
+  selectedIncidentTypes: string[];
   selectedIndustries: string[];
+  selectedPoliceAreas: string[];
   selectedSchemes: string[];
 }
 
@@ -47,6 +51,8 @@ const useIncidentMap = (): Return => {
   const [selectedGroups, setGroups] = useState<string[]>([]);
   const [selectedBrands, setBrands] = useState<string[]>([]);
   const [selectedIndustries, setIndustries] = useState<string[]>([]);
+  const [selectedIncidentTypes, setIncidentTypes] = useState<string[]>([]);
+  const [selectedPoliceAreas, setPoliceAreas] = useState<string[]>([]);
   const [dateRange, setDateRange] = useState<{
     endDate: Date;
     startDate: Date;
@@ -74,6 +80,24 @@ const useIncidentMap = (): Return => {
   const { data, loading } = useIncidentSimpleMapQuery({
     variables: {
       where: {
+        business:
+          selectedPoliceAreas.length > 0
+            ? {
+                policeArea: {
+                  hasSome: selectedPoliceAreas,
+                },
+              }
+            : undefined,
+        crimeTypes:
+          selectedIncidentTypes.length > 0
+            ? {
+                some: {
+                  id: {
+                    in: selectedIncidentTypes,
+                  },
+                },
+              }
+            : undefined,
         date: dateRange
           ? {
               gte: dateRange.startDate,
@@ -189,12 +213,16 @@ const useIncidentMap = (): Return => {
     onChangeBrands: setBrands,
     onChangeDateRange: setDateRange,
     onChangeGroups,
+    onChangeIncidentTypes: setIncidentTypes,
     onChangeIndustries: setIndustries,
+    onChangePoliceAreas: setPoliceAreas,
     onChangeSchemes,
     schemes,
     selectedBrands,
     selectedGroups,
+    selectedIncidentTypes,
     selectedIndustries,
+    selectedPoliceAreas,
     selectedSchemes,
   };
 };

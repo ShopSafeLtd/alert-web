@@ -2,6 +2,8 @@ import type { BrandsQuery } from '#/views/settings/brands/graphql/queries/__gene
 import type { SchemeGroupsQuery } from 'graphql/groups/queries/__generated__/scheme-groups.generated';
 import type { IndustriesQuery } from 'graphql/industry/__generated__/industries.generated';
 
+import IncidentTypesSelect from '#/components/form-components/IncidentTypesSelect/IncidentTypesSelect.view';
+import PoliceAreaSelect from '#/components/form-components/PoliceAreaSelect/PoliceAreaSelect.view';
 import DatePicker from '#/components/util-components/DatePicker';
 import { usePresetDateRanges } from '#/views/data-management/export-activities/useExportActivities';
 import {
@@ -37,8 +39,9 @@ interface Props {
   onChangeBrands: (value: string[]) => void;
   onChangeDateRange: (value: { endDate: Date; startDate: Date }) => void;
   onChangeGroups: (value: string[]) => void;
-
+  onChangeIncidentTypes: (value: string[]) => void;
   onChangeIndustries: (value: string[]) => void;
+  onChangePoliceAreas: (value: string[]) => void;
   onChangeSchemes: (value: string[]) => void;
   // Panel control
   onClose?: () => void;
@@ -55,7 +58,9 @@ interface Props {
   selectedBrands: string[];
 
   selectedGroups: string[];
+  selectedIncidentTypes: string[];
   selectedIndustries: string[];
+  selectedPoliceAreas: string[];
   selectedSchemes: string[];
   setMultiColour: (value: 'multi' | 'single') => void;
 
@@ -87,7 +92,9 @@ const FloatingFilterPanel: React.FC<Props> = ({
   onChangeBrands,
   onChangeDateRange,
   onChangeGroups,
+  onChangeIncidentTypes,
   onChangeIndustries,
+  onChangePoliceAreas,
   onChangeSchemes,
   onClose,
   onToggleBusinesses,
@@ -99,7 +106,9 @@ const FloatingFilterPanel: React.FC<Props> = ({
   schemes,
   selectedBrands,
   selectedGroups,
+  selectedIncidentTypes,
   selectedIndustries,
+  selectedPoliceAreas,
   selectedSchemes,
   setMultiColour,
   setShowLondonPolice,
@@ -266,7 +275,16 @@ const FloatingFilterPanel: React.FC<Props> = ({
     onChangeGroups([]);
     onChangeBrands([]);
     onChangeIndustries([]);
-  }, [onChangeSchemes, onChangeGroups, onChangeBrands, onChangeIndustries]);
+    onChangeIncidentTypes([]);
+    onChangePoliceAreas([]);
+  }, [
+    onChangeSchemes,
+    onChangeGroups,
+    onChangeBrands,
+    onChangeIndustries,
+    onChangeIncidentTypes,
+    onChangePoliceAreas,
+  ]);
 
   // Count active filters
   const activeFilterCount = [
@@ -274,6 +292,8 @@ const FloatingFilterPanel: React.FC<Props> = ({
     selectedGroups.length,
     selectedBrands.length,
     selectedIndustries.length,
+    selectedIncidentTypes.length,
+    selectedPoliceAreas.length,
   ].reduce((sum, count) => sum + (count > 0 ? 1 : 0), 0);
   const ranges = usePresetDateRanges();
 
@@ -575,6 +595,40 @@ const FloatingFilterPanel: React.FC<Props> = ({
                     </Select.Option>
                   ))}
                 </Select>
+              </Form.Item>
+
+              <Form.Item
+                label={intl.formatMessage({ defaultMessage: 'Incident Types' })}
+                style={{ marginBottom: '12px' }}
+              >
+                <IncidentTypesSelect
+                  maxTagCount={2}
+                  multiple
+                  onChange={onChangeIncidentTypes}
+                  placeholder={intl.formatMessage({
+                    defaultMessage: 'Select incident types',
+                  })}
+                  size="small"
+                  style={{ width: '100%' }}
+                  value={selectedIncidentTypes}
+                />
+              </Form.Item>
+
+              <Form.Item
+                label={intl.formatMessage({ defaultMessage: 'Police Areas' })}
+                style={{ marginBottom: '12px' }}
+              >
+                <PoliceAreaSelect
+                  maxTagCount={2}
+                  multiple
+                  onChange={onChangePoliceAreas}
+                  placeholder={intl.formatMessage({
+                    defaultMessage: 'Select police areas',
+                  })}
+                  size="small"
+                  style={{ width: '100%' }}
+                  value={selectedPoliceAreas}
+                />
               </Form.Item>
 
               {activeFilterCount > 0 && (
