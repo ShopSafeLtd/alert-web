@@ -1,51 +1,60 @@
 import React from 'react';
+
 import View from './IncidentMap.view';
 import useIncidentMap from './useIncidentMap';
 
 const IncidentMap = () => {
   const {
-    data,
-    loading,
-    groupsData,
-    groupsLoading,
-    businessData,
-    schemes,
-    onChangeSchemes,
-    selectedSchemes,
-    onChangeGroups,
-    selectedGroups,
-    onChangeDateRange,
-    onChangeBrands,
-    onChangeIndustries,
     brandsData,
     brandsLoading,
-    industriesLoading,
-    selectedIndustries,
-    selectedBrands,
+    businessData,
+    data,
+    groupsData,
+    groupsLoading,
     industriesData,
+    industriesLoading,
+    loading,
+    onChangeBrands,
+    onChangeDateRange,
+    onChangeGroups,
+    onChangeIncidentTypes,
+    onChangeIndustries,
+    onChangePoliceAreas,
+    onChangeSchemes,
+    schemes,
+    selectedBrands,
+    selectedGroups,
+    selectedIncidentTypes,
+    selectedIndustries,
+    selectedPoliceAreas,
+    selectedSchemes,
   } = useIncidentMap();
 
   return (
     <View
-      data={data}
-      loading={loading}
-      groupsLoading={groupsLoading}
-      groupsData={groupsData}
-      businessData={businessData}
-      schemes={schemes}
-      onChangeSchemes={onChangeSchemes}
-      selectedSchemes={selectedSchemes}
-      onChangeGroups={onChangeGroups}
-      selectedGroups={selectedGroups}
-      onChangeDateRange={onChangeDateRange}
-      onChangeBrands={onChangeBrands}
-      onChangeIndustries={onChangeIndustries}
       brandsData={brandsData}
       brandsLoading={brandsLoading}
-      industriesLoading={industriesLoading}
-      selectedIndustries={selectedIndustries}
-      selectedBrands={selectedBrands}
+      businessData={businessData}
+      data={data}
+      groupsData={groupsData}
+      groupsLoading={groupsLoading}
       industriesData={industriesData}
+      industriesLoading={industriesLoading}
+      loading={loading}
+      onChangeBrands={onChangeBrands}
+      onChangeDateRange={onChangeDateRange}
+      onChangeGroups={onChangeGroups}
+      onChangeIncidentTypes={onChangeIncidentTypes}
+      onChangeIndustries={onChangeIndustries}
+      onChangePoliceAreas={onChangePoliceAreas}
+      onChangeSchemes={onChangeSchemes}
+      schemes={schemes}
+      selectedBrands={selectedBrands}
+      selectedGroups={selectedGroups}
+      selectedIncidentTypes={selectedIncidentTypes}
+      selectedIndustries={selectedIndustries}
+      selectedPoliceAreas={selectedPoliceAreas}
+      selectedSchemes={selectedSchemes}
     />
   );
 };
