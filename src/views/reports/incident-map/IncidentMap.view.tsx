@@ -218,12 +218,16 @@ interface Props {
   onChangeBrands: (value: string[]) => void;
   onChangeDateRange: (value: { endDate: Date; startDate: Date }) => void;
   onChangeGroups: (value: string[]) => void;
+  onChangeIncidentTypes: (value: string | string[]) => void;
   onChangeIndustries: (value: string[]) => void;
+  onChangePoliceAreas: (value: string | string[]) => void;
   onChangeSchemes: (value: string[]) => void;
   schemes: { scheme: { id: string; name: string } }[];
   selectedBrands: string[];
   selectedGroups: string[];
+  selectedIncidentTypes: string[];
   selectedIndustries: string[];
+  selectedPoliceAreas: string[];
   selectedSchemes: string[];
 }
 
@@ -240,12 +244,16 @@ const IncidentMap = ({
   onChangeBrands,
   onChangeDateRange,
   onChangeGroups,
+  onChangeIncidentTypes,
   onChangeIndustries,
+  onChangePoliceAreas,
   onChangeSchemes,
   schemes,
   selectedBrands,
   selectedGroups,
+  selectedIncidentTypes,
   selectedIndustries,
+  selectedPoliceAreas,
   selectedSchemes,
 }: Props) => {
   const mapRef = useRef<MapRef>(null);
@@ -897,7 +905,9 @@ const IncidentMap = ({
                 onChangeBrands={onChangeBrands}
                 onChangeDateRange={onChangeDateRange}
                 onChangeGroups={onChangeGroups}
+                onChangeIncidentTypes={onChangeIncidentTypes}
                 onChangeIndustries={onChangeIndustries}
+                onChangePoliceAreas={onChangePoliceAreas}
                 onChangeSchemes={onChangeSchemes}
                 onClose={toggleFilterPanel}
                 onToggleBusinesses={toggleBusinesses}
@@ -909,7 +919,9 @@ const IncidentMap = ({
                 schemes={schemes}
                 selectedBrands={selectedBrands}
                 selectedGroups={selectedGroups}
+                selectedIncidentTypes={selectedIncidentTypes}
                 selectedIndustries={selectedIndustries}
+                selectedPoliceAreas={selectedPoliceAreas}
                 selectedSchemes={selectedSchemes}
                 setMultiColour={setMultiColour}
                 setShowLondonPolice={setShowLondonPolice}
