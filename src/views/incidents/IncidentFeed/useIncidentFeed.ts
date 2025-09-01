@@ -2,6 +2,10 @@ import type {
   IncidentsFeedQuery,
   IncidentsFeedQueryVariables,
 } from '#/views/incidents/IncidentFeed/graphql/queries/__generated__/incident-feed.generated';
+import {
+  IncidentsFeedDocument,
+  useIncidentsFeedQuery,
+} from '#/views/incidents/IncidentFeed/graphql/queries/__generated__/incident-feed.generated';
 import type { MutationUpdaterFn } from '@apollo/client';
 import type { RecycleIncidentMutation } from 'graphql/incidents/mutations/__generated__/recycle-incident.generated';
 import type { IncidentFilters } from 'state/data-model';
@@ -14,10 +18,6 @@ import {
   currentUserAtom,
 } from '#/providers/UserProvider/UserProvider';
 import hasRolePermission from '#/utils/has-role-permission';
-import {
-  IncidentsFeedDocument,
-  useIncidentsFeedQuery,
-} from '#/views/incidents/IncidentFeed/graphql/queries/__generated__/incident-feed.generated';
 import {
   PermissionMethod,
   PermissionModel,
@@ -108,6 +108,7 @@ const useIncidentFeed = (): Return => {
     priority,
     search,
     tableView,
+    policeAreas,
   } = variables;
 
   // filter initial state
@@ -313,6 +314,7 @@ const useIncidentFeed = (): Return => {
           }
         : undefined,
     },
+    policeAreas,
   };
   // Queries
   // Fetch incidents
@@ -551,6 +553,7 @@ const useIncidentFeed = (): Return => {
         incidentDate: undefined,
         peculiarities: '',
         search: '',
+        policeAreas: [],
       },
     });
   };

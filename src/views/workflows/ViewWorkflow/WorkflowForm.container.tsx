@@ -7,9 +7,13 @@ const WorkflowFormContainer = () => {
   const {
     activityTemplateForm,
     availableQuestions,
+    brandsSelected,
     checklistOption,
+    countriesSelected,
     createNewQuestion,
     descriptionCheck,
+    divisionsSelected,
+    editId,
     form,
     goods,
     goodsTypeCheck,
@@ -18,14 +22,18 @@ const WorkflowFormContainer = () => {
     incidentTimeCountCheck,
     lessThanSelected,
     loading,
+    lossValueSelected,
     modelSelected,
     newQuestion,
     onClose,
     onFinish,
+    prefix,
+    prioritySelected,
     questionGroups,
     questions,
     questionsSelected,
     saving,
+    schemeId,
     selectedQuestions,
     sendEmailCheck,
     sendNotificationCheck,
@@ -38,18 +46,34 @@ const WorkflowFormContainer = () => {
     tagsSelected,
     taskOutcome,
     taskQuestions,
+    typeWatch,
     updateIncidentCheck,
     updateTemplates,
     valueSelected,
+    workflowTypeWatch,
+    brandsLoading,
+    countries,
+    divisions,
+    divisionsLoading,
+    brands,
   } = useWorkflowForm();
 
   return (
     <View
+      brands={brands}
+      brandsLoading={brandsLoading}
+      countries={countries}
+      divisions={divisions}
+      divisionsLoading={divisionsLoading}
       activityTemplateForm={activityTemplateForm}
       availableQuestions={availableQuestions}
+      brandsSelected={brandsSelected}
       checklistOption={checklistOption}
+      countriesSelected={countriesSelected}
       createNewQuestion={createNewQuestion}
       descriptionCheck={descriptionCheck}
+      divisionsSelected={divisionsSelected}
+      editId={editId}
       form={form}
       goods={goods}
       goodsTypeCheck={goodsTypeCheck}
@@ -58,14 +82,18 @@ const WorkflowFormContainer = () => {
       incidentTimeCountCheck={incidentTimeCountCheck}
       lessThanSelected={lessThanSelected}
       loading={loading}
+      lossValueSelected={lossValueSelected}
       modelSelected={modelSelected}
       newQuestion={newQuestion}
       onClose={onClose}
       onFinish={onFinish}
+      prefix={prefix}
+      prioritySelected={prioritySelected}
       questionGroups={questionGroups}
       questions={questions}
       questionsSelected={questionsSelected}
       saving={saving}
+      schemeId={schemeId}
       selectedQuestions={selectedQuestions}
       sendEmailCheck={sendEmailCheck}
       sendNotificationCheck={sendNotificationCheck}
@@ -78,9 +106,11 @@ const WorkflowFormContainer = () => {
       tagsSelected={tagsSelected}
       taskOutcome={taskOutcome}
       taskQuestions={taskQuestions}
+      typeWatch={typeWatch}
       updateIncidentCheck={updateIncidentCheck}
       updateTemplates={updateTemplates}
       valueSelected={valueSelected}
+      workflowTypeWatch={workflowTypeWatch}
     />
   );
 };

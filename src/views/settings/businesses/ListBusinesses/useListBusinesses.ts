@@ -2,20 +2,21 @@ import type {
   BusinessesListQuery,
   BusinessesListQueryVariables,
 } from '#/views/settings/businesses/ListBusinesses/graphql/queries/__generated__/list-businesses.generated';
+import {
+  BusinessesListDocument,
+  useBusinessesListQuery,
+} from '#/views/settings/businesses/ListBusinesses/graphql/queries/__generated__/list-businesses.generated';
 import type { BusinessData } from 'types/DataType';
 
 import { useLinkBusinessToSchemeMutation } from '#/graphql/businesses/mutations/__generated__/link-business-to-scheme.generated';
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { useBusinessTagsQuery } from '#/views/settings/businesses/ListBusinesses/graphql/queries/__generated__/list-business-tags.generated';
-import {
-  BusinessesListDocument,
-  useBusinessesListQuery,
-} from '#/views/settings/businesses/ListBusinesses/graphql/queries/__generated__/list-businesses.generated';
 import { useListGroupsQuery } from '#/views/settings/businesses/ListBusinesses/graphql/queries/__generated__/list-groups.generated';
 import { useParentBusinessesListQuery } from '#/views/settings/businesses/ListBusinesses/graphql/queries/__generated__/list-parent-business-ids.generated';
 import { Modal, notification } from 'antd';
 import { useCreateBusinessMutation } from 'graphql/businesses/mutations/__generated__/create-business.generated';
 import { useDeleteBusinessMutation } from 'graphql/businesses/mutations/__generated__/delete-business.generated';
+import type { PoliceForce } from 'graphql/types';
 import { Model, QueryMode, SortOrder } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
 import { useMemo, useState } from 'react';
@@ -53,6 +54,8 @@ interface Return {
   toggleAddVisible: () => void;
   toggleFiltersOpen: () => void;
   toggleLinkVisible: () => void;
+  policeAreaFilter: PoliceForce[];
+  setPoliceAreaFilter: (value: PoliceForce[]) => void;
 }
 
 const useListBusinesses = (): Return => {
@@ -67,7 +70,7 @@ const useListBusinesses = (): Return => {
   const [parentFilter, setParentFilter] = useState<string[]>([]);
   const [groupFilter, setGroupFilter] = useState<string[]>([]);
   const [tagFilter, setTagFilter] = useState<string[]>([]);
-
+  const [policeAreaFilter, setPoliceAreaFilter] = useState<PoliceForce[]>([]);
   const variables: BusinessesListQueryVariables = {
     orderBy: {
       name: SortOrder.Asc,
@@ -94,6 +97,8 @@ const useListBusinesses = (): Return => {
       },
       tags:
         tagFilter.length > 0 ? { some: { id: { in: tagFilter } } } : undefined,
+      policeArea:
+        policeAreaFilter.length > 0 ? { hasSome: policeAreaFilter } : undefined,
     },
   };
   const { data } = useBusinessesListQuery({
@@ -424,6 +429,8 @@ const useListBusinesses = (): Return => {
     toggleAddVisible,
     toggleFiltersOpen,
     toggleLinkVisible,
+    policeAreaFilter,
+    setPoliceAreaFilter,
   };
 };
 

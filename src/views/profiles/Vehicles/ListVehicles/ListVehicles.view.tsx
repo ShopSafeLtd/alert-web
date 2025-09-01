@@ -1,6 +1,6 @@
 import type { Dayjs } from 'dayjs';
 import type { ListCustomGalleriesQuery } from 'graphql/customGallery/queries/__generated__/list_custom_galleries.generated';
-import type { ImagePosition, SortOrder } from 'graphql/types';
+import type { ImagePosition, PoliceForce, SortOrder } from 'graphql/types';
 import type { ListVehiclesQuery } from 'graphql/vehicles/queries/__generated__/list-vehicles.generated';
 import type { VehicleFilters } from 'state/data-model';
 import type { DateType } from 'types/DataType';
@@ -50,6 +50,7 @@ interface Props {
   toggleAddInvestigation: (value: string) => void;
   toggleSortFilter: () => void;
   variables: VehicleFilters;
+  setPoliceAreas: (value: PoliceForce[]) => void;
 }
 
 const ListVehicles = ({
@@ -72,6 +73,7 @@ const ListVehicles = ({
   toggleAddInvestigation,
   toggleSortFilter,
   variables,
+  setPoliceAreas,
 }: Props) => {
   const intl = useIntl();
   const classes = useStyles();
@@ -197,7 +199,6 @@ const ListVehicles = ({
             dataIndex: 'reference',
             key: 'reference',
             render: (value, item) => (
-              // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
               <Link to={`view/${item.key}`}>{value}</Link>
             ),
             title: intl.formatMessage({
@@ -307,6 +308,7 @@ const ListVehicles = ({
           setGroupsFilter={setGroupsFilter}
           setOrder={setOrder}
           variables={variables}
+          setPoliceAreas={setPoliceAreas}
         />
       </Drawer>
       {/* investigation */}

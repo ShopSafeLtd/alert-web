@@ -1,13 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-argument */
 import type { FormInstance } from 'antd';
-import type { UserQuery } from 'graphql/user/queries/__generated__/user.generated';
-import type { BusinessData, SelectOptions } from 'types/DataType';
-
-import BusinessesSelect from '#/components/form-components/BusinessesSelect/BusinessesSelect.view';
-import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
-// import validateMobileWithCountryCode from '#/utils/validate-contry-code';
-import { faPlus } from '@fortawesome/pro-light-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
   Col,
@@ -20,6 +12,14 @@ import {
   Switch,
   Typography,
 } from 'antd';
+import type { UserQuery } from 'graphql/user/queries/__generated__/user.generated';
+import type { BusinessData, SelectOptions } from 'types/DataType';
+
+import BusinessesSelect from '#/components/form-components/BusinessesSelect/BusinessesSelect.view';
+import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
+// import validateMobileWithCountryCode from '#/utils/validate-contry-code';
+import { faPlus } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PhoneInput from 'antd-phone-input';
 import AddBusiness from 'components/form-components/businesses/AddBusiness';
 import { Role } from 'graphql/types';
@@ -115,7 +115,7 @@ const EditUser = ({
         offenderEmail: data?.user?.offenderEmail,
         offenderPush: data?.user?.offenderPush,
         publicName: data?.user?.publicName,
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+
         reportToAllBusinesses: data?.user?.reportToAllBusinesses || false,
         role: data?.user?.schemePermission?.id || '',
         subscribedIncidentOnly: data?.user?.subscribedIncidentOnly,
@@ -352,9 +352,13 @@ const EditUser = ({
             <Col span={12}>
               <Form.Item
                 label={intl.formatMessage({
-                  defaultMessage: 'Approver Groups',
+                  defaultMessage: 'Group Admin',
                 })}
                 name="approverGroups"
+                tooltip={intl.formatMessage({
+                  defaultMessage:
+                    'Group members who can have specific workflows triggered for them',
+                })}
               >
                 <Select
                   disabled={saving}

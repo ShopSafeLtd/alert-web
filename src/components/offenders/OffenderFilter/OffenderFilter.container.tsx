@@ -25,10 +25,13 @@ const OffenderFilter = (): JSX.Element => {
     tags,
     tagsLoading,
     variables,
+
+    setPoliceAreas,
   } = useOffenderFilter();
 
   return (
     <View
+      setPoliceAreas={setPoliceAreas}
       businessData={businessData}
       businessesLoading={businessesLoading}
       clearFilters={clearFilters}

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access */
 import type ImportRecord from '@importok/javascript/ImportRecord';
 
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
@@ -8,6 +9,7 @@ import saveJsonToUrl from '#/views/settings/data-import/utils/save-json-to-url';
 import { GenericProvider } from '@importok/javascript';
 import ImportokWizard from '@importok/react';
 import { Card } from 'antd';
+import { isValid, parse } from 'date-fns';
 import { useListIncidentTagsQuery } from 'graphql/tags/queries/__generated__/list-incident-tags.generated';
 import { useAtomValue } from 'jotai/index';
 import React, { useMemo } from 'react';
@@ -85,8 +87,8 @@ const IncidentImport = () => {
       }),
       label: intl.formatMessage({ defaultMessage: 'Date & Time' }),
       name: 'date',
-      transformers: 'trim',
-      validators: 'required',
+      transformers: 'trim|smartdate',
+      validators: 'required|validDateFormat',
     },
     {
       description: intl.formatMessage({
@@ -170,13 +172,136 @@ const IncidentImport = () => {
    * Custom transformers
    * Check https://importok.io/docs/transformers for more details
    */
-  const transformers = {};
+  const transformers = {
+    smartdate(record, key) {
+      const raw = record.get(key);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      if (raw === null || raw === '') return raw;
+
+      const s = String(raw).trim();
+
+      // Numeric? Assume Excel
+      if (/^\d+(\.\d+)?$/.test(s)) {
+        const n = Number(s); // keep time fraction if present
+        // Excel serial 1 = 1900-01-01 ⇒ epoch = 1899-12-30 (handles 1900 leap bug)
+        const epoch = Date.UTC(1899, 11, 30);
+        const d = new Date(epoch + n * 86400000);
+
+        // Check if there's a time component (fractional part)
+        const hasFractionalPart = n % 1 !== 0;
+        if (hasFractionalPart) {
+          // Return with time: DD/MM/YYYY HH:mm:ss
+          const day = String(d.getUTCDate()).padStart(2, '0');
+          const month = String(d.getUTCMonth() + 1).padStart(2, '0');
+          const year = d.getUTCFullYear();
+          const hours = String(d.getUTCHours()).padStart(2, '0');
+          const minutes = String(d.getUTCMinutes()).padStart(2, '0');
+          const seconds = String(d.getUTCSeconds()).padStart(2, '0');
+          return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+        } else {
+          // Return date only: DD/MM/YYYY
+          const day = String(d.getUTCDate()).padStart(2, '0');
+          const month = String(d.getUTCMonth() + 1).padStart(2, '0');
+          const year = d.getUTCFullYear();
+          return `${day}/${month}/${year}`;
+        }
+      }
+
+      // Try common text formats
+      const formats = [
+        'DD/MM/YYYY HH:mm:ss',
+        'DD/MM/YYYY HH:mm',
+        'DD/MM/YYYY',
+        'DD-MM-YYYY HH:mm:ss',
+        'DD-MM-YYYY HH:mm',
+        'DD-MM-YYYY',
+      ];
+      for (const f of formats) {
+        const d = parse(s, f, new Date());
+        if (isValid(d)) {
+          // Check if original format had time component
+          const hasTime = f.includes('HH:mm');
+          if (hasTime) {
+            // Return with time: DD/MM/YYYY HH:mm:ss
+            const day = String(d.getDate()).padStart(2, '0');
+            const month = String(d.getMonth() + 1).padStart(2, '0');
+            const year = d.getFullYear();
+            const hours = String(d.getHours()).padStart(2, '0');
+            const minutes = String(d.getMinutes()).padStart(2, '0');
+            const seconds = String(d.getSeconds()).padStart(2, '0');
+            return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+          } else {
+            // Return date only: DD/MM/YYYY
+            const day = String(d.getDate()).padStart(2, '0');
+            const month = String(d.getMonth() + 1).padStart(2, '0');
+            const year = d.getFullYear();
+            return `${day}/${month}/${year}`;
+          }
+        }
+      }
+      return s; // leave as-is; validator will flag it
+    },
+  };
 
   /**
    * Custom validators
    * Check https://importok.io/docs/validators for more details
    */
-  const validators = {};
+  const validators = {
+    validDateFormat(record, key) {
+      const value = record.get(key);
+      if (!value || value === '') return true; // Allow empty values (required validator handles this)
+
+      const validFormats = [
+        'DD/MM/YYYY HH:mm:ss',
+        'DD/MM/YYYY HH:mm',
+        'DD/MM/YYYY',
+        'DD-MM-YYYY HH:mm:ss',
+        'DD-MM-YYYY HH:mm',
+        'DD-MM-YYYY',
+      ];
+
+      const s = String(value).trim();
+
+      // Check if the value matches any of the valid formats exactly
+      for (const format of validFormats) {
+        const d = parse(s, format, new Date());
+        if (isValid(d)) {
+          // Additional check: ensure the parsed date formats back to the same string
+          // This prevents partial matches
+          const day = String(d.getDate()).padStart(2, '0');
+          const month = String(d.getMonth() + 1).padStart(2, '0');
+          const year = d.getFullYear();
+
+          let expectedFormat;
+          if (format.includes('HH:mm:ss')) {
+            const hours = String(d.getHours()).padStart(2, '0');
+            const minutes = String(d.getMinutes()).padStart(2, '0');
+            const seconds = String(d.getSeconds()).padStart(2, '0');
+            expectedFormat = format.includes('/')
+              ? `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`
+              : `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
+          } else if (format.includes('HH:mm')) {
+            const hours = String(d.getHours()).padStart(2, '0');
+            const minutes = String(d.getMinutes()).padStart(2, '0');
+            expectedFormat = format.includes('/')
+              ? `${day}/${month}/${year} ${hours}:${minutes}`
+              : `${day}-${month}-${year} ${hours}:${minutes}`;
+          } else {
+            expectedFormat = format.includes('/')
+              ? `${day}/${month}/${year}`
+              : `${day}-${month}-${year}`;
+          }
+
+          if (s === expectedFormat) {
+            return true;
+          }
+        }
+      }
+
+      return 'Date must be in one of these formats: DD/MM/YYYY, DD/MM/YYYY HH:mm, DD/MM/YYYY HH:mm:ss, DD-MM-YYYY, DD-MM-YYYY HH:mm, or DD-MM-YYYY HH:mm:ss';
+    },
+  };
 
   /**
    * Custom providers
@@ -239,7 +364,6 @@ const IncidentImport = () => {
       },
       goodsData: typesData
         ? new GenericProvider(
-            // eslint-disable-next-line unicorn/no-array-reduce
             goodsData?.goodsTypes.reduce((acc, curr) => {
               acc[curr.id] = curr.name;
               return acc;
@@ -248,7 +372,6 @@ const IncidentImport = () => {
         : {},
       typesData: typesData
         ? new GenericProvider(
-            // eslint-disable-next-line unicorn/no-array-reduce
             typesData.listIncidentTags.reduce((acc, curr) => {
               acc[curr.value] = curr.label;
               return acc;
@@ -264,12 +387,7 @@ const IncidentImport = () => {
    * Check https://importok.io/docs/webhooks for more details
    */
 
-  const onImportReady = async function (
-    records: ImportRecord[],
-    meta: unknown
-  ) {
-    console.log(records, meta);
-
+  const onImportReady = async function (records: ImportRecord[]) {
     const importData: IncidentData[] = records.map((item) => {
       const itemProperties = item.getProperties();
 
@@ -290,7 +408,6 @@ const IncidentImport = () => {
       const groupId = itemProperties['group'];
       const tagIds = itemProperties['tag'];
 
-      console.log(itemProperties);
       return {
         businessName,
         crimeReference,

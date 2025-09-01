@@ -23,6 +23,7 @@ export type ListOffendersRelayQueryVariables = Types.Exact<{
   where?: Types.InputMaybe<Types.OffenderWhereInput>;
   orderByValue?: Types.InputMaybe<Types.SortOrder>;
   skip?: Types.InputMaybe<Types.Scalars['Int']>;
+  policeAreas?: Types.InputMaybe<Array<Types.PoliceForce> | Types.PoliceForce>;
 }>;
 
 
@@ -46,18 +47,18 @@ export const OffenderFeedListDocument = gql`
 }
     ${OffenderCardFragmentDoc}`;
 export function useOffenderFeedListQuery(baseOptions: Apollo.QueryHookOptions<OffenderFeedListQuery, OffenderFeedListQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
+        const options = {...defaultOptions, ...baseOptions};
         return Apollo.useQuery<OffenderFeedListQuery, OffenderFeedListQueryVariables>(OffenderFeedListDocument, options);
       }
 export function useOffenderFeedListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OffenderFeedListQuery, OffenderFeedListQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
+          const options = {...defaultOptions, ...baseOptions};
           return Apollo.useLazyQuery<OffenderFeedListQuery, OffenderFeedListQueryVariables>(OffenderFeedListDocument, options);
         }
 export type OffenderFeedListQueryHookResult = ReturnType<typeof useOffenderFeedListQuery>;
 export type OffenderFeedListLazyQueryHookResult = ReturnType<typeof useOffenderFeedListLazyQuery>;
 export type OffenderFeedListQueryResult = Apollo.QueryResult<OffenderFeedListQuery, OffenderFeedListQueryVariables>;
 export const ListOffendersRelayDocument = gql`
-    query ListOffendersRelay($after: String, $first: Int, $order: OffenderOrderByWithRelationInput, $scheme: SchemeWhereUniqueInput, $where: OffenderWhereInput, $orderByValue: SortOrder, $skip: Int) {
+    query ListOffendersRelay($after: String, $first: Int, $order: OffenderOrderByWithRelationInput, $scheme: SchemeWhereUniqueInput, $where: OffenderWhereInput, $orderByValue: SortOrder, $skip: Int, $policeAreas: [PoliceForce!]) {
   listOffendersRelay(
     after: $after
     first: $first
@@ -66,6 +67,7 @@ export const ListOffendersRelayDocument = gql`
     where: $where
     orderByValue: $orderByValue
     skip: $skip
+    policeAreas: $policeAreas
   ) {
     pageInfo {
       hasNextPage
@@ -80,11 +82,11 @@ export const ListOffendersRelayDocument = gql`
 }
     ${OffenderCardFragmentDoc}`;
 export function useListOffendersRelayQuery(baseOptions?: Apollo.QueryHookOptions<ListOffendersRelayQuery, ListOffendersRelayQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
+        const options = {...defaultOptions, ...baseOptions};
         return Apollo.useQuery<ListOffendersRelayQuery, ListOffendersRelayQueryVariables>(ListOffendersRelayDocument, options);
       }
 export function useListOffendersRelayLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ListOffendersRelayQuery, ListOffendersRelayQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
+          const options = {...defaultOptions, ...baseOptions};
           return Apollo.useLazyQuery<ListOffendersRelayQuery, ListOffendersRelayQueryVariables>(ListOffendersRelayDocument, options);
         }
 export type ListOffendersRelayQueryHookResult = ReturnType<typeof useListOffendersRelayQuery>;

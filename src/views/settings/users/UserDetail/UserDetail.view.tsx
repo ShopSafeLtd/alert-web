@@ -1,7 +1,9 @@
 /* eslint-disable formatjs/no-literal-string-in-jsx */
 import type { ViewportData } from '#/types/DataType';
 import type { Role } from 'graphql/types';
+import { AppType, UserStatus } from 'graphql/types';
 import type { RefObject } from 'react';
+import React, { useState } from 'react';
 
 // import { EditPasswordButton } from '#/components/Password/OwnPasswordChange.view';
 import LocatingModal from '#/components/map/LocatingModal';
@@ -39,9 +41,7 @@ import {
   Typography,
 } from 'antd';
 import EditUser from 'components/form-components/user/EditUser';
-import { AppType, UserStatus } from 'graphql/types';
 import { useAtomValue } from 'jotai';
-import React, { useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { GetUserStatusValues } from 'types/enums/user_status';
@@ -483,9 +483,7 @@ const userDetail = ({
               {data?.user?.approverGroups &&
                 data?.user?.approverGroups.length > 0 && (
                   <Descriptions.Item
-                    label={
-                      <FormattedMessage defaultMessage="Approver Groups" />
-                    }
+                    label={<FormattedMessage defaultMessage="Group Admin" />}
                   >
                     <Row gutter={[0, 8]}>
                       {data?.user?.approverGroups.map(({ id, name }) => (
@@ -585,7 +583,7 @@ const userDetail = ({
                   dataIndex: 'updatedAt',
                   ellipsis: true,
                   key: 'updatedAt',
-                  // eslint-disable-next-line no-confusing-arrow
+
                   render: (value: Date) => (
                     <Tooltip title={new Date(value).toLocaleString('en-GB')}>
                       {FormatCalendar(new Date(value), intl, true)}{' '}
