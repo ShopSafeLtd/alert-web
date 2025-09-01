@@ -2,14 +2,25 @@ import type {
   ListOffendersRelayQuery,
   ListOffendersRelayQueryVariables,
 } from '#/views/profiles/offenders/OffenderFeed/graphql/queries/__generated__/offender-feed.generated';
+import {
+  ListOffendersRelayDocument,
+  useListOffendersRelayQuery,
+} from '#/views/profiles/offenders/OffenderFeed/graphql/queries/__generated__/offender-feed.generated';
 import type { MutationUpdaterFn } from '@apollo/client';
 import type { ListCustomGalleriesQuery } from 'graphql/customGallery/queries/__generated__/list_custom_galleries.generated';
+import { useListCustomGalleriesQuery } from 'graphql/customGallery/queries/__generated__/list_custom_galleries.generated';
 import type { RecycleOffenderMutation } from 'graphql/offenders/mutations/__generated__/recycle-offender.generated';
 import type {
   IncidentListRelationFilter,
   IncidentWhereInput,
   InputMaybe,
   OffenderOrderByWithRelationInput,
+} from 'graphql/types';
+import {
+  PermissionMethod,
+  PermissionModel,
+  QueryMode,
+  SortOrder,
 } from 'graphql/types';
 import type { OffenderFilters } from 'state/data-model';
 
@@ -20,17 +31,6 @@ import {
   currentUserAtom,
 } from '#/providers/UserProvider/UserProvider';
 import hasRolePermission from '#/utils/has-role-permission';
-import {
-  ListOffendersRelayDocument,
-  useListOffendersRelayQuery,
-} from '#/views/profiles/offenders/OffenderFeed/graphql/queries/__generated__/offender-feed.generated';
-import { useListCustomGalleriesQuery } from 'graphql/customGallery/queries/__generated__/list_custom_galleries.generated';
-import {
-  PermissionMethod,
-  PermissionModel,
-  QueryMode,
-  SortOrder,
-} from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -121,6 +121,7 @@ const useOffenderFeed = (): Return => {
     sex,
     tableView,
     warnings,
+    policeAreas,
   } = filterVariables;
 
   const generateSorted = (): {
@@ -209,6 +210,7 @@ const useOffenderFeed = (): Return => {
     },
     ...generateSorted(),
     first: compactView ? 48 : 12,
+    policeAreas,
     where: {
       AND: search
         ? [

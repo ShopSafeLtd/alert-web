@@ -1,7 +1,13 @@
 import type { MutationUpdaterFn } from '@apollo/client';
 import type { ListCustomGalleriesQuery } from 'graphql/customGallery/queries/__generated__/list_custom_galleries.generated';
+import { useListCustomGalleriesQuery } from 'graphql/customGallery/queries/__generated__/list_custom_galleries.generated';
 import type { CreateVehicleMutation } from 'graphql/vehicles/mutations/__generated__/create-vehicle.generated';
+import { useCreateVehicleMutation } from 'graphql/vehicles/mutations/__generated__/create-vehicle.generated';
 import type { ListVehiclesQuery } from 'graphql/vehicles/queries/__generated__/list-vehicles.generated';
+import {
+  ListVehiclesDocument,
+  useListVehiclesQuery,
+} from 'graphql/vehicles/queries/__generated__/list-vehicles.generated';
 import type { VehicleFilters } from 'state/data-model';
 import type { DateType, VehicleData } from 'types/DataType';
 
@@ -9,13 +15,8 @@ import { useGroupsContext } from '#/context/groups-context';
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { currentSchemeDefaultGroups } from '#/providers/UserProvider/UserProvider';
 import { notification } from 'antd';
-import { useListCustomGalleriesQuery } from 'graphql/customGallery/queries/__generated__/list_custom_galleries.generated';
+import type { PoliceForce } from 'graphql/types';
 import { QueryMode, SortOrder } from 'graphql/types';
-import { useCreateVehicleMutation } from 'graphql/vehicles/mutations/__generated__/create-vehicle.generated';
-import {
-  ListVehiclesDocument,
-  useListVehiclesQuery,
-} from 'graphql/vehicles/queries/__generated__/list-vehicles.generated';
 import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -39,6 +40,7 @@ interface Return {
   setGroupsFilter: (value: string[]) => void;
   setOrder: (value: SortOrder) => void;
   setSearch: (value: string) => void;
+  setPoliceAreas: (value: PoliceForce[]) => void;
   sortFilter: boolean;
   toggleAddInvestigation: (value: string) => void;
   toggleSortFilter: () => void;
@@ -74,12 +76,14 @@ const useListVehicles = (): Return => {
     groups: groupsFilter,
     order,
     search,
+    policeAreas,
   } = filterVariables;
 
   const variables = {
     order: {
       updatedAt: order,
     },
+    policeAreas,
     where: {
       OR: [
         {
@@ -393,6 +397,15 @@ const useListVehicles = (): Return => {
     });
   };
 
+  const setPoliceAreas = (values: PoliceForce[]) => {
+    setFilterState({
+      pagination,
+      variables: {
+        ...filterVariables,
+        policeAreas: values,
+      },
+    });
+  };
   const toggleSortFilter = () => {
     setSortFilter(!sortFilter);
   };
@@ -425,6 +438,7 @@ const useListVehicles = (): Return => {
         groups: [],
         order: SortOrder.Desc,
         search: '',
+        policeAreas: [],
       },
     });
   };
@@ -432,7 +446,7 @@ const useListVehicles = (): Return => {
     addInvestigation,
     clearFilters,
     customGalleriesData,
-
+    setPoliceAreas,
     data: vehiclesData,
     groups,
     groupsLoading,

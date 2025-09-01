@@ -52,3 +52,17 @@ export function formatPoliceAreasList(
       .join(' ')
   );
 }
+export function formatPoliceForceLabel(force: string): string {
+  const lowerWords = ['and', 'of', 'the'];
+
+  return force
+    .split('_')
+    .map((word, idx) => {
+      const lower = word.toLowerCase();
+      if (idx > 0 && lowerWords.includes(lower)) {
+        return lower;
+      }
+      return lower.charAt(0).toUpperCase() + lower.slice(1);
+    })
+    .join(' ');
+}

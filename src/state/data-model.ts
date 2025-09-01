@@ -1,5 +1,5 @@
-/* eslint-disable no-param-reassign */
 import type { Action } from 'easy-peasy';
+import { action } from 'easy-peasy';
 import type {
   Age,
   ArticlePriority,
@@ -8,12 +8,11 @@ import type {
   Gender,
   InvestigationStatus,
   Model,
+  PoliceForce,
   Race,
 } from 'graphql/types';
-import type { DateType } from 'types/DataType';
-
-import { action } from 'easy-peasy';
 import { IncidentPriority, SortOrder } from 'graphql/types';
+import type { DateType } from 'types/DataType';
 
 export enum IncidentSort {
   createdAtAsc = 'CREATED_AT_ASC',
@@ -43,6 +42,7 @@ export interface IncidentFilters {
   priority: IncidentPriority[];
   search: string;
   tableView: boolean;
+  policeAreas?: PoliceForce[];
 }
 
 export interface OffenderFilters {
@@ -68,6 +68,7 @@ export interface OffenderFilters {
   sex: Gender[];
   tableView: boolean;
   warnings: string[];
+  policeAreas?: PoliceForce[];
 }
 
 export interface FeedItemFilters {
@@ -96,6 +97,7 @@ export interface VehicleFilters {
   groups: string[];
   order: SortOrder;
   search: string;
+  policeAreas?: PoliceForce[];
 }
 
 export interface CrimeGroupFilters {
@@ -232,6 +234,7 @@ export interface DataModel {
   setOffenders: Action<DataModel, Offenders>;
   setVehicles: Action<DataModel, Vehicles>;
   vehicles: Vehicles;
+  policeAreas?: PoliceForce[];
 }
 
 const dataModel: DataModel = {

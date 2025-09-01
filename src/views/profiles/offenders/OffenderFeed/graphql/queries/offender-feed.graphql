@@ -1,50 +1,53 @@
 query offenderFeedList(
-  $scheme: SchemeWhereUniqueInput!
-  $where: OffenderWhereInput
-  $order: OffenderOrderByWithRelationInput
-  $take: Int
-  $skip: Int
+    $scheme: SchemeWhereUniqueInput!
+    $where: OffenderWhereInput
+    $order: OffenderOrderByWithRelationInput
+    $take: Int
+    $skip: Int
 ) {
-  listOffenders(
-    scheme: $scheme
-    where: $where
-    order: $order
-    take: $take
-    skip: $skip
-  ) {
-    offenders {
-      ...OffenderCard
+    listOffenders(
+        scheme: $scheme
+        where: $where
+        order: $order
+        take: $take
+        skip: $skip
+    ) {
+        offenders {
+            ...OffenderCard
+        }
+        total
     }
-    total
-  }
 }
 
 query ListOffendersRelay(
-  $after: String
-  $first: Int
-  $order: OffenderOrderByWithRelationInput
-  $scheme: SchemeWhereUniqueInput
-  $where: OffenderWhereInput
-  $orderByValue: SortOrder
-  $skip: Int
+    $after: String
+    $first: Int
+    $order: OffenderOrderByWithRelationInput
+    $scheme: SchemeWhereUniqueInput
+    $where: OffenderWhereInput
+    $orderByValue: SortOrder
+    $skip: Int
+    $policeAreas: [PoliceForce!]
+
 ) {
-  listOffendersRelay(
-    after: $after
-    first: $first
-    order: $order
-    scheme: $scheme
-    where: $where
-    orderByValue: $orderByValue
-    skip: $skip
-  ) {
-    pageInfo {
-      hasNextPage
-      endCursor
+    listOffendersRelay(
+        after: $after
+        first: $first
+        order: $order
+        scheme: $scheme
+        where: $where
+        orderByValue: $orderByValue
+        skip: $skip
+        policeAreas: $policeAreas
+    ) {
+        pageInfo {
+            hasNextPage
+            endCursor
+        }
+        edges {
+            node {
+                ...OffenderCard
+            }
+        }
     }
-    edges {
-      node {
-        ...OffenderCard
-      }
-    }
-  }
 }

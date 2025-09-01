@@ -30,10 +30,14 @@ const ListBusinesses = () => {
     toggleAddVisible,
     toggleFiltersOpen,
     toggleLinkVisible,
+    policeAreaFilter,
+    setPoliceAreaFilter,
   } = useListBusinesses();
 
   return (
     <View
+      setPoliceAreaFilter={setPoliceAreaFilter}
+      policeAreaFilter={policeAreaFilter}
       addVisible={addVisible}
       data={data}
       deleteConfirm={deleteConfirm}

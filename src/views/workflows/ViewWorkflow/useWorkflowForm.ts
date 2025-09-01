@@ -1,20 +1,11 @@
 import type { WorkflowDataQuery } from '#/views/workflows/graphql/queries/__generated__/workflow-data.generated';
-import type { FormInstance } from 'antd';
-import type { AnswerType, CronSchedule, IncidentPriority } from 'graphql/types';
-
-import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
-import useActivityTemplates from '#/views/adminTodo/ActivityTemplates/useActivityTemplates';
-import { useChecklistsQuery } from '#/views/checklist/graphql/queries/__generated__/list-checklists.generated';
-import { useCreateOneWorkflowMutation } from '#/views/workflows/graphql/mutations/__generated__/create-workflow.generated';
-import { useUpdateOneWorkflowMutation } from '#/views/workflows/graphql/mutations/__generated__/update-workflow.generated';
-import { useViewWorkflowQuery } from '#/views/workflows/graphql/queries/__generated__/view-workflow.generated';
 import {
-  WorkflowDataDocument,
   useWorkflowDataQuery,
+  WorkflowDataDocument,
 } from '#/views/workflows/graphql/queries/__generated__/workflow-data.generated';
-import { useApolloClient } from '@apollo/client';
+import type { FormInstance } from 'antd';
 import { Form, notification } from 'antd';
-import { useListGoodsTypesQuery } from 'graphql/goods-types/queries/__generated__/list-goods-types.generated';
+import type { AnswerType, CronSchedule, IncidentPriority } from 'graphql/types';
 import {
   Model,
   QuestionModel,
@@ -22,10 +13,26 @@ import {
   WorkflowActionType,
   WorkflowTrigger,
 } from 'graphql/types';
+
+import {
+  currencySymbolAtom,
+  currentSchemeIdAtom,
+} from '#/providers/SchemeProvider/SchemeProvider';
+import useActivityTemplates from '#/views/adminTodo/ActivityTemplates/useActivityTemplates';
+import { useChecklistsQuery } from '#/views/checklist/graphql/queries/__generated__/list-checklists.generated';
+import { useCreateOneWorkflowMutation } from '#/views/workflows/graphql/mutations/__generated__/create-workflow.generated';
+import { useUpdateOneWorkflowMutation } from '#/views/workflows/graphql/mutations/__generated__/update-workflow.generated';
+import { useViewWorkflowQuery } from '#/views/workflows/graphql/queries/__generated__/view-workflow.generated';
+import { useApolloClient } from '@apollo/client';
+import { useListGoodsTypesQuery } from 'graphql/goods-types/queries/__generated__/list-goods-types.generated';
 import { useAtomValue } from 'jotai/index';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useBrandsQuery } from '#/views/settings/brands/graphql/queries/__generated__/brands.generated';
+import { useDivisionsOnSchemeQuery } from '#/views/workflows/ViewWorkflow/graphql/queries/__generated__/divisions.generated';
+
+const countriesOptions = [];
 
 interface ListData {
   defaultDueDays: number;
@@ -59,11 +66,14 @@ interface WorkflowData {
     dueDays: number;
     name: string;
     questions: string[];
+    questionGroupId?: string;
   };
   usersToGetFrom?: {
     createdBy?: boolean;
     groups?: string[];
+    adminGroups?: string[];
     parentGroups?: boolean;
+    parentGroupsAdmin?: boolean;
     roles?: string[];
     users?: string[];
   };
@@ -73,15 +83,27 @@ export type OverUnder = 'over' | 'under';
 
 interface WorkflowConditions {
   anyAll: AnyAll;
+  // new
+  brands?: {
+    anyAll: AnyAll;
+    brands: string[] | undefined;
+  };
   checkListScore?: {
     greaterThan: boolean;
     score: number;
   };
   checklistTemplate?: string[];
+  // new
+  countries?: {
+    anyAll: AnyAll;
+    countries: string[] | undefined;
+  };
   descriptionWords?: {
     anyAll: AnyAll;
     words: string[] | undefined;
   };
+  // new
+  division?: string[];
   goodsType?: {
     anyAll: AnyAll;
     goods: string[] | undefined;
@@ -96,6 +118,13 @@ interface WorkflowConditions {
   };
   incidentWhileBan?: boolean | string;
   lessThanValue?: string;
+  // new
+  lossValue?: boolean | string;
+  // new
+  priority?: {
+    anyAll: AnyAll;
+    priority: string[] | undefined;
+  };
   questions?: {
     anyAll: AnyAll;
     questions: {
@@ -125,14 +154,29 @@ export interface Question {
 export interface FormData {
   autoApprove: boolean;
   autoApproveCheck: boolean;
+  // new
+  brands?: {
+    anyAll: AnyAll;
+    brands: string[] | undefined;
+  };
+  brandsCheck: boolean;
   checklistScore?: null | number;
   checklistScoreGreaterThan?: boolean | null;
   checklistTemplate?: null | string[];
+  // new
+  countries?: {
+    anyAll: AnyAll;
+    countries: string[] | undefined;
+  };
+  countriesCheck: boolean;
   cronDate?: Date;
   cronStart?: Date;
   descriptionCheck: boolean;
   descriptionCondition: AnyAll;
   descriptionWords: string[];
+  // new
+  division?: string[];
+  divisionsCheck: boolean;
   frequency?: CronSchedule;
   goodsType: string[];
   goodsTypeCheck: boolean;
@@ -146,8 +190,17 @@ export interface FormData {
   incidentWhileBanCheck: boolean;
   lessThanCheck: boolean;
   lessThanPrice: number;
+  // new
+  lossValue?: boolean | string;
+  lossValueCheck: boolean;
   name: string;
   option: AnyAll;
+  // new
+  priority?: {
+    anyAll: AnyAll;
+    priority: string[] | undefined;
+  };
+  priorityCheck: boolean;
   questionChecked: boolean;
   questionMethod: AnyAll;
   selectedGroup: string;
@@ -174,7 +227,9 @@ export interface FormData {
   useChecklistScore?: boolean;
   useCreatedBy?: boolean;
   useDynamicGroups?: boolean;
+  useDynamicAdminGroups?: boolean;
   userManagementGroups: string[];
+  userManagementAdminGroups: string[];
   userManagementRoles: string[];
   userManagementUsers: string[];
   valueCheck: boolean;
@@ -188,9 +243,13 @@ export type LabelValue = { label: string; value: string };
 interface Return {
   activityTemplateForm: boolean;
   availableQuestions: Question[];
+  brandsSelected: boolean;
   checklistOption: { label: string; value: string }[];
+  countriesSelected: boolean;
   createNewQuestion: (id: string, question: string) => void;
   descriptionCheck: boolean;
+  divisionsSelected: boolean;
+  editId?: string;
   form: FormInstance<FormData>;
   goods: { label: string; value: string }[];
   goodsTypeCheck: boolean;
@@ -199,14 +258,18 @@ interface Return {
   incidentTimeCountCheck: boolean;
   lessThanSelected: boolean;
   loading: boolean;
+  lossValueSelected: boolean;
   modelSelected: Model | null | undefined;
   newQuestion: boolean;
   onClose: () => void;
   onFinish: (formData: FormData) => void;
+  prefix: string;
+  prioritySelected: boolean;
   questionGroups: QuestionGroupData[];
   questions: Question[];
   questionsSelected: boolean;
   saving: boolean;
+  schemeId: string;
   selectedQuestions: Question[];
   sendEmailCheck: boolean;
   sendNotificationCheck: boolean;
@@ -219,12 +282,19 @@ interface Return {
   tagsSelected: boolean;
   taskOutcome: boolean;
   taskQuestions: Question[];
+  typeWatch: string;
   updateIncidentCheck: boolean;
   updateTemplates: (
     item: ListData,
     type: 'create' | 'delete' | 'update'
   ) => void;
   valueSelected: boolean;
+  workflowTypeWatch: Model | null | undefined;
+  brands: LabelValue[];
+  countries: LabelValue[];
+  divisions: LabelValue[];
+  brandsLoading: boolean;
+  divisionsLoading: boolean;
 }
 
 const useWorkflowForm = (): Return => {
@@ -235,8 +305,8 @@ const useWorkflowForm = (): Return => {
 
   const [saving, setSaving] = useState(false);
   const [activityTemplateForm, setActivityTemplateForm] = useState(false);
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  const [_selectedActivity, setSelectedActivity] =
+
+  const [selectedActivity, setSelectedActivity] =
     useState<QuestionGroupData | null>(null);
   const [initiated, setInitiated] = useState(false);
   const [newQuestion, setNewQuestion] = useState<boolean>(false);
@@ -246,9 +316,50 @@ const useWorkflowForm = (): Return => {
   const [selectedQuestions, setSelectedQuestions] = React.useState<Question[]>(
     []
   );
+  const typeWatch = Form.useWatch('workflowMode', form);
+  const workflowTypeWatch = Form.useWatch('workflowType', form);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
+  const { prefix } = useAtomValue(currencySymbolAtom);
 
   const client = useApolloClient();
 
+  const { data: BrandsInitData, loading: brandsLoading } = useBrandsQuery({
+    fetchPolicy: 'cache-and-network',
+    variables: {
+      where: {
+        schemeId: {
+          equals: currentScheme,
+        },
+      },
+    },
+  });
+  const { data: DivisionsInitData, loading: divisionsLoading } =
+    useDivisionsOnSchemeQuery({
+      fetchPolicy: 'cache-and-network',
+      variables: {
+        id: currentScheme,
+      },
+    });
+
+  const divisionsData = useMemo(() => {
+    if (DivisionsInitData?.scheme?.divisions) {
+      return DivisionsInitData?.scheme?.divisions.map((division) => ({
+        label: division,
+        value: division,
+      }));
+    }
+    return [];
+  }, [DivisionsInitData]);
+
+  const brandsData = useMemo(() => {
+    if (BrandsInitData?.brands?.edges) {
+      return BrandsInitData.brands.edges.map(({ node }) => ({
+        label: node.name,
+        value: node.id,
+      }));
+    }
+    return [];
+  }, [BrandsInitData]);
   const { data, loading } = useWorkflowDataQuery({
     variables: {
       orderBy: {
@@ -293,6 +404,7 @@ const useWorkflowForm = (): Return => {
     tableData,
     updateTemplates,
   } = useActivityTemplates();
+
   const navigate = useNavigate();
   const tagsSelected = Form.useWatch('tags', form);
   const groupsSelected = Form.useWatch('groups', form);
@@ -307,6 +419,12 @@ const useWorkflowForm = (): Return => {
   const sendEmailCheck = Form.useWatch('sendEmailCheck', form);
   const sendNotificationCheck = Form.useWatch('sendNotificationCheck', form);
   const updateIncidentCheck = Form.useWatch('updateIncident', form);
+  // new condition field watches
+  const brandsSelected = Form.useWatch('brandsCheck', form);
+  const countriesSelected = Form.useWatch('countriesCheck', form);
+  const divisionsSelected = Form.useWatch('divisionsCheck', form);
+  const prioritySelected = Form.useWatch('priorityCheck', form);
+  const lossValueSelected = Form.useWatch('lossValueCheck', form);
 
   const { data: editWorkflowData, loading: editWorkflowLoading } =
     useViewWorkflowQuery({
@@ -338,10 +456,16 @@ const useWorkflowForm = (): Return => {
           form.setFieldsValue({
             autoApprove: action?.autoApprove,
             autoApproveCheck: action?.autoApprove !== undefined,
+            // New brands fields
+            brands: conditions?.brands,
+            brandsCheck: !!conditions?.brands?.brands?.length,
             checklistScore: conditions?.checkListScore?.score || null,
             checklistScoreGreaterThan:
               conditions?.checkListScore?.greaterThan || null,
             checklistTemplate: conditions?.checklistTemplate || null,
+            // New countries fields
+            countries: conditions?.countries,
+            countriesCheck: !!conditions?.countries?.countries?.length,
             cronDate: workflow.cronDate
               ? new Date(workflow.cronDate)
               : undefined,
@@ -350,6 +474,9 @@ const useWorkflowForm = (): Return => {
               conditions.descriptionWords.words?.length > 0,
             descriptionCondition: conditions?.descriptionWords?.anyAll,
             descriptionWords: conditions?.descriptionWords?.words || [],
+            // New division fields
+            division: conditions?.division || [],
+            divisionsCheck: !!conditions?.division?.length,
             frequency: workflow.cronSchedule || undefined,
             goodsType: conditions?.goodsType?.goods || [],
             goodsTypeCheck:
@@ -381,8 +508,15 @@ const useWorkflowForm = (): Return => {
             lessThanPrice: conditions?.lessThanValue
               ? Number.parseInt(conditions.lessThanValue, 10)
               : 0,
+            // New loss value fields
+            lossValue: conditions?.lossValue,
+            lossValueCheck:
+              conditions?.lossValue !== undefined && !!conditions?.lossValue,
             name: workflow.name,
             option: conditions?.anyAll,
+            // New priority fields
+            priority: conditions?.priority,
+            priorityCheck: !!conditions?.priority?.priority?.length,
             questionChecked: !!conditions?.questions,
             questionMethod: conditions?.questions?.anyAll,
             sendEmailCheck:
@@ -410,7 +544,10 @@ const useWorkflowForm = (): Return => {
             useChecklistScore: !!conditions?.checkListScore,
             useCreatedBy: !!action?.usersToGetFrom?.createdBy,
             useDynamicGroups: !!action?.usersToGetFrom?.parentGroups,
+            useDynamicAdminGroups: !!action?.usersToGetFrom?.parentGroupsAdmin,
             userManagementGroups: newCombined.groups,
+            userManagementAdminGroups:
+              action?.usersToGetFrom?.adminGroups || [],
             userManagementRoles: action?.usersToGetFrom?.roles || [],
             userManagementUsers: newCombined.users,
             valueCheck: !!conditions?.totalValue,
@@ -433,7 +570,26 @@ const useWorkflowForm = (): Return => {
         },
       },
     });
+  useEffect(() => {
+    if (!editWorkflowData || !editWorkflowData.workflow?.actions) return;
+    const action = editWorkflowData?.workflow?.actions[0]?.data as WorkflowData;
 
+    if (
+      !action ||
+      !action.task?.questions ||
+      !tableData ||
+      tableData.length === 0
+    )
+      return;
+
+    if (selectedActivity) return;
+
+    const foundActivity = tableData.find(
+      (activity) => activity.id === action.task?.questionGroupId
+    );
+
+    if (foundActivity) setSelectedActivity(foundActivity);
+  }, [tableData, editWorkflowData]);
   const groups = useMemo(() => {
     if (data?.scheme?.groups) {
       return data.scheme.groups.map(({ id, name }) => ({
@@ -677,7 +833,9 @@ const useWorkflowForm = (): Return => {
       usersToGetFrom: {
         createdBy: values.useCreatedBy,
         groups: values.userManagementGroups,
+        adminGroups: values.userManagementAdminGroups,
         parentGroups: values.useDynamicGroups,
+        parentGroupsAdmin: values.useDynamicAdminGroups,
         roles: values.userManagementRoles,
         users: values.userManagementUsers,
       },
@@ -685,6 +843,13 @@ const useWorkflowForm = (): Return => {
 
     const conditionsData: WorkflowConditions = {
       anyAll: values.option,
+      // New brands condition
+      brands: values.brandsCheck
+        ? {
+            anyAll: values.brands?.anyAll || 'any',
+            brands: values.brands?.brands,
+          }
+        : undefined,
       checkListScore:
         values.checklistScore !== null && values.checklistScore !== undefined
           ? {
@@ -696,12 +861,24 @@ const useWorkflowForm = (): Return => {
         values.checklistTemplate && values.checklistTemplate.length > 0
           ? values.checklistTemplate
           : undefined,
+      // New countries condition
+      countries: values.countriesCheck
+        ? {
+            anyAll: values.countries?.anyAll || 'any',
+            countries: values.countries?.countries,
+          }
+        : undefined,
       descriptionWords: values.descriptionCheck
         ? {
             anyAll: values.descriptionCondition,
             words: values.descriptionWords,
           }
         : undefined,
+      // New division condition
+      division:
+        values.divisionsCheck && values.division?.length
+          ? values.division
+          : undefined,
       goodsType: goodsTypeCheck
         ? {
             anyAll: values.goodsTypeCondition,
@@ -723,6 +900,15 @@ const useWorkflowForm = (): Return => {
       incidentWhileBan: values.incidentWhileBanCheck ? 'true' : undefined,
       lessThanValue: lessThanSelected
         ? values.lessThanPrice.toString()
+        : undefined,
+      // New loss value condition
+      lossValue: lossValueSelected ? values.lossValue : undefined,
+      // New priority condition
+      priority: values.priorityCheck
+        ? {
+            anyAll: values.priority?.anyAll || 'any',
+            priority: values.priority?.priority,
+          }
         : undefined,
       questions: values.questionChecked
         ? {
@@ -837,8 +1023,6 @@ const useWorkflowForm = (): Return => {
     },
   });
 
-  const schemeId = useAtomValue(currentSchemeIdAtom);
-
   const { data: checklistData, loading: checklistLoading } = useChecklistsQuery(
     {
       fetchPolicy: 'cache-and-network',
@@ -865,9 +1049,13 @@ const useWorkflowForm = (): Return => {
   return {
     activityTemplateForm,
     availableQuestions,
+    brandsSelected,
     checklistOption,
+    countriesSelected,
     createNewQuestion,
     descriptionCheck,
+    divisionsSelected,
+    editId: EditId,
     form,
     goods:
       goodsData?.listGoodsTypes?.goodsTypes?.map(({ id, name }) => ({
@@ -885,14 +1073,18 @@ const useWorkflowForm = (): Return => {
       editWorkflowLoading ||
       goodsLoading ||
       checklistLoading,
+    lossValueSelected,
     modelSelected,
     newQuestion,
     onClose,
     onFinish,
+    prefix,
+    prioritySelected,
     questionGroups,
     questions,
     questionsSelected,
     saving,
+    schemeId,
     selectedQuestions,
     sendEmailCheck,
     sendNotificationCheck,
@@ -905,9 +1097,16 @@ const useWorkflowForm = (): Return => {
     tagsSelected,
     taskOutcome,
     taskQuestions,
+    typeWatch,
     updateIncidentCheck,
     updateTemplates,
     valueSelected,
+    workflowTypeWatch,
+    brands: brandsData,
+    countries: countriesOptions,
+    divisions: divisionsData,
+    brandsLoading,
+    divisionsLoading,
   };
 };
 
