@@ -3,6 +3,7 @@ import type { BrandsQuery } from '#/views/settings/brands/graphql/queries/__gene
 import type { BusinessLocationsQuery } from 'graphql/businesses/queries/__generated__/business-locations.generated';
 import type { SchemeGroupsQuery } from 'graphql/groups/queries/__generated__/scheme-groups.generated';
 import type { IndustriesQuery } from 'graphql/industry/__generated__/industries.generated';
+import type { PoliceForce } from 'graphql/types';
 
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import {
@@ -30,9 +31,9 @@ interface Return {
   onChangeBrands: (value: string[]) => void;
   onChangeDateRange: (value: { endDate: Date; startDate: Date }) => void;
   onChangeGroups: (value: string[]) => void;
-  onChangeIncidentTypes: (value: string[]) => void;
+  onChangeIncidentTypes: (value: string | string[]) => void;
   onChangeIndustries: (value: string[]) => void;
-  onChangePoliceAreas: (value: string[]) => void;
+  onChangePoliceAreas: (value: string | string[]) => void;
   onChangeSchemes: (value: string[]) => void;
   schemes: { scheme: { id: string; name: string } }[];
   selectedBrands: string[];
@@ -51,8 +52,10 @@ const useIncidentMap = (): Return => {
   const [selectedGroups, setGroups] = useState<string[]>([]);
   const [selectedBrands, setBrands] = useState<string[]>([]);
   const [selectedIndustries, setIndustries] = useState<string[]>([]);
-  const [selectedIncidentTypes, setIncidentTypes] = useState<string[]>([]);
-  const [selectedPoliceAreas, setPoliceAreas] = useState<string[]>([]);
+  const [selectedIncidentTypes, setSelectedIncidentTypes] = useState<string[]>(
+    []
+  );
+  const [selectedPoliceAreas, setSelectedPoliceAreas] = useState<string[]>([]);
   const [dateRange, setDateRange] = useState<{
     endDate: Date;
     startDate: Date;
@@ -84,7 +87,7 @@ const useIncidentMap = (): Return => {
           selectedPoliceAreas.length > 0
             ? {
                 policeArea: {
-                  hasSome: selectedPoliceAreas,
+                  hasSome: selectedPoliceAreas as PoliceForce[],
                 },
               }
             : undefined,
@@ -213,9 +216,13 @@ const useIncidentMap = (): Return => {
     onChangeBrands: setBrands,
     onChangeDateRange: setDateRange,
     onChangeGroups,
-    onChangeIncidentTypes: setIncidentTypes,
+    onChangeIncidentTypes: (value: string | string[]) => {
+      setSelectedIncidentTypes(Array.isArray(value) ? value : [value]);
+    },
     onChangeIndustries: setIndustries,
-    onChangePoliceAreas: setPoliceAreas,
+    onChangePoliceAreas: (value: string | string[]) => {
+      setSelectedPoliceAreas(Array.isArray(value) ? value : [value]);
+    },
     onChangeSchemes,
     schemes,
     selectedBrands,

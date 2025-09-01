@@ -593,7 +593,7 @@ const SchemeSettings = (): JSX.Element => {
                 <PermissionCheckWrapper
                   permission={{
                     method: PermissionMethod.Read,
-                    model: PermissionModel.DataImport,
+                    model: PermissionModel.DataExport,
                   }}
                 >
                   <DataExport />

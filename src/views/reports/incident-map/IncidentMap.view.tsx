@@ -218,9 +218,9 @@ interface Props {
   onChangeBrands: (value: string[]) => void;
   onChangeDateRange: (value: { endDate: Date; startDate: Date }) => void;
   onChangeGroups: (value: string[]) => void;
-  onChangeIncidentTypes: (value: string[]) => void;
+  onChangeIncidentTypes: (value: string | string[]) => void;
   onChangeIndustries: (value: string[]) => void;
-  onChangePoliceAreas: (value: string[]) => void;
+  onChangePoliceAreas: (value: string | string[]) => void;
   onChangeSchemes: (value: string[]) => void;
   schemes: { scheme: { id: string; name: string } }[];
   selectedBrands: string[];
