@@ -105,9 +105,11 @@ const IncidentTypesSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
       onChange={onTreeChange}
       optionFilterProp="label"
       placeholder={placeholder}
+      showCheckedStrategy={TreeSelect.SHOW_CHILD}
       showSearch
       size={size}
       style={style}
+      treeCheckable={allowMultiple}
       treeData={treeData}
       treeDefaultExpandAll
       treeNodeFilterProp="label"
