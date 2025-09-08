@@ -1,0 +1,5 @@
+mutation NextImportData($data: NextImportDataInput!) {
+    nextImportData(data: $data) {
+        success
+    }
+}
