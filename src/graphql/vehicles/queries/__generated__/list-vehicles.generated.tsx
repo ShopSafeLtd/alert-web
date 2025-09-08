@@ -61,11 +61,11 @@ export const ListVehiclesDocument = gql`
 }
     `;
 export function useListVehiclesQuery(baseOptions?: Apollo.QueryHookOptions<ListVehiclesQuery, ListVehiclesQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions};
+        const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<ListVehiclesQuery, ListVehiclesQueryVariables>(ListVehiclesDocument, options);
       }
 export function useListVehiclesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ListVehiclesQuery, ListVehiclesQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions};
+          const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<ListVehiclesQuery, ListVehiclesQueryVariables>(ListVehiclesDocument, options);
         }
 export type ListVehiclesQueryHookResult = ReturnType<typeof useListVehiclesQuery>;

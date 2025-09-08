@@ -47,11 +47,11 @@ export const OffenderFeedListDocument = gql`
 }
     ${OffenderCardFragmentDoc}`;
 export function useOffenderFeedListQuery(baseOptions: Apollo.QueryHookOptions<OffenderFeedListQuery, OffenderFeedListQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions};
+        const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<OffenderFeedListQuery, OffenderFeedListQueryVariables>(OffenderFeedListDocument, options);
       }
 export function useOffenderFeedListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OffenderFeedListQuery, OffenderFeedListQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions};
+          const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<OffenderFeedListQuery, OffenderFeedListQueryVariables>(OffenderFeedListDocument, options);
         }
 export type OffenderFeedListQueryHookResult = ReturnType<typeof useOffenderFeedListQuery>;
@@ -82,11 +82,11 @@ export const ListOffendersRelayDocument = gql`
 }
     ${OffenderCardFragmentDoc}`;
 export function useListOffendersRelayQuery(baseOptions?: Apollo.QueryHookOptions<ListOffendersRelayQuery, ListOffendersRelayQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions};
+        const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<ListOffendersRelayQuery, ListOffendersRelayQueryVariables>(ListOffendersRelayDocument, options);
       }
 export function useListOffendersRelayLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ListOffendersRelayQuery, ListOffendersRelayQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions};
+          const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<ListOffendersRelayQuery, ListOffendersRelayQueryVariables>(ListOffendersRelayDocument, options);
         }
 export type ListOffendersRelayQueryHookResult = ReturnType<typeof useListOffendersRelayQuery>;

@@ -2497,7 +2497,9 @@ export type CentralCoopImportDataInput = {
   /** Optional mapping of CSV/Excel columns to incident fields */
   columnMapping?: InputMaybe<IncidentColumnMapping>;
   /** Base64 encoded CSV/Excel data or file content as string (auto-detects format) */
-  csvData: Scalars['String'];
+  csvData?: InputMaybe<Scalars['String']>;
+  /** URL to download the CSV/Excel file from (e.g., Azure Blob Storage URL) */
+  fileUrl?: InputMaybe<Scalars['String']>;
   groups?: InputMaybe<Array<CentralCoopIdInput>>;
   scheme: CentralCoopIdInput;
 };
@@ -5194,7 +5196,9 @@ export type DunelmImportDataInput = {
   /** Optional mapping of CSV/Excel columns to incident fields */
   columnMapping?: InputMaybe<DunelmColumnMapping>;
   /** Base64 encoded CSV/Excel data or file content as string (auto-detects format) */
-  fileData: Scalars['String'];
+  fileData?: InputMaybe<Scalars['String']>;
+  /** URL to download the CSV/Excel file from (e.g., Azure Blob Storage URL) */
+  fileUrl?: InputMaybe<Scalars['String']>;
   groups?: InputMaybe<Array<DunelmIdInput>>;
   scheme: DunelmIdInput;
 };
@@ -11134,6 +11138,7 @@ export type Mutation = {
   midCountiesImportData: SystemTask;
   mySafetyImportData: SystemTask;
   nextImportData: SystemTask;
+  oneStopImportData: SystemTask;
   queueIncidentCsvExport: QueuedIncidentExportResult;
   recycleActiveChecklist: ActiveChecklist;
   recycleChecklist: Checklist;
@@ -12018,6 +12023,11 @@ export type MutationMySafetyImportDataArgs = {
 
 export type MutationNextImportDataArgs = {
   data: NextImportDataInput;
+};
+
+
+export type MutationOneStopImportDataArgs = {
+  data: OneStopImportDataInput;
 };
 
 
@@ -13140,7 +13150,9 @@ export type NextImportDataInput = {
   /** Optional mapping of CSV/Excel columns to incident fields */
   columnMapping?: InputMaybe<NextColumnMapping>;
   /** Base64 encoded CSV/Excel data or file content as string (auto-detects format) */
-  fileData: Scalars['String'];
+  fileData?: InputMaybe<Scalars['String']>;
+  /** URL to download the CSV/Excel file from (e.g., Azure Blob Storage URL) */
+  fileUrl?: InputMaybe<Scalars['String']>;
   groups?: InputMaybe<Array<NextIdInput>>;
   scheme: NextIdInput;
 };
