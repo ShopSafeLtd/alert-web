@@ -1,0 +1,9 @@
+[build]
+  publish = "build"
+
+[[edge_functions]]
+  function = "api-proxy"
+  path = "/api/*"
+
+[build.environment]
+  NODE_VERSION = "20"
