@@ -123,11 +123,10 @@ const WatermarkImage = ({
           if (triggerLightbox && url) triggerLightbox([{ src: url }], 0);
         }}
       >
-        {!image && (
+        {!image && url && (
           <div
             className={classes.image}
             style={{
-              // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
               backgroundImage: `url(${url})`,
               backgroundPosition: getPosition(position),
               transform: `rotate(${rotation || 0}deg)`,
@@ -219,11 +218,10 @@ const WatermarkImage = ({
         <span className={classes.text}>{reference}</span>
         <span className={classes.text}>{reference}</span>
       </div>
-      {!image && (
+      {!image && url && (
         <div
           className={classes.image}
           style={{
-            // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
             backgroundImage: `url(${url})`,
             backgroundPosition: getPosition(position),
             transform: `rotate(${rotation || 0}deg)`,
