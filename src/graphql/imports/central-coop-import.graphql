@@ -1,0 +1,5 @@
+mutation CentralCoopImportData($data: CentralCoopImportDataInput!) {
+    centralCoopImportData(data: $data) {
+        success
+    }
+}

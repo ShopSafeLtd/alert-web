@@ -92,6 +92,37 @@ const MySafety = lazy(
 const IntelOne = lazy(
   () => import('../../../views/settings/data-import/intel-one/IntelOne.view')
 );
+const NextImport = lazy(
+  () =>
+    import('../../../views/settings/data-import/next-import/NextImport.view')
+);
+const DunelmImport = lazy(
+  () =>
+    import(
+      '../../../views/settings/data-import/dunelm-import/DunelmImport.view'
+    )
+);
+const TJXImport = lazy(
+  () => import('../../../views/settings/data-import/tjx-import/TJXImport.view')
+);
+const CentralCoopImport = lazy(
+  () =>
+    import(
+      '../../../views/settings/data-import/central-coop-import/CentralCoopImport.view'
+    )
+);
+const IcelandImport = lazy(
+  () =>
+    import(
+      '../../../views/settings/data-import/iceland-import/IcelandImport.view'
+    )
+);
+const RiverIslandImport = lazy(
+  () =>
+    import(
+      '../../../views/settings/data-import/river-island-import/RiverIslandImport.view'
+    )
+);
 const DashboardManagement = lazy(
   () => import('../dashboard-management/router')
 );
@@ -574,6 +605,84 @@ const SchemeSettings = (): JSX.Element => {
                 </PermissionCheckWrapper>
               }
               path="data-import/intel-one"
+            />
+            <Route
+              element={
+                <PermissionCheckWrapper
+                  permission={{
+                    method: PermissionMethod.Read,
+                    model: PermissionModel.DataImport,
+                  }}
+                >
+                  <NextImport />
+                </PermissionCheckWrapper>
+              }
+              path="data-import/next-import"
+            />
+            <Route
+              element={
+                <PermissionCheckWrapper
+                  permission={{
+                    method: PermissionMethod.Read,
+                    model: PermissionModel.DataImport,
+                  }}
+                >
+                  <DunelmImport />
+                </PermissionCheckWrapper>
+              }
+              path="data-import/dunelm-import"
+            />
+            <Route
+              element={
+                <PermissionCheckWrapper
+                  permission={{
+                    method: PermissionMethod.Read,
+                    model: PermissionModel.DataImport,
+                  }}
+                >
+                  <TJXImport />
+                </PermissionCheckWrapper>
+              }
+              path="data-import/tjx-import"
+            />
+            <Route
+              element={
+                <PermissionCheckWrapper
+                  permission={{
+                    method: PermissionMethod.Read,
+                    model: PermissionModel.DataImport,
+                  }}
+                >
+                  <CentralCoopImport />
+                </PermissionCheckWrapper>
+              }
+              path="data-import/central-coop-import"
+            />
+            <Route
+              element={
+                <PermissionCheckWrapper
+                  permission={{
+                    method: PermissionMethod.Read,
+                    model: PermissionModel.DataImport,
+                  }}
+                >
+                  <IcelandImport />
+                </PermissionCheckWrapper>
+              }
+              path="data-import/iceland-import"
+            />
+            <Route
+              element={
+                <PermissionCheckWrapper
+                  permission={{
+                    method: PermissionMethod.Read,
+                    model: PermissionModel.DataImport,
+                  }}
+                >
+                  <RiverIslandImport />
+                </PermissionCheckWrapper>
+              }
+              path="data-import/river-island-import"
             />
             <Route
               element={

@@ -1,0 +1,5 @@
+mutation IcelandImportData($data: IcelandImportDataInput!) {
+    icelandImportData(data: $data) {
+        success
+    }
+}
