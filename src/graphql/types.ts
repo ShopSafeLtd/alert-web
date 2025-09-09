@@ -2497,7 +2497,9 @@ export type CentralCoopImportDataInput = {
   /** Optional mapping of CSV/Excel columns to incident fields */
   columnMapping?: InputMaybe<IncidentColumnMapping>;
   /** Base64 encoded CSV/Excel data or file content as string (auto-detects format) */
-  csvData: Scalars['String'];
+  csvData?: InputMaybe<Scalars['String']>;
+  /** URL to download the CSV/Excel file from (e.g., Azure Blob Storage URL) */
+  fileUrl?: InputMaybe<Scalars['String']>;
   groups?: InputMaybe<Array<CentralCoopIdInput>>;
   scheme: CentralCoopIdInput;
 };
@@ -5194,7 +5196,9 @@ export type DunelmImportDataInput = {
   /** Optional mapping of CSV/Excel columns to incident fields */
   columnMapping?: InputMaybe<DunelmColumnMapping>;
   /** Base64 encoded CSV/Excel data or file content as string (auto-detects format) */
-  fileData: Scalars['String'];
+  fileData?: InputMaybe<Scalars['String']>;
+  /** URL to download the CSV/Excel file from (e.g., Azure Blob Storage URL) */
+  fileUrl?: InputMaybe<Scalars['String']>;
   groups?: InputMaybe<Array<DunelmIdInput>>;
   scheme: DunelmIdInput;
 };
@@ -7357,6 +7361,35 @@ export enum IdSource {
   Passport = 'PASSPORT',
   Police = 'POLICE'
 }
+
+export type IcelandColumnMapping = {
+  dateColumn?: InputMaybe<Scalars['String']>;
+  moColumn?: InputMaybe<Scalars['String']>;
+  moColumn2?: InputMaybe<Scalars['String']>;
+  noColumn?: InputMaybe<Scalars['String']>;
+  offenderAddressColumn?: InputMaybe<Scalars['String']>;
+  offenderNameColumn?: InputMaybe<Scalars['String']>;
+  offenderSurnameColumn?: InputMaybe<Scalars['String']>;
+  policeRefColumn?: InputMaybe<Scalars['String']>;
+  timeColumn?: InputMaybe<Scalars['String']>;
+  typeColumn?: InputMaybe<Scalars['String']>;
+  valueColumn?: InputMaybe<Scalars['String']>;
+};
+
+export type IcelandIdInput = {
+  id: Scalars['String'];
+};
+
+export type IcelandImportDataInput = {
+  /** Optional mapping of CSV/Excel columns to incident fields */
+  columnMapping?: InputMaybe<IcelandColumnMapping>;
+  /** Base64 encoded CSV/Excel data or file content as string (auto-detects format) */
+  csvData?: InputMaybe<Scalars['String']>;
+  /** URL to download the CSV/Excel file from (e.g., Azure Blob Storage URL) */
+  fileUrl?: InputMaybe<Scalars['String']>;
+  groups?: InputMaybe<Array<IcelandIdInput>>;
+  scheme: IcelandIdInput;
+};
 
 export type Image = {
   __typename?: 'Image';
@@ -10892,6 +10925,35 @@ export type MessageWhereUniqueInput = {
   vehicles?: InputMaybe<VehicleListRelationFilter>;
 };
 
+export type MidCountiesColumnMapping = {
+  actualLossColumn?: InputMaybe<Scalars['String']>;
+  arrestedColumn?: InputMaybe<Scalars['String']>;
+  dateOfIncidentColumn?: InputMaybe<Scalars['String']>;
+  eventColumn?: InputMaybe<Scalars['String']>;
+  policeInvolvedColumn?: InputMaybe<Scalars['String']>;
+  recoveredLossColumn?: InputMaybe<Scalars['String']>;
+  referenceColumn?: InputMaybe<Scalars['String']>;
+  sitePinColumn?: InputMaybe<Scalars['String']>;
+  summaryColumn?: InputMaybe<Scalars['String']>;
+  timeOfIncidentColumn?: InputMaybe<Scalars['String']>;
+  vehicleRegColumn?: InputMaybe<Scalars['String']>;
+};
+
+export type MidCountiesIdInput = {
+  id: Scalars['String'];
+};
+
+export type MidCountiesImportDataInput = {
+  /** Optional mapping of CSV/Excel columns to incident fields */
+  columnMapping?: InputMaybe<MidCountiesColumnMapping>;
+  /** Base64 encoded CSV/Excel data or file content as string (auto-detects format) */
+  fileData?: InputMaybe<Scalars['String']>;
+  /** URL to download the CSV/Excel file from (e.g., Azure Blob Storage URL) */
+  fileUrl?: InputMaybe<Scalars['String']>;
+  groups?: InputMaybe<Array<MidCountiesIdInput>>;
+  scheme: MidCountiesIdInput;
+};
+
 export enum Model {
   Add = 'ADD',
   Address = 'ADDRESS',
@@ -11056,6 +11118,7 @@ export type Mutation = {
   forcedPasswordSet?: Maybe<Scalars['String']>;
   generateFeedItems: SystemTask;
   generateStatementBody: GeneratedStatementBody;
+  icelandImportData: SystemTask;
   importStockItemCsv: Scalars['Boolean'];
   incidentImport: IncidentImportValidationResult;
   incidentItemsCsv: Scalars['String'];
@@ -11072,8 +11135,10 @@ export type Mutation = {
   markAsReadMessages: UserChat;
   mergeBusinessesWithSameName: Business;
   mergeOffender: Offender;
+  midCountiesImportData: SystemTask;
   mySafetyImportData: SystemTask;
   nextImportData: SystemTask;
+  oneStopImportData: SystemTask;
   queueIncidentCsvExport: QueuedIncidentExportResult;
   recycleActiveChecklist: ActiveChecklist;
   recycleChecklist: Checklist;
@@ -11095,6 +11160,7 @@ export type Mutation = {
   restoreIncident: Incident;
   restoreItem?: Maybe<RecycledItem>;
   restoreOffender: Offender;
+  riverIslandImportData: SystemTask;
   scanIncident: Incident;
   searchExistingImages: Array<RekMatch>;
   searchFaces: SystemTask;
@@ -11123,6 +11189,7 @@ export type Mutation = {
   syncIncidentSchemes: SystemTask;
   syncNewSchemeTags: SystemTask;
   syncRekImages: SystemTask;
+  tjxImportData: SystemTask;
   toggleUser: User;
   unsubscribeFromIncident: Incident;
   unsubscribeFromOffender: Offender;
@@ -11859,6 +11926,11 @@ export type MutationGenerateStatementBodyArgs = {
 };
 
 
+export type MutationIcelandImportDataArgs = {
+  data: IcelandImportDataInput;
+};
+
+
 export type MutationImportStockItemCsvArgs = {
   where: Scalars['String'];
 };
@@ -11939,6 +12011,11 @@ export type MutationMergeOffenderArgs = {
 };
 
 
+export type MutationMidCountiesImportDataArgs = {
+  data: MidCountiesImportDataInput;
+};
+
+
 export type MutationMySafetyImportDataArgs = {
   data: MySafetyImportDataInput;
 };
@@ -11946,6 +12023,11 @@ export type MutationMySafetyImportDataArgs = {
 
 export type MutationNextImportDataArgs = {
   data: NextImportDataInput;
+};
+
+
+export type MutationOneStopImportDataArgs = {
+  data: OneStopImportDataInput;
 };
 
 
@@ -12035,6 +12117,11 @@ export type MutationRestoreItemArgs = {
 export type MutationRestoreOffenderArgs = {
   data: RecycledItemWhereUniqueInput;
   where: UniqueId;
+};
+
+
+export type MutationRiverIslandImportDataArgs = {
+  data: RiverIslandImportInput;
 };
 
 
@@ -12142,6 +12229,11 @@ export type MutationSyncIncidentGroupsArgs = {
 export type MutationSyncIncidentLocationsArgs = {
   businessId: Scalars['String'];
   groupId: Scalars['String'];
+};
+
+
+export type MutationTjxImportDataArgs = {
+  data: TjxImportDataInput;
 };
 
 
@@ -13058,7 +13150,9 @@ export type NextImportDataInput = {
   /** Optional mapping of CSV/Excel columns to incident fields */
   columnMapping?: InputMaybe<NextColumnMapping>;
   /** Base64 encoded CSV/Excel data or file content as string (auto-detects format) */
-  fileData: Scalars['String'];
+  fileData?: InputMaybe<Scalars['String']>;
+  /** URL to download the CSV/Excel file from (e.g., Azure Blob Storage URL) */
+  fileUrl?: InputMaybe<Scalars['String']>;
   groups?: InputMaybe<Array<NextIdInput>>;
   scheme: NextIdInput;
 };
@@ -14500,6 +14594,49 @@ export type OneSignalIdWhereInput = {
   updatedAt?: InputMaybe<DateTimeFilter>;
   user?: InputMaybe<UserWhereInput>;
   userId?: InputMaybe<StringFilter>;
+};
+
+export type OneStopColumnMapping = {
+  /** The colour of any vehicles involved */
+  colourColumn?: InputMaybe<Scalars['String']>;
+  /** The crime reference number if reported to police */
+  crimeReferenceColumn?: InputMaybe<Scalars['String']>;
+  /** The description of the incident */
+  incidentDetailsColumn?: InputMaybe<Scalars['String']>;
+  /** The date and time of the incident */
+  incidentReportDateColumn?: InputMaybe<Scalars['String']>;
+  /** The make of any vehicles involved */
+  makeColumn?: InputMaybe<Scalars['String']>;
+  /** The model of any vehicles involved */
+  modelColumn?: InputMaybe<Scalars['String']>;
+  /** The name of any offenders involved if known */
+  offenderNameColumn?: InputMaybe<Scalars['String']>;
+  /** The customerRef of the incident */
+  referenceColumn?: InputMaybe<Scalars['String']>;
+  /** The name of the business for this incident */
+  siteNameColumn?: InputMaybe<Scalars['String']>;
+  /** The total value of the goods lost in the incident */
+  totalProductStockValueColumn?: InputMaybe<Scalars['String']>;
+  /** The type of the incident */
+  typeColumn?: InputMaybe<Scalars['String']>;
+  /** The registration of any vehicles involved */
+  vehicleRegColumn?: InputMaybe<Scalars['String']>;
+};
+
+export type OneStopIdInput = {
+  id: Scalars['String'];
+};
+
+export type OneStopImportDataInput = {
+  /** Optional mapping of CSV/Excel columns to incident fields */
+  columnMapping?: InputMaybe<OneStopColumnMapping>;
+  /** Base64 encoded CSV/Excel data or file content as string (auto-detects format) */
+  fileData?: InputMaybe<Scalars['String']>;
+  /** URL to download the CSV/Excel file from */
+  fileUrl?: InputMaybe<Scalars['String']>;
+  /** Optional groups to assign imported incidents to */
+  groups?: InputMaybe<Array<OneStopIdInput>>;
+  scheme: OneStopIdInput;
 };
 
 export type OutcomeSummary = {
@@ -18200,6 +18337,38 @@ export type ResetPassword = {
   message: Scalars['String'];
 };
 
+export type RiverIslandColumnMapping = {
+  /** Column name for case type */
+  caseTypeColumn?: InputMaybe<Scalars['String']>;
+  /** Column name for incident date */
+  incidentDateColumn?: InputMaybe<Scalars['String']>;
+  /** Column name for report narrative */
+  reportNarrativeColumn?: InputMaybe<Scalars['String']>;
+  /** Column name for store number */
+  storeNumberColumn?: InputMaybe<Scalars['String']>;
+  /** Column name for total stolen value */
+  totalStolenColumn?: InputMaybe<Scalars['String']>;
+};
+
+export type RiverIslandGroupInput = {
+  id: Scalars['String'];
+};
+
+export type RiverIslandImportInput = {
+  /** Optional column mapping for CSV/Excel headers */
+  columnMapping?: InputMaybe<RiverIslandColumnMapping>;
+  /** CSV or Excel file content as base64 string */
+  fileData?: InputMaybe<Scalars['String']>;
+  /** URL to download the CSV/Excel file from */
+  fileUrl?: InputMaybe<Scalars['String']>;
+  groups?: InputMaybe<Array<RiverIslandGroupInput>>;
+  scheme: RiverIslandSchemeInput;
+};
+
+export type RiverIslandSchemeInput = {
+  id: Scalars['String'];
+};
+
 export enum Role {
   ContentAdmin = 'CONTENT_ADMIN',
   GroupAdmin = 'GROUP_ADMIN',
@@ -21263,6 +21432,43 @@ export type TimeTakenWhereUniqueInput = {
   updatedAt?: InputMaybe<DateTimeFilter>;
   user?: InputMaybe<UserWhereInput>;
   userId?: InputMaybe<StringFilter>;
+};
+
+export type TjxColumnMapping = {
+  /** Whether it was a crime or not */
+  crimeIncidentColumn?: InputMaybe<Scalars['String']>;
+  /** The date and time of the incident */
+  dateTimeColumn?: InputMaybe<Scalars['String']>;
+  /** The description of the incident */
+  descriptionColumn?: InputMaybe<Scalars['String']>;
+  /** The location of the incident in the store */
+  locationLabelColumn?: InputMaybe<Scalars['String']>;
+  /** The store number of the business */
+  storeNoColumn?: InputMaybe<Scalars['String']>;
+  /** The type of theft incident */
+  theftIncidentTypeColumn?: InputMaybe<Scalars['String']>;
+  /** The total value of goods involved */
+  totalTheftValueColumn?: InputMaybe<Scalars['String']>;
+  /** The value of the incident which was lost */
+  totalUnrecoveredValueColumn?: InputMaybe<Scalars['String']>;
+  /** Whether it was a violent incident */
+  violenceAggressionColumn?: InputMaybe<Scalars['String']>;
+};
+
+export type TjxIdInput = {
+  id: Scalars['String'];
+};
+
+export type TjxImportDataInput = {
+  /** Optional mapping of CSV/Excel columns to incident fields */
+  columnMapping?: InputMaybe<TjxColumnMapping>;
+  /** Base64 encoded CSV/Excel data or file content as string (auto-detects format) */
+  fileData?: InputMaybe<Scalars['String']>;
+  /** URL to download the CSV/Excel file from */
+  fileUrl?: InputMaybe<Scalars['String']>;
+  /** The group ID to limit business matching to */
+  groupId?: InputMaybe<Scalars['String']>;
+  scheme: TjxIdInput;
 };
 
 export type Todo = {

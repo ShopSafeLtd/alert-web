@@ -1,0 +1,5 @@
+mutation TJXImportData($data: TjxImportDataInput!) {
+    tjxImportData(data: $data) {
+        success
+    }
+}

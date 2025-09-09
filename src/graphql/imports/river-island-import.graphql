@@ -1,0 +1,5 @@
+mutation RiverIslandImportData($data: RiverIslandImportInput!) {
+    riverIslandImportData(data: $data) {
+        success
+    }
+}

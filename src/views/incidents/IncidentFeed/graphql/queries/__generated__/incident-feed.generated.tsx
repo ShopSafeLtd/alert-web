@@ -44,11 +44,11 @@ export const IncidentsFeedDocument = gql`
 }
     ${IncidentCardFragmentDoc}`;
 export function useIncidentsFeedQuery(baseOptions: Apollo.QueryHookOptions<IncidentsFeedQuery, IncidentsFeedQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions};
+        const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<IncidentsFeedQuery, IncidentsFeedQueryVariables>(IncidentsFeedDocument, options);
       }
 export function useIncidentsFeedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<IncidentsFeedQuery, IncidentsFeedQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions};
+          const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<IncidentsFeedQuery, IncidentsFeedQueryVariables>(IncidentsFeedDocument, options);
         }
 export type IncidentsFeedQueryHookResult = ReturnType<typeof useIncidentsFeedQuery>;
