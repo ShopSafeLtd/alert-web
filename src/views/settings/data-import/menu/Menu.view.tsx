@@ -15,6 +15,7 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 const customStockAllowed = new Set(['cltr752fn001kwdcafx5pbq29']);
+const restrictedImportsScheme = 'cm9a19w1r00l58q01ss3wm0c1';
 
 const ImportMenu = () => {
   const classes = useSharedStyles();
@@ -85,6 +86,70 @@ const ImportMenu = () => {
       title: <FormattedMessage defaultMessage="Incident Import" />,
       to: '/app/scheme-settings/data-import/incident-import',
     },
+    ...(schemeId === restrictedImportsScheme
+      ? [
+          {
+            description: (
+              <FormattedMessage defaultMessage="Import data from Next system into alert." />
+            ),
+            icon: <FontAwesomeIcon icon={faCloudUpload} />,
+            iconBackground: '#1677ff',
+            iconColor: '#1677ff',
+            title: <FormattedMessage defaultMessage="Next Import" />,
+            to: '/app/scheme-settings/data-import/next-import',
+          },
+          {
+            description: (
+              <FormattedMessage defaultMessage="Import data from Dunelm system into alert." />
+            ),
+            icon: <FontAwesomeIcon icon={faFileImport} />,
+            iconBackground: '#52a373',
+            iconColor: '#52a373',
+            title: <FormattedMessage defaultMessage="Dunelm Import" />,
+            to: '/app/scheme-settings/data-import/dunelm-import',
+          },
+          {
+            description: (
+              <FormattedMessage defaultMessage="Import data from TJX system into alert." />
+            ),
+            icon: <FontAwesomeIcon icon={faDatabase} />,
+            iconBackground: '#eb2f96',
+            iconColor: '#eb2f96',
+            title: <FormattedMessage defaultMessage="TJX Import" />,
+            to: '/app/scheme-settings/data-import/tjx-import',
+          },
+          {
+            description: (
+              <FormattedMessage defaultMessage="Import data from Central Co-op system into alert." />
+            ),
+            icon: <FontAwesomeIcon icon={faCloudUpload} />,
+            iconBackground: '#008552',
+            iconColor: '#008552',
+            title: <FormattedMessage defaultMessage="Central Co-op Import" />,
+            to: '/app/scheme-settings/data-import/central-coop-import',
+          },
+          {
+            description: (
+              <FormattedMessage defaultMessage="Import data from Iceland system into alert." />
+            ),
+            icon: <FontAwesomeIcon icon={faFileImport} />,
+            iconBackground: '#ee1c2e',
+            iconColor: '#ee1c2e',
+            title: <FormattedMessage defaultMessage="Iceland Import" />,
+            to: '/app/scheme-settings/data-import/iceland-import',
+          },
+          {
+            description: (
+              <FormattedMessage defaultMessage="Import data from River Island system into alert." />
+            ),
+            icon: <FontAwesomeIcon icon={faDatabase} />,
+            iconBackground: '#000000',
+            iconColor: '#000000',
+            title: <FormattedMessage defaultMessage="River Island Import" />,
+            to: '/app/scheme-settings/data-import/river-island-import',
+          },
+        ]
+      : []),
   ];
 
   const knowledgeBaseSections = [
