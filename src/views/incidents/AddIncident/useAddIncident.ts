@@ -122,6 +122,7 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
   const userId = useAtomValue(currentUserAtom)?.id ?? '';
   const businesses = useAtomValue(currentSchemeBusinessesAtom);
   const permissions = useAtomValue(currentPermissionsAtom);
+  const userBusinesses = useAtomValue(currentSchemeBusinessesAtom);
 
   const reportOnly =
     useAtomValue(currentSchemeAtom)?.reportOnly &&
@@ -239,8 +240,12 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
   const [getBrands] = useBusinessBrandsLazyQuery();
   const [getGroups] = useBusinessGroupsLazyQuery();
 
+  const businessId = useMemo(() => {
+    if (userBusinesses.length === 1) return userBusinesses[0].id;
+    return formBusiness?.value;
+  }, [formBusiness, userBusinesses]);
   useEffect(() => {
-    if (formBusiness) {
+    if (businessId) {
       void getBrands({
         onCompleted: (data) => {
           if (data && data.business && data.business.brands.length > 0) {
@@ -249,7 +254,7 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
         },
         variables: {
           where: {
-            id: formBusiness.value,
+            id: businessId,
           },
         },
       });
@@ -265,7 +270,7 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
             businesses: {
               some: {
                 id: {
-                  equals: formBusiness.value,
+                  equals: businessId,
                 },
               },
             },
