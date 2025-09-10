@@ -4,12 +4,15 @@ import type { StockItemValue } from 'components/form-components/StockItemSearch/
 import type { ListGoodsTypesQuery } from 'graphql/goods-types/queries/__generated__/list-goods-types.generated';
 import type { Currency } from 'graphql/types';
 
-import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import {
+  currentSchemeBusinessesAtom,
+  currentSchemeIdAtom,
+} from '#/providers/SchemeProvider/SchemeProvider';
 import { Form } from 'antd';
 import { useListBusinessesDivisionQuery } from 'graphql/businesses/queries/__generated__/list-businesses-division.generated';
 import { useListGoodsTypesQuery } from 'graphql/goods-types/queries/__generated__/list-goods-types.generated';
 import { useAtomValue } from 'jotai/index';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 interface Return {
   businessCurrency?: Currency | null;
@@ -34,6 +37,7 @@ const useIncidentGoods = ({
   form: FormInstance<FormData>;
 }): Return => {
   const schemeId = useAtomValue(currentSchemeIdAtom);
+  const userBusinesses = useAtomValue(currentSchemeBusinessesAtom);
 
   const { data: goodsTypesData } = useListGoodsTypesQuery({
     variables: {
@@ -46,10 +50,15 @@ const useIncidentGoods = ({
   });
   const business = Form.useWatch('business', form);
 
+  const businessId = useMemo(() => {
+    if (userBusinesses.length === 1) return userBusinesses[0].id;
+    return business?.value;
+  }, [business, userBusinesses]);
+
   const { data: businessesData } = useListBusinessesDivisionQuery({
     variables: {
       where: {
-        id: business?.value ? { equals: business.value } : undefined,
+        id: businessId ? { equals: businessId } : undefined,
         schemes: {
           some: {
             id: {
