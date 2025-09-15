@@ -123,6 +123,12 @@ const RiverIslandImport = lazy(
       '../../../views/settings/data-import/river-island-import/RiverIslandImport.view'
     )
 );
+const JDSiteImport = lazy(
+  () =>
+    import(
+      '../../../views/settings/data-import/jd-site-import/JDSiteImport.view'
+    )
+);
 const DashboardManagement = lazy(
   () => import('../dashboard-management/router')
 );
@@ -683,6 +689,19 @@ const SchemeSettings = (): JSX.Element => {
                 </PermissionCheckWrapper>
               }
               path="data-import/river-island-import"
+            />
+            <Route
+              element={
+                <PermissionCheckWrapper
+                  permission={{
+                    method: PermissionMethod.Read,
+                    model: PermissionModel.DataImport,
+                  }}
+                >
+                  <JDSiteImport />
+                </PermissionCheckWrapper>
+              }
+              path="data-import/jd-site-import"
             />
             <Route
               element={
