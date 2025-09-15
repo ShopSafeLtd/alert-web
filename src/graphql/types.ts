@@ -9618,7 +9618,16 @@ export type InvestigationWhereUniqueInput = {
 
 export type JdSiteImportInput = {
   fileUrl: Scalars['String'];
+  /** Which scheme(s) to process. Defaults to BOTH */
+  schemeSelection?: InputMaybe<JdSiteSchemeSelection>;
 };
+
+/** Select which scheme(s) to import data into */
+export enum JdSiteSchemeSelection {
+  Both = 'BOTH',
+  Jdna = 'JDNA',
+  JdNexus = 'JD_NEXUS'
+}
 
 export type JsonFilter = {
   array_contains?: InputMaybe<Scalars['JSON']>;
@@ -18409,6 +18418,7 @@ export type Scheme = {
   currentTerms?: Maybe<TermsAndCondition>;
   customGalleries: Array<CustomGallery>;
   customTranslations: Array<Scalars['JSON']>;
+  customer?: Maybe<Scalars['String']>;
   darkLogo?: Maybe<Image>;
   darkLogoId?: Maybe<Scalars['String']>;
   defaultBulletinEmails: Scalars['Boolean'];
@@ -18450,6 +18460,7 @@ export type Scheme = {
   intel: Array<Intel>;
   investigations: Array<Investigation>;
   investigationsInScheme: Array<Investigation>;
+  labels: Array<Scalars['String']>;
   languageCount: Scalars['Int'];
   languages: Array<Language>;
   loginEvents: Array<LoginEvent>;
@@ -18469,6 +18480,9 @@ export type Scheme = {
   oneSelectedIncidentTypeOnly: Scalars['Boolean'];
   optionalBusinessOnUsers: Scalars['Boolean'];
   policeReporting: Scalars['Boolean'];
+  policeSharing: Scalars['Boolean'];
+  policeSharingGroupIds: Array<Scalars['String']>;
+  policeSharingTagIds: Array<Scalars['String']>;
   questionGroups: Array<QuestionGroup>;
   questions: Array<Question>;
   recycledItems: Array<RecycledItem>;
