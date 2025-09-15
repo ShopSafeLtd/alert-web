@@ -1,0 +1,5 @@
+mutation JDSiteImport($data: JdSiteImportInput!) {
+    jdSiteImport(data: $data) {
+        success
+    }
+}

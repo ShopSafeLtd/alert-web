@@ -150,6 +150,20 @@ const ImportMenu = () => {
           },
         ]
       : []),
+    ...(schemeId === 'clktxb47e0000xd14hit5ezhq'
+      ? [
+          {
+            description: (
+              <FormattedMessage defaultMessage="Import JD site data into alert." />
+            ),
+            icon: <FontAwesomeIcon icon={faFileImport} />,
+            iconBackground: '#ff7a45',
+            iconColor: '#ff7a45',
+            title: <FormattedMessage defaultMessage="JD Site Import" />,
+            to: '/app/scheme-settings/data-import/jd-site-import',
+          },
+        ]
+      : []),
   ];
 
   const knowledgeBaseSections = [
