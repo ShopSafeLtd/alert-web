@@ -1099,6 +1099,13 @@ export enum AnswerType {
   Time = 'TIME'
 }
 
+export enum AnswerTypeInput {
+  Boolean = 'BOOLEAN',
+  Date = 'DATE',
+  Number = 'NUMBER',
+  String = 'STRING'
+}
+
 export type AnswerUpdateManyWithoutIncidentInput = {
   create?: InputMaybe<Array<AnswerCreateWithoutIncidentInput>>;
   deleteMany?: InputMaybe<Array<AnswerScalarWhereInput>>;
@@ -2222,6 +2229,12 @@ export type BusinessValueStatsArgs = {
   startDate: Scalars['DateTime'];
 };
 
+export type BusinessAnswerInput = {
+  answer: Scalars['String'];
+  businessQuestionId: Scalars['String'];
+  type?: InputMaybe<AnswerTypeInput>;
+};
+
 export type BusinessBrandsInput = {
   set?: InputMaybe<Array<UniqueId>>;
 };
@@ -2362,6 +2375,66 @@ export type BusinessOrderByWithRelationInput = {
 export type BusinessParentInput = {
   connect?: InputMaybe<UniqueId>;
   disconnect?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type BusinessQuestion = {
+  __typename?: 'BusinessQuestion';
+  actions: Array<Scalars['JSON']>;
+  answers: Array<Answer>;
+  createdAt: Scalars['DateTime'];
+  deleted: Scalars['Boolean'];
+  dependentBrands: Array<Scalars['String']>;
+  dependentQuestions: Array<Scalars['JSON']>;
+  dependentTags: Array<Scalars['String']>;
+  failureAnswer?: Maybe<Scalars['String']>;
+  failureMessage?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  priority: Scalars['Int'];
+  question: Question;
+  questionId: Scalars['String'];
+  req: Scalars['Boolean'];
+  roles: Array<CustomRole>;
+  scheme: Scheme;
+  schemeId: Scalars['String'];
+  tooltip?: Maybe<Scalars['String']>;
+  updatedAt: Scalars['DateTime'];
+};
+
+export type BusinessQuestionOrderBy = {
+  createdAt?: InputMaybe<SortOrder>;
+  id?: InputMaybe<SortOrder>;
+  priority?: InputMaybe<SortOrder>;
+  updatedAt?: InputMaybe<SortOrder>;
+};
+
+export type BusinessQuestionRelayOrderInput = {
+  createdAt?: InputMaybe<SortOrder>;
+  priority?: InputMaybe<SortOrder>;
+};
+
+export type BusinessQuestionRelayWhereInput = {
+  deleted?: InputMaybe<Scalars['Boolean']>;
+  required?: InputMaybe<Scalars['Boolean']>;
+  schemeIds?: InputMaybe<Array<Scalars['String']>>;
+  search?: InputMaybe<Scalars['String']>;
+};
+
+export type BusinessQuestionWhereInput = {
+  AND?: InputMaybe<Array<BusinessQuestionWhereInput>>;
+  NOT?: InputMaybe<Array<BusinessQuestionWhereInput>>;
+  OR?: InputMaybe<Array<BusinessQuestionWhereInput>>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  deleted?: InputMaybe<BoolFilter>;
+  id?: InputMaybe<StringFilter>;
+  priority?: InputMaybe<IntFilter>;
+  questionId?: InputMaybe<StringFilter>;
+  req?: InputMaybe<BoolFilter>;
+  schemeId?: InputMaybe<StringFilter>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
+};
+
+export type BusinessQuestionWhereUniqueInput = {
+  id?: InputMaybe<Scalars['String']>;
 };
 
 export type BusinessReport = {
@@ -3125,6 +3198,21 @@ export type CreateBusinessOnUserDataInput = {
   publicName: Scalars['Boolean'];
   schemes: ConnectArrayHelper;
   tags?: InputMaybe<NullableConnectArrayHelper>;
+};
+
+export type CreateBusinessQuestionInput = {
+  actions?: InputMaybe<Array<Scalars['JSON']>>;
+  dependentBrands?: InputMaybe<Array<Scalars['String']>>;
+  dependentQuestions?: InputMaybe<Array<Scalars['JSON']>>;
+  dependentTags?: InputMaybe<Array<Scalars['String']>>;
+  failureAnswer?: InputMaybe<Scalars['String']>;
+  failureMessage?: InputMaybe<Scalars['String']>;
+  priority?: InputMaybe<Scalars['Int']>;
+  questionId: Scalars['String'];
+  req?: InputMaybe<Scalars['Boolean']>;
+  roleIds?: InputMaybe<Array<Scalars['String']>>;
+  schemeId: Scalars['String'];
+  tooltip?: InputMaybe<Scalars['String']>;
 };
 
 export type CreateBusinessRelationDataInput = {
@@ -4532,6 +4620,42 @@ export type DataCard = {
   graphStart: Scalars['String'];
   total: Scalars['Float'];
   totalDuration: Scalars['String'];
+};
+
+export type DataQualityScore = {
+  __typename?: 'DataQualityScore';
+  /** Percentage of incidents with categories */
+  categoryCompletionRate: Scalars['Float'];
+  /** Quality score for descriptions */
+  descriptionQualityScore: Scalars['Float'];
+  /** Percentage of incidents with images */
+  imageAttachmentRate: Scalars['Float'];
+  /** Incident data completeness score */
+  incidentCompleteness: Scalars['Float'];
+  /** Score for linking incidents to offenders */
+  linkageScore: Scalars['Float'];
+  /** Percentage of incidents with location data */
+  locationDataRate: Scalars['Float'];
+  /** Offender data completeness score */
+  offenderCompleteness: Scalars['Float'];
+  /** Overall data quality score (0-100) */
+  overallScore: Scalars['Float'];
+  /** Score for timely data entry */
+  timelinessScore: Scalars['Float'];
+};
+
+export type DataQualityTrend = {
+  __typename?: 'DataQualityTrend';
+  /** Average completeness percentage */
+  averageCompleteness: Scalars['Float'];
+  /** Improvement from previous month */
+  improvementRate?: Maybe<Scalars['Float']>;
+  /** Number of incidents */
+  incidentCount: Scalars['Int'];
+  /** Month */
+  month: Scalars['String'];
+  /** Overall quality score */
+  overallScore: Scalars['Float'];
 };
 
 export enum DataType {
@@ -6250,6 +6374,22 @@ export enum FaceSource {
   Aws = 'AWS',
   Custom = 'CUSTOM'
 }
+
+export type FeatureAdoptionRate = {
+  __typename?: 'FeatureAdoptionRate';
+  /** Percentage of users who have used this feature */
+  adoptionRate: Scalars['Float'];
+  /** Average number of items created per user */
+  averagePerUser: Scalars['Float'];
+  /** Name of the feature */
+  featureName: Scalars['String'];
+  /** Total number of items created for this feature */
+  totalCount: Scalars['Int'];
+  /** Usage trend (increasing, decreasing, stable) */
+  trend?: Maybe<Scalars['String']>;
+  /** Number of unique users who used this feature */
+  uniqueUsers: Scalars['Int'];
+};
 
 export enum Features {
   Activities = 'ACTIVITIES',
@@ -8205,6 +8345,36 @@ export type IncidentConnectOne = {
   connect: IncidentWhereUniqueInput;
 };
 
+export type IncidentDataQuality = {
+  __typename?: 'IncidentDataQuality';
+  /** Creation date */
+  createdAt: Scalars['DateTime'];
+  /** Description length in characters */
+  descriptionLength: Scalars['Int'];
+  /** Has category */
+  hasCategory: Scalars['Boolean'];
+  /** Has description */
+  hasDescription: Scalars['Boolean'];
+  /** Has images attached */
+  hasImages: Scalars['Boolean'];
+  /** Has location data */
+  hasLocation: Scalars['Boolean'];
+  /** Has linked offenders */
+  hasOffenders: Scalars['Boolean'];
+  /** Has value/loss amount */
+  hasValue: Scalars['Boolean'];
+  /** Number of images */
+  imageCount: Scalars['Int'];
+  /** Incident ID */
+  incidentId: Scalars['String'];
+  /** Number of linked offenders */
+  offenderCount: Scalars['Int'];
+  /** Quality score for this incident */
+  qualityScore: Scalars['Float'];
+  /** Number of updates */
+  updateCount: Scalars['Int'];
+};
+
 export type IncidentExport = {
   __typename?: 'IncidentExport';
   activityCount: Scalars['Int'];
@@ -8611,8 +8781,38 @@ export type IncidentMapRelayWhere = {
   ids: Array<Scalars['String']>;
 };
 
+export type IncidentMonthlyByScheme = {
+  __typename?: 'IncidentMonthlyByScheme';
+  count: Scalars['Int'];
+  month: Scalars['String'];
+  schemeId: Scalars['String'];
+  schemeName: Scalars['String'];
+};
+
 export type IncidentOffenderImages = {
   create?: InputMaybe<Array<UploadIncidentOffenderImage>>;
+};
+
+export type IncidentOffenderRatio = {
+  __typename?: 'IncidentOffenderRatio';
+  /** Average number of incidents per offender */
+  averageIncidentsPerOffender: Scalars['Float'];
+  /** Ratio of incidents to offenders */
+  incidentToOffenderRatio: Scalars['Float'];
+  /** Percentage of incidents linked to offenders */
+  linkageRate: Scalars['Float'];
+  /** Maximum incidents linked to a single offender */
+  maxIncidentsPerOffender: Scalars['Int'];
+  /** Number of offenders with multiple incidents */
+  repeatOffenderCount: Scalars['Int'];
+  /** Percentage of offenders who are repeat offenders */
+  repeatOffenderPercentage: Scalars['Float'];
+  /** Total number of incidents */
+  totalIncidents: Scalars['Int'];
+  /** Total number of unique offenders */
+  totalOffenders: Scalars['Int'];
+  /** Number of incidents without linked offenders */
+  unlinkedIncidents: Scalars['Int'];
 };
 
 export type IncidentOffenderWhereInput = {
@@ -9415,6 +9615,22 @@ export type InvestigationVehiclesArgs = {
   where?: InputMaybe<VehicleWhereInput>;
 };
 
+export type InvestigationByType = {
+  __typename?: 'InvestigationByType';
+  /** Average offenders identified per investigation */
+  averageOffendersIdentified: Scalars['Float'];
+  /** Average resolution time */
+  averageResolutionDays: Scalars['Float'];
+  /** Number of investigations */
+  count: Scalars['Int'];
+  /** Type/category of investigation */
+  investigationType: Scalars['String'];
+  /** Number resolved */
+  resolvedCount: Scalars['Int'];
+  /** Success rate for this type */
+  successRate: Scalars['Float'];
+};
+
 export type InvestigationListRelationFilter = {
   every?: InputMaybe<InvestigationWhereInput>;
   none?: InputMaybe<InvestigationWhereInput>;
@@ -9525,6 +9741,28 @@ export enum InvestigationStatus {
   Paused = 'PAUSED'
 }
 
+export type InvestigationSuccessRate = {
+  __typename?: 'InvestigationSuccessRate';
+  /** Average days to resolve an investigation */
+  averageResolutionDays: Scalars['Float'];
+  /** Number of closed investigations */
+  closedInvestigations: Scalars['Int'];
+  /** Investigations linked to incidents */
+  investigationsWithIncidents: Scalars['Int'];
+  /** Investigations that identified offenders */
+  investigationsWithOffenders: Scalars['Int'];
+  /** Percentage of investigations that identified offenders */
+  offenderIdentificationRate: Scalars['Float'];
+  /** Number of open investigations */
+  openInvestigations: Scalars['Int'];
+  /** Number of resolved investigations */
+  resolvedInvestigations: Scalars['Int'];
+  /** Percentage of investigations resolved successfully */
+  successRate: Scalars['Float'];
+  /** Total number of investigations */
+  totalInvestigations: Scalars['Int'];
+};
+
 export type InvestigationSummary = {
   __typename?: 'InvestigationSummary';
   closed: Scalars['Int'];
@@ -9543,6 +9781,18 @@ export type InvestigationTableWhereInput = {
   search?: InputMaybe<Scalars['String']>;
   status?: InputMaybe<Array<InvestigationStatus>>;
   totalValue?: InputMaybe<Scalars['Int']>;
+};
+
+export type InvestigationTimeline = {
+  __typename?: 'InvestigationTimeline';
+  /** Investigations created */
+  created: Scalars['Int'];
+  /** Month */
+  month: Scalars['String'];
+  /** Investigations resolved */
+  resolved: Scalars['Int'];
+  /** Success rate for the month */
+  successRate: Scalars['Float'];
 };
 
 export type InvestigationWhereInput = {
@@ -9873,6 +10123,12 @@ export type ListArticles = {
 export type ListBusinessContribution = {
   __typename?: 'ListBusinessContribution';
   businessContributions: Array<BusinessContributions>;
+  total: Scalars['Int'];
+};
+
+export type ListBusinessQuestions = {
+  __typename?: 'ListBusinessQuestions';
+  businessQuestions: Array<BusinessQuestion>;
   total: Scalars['Int'];
 };
 
@@ -11024,6 +11280,7 @@ export type Mutation = {
   createBlurFaces: Image;
   createBusiness: Business;
   createBusinessCsvZip: Scalars['String'];
+  createBusinessQuestion: BusinessQuestion;
   createChat: Chat;
   createChecklistCsvZip: Scalars['String'];
   createCollection: RekCollection;
@@ -11079,6 +11336,7 @@ export type Mutation = {
   deleteBan: Ban;
   deleteBrand: Brand;
   deleteBusiness: Business;
+  deleteBusinessQuestion: BusinessQuestion;
   deleteChat: Chat;
   deleteCrimeGroup: CrimeGroup;
   deleteCustomGallery: CustomGallery;
@@ -11184,6 +11442,7 @@ export type Mutation = {
   startEnhancedAudioStream: EnhancedAudioSession;
   stockItemImport: SystemTask;
   streamAudioChunk: AudioProcessingResult;
+  submitBusinessAnswers: SubmitBusinessAnswersResult;
   subscribeToCrimeGroup: CrimeGroup;
   subscribeToIncident: Incident;
   subscribeToInvestigation: Investigation;
@@ -11206,6 +11465,7 @@ export type Mutation = {
   unsubscribeToInvestigation: Investigation;
   unsubscribeToVehicle: Vehicle;
   updateBusiness: Business;
+  updateBusinessQuestion: BusinessQuestion;
   updateChat: Chat;
   updateChecklist: Checklist;
   updateCrimeGroup: CrimeGroup;
@@ -11414,6 +11674,11 @@ export type MutationCreateBusinessArgs = {
 
 export type MutationCreateBusinessCsvZipArgs = {
   where: BusinessWhereInput;
+};
+
+
+export type MutationCreateBusinessQuestionArgs = {
+  data: CreateBusinessQuestionInput;
 };
 
 
@@ -11694,6 +11959,11 @@ export type MutationDeleteBrandArgs = {
 
 export type MutationDeleteBusinessArgs = {
   where: BusinessWhereUniqueInput;
+};
+
+
+export type MutationDeleteBusinessQuestionArgs = {
+  where: BusinessQuestionWhereUniqueInput;
 };
 
 
@@ -12196,6 +12466,11 @@ export type MutationStreamAudioChunkArgs = {
 };
 
 
+export type MutationSubmitBusinessAnswersArgs = {
+  data: SubmitBusinessAnswersInput;
+};
+
+
 export type MutationSubscribeToCrimeGroupArgs = {
   where: UniqueId;
 };
@@ -12279,6 +12554,12 @@ export type MutationUnsubscribeToVehicleArgs = {
 export type MutationUpdateBusinessArgs = {
   data: BusinessUpdateInput;
   where: BusinessWhereUniqueInput;
+};
+
+
+export type MutationUpdateBusinessQuestionArgs = {
+  data: UpdateBusinessQuestionInput;
+  where: BusinessQuestionWhereUniqueInput;
 };
 
 
@@ -14078,6 +14359,8 @@ export type OffenderOrderByWithRelationInput = {
   targetedGoods?: InputMaybe<SortOrder>;
   tempId?: InputMaybe<SortOrder>;
   todos?: InputMaybe<TodoOrderByRelationAggregateInput>;
+  totalIncidentsCount?: InputMaybe<SortOrder>;
+  totalValueCount?: InputMaybe<SortOrder>;
   updatedAt?: InputMaybe<SortOrder>;
   updates?: InputMaybe<UpdateOrderByRelationAggregateInput>;
   uploaded?: InputMaybe<SortOrder>;
@@ -14784,6 +15067,36 @@ export type Permissions = {
   model: PermissionModel;
 };
 
+export type PlatformFeatureUsage = {
+  __typename?: 'PlatformFeatureUsage';
+  /** Feature name */
+  featureName: Scalars['String'];
+  /** Platform type */
+  platform: Scalars['String'];
+  /** Number of unique users who used this feature */
+  uniqueUsers: Scalars['Int'];
+  /** Number of times feature was used */
+  usageCount: Scalars['Int'];
+};
+
+export type PlatformUsageBreakdown = {
+  __typename?: 'PlatformUsageBreakdown';
+  /** Average sessions per user on this platform */
+  averageSessionsPerUser: Scalars['Float'];
+  /** Percentage of total sessions */
+  percentageOfSessions: Scalars['Float'];
+  /** Percentage of total users */
+  percentageOfUsers: Scalars['Float'];
+  /** Platform type (WEB, IOS, ANDROID) */
+  platform: Scalars['String'];
+  /** Number of sessions from this platform */
+  sessionCount: Scalars['Int'];
+  /** Total actions performed on this platform */
+  totalActions: Scalars['Int'];
+  /** Number of unique users on this platform */
+  uniqueUsers: Scalars['Int'];
+};
+
 export enum PoliceForce {
   AvonAndSomerset = 'AVON_AND_SOMERSET',
   Bedfordshire = 'BEDFORDSHIRE',
@@ -14914,6 +15227,8 @@ export type Query = {
   businessImpact: BusinessImpact;
   businessIncidentCountGraph: Array<Graph>;
   businessLossRecoveredGraph: Array<RadialGraph>;
+  businessQuestion: BusinessQuestion;
+  businessQuestionRelay: QueryBusinessQuestionRelayConnection;
   businessRelay: QueryBusinessRelayConnection;
   businessReport: BusinessReport;
   chat: Chat;
@@ -14937,6 +15252,7 @@ export type Query = {
   customQuestionsCountGraph: CustomQuestionsGraph;
   dashboard: Dashboard;
   dashboards: QueryDashboardsConnection;
+  dataQualityScore: DataQualityScore;
   dateTest: Array<Scalars['String']>;
   dateTestParser: Array<Scalars['String']>;
   demDevice: DemDevice;
@@ -14946,6 +15262,7 @@ export type Query = {
   demGroups: QueryDemGroupsConnection;
   documents: QueryDocumentsConnection;
   documentsNoFolder: QueryDocumentsNoFolderConnection;
+  featureAdoptionRate: Array<FeatureAdoptionRate>;
   feedItem: FeedItem;
   feedItems: Array<FeedItem>;
   feedRelay: QueryFeedRelayConnection;
@@ -14961,11 +15278,14 @@ export type Query = {
   images: Array<Image>;
   incident: Incident;
   incidentCount: Scalars['Int'];
+  incidentDataQuality: Array<IncidentDataQuality>;
   incidentFeed: Array<Incident>;
   incidentHeatPerformance: ListIncidentsHeatPerformance;
   incidentItems: QueryIncidentItemsConnection;
   incidentMapRelay: QueryIncidentMapRelayConnection;
   incidentMonthGraph: Array<Graph>;
+  incidentMonthlyByScheme: Array<IncidentMonthlyByScheme>;
+  incidentOffenderRatio: IncidentOffenderRatio;
   incidentRelaySimple: QueryIncidentRelaySimpleConnection;
   incidentTableReport: ListIncidentPerformance;
   incidents: Array<Incident>;
@@ -14976,8 +15296,11 @@ export type Query = {
   investigation: Investigation;
   investigationPerformance: ListInvestigationPerformance;
   investigationRelay: QueryInvestigationRelayConnection;
+  investigationSuccessRate: InvestigationSuccessRate;
   investigationTableReport: ListInvestigationPerformance;
+  investigationTimeline: Array<InvestigationTimeline>;
   investigations: Array<Investigation>;
+  investigationsByType: Array<InvestigationByType>;
   isPasswordDisabled: Scalars['Boolean'];
   latestIncident?: Maybe<LatestIncident>;
   latestIncidents: QueryLatestIncidentsConnection;
@@ -14985,6 +15308,7 @@ export type Query = {
   listActions: ListActions;
   listArticles: ListArticles;
   listArticlesRelay: QueryListArticlesRelayConnection;
+  listBusinessQuestions: ListBusinessQuestions;
   listBusinesses: ListBusinesses;
   listCrimeGroups: ListCrimeGroups;
   listCustomGalleries: ListCustomGalleries;
@@ -15033,12 +15357,15 @@ export type Query = {
   offenders: Array<Offender>;
   offendersPerformance: ListOffenderPerformance;
   performanceReport: PerformanceReport;
+  platformFeatureUsage: Array<PlatformFeatureUsage>;
+  platformUsageBreakdown: Array<PlatformUsageBreakdown>;
   previewIncidentExport: IncidentExport;
   question: Question;
   questions: QueryQuestionsConnection;
   recycledItem?: Maybe<RecycledItem>;
   recycledItems: Array<RecycledItem>;
   recycledItemsCount: Scalars['Int'];
+  repeatOffenderDetails: Array<RepeatOffenderDetail>;
   reportGroup: ReportGroup;
   reportGroups: QueryReportGroupsConnection;
   reportTemplate: ReportTemplate;
@@ -15048,6 +15375,7 @@ export type Query = {
   role: CustomRole;
   roles: QueryRolesConnection;
   scheme: Scheme;
+  schemeDashboardStats: SchemeDashboardStats;
   schemes: Array<Scheme>;
   searchAudioIncidentGoods: Array<StockItemCandidate>;
   searchOffenders: QuerySearchOffendersConnection;
@@ -15077,16 +15405,19 @@ export type Query = {
   translateText: Array<TranslatedText>;
   updates: Array<Update>;
   user: User;
+  userActivityGauge: UserActivityGauge;
   userByEmail?: Maybe<User>;
   userChat: UserChat;
   userChats: Array<UserChat>;
   userContact?: Maybe<Contact>;
   userContributions: ListUserContribution;
+  userEngagementDepth: Array<UserEngagementDepth>;
   userGroupRelay: QueryUserGroupRelayConnection;
   userIncidentCountGraph: Array<Graph>;
   userNew: UserNew;
   userNotification: UserNotification;
   userNotifications: Array<UserNotification>;
+  userPlatformPreferences: Array<UserPlatformPreference>;
   userScheme: UserScheme;
   userSchemes: Array<UserScheme>;
   userSessionsGraph: Array<RadialValueGraph>;
@@ -15341,6 +15672,23 @@ export type QueryBusinessLossRecoveredGraphArgs = {
 };
 
 
+export type QueryBusinessQuestionArgs = {
+  where: BusinessQuestionWhereUniqueInput;
+};
+
+
+export type QueryBusinessQuestionRelayArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<BusinessQuestionRelayOrderInput>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where: BusinessQuestionRelayWhereInput;
+};
+
+
 export type QueryBusinessRelayArgs = {
   after?: InputMaybe<Scalars['String']>;
   before?: InputMaybe<Scalars['String']>;
@@ -15486,6 +15834,13 @@ export type QueryDashboardsArgs = {
 };
 
 
+export type QueryDataQualityScoreArgs = {
+  endDate?: InputMaybe<Scalars['String']>;
+  schemeId: Scalars['String'];
+  startDate?: InputMaybe<Scalars['String']>;
+};
+
+
 export type QueryDateTestArgs = {
   date: Scalars['DateTime'];
   parseUKDateTest?: InputMaybe<Scalars['String']>;
@@ -15554,6 +15909,13 @@ export type QueryDocumentsNoFolderArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<DocumentWhereInput>;
+};
+
+
+export type QueryFeatureAdoptionRateArgs = {
+  endDate?: InputMaybe<Scalars['String']>;
+  schemeId: Scalars['String'];
+  startDate?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -15654,6 +16016,15 @@ export type QueryIncidentCountArgs = {
 };
 
 
+export type QueryIncidentDataQualityArgs = {
+  endDate?: InputMaybe<Scalars['String']>;
+  limit?: InputMaybe<Scalars['Int']>;
+  minQualityScore?: InputMaybe<Scalars['Float']>;
+  schemeId: Scalars['String'];
+  startDate?: InputMaybe<Scalars['String']>;
+};
+
+
 export type QueryIncidentFeedArgs = {
   after?: InputMaybe<Scalars['String']>;
   approved?: InputMaybe<Scalars['Boolean']>;
@@ -15695,6 +16066,21 @@ export type QueryIncidentMapRelayArgs = {
 
 export type QueryIncidentMonthGraphArgs = {
   where: BusinessIncidentsCountGraphInput;
+};
+
+
+export type QueryIncidentMonthlyBySchemeArgs = {
+  endDate: Scalars['String'];
+  groupBy?: InputMaybe<Scalars['String']>;
+  schemeIds: Array<Scalars['String']>;
+  startDate: Scalars['String'];
+};
+
+
+export type QueryIncidentOffenderRatioArgs = {
+  endDate?: InputMaybe<Scalars['String']>;
+  schemeId: Scalars['String'];
+  startDate?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -15771,8 +16157,21 @@ export type QueryInvestigationRelayArgs = {
 };
 
 
+export type QueryInvestigationSuccessRateArgs = {
+  endDate?: InputMaybe<Scalars['String']>;
+  schemeId: Scalars['String'];
+  startDate?: InputMaybe<Scalars['String']>;
+};
+
+
 export type QueryInvestigationTableReportArgs = {
   where: InvestigationTableWhereInput;
+};
+
+
+export type QueryInvestigationTimelineArgs = {
+  months?: InputMaybe<Scalars['Int']>;
+  schemeId: Scalars['String'];
 };
 
 
@@ -15783,6 +16182,13 @@ export type QueryInvestigationsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<InvestigationWhereInput>;
+};
+
+
+export type QueryInvestigationsByTypeArgs = {
+  endDate?: InputMaybe<Scalars['String']>;
+  schemeId: Scalars['String'];
+  startDate?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -15839,6 +16245,14 @@ export type QueryListArticlesRelayArgs = {
   order?: InputMaybe<ArticleOrderByWithRelationInput>;
   scheme: SchemeWhereUniqueInput;
   where?: InputMaybe<ArticleWhereInput>;
+};
+
+
+export type QueryListBusinessQuestionsArgs = {
+  orderBy?: InputMaybe<Array<BusinessQuestionOrderBy>>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<BusinessQuestionWhereInput>;
 };
 
 
@@ -16204,6 +16618,20 @@ export type QueryPerformanceReportArgs = {
 };
 
 
+export type QueryPlatformFeatureUsageArgs = {
+  endDate?: InputMaybe<Scalars['String']>;
+  schemeId: Scalars['String'];
+  startDate?: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryPlatformUsageBreakdownArgs = {
+  endDate?: InputMaybe<Scalars['String']>;
+  schemeId: Scalars['String'];
+  startDate?: InputMaybe<Scalars['String']>;
+};
+
+
 export type QueryPreviewIncidentExportArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
@@ -16248,6 +16676,15 @@ export type QueryRecycledItemsCountArgs = {
   schemeId: Scalars['String'];
   search?: InputMaybe<Scalars['String']>;
   take?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type QueryRepeatOffenderDetailsArgs = {
+  endDate?: InputMaybe<Scalars['String']>;
+  limit?: InputMaybe<Scalars['Int']>;
+  minIncidents?: InputMaybe<Scalars['Int']>;
+  schemeId: Scalars['String'];
+  startDate?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -16312,6 +16749,11 @@ export type QueryRolesArgs = {
 
 export type QuerySchemeArgs = {
   where: SchemeWhereUniqueInput;
+};
+
+
+export type QuerySchemeDashboardStatsArgs = {
+  schemeId: Scalars['String'];
 };
 
 
@@ -16534,6 +16976,12 @@ export type QueryUserArgs = {
 };
 
 
+export type QueryUserActivityGaugeArgs = {
+  daysPeriod?: InputMaybe<Scalars['Int']>;
+  schemeId: Scalars['String'];
+};
+
+
 export type QueryUserByEmailArgs = {
   email: Scalars['String'];
 };
@@ -16556,6 +17004,14 @@ export type QueryUserChatsArgs = {
 
 export type QueryUserContributionsArgs = {
   where: UserContributionWhereInput;
+};
+
+
+export type QueryUserEngagementDepthArgs = {
+  endDate?: InputMaybe<Scalars['String']>;
+  limit?: InputMaybe<Scalars['Int']>;
+  schemeId: Scalars['String'];
+  startDate?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -16593,6 +17049,14 @@ export type QueryUserNotificationsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<UserNotificationWhereInput>;
+};
+
+
+export type QueryUserPlatformPreferencesArgs = {
+  endDate?: InputMaybe<Scalars['String']>;
+  limit?: InputMaybe<Scalars['Int']>;
+  schemeId: Scalars['String'];
+  startDate?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -16765,6 +17229,19 @@ export type QueryBrandsConnectionEdge = {
   __typename?: 'QueryBrandsConnectionEdge';
   cursor: Scalars['String'];
   node: Brand;
+};
+
+export type QueryBusinessQuestionRelayConnection = {
+  __typename?: 'QueryBusinessQuestionRelayConnection';
+  edges: Array<QueryBusinessQuestionRelayConnectionEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type QueryBusinessQuestionRelayConnectionEdge = {
+  __typename?: 'QueryBusinessQuestionRelayConnectionEdge';
+  cursor: Scalars['String'];
+  node: BusinessQuestion;
 };
 
 export type QueryBusinessRelayConnection = {
@@ -17999,6 +18476,26 @@ export type RelationSet = {
   set?: InputMaybe<Array<UniqueId>>;
 };
 
+export type RepeatOffenderDetail = {
+  __typename?: 'RepeatOffenderDetail';
+  /** Categories of incidents */
+  categories: Array<Scalars['String']>;
+  /** Days between first and last incident */
+  daysBetweenIncidents: Scalars['Int'];
+  /** Date of first incident */
+  firstIncidentDate: Scalars['DateTime'];
+  /** Number of incidents */
+  incidentCount: Scalars['Int'];
+  /** Date of most recent incident */
+  lastIncidentDate: Scalars['DateTime'];
+  /** Offender ID */
+  offenderId: Scalars['String'];
+  /** Offender name */
+  offenderName: Scalars['String'];
+  /** Total value of incidents if available */
+  totalValue?: Maybe<Scalars['Float']>;
+};
+
 export type ReportGroup = {
   __typename?: 'ReportGroup';
   createdAt: Scalars['Date'];
@@ -18975,6 +19472,22 @@ export type SchemeCreateInput = {
   preset?: InputMaybe<Scalars['String']>;
 };
 
+export type SchemeDashboardStats = {
+  __typename?: 'SchemeDashboardStats';
+  /** Number of users who logged in this month */
+  activeUsersThisMonth: Scalars['Int'];
+  /** Number of incidents created this month */
+  incidentsThisMonth: Scalars['Int'];
+  /** Total number of incidents in the scheme */
+  totalIncidents: Scalars['Int'];
+  /** Total number of offenders in the scheme */
+  totalOffenders: Scalars['Int'];
+  /** Total number of user sessions (login events) */
+  totalUserSessions: Scalars['Int'];
+  /** Total number of users in the scheme */
+  totalUsers: Scalars['Int'];
+};
+
 export type SchemeInputArg = {
   id?: InputMaybe<StringFilter>;
 };
@@ -19163,6 +19676,7 @@ export type SchemeUpdateInput = {
   autoPopulateDescription?: InputMaybe<SetBooleanHelper>;
   checklistFeatureActive?: InputMaybe<Scalars['Boolean']>;
   collectionIds?: InputMaybe<Array<Scalars['String']>>;
+  customer?: InputMaybe<SetStringHelper>;
   darkLogo?: InputMaybe<ImageUpdateOneWithoutSchemeDarkNestedInput>;
   defaultBulletinEmails?: InputMaybe<SetBooleanHelper>;
   defaultBulletinPush?: InputMaybe<SetBooleanHelper>;
@@ -19185,12 +19699,16 @@ export type SchemeUpdateInput = {
   incidentCustomQuestionRadio?: InputMaybe<SetBooleanHelper>;
   incidentRetention?: InputMaybe<SetIntHelper>;
   incidentTypeTooltip?: InputMaybe<SetStringHelper>;
+  labels?: InputMaybe<Array<Scalars['String']>>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeDarkNestedInput>;
   mg11Available?: InputMaybe<Scalars['Boolean']>;
   name?: InputMaybe<SetStringHelper>;
   needJustification?: InputMaybe<SetBooleanHelper>;
   offenderRetention?: InputMaybe<SetIntHelper>;
   oneSelectedIncidentTypeOnly?: InputMaybe<SetBooleanHelper>;
+  policeSharing?: InputMaybe<SetBooleanHelper>;
+  policeSharingGroupIds?: InputMaybe<Array<Scalars['String']>>;
+  policeSharingTagIds?: InputMaybe<Array<Scalars['String']>>;
   reportOnly?: InputMaybe<SetBooleanHelper>;
   requireActivityAuthorised?: InputMaybe<SetBooleanHelper>;
   requireSiteNumberForUsers?: InputMaybe<SetBooleanHelper>;
@@ -20415,6 +20933,18 @@ export type Style = {
   __typename?: 'Style';
   height: Scalars['Int'];
   width: Scalars['Int'];
+};
+
+export type SubmitBusinessAnswersInput = {
+  answers: Array<BusinessAnswerInput>;
+  businessId: Scalars['String'];
+};
+
+export type SubmitBusinessAnswersResult = {
+  __typename?: 'SubmitBusinessAnswersResult';
+  message?: Maybe<Scalars['String']>;
+  savedAnswers: Scalars['Int'];
+  success: Scalars['Boolean'];
 };
 
 export type Subscription = {
@@ -22049,6 +22579,20 @@ export type UpdateBusinessOnUserEnvelope = {
   where?: InputMaybe<BusinessWhereUniqueInput>;
 };
 
+export type UpdateBusinessQuestionInput = {
+  actions?: InputMaybe<Array<Scalars['JSON']>>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
+  dependentBrands?: InputMaybe<Array<Scalars['String']>>;
+  dependentQuestions?: InputMaybe<Array<Scalars['JSON']>>;
+  dependentTags?: InputMaybe<Array<Scalars['String']>>;
+  failureAnswer?: InputMaybe<Scalars['String']>;
+  failureMessage?: InputMaybe<Scalars['String']>;
+  priority?: InputMaybe<Scalars['Int']>;
+  req?: InputMaybe<Scalars['Boolean']>;
+  roleIds?: InputMaybe<Array<Scalars['String']>>;
+  tooltip?: InputMaybe<Scalars['String']>;
+};
+
 export type UpdateBusinessRelationEnvelope = {
   data?: InputMaybe<BusinessUpdateInput>;
   where?: InputMaybe<BusinessWhereUniqueInput>;
@@ -23225,6 +23769,20 @@ export type UserVehiclesArgs = {
   where?: InputMaybe<VehicleWhereInput>;
 };
 
+export type UserActivityGauge = {
+  __typename?: 'UserActivityGauge';
+  /** Number of users who have not been online in the past 30 days */
+  offlineCount: Scalars['Int'];
+  /** Percentage of users offline */
+  offlinePercentage: Scalars['Float'];
+  /** Number of users who have been online in the past 30 days */
+  onlineCount: Scalars['Int'];
+  /** Percentage of users online */
+  onlinePercentage: Scalars['Float'];
+  /** Total number of users in the scheme */
+  totalCount: Scalars['Int'];
+};
+
 export type UserChat = {
   __typename?: 'UserChat';
   chat: Chat;
@@ -23367,6 +23925,36 @@ export type UserContributionWhereInput = {
   rolesIds?: InputMaybe<Array<Scalars['String']>>;
   schemeIds: Array<Scalars['String']>;
   search?: InputMaybe<Scalars['String']>;
+};
+
+export type UserEngagementDepth = {
+  __typename?: 'UserEngagementDepth';
+  /** User email */
+  email?: Maybe<Scalars['String']>;
+  /** Calculated engagement score (0-100) */
+  engagementScore: Scalars['Float'];
+  /** Number of incidents created */
+  incidentsCreated: Scalars['Int'];
+  /** Number of investigations created */
+  investigationsCreated: Scalars['Int'];
+  /** Last activity date */
+  lastActive?: Maybe<Scalars['DateTime']>;
+  /** Number of messages posted */
+  messagesPosted: Scalars['Int'];
+  /** Number of offenders created */
+  offendersCreated: Scalars['Int'];
+  /** Number of sessions in period */
+  sessionCount: Scalars['Int'];
+  /** Total number of actions performed */
+  totalActions: Scalars['Int'];
+  /** Number of updates created */
+  updatesCreated: Scalars['Int'];
+  /** User ID */
+  userId: Scalars['String'];
+  /** User full name */
+  userName: Scalars['String'];
+  /** Number of vehicles created */
+  vehiclesCreated: Scalars['Int'];
 };
 
 export type UserGroupsPermissionFilter = {
@@ -23594,6 +24182,24 @@ export type UserOrderByWithRelationInput = {
   updatedAt?: InputMaybe<SortOrder>;
   uploaded?: InputMaybe<SortOrder>;
   vehicles?: InputMaybe<VehicleOrderByRelationAggregateInput>;
+};
+
+export type UserPlatformPreference = {
+  __typename?: 'UserPlatformPreference';
+  /** Number of Android sessions */
+  androidSessions: Scalars['Int'];
+  /** Number of iOS sessions */
+  iosSessions: Scalars['Int'];
+  /** Whether user uses multiple platforms */
+  multiPlatformUser: Scalars['Boolean'];
+  /** Most used platform */
+  primaryPlatform: Scalars['String'];
+  /** User ID */
+  userId: Scalars['String'];
+  /** User name */
+  userName: Scalars['String'];
+  /** Number of web sessions */
+  webSessions: Scalars['Int'];
 };
 
 export type UserRelayAdminWhereInput = {
