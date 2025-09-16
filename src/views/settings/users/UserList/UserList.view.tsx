@@ -1,12 +1,14 @@
 import type { UserListQuery } from '#/views/settings/users/UserList/__generated__/UserList.generated';
 import type { MutationUpdaterFn } from '@apollo/client';
-import type { CreateUserInDatabaseMutation } from 'graphql/users/mutations/__generated__/create-user-in-databse.generated';
+import type {
+  CreateUserInDatabaseMutation
+} from 'graphql/users/mutations/__generated__/create-user-in-databse.generated';
 import type { InviteExistingUserMutation } from 'graphql/users/mutations/__generated__/invite-exiting-user.generated';
 import type { UserSort } from 'types/enums/user_sort';
 
 import { faEdit, faFilter, faPlus } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, Col, Drawer, Input, Row, Table, Tag, Typography } from 'antd';
+import { Button, Col, Drawer, Row, Table, Tag, Typography } from 'antd';
 import AddUser from 'components/form-components/user/AddUser';
 import EditUser from 'components/form-components/user/EditUser';
 import UserFilter from 'components/users/UserFilter';
@@ -15,6 +17,7 @@ import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { GetUserStatusValues, userStatusValues } from 'types/enums/user_status';
+import DebouncedInput from '#/utils/debounced-input';
 
 interface Props {
   addUser: boolean;
@@ -28,7 +31,6 @@ interface Props {
   loading: boolean;
   onPaginationChange: (page: number, pageSize: number) => void;
   order: UserSort;
-  search: string;
   selectedGroups: string[];
   setOrder: (value: UserSort) => void;
   setSearch: (value: string) => void;
@@ -62,7 +64,6 @@ const UserList = ({
   loading,
   onPaginationChange,
   order,
-  search,
   selectedGroups,
   setOrder,
   setSearch,
@@ -91,13 +92,14 @@ const UserList = ({
     <div className="list-view">
       <Row gutter={8} style={{ marginBottom: 10 }}>
         <Col span={8}>
-          <Input
+          <DebouncedInput
             allowClear
-            onChange={(event) => setSearch(event.target.value)}
+            onChange={(event) => {
+              setSearch(event.target.value);
+            }}
             placeholder={intl.formatMessage({
-              defaultMessage: 'Search for a user...',
+              defaultMessage: 'Search for an user...',
             })}
-            value={search}
           />
         </Col>
         <Col flex={1} />

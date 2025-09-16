@@ -16,7 +16,6 @@ const UserList = (): JSX.Element => {
     loading,
     onPaginationChange,
     order,
-    search,
     selectedGroups,
     setOrder,
     setSearch,
@@ -46,7 +45,6 @@ const UserList = (): JSX.Element => {
       loading={loading}
       onPaginationChange={onPaginationChange}
       order={order}
-      search={search}
       selectedGroups={selectedGroups}
       setOrder={setOrder}
       setSearch={setSearch}

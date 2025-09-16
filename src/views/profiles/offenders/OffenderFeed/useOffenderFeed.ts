@@ -137,13 +137,13 @@ const useOffenderFeed = (): Return => {
       }
       case OffenderSort.noIncidentAsc: {
         return {
-          order: { incidents: { _count: SortOrder.Asc } },
+          order: { totalIncidentsCount: SortOrder.Asc },
           orderByValue: null,
         };
       }
       case OffenderSort.noIncidentDesc: {
         return {
-          order: { incidents: { _count: SortOrder.Desc } },
+          order: { totalIncidentsCount: SortOrder.Desc },
           orderByValue: null,
         };
       }
