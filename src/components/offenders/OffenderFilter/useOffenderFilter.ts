@@ -1,5 +1,3 @@
-import type { SearchBusinessesQuery } from 'graphql/businesses/queries/__generated__/search-businesses.generated';
-import { useSearchBusinessesQuery } from 'graphql/businesses/queries/__generated__/search-businesses.generated';
 import type { Age, Build, Gender, PoliceForce, Race } from 'graphql/types';
 import { Model, SortOrder } from 'graphql/types';
 import type { OffenderFilters } from 'state/data-model';
@@ -12,8 +10,6 @@ import { useAtomValue } from 'jotai/index';
 import { OffenderSort, useStoreActions, useStoreState } from 'state';
 
 interface Return {
-  businessData: SearchBusinessesQuery | undefined;
-  businessesLoading: boolean;
   clearFilters: () => void;
   order: OffenderSort;
   publicOffenderDOB: boolean;
@@ -64,25 +60,6 @@ const useOffenderFilter = (): Return => {
       },
     },
   });
-
-  const { data: businessData, loading: businessesLoading } =
-    useSearchBusinessesQuery({
-      variables: {
-        orderBy: {
-          name: SortOrder.Asc,
-        },
-        take: 100,
-        where: {
-          schemes: {
-            some: {
-              id: {
-                equals: schemeId,
-              },
-            },
-          },
-        },
-      },
-    });
 
   const setGroupsFilter = (values: string[]) => {
     setOffendersState({
@@ -242,8 +219,6 @@ const useOffenderFilter = (): Return => {
   };
 
   return {
-    businessData,
-    businessesLoading,
     clearFilters,
     order,
     publicOffenderDOB,
