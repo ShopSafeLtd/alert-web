@@ -1,10 +1,8 @@
-import type { BusinessesSelectQueryVariables } from '#/components/form-components/BusinessesSelect/__generated__/BusinessSelectQuery.generated';
-import type { SizeType } from 'antd/lib/config-provider/SizeContext';
 import type {
-  DefaultOptionType,
-  LabeledValue,
-  SelectProps,
-} from 'antd/lib/select';
+  BusinessesSelectQueryVariables
+} from '#/components/form-components/BusinessesSelect/__generated__/BusinessSelectQuery.generated';
+import type { SizeType } from 'antd/lib/config-provider/SizeContext';
+import type { DefaultOptionType, LabeledValue, SelectProps, } from 'antd/lib/select';
 
 import {
   useBusinessesSideListLazyQuery,
@@ -65,13 +63,15 @@ function convertToArrayOfStrings(onChangeValue: ValueType): string[] {
   if (!onChangeValue) return [];
   if (Array.isArray(onChangeValue)) {
     if (onChangeValue.every((item) => typeof item === 'string')) {
-      return onChangeValue;
+      return onChangeValue as string[];
     } else if (onChangeValue.every((item) => typeof item === 'number')) {
-      return onChangeValue.map((item) => item.toString());
-    } else if (onChangeValue[0].label === undefined) {
+      return (onChangeValue as number[]).map((item) => item.toString());
+    } else if ((onChangeValue[0] as LabeledValue).label === undefined) {
       return [];
     } else {
-      return onChangeValue.map((item) => item.value.toString());
+      return (onChangeValue as LabeledValue[]).map((item) =>
+        item.value.toString()
+      );
     }
   } else if (typeof onChangeValue === 'string') {
     return [onChangeValue];
