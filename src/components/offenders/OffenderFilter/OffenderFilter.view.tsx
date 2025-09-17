@@ -1,4 +1,3 @@
-import type { SearchBusinessesQuery } from 'graphql/businesses/queries/__generated__/search-businesses.generated';
 import type { OffenderFilters } from 'state/data-model';
 import type { DateType } from 'types/DataType';
 
@@ -14,6 +13,7 @@ import { OffenderSort } from 'state';
 
 import useStyles from './OffenderFilter.styles';
 import { formatPoliceForceLabel } from '#/utils/formatPoliceAreas';
+import BusinessesSelect from '#/components/form-components/BusinessesSelect/BusinessesSelect.view';
 
 const { RangePicker } = DatePicker;
 const { useForm } = Form;
@@ -23,8 +23,6 @@ interface FormData {
 }
 
 interface Props {
-  businessData: SearchBusinessesQuery | undefined;
-  businessesLoading: boolean;
   clearFilters: () => void;
   order: OffenderSort;
   publicOffenderDOB: boolean;
@@ -46,10 +44,7 @@ interface Props {
   variables: OffenderFilters;
 }
 
-// TODO change to businesses select component instead of doing a search
 const OffenderFilter = ({
-  businessData,
-  businessesLoading,
   clearFilters,
   order,
   publicOffenderDOB,
@@ -466,28 +461,15 @@ const OffenderFilter = ({
               defaultMessage: 'Offender has incidents at...',
             })}
           </Typography.Paragraph>
-          <Select
-            allowClear
+          <BusinessesSelect
             className={classes.select}
-            loading={businessesLoading}
+            maxTagCount="responsive"
             mode="multiple"
             onChange={setBusinesses}
-            optionLabelProp="textLabel"
-            options={businessData?.listBusinesses.businesses.map((item) => ({
-              label: (
-                <div key={item.id} style={{ display: 'inline-block' }}>
-                  <Typography.Text>{item.name}</Typography.Text>
-                  <div>
-                    <Typography.Text>{item.locations[0]?.full}</Typography.Text>
-                  </div>
-                </div>
-              ),
-              textLabel: item.name,
-              value: item.id,
-            }))}
             placeholder={intl.formatMessage({
               defaultMessage: 'Select Businesses',
             })}
+            style={{ width: '100%', marginBottom: 10 }}
             value={businesses}
           />
         </Col>

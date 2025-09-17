@@ -1,10 +1,8 @@
-import type { BusinessesSelectQueryVariables } from '#/components/form-components/BusinessesSelect/__generated__/BusinessSelectQuery.generated';
-import type { SizeType } from 'antd/lib/config-provider/SizeContext';
 import type {
-  DefaultOptionType,
-  LabeledValue,
-  SelectProps,
-} from 'antd/lib/select';
+  BusinessesSelectQueryVariables
+} from '#/components/form-components/BusinessesSelect/__generated__/BusinessSelectQuery.generated';
+import type { SizeType } from 'antd/lib/config-provider/SizeContext';
+import type { DefaultOptionType, LabeledValue, SelectProps, } from 'antd/lib/select';
 
 import {
   useBusinessesSideListLazyQuery,
@@ -228,6 +226,7 @@ const BusinessesSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
   }, [initialValues, data]);
 
   const next = () => {
+    setFetchingMore(true);
     void fetchMore({
       updateQuery: (prev, { fetchMoreResult }) => {
         setFetchingMore(false);

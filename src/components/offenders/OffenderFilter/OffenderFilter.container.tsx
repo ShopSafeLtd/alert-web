@@ -5,8 +5,6 @@ import useOffenderFilter from './useOffenderFilter';
 
 const OffenderFilter = (): JSX.Element => {
   const {
-    businessData,
-    businessesLoading,
     clearFilters,
     order,
     publicOffenderDOB,
@@ -25,15 +23,12 @@ const OffenderFilter = (): JSX.Element => {
     tags,
     tagsLoading,
     variables,
-
     setPoliceAreas,
   } = useOffenderFilter();
 
   return (
     <View
       setPoliceAreas={setPoliceAreas}
-      businessData={businessData}
-      businessesLoading={businessesLoading}
       clearFilters={clearFilters}
       order={order}
       publicOffenderDOB={publicOffenderDOB}
