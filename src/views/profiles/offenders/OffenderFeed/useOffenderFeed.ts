@@ -204,6 +204,7 @@ const useOffenderFeed = (): Return => {
       : { some: filters[0] };
   };
 
+  // TODO: implement a debounce for this so things dont change everytime they use a select and waits till they stop for 0.5s - saves 100 of requests if they are selecting businesses or groups etc
   const variables: ListOffendersRelayQueryVariables = {
     scheme: {
       id: schemeId,

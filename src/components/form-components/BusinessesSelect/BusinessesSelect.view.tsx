@@ -65,15 +65,13 @@ function convertToArrayOfStrings(onChangeValue: ValueType): string[] {
   if (!onChangeValue) return [];
   if (Array.isArray(onChangeValue)) {
     if (onChangeValue.every((item) => typeof item === 'string')) {
-      return onChangeValue as string[];
+      return onChangeValue;
     } else if (onChangeValue.every((item) => typeof item === 'number')) {
-      return (onChangeValue as number[]).map((item) => item.toString());
-    } else if ((onChangeValue[0] as LabeledValue).label === undefined) {
+      return onChangeValue.map((item) => item.toString());
+    } else if (onChangeValue[0].label === undefined) {
       return [];
     } else {
-      return (onChangeValue as LabeledValue[]).map((item) =>
-        item.value.toString()
-      );
+      return onChangeValue.map((item) => item.value.toString());
     }
   } else if (typeof onChangeValue === 'string') {
     return [onChangeValue];
@@ -228,6 +226,7 @@ const BusinessesSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
   }, [initialValues, data]);
 
   const next = () => {
+    setFetchingMore(true);
     void fetchMore({
       updateQuery: (prev, { fetchMoreResult }) => {
         setFetchingMore(false);
