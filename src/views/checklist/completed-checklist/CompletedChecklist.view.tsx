@@ -82,9 +82,6 @@ const CompletedChecklistView = ({
     total: number;
   }[] = [];
 
-  // eslint-disable-next-line no-restricted-syntax
-  // eslint-disable-next-line @typescript-eslint/no-loop-func,no-restricted-syntax
-  // eslint-disable-next-line @typescript-eslint/no-loop-func,no-restricted-syntax
   for (const section of checklistSections.filter((s) => !s.sub)) {
     // Check if the section has a dependsOnWeight property
     if (section.dependsOnWeight) {
@@ -636,7 +633,15 @@ const CompletedChecklistView = ({
               <Typography.Text strong>Completed By </Typography.Text>
             </Col>
             <Col>
-              <div dangerouslySetInnerHTML={{ __html: signature }} />
+              {signature && signature.startsWith('data:image') ? (
+                <img
+                  src={signature}
+                  alt="Completed By Signature"
+                  style={{ maxWidth: 200, maxHeight: 80 }}
+                />
+              ) : (
+                <div dangerouslySetInnerHTML={{ __html: signature }} />
+              )}
             </Col>
             <Col>
               <Space direction="vertical">
@@ -1102,7 +1107,15 @@ const CompletedChecklistView = ({
                 <Typography.Text strong>Completed By </Typography.Text>
               </Col>
               <Col>
-                <div dangerouslySetInnerHTML={{ __html: signature }} />
+                {signature && signature.startsWith('data:image') ? (
+                  <img
+                    src={signature}
+                    alt="Completed By Signature"
+                    style={{ maxWidth: 200, maxHeight: 80 }}
+                  />
+                ) : (
+                  <div dangerouslySetInnerHTML={{ __html: signature }} />
+                )}
               </Col>
               <Col>
                 <Space direction="vertical">
