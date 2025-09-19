@@ -62,7 +62,6 @@ const CompletedChecklistView = ({
     qId: string;
     url: string;
   }[] = [];
-  console.log('signature1', signature);
 
   let total = 0;
   let maxTotal = 0;
@@ -637,7 +636,7 @@ const CompletedChecklistView = ({
                 <img
                   src={signature}
                   alt="Completed By Signature"
-                  style={{ maxWidth: 200, maxHeight: 80 }}
+                  style={{ maxWidth: 400, maxHeight: 120 }}
                 />
               ) : (
                 <div dangerouslySetInnerHTML={{ __html: signature }} />
@@ -1111,7 +1110,7 @@ const CompletedChecklistView = ({
                   <img
                     src={signature}
                     alt="Completed By Signature"
-                    style={{ maxWidth: 200, maxHeight: 80 }}
+                    style={{ maxWidth: 400, maxHeight: 120 }}
                   />
                 ) : (
                   <div dangerouslySetInnerHTML={{ __html: signature }} />
