@@ -9,17 +9,34 @@ import type { FillLayer, LineLayer, MapRef } from 'react-map-gl';
 import FloatingFilterPanel from '#/components/map/FloatingFilterPanel';
 import FloatingShowFiltersButton from '#/components/map/FloatingShowFiltersButton';
 import IncidentSidebar from '#/components/map/IncidentSidebar/IncidentSidebar.view';
+import MapLegend from '#/components/map/MapLegend';
 import MultiIncidentPopup from '#/components/map/MultiIncidentPopup/MultiIncidentPopup.view';
 import ReportsSideMenu from '#/components/reports/ReportsSideMenu/ReportsSideMenu.view';
+import BCRPLayer from '#/views/reports/incident-map/layers/bcrpLayer';
+import BusinessLayer from '#/views/reports/incident-map/layers/businessLayer';
+import CameraLayer from '#/views/reports/incident-map/layers/cameraLayer';
+import {
+  clusterRingLayer,
+  incidentClusterCountLayer,
+  incidentClusterLayer,
+  incidentCountLayer,
+  incidentMarkerLayer,
+  incidentPulseLayer,
+  incidentRingLayer,
+} from '#/views/reports/incident-map/layers/incidentLayers';
 import LondonPoliceLayer from '#/views/reports/incident-map/layers/londonArea';
 import PoliceLayer from '#/views/reports/incident-map/layers/policeArea';
-import { Col, Row, Spin } from 'antd';
+import RetailParkLayer from '#/views/reports/incident-map/layers/retailParkLayer';
+import { Col, Row, Spin, Typography } from 'antd';
 import mapboxgl from 'mapbox-gl';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { FormattedMessage } from 'react-intl';
 import { Layer, Map as MapboxMap, Popup, Source } from 'react-map-gl';
 import { useStoreState } from 'state';
 
 import useStyles from './IncidentMap.styles';
+
+const { Text } = Typography;
 
 export const dataLayer: FillLayer = {
   id: 'data',
@@ -41,169 +58,7 @@ export const lineLayer: LineLayer = {
   type: 'line',
 };
 
-const ClusterLayer = (
-  <Layer
-    filter={['has', 'point_count']}
-    id="clusters"
-    paint={{
-      'circle-color': [
-        'step',
-        ['get', 'point_count'],
-        '#51bbd6',
-        50,
-        '#f1f075',
-        100,
-        '#f28cb1',
-      ],
-      'circle-radius': ['step', ['get', 'point_count'], 20, 100, 30, 750, 40],
-    }}
-    source="incidents"
-    type="circle"
-  />
-);
-
-const ClusterCountLayer = (
-  <Layer
-    filter={['has', 'point_count']}
-    id="cluster-count"
-    layout={{
-      'text-allow-overlap': true,
-      'text-field': '{point_count_abbreviated}',
-      'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-      'text-ignore-placement': true,
-      'text-size': 12,
-    }}
-    paint={{
-      'text-color': [
-        'step',
-        ['get', 'point_count'],
-        '#fff',
-        50,
-        '#000',
-        100,
-        '#fff',
-      ],
-    }}
-    source="incidents"
-    type="symbol"
-  />
-);
-
-const UnClusteredLayer = (
-  <Layer
-    filter={['!', ['has', 'point_count']]}
-    id="unclustered-point"
-    paint={{
-      'circle-color': [
-        'case',
-        ['>', ['get', 'incidentCount'], 1],
-        '#ff4d4f', // Red for multiple incidents
-        '#11b4da', // Blue for single incident
-      ],
-      'circle-radius': ['case', ['>', ['get', 'incidentCount'], 1], 10, 8],
-      'circle-stroke-color': '#fff',
-      'circle-stroke-width': 2,
-    }}
-    source="incidents"
-    type="circle"
-  />
-);
-
-const IncidentCountLayer = (
-  <Layer
-    filter={[
-      'all',
-      ['!', ['has', 'point_count']],
-      ['>', ['get', 'incidentCount'], 1],
-    ]}
-    id="incident-count"
-    layout={{
-      'text-field': ['get', 'incidentCount'],
-      'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-      'text-size': 11,
-    }}
-    paint={{
-      'text-color': '#fff',
-    }}
-    source="incidents"
-    type="symbol"
-  />
-);
-
-const BusinessClusterLayer = (
-  <Layer
-    filter={['has', 'point_count']}
-    id="clusters"
-    paint={{
-      'circle-color': 'rgb(222, 68, 54)',
-      'circle-radius': ['step', ['get', 'point_count'], 20, 100, 30, 750, 40],
-    }}
-    source="businesses"
-    type="circle"
-  />
-);
-
-const BusinessClusterCountLayer = (
-  <Layer
-    filter={['has', 'point_count']}
-    id="cluster-count"
-    layout={{
-      'text-field': '{point_count_abbreviated}',
-      'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-      'text-size': 12,
-    }}
-    paint={{
-      'text-color': '#FFF',
-    }}
-    source="businesses"
-    type="symbol"
-  />
-);
-
-const BusinessUnClusteredLayer = (
-  <Layer
-    filter={['!', ['has', 'point_count']]}
-    id="unclustered-point"
-    paint={{
-      'circle-color': 'rgb(222, 68, 54)',
-      'circle-radius': 5,
-      'circle-stroke-color': '#fff',
-      'circle-stroke-width': 0.5,
-    }}
-    source="businesses"
-    type="circle"
-  />
-);
-
-const HeatMapLayer = (
-  <Layer
-    id="heatmap"
-    maxzoom={20}
-    paint={{
-      'heatmap-intensity': {
-        stops: [
-          [11, 1],
-          [15, 3],
-        ],
-      },
-      'heatmap-opacity': 0.3,
-      'heatmap-radius': {
-        stops: [
-          [11, 15],
-          [15, 30],
-        ],
-      },
-      'heatmap-weight': 1,
-      // 'heatmap-intensity': {
-      //   stops: [
-      //     [11, 1],
-      //     [15, 3]
-      //   ]
-      // },
-    }}
-    type="heatmap"
-  />
-);
+// Layer definitions have been moved to ./layers/incidentLayers.tsx for better organization
 
 interface Props {
   brandsData: BrandsQuery | undefined;
@@ -266,8 +121,12 @@ const IncidentMap = ({
   const [showMarkers, setShowMarkers] = useState(true);
   const [showPolice, setShowPolice] = useState(false);
   const [showLondonPolice, toggleShowLondonPolice] = useState(false);
+  const [showCameras, setShowCameras] = useState(false);
+  const [showBCRP, setShowBCRP] = useState(false);
+  const [showRetailParks, setShowRetailParks] = useState(false);
   const [useBcu, toggleUseBcu] = useState(false);
   const [showFilterPanel, setShowFilterPanel] = useState(true);
+  const [heatmapIntensity, setHeatmapIntensity] = useState(50); // 0-100 scale
   const [cluster, setCluster] = useState(true);
   const [selectedIncidents, setSelectedIncidents] = useState<{
     currentIndex: number;
@@ -311,6 +170,9 @@ const IncidentMap = ({
   };
   const toggleHeatmap = () => setShowHeatmap(!showHeatmap);
   const togglePolice = () => setShowPolice(!showPolice);
+  const toggleCameras = () => setShowCameras(!showCameras);
+  const toggleBCRP = () => setShowBCRP(!showBCRP);
+  const toggleRetailParks = () => setShowRetailParks(!showRetailParks);
 
   const onCloseSidebar = useCallback(() => {
     setSidebarOpen(false);
@@ -547,18 +409,23 @@ const IncidentMap = ({
         // Handle individual incident click
         else if (incidentFeature) {
           try {
-            const clickedIncident = JSON.parse(
-              incidentFeature.properties?.incident as string
-            ) as IncidentMapQuery['incidents'][number];
+            // Check if this feature has multiple incidents stored
+            const allIncidentsJson = incidentFeature.properties
+              ?.allIncidents as string | undefined;
+            let incidentsAtLocation: IncidentMapQuery['incidents'];
 
-            // Only use manual grouping when clustering is disabled or for precision
-            const incidentsAtLocation = cluster
-              ? [clickedIncident] // When clustering is enabled, treat as single incident
-              : findIncidentsAtLocation(
-                  // When clustering is disabled, find overlapping
-                  clickedIncident.location?.geoLng || 0,
-                  clickedIncident.location?.geoLat || 0
-                );
+            if (allIncidentsJson) {
+              // Multiple incidents at this location - use the stored array
+              incidentsAtLocation = JSON.parse(
+                allIncidentsJson
+              ) as IncidentMapQuery['incidents'];
+            } else {
+              // Single incident
+              const clickedIncident = JSON.parse(
+                incidentFeature.properties?.incident as string
+              ) as IncidentMapQuery['incidents'][number];
+              incidentsAtLocation = [clickedIncident];
+            }
 
             if (viewMode === 'sidebar') {
               onOpenSidebar(
@@ -639,10 +506,52 @@ const IncidentMap = ({
   );
 
   useEffect(() => {
-    mapRef.current?.moveLayer('unclustered-point');
-    mapRef.current?.moveLayer('clusters');
-    mapRef.current?.moveLayer('cluster-count');
-  }, [showHeatmap, showMarkers, showPolice, useBcu, showLondonPolice]);
+    // Small delay to ensure layers are loaded
+    const timer = setTimeout(() => {
+      if (!mapRef.current) return;
+
+      try {
+        // Move incident layers up
+        mapRef.current.moveLayer('unclustered-point');
+        mapRef.current.moveLayer('clusters');
+
+        // Move text layers to the top
+        mapRef.current.moveLayer('cluster-count');
+        mapRef.current.moveLayer('incident-count');
+
+        // If businesses are shown, ensure they're below incidents
+        if (showBusinesses && showMarkers) {
+          const map = mapRef.current.getMap();
+
+          // Check if layers exist before trying to move them
+          if (
+            map.getLayer('business-points') &&
+            map.getLayer('unclustered-point')
+          ) {
+            map.moveLayer('business-points', 'unclustered-point');
+          }
+          if (
+            map.getLayer('business-ring') &&
+            map.getLayer('business-points')
+          ) {
+            map.moveLayer('business-ring', 'business-points');
+          }
+        }
+      } catch (error) {
+        console.log('Layer reordering error:', error);
+      }
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, [
+    showHeatmap,
+    showMarkers,
+    showPolice,
+    useBcu,
+    showLondonPolice,
+    showBusinesses,
+    cluster,
+  ]);
 
   const [collapsed, setCollapsed] = useState(false);
 
@@ -658,7 +567,7 @@ const IncidentMap = ({
     return () => cancelAnimationFrame(rAF);
   }, [collapsed]);
 
-  const classes = useStyles();
+  const classes = useStyles({ colorScheme: currentTheme });
 
   // Add global styles for Mapbox popup theming
   useEffect(() => {
@@ -698,249 +607,287 @@ const IncidentMap = ({
         />
       </Col>
       <Col className={classes.page} flex={1}>
-        {loading && data?.incidents ? (
-          <div className={classes.loadingPage}>
-            <Spin />
-          </div>
-        ) : (
-          <div className={classes.mapContainer} ref={mapContainerRef}>
-            <MapboxMap
-              initialViewState={{
-                latitude: 55.37,
-                longitude: 3.43,
-                zoom: 5,
-              }}
-              interactiveLayerIds={[
-                'unclustered-point',
-                'incident-count',
-                'clusters',
-                'cluster-count',
-              ]}
-              mapLib={mapboxgl}
-              mapStyle={
-                currentTheme === 'dark'
-                  ? 'mapbox://styles/wgarrod/clua60bxj016401qse8vj1qfu'
-                  : 'mapbox://styles/wgarrod/clgkn5gb7007u01qmahuhbi6o'
-              }
-              mapboxAccessToken={import.meta.env.VITE_MAPBOX_ACCESS_TOKEN}
-              onClick={onMapClick as (event: unknown) => void}
-              onError={() => {}}
-              onMouseEnter={onMouseEnter}
-              onMouseLeave={onMouseLeave}
-              ref={mapRef}
-              style={{ height: '100vh', width: '100%' }}
-            >
-              {showMarkers && (
-                <Source
-                  cluster={cluster}
-                  clusterMaxZoom={14}
-                  clusterRadius={50}
-                  data={{
-                    features: (() => {
-                      if (!data?.incidents) return [];
+        <div className={classes.mapContainer} ref={mapContainerRef}>
+          {/* Loading overlay */}
+          {(loading || (!data && !businessData)) && (
+            <div className={classes.loadingOverlay}>
+              <div className={classes.loadingContent}>
+                <Spin size="large" />
+                <Text className={classes.loadingText}>
+                  <FormattedMessage defaultMessage="Loading map data..." />
+                </Text>
+              </div>
+            </div>
+          )}
+          <MapboxMap
+            initialViewState={{
+              latitude: 55.37,
+              longitude: 3.43,
+              zoom: 5,
+            }}
+            interactiveLayerIds={[
+              'unclustered-point',
+              'incident-count',
+              'clusters',
+              'cluster-count',
+              'business-points',
+              'business-clusters',
+            ]}
+            mapLib={mapboxgl}
+            mapStyle={
+              currentTheme === 'dark'
+                ? 'mapbox://styles/wgarrod/clua60bxj016401qse8vj1qfu'
+                : 'mapbox://styles/wgarrod/clgkn5gb7007u01qmahuhbi6o'
+            }
+            mapboxAccessToken={import.meta.env.VITE_MAPBOX_ACCESS_TOKEN}
+            onClick={onMapClick as (event: unknown) => void}
+            onError={() => {}}
+            onMouseEnter={onMouseEnter}
+            onMouseLeave={onMouseLeave}
+            ref={mapRef}
+            style={{ height: '100vh', width: '100%' }}
+          >
+            <BusinessLayer
+              businessData={businessData}
+              cluster={cluster}
+              showDetailedLabels={false}
+              showLabels={true}
+              visible={showBusinesses}
+            />
+            {showMarkers && (
+              <Source
+                cluster={cluster}
+                clusterMaxZoom={14}
+                clusterRadius={50}
+                data={{
+                  features: (() => {
+                    if (!data?.incidents) return [];
 
-                      if (cluster) {
-                        // When clustering is enabled, create individual features
-                        // Mapbox will handle the clustering automatically
-                        return data.incidents.map((incident) => ({
+                    // Always group incidents by exact location first
+                    const locationGroups = new Map<
+                      string,
+                      IncidentSimpleMapQuery['incidents'][number][]
+                    >();
+
+                    for (const incident of data.incidents) {
+                      const lng = incident.location?.geoLng || 0;
+                      const lat = incident.location?.geoLat || 0;
+                      const locationKey = `${lng.toFixed(6)},${lat.toFixed(6)}`;
+
+                      if (!locationGroups.has(locationKey)) {
+                        locationGroups.set(locationKey, []);
+                      }
+                      locationGroups.get(locationKey)!.push(incident);
+                    }
+
+                    // Create features with proper incident counts
+                    return [...locationGroups.entries()].map(
+                      ([locationKey, incidents]) => {
+                        const [lng, lat] = locationKey.split(',').map(Number);
+                        const [primaryIncident] = incidents;
+
+                        return {
                           geometry: {
-                            coordinates: [
-                              incident.location?.geoLng || 0,
-                              incident.location?.geoLat || 0,
-                            ],
+                            coordinates: [lng, lat],
                             type: 'Point' as const,
                           },
                           properties: {
-                            incident: JSON.stringify(incident),
-                            incidentCount: 1, // Individual incidents
+                            // Store all incidents for retrieval when clicked
+                            allIncidents:
+                              incidents.length > 1
+                                ? JSON.stringify(incidents)
+                                : undefined,
+                            incident: JSON.stringify(primaryIncident),
+                            incidentCount: incidents.length,
                           },
                           type: 'Feature' as const,
-                        }));
-                      } else {
-                        // When clustering is disabled, group incidents by location manually
-                        const locationGroups = new Map<
-                          string,
-                          IncidentSimpleMapQuery['incidents'][number][]
-                        >();
-                        for (const incident of data.incidents) {
-                          const lng = incident.location?.geoLng || 0;
-                          const lat = incident.location?.geoLat || 0;
-                          const locationKey = `${lng.toFixed(6)},${lat.toFixed(6)}`;
-
-                          if (!locationGroups.has(locationKey)) {
-                            locationGroups.set(locationKey, []);
-                          }
-                          locationGroups.get(locationKey)!.push(incident);
-                        }
-
-                        // Create features with incident count for manual grouping
-                        return [...locationGroups.entries()].map(
-                          ([locationKey, incidents]) => {
-                            const [lng, lat] = locationKey
-                              .split(',')
-                              .map(Number);
-                            const [primaryIncident] = incidents; // Use first incident as primary
-
-                            return {
-                              geometry: {
-                                coordinates: [lng, lat],
-                                type: 'Point' as const,
-                              },
-                              properties: {
-                                incident: JSON.stringify(primaryIncident),
-                                incidentCount: incidents.length,
-                              },
-                              type: 'Feature' as const,
-                            };
-                          }
-                        );
+                        };
                       }
-                    })(),
-                    type: 'FeatureCollection',
-                  }}
-                  id="incidents"
-                  type="geojson"
-                >
-                  {ClusterLayer}
-                  {ClusterCountLayer}
-                  {UnClusteredLayer}
-                  {!cluster && IncidentCountLayer}
-                </Source>
-              )}
-              <PoliceLayer
-                colourMode={multiColour}
-                incidents={incidentCoords}
-                mapRef={mapRef}
-                visible={showPolice}
-              />
-              <LondonPoliceLayer
-                colourMode={multiColour}
-                incidents={incidentCoords}
-                mapRef={mapRef}
-                useBcuColour={useBcu}
-                visible={showLondonPolice}
-              />
-              <Source
-                data={{
-                  features:
-                    data?.incidents.map((incident) => ({
-                      geometry: {
-                        coordinates: [
-                          incident.location?.geoLng || 0,
-                          incident.location?.geoLat || 0,
-                        ],
-                        type: 'Point',
-                      },
-                      properties: {},
-                      type: 'Feature',
-                    })) || [],
+                    );
+                  })(),
                   type: 'FeatureCollection',
                 }}
-                id="incidents-heatmap"
+                id="incidents"
                 type="geojson"
               >
-                {showHeatmap && HeatMapLayer}
+                {/* Background layers first */}
+                <Layer {...incidentPulseLayer} />
+                <Layer {...incidentRingLayer} />
+
+                {/* Cluster layers - only shown when clustering is enabled */}
+                {cluster && (
+                  <>
+                    <Layer {...clusterRingLayer} />
+                    <Layer {...incidentClusterLayer} />
+                  </>
+                )}
+
+                {/* Main marker layer */}
+                <Layer {...incidentMarkerLayer} />
+
+                {/* Text layers on top - these must be last to appear above circles */}
+                {cluster && <Layer {...incidentClusterCountLayer} />}
+                <Layer {...incidentCountLayer} />
               </Source>
-              {showBusinesses && (
-                <Source
-                  cluster={cluster}
-                  clusterMaxZoom={14}
-                  clusterRadius={50}
-                  data={{
-                    features:
-                      businessData?.listBusinesses.businesses.map(
-                        (business) => ({
-                          geometry: {
-                            coordinates: [
-                              business.locations[0]?.geoLng || 0,
-                              business.locations[0]?.geoLat || 0,
-                            ],
-                            type: 'Point',
-                          },
-                          properties: {},
-                          type: 'Feature',
-                        })
-                      ) || [],
-                    type: 'FeatureCollection',
+            )}
+            <PoliceLayer
+              colourMode={multiColour}
+              incidents={incidentCoords}
+              mapRef={mapRef}
+              visible={showPolice}
+            />
+            <LondonPoliceLayer
+              colourMode={multiColour}
+              incidents={incidentCoords}
+              mapRef={mapRef}
+              useBcuColour={useBcu}
+              visible={showLondonPolice}
+            />
+            <CameraLayer
+              showLabels={true}
+              useIcons={false}
+              visible={showCameras}
+            />
+            <BCRPLayer
+              showDetailedLabels={false}
+              showLabels={true}
+              visible={showBCRP}
+            />
+            <RetailParkLayer
+              showIcons={false}
+              showLabels={true}
+              visible={showRetailParks}
+            />
+            <Source
+              data={{
+                features:
+                  data?.incidents.map((incident) => ({
+                    geometry: {
+                      coordinates: [
+                        incident.location?.geoLng || 0,
+                        incident.location?.geoLat || 0,
+                      ],
+                      type: 'Point',
+                    },
+                    properties: {},
+                    type: 'Feature',
+                  })) || [],
+                type: 'FeatureCollection',
+              }}
+              id="incidents-heatmap"
+              type="geojson"
+            >
+              {showHeatmap && (
+                <Layer
+                  id="heatmap"
+                  maxzoom={20}
+                  paint={{
+                    'heatmap-intensity': {
+                      stops: [
+                        [11, 0.5 + (heatmapIntensity / 100) * 1.5], // Scale from 0.5 to 2
+                        [15, 1 + (heatmapIntensity / 100) * 4], // Scale from 1 to 5
+                      ],
+                    },
+                    'heatmap-opacity': 0.2 + (heatmapIntensity / 100) * 0.4, // Scale from 0.2 to 0.6
+                    'heatmap-radius': {
+                      stops: [
+                        [11, 10 + (heatmapIntensity / 100) * 20], // Scale from 10 to 30
+                        [15, 20 + (heatmapIntensity / 100) * 30], // Scale from 20 to 50
+                      ],
+                    },
+                    'heatmap-weight': 0.5 + (heatmapIntensity / 100) * 1, // Scale from 0.5 to 1.5
                   }}
-                  id="businesses"
-                  type="geojson"
-                >
-                  {BusinessClusterLayer}
-                  {BusinessClusterCountLayer}
-                  {BusinessUnClusteredLayer}
-                </Source>
+                  source="incidents-heatmap"
+                  type="heatmap"
+                />
               )}
+            </Source>
 
-              {selectedIncidents && viewMode === 'popup' && (
-                <Popup
-                  anchor="bottom"
-                  closeButton={true}
-                  closeOnClick={false}
-                  latitude={selectedIncidents.latitude}
-                  longitude={selectedIncidents.longitude}
-                  offset={[0, -10]}
-                  onClose={() => setSelectedIncidents(null)}
-                >
-                  <MultiIncidentPopup
-                    incidents={
-                      selectedIncidents?.incidents.map((item) => item.id) || []
-                    }
-                  />
-                </Popup>
-              )}
-            </MapboxMap>
-
-            {showFilterPanel && (
-              <FloatingFilterPanel
-                brandsData={brandsData}
-                brandsLoading={brandsLoading}
-                cluster={cluster}
-                containerRef={mapContainerRef}
-                groupsData={groupsData}
-                groupsLoading={groupsLoading}
-                industriesData={industriesData}
-                industriesLoading={industriesLoading}
-                multiColour={multiColour}
-                onChangeBrands={onChangeBrands}
-                onChangeDateRange={onChangeDateRange}
-                onChangeGroups={onChangeGroups}
-                onChangeIncidentTypes={onChangeIncidentTypes}
-                onChangeIndustries={onChangeIndustries}
-                onChangePoliceAreas={onChangePoliceAreas}
-                onChangeSchemes={onChangeSchemes}
-                onClose={toggleFilterPanel}
-                onToggleBusinesses={toggleBusinesses}
-                onToggleCluster={toggleCluster}
-                onToggleHeatmap={toggleHeatmap}
-                onToggleMarkers={toggleMarkers}
-                onTogglePolice={togglePolice}
-                onToggleViewMode={toggleViewMode}
-                schemes={schemes}
-                selectedBrands={selectedBrands}
-                selectedGroups={selectedGroups}
-                selectedIncidentTypes={selectedIncidentTypes}
-                selectedIndustries={selectedIndustries}
-                selectedPoliceAreas={selectedPoliceAreas}
-                selectedSchemes={selectedSchemes}
-                setMultiColour={setMultiColour}
-                setShowLondonPolice={setShowLondonPolice}
-                setUseBcu={setUseBcu}
-                showBusinesses={showBusinesses}
-                showHeatmap={showHeatmap}
-                showLondonPolice={showLondonPolice}
-                showMarkers={showMarkers}
-                showPolice={showPolice}
-                useBcu={useBcu}
-                viewMode={viewMode}
-              />
+            {selectedIncidents && viewMode === 'popup' && (
+              <Popup
+                anchor="bottom"
+                closeButton={true}
+                closeOnClick={false}
+                latitude={selectedIncidents.latitude}
+                longitude={selectedIncidents.longitude}
+                offset={[0, -10]}
+                onClose={() => setSelectedIncidents(null)}
+              >
+                <MultiIncidentPopup
+                  incidents={
+                    selectedIncidents?.incidents.map((item) => item.id) || []
+                  }
+                />
+              </Popup>
             )}
+          </MapboxMap>
 
-            {!showFilterPanel && (
-              <FloatingShowFiltersButton onClick={toggleFilterPanel} />
-            )}
-          </div>
-        )}
+          {showFilterPanel && (
+            <FloatingFilterPanel
+              brandsData={brandsData}
+              brandsLoading={brandsLoading}
+              cluster={cluster}
+              containerRef={mapContainerRef}
+              groupsData={groupsData}
+              groupsLoading={groupsLoading}
+              heatmapIntensity={heatmapIntensity}
+              industriesData={industriesData}
+              industriesLoading={industriesLoading}
+              multiColour={multiColour}
+              onChangeBrands={onChangeBrands}
+              onChangeDateRange={onChangeDateRange}
+              onChangeGroups={onChangeGroups}
+              onChangeHeatmapIntensity={setHeatmapIntensity}
+              onChangeIncidentTypes={onChangeIncidentTypes}
+              onChangeIndustries={onChangeIndustries}
+              onChangePoliceAreas={onChangePoliceAreas}
+              onChangeSchemes={onChangeSchemes}
+              onClose={toggleFilterPanel}
+              onToggleBCRP={toggleBCRP}
+              onToggleBusinesses={toggleBusinesses}
+              onToggleCameras={toggleCameras}
+              onToggleCluster={toggleCluster}
+              onToggleHeatmap={toggleHeatmap}
+              onToggleMarkers={toggleMarkers}
+              onTogglePolice={togglePolice}
+              onToggleRetailParks={toggleRetailParks}
+              onToggleViewMode={toggleViewMode}
+              schemes={schemes}
+              selectedBrands={selectedBrands}
+              selectedGroups={selectedGroups}
+              selectedIncidentTypes={selectedIncidentTypes}
+              selectedIndustries={selectedIndustries}
+              selectedPoliceAreas={selectedPoliceAreas}
+              selectedSchemes={selectedSchemes}
+              setMultiColour={setMultiColour}
+              setShowLondonPolice={setShowLondonPolice}
+              setUseBcu={setUseBcu}
+              showBCRP={showBCRP}
+              showBusinesses={showBusinesses}
+              showCameras={showCameras}
+              showHeatmap={showHeatmap}
+              showLondonPolice={showLondonPolice}
+              showMarkers={showMarkers}
+              showPolice={showPolice}
+              showRetailParks={showRetailParks}
+              useBcu={useBcu}
+              viewMode={viewMode}
+            />
+          )}
+
+          {!showFilterPanel && (
+            <FloatingShowFiltersButton onClick={toggleFilterPanel} />
+          )}
+
+          <MapLegend
+            showBCRP={showBCRP}
+            showBusinesses={showBusinesses}
+            showCameras={showCameras}
+            showHeatmap={showHeatmap}
+            showMarkers={showMarkers}
+            showRetailParks={showRetailParks}
+          />
+        </div>
 
         <IncidentSidebar
           currentIndex={selectedIncidents?.currentIndex || 0}

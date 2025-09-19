@@ -2,10 +2,6 @@ import type {
   IncidentsFeedQuery,
   IncidentsFeedQueryVariables,
 } from '#/views/incidents/IncidentFeed/graphql/queries/__generated__/incident-feed.generated';
-import {
-  IncidentsFeedDocument,
-  useIncidentsFeedQuery,
-} from '#/views/incidents/IncidentFeed/graphql/queries/__generated__/incident-feed.generated';
 import type { MutationUpdaterFn } from '@apollo/client';
 import type { RecycleIncidentMutation } from 'graphql/incidents/mutations/__generated__/recycle-incident.generated';
 import type { IncidentFilters } from 'state/data-model';
@@ -18,6 +14,10 @@ import {
   currentUserAtom,
 } from '#/providers/UserProvider/UserProvider';
 import hasRolePermission from '#/utils/has-role-permission';
+import {
+  IncidentsFeedDocument,
+  useIncidentsFeedQuery,
+} from '#/views/incidents/IncidentFeed/graphql/queries/__generated__/incident-feed.generated';
 import {
   PermissionMethod,
   PermissionModel,
@@ -105,10 +105,10 @@ const useIncidentFeed = (): Return => {
     groups,
     incidentDate,
     peculiarities,
+    policeAreas,
     priority,
     search,
     tableView,
-    policeAreas,
   } = variables;
 
   // filter initial state
@@ -140,6 +140,7 @@ const useIncidentFeed = (): Return => {
       date:
         order === IncidentSort.createdAtDesc ? SortOrder.Desc : SortOrder.Asc,
     },
+    policeAreas,
     schemeId,
     where: {
       AND: search
@@ -232,8 +233,8 @@ const useIncidentFeed = (): Return => {
           : undefined,
       createdAt: createdAt
         ? {
-            gte: createdAt.startDate,
-            lte: createdAt.endDate,
+            gte: new Date(createdAt.startDate.setHours(0, 0, 0, 0)),
+            lte: new Date(createdAt.endDate.setHours(23, 59, 59)),
           }
         : undefined,
       createdBy:
@@ -256,8 +257,8 @@ const useIncidentFeed = (): Return => {
           : undefined,
       date: incidentDate
         ? {
-            gte: incidentDate.startDate,
-            lte: incidentDate.endDate,
+            gte: new Date(incidentDate.startDate.setHours(0, 0, 0, 0)),
+            lte: new Date(incidentDate.endDate.setHours(23, 59, 59)),
           }
         : undefined,
       description: peculiarities
@@ -314,7 +315,6 @@ const useIncidentFeed = (): Return => {
           }
         : undefined,
     },
-    policeAreas,
   };
   // Queries
   // Fetch incidents
@@ -552,8 +552,8 @@ const useIncidentFeed = (): Return => {
         groups: [],
         incidentDate: undefined,
         peculiarities: '',
-        search: '',
         policeAreas: [],
+        search: '',
       },
     });
   };

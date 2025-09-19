@@ -155,6 +155,22 @@ const useIncidentMap = (): Return => {
                 },
               }
             : undefined,
+        groups:
+          selectedGroups.length > 0
+            ? {
+                some: {
+                  id: {
+                    in: selectedGroups,
+                  },
+                },
+              }
+            : undefined,
+        policeArea:
+          selectedPoliceAreas.length > 0
+            ? {
+                hasSome: selectedPoliceAreas as PoliceForce[],
+              }
+            : undefined,
         schemes: {
           some: {
             id: {
@@ -162,20 +178,6 @@ const useIncidentMap = (): Return => {
             },
           },
         },
-        users:
-          selectedGroups.length > 0
-            ? {
-                some: {
-                  groups: {
-                    some: {
-                      id: {
-                        in: selectedGroups,
-                      },
-                    },
-                  },
-                },
-              }
-            : undefined,
       },
     },
   });

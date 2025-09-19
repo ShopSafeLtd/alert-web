@@ -13,9 +13,10 @@ import {
   faTimes,
 } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, Form, Select, Switch, Typography } from 'antd';
+import { Button, Form, Select, Slider, Switch, Typography } from 'antd';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
+import { useStoreState } from 'state';
 
 import useStyles from './FloatingFilterPanel.styles';
 
@@ -33,12 +34,14 @@ interface Props {
   containerRef?: React.RefObject<HTMLElement>;
   groupsData: SchemeGroupsQuery | undefined;
   groupsLoading: boolean;
+  heatmapIntensity: number;
   industriesData: IndustriesQuery | undefined;
   industriesLoading: boolean;
   multiColour: 'multi' | 'single';
   onChangeBrands: (value: string[]) => void;
   onChangeDateRange: (value: { endDate: Date; startDate: Date }) => void;
   onChangeGroups: (value: string[]) => void;
+  onChangeHeatmapIntensity: (value: number) => void;
   onChangeIncidentTypes: (value: string | string[]) => void;
   onChangeIndustries: (value: string[]) => void;
   onChangePoliceAreas: (value: string | string[]) => void;
@@ -46,12 +49,15 @@ interface Props {
   // Panel control
   onClose?: () => void;
 
+  onToggleBCRP: () => void;
   onToggleBusinesses: () => void;
+  onToggleCameras: () => void;
   onToggleCluster: () => void;
   onToggleHeatmap: () => void;
   onToggleMarkers: () => void;
 
   onTogglePolice: () => void;
+  onToggleRetailParks: () => void;
   onToggleViewMode: () => void;
   // Filter data and handlers
   schemes: { scheme: { id: string; name: string } }[];
@@ -68,11 +74,14 @@ interface Props {
 
   setUseBcu: () => void;
   // Display toggles
+  showBCRP: boolean;
   showBusinesses: boolean;
+  showCameras: boolean;
   showHeatmap: boolean;
   showLondonPolice: boolean;
   showMarkers: boolean;
   showPolice: boolean;
+  showRetailParks: boolean;
   useBcu: boolean;
   viewMode: 'popup' | 'sidebar';
 }
@@ -86,22 +95,27 @@ const FloatingFilterPanel: React.FC<Props> = ({
   containerRef,
   groupsData,
   groupsLoading,
+  heatmapIntensity,
   industriesData,
   industriesLoading,
   multiColour,
   onChangeBrands,
   onChangeDateRange,
   onChangeGroups,
+  onChangeHeatmapIntensity,
   onChangeIncidentTypes,
   onChangeIndustries,
   onChangePoliceAreas,
   onChangeSchemes,
   onClose,
+  onToggleBCRP,
   onToggleBusinesses,
+  onToggleCameras,
   onToggleCluster,
   onToggleHeatmap,
   onToggleMarkers,
   onTogglePolice,
+  onToggleRetailParks,
   onToggleViewMode,
   schemes,
   selectedBrands,
@@ -113,15 +127,19 @@ const FloatingFilterPanel: React.FC<Props> = ({
   setMultiColour,
   setShowLondonPolice,
   setUseBcu,
+  showBCRP,
   showBusinesses,
+  showCameras,
   showHeatmap,
   showLondonPolice,
   showMarkers,
   showPolice,
+  showRetailParks,
   useBcu,
   viewMode,
 }) => {
-  const classes = useStyles();
+  const currentTheme = useStoreState((state) => state.theme.currentTheme);
+  const classes = useStyles({ colorScheme: currentTheme });
   const intl = useIntl();
 
   // Start with a default position in the top right
@@ -410,6 +428,52 @@ const FloatingFilterPanel: React.FC<Props> = ({
                 />
               </div>
 
+              {showHeatmap && (
+                <div
+                  style={{
+                    marginBottom: '16px',
+                    marginTop: '12px',
+                    paddingLeft: '4px',
+                    paddingRight: '4px',
+                  }}
+                >
+                  <div
+                    style={{
+                      alignItems: 'center',
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      marginBottom: '8px',
+                    }}
+                  >
+                    <Text className={classes.switchLabel} style={{ margin: 0 }}>
+                      <FormattedMessage defaultMessage="Heatmap Sensitivity" />
+                    </Text>
+                    <Text style={{ color: '#666', fontSize: '12px' }}>
+                      <FormattedMessage
+                        defaultMessage="{intensity}%"
+                        values={{ intensity: heatmapIntensity }}
+                      />
+                    </Text>
+                  </div>
+                  <Slider
+                    marks={{
+                      0: { label: 'Low', style: { fontSize: '10px' } },
+                      50: { label: 'Mid', style: { fontSize: '10px' } },
+                      100: { label: 'High', style: { fontSize: '10px' } },
+                    }}
+                    max={100}
+                    min={0}
+                    onChange={onChangeHeatmapIntensity}
+                    style={{ marginBottom: '4px' }}
+                    tooltip={{
+                      formatter: (value) => `${value}%`,
+                      placement: 'bottom',
+                    }}
+                    value={heatmapIntensity}
+                  />
+                </div>
+              )}
+
               <div className={classes.switchRow}>
                 <Text className={classes.switchLabel}>
                   <FormattedMessage defaultMessage="Show Police Areas" />
@@ -431,6 +495,44 @@ const FloatingFilterPanel: React.FC<Props> = ({
                   size="small"
                 />
               </div>
+
+              {selectedSchemes.includes('cm9a19w1r00l58q01ss3wm0c1') && (
+                <>
+                  <div className={classes.switchRow}>
+                    <Text className={classes.switchLabel}>
+                      <FormattedMessage defaultMessage="Show ANPR Cameras" />
+                    </Text>
+                    <Switch
+                      checked={showCameras}
+                      onChange={onToggleCameras}
+                      size="small"
+                    />
+                  </div>
+
+                  <div className={classes.switchRow}>
+                    <Text className={classes.switchLabel}>
+                      <FormattedMessage defaultMessage="Show BCRP Partnerships" />
+                    </Text>
+                    <Switch
+                      checked={showBCRP}
+                      onChange={onToggleBCRP}
+                      size="small"
+                    />
+                  </div>
+
+                  <div className={classes.switchRow}>
+                    <Text className={classes.switchLabel}>
+                      <FormattedMessage defaultMessage="Show Shopping Centres" />
+                    </Text>
+                    <Switch
+                      checked={showRetailParks}
+                      onChange={onToggleRetailParks}
+                      size="small"
+                    />
+                  </div>
+                </>
+              )}
+
               <div className={classes.switchRow}>
                 <Text className={classes.switchLabel}>
                   <FormattedMessage defaultMessage="BCU-colour Areas" />

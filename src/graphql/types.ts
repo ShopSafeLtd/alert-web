@@ -11383,7 +11383,11 @@ export type Mutation = {
   extendOffender: Offender;
   finalizeAudioSession: Scalars['Boolean'];
   forcedPasswordSet?: Maybe<Scalars['String']>;
+  generateComprehensiveDemoData: Scalars['String'];
+  generateDemoBusinesses: Scalars['String'];
+  generateDemoStockItems: Scalars['Int'];
   generateFeedItems: SystemTask;
+  generateIncidentTypeDescription: Scalars['String'];
   generateStatementBody: GeneratedStatementBody;
   icelandImportData: SystemTask;
   importStockItemCsv: Scalars['Boolean'];
@@ -12195,8 +12199,34 @@ export type MutationFinalizeAudioSessionArgs = {
 };
 
 
+export type MutationGenerateComprehensiveDemoDataArgs = {
+  businessContext: Scalars['String'];
+  incidentsPerMonth?: InputMaybe<Scalars['Int']>;
+  schemeId: Scalars['String'];
+  timeRangeDays?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type MutationGenerateDemoBusinessesArgs = {
+  businessContext: Scalars['String'];
+  schemeId: Scalars['String'];
+};
+
+
+export type MutationGenerateDemoStockItemsArgs = {
+  businessContext: Scalars['String'];
+  schemeId: Scalars['String'];
+};
+
+
 export type MutationGenerateFeedItemsArgs = {
   where: UniqueId;
+};
+
+
+export type MutationGenerateIncidentTypeDescriptionArgs = {
+  incidentTypeName: Scalars['String'];
+  userDescription?: InputMaybe<Scalars['String']>;
 };
 
 
