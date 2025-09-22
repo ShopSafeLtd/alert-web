@@ -263,10 +263,7 @@ const BusinessLayer: React.FC<BusinessLayerProps> = ({
       businessData.listBusinesses.businesses.map((business) => {
         // Get the first brand if available
         const primaryBrand = business.brands?.[0];
-        const brandColor = getBrandColor(
-          primaryBrand?.id as string | undefined,
-          primaryBrand?.name as string | undefined
-        );
+        const brandColor = getBrandColor(primaryBrand, primaryBrand);
 
         return {
           geometry: {
@@ -280,8 +277,8 @@ const BusinessLayer: React.FC<BusinessLayerProps> = ({
             address: business.locations[0]?.full || '',
             brandColor,
             brandCount: business.brands?.length || 0,
-            brandId: (primaryBrand?.id as string) || '',
-            brandName: (primaryBrand?.name as string) || '',
+            brandId: primaryBrand || '',
+            brandName: primaryBrand || '',
             fullName: business.fullName || '',
             id: business.id,
             name: business.name || business.fullName || 'Unknown Business',

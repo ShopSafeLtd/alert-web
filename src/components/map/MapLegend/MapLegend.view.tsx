@@ -29,7 +29,9 @@ const MapLegend: React.FC<Props> = ({
   showRetailParks,
 }) => {
   const currentTheme = useStoreState((state) => state.theme.currentTheme);
-  const classes = useStyles({ colorScheme: currentTheme });
+  const classes = useStyles({ colorScheme: currentTheme } as Parameters<
+    typeof useStyles
+  >[0]);
 
   const legendItems: LegendItem[] = [];
 

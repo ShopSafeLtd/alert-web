@@ -567,7 +567,9 @@ const IncidentMap = ({
     return () => cancelAnimationFrame(rAF);
   }, [collapsed]);
 
-  const classes = useStyles({ colorScheme: currentTheme });
+  const classes = useStyles({ colorScheme: currentTheme } as Parameters<
+    typeof useStyles
+  >[0]);
 
   // Add global styles for Mapbox popup theming
   useEffect(() => {

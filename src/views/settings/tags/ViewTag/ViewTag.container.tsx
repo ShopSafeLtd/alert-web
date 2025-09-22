@@ -18,15 +18,12 @@ const AddCrimeType = (): JSX.Element => {
     incidentFormLayout,
     incidentFormLayoutChanged,
     involvedMode,
-    isInitialLoad,
     loading,
     parentTag,
     questionLayoutChanged,
     questionsLayout,
     saveAllChanges,
-    saveIncidentForm,
     saveModuleConditions,
-    saveQOrder,
     saving,
     selectedModule,
     selectedQuestion,
@@ -63,15 +60,12 @@ const AddCrimeType = (): JSX.Element => {
       incidentFormLayout={incidentFormLayout}
       incidentFormLayoutChanged={incidentFormLayoutChanged}
       involvedMode={involvedMode}
-      isInitialLoad={isInitialLoad}
       loading={loading}
       parentTag={parentTag}
       questionLayoutChanged={questionLayoutChanged}
       questionsLayout={questionsLayout}
       saveAllChanges={saveAllChanges}
-      saveIncidentForm={saveIncidentForm}
       saveModuleConditions={saveModuleConditions}
-      saveQOrder={saveQOrder}
       saving={saving}
       selectedModule={selectedModule}
       selectedQuestion={selectedQuestion}

@@ -139,7 +139,9 @@ const FloatingFilterPanel: React.FC<Props> = ({
   viewMode,
 }) => {
   const currentTheme = useStoreState((state) => state.theme.currentTheme);
-  const classes = useStyles({ colorScheme: currentTheme });
+  const classes = useStyles({ colorScheme: currentTheme } as Parameters<
+    typeof useStyles
+  >[0]);
   const intl = useIntl();
 
   // Start with a default position in the top right
