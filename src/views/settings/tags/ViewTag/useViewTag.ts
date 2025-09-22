@@ -5,6 +5,7 @@ import type { ViewTagQuery } from '#/views/settings/tags/ViewTag/graphql/__gener
 import type { AnswerType } from 'graphql/types';
 import type { Dispatch, SetStateAction } from 'react';
 
+import { useUserRolesQuery } from '#/components/form-components/user/graphql/queries/__generated__/custom-roles.generated';
 import {
   currentSchemeAtom,
   currentSchemeIdAtom,
@@ -41,6 +42,7 @@ export type IncidentFormFieldState = {
 interface Return {
   addQuestion: boolean;
   availableBusinessGroups: { id: string; name: string }[];
+  availableRoles: { id: string; name: string; type: string }[];
   conditionsModalOpen: boolean;
   currentModuleConditions: ModuleCondition[];
   data: ViewTagQuery | undefined;
@@ -349,6 +351,14 @@ const useViewTag = (): Return => {
 
   const [getBusinessGroups, { data: businessGroupsData }] =
     useBusinessGroupsLazyQuery();
+
+  const { data: rolesData } = useUserRolesQuery({
+    fetchPolicy: 'cache-and-network',
+    variables: {
+      schemeId,
+    },
+  });
+
   useEffect(() => {
     window.scrollTo({ behavior: 'smooth', top: 0 });
     // Fetch business groups for the scheme
@@ -945,6 +955,16 @@ const useViewTag = (): Return => {
     [businessGroupsData]
   );
 
+  const availableRoles = useMemo(
+    () =>
+      rolesData?.roles.edges.map(({ node }) => ({
+        id: node.id,
+        name: node.name,
+        type: node.type,
+      })) || [],
+    [rolesData]
+  );
+
   const currentModuleConditions = useMemo(
     () => (selectedModule ? moduleConditions[selectedModule] || [] : []),
     [selectedModule, moduleConditions]
@@ -953,6 +973,7 @@ const useViewTag = (): Return => {
   return {
     addQuestion,
     availableBusinessGroups,
+    availableRoles,
     conditionsModalOpen,
     currentModuleConditions,
     data,
