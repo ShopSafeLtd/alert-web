@@ -1,7 +1,6 @@
 /* eslint-disable formatjs/no-literal-string-in-jsx */
 import React from 'react';
 import './styles.css';
-import processText from '../../../utils/generate-text';
 
 interface Mg11Data {
   name: string;
@@ -47,7 +46,21 @@ const generateMg11 = () => {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const data: Partial<Mg11Data> = JSON.parse(rawdata);
 
-  const { text1, text2, noPages } = processText(data.statement || '');
+  const statementText = data.statement || '';
+  const wordsPerPage = 250;
+  const wordCount = statementText
+    .split(/\s+/)
+    .filter((word) => word.length > 0).length;
+  const estimatedPages = Math.ceil(wordCount / wordsPerPage);
+  const noPages = Math.max(2, estimatedPages + 1);
+
+  const words = statementText.split(/\s+/);
+  const text1Words = words.slice(0, Math.floor(words.length * 0.6));
+  const text2Words = words.slice(Math.floor(words.length * 0.6));
+
+  const text1 = text1Words.join(' ');
+  const text2 = text2Words.join(' ');
+
   return (
     <div>
       <div className="page">
@@ -127,6 +140,9 @@ const generateMg11 = () => {
                 style={{
                   fontSize: 12,
                   hyphens: 'auto',
+                  lineHeight: 1.6, // Added better line spacing
+                  marginTop: 10,
+                  marginBottom: 10,
                 }}
               >
                 {text1}
@@ -159,11 +175,11 @@ const generateMg11 = () => {
         </div>
       </div>
 
-      {noPages === 3 && (
+      {noPages >= 3 && (
         <div className="page">
           <div className="container">
             <div className="box">RESTRICTED (when completed)</div>
-            <div className="text">Page 2 of 3</div>
+            <div className="text">Page 2 of {noPages}</div>
           </div>
           <div className="body-div">
             <section>
@@ -172,7 +188,9 @@ const generateMg11 = () => {
                   style={{
                     fontSize: 12,
                     hyphens: 'auto',
+                    lineHeight: 1.6, // Added better line spacing
                     marginTop: 15,
+                    marginBottom: 15,
                   }}
                 >
                   {text2}
