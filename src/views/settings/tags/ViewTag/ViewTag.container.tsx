@@ -6,6 +6,9 @@ import useViewTag from './useViewTag';
 const AddCrimeType = (): JSX.Element => {
   const {
     addQuestion,
+    availableBusinessGroups,
+    conditionsModalOpen,
+    currentModuleConditions,
     data,
     deleteConfirm,
     deleteQuestion,
@@ -19,10 +22,12 @@ const AddCrimeType = (): JSX.Element => {
     parentTag,
     questionLayoutChanged,
     questionsLayout,
-    saveIncidentForm,
-    saveQOrder,
+    saveAllChanges,
+    saveModuleConditions,
     saving,
+    selectedModule,
     selectedQuestion,
+    setConditionsModalOpen,
     setDraftState,
     setEditIncidentType,
     setIncidentFormLayout,
@@ -30,6 +35,7 @@ const AddCrimeType = (): JSX.Element => {
     setParentTag,
     setQuestionLayoutChanged,
     setQuestionsLayout,
+    setSelectedModule,
     setSelectedQuestion,
     showDraft,
     toggleAddQuestion,
@@ -42,6 +48,9 @@ const AddCrimeType = (): JSX.Element => {
   return (
     <View
       addQuestion={addQuestion}
+      availableBusinessGroups={availableBusinessGroups}
+      conditionsModalOpen={conditionsModalOpen}
+      currentModuleConditions={currentModuleConditions}
       data={data}
       deleteConfirm={deleteConfirm}
       deleteQuestion={deleteQuestion}
@@ -55,10 +64,12 @@ const AddCrimeType = (): JSX.Element => {
       parentTag={parentTag}
       questionLayoutChanged={questionLayoutChanged}
       questionsLayout={questionsLayout}
-      saveIncidentForm={saveIncidentForm}
-      saveQOrder={saveQOrder}
+      saveAllChanges={saveAllChanges}
+      saveModuleConditions={saveModuleConditions}
       saving={saving}
+      selectedModule={selectedModule}
       selectedQuestion={selectedQuestion}
+      setConditionsModalOpen={setConditionsModalOpen}
       setDraftState={setDraftState}
       setEditIncidentType={setEditIncidentType}
       setIncidentFormLayout={setIncidentFormLayout}
@@ -66,6 +77,7 @@ const AddCrimeType = (): JSX.Element => {
       setParentTag={setParentTag}
       setQuestionLayoutChanged={setQuestionLayoutChanged}
       setQuestionsLayout={setQuestionsLayout}
+      setSelectedModule={setSelectedModule}
       setSelectedQuestion={setSelectedQuestion}
       showDraft={showDraft}
       toggleAddQuestion={toggleAddQuestion}

@@ -1,0 +1,50 @@
+query BusinessQuestions(
+  $first: Int
+  $after: String
+  $last: Int
+  $before: String
+  $where: BusinessQuestionRelayWhereInput!
+  $orderBy: BusinessQuestionRelayOrderInput
+) {
+  businessQuestionRelay(
+    first: $first
+    after: $after
+    last: $last
+    before: $before
+    where: $where
+    orderBy: $orderBy
+  ) {
+    edges {
+      node {
+        id
+        createdAt
+        updatedAt
+        schemeId
+        questionId
+        priority
+        req
+        deleted
+        dependentBrands
+        dependentQuestions
+        dependentTags
+        actions
+        failureAnswer
+        failureMessage
+        tooltip
+        question {
+          id
+          question
+          type
+          options
+        }
+      }
+    }
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
+    }
+    totalCount
+  }
+}

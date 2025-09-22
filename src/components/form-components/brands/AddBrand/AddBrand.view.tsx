@@ -67,15 +67,6 @@ const AddBrand = ({
                   defaultMessage: 'Businesses',
                 })}
                 name="businesses"
-                rules={[
-                  {
-                    message: intl.formatMessage({
-                      defaultMessage:
-                        'Please select at least one business for the new brand.',
-                    }),
-                    required: true,
-                  },
-                ]}
               >
                 <BusinessesSelect
                   maxTagCount="responsive"

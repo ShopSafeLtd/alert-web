@@ -86,6 +86,16 @@ const ImportMenu = () => {
       title: <FormattedMessage defaultMessage="Incident Import" />,
       to: '/app/scheme-settings/data-import/incident-import',
     },
+    {
+      description: (
+        <FormattedMessage defaultMessage="Import data from OneStop system into alert." />
+      ),
+      icon: <FontAwesomeIcon icon={faCloudUpload} />,
+      iconBackground: '#597ef7',
+      iconColor: '#597ef7',
+      title: <FormattedMessage defaultMessage="OneStop Import" />,
+      to: '/app/scheme-settings/data-import/onestop',
+    },
     ...(schemeId === restrictedImportsScheme
       ? [
           {

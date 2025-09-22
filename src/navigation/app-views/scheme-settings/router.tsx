@@ -129,6 +129,12 @@ const JDSiteImport = lazy(
       '../../../views/settings/data-import/jd-site-import/JDSiteImport.view'
     )
 );
+const OneStop = lazy(
+  () => import('../../../views/settings/data-import/onestop/OneStop.view')
+);
+const BusinessOptions = lazy(
+  () => import('../../../views/settings/business-options/BusinessOptions.view')
+);
 const DashboardManagement = lazy(
   () => import('../dashboard-management/router')
 );
@@ -544,6 +550,19 @@ const SchemeSettings = (): JSX.Element => {
               path="recycle-bin/*"
             />
             <Route
+              element={
+                <PermissionCheckWrapper
+                  permission={{
+                    method: PermissionMethod.Read,
+                    model: PermissionModel.Businesses,
+                  }}
+                >
+                  <BusinessOptions />
+                </PermissionCheckWrapper>
+              }
+              path="business-options"
+            />
+            <Route
               element={<Navigate to="/app/businesses/*" />}
               path="businesses/*"
             />
@@ -702,6 +721,19 @@ const SchemeSettings = (): JSX.Element => {
                 </PermissionCheckWrapper>
               }
               path="data-import/jd-site-import"
+            />
+            <Route
+              element={
+                <PermissionCheckWrapper
+                  permission={{
+                    method: PermissionMethod.Read,
+                    model: PermissionModel.DataImport,
+                  }}
+                >
+                  <OneStop />
+                </PermissionCheckWrapper>
+              }
+              path="data-import/onestop"
             />
             <Route
               element={

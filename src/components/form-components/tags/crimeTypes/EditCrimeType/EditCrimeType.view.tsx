@@ -1,6 +1,9 @@
 import type { TagQuery } from 'graphql/tag/queries/__generated__/tag.generated';
 
 import RoleSelect from '#/components/form-components/Roles/RoleSelect';
+import AIGenerateButton, {
+  getGradientFormItemClassName,
+} from '#/components/ui/AIGenerateButton';
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import {
   Button,
@@ -28,25 +31,51 @@ interface FormData {
 
 interface Props {
   data: TagQuery | undefined;
+  generatingDescription?: boolean;
   loading: boolean;
   onClose: () => void;
+  onGenerateDescription?: (
+    name: string,
+    currentDescription?: string
+  ) => Promise<null | string>;
   onSubmit: (value: FormData) => void;
   saving: boolean;
 }
 
 const EditCrimeType = ({
   data,
+  generatingDescription = false,
   loading,
   onClose,
+  onGenerateDescription,
   onSubmit,
   saving,
 }: Props): JSX.Element => {
   const intl = useIntl();
   const schemeId = useAtomValue(currentSchemeIdAtom);
+  const [form] = Form.useForm();
+
+  const handleGenerateDescription = async () => {
+    const currentName = form.getFieldValue('name') as string;
+    const descriptionValue = form.getFieldValue('description') as string;
+
+    if (onGenerateDescription && currentName) {
+      const generatedDescription = await onGenerateDescription(
+        currentName,
+        descriptionValue
+      );
+
+      if (generatedDescription) {
+        // Set the form value directly - should work now that TextArea is direct child of Form.Item
+        form.setFieldsValue({ description: generatedDescription });
+      }
+    }
+  };
   return !data && loading ? (
     <Skeleton />
   ) : (
     <Form
+      form={form}
       initialValues={{
         crimeType: data?.tag?.crimeType,
         description: data?.tag?.description,
@@ -86,14 +115,37 @@ const EditCrimeType = ({
       </Row>
       <Row gutter={16}>
         <Col span={24}>
-          <Form.Item
-            label={intl.formatMessage({
-              defaultMessage: 'Description',
-            })}
-            name="description"
-          >
-            <Input.TextArea disabled={saving} rows={10} />
-          </Form.Item>
+          <div style={{ position: 'relative' }}>
+            <Form.Item
+              className={getGradientFormItemClassName(
+                generatingDescription,
+                'blueGradient'
+              )}
+              label={intl.formatMessage({
+                defaultMessage: 'Description',
+              })}
+              name="description"
+            >
+              <Input.TextArea
+                className="ai-generate-textarea"
+                disabled={saving}
+                rows={10}
+                style={{ paddingRight: '60px' }}
+              />
+            </Form.Item>
+            {onGenerateDescription && (
+              <AIGenerateButton
+                disabled={saving}
+                form={form}
+                generating={generatingDescription}
+                gradientVariant="blueGradient"
+                nameFieldName="name"
+                onClick={() => {
+                  void handleGenerateDescription();
+                }}
+              />
+            )}
+          </div>
         </Col>
         {data?.tag?.type === TagType.IncidentCrimeType && (
           <>
