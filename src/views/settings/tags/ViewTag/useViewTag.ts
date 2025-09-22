@@ -1,5 +1,6 @@
 /* eslint-disable no-restricted-syntax */
 import type { ExtendedLayout } from '#/views/reports/types';
+import type { ModuleCondition } from '#/views/settings/tags/ViewTag/components/ModuleConditionsModal';
 import type { ViewTagQuery } from '#/views/settings/tags/ViewTag/graphql/__generated__/view-tag.generated';
 import type { AnswerType } from 'graphql/types';
 import type { Dispatch, SetStateAction } from 'react';
@@ -8,6 +9,7 @@ import {
   currentSchemeAtom,
   currentSchemeIdAtom,
 } from '#/providers/SchemeProvider/SchemeProvider';
+import { useBusinessGroupsLazyQuery } from '#/views/incidents/AddIncident/graphql/queries/__generated__/business-groups.generated';
 import { useRemoveQuestionFromTagMutation } from '#/views/settings/tags/ViewTag/graphql/__generated__/remove-question.generated';
 import { useUpsertIncidentFormMutation } from '#/views/settings/tags/ViewTag/graphql/__generated__/update-incident-form-fields.generated';
 import { useUpdateTagQsMutation } from '#/views/settings/tags/ViewTag/graphql/__generated__/update-question-order.generated';
@@ -21,7 +23,7 @@ import { useRecycleTagMutation } from 'graphql/tag/mutation/__generated__/recycl
 import { useUpdateTagMutation } from 'graphql/tag/mutation/__generated__/update_tag.generated';
 import { IncidentFormField, Model, TagType } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useParams } from 'react-router-dom';
 import errorNotification from 'types/mutation_notifications/error_notification';
@@ -38,6 +40,9 @@ export type IncidentFormFieldState = {
 
 interface Return {
   addQuestion: boolean;
+  availableBusinessGroups: { id: string; name: string }[];
+  conditionsModalOpen: boolean;
+  currentModuleConditions: ModuleCondition[];
   data: ViewTagQuery | undefined;
   deleteConfirm: (value: string) => void;
   deleteQuestion: (questionId: string) => void;
@@ -51,15 +56,20 @@ interface Return {
   incidentFormLayout: ExtendedLayout[];
   incidentFormLayoutChanged: boolean;
   involvedMode: boolean;
+  isInitialLoad: boolean;
   loading: boolean;
   parentTag: null | string | undefined;
   questionLayoutChanged: boolean;
   questionsLayout: ExtendedLayout[];
+  saveAllChanges: () => void;
   saveIncidentForm: () => void;
+  saveModuleConditions: (conditions: ModuleCondition[]) => void;
   saveQOrder: () => void;
   saving: boolean;
   schemeId: string;
+  selectedModule: IncidentFormField | null;
   selectedQuestion: null | string;
+  setConditionsModalOpen: (open: boolean) => void;
   setDraftState: Dispatch<
     SetStateAction<{
       draftButton: string;
@@ -73,6 +83,7 @@ interface Return {
   setParentTag: (value: string) => void;
   setQuestionLayoutChanged: (value: boolean) => void;
   setQuestionsLayout: (value: ExtendedLayout[]) => void;
+  setSelectedModule: (field: IncidentFormField | null) => void;
   setSelectedQuestion: (value: null | string) => void;
   showDraft: boolean;
   toggleAddQuestion: () => void;
@@ -288,8 +299,15 @@ const useViewTag = (): Return => {
   >(defaultIncidentFormLayout);
   const [incidentFormLayoutChanged, setIncidentFormLayoutChanged] =
     useState(false);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
   const [incidentFormFields, setIncidentFormFields] =
     useState<IncidentFormFieldState>(defaultIncidentFormFieldsTrue);
+  const [selectedModule, setSelectedModule] =
+    useState<IncidentFormField | null>(null);
+  const [conditionsModalOpen, setConditionsModalOpen] = useState(false);
+  const [moduleConditions, setModuleConditions] = useState<
+    Record<IncidentFormField, ModuleCondition[]>
+  >({} as Record<IncidentFormField, ModuleCondition[]>);
 
   const [draftState, setDraftState] = useState({
     draftButton: 'Save as Draft 2',
@@ -328,9 +346,35 @@ const useViewTag = (): Return => {
   });
 
   const [selectedQuestion, setSelectedQuestion] = useState<null | string>(null);
+
+  const [getBusinessGroups, { data: businessGroupsData }] =
+    useBusinessGroupsLazyQuery();
   useEffect(() => {
     window.scrollTo({ behavior: 'smooth', top: 0 });
-  }, []);
+    // Fetch business groups for the scheme
+    void getBusinessGroups({
+      variables: {
+        where: {
+          scheme: {
+            id: {
+              equals: schemeId,
+            },
+          },
+        },
+      },
+    });
+  }, [schemeId]);
+
+  // Reset initial load flag after data is loaded
+  useEffect(() => {
+    if (data && isInitialLoad) {
+      // Give React time to render before allowing change tracking
+      const timer = setTimeout(() => {
+        setIsInitialLoad(false);
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [data, isInitialLoad]);
   useEffect(() => {
     if (
       data?.tag.incidentForm?.fields.find(
@@ -361,7 +405,10 @@ const useViewTag = (): Return => {
           y: index,
         }));
       setQuestionsLayout(qs || []);
-      setQuestionLayoutChanged(false);
+      // Don't mark as changed during initial load
+      if (!isInitialLoad) {
+        setQuestionLayoutChanged(false);
+      }
       setPTag(data?.tag?.parentTag?.id || null);
     }
     if (data?.tag?.incidentForm) {
@@ -402,6 +449,17 @@ const useViewTag = (): Return => {
           y: highestY + 1 + index,
         }));
       setIncidentFormLayout([...initialLayout, ...newFields]);
+      // Reset the changed flag since this is from initial data load
+      setIncidentFormLayoutChanged(false);
+
+      // Load existing conditions from the incident form fields
+      const conditionsMap: Record<string, ModuleCondition[]> = {};
+      for (const field of data.tag.incidentForm.fields) {
+        if (field.conditions && Array.isArray(field.conditions)) {
+          conditionsMap[field.type] = field.conditions as ModuleCondition[];
+        }
+      }
+      setModuleConditions(conditionsMap);
     }
     if (
       data?.tag?.incidentForm?.fields?.find(
@@ -782,6 +840,13 @@ const useViewTag = (): Return => {
             };
 
             const getConditions = () => {
+              // Check if we have updated conditions in our state
+              if (moduleConditions[t.type]) {
+                return moduleConditions[t.type].length > 0
+                  ? moduleConditions[t.type]
+                  : undefined;
+              }
+              // Otherwise use existing conditions
               if (existing?.conditions) return existing.conditions;
               return undefined;
             };
@@ -852,8 +917,44 @@ const useViewTag = (): Return => {
     });
   };
 
+  const saveModuleConditions = (conditions: ModuleCondition[]) => {
+    if (selectedModule) {
+      setModuleConditions((prev) => ({
+        ...prev,
+        [selectedModule]: conditions,
+      }));
+      setIncidentFormLayoutChanged(true);
+    }
+  };
+
+  const saveAllChanges = () => {
+    if (questionLayoutChanged) {
+      saveQOrder();
+    }
+    if (incidentFormLayoutChanged) {
+      saveIncidentForm();
+    }
+  };
+
+  const availableBusinessGroups = useMemo(
+    () =>
+      businessGroupsData?.groups.map((group) => ({
+        id: group.id,
+        name: group.name || group.id,
+      })) || [],
+    [businessGroupsData]
+  );
+
+  const currentModuleConditions = useMemo(
+    () => (selectedModule ? moduleConditions[selectedModule] || [] : []),
+    [selectedModule, moduleConditions]
+  );
+
   return {
     addQuestion,
+    availableBusinessGroups,
+    conditionsModalOpen,
+    currentModuleConditions,
     data,
     deleteConfirm,
     deleteQuestion,
@@ -863,15 +964,20 @@ const useViewTag = (): Return => {
     incidentFormLayout,
     incidentFormLayoutChanged,
     involvedMode,
+    isInitialLoad,
     loading,
     parentTag,
     questionLayoutChanged,
     questionsLayout,
+    saveAllChanges,
     saveIncidentForm,
+    saveModuleConditions,
     saveQOrder,
     saving,
     schemeId,
+    selectedModule,
     selectedQuestion,
+    setConditionsModalOpen,
     setDraftState,
     setEditIncidentType,
     setIncidentFormLayout,
@@ -879,6 +985,7 @@ const useViewTag = (): Return => {
     setParentTag,
     setQuestionLayoutChanged,
     setQuestionsLayout,
+    setSelectedModule,
     setSelectedQuestion,
     showDraft,
     toggleAddQuestion,

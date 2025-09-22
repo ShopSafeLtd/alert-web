@@ -152,6 +152,17 @@ const SettingsSideMenu = ({
           }),
           to: '/app/scheme-settings/questions',
         },
+        {
+          icon: <AppstoreOutlined />,
+          permissions: {
+            method: PermissionMethod.Read,
+            model: PermissionModel.Businesses,
+          },
+          title: intl.formatMessage({
+            defaultMessage: 'Business Options',
+          }),
+          to: '/app/scheme-settings/business-options',
+        },
       ],
     },
     {

@@ -6,21 +6,25 @@ import type { Dispatch, SetStateAction } from 'react';
 import { margin, rowHeight } from '#/components/reports/utils/utils';
 import {
   faBars,
+  faFilter,
+  faGripVertical,
   faPenToSquare,
   faPlus,
   faTrash,
 } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
+  Badge,
   Button,
   Card,
-  Checkbox,
   Col,
   Drawer,
   Input,
   PageHeader,
   Row,
   Select,
+  Switch,
+  Tag,
   Tooltip,
   Typography,
 } from 'antd';
@@ -31,6 +35,7 @@ import RGL, { WidthProvider } from 'react-grid-layout';
 import 'react-grid-layout/css/styles.css';
 import { FormattedMessage, useIntl } from 'react-intl';
 
+import type { ModuleCondition } from './components/ModuleConditionsModal';
 import type {
   Elements,
   FieldLayout,
@@ -40,6 +45,7 @@ import type {
 import AddQuestionContainer from '../../../../components/form-components/addQuestion/AddQuestion.container';
 import UpdateQuestionContainer from '../../../../components/form-components/update-question-on-tag/UpdateQuestion.container';
 import BuildTree from '../../../../utils/tags/tree-helper';
+import ModuleConditionsModal from './components/ModuleConditionsModal';
 
 // const FromFieldsConfig = () => {
 //   const [configOpen, setConfigOpen] = useState(false);
@@ -72,6 +78,9 @@ import BuildTree from '../../../../utils/tags/tree-helper';
 
 interface Props {
   addQuestion: boolean;
+  availableBusinessGroups: { id: string; name: string }[];
+  conditionsModalOpen: boolean;
+  currentModuleConditions: ModuleCondition[];
   data: ViewTagQuery | undefined;
   deleteConfirm: (value: string) => void;
   deleteQuestion: (questionId: string) => void;
@@ -89,10 +98,12 @@ interface Props {
   parentTag: null | string | undefined;
   questionLayoutChanged: boolean;
   questionsLayout: ExtendedLayout[];
-  saveIncidentForm: () => void;
-  saveQOrder: () => void;
+  saveAllChanges: () => void;
+  saveModuleConditions: (conditions: ModuleCondition[]) => void;
   saving: boolean;
+  selectedModule: IncidentFormField | null;
   selectedQuestion: null | string;
+  setConditionsModalOpen: (open: boolean) => void;
   setDraftState: Dispatch<
     SetStateAction<{
       draftButton: string;
@@ -106,6 +117,7 @@ interface Props {
   setParentTag: (value: string) => void;
   setQuestionLayoutChanged: (value: boolean) => void;
   setQuestionsLayout: (value: ExtendedLayout[]) => void;
+  setSelectedModule: (field: IncidentFormField | null) => void;
   setSelectedQuestion: (value: null | string) => void;
   showDraft: boolean;
   toggleAddQuestion: () => void;
@@ -125,6 +137,9 @@ interface Props {
 
 const ViewTag = ({
   addQuestion,
+  availableBusinessGroups,
+  conditionsModalOpen,
+  currentModuleConditions,
   data,
   deleteConfirm,
   deleteQuestion,
@@ -138,10 +153,12 @@ const ViewTag = ({
   parentTag,
   questionLayoutChanged,
   questionsLayout,
-  saveIncidentForm,
-  saveQOrder,
+  saveAllChanges,
+  saveModuleConditions,
   saving,
+  selectedModule,
   selectedQuestion,
+  setConditionsModalOpen,
   setDraftState,
   setEditIncidentType,
   setIncidentFormLayout,
@@ -149,6 +166,7 @@ const ViewTag = ({
   setParentTag,
   setQuestionLayoutChanged,
   setQuestionsLayout,
+  setSelectedModule,
   setSelectedQuestion,
   showDraft,
   toggleAddQuestion,
@@ -157,8 +175,6 @@ const ViewTag = ({
   updateQuestionOnTag,
   updateTagParent,
 }: Props): JSX.Element => {
-  console.log('involvedMode view', involvedMode);
-
   const ReactGridLayout = useMemo(() => WidthProvider(RGL), []);
   const intl = useIntl();
 
@@ -203,36 +219,88 @@ const ViewTag = ({
     return null;
   };
 
+  // Helper to get condition count for a module
+  const getConditionCount = (fieldType: IncidentFormField) => {
+    const moduleConditions = data?.tag?.incidentForm?.fields?.find(
+      (field) => field.type === fieldType
+    )?.conditions;
+    return Array.isArray(moduleConditions) ? moduleConditions.length : 0;
+  };
+
   const incidentFormElements: Elements = {
     cctv: (
       <div
         key="cctv"
         style={{
-          cursor: 'grab',
+          cursor: 'move',
         }}
       >
         <Card
-          style={{ marginBottom: 0, outline: '1px solid #ccc' }}
-          title={<FormattedMessage defaultMessage="CCTV" />}
+          style={{
+            border: incidentFormFields.CCTV
+              ? '1px solid #1890ff'
+              : '1px solid #d9d9d9',
+            marginBottom: 0,
+            opacity: incidentFormFields.CCTV ? 1 : 0.7,
+            transition: 'all 0.3s ease',
+          }}
         >
-          {/* <FromFieldsConfig />*/}
-          <Row>
-            <Col flex={1}>
-              <FormattedMessage defaultMessage="CCTV" />
-            </Col>
-            <Col>
+          <Row align="middle" gutter={8}>
+            <Col span={1}>
               <Tooltip
                 title={intl.formatMessage({
-                  defaultMessage: 'Hide/Show field on form',
+                  defaultMessage: 'Drag to reorder',
                 })}
               >
-                <Checkbox
-                  checked={incidentFormFields.CCTV}
-                  onChange={() => {
-                    toggleField(IncidentFormField.Cctv);
-                  }}
+                <FontAwesomeIcon
+                  icon={faGripVertical}
+                  size="lg"
+                  style={{ color: '#8c8c8c', cursor: 'grab' }}
                 />
               </Tooltip>
+            </Col>
+            <Col flex={1}>
+              <FormattedMessage defaultMessage="CCTV" />
+              {getConditionCount(IncidentFormField.Cctv) > 0 && (
+                <Badge
+                  count={getConditionCount(IncidentFormField.Cctv)}
+                  style={{ marginLeft: 12 }}
+                  title={intl.formatMessage(
+                    {
+                      defaultMessage: '{count} condition(s) active',
+                    },
+                    { count: getConditionCount(IncidentFormField.Cctv) }
+                  )}
+                />
+              )}
+            </Col>
+            <Col>
+              <Button
+                className="cancelDrag"
+                icon={<FontAwesomeIcon icon={faFilter} />}
+                onClick={() => {
+                  setSelectedModule(IncidentFormField.Cctv);
+                  setConditionsModalOpen(true);
+                }}
+                size="small"
+                type={
+                  getConditionCount(IncidentFormField.Cctv) > 0
+                    ? 'primary'
+                    : 'default'
+                }
+              >
+                Conditions
+              </Button>
+            </Col>
+            <Col>
+              <Switch
+                checked={incidentFormFields.CCTV}
+                checkedChildren="On"
+                onChange={() => {
+                  toggleField(IncidentFormField.Cctv);
+                }}
+                unCheckedChildren="Off"
+              />
             </Col>
           </Row>
         </Card>
@@ -242,30 +310,75 @@ const ViewTag = ({
       <div
         key="custom"
         style={{
-          cursor: 'grab',
+          cursor: 'move',
         }}
       >
         <Card
-          style={{ marginBottom: 0, outline: '1px solid #ccc' }}
-          title={<FormattedMessage defaultMessage="Custom" />}
+          style={{
+            border: incidentFormFields.CUSTOM
+              ? '1px solid #1890ff'
+              : '1px solid #d9d9d9',
+            marginBottom: 0,
+            opacity: incidentFormFields.CUSTOM ? 1 : 0.7,
+            transition: 'all 0.3s ease',
+          }}
         >
-          <Row>
-            <Col flex={1}>
-              <FormattedMessage defaultMessage="Custom" />
-            </Col>
-            <Col>
+          <Row align="middle" gutter={8}>
+            <Col span={1}>
               <Tooltip
                 title={intl.formatMessage({
-                  defaultMessage: 'Hide/Show field on form',
+                  defaultMessage: 'Drag to reorder',
                 })}
               >
-                <Checkbox
-                  checked={incidentFormFields.CUSTOM}
-                  onChange={() => {
-                    toggleField(IncidentFormField.Custom);
-                  }}
+                <FontAwesomeIcon
+                  icon={faGripVertical}
+                  size="lg"
+                  style={{ color: '#8c8c8c', cursor: 'grab' }}
                 />
               </Tooltip>
+            </Col>
+            <Col flex={1}>
+              <FormattedMessage defaultMessage="Custom" />
+              {getConditionCount(IncidentFormField.Custom) > 0 && (
+                <Badge
+                  count={getConditionCount(IncidentFormField.Custom)}
+                  style={{ marginLeft: 12 }}
+                  title={intl.formatMessage(
+                    {
+                      defaultMessage: '{count} condition(s) active',
+                    },
+                    { count: getConditionCount(IncidentFormField.Custom) }
+                  )}
+                />
+              )}
+            </Col>
+            <Col>
+              <Button
+                className="cancelDrag"
+                icon={<FontAwesomeIcon icon={faFilter} />}
+                onClick={() => {
+                  setSelectedModule(IncidentFormField.Custom);
+                  setConditionsModalOpen(true);
+                }}
+                size="small"
+                type={
+                  getConditionCount(IncidentFormField.Custom) > 0
+                    ? 'primary'
+                    : 'default'
+                }
+              >
+                Conditions
+              </Button>
+            </Col>
+            <Col>
+              <Switch
+                checked={incidentFormFields.CUSTOM}
+                checkedChildren="On"
+                onChange={() => {
+                  toggleField(IncidentFormField.Custom);
+                }}
+                unCheckedChildren="Off"
+              />
             </Col>
           </Row>
         </Card>
@@ -276,32 +389,48 @@ const ViewTag = ({
         <div
           key="draft"
           style={{
-            cursor: 'grab',
+            cursor: 'move',
           }}
         >
           <Card
-            style={{ marginBottom: 0, outline: '1px solid #ccc' }}
-            title={<FormattedMessage defaultMessage="Save as draft" />}
+            style={{
+              border: incidentFormFields.DRAFT
+                ? '1px solid #1890ff'
+                : '1px solid #d9d9d9',
+              marginBottom: 0,
+              opacity: incidentFormFields.DRAFT ? 1 : 0.7,
+              transition: 'all 0.3s ease',
+            }}
           >
-            <Row gutter={[16, 16]}>
-              <Col flex={1}>
-                <FormattedMessage defaultMessage="Draft" />
-              </Col>
-              <Col>
+            <Row align="middle" gutter={8}>
+              <Col span={1}>
                 <Tooltip
                   title={intl.formatMessage({
-                    defaultMessage: 'Hide/Show field on form',
+                    defaultMessage: 'Drag to reorder',
                   })}
                 >
-                  <Checkbox
-                    checked={incidentFormFields.DRAFT}
-                    onChange={() => {
-                      toggleField(IncidentFormField.Draft);
-                    }}
+                  <FontAwesomeIcon
+                    icon={faGripVertical}
+                    size="lg"
+                    style={{ color: '#8c8c8c', cursor: 'grab' }}
                   />
                 </Tooltip>
               </Col>
-
+              <Col flex={1}>
+                <FormattedMessage defaultMessage="Save as draft" />
+              </Col>
+              <Col>
+                <Switch
+                  checked={incidentFormFields.DRAFT}
+                  checkedChildren="On"
+                  onChange={() => {
+                    toggleField(IncidentFormField.Draft);
+                  }}
+                  unCheckedChildren="Off"
+                />
+              </Col>
+            </Row>
+            <Row gutter={[16, 16]} style={{ marginTop: 16 }}>
               {/* Draft Title Input */}
               <Col span={24}>
                 <Input
@@ -360,30 +489,75 @@ const ViewTag = ({
       <div
         key="goods"
         style={{
-          cursor: 'grab',
+          cursor: 'move',
         }}
       >
         <Card
-          style={{ marginBottom: 0, outline: '1px solid #ccc' }}
-          title={<FormattedMessage defaultMessage="Goods" />}
+          style={{
+            border: incidentFormFields.GOODS
+              ? '1px solid #1890ff'
+              : '1px solid #d9d9d9',
+            marginBottom: 0,
+            opacity: incidentFormFields.GOODS ? 1 : 0.7,
+            transition: 'all 0.3s ease',
+          }}
         >
-          <Row>
-            <Col flex={1}>
-              <FormattedMessage defaultMessage="Goods" />
-            </Col>
-            <Col>
+          <Row align="middle" gutter={8}>
+            <Col span={1}>
               <Tooltip
                 title={intl.formatMessage({
-                  defaultMessage: 'Hide/Show field on form',
+                  defaultMessage: 'Drag to reorder',
                 })}
               >
-                <Checkbox
-                  checked={incidentFormFields.GOODS}
-                  onChange={() => {
-                    toggleField(IncidentFormField.Goods);
-                  }}
+                <FontAwesomeIcon
+                  icon={faGripVertical}
+                  size="lg"
+                  style={{ color: '#8c8c8c', cursor: 'grab' }}
                 />
               </Tooltip>
+            </Col>
+            <Col flex={1}>
+              <FormattedMessage defaultMessage="Goods" />
+              {getConditionCount(IncidentFormField.Goods) > 0 && (
+                <Badge
+                  count={getConditionCount(IncidentFormField.Goods)}
+                  style={{ marginLeft: 12 }}
+                  title={intl.formatMessage(
+                    {
+                      defaultMessage: '{count} condition(s) active',
+                    },
+                    { count: getConditionCount(IncidentFormField.Goods) }
+                  )}
+                />
+              )}
+            </Col>
+            <Col>
+              <Button
+                className="cancelDrag"
+                icon={<FontAwesomeIcon icon={faFilter} />}
+                onClick={() => {
+                  setSelectedModule(IncidentFormField.Goods);
+                  setConditionsModalOpen(true);
+                }}
+                size="small"
+                type={
+                  getConditionCount(IncidentFormField.Goods) > 0
+                    ? 'primary'
+                    : 'default'
+                }
+              >
+                Conditions
+              </Button>
+            </Col>
+            <Col>
+              <Switch
+                checked={incidentFormFields.GOODS}
+                checkedChildren="On"
+                onChange={() => {
+                  toggleField(IncidentFormField.Goods);
+                }}
+                unCheckedChildren="Off"
+              />
             </Col>
           </Row>
         </Card>
@@ -393,21 +567,72 @@ const ViewTag = ({
       <div
         key="groups"
         style={{
-          cursor: 'grab',
+          cursor: 'move',
         }}
       >
         <Card
-          style={{ marginBottom: 0, outline: '1px solid #ccc' }}
-          title={<FormattedMessage defaultMessage="Groups" />}
+          style={{
+            border: incidentFormFields.GROUPS
+              ? '1px solid #1890ff'
+              : '1px solid #d9d9d9',
+            marginBottom: 0,
+            opacity: incidentFormFields.GROUPS ? 1 : 0.7,
+            transition: 'all 0.3s ease',
+          }}
         >
-          <Row>
+          <Row align="middle" gutter={8}>
+            <Col span={1}>
+              <Tooltip
+                title={intl.formatMessage({
+                  defaultMessage: 'Drag to reorder',
+                })}
+              >
+                <FontAwesomeIcon
+                  icon={faGripVertical}
+                  size="lg"
+                  style={{ color: '#8c8c8c', cursor: 'grab' }}
+                />
+              </Tooltip>
+            </Col>
             <Col flex={1}>
               <FormattedMessage defaultMessage="Groups" />
+              {getConditionCount(IncidentFormField.Groups) > 0 && (
+                <Badge
+                  count={getConditionCount(IncidentFormField.Groups)}
+                  style={{ marginLeft: 12 }}
+                  title={intl.formatMessage(
+                    {
+                      defaultMessage: '{count} condition(s) active',
+                    },
+                    { count: getConditionCount(IncidentFormField.Groups) }
+                  )}
+                />
+              )}
             </Col>
             <Col>
-              <Checkbox
+              <Button
+                className="cancelDrag"
+                icon={<FontAwesomeIcon icon={faFilter} />}
+                onClick={() => {
+                  setSelectedModule(IncidentFormField.Groups);
+                  setConditionsModalOpen(true);
+                }}
+                size="small"
+                type={
+                  getConditionCount(IncidentFormField.Groups) > 0
+                    ? 'primary'
+                    : 'default'
+                }
+              >
+                Conditions
+              </Button>
+            </Col>
+            <Col>
+              <Switch
                 checked={incidentFormFields.GROUPS}
+                checkedChildren="On"
                 onChange={() => toggleField(IncidentFormField.Groups)}
+                unCheckedChildren="Off"
               />
             </Col>
           </Row>
@@ -418,30 +643,75 @@ const ViewTag = ({
       <div
         key="images"
         style={{
-          cursor: 'grab',
+          cursor: 'move',
         }}
       >
         <Card
-          style={{ marginBottom: 0, outline: '1px solid #ccc' }}
-          title={<FormattedMessage defaultMessage="Images" />}
+          style={{
+            border: incidentFormFields.IMAGES
+              ? '1px solid #1890ff'
+              : '1px solid #d9d9d9',
+            marginBottom: 0,
+            opacity: incidentFormFields.IMAGES ? 1 : 0.7,
+            transition: 'all 0.3s ease',
+          }}
         >
-          <Row>
-            <Col flex={1}>
-              <FormattedMessage defaultMessage="Images" />
-            </Col>
-            <Col>
+          <Row align="middle" gutter={8}>
+            <Col span={1}>
               <Tooltip
                 title={intl.formatMessage({
-                  defaultMessage: 'Hide/Show field on form',
+                  defaultMessage: 'Drag to reorder',
                 })}
               >
-                <Checkbox
-                  checked={incidentFormFields.IMAGES}
-                  onChange={() => {
-                    toggleField(IncidentFormField.Images);
-                  }}
+                <FontAwesomeIcon
+                  icon={faGripVertical}
+                  size="lg"
+                  style={{ color: '#8c8c8c', cursor: 'grab' }}
                 />
               </Tooltip>
+            </Col>
+            <Col flex={1}>
+              <FormattedMessage defaultMessage="Images" />
+              {getConditionCount(IncidentFormField.Images) > 0 && (
+                <Badge
+                  count={getConditionCount(IncidentFormField.Images)}
+                  style={{ marginLeft: 12 }}
+                  title={intl.formatMessage(
+                    {
+                      defaultMessage: '{count} condition(s) active',
+                    },
+                    { count: getConditionCount(IncidentFormField.Images) }
+                  )}
+                />
+              )}
+            </Col>
+            <Col>
+              <Button
+                className="cancelDrag"
+                icon={<FontAwesomeIcon icon={faFilter} />}
+                onClick={() => {
+                  setSelectedModule(IncidentFormField.Images);
+                  setConditionsModalOpen(true);
+                }}
+                size="small"
+                type={
+                  getConditionCount(IncidentFormField.Images) > 0
+                    ? 'primary'
+                    : 'default'
+                }
+              >
+                Conditions
+              </Button>
+            </Col>
+            <Col>
+              <Switch
+                checked={incidentFormFields.IMAGES}
+                checkedChildren="On"
+                onChange={() => {
+                  toggleField(IncidentFormField.Images);
+                }}
+                unCheckedChildren="Off"
+              />
             </Col>
           </Row>
         </Card>
@@ -451,44 +721,82 @@ const ViewTag = ({
       <div
         key="police"
         style={{
-          cursor: 'grab',
+          cursor: 'move',
         }}
       >
         <Card
-          style={{ marginBottom: 0, outline: '1px solid #ccc' }}
-          title={<FormattedMessage defaultMessage="Details/Police" />}
+          style={{
+            border: incidentFormFields.POLICE
+              ? '1px solid #1890ff'
+              : '1px solid #d9d9d9',
+            marginBottom: 0,
+            opacity: incidentFormFields.POLICE ? 1 : 0.7,
+            transition: 'all 0.3s ease',
+          }}
         >
-          <Row>
-            <Col flex={1}>
-              <FormattedMessage defaultMessage="Police" />
-            </Col>
-            <Col>
+          <Row align="middle" gutter={8}>
+            <Col span={1}>
               <Tooltip
                 title={intl.formatMessage({
-                  defaultMessage: 'Hide/Show field on form',
+                  defaultMessage: 'Drag to reorder',
                 })}
               >
-                <Checkbox
-                  checked={incidentFormFields.POLICE}
-                  onChange={() => {
-                    toggleField(IncidentFormField.Police);
-                  }}
+                <FontAwesomeIcon
+                  icon={faGripVertical}
+                  size="lg"
+                  style={{ color: '#8c8c8c', cursor: 'grab' }}
                 />
               </Tooltip>
             </Col>
-          </Row>
-          <Row>
             <Col flex={1}>
-              <FormattedMessage defaultMessage="Details" />
+              <div>
+                <div>
+                  <FormattedMessage defaultMessage="Details/Police" />
+                  {getConditionCount(IncidentFormField.Police) > 0 && (
+                    <Badge
+                      count={getConditionCount(IncidentFormField.Police)}
+                      style={{ marginLeft: 12 }}
+                      title={intl.formatMessage(
+                        {
+                          defaultMessage: '{count} condition(s) active',
+                        },
+                        { count: getConditionCount(IncidentFormField.Police) }
+                      )}
+                    />
+                  )}
+                </div>
+                <Typography.Text style={{ fontSize: 12 }} type="secondary">
+                  <FormattedMessage defaultMessage="Details section is always required" />
+                </Typography.Text>
+              </div>
             </Col>
             <Col>
-              <Tooltip
-                title={intl.formatMessage({
-                  defaultMessage: 'Is required',
-                })}
+              <Button
+                className="cancelDrag"
+                icon={<FontAwesomeIcon icon={faFilter} />}
+                onClick={() => {
+                  setSelectedModule(IncidentFormField.Police);
+                  setConditionsModalOpen(true);
+                }}
+                size="small"
+                type={
+                  getConditionCount(IncidentFormField.Police) > 0
+                    ? 'primary'
+                    : 'default'
+                }
               >
-                <Checkbox checked={incidentFormFields.DETAILS} disabled />
-              </Tooltip>
+                Conditions
+              </Button>
+            </Col>
+            <Col>
+              <Switch
+                checked={incidentFormFields.POLICE}
+                checkedChildren="On"
+                onChange={() => {
+                  toggleField(IncidentFormField.Police);
+                }}
+                unCheckedChildren="Off"
+              />
             </Col>
           </Row>
         </Card>
@@ -498,89 +806,128 @@ const ViewTag = ({
       <div
         key="profiles"
         style={{
-          cursor: 'grab',
+          cursor: 'move',
         }}
       >
         <Card
-          style={{ marginBottom: 0, outline: '1px solid #ccc' }}
-          title={<FormattedMessage defaultMessage="Profiles" />}
+          style={{
+            border: incidentFormFields.OFFENDERS
+              ? '1px solid #1890ff'
+              : '1px solid #d9d9d9',
+            marginBottom: 0,
+            opacity: incidentFormFields.OFFENDERS ? 1 : 0.7,
+            transition: 'all 0.3s ease',
+          }}
         >
-          <Row>
-            <Col flex={1}>
-              <FormattedMessage defaultMessage="Offenders" />
-            </Col>
-            <Col>
+          <Row align="middle" gutter={8}>
+            <Col span={1}>
               <Tooltip
                 title={intl.formatMessage({
-                  defaultMessage: 'Hide/Show field on form',
+                  defaultMessage: 'Drag to reorder',
                 })}
               >
-                <Checkbox
-                  checked={incidentFormFields.OFFENDERS}
-                  onChange={() => {
-                    toggleField(IncidentFormField.Offenders);
-                  }}
+                <FontAwesomeIcon
+                  icon={faGripVertical}
+                  size="lg"
+                  style={{ color: '#8c8c8c', cursor: 'grab' }}
                 />
               </Tooltip>
+            </Col>
+            <Col flex={1}>
+              <div>
+                <FormattedMessage defaultMessage="Profiles" />
+                {getConditionCount(IncidentFormField.Offenders) > 0 && (
+                  <Badge
+                    count={getConditionCount(IncidentFormField.Offenders)}
+                    style={{ marginLeft: 12 }}
+                    title={intl.formatMessage(
+                      {
+                        defaultMessage: '{count} condition(s) active',
+                      },
+                      { count: getConditionCount(IncidentFormField.Offenders) }
+                    )}
+                  />
+                )}
+              </div>
+            </Col>
+            <Col>
+              <Button
+                className="cancelDrag"
+                icon={<FontAwesomeIcon icon={faFilter} />}
+                onClick={() => {
+                  setSelectedModule(IncidentFormField.Offenders);
+                  setConditionsModalOpen(true);
+                }}
+                size="small"
+                type={
+                  getConditionCount(IncidentFormField.Offenders) > 0
+                    ? 'primary'
+                    : 'default'
+                }
+              >
+                Conditions
+              </Button>
+            </Col>
+            <Col>
+              <Switch
+                checked={incidentFormFields.OFFENDERS}
+                checkedChildren="On"
+                onChange={() => {
+                  toggleField(IncidentFormField.Offenders);
+                }}
+                unCheckedChildren="Off"
+              />
             </Col>
           </Row>
-          {/* TODO Put back when native form is updated */}
-          {/* <Row> */}
-          {/*  <Col flex={1}> */}
-          {/*    <FormattedMessage defaultMessage="Vehicles" id="r6wuJ3" /> */}
-          {/*  </Col> */}
-          {/*  <Col> */}
-          {/*    <Tooltip */}
-          {/*      title={intl.formatMessage({ */}
-          {/*        defaultMessage: 'Hide/Show field on form', */}
-          {/*        id: '+AMnGS', */}
-          {/*      })} */}
-          {/*    > */}
-          {/*      <Checkbox */}
-          {/*        checked={incidentFormFields.VEHICLES} */}
-          {/*        onChange={() => { */}
-          {/*          toggleField(IncidentFormField.Vehicles); */}
-          {/*        }} */}
-          {/*      /> */}
-          {/*    </Tooltip> */}
-          {/*  </Col> */}
-          {/* </Row> */}
-          <Row>
+          <Row style={{ marginTop: 8 }}>
+            {/* TODO Put back when native form is updated */}
+            {/* <Row> */}
+            {/*  <Col flex={1}> */}
+            {/*    <FormattedMessage defaultMessage="Vehicles" id="r6wuJ3" /> */}
+            {/*  </Col> */}
+            {/*  <Col> */}
+            {/*    <Tooltip */}
+            {/*      title={intl.formatMessage({ */}
+            {/*        defaultMessage: 'Hide/Show field on form', */}
+            {/*        id: '+AMnGS', */}
+            {/*      })} */}
+            {/*    > */}
+            {/*      <Checkbox */}
+            {/*        checked={incidentFormFields.VEHICLES} */}
+            {/*        onChange={() => { */}
+            {/*          toggleField(IncidentFormField.Vehicles); */}
+            {/*        }} */}
+            {/*      /> */}
+            {/*    </Tooltip> */}
+            {/*  </Col> */}
+            {/* </Row> */}
+            <Col span={1} />
             <Col flex={1}>
-              <FormattedMessage defaultMessage="Witnesses" />
+              <Typography.Text>Witnesses</Typography.Text>
             </Col>
             <Col>
-              <Tooltip
-                title={intl.formatMessage({
-                  defaultMessage: 'Hide/Show field on form',
-                })}
-              >
-                <Checkbox
-                  checked={incidentFormFields.WITNESSES}
-                  onChange={() => {
-                    toggleField(IncidentFormField.Witnesses);
-                  }}
-                />
-              </Tooltip>
+              <Switch
+                checked={incidentFormFields.WITNESSES}
+                onChange={() => {
+                  toggleField(IncidentFormField.Witnesses);
+                }}
+                size="small"
+              />
             </Col>
           </Row>
-          <Row>
+          <Row style={{ marginTop: 8 }}>
+            <Col span={1} />
             <Col flex={1}>
-              <FormattedMessage defaultMessage="Victims" />
+              <Typography.Text>Victims</Typography.Text>
             </Col>
             <Col>
-              <Tooltip
-                title={intl.formatMessage({
-                  defaultMessage: 'Hide/Show field on form',
-                })}
-              >
-                <Checkbox
-                  checked={incidentFormFields.VICTIMS}
-                  onChange={() => {
-                    toggleField(IncidentFormField.Victims);
-                  }}
-                />
-              </Tooltip>
+              <Switch
+                checked={incidentFormFields.VICTIMS}
+                onChange={() => {
+                  toggleField(IncidentFormField.Victims);
+                }}
+                size="small"
+              />
             </Col>
           </Row>
         </Card>
@@ -590,88 +937,92 @@ const ViewTag = ({
       <div
         key="tags"
         style={{
-          cursor: 'grab',
+          cursor: 'move',
         }}
       >
         <Card
-          style={{ marginBottom: 0, outline: '1px solid #ccc' }}
-          title={<FormattedMessage defaultMessage="Tags" />}
+          style={{
+            border: '1px solid #1890ff',
+            marginBottom: 0,
+            opacity: 1,
+            transition: 'all 0.3s ease',
+          }}
         >
-          <Row>
-            <Col flex={1}>
-              <FormattedMessage defaultMessage="Tags" />
-            </Col>
-            <Col>
+          <Row align="middle" gutter={8}>
+            <Col span={1}>
               <Tooltip
                 title={intl.formatMessage({
-                  defaultMessage: 'Is required',
+                  defaultMessage: 'Drag to reorder',
                 })}
               >
-                <Checkbox checked={incidentFormFields.TYPES} disabled />
-              </Tooltip>
-            </Col>
-          </Row>
-          <Row>
-            <Col flex={1}>
-              <FormattedMessage defaultMessage="Impact" />
-            </Col>
-            <Col>
-              <Tooltip
-                title={intl.formatMessage({
-                  defaultMessage: 'Hide/Show field on form',
-                })}
-              >
-                <Checkbox
-                  checked={incidentFormFields.IMPACT}
-                  onChange={() => {
-                    toggleField(IncidentFormField.Impact);
-                  }}
+                <FontAwesomeIcon
+                  icon={faGripVertical}
+                  size="lg"
+                  style={{ color: '#8c8c8c', cursor: 'grab' }}
                 />
               </Tooltip>
             </Col>
-          </Row>
-          <Row gutter={16}>
             <Col flex={1}>
-              <FormattedMessage defaultMessage="Involved" />
+              <div>
+                <FormattedMessage defaultMessage="Tags" />
+                <Tag color="red" style={{ marginLeft: 8 }}>
+                  <FormattedMessage defaultMessage="Required" />
+                </Tag>
+              </div>
+            </Col>
+            <Col>
+              <Typography.Text type="secondary">
+                <FormattedMessage defaultMessage="Always enabled" />
+              </Typography.Text>
+            </Col>
+          </Row>
+          <Row style={{ marginTop: 12 }}>
+            <Col span={1} />
+            <Col flex={1}>
+              <Typography.Text>Impact</Typography.Text>
+            </Col>
+            <Col>
+              <Switch
+                checked={incidentFormFields.IMPACT}
+                onChange={() => {
+                  toggleField(IncidentFormField.Impact);
+                }}
+                size="small"
+              />
+            </Col>
+          </Row>
+          <Row align="middle" style={{ marginTop: 8 }}>
+            <Col span={1} />
+            <Col flex={1}>
+              <Typography.Text>Involved</Typography.Text>
             </Col>
             <Col>
               <Tooltip
                 title={intl.formatMessage({
-                  defaultMessage:
-                    'Allow users to select multiple tags or just one',
+                  defaultMessage: 'Single selection mode',
                 })}
               >
-                <Row align="middle" gutter={8}>
-                  <Col>
-                    <Typography.Text>
-                      <FormattedMessage defaultMessage="Single Mode:" />
-                    </Typography.Text>
-                  </Col>
-                  <Col>
-                    <Checkbox
-                      checked={involvedMode}
-                      disabled={!incidentFormFields.INVOLVED}
-                      onChange={(event) => {
-                        toggleInvolvedMode(event.target.checked);
-                      }}
-                    />
-                  </Col>
-                </Row>
-              </Tooltip>
-            </Col>
-            <Col>
-              <Tooltip
-                title={intl.formatMessage({
-                  defaultMessage: 'Hide/Show field on form',
-                })}
-              >
-                <Checkbox
-                  checked={incidentFormFields.INVOLVED}
-                  onChange={() => {
-                    toggleField(IncidentFormField.Involved);
+                <Switch
+                  checked={involvedMode}
+                  checkedChildren="Single"
+                  disabled={!incidentFormFields.INVOLVED}
+                  onChange={(checked) => {
+                    toggleInvolvedMode(checked);
                   }}
+                  size="small"
+                  style={{ width: 70 }}
+                  unCheckedChildren="Multi"
                 />
               </Tooltip>
+            </Col>
+            <Col style={{ marginLeft: 8 }}>
+              <Switch
+                checked={incidentFormFields.INVOLVED}
+                onChange={() => {
+                  toggleField(IncidentFormField.Involved);
+                }}
+                size="small"
+              />
             </Col>
           </Row>
         </Card>
@@ -681,30 +1032,75 @@ const ViewTag = ({
       <div
         key="when"
         style={{
-          cursor: 'grab',
+          cursor: 'move',
         }}
       >
         <Card
-          style={{ marginBottom: 0, outline: '1px solid #ccc' }}
-          title={<FormattedMessage defaultMessage="When/Where" />}
+          style={{
+            border: incidentFormFields.WHERE
+              ? '1px solid #1890ff'
+              : '1px solid #d9d9d9',
+            marginBottom: 0,
+            opacity: incidentFormFields.WHERE ? 1 : 0.7,
+            transition: 'all 0.3s ease',
+          }}
         >
-          <Row>
-            <Col flex={1}>
-              <FormattedMessage defaultMessage="When/Where" />
-            </Col>
-            <Col>
+          <Row align="middle" gutter={8}>
+            <Col span={1}>
               <Tooltip
                 title={intl.formatMessage({
-                  defaultMessage: 'Hide/Show field on form',
+                  defaultMessage: 'Drag to reorder',
                 })}
               >
-                <Checkbox
-                  checked={incidentFormFields.WHERE}
-                  onChange={() => {
-                    toggleField(IncidentFormField.Where);
-                  }}
+                <FontAwesomeIcon
+                  icon={faGripVertical}
+                  size="lg"
+                  style={{ color: '#8c8c8c', cursor: 'grab' }}
                 />
               </Tooltip>
+            </Col>
+            <Col flex={1}>
+              <FormattedMessage defaultMessage="When/Where" />
+              {getConditionCount(IncidentFormField.Where) > 0 && (
+                <Badge
+                  count={getConditionCount(IncidentFormField.Where)}
+                  style={{ marginLeft: 12 }}
+                  title={intl.formatMessage(
+                    {
+                      defaultMessage: '{count} condition(s) active',
+                    },
+                    { count: getConditionCount(IncidentFormField.Where) }
+                  )}
+                />
+              )}
+            </Col>
+            <Col>
+              <Button
+                className="cancelDrag"
+                icon={<FontAwesomeIcon icon={faFilter} />}
+                onClick={() => {
+                  setSelectedModule(IncidentFormField.Where);
+                  setConditionsModalOpen(true);
+                }}
+                size="small"
+                type={
+                  getConditionCount(IncidentFormField.Where) > 0
+                    ? 'primary'
+                    : 'default'
+                }
+              >
+                Conditions
+              </Button>
+            </Col>
+            <Col>
+              <Switch
+                checked={incidentFormFields.WHERE}
+                checkedChildren="On"
+                onChange={() => {
+                  toggleField(IncidentFormField.Where);
+                }}
+                unCheckedChildren="Off"
+              />
             </Col>
           </Row>
         </Card>
@@ -905,12 +1301,10 @@ const ViewTag = ({
             <Row>
               <Col flex={1}>
                 <FormattedMessage defaultMessage="Custom Questions" />
-              </Col>
-              <Col>
                 {questionLayoutChanged && (
-                  <Button onClick={() => saveQOrder()} type="primary">
-                    <FormattedMessage defaultMessage="Save Order" />
-                  </Button>
+                  <Tag color="orange" style={{ marginLeft: 8 }}>
+                    <FormattedMessage defaultMessage="Unsaved changes" />
+                  </Tag>
                 )}
               </Col>
             </Row>
@@ -927,7 +1321,15 @@ const ViewTag = ({
                   margin={margin}
                   onLayoutChange={(newLayout) => {
                     setQuestionsLayout(newLayout);
-                    if (!questionLayoutChanged) setQuestionLayoutChanged(true);
+                    // Only mark as changed if user actually moved something
+                    const hasActualChange = newLayout.some(
+                      (item, index) =>
+                        item.y !== questionsLayout[index]?.y ||
+                        item.x !== questionsLayout[index]?.x
+                    );
+                    if (hasActualChange && !questionLayoutChanged) {
+                      setQuestionLayoutChanged(true);
+                    }
                   }}
                   rowHeight={rowHeight}
                   width={20}
@@ -947,12 +1349,10 @@ const ViewTag = ({
             <Row>
               <Col flex={1}>
                 <FormattedMessage defaultMessage="Custom Incident Form" />
-              </Col>
-              <Col>
                 {incidentFormLayoutChanged && (
-                  <Button onClick={() => saveIncidentForm()} type="primary">
-                    <FormattedMessage defaultMessage="Save Order" />
-                  </Button>
+                  <Tag color="orange" style={{ marginLeft: 8 }}>
+                    <FormattedMessage defaultMessage="Unsaved changes" />
+                  </Tag>
                 )}
               </Col>
             </Row>
@@ -965,13 +1365,13 @@ const ViewTag = ({
                 isDraggable
                 isResizable={false}
                 layout={incidentFormLayout}
-                margin={margin}
+                margin={[0, 8]}
                 onLayoutChange={(newLayout) => {
                   setIncidentFormLayout(newLayout);
                   if (!incidentFormLayoutChanged)
                     setIncidentFormLayoutChanged(true);
                 }}
-                rowHeight={rowHeight}
+                rowHeight={30}
                 width={20}
               >
                 {incidentFormFormatted}
@@ -1058,6 +1458,57 @@ const ViewTag = ({
           />
         )}
       </Drawer>
+      {selectedModule && (
+        <ModuleConditionsModal
+          availableBusinessGroups={availableBusinessGroups}
+          availableQuestions={
+            data?.tag?.tagQuestions?.map((tq) => ({
+              answerType: tq.question.type,
+              id: tq.question.id,
+              options: tq.question.optionsFormatted?.map((opt) => ({
+                label: opt,
+                value: opt,
+              })),
+              question: tq.question.questionFormatted,
+            })) || []
+          }
+          currentConditions={currentModuleConditions}
+          moduleType={selectedModule}
+          onClose={() => {
+            setConditionsModalOpen(false);
+            setSelectedModule(null);
+          }}
+          onSave={saveModuleConditions}
+          open={conditionsModalOpen}
+        />
+      )}
+
+      {/* Floating Save Bar */}
+      {(incidentFormLayoutChanged || questionLayoutChanged) && (
+        <Card
+          bodyStyle={{
+            alignItems: 'center',
+            display: 'flex',
+            gap: 16,
+            padding: '8px',
+          }}
+          style={{
+            bottom: 24,
+            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
+            padding: '8px 16px',
+            position: 'fixed',
+            right: 24,
+            zIndex: 1000,
+          }}
+        >
+          <Typography.Text strong>
+            <FormattedMessage defaultMessage="You have unsaved changes" />
+          </Typography.Text>
+          <Button loading={saving} onClick={saveAllChanges} type="primary">
+            <FormattedMessage defaultMessage="Save All Changes" />
+          </Button>
+        </Card>
+      )}
     </div>
   );
 };
