@@ -25,6 +25,7 @@ import {
   currentSchemeAtom,
   currentSchemeBusinessesAtom,
   currentSchemeIdAtom,
+  currentUserSchemeAtom,
   isAdminAtom,
 } from '#/providers/SchemeProvider/SchemeProvider';
 import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
@@ -120,6 +121,7 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
   const intl = useIntl();
   const isAdmin = useAtomValue(isAdminAtom);
   const userId = useAtomValue(currentUserAtom)?.id ?? '';
+  const userRole = useAtomValue(currentUserSchemeAtom)?.role;
   const businesses = useAtomValue(currentSchemeBusinessesAtom);
   const permissions = useAtomValue(currentPermissionsAtom);
   const userBusinesses = useAtomValue(currentSchemeBusinessesAtom);
@@ -1380,25 +1382,10 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
                 }
 
                 if (condition.type === 'USER_ROLE') {
-                  // Check if user has admin role
-                  if (
-                    isAdmin &&
-                    condition.conditionValues.includes('SCHEME_ADMIN')
-                  ) {
-                    return true;
-                  }
-
-                  // Check if user has custom role (any non-USER role)
-                  if (condition.conditionValues.includes('CUSTOM')) {
-                    // We need to get the user's role from the current scheme
-                    // This would need to be fetched or passed from the scheme context
-                    // For now, we'll check if they're not a basic user
-                    return !condition.conditionValues.includes('USER');
-                  }
-
-                  // For other specific roles, we would need the actual role value
-                  // which should be available from the userScheme context
-                  return false;
+                  // Check if user's role ID matches any of the condition values
+                  return !!(
+                    userRole && condition.conditionValues.includes(userRole)
+                  );
                 }
 
                 return true;

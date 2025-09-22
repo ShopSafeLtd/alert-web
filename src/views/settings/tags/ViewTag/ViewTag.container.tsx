@@ -7,6 +7,7 @@ const AddCrimeType = (): JSX.Element => {
   const {
     addQuestion,
     availableBusinessGroups,
+    availableRoles,
     conditionsModalOpen,
     currentModuleConditions,
     data,
@@ -49,6 +50,7 @@ const AddCrimeType = (): JSX.Element => {
     <View
       addQuestion={addQuestion}
       availableBusinessGroups={availableBusinessGroups}
+      availableRoles={availableRoles}
       conditionsModalOpen={conditionsModalOpen}
       currentModuleConditions={currentModuleConditions}
       data={data}

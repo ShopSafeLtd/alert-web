@@ -29,9 +29,7 @@ const WorkflowTriggerConfig: React.FC<WorkflowTriggerConfigProps> = ({
         <FormattedMessage defaultMessage="Workflow Trigger" />
       </Typography.Title>
       <Form.Item
-        label={
-          <FormattedMessage defaultMessage="Name for the workflow" />
-        }
+        label={<FormattedMessage defaultMessage="Name for the workflow" />}
         name="name"
         rules={[
           {
@@ -99,9 +97,7 @@ const WorkflowTriggerConfig: React.FC<WorkflowTriggerConfigProps> = ({
         <Col span={24}>
           {typeWatch === 'trigger' && (
             <Form.Item
-              label={
-                <FormattedMessage defaultMessage="Trigger Data" />
-              }
+              label={<FormattedMessage defaultMessage="Trigger Data" />}
               name="workflowType"
               rules={[
                 {
@@ -112,8 +108,7 @@ const WorkflowTriggerConfig: React.FC<WorkflowTriggerConfigProps> = ({
                 },
               ]}
               tooltip={intl.formatMessage({
-                defaultMessage:
-                  'The data that triggers the workflow.',
+                defaultMessage: 'The data that triggers the workflow.',
               })}
             >
               <Radio.Group
@@ -152,9 +147,7 @@ const WorkflowTriggerConfig: React.FC<WorkflowTriggerConfigProps> = ({
         <Col span={24}>
           {modelSelected && modelSelected === Model.Incident && (
             <Form.Item
-              label={
-                <FormattedMessage defaultMessage="Trigger Action" />
-              }
+              label={<FormattedMessage defaultMessage="Trigger Action" />}
               name="workflowTrigger"
               rules={[
                 {
@@ -165,12 +158,10 @@ const WorkflowTriggerConfig: React.FC<WorkflowTriggerConfigProps> = ({
                 },
               ]}
               tooltip={intl.formatMessage({
-                defaultMessage:
-                  'The action that triggers the workflow.',
+                defaultMessage: 'The action that triggers the workflow.',
               })}
             >
               <Radio.Group
-                defaultValue={WorkflowTrigger.Created}
                 disabled={editId !== undefined}
                 optionType="button"
                 options={[
@@ -210,8 +201,7 @@ const WorkflowTriggerConfig: React.FC<WorkflowTriggerConfigProps> = ({
                 },
               ]}
               tooltip={intl.formatMessage({
-                defaultMessage:
-                  'How regularly the workflow should run',
+                defaultMessage: 'How regularly the workflow should run',
               })}
             >
               <Select
@@ -259,9 +249,7 @@ const WorkflowTriggerConfig: React.FC<WorkflowTriggerConfigProps> = ({
             >
               <DatePicker
                 defaultValue={
-                  new Date(
-                    new Date().setDate(new Date().getDate() + 1)
-                  )
+                  new Date(new Date().setDate(new Date().getDate() + 1))
                 }
               />
             </Form.Item>

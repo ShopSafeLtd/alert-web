@@ -33,6 +33,7 @@ interface Props {
     options?: { label: string; value: string }[];
     question: string;
   }[];
+  availableRoles: { id: string; name: string; type: string }[];
   currentConditions?: ModuleCondition[];
   moduleType: IncidentFormField;
   onClose: () => void;
@@ -40,23 +41,10 @@ interface Props {
   open: boolean;
 }
 
-const availableRoles = [
-  { label: 'User', value: 'USER' },
-  { label: 'Scheme Admin', value: 'SCHEME_ADMIN' },
-  { label: 'Group Admin', value: 'GROUP_ADMIN' },
-  { label: 'Content Admin', value: 'CONTENT_ADMIN' },
-  { label: 'Shopsafe Admin', value: 'SHOPSAFE_ADMIN' },
-  { label: 'Any Custom Role', value: 'CUSTOM' },
-];
-
-const getRoleLabels = (roleValues: string[]): string[] =>
-  roleValues.map(
-    (value) => availableRoles.find((r) => r.value === value)?.label || value
-  );
-
 const ModuleConditionsModal: React.FC<Props> = ({
   availableBusinessGroups,
   availableQuestions,
+  availableRoles,
   currentConditions = [],
   onClose,
   onSave,
@@ -134,6 +122,9 @@ const ModuleConditionsModal: React.FC<Props> = ({
       (id) => availableBusinessGroups.find((g) => g.id === id)?.name || id
     );
 
+  const getRoleNames = (roleIds: string[]): string[] =>
+    roleIds.map((id) => availableRoles.find((r) => r.id === id)?.name || id);
+
   const getAnswerLabels = (condition: ModuleCondition): string[] => {
     const options = getQuestionOptions(condition.questionId);
     return condition.conditionValues.map(
@@ -194,8 +185,8 @@ const ModuleConditionsModal: React.FC<Props> = ({
                     value={condition.conditionValues}
                   >
                     {availableRoles.map((role) => (
-                      <Option key={role.value} value={role.value}>
-                        {role.label}
+                      <Option key={role.id} value={role.id}>
+                        {role.name}
                       </Option>
                     ))}
                   </Select>
@@ -308,7 +299,7 @@ const ModuleConditionsModal: React.FC<Props> = ({
                   {cond.type === 'USER_ROLE' ? (
                     <>
                       <FormattedMessage defaultMessage="User has role: " />
-                      {getRoleLabels(cond.conditionValues).join(' OR ')}
+                      {getRoleNames(cond.conditionValues).join(' OR ')}
                     </>
                   ) : cond.type === 'BUSINESS_GROUPS' ? (
                     <>
