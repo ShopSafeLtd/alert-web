@@ -8,13 +8,14 @@ export type BusinessGroupsQueryVariables = Types.Exact<{
 }>;
 
 
-export type BusinessGroupsQuery = { __typename?: 'Query', groups: Array<{ __typename?: 'Group', id: string }> };
+export type BusinessGroupsQuery = { __typename?: 'Query', groups: Array<{ __typename?: 'Group', id: string, name: string }> };
 
 
 export const BusinessGroupsDocument = gql`
     query BusinessGroups($where: GroupWhereInput) {
   groups(where: $where) {
     id
+    name
   }
 }
     `;

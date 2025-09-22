@@ -1,23 +1,33 @@
 import React from 'react';
+
 import View from './EditCrimeType.view';
 import useEditCrimeType from './useEditCrimeType';
 
 interface Props {
-  onClose: () => void;
   incidentId: string | undefined;
+  onClose: () => void;
 }
 
-const EditCrimeType = ({ onClose, incidentId }: Props): JSX.Element => {
-  const { onSubmit, data, loading, saving } = useEditCrimeType({
-    onClose,
+const EditCrimeType = ({ incidentId, onClose }: Props): JSX.Element => {
+  const {
+    data,
+    generatingDescription,
+    loading,
+    onGenerateDescription,
+    onSubmit,
+    saving,
+  } = useEditCrimeType({
     incidentId,
+    onClose,
   });
   return (
     <View
-      onSubmit={onSubmit}
-      onClose={onClose}
       data={data}
+      generatingDescription={generatingDescription}
       loading={loading}
+      onClose={onClose}
+      onGenerateDescription={onGenerateDescription}
+      onSubmit={onSubmit}
       saving={saving}
     />
   );

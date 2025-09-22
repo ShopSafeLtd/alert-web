@@ -1,0 +1,378 @@
+/* AI Generate Button Component */
+.aiButtonWrapper {
+  position: absolute;
+  right: 8px;
+  top: 32px; /* Adjusted to account for the label */
+  z-index: 1;
+}
+
+.aiButtonGradientWrapper {
+  position: relative;
+  display: inline-block;
+  padding: 2px;
+  border-radius: 0.625rem; /* 10px - matches button border radius */
+  transition: all 0.3s ease;
+}
+
+/* Four-color gradient: Red to Orange to Dark Blue to Light Blue */
+.aiButtonGradientWrapper.redOrange {
+  background: linear-gradient(135deg, #ee2224, #f4a841, #421bff, #0db0fd);
+}
+
+/* Four-color gradient: Red to Orange to Dark Blue to Light Blue */
+.aiButtonGradientWrapper.blueGradient {
+  background: linear-gradient(135deg, #ee2224, #f4a841, #421bff, #0db0fd);
+}
+
+/* Static gradient with subtle opacity */
+.aiButtonGradientWrapper:not(.generating) {
+  opacity: 0.8;
+  box-shadow: 0 2px 8px rgba(238, 34, 36, 0.15);
+}
+
+.aiButtonGradientWrapper.blueGradient:not(.generating) {
+  box-shadow: 0 2px 8px rgba(66, 27, 255, 0.15);
+}
+
+.aiButtonGradientWrapper:not(.generating):hover {
+  opacity: 1;
+  box-shadow: 0 4px 12px rgba(238, 34, 36, 0.25);
+  transform: translateY(-1px);
+}
+
+.aiButtonGradientWrapper.blueGradient:not(.generating):hover {
+  box-shadow: 0 4px 12px rgba(66, 27, 255, 0.25);
+}
+
+/* Animated gradient when generating - Four colors repeating */
+.aiButtonGradientWrapper.redOrange.generating {
+  background: linear-gradient(
+    45deg,
+    #ee2224,
+    #f4a841,
+    #421bff,
+    #0db0fd,
+    #ee2224,
+    #f4a841,
+    #421bff,
+    #0db0fd
+  );
+  background-size: 800% 800%;
+  animation: gradientShift 4s ease infinite;
+  opacity: 1;
+}
+
+/* Animated gradient when generating - Four colors repeating */
+.aiButtonGradientWrapper.blueGradient.generating {
+  background: linear-gradient(
+    45deg,
+    #ee2224,
+    #f4a841,
+    #421bff,
+    #0db0fd,
+    #ee2224,
+    #f4a841,
+    #421bff,
+    #0db0fd
+  );
+  background-size: 800% 800%;
+  animation: gradientShift 4s ease infinite;
+  opacity: 1;
+}
+
+/* Dark mode adjustments */
+:global([style*='color-scheme: dark'])
+  .aiButtonGradientWrapper:not(.generating) {
+  opacity: 0.7;
+}
+
+:global([style*='color-scheme: dark'])
+  .aiButtonGradientWrapper:not(.generating):hover {
+  opacity: 0.9;
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.aiButton {
+  position: relative;
+  border-radius: calc(
+    0.625rem - 2px
+  ); /* 8px - accounts for 2px gradient border */
+  transition: all 0.3s ease;
+  z-index: 1;
+}
+
+/* Light mode styles (default) */
+.aiButton {
+  background: #ffffff;
+  border: none;
+  color: rgba(0, 0, 0, 0.85);
+  margin: 0;
+}
+
+.aiButton:hover:not(:disabled) {
+  background: #fafafa;
+  color: #ee2224;
+  border: none;
+}
+
+.aiButtonGradientWrapper.blueGradient .aiButton:hover:not(:disabled) {
+  color: #421bff;
+}
+
+/* Dark mode styles - matching Ant Design v4 dark theme */
+:global([style*='color-scheme: dark']) .aiButton {
+  background: #141414;
+  border: none;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+:global([style*='color-scheme: dark']) .aiButton:hover:not(:disabled) {
+  background: #1f1f1f;
+  color: #f4a841;
+  border: none;
+}
+
+:global([style*='color-scheme: dark'])
+  .aiButtonGradientWrapper.blueGradient
+  .aiButton:hover:not(:disabled) {
+  color: #0db0fd;
+  background: #1f1f1f;
+  border: none;
+}
+
+/* Generating state */
+.aiButtonGradientWrapper.generating .aiButton {
+  background: #ffffff;
+  color: #ee2224;
+  border: none;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.aiButtonGradientWrapper.blueGradient.generating .aiButton {
+  color: #421bff;
+}
+
+.aiButtonGradientWrapper.generating .aiButton:hover {
+  background: white;
+}
+
+/* Dark mode generating state */
+:global([style*='color-scheme: dark'])
+  .aiButtonGradientWrapper.generating
+  .aiButton {
+  background: #141414;
+  color: #f4a841;
+  border: none;
+}
+
+:global([style*='color-scheme: dark'])
+  .aiButtonGradientWrapper.blueGradient.generating
+  .aiButton {
+  color: #0db0fd;
+  background: #141414;
+}
+
+:global([style*='color-scheme: dark'])
+  .aiButtonGradientWrapper.generating
+  .aiButton:hover {
+  background: #141414;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 20px rgba(238, 34, 36, 0.2);
+  }
+  50% {
+    transform: scale(1.02);
+    box-shadow: 0 0 30px rgba(238, 34, 36, 0.4);
+  }
+}
+
+/* Blue variant pulse */
+.aiButtonGradientWrapper.blueGradient.generating .aiButton {
+  animation: pulseBlue 2s ease-in-out infinite;
+}
+
+@keyframes pulseBlue {
+  0%,
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 20px rgba(66, 27, 255, 0.2);
+  }
+  50% {
+    transform: scale(1.02);
+    box-shadow: 0 0 30px rgba(66, 27, 255, 0.4);
+  }
+}
+
+/* Content wrapper for text areas and other elements */
+.aiContentGradientWrapper {
+  position: relative;
+  display: block;
+  padding: 2px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  background: transparent;
+}
+
+/* Red to Orange gradient for content wrapper */
+.aiContentGradientWrapper.redOrange {
+  background: transparent;
+}
+
+/* Blue gradient for content wrapper */
+.aiContentGradientWrapper.blueGradient {
+  background: transparent;
+}
+
+/* Static state - no gradient */
+.aiContentGradientWrapper:not(.generating) {
+  background: transparent;
+}
+
+/* Animated gradient when generating - Four colors for content */
+.aiContentGradientWrapper.redOrange.generating {
+  background: linear-gradient(
+    45deg,
+    #ee2224,
+    #f4a841,
+    #421bff,
+    #0db0fd,
+    #ee2224,
+    #f4a841,
+    #421bff,
+    #0db0fd
+  );
+  background-size: 800% 800%;
+  animation: gradientShift 4s ease infinite;
+  border-radius: 8px;
+}
+
+/* Animated gradient when generating - Four colors for content */
+.aiContentGradientWrapper.blueGradient.generating {
+  background: linear-gradient(
+    45deg,
+    #ee2224,
+    #f4a841,
+    #421bff,
+    #0db0fd,
+    #ee2224,
+    #f4a841,
+    #421bff,
+    #0db0fd
+  );
+  background-size: 800% 800%;
+  animation: gradientShift 4s ease infinite;
+  border-radius: 8px;
+}
+
+/* Ensure child elements have proper background when generating */
+.aiContentGradientWrapper.generating :global(.ant-input),
+.aiContentGradientWrapper.generating :global(.ant-input-affix-wrapper),
+.aiContentGradientWrapper.generating
+  :global(.ant-input-textarea)
+  :global(textarea.ant-input) {
+  background: #ffffff;
+  border: none;
+  border-radius: 6px;
+}
+
+/* Dark mode adjustments for content wrapper - matching Ant Design v4 dark theme */
+:global([style*='color-scheme: dark'])
+  .aiContentGradientWrapper.generating
+  :global(.ant-input),
+:global([style*='color-scheme: dark'])
+  .aiContentGradientWrapper.generating
+  :global(.ant-input-affix-wrapper),
+:global([style*='color-scheme: dark'])
+  .aiContentGradientWrapper.generating
+  :global(.ant-input-textarea)
+  :global(textarea.ant-input) {
+  background: #141414;
+  border: none;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* Style for the textarea to prevent text going behind button */
+.descriptionTextArea {
+  padding-right: 60px !important; /* Space for button + some margin */
+}
+
+/* Gradient Form Item styles for reusable gradient borders */
+.gradientFormItem {
+  position: relative;
+}
+
+/* Apply gradient background to the control wrapper when generating */
+.gradientFormItem.generating :global(.ant-form-item-control-input-content) {
+  position: relative;
+  padding: 2px;
+  border-radius: 8px;
+  animation: gradientShift 4s ease infinite;
+}
+
+/* Four-color gradient variant for form items */
+.gradientFormItem.redOrange.generating
+  :global(.ant-form-item-control-input-content) {
+  background: linear-gradient(
+    45deg,
+    #ee2224,
+    #f4a841,
+    #421bff,
+    #0db0fd,
+    #ee2224,
+    #f4a841,
+    #421bff,
+    #0db0fd
+  );
+  background-size: 800% 800%;
+}
+
+/* Four-color gradient variant for form items */
+.gradientFormItem.blueGradient.generating
+  :global(.ant-form-item-control-input-content) {
+  background: linear-gradient(
+    45deg,
+    #ee2224,
+    #f4a841,
+    #421bff,
+    #0db0fd,
+    #ee2224,
+    #f4a841,
+    #421bff,
+    #0db0fd
+  );
+  background-size: 800% 800%;
+}
+
+/* Ensure textarea/input has proper background when generating */
+.gradientFormItem.generating :global(.ant-input),
+.gradientFormItem.generating :global(.ant-input-affix-wrapper) {
+  background: #ffffff;
+  border: none;
+  border-radius: 6px;
+}
+
+/* Dark mode support for gradient form items */
+:global([style*='color-scheme: dark'])
+  .gradientFormItem.generating
+  :global(.ant-input),
+:global([style*='color-scheme: dark'])
+  .gradientFormItem.generating
+  :global(.ant-input-affix-wrapper) {
+  background: #141414;
+  color: rgba(255, 255, 255, 0.85);
+}

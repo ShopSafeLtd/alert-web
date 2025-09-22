@@ -14,6 +14,8 @@ import { useState } from 'react';
 import { useIntl } from 'react-intl';
 import errorNotification from 'types/mutation_notifications/error_notification';
 
+import { useGenerateIncidentTypeDescriptionMutation } from './graphql/mutations/__generated__/generateIncidentTypeDescription.generated';
+
 interface FormData {
   crimeType: CrimeType;
   description: string;
@@ -30,6 +32,11 @@ interface Props {
 }
 
 interface Return {
+  generatingDescription: boolean;
+  onGenerateDescription: (
+    name: string,
+    currentDescription?: string
+  ) => Promise<null | string>;
   onSubmit: (value: FormData) => void;
   saving: boolean;
   schemeId: string;
@@ -45,6 +52,7 @@ const useAddCrimeType = ({
   const schemeId = useAtomValue(currentSchemeIdAtom);
   const userId = useAtomValue(userIdAtom);
   const [saving, setSaving] = useState(false);
+  const [generatingDescription, setGeneratingDescription] = useState(false);
 
   const { data: tags } = useListSchemeTagsQuery({
     fetchPolicy: 'cache-and-network',
@@ -88,6 +96,8 @@ const useAddCrimeType = ({
     update,
   });
 
+  const [generateDescription] = useGenerateIncidentTypeDescriptionMutation();
+
   const onSubmit = (data: FormData) => {
     setSaving(true);
 
@@ -126,7 +136,44 @@ const useAddCrimeType = ({
     });
   };
 
+  const onGenerateDescription = async (
+    name: string,
+    currentDescription?: string
+  ): Promise<null | string> => {
+    setGeneratingDescription(true);
+
+    try {
+      const result = await generateDescription({
+        variables: {
+          incidentTypeName: name,
+          userDescription: currentDescription || undefined,
+        },
+      });
+
+      setGeneratingDescription(false);
+
+      if (result.data?.generateIncidentTypeDescription) {
+        return result.data.generateIncidentTypeDescription;
+      }
+    } catch {
+      setGeneratingDescription(false);
+      notification.error({
+        description: intl.formatMessage({
+          defaultMessage: 'Failed to generate description. Please try again.',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Generation Failed',
+        }),
+        placement: 'bottomRight',
+      });
+    }
+
+    return null;
+  };
+
   return {
+    generatingDescription,
+    onGenerateDescription,
     onSubmit,
     saving,
     schemeId,

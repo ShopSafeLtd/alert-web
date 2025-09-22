@@ -1,0 +1,3 @@
+mutation GenerateIncidentTypeDescription($incidentTypeName: String!, $userDescription: String) {
+    generateIncidentTypeDescription(incidentTypeName: $incidentTypeName, userDescription: $userDescription)
+}

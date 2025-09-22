@@ -1,0 +1,5 @@
+mutation OneStopImportData($data: OneStopImportDataInput!) {
+    oneStopImportData(data: $data) {
+        success
+    }
+}
