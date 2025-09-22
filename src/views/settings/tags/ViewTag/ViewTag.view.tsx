@@ -79,6 +79,7 @@ import ModuleConditionsModal from './components/ModuleConditionsModal';
 interface Props {
   addQuestion: boolean;
   availableBusinessGroups: { id: string; name: string }[];
+  availableRoles: { id: string; name: string; type: string }[];
   conditionsModalOpen: boolean;
   currentModuleConditions: ModuleCondition[];
   data: ViewTagQuery | undefined;
@@ -138,6 +139,7 @@ interface Props {
 const ViewTag = ({
   addQuestion,
   availableBusinessGroups,
+  availableRoles,
   conditionsModalOpen,
   currentModuleConditions,
   data,
@@ -1472,6 +1474,7 @@ const ViewTag = ({
               question: tq.question.questionFormatted,
             })) || []
           }
+          availableRoles={availableRoles}
           currentConditions={currentModuleConditions}
           moduleType={selectedModule}
           onClose={() => {
