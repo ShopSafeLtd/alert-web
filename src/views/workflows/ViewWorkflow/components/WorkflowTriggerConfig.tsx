@@ -1,7 +1,7 @@
 import type { FormInstance } from 'antd';
+import { Card, Col, Form, Input, Radio, Row, Select, Typography } from 'antd';
 
 import DatePicker from '#/components/util-components/DatePicker';
-import { Card, Col, Form, Input, Radio, Row, Select, Typography } from 'antd';
 import { CronSchedule, Model, WorkflowTrigger } from 'graphql/types';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
@@ -211,6 +211,12 @@ const WorkflowTriggerConfig: React.FC<WorkflowTriggerConfigProps> = ({
                       defaultMessage: 'Every Day',
                     }),
                     value: CronSchedule.EveryDay,
+                  },
+                  {
+                    label: intl.formatMessage({
+                      defaultMessage: 'Every Week',
+                    }),
+                    value: CronSchedule.EveryWeek,
                   },
                   {
                     label: intl.formatMessage({
