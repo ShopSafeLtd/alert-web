@@ -49,7 +49,9 @@ const useStyles = createUseStyles((theme: Theme) => ({
       theme.colorScheme === 'dark'
         ? '0 2px 8px rgba(0, 0, 0, 0.4)'
         : '0 2px 8px rgba(0, 0, 0, 0.15)',
+    maxHeight: '60vh',
     maxWidth: '220px',
+    overflowY: 'auto',
     padding: '12px 16px',
     position: 'absolute',
     right: '20px',

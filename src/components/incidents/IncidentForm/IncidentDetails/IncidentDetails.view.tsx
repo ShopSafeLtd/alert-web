@@ -2,6 +2,8 @@ import DatePicker from '#/components/util-components/DatePicker';
 import { Col, Form, Input, Row, Typography } from 'antd';
 import React from 'react';
 import { useIntl } from 'react-intl';
+import { useAtomValue } from 'jotai/index';
+import { useAmericanDateFormatAtom } from '#/providers/SchemeProvider/SchemeProvider';
 
 const { Paragraph, Title } = Typography;
 
@@ -11,6 +13,13 @@ interface Props {
 
 const IncidentDetails = ({ saving }: Props): JSX.Element => {
   const intl = useIntl();
+  let dateFormat = 'HH:mm - DD/MM/YY';
+  const shouldUseUs = useAtomValue(useAmericanDateFormatAtom);
+
+  if (shouldUseUs) {
+    dateFormat = 'HH:mm - MM/DD/YY';
+  }
+
   return (
     <>
       <Row align="bottom" style={{ marginBottom: 20 }}>
@@ -61,7 +70,7 @@ const IncidentDetails = ({ saving }: Props): JSX.Element => {
               disabledDate={(current) =>
                 current && current.valueOf() > Date.now()
               }
-              format="HH:mm - DD/MM/YY"
+              format={dateFormat}
               placeholder={intl.formatMessage(
                 { defaultMessage: 'Set Date & Time' },
                 {}

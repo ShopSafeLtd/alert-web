@@ -18,18 +18,30 @@ import { useIndustriesQuery } from 'graphql/industry/__generated__/industries.ge
 import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 
+// import useIncidentMapReport, {
+//   type IncidentMapFilters,
+// } from './useIncidentMapReport';
+
+const handleSaveFilters = () => {
+  console.log('Save disabled for debugging');
+};
+
 interface Return {
+  // Original data
   allBrandsData: BrandsQuery | undefined;
   brandsData: BrandsQuery | undefined;
   brandsLoading: boolean;
   businessData: BusinessLocationsQuery | undefined;
+  cluster: boolean;
   data: IncidentSimpleMapQuery | undefined;
   dateRange: { endDate: Date; startDate: Date } | null;
   groupsData: SchemeGroupsQuery | undefined;
   groupsLoading: boolean;
+  heatmapIntensity: number;
   industriesData: IndustriesQuery | undefined;
   industriesLoading: boolean;
   loading: boolean;
+  multiColour: 'multi' | 'single';
   onChangeBrands: (value: string[]) => void;
   onChangeDateRange: (value: { endDate: Date; startDate: Date } | null) => void;
   onChangeGroups: (value: string[]) => void;
@@ -37,19 +49,63 @@ interface Return {
   onChangeIndustries: (value: string[]) => void;
   onChangePoliceAreas: (value: string | string[]) => void;
   onChangeSchemes: (value: string[]) => void;
+  // Save filters
+  saveFilters: () => void;
+  saving: boolean;
   schemes: { scheme: { id: string; name: string } }[];
   selectedBrands: string[];
+
   selectedGroups: string[];
   selectedIncidentTypes: string[];
   selectedIndustries: string[];
   selectedPoliceAreas: string[];
   selectedSchemes: string[];
+  setCluster: (value: boolean) => void;
+  setHeatmapIntensity: (value: number) => void;
+  setMultiColour: (value: 'multi' | 'single') => void;
+  setShowBCRP: (value: boolean) => void;
+  setShowBusinesses: (value: boolean) => void;
+  setShowCameras: (value: boolean) => void;
+  setShowHeatmap: (value: boolean) => void;
+  setShowLondonPolice: (value: boolean) => void;
+  setShowMarkers: (value: boolean) => void;
+  setShowPolice: (value: boolean) => void;
+  setShowRetailParks: (value: boolean) => void;
+  setShowUKDistricts: (value: boolean) => void;
+  setUseBcu: (value: boolean) => void;
+  setViewMode: (value: 'popup' | 'sidebar') => void;
+  showBCRP: boolean;
+  showBusinesses: boolean;
+  showCameras: boolean;
+  showHeatmap: boolean;
+  showLondonPolice: boolean;
+  // Display settings
+  showMarkers: boolean;
+  showPolice: boolean;
+  showRetailParks: boolean;
+  showUKDistricts: boolean;
+
+  useBcu: boolean;
+  viewMode: 'popup' | 'sidebar';
 }
 
-const useIncidentMap = (): Return => {
+const useIncidentMapWithMetadata = (): Return => {
   const userId = useAtomValue(userIdAtom);
   const currentScheme = useAtomValue(currentSchemeIdAtom);
   const schemes = useAtomValue(userSchemesAtom);
+
+  // Completely disable metadata system for debugging
+  const saving = false;
+
+  // Default date range (last 30 days)
+  const defaultDateRange = (() => {
+    const endDate = new Date();
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - 30);
+    return { endDate, startDate };
+  })();
+
+  // Initialize state with default values - NO getFilters() call to avoid loops
   const [selectedSchemes, setSchemes] = useState<string[]>([currentScheme]);
   const [selectedGroups, setGroups] = useState<string[]>([]);
   const [selectedBrands, setBrands] = useState<string[]>([]);
@@ -61,14 +117,27 @@ const useIncidentMap = (): Return => {
   const [dateRange, setDateRange] = useState<{
     endDate: Date;
     startDate: Date;
-  } | null>(() => {
-    // Default to last 30 days
-    const endDate = new Date();
-    const startDate = new Date();
-    startDate.setDate(startDate.getDate() - 30);
-    return { endDate, startDate };
-  });
+  } | null>(defaultDateRange);
 
+  // Display settings state - initialize with defaults
+  const [showMarkers, setShowMarkers] = useState(true);
+  const [showBusinesses, setShowBusinesses] = useState(false);
+  const [showHeatmap, setShowHeatmap] = useState(false);
+  const [showPolice, setShowPolice] = useState(false);
+  const [showLondonPolice, setShowLondonPolice] = useState(false);
+  const [showCameras, setShowCameras] = useState(false);
+  const [showBCRP, setShowBCRP] = useState(false);
+  const [showRetailParks, setShowRetailParks] = useState(false);
+  const [showUKDistricts, setShowUKDistricts] = useState(false);
+  const [cluster, setCluster] = useState(true);
+  const [heatmapIntensity, setHeatmapIntensity] = useState(50);
+  const [multiColour, setMultiColour] = useState<'multi' | 'single'>('single');
+  const [useBcu, setUseBcu] = useState(false);
+  const [viewMode, setViewMode] = useState<'popup' | 'sidebar'>('popup');
+
+  // All metadata functionality disabled for debugging
+
+  // Data queries (same as original)
   const { data: groupsData, loading: groupsLoading } = useSchemeGroupsQuery({
     variables: {
       where: {
@@ -192,7 +261,7 @@ const useIncidentMap = (): Return => {
 
   const { data: brandsData, loading: brandsLoading } = useBrandsQuery({
     variables: {
-      take: 1000, // Fetch more brands to ensure we get all of them
+      take: 1000,
       where: {
         scheme: {
           id: {
@@ -203,10 +272,9 @@ const useIncidentMap = (): Return => {
     },
   });
 
-  // Also fetch ALL brands for name mapping (no filter)
   const { data: allBrandsData } = useBrandsQuery({
     variables: {
-      take: 2000, // Get all brands for name lookup
+      take: 2000,
     },
   });
 
@@ -226,13 +294,16 @@ const useIncidentMap = (): Return => {
     brandsData,
     brandsLoading,
     businessData,
+    cluster,
     data,
     dateRange,
     groupsData,
     groupsLoading,
+    heatmapIntensity,
     industriesData,
     industriesLoading,
     loading,
+    multiColour,
     onChangeBrands: setBrands,
     onChangeDateRange: setDateRange,
     onChangeGroups,
@@ -244,14 +315,45 @@ const useIncidentMap = (): Return => {
       setSelectedPoliceAreas(Array.isArray(value) ? value : [value]);
     },
     onChangeSchemes,
+    // Save filters
+    saveFilters: handleSaveFilters,
+    saving,
     schemes,
     selectedBrands,
+
     selectedGroups,
     selectedIncidentTypes,
     selectedIndustries,
     selectedPoliceAreas,
     selectedSchemes,
+    setCluster,
+    setHeatmapIntensity,
+    setMultiColour,
+    setShowBCRP,
+    setShowBusinesses,
+    setShowCameras,
+    setShowHeatmap,
+    setShowLondonPolice,
+    setShowMarkers,
+    setShowPolice,
+    setShowRetailParks,
+    setShowUKDistricts,
+    setUseBcu,
+    setViewMode,
+    showBCRP,
+    showBusinesses,
+    showCameras,
+    showHeatmap,
+    showLondonPolice,
+    // Display settings
+    showMarkers,
+    showPolice,
+    showRetailParks,
+    showUKDistricts,
+
+    useBcu,
+    viewMode,
   };
 };
 
-export default useIncidentMap;
+export default useIncidentMapWithMetadata;

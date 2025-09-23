@@ -1,75 +1,76 @@
 query CurrentSchemeProvider($where: UserSchemeWhereUniqueInput!) {
-  userScheme(where: $where) {
-    id
-    role
-    isAdmin
-    permissions {
-      model
-      allowedMethods
-    }
-    orignalPermissions {
-      id
-      admin
-    }
-    dashboard {
-      runningBanner
-      layout {
-        h
-        i
-        maxH
-        maxW
-        minH
-        minW
-        moved
-        static
-        w
-        x
-        y
-        metadata
-      }
-    }
-    scheme {
-      disablePassword
-      draftIncidents
-      currency
-      dontAutoSetTimeDate
-      activityAssignToUser
-      autoPopulateDescription
-      defaultPublicOffenderDOB
-      disableGalleryOnNative
-      facialDetection
-      facialRecognition
-      facialRedaction
-      allowTodoTemplateOverride
-      restrictIncidentAccess
-      goodsMode
-      id
-      imagesRequiredOnOffenders
-      languageCount
-      name
-      needJustification
-      oneSelectedIncidentTypeOnly
-      reportOnly
-      taskTimeTracking
-      requireSiteNumberForUsers
-      skipLocationToAddress
-      useBusinessGroupsOnIncident
-      userTodos
-      needJustification
-      incidentTypeTooltip
-      requireActivityAuthorised
-      requireBusinessOnIncident
-      optionalBusinessOnUsers
-      connectedToSchemes {
+    userScheme(where: $where) {
         id
-        name
-      }
-      logo {
-        optimisedPersisted
-      }
-      darkLogo {
-        optimisedPersisted
-      }
+        role
+        isAdmin
+        permissions {
+            model
+            allowedMethods
+        }
+        orignalPermissions {
+            id
+            admin
+        }
+        dashboard {
+            runningBanner
+            layout {
+                h
+                i
+                maxH
+                maxW
+                minH
+                minW
+                moved
+                static
+                w
+                x
+                y
+                metadata
+            }
+        }
+        scheme {
+            usDateFormat
+            disablePassword
+            draftIncidents
+            currency
+            dontAutoSetTimeDate
+            activityAssignToUser
+            autoPopulateDescription
+            defaultPublicOffenderDOB
+            disableGalleryOnNative
+            facialDetection
+            facialRecognition
+            facialRedaction
+            allowTodoTemplateOverride
+            restrictIncidentAccess
+            goodsMode
+            id
+            imagesRequiredOnOffenders
+            languageCount
+            name
+            needJustification
+            oneSelectedIncidentTypeOnly
+            reportOnly
+            taskTimeTracking
+            requireSiteNumberForUsers
+            skipLocationToAddress
+            useBusinessGroupsOnIncident
+            userTodos
+            needJustification
+            incidentTypeTooltip
+            requireActivityAuthorised
+            requireBusinessOnIncident
+            optionalBusinessOnUsers
+            connectedToSchemes {
+                id
+                name
+            }
+            logo {
+                optimisedPersisted
+            }
+            darkLogo {
+                optimisedPersisted
+            }
+        }
     }
-  }
 }

@@ -125,6 +125,16 @@ const CreateReport = ({ onClose }: Props) => {
       }),
       value: ReportType.CheckListQuestionTable,
     },
+    {
+      description: intl.formatMessage({
+        defaultMessage:
+          'Interactive map view of incidents with filters and layers.',
+      }),
+      name: intl.formatMessage({
+        defaultMessage: 'Incident Map',
+      }),
+      value: ReportType.IncidentMap,
+    },
   ];
 
   const [createReport] = useCreateReportTemplateMutation({

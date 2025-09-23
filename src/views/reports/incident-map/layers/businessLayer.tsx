@@ -5,23 +5,33 @@ import React from 'react';
 import { Layer, Source } from 'react-map-gl';
 
 // Color palette for different brands
-// Using a diverse, visually distinct palette
+// Using a diverse, visually distinct palette with maximum contrast
 export const BRAND_COLORS = [
-  '#6366f1', // Indigo (default)
-  '#ec4899', // Pink
-  '#10b981', // Emerald
-  '#f59e0b', // Amber
-  '#8b5cf6', // Violet
-  '#14b8a6', // Teal
-  '#f97316', // Orange
-  '#3b82f6', // Blue
-  '#84cc16', // Lime
-  '#ef4444', // Red
-  '#a855f7', // Purple
-  '#06b6d4', // Cyan
-  '#eab308', // Yellow
-  '#64748b', // Slate
-  '#22c55e', // Green
+  '#FF0000', // Pure Red
+  '#00FF00', // Pure Green
+  '#0000FF', // Pure Blue
+  '#FFFF00', // Yellow
+  '#FF00FF', // Magenta
+  '#00FFFF', // Cyan
+  '#FF8C00', // Dark Orange
+  '#9400D3', // Violet
+  '#32CD32', // Lime Green
+  '#FF1493', // Deep Pink
+  '#1E90FF', // Dodger Blue
+  '#FFD700', // Gold
+  '#8B4513', // Saddle Brown
+  '#00CED1', // Dark Turquoise
+  '#FF69B4', // Hot Pink
+  '#4B0082', // Indigo
+  '#FA8072', // Salmon
+  '#2E8B57', // Sea Green
+  '#FF6347', // Tomato
+  '#4682B4', // Steel Blue
+  '#D2691E', // Chocolate
+  '#6B8E23', // Olive Drab
+  '#FF4500', // Orange Red
+  '#DA70D6', // Orchid
+  '#20B2AA', // Light Sea Green
 ];
 
 // Function to generate consistent color for a brand

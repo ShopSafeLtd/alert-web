@@ -1,10 +1,9 @@
 import type { CurrentSchemeProviderQuery } from '#/providers/SchemeProvider/__generated__/current-scheme.generated';
-import type { AvailableDashboardElements } from '#/state/dashboard-model';
-
 import { useCurrentSchemeProviderQuery } from '#/providers/SchemeProvider/__generated__/current-scheme.generated';
+import type { AvailableDashboardElements } from '#/state/dashboard-model';
+import { defaultAdminLayout, defaultUserLayout } from '#/state/dashboard-model';
 import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import { useStoreActions } from '#/state';
-import { defaultAdminLayout, defaultUserLayout } from '#/state/dashboard-model';
 import { LocalStorageKeys } from '#/types';
 import { Currency, GoodsMode, Role } from 'graphql/types';
 import { atom, useAtomValue, useSetAtom } from 'jotai/index';
@@ -78,6 +77,11 @@ export const CurrencySymbolMap: Record<
   [Currency.Zar]: { prefix: 'R', suffix: '' },
 };
 
+export const useAmericanDateFormatAtom = atom((get) => {
+  const { scheme } = get(currentUserSchemeAtom);
+  return scheme?.usDateFormat || false;
+});
+
 export const settingSchemeAtom = atom(true);
 export const currencyAtom = atom((get) => {
   const { scheme } = get(currentUserSchemeAtom);
@@ -110,6 +114,7 @@ export const defaultCurrentUserSchemeAtom: UserSchemeState = {
   permissions: [],
   role: Role.User,
   scheme: {
+    usDateFormat: false,
     activityAssignToUser: false,
     allowTodoTemplateOverride: true,
     autoPopulateDescription: false,
