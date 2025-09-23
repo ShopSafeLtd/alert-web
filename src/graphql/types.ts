@@ -4957,6 +4957,13 @@ export type DependWeightInput = {
   weight: Scalars['String'];
 };
 
+export enum DetectActionType {
+  Activity = 'ACTIVITY',
+  Email = 'EMAIL',
+  PushNotification = 'PUSH_NOTIFICATION',
+  Sms = 'SMS'
+}
+
 export type DetectedFace = {
   __typename?: 'DetectedFace';
   attributes: Scalars['JSON'];
@@ -18502,6 +18509,11 @@ export type RekMatchedFaceWhereInput = {
   updatedAt?: InputMaybe<DateTimeFilter>;
 };
 
+export enum RekVersion {
+  Aws = 'AWS',
+  Custom = 'CUSTOM'
+}
+
 export type RelationSet = {
   set?: InputMaybe<Array<UniqueId>>;
 };
@@ -19038,6 +19050,7 @@ export type Scheme = {
   updatedAt: Scalars['Date'];
   updatesCreated: Scalars['Int'];
   uploadOffenderImagesOnMobile: Scalars['Boolean'];
+  usDateFormat: Scalars['Boolean'];
   useBusinessGroupsOnIncident: Scalars['Boolean'];
   userCount: Scalars['Int'];
   userNotifications: Scalars['Int'];
@@ -23069,7 +23082,7 @@ export type UploadVehicleImage = {
 
 export type UpsertBrand = {
   brandId?: InputMaybe<Scalars['String']>;
-  businesses: Array<Scalars['String']>;
+  businesses?: InputMaybe<Array<Scalars['String']>>;
   description?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
   schemeId: Scalars['String'];
