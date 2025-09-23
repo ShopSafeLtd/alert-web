@@ -13,7 +13,9 @@ import MapLegend from '#/components/map/MapLegend';
 import MultiIncidentPopup from '#/components/map/MultiIncidentPopup/MultiIncidentPopup.view';
 import ReportsSideMenu from '#/components/reports/ReportsSideMenu/ReportsSideMenu.view';
 import BCRPLayer from '#/views/reports/incident-map/layers/bcrpLayer';
-import BusinessLayer from '#/views/reports/incident-map/layers/businessLayer';
+import BusinessLayer, {
+  getBrandColor,
+} from '#/views/reports/incident-map/layers/businessLayer';
 import CameraLayer from '#/views/reports/incident-map/layers/cameraLayer';
 import {
   clusterRingLayer,
@@ -27,9 +29,16 @@ import {
 import LondonPoliceLayer from '#/views/reports/incident-map/layers/londonArea';
 import PoliceLayer from '#/views/reports/incident-map/layers/policeArea';
 import RetailParkLayer from '#/views/reports/incident-map/layers/retailParkLayer';
+import UKDistrictsLayer from '#/views/reports/incident-map/layers/ukDistrictsLayer';
 import { Col, Row, Spin, Typography } from 'antd';
 import mapboxgl from 'mapbox-gl';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Layer, Map as MapboxMap, Popup, Source } from 'react-map-gl';
 import { useStoreState } from 'state';
@@ -61,41 +70,82 @@ export const lineLayer: LineLayer = {
 // Layer definitions have been moved to ./layers/incidentLayers.tsx for better organization
 
 interface Props {
+  allBrandsData: BrandsQuery | undefined;
   brandsData: BrandsQuery | undefined;
   brandsLoading: boolean;
   businessData: BusinessLocationsQuery | undefined;
+  cluster: boolean;
   data: IncidentSimpleMapQuery | undefined;
+  dateRange: { endDate: Date; startDate: Date } | null;
   groupsData: SchemeGroupsQuery | undefined;
   groupsLoading: boolean;
+  heatmapIntensity: number;
   industriesData: IndustriesQuery | undefined;
   industriesLoading: boolean;
   loading: boolean;
+  multiColour: 'multi' | 'single';
   onChangeBrands: (value: string[]) => void;
-  onChangeDateRange: (value: { endDate: Date; startDate: Date }) => void;
+  onChangeDateRange: (value: { endDate: Date; startDate: Date } | null) => void;
   onChangeGroups: (value: string[]) => void;
   onChangeIncidentTypes: (value: string | string[]) => void;
   onChangeIndustries: (value: string[]) => void;
   onChangePoliceAreas: (value: string | string[]) => void;
   onChangeSchemes: (value: string[]) => void;
+  // Save filters
+  saveFilters: () => void;
+  saving: boolean;
   schemes: { scheme: { id: string; name: string } }[];
   selectedBrands: string[];
+
   selectedGroups: string[];
   selectedIncidentTypes: string[];
   selectedIndustries: string[];
   selectedPoliceAreas: string[];
   selectedSchemes: string[];
+  setCluster: (value: boolean) => void;
+  setHeatmapIntensity: (value: number) => void;
+  setMultiColour: (value: 'multi' | 'single') => void;
+  setShowBCRP: (value: boolean) => void;
+  setShowBusinesses: (value: boolean) => void;
+  setShowCameras: (value: boolean) => void;
+  setShowHeatmap: (value: boolean) => void;
+  setShowLondonPolice: (value: boolean) => void;
+  setShowMarkers: (value: boolean) => void;
+  setShowPolice: (value: boolean) => void;
+  setShowRetailParks: (value: boolean) => void;
+  setShowUKDistricts: (value: boolean) => void;
+  setUseBcu: (value: boolean) => void;
+  setViewMode: (value: 'popup' | 'sidebar') => void;
+  showBCRP: boolean;
+  showBusinesses: boolean;
+  showCameras: boolean;
+  showHeatmap: boolean;
+  showLondonPolice: boolean;
+  // Display settings
+  showMarkers: boolean;
+  showPolice: boolean;
+  showRetailParks: boolean;
+  showUKDistricts: boolean;
+
+  useBcu: boolean;
+  viewMode: 'popup' | 'sidebar';
 }
 
 const IncidentMap = ({
+  allBrandsData,
   brandsData,
   brandsLoading,
   businessData,
+  cluster,
   data,
+  dateRange,
   groupsData,
   groupsLoading,
+  heatmapIntensity,
   industriesData,
   industriesLoading,
   loading,
+  multiColour,
   onChangeBrands,
   onChangeDateRange,
   onChangeGroups,
@@ -103,31 +153,50 @@ const IncidentMap = ({
   onChangeIndustries,
   onChangePoliceAreas,
   onChangeSchemes,
+  // Save filters
+  saveFilters,
+  saving,
   schemes,
   selectedBrands,
+
   selectedGroups,
   selectedIncidentTypes,
   selectedIndustries,
   selectedPoliceAreas,
   selectedSchemes,
+  setCluster,
+  setHeatmapIntensity,
+  setMultiColour,
+  setShowBCRP,
+  setShowBusinesses,
+  setShowCameras,
+  setShowHeatmap,
+  setShowLondonPolice: setShowLondonPoliceProp,
+  setShowMarkers,
+  setShowPolice,
+  setShowRetailParks,
+  setShowUKDistricts,
+  setUseBcu: setUseBcuProp,
+  setViewMode,
+  showBCRP,
+  showBusinesses,
+  showCameras,
+  showHeatmap,
+  showLondonPolice,
+  // Display settings
+  showMarkers,
+  showPolice,
+  showRetailParks,
+  showUKDistricts,
+
+  useBcu,
+  viewMode,
 }: Props) => {
   const mapRef = useRef<MapRef>(null);
   const mapContainerRef = useRef<HTMLDivElement>(null);
 
   const currentTheme = useStoreState((state) => state.theme.currentTheme);
-  const [multiColour, setMultiColour] = useState<'multi' | 'single'>('single');
-  const [showBusinesses, setShowBusinesses] = useState(false);
-  const [showHeatmap, setShowHeatmap] = useState(false);
-  const [showMarkers, setShowMarkers] = useState(true);
-  const [showPolice, setShowPolice] = useState(false);
-  const [showLondonPolice, toggleShowLondonPolice] = useState(false);
-  const [showCameras, setShowCameras] = useState(false);
-  const [showBCRP, setShowBCRP] = useState(false);
-  const [showRetailParks, setShowRetailParks] = useState(false);
-  const [useBcu, toggleUseBcu] = useState(false);
   const [showFilterPanel, setShowFilterPanel] = useState(true);
-  const [heatmapIntensity, setHeatmapIntensity] = useState(50); // 0-100 scale
-  const [cluster, setCluster] = useState(true);
   const [selectedIncidents, setSelectedIncidents] = useState<{
     currentIndex: number;
     incidents: IncidentSimpleMapQuery['incidents'];
@@ -135,14 +204,13 @@ const IncidentMap = ({
     longitude: number;
   } | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [viewMode, setViewMode] = useState<'popup' | 'sidebar'>('popup');
 
   const setUseBcu = () => {
-    toggleUseBcu(!useBcu);
+    setUseBcuProp(!useBcu);
   };
 
   const setShowLondonPolice = () => {
-    toggleShowLondonPolice(!showLondonPolice);
+    setShowLondonPoliceProp(!showLondonPolice);
   };
 
   const toggleFilterPanel = () => {
@@ -173,6 +241,7 @@ const IncidentMap = ({
   const toggleCameras = () => setShowCameras(!showCameras);
   const toggleBCRP = () => setShowBCRP(!showBCRP);
   const toggleRetailParks = () => setShowRetailParks(!showRetailParks);
+  const toggleUKDistricts = () => setShowUKDistricts(!showUKDistricts);
 
   const onCloseSidebar = useCallback(() => {
     setSidebarOpen(false);
@@ -599,6 +668,49 @@ const IncidentMap = ({
       }))
       ?.filter((coord) => coord.lng !== 0 && coord.lat !== 0) || [];
 
+  // Extract unique brands with their colors
+  const uniqueBrands = useMemo(() => {
+    if (!businessData?.listBusinesses?.businesses || !showBusinesses) return [];
+
+    const brandsMap = new Map<string, { color: string; name: string }>();
+
+    // Create a map of brand IDs to names from both brandsData and allBrandsData
+    const brandIdToName = new Map<string, string>();
+
+    // First add brands from filtered brandsData
+    if (brandsData?.brands?.edges) {
+      for (const { node } of brandsData.brands.edges) {
+        brandIdToName.set(node.id, node.name);
+      }
+    }
+
+    // Then add ALL brands to catch any missing ones
+    if (allBrandsData?.brands?.edges) {
+      for (const { node } of allBrandsData.brands.edges) {
+        if (!brandIdToName.has(node.id)) {
+          brandIdToName.set(node.id, node.name);
+        }
+      }
+    }
+
+    for (const business of businessData.listBusinesses.businesses) {
+      if (business.brands)
+        for (const brandId of business.brands) {
+          if (brandId && !brandsMap.has(brandId)) {
+            // Get the brand name from our complete map, fallback to ID if still not found
+            const brandName = brandIdToName.get(brandId) || brandId;
+            brandsMap.set(brandId, {
+              color: getBrandColor(brandId, brandName),
+              name: brandName,
+            });
+          }
+        }
+    }
+
+    // Convert to array and sort by name
+    return [...brandsMap.values()].sort((a, b) => a.name.localeCompare(b.name));
+  }, [businessData, brandsData, allBrandsData, showBusinesses]);
+
   return (
     <Row>
       <Col style={{ width: collapsed ? 0 : undefined }}>
@@ -760,6 +872,7 @@ const IncidentMap = ({
               showLabels={true}
               visible={showRetailParks}
             />
+            <UKDistrictsLayer showLabels={true} visible={showUKDistricts} />
             <Source
               data={{
                 features:
@@ -830,6 +943,7 @@ const IncidentMap = ({
               brandsLoading={brandsLoading}
               cluster={cluster}
               containerRef={mapContainerRef}
+              dateRange={dateRange}
               groupsData={groupsData}
               groupsLoading={groupsLoading}
               heatmapIntensity={heatmapIntensity}
@@ -845,6 +959,7 @@ const IncidentMap = ({
               onChangePoliceAreas={onChangePoliceAreas}
               onChangeSchemes={onChangeSchemes}
               onClose={toggleFilterPanel}
+              onSaveFilters={saveFilters}
               onToggleBCRP={toggleBCRP}
               onToggleBusinesses={toggleBusinesses}
               onToggleCameras={toggleCameras}
@@ -853,7 +968,9 @@ const IncidentMap = ({
               onToggleMarkers={toggleMarkers}
               onTogglePolice={togglePolice}
               onToggleRetailParks={toggleRetailParks}
+              onToggleUKDistricts={toggleUKDistricts}
               onToggleViewMode={toggleViewMode}
+              savingFilters={saving}
               schemes={schemes}
               selectedBrands={selectedBrands}
               selectedGroups={selectedGroups}
@@ -872,6 +989,7 @@ const IncidentMap = ({
               showMarkers={showMarkers}
               showPolice={showPolice}
               showRetailParks={showRetailParks}
+              showUKDistricts={showUKDistricts}
               useBcu={useBcu}
               viewMode={viewMode}
             />
@@ -882,12 +1000,14 @@ const IncidentMap = ({
           )}
 
           <MapLegend
+            brands={uniqueBrands}
             showBCRP={showBCRP}
             showBusinesses={showBusinesses}
             showCameras={showCameras}
             showHeatmap={showHeatmap}
             showMarkers={showMarkers}
             showRetailParks={showRetailParks}
+            showUKDistricts={showUKDistricts}
           />
         </div>
 

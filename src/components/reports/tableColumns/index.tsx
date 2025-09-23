@@ -2,7 +2,9 @@
 import type { ColumnsType, SortOrder } from 'antd/es/table/interface';
 
 import GetInvestigationStatusValues from '#/types/enums/investigation-status';
-import { Typography } from 'antd';
+import { faUserLarge } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Avatar, Typography } from 'antd';
 import dayjs from 'dayjs';
 import { InvestigationStatus } from 'graphql/types';
 import React from 'react';
@@ -364,6 +366,7 @@ export interface OffenderTableData {
   alertId: string;
   fullName: string;
   id: string;
+  image?: null | string;
   lastIncident: string;
   lostValue: string;
   recoveredValue: string;
@@ -373,6 +376,35 @@ export interface OffenderTableData {
 }
 
 export const OffenderColumns: ColumnsType<OffenderTableData> = [
+  {
+    dataIndex: 'image',
+    key: 'image',
+    render: (image: string | undefined) => (
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        {image ? (
+          <img
+            alt="Offender"
+            src={image}
+            style={{
+              borderRadius: '6px',
+              height: 60,
+              objectFit: 'cover',
+              width: 60,
+            }}
+          />
+        ) : (
+          <Avatar
+            icon={<FontAwesomeIcon icon={faUserLarge} />}
+            shape="square"
+            size={60}
+            style={{ borderRadius: '6px' }}
+          />
+        )}
+      </div>
+    ),
+    title: <FormattedMessage defaultMessage="Photo" />,
+    width: 100,
+  },
   {
     dataIndex: 'fullName',
     key: 'fullName',
