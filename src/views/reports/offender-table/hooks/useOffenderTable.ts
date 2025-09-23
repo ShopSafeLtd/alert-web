@@ -300,7 +300,7 @@ const useOffenderTable = (): Return => {
       alertId: offender.alertId,
       fullName: shouldRedact ? redactedText : offender.name,
       id: offender.id,
-      image: offender.primaryPhoto,
+      image: shouldRedact ? undefined : offender.primaryPhoto || undefined,
       key: offender.name + i.toString(),
       lastIncident: offender.lastIncidentDate
         ? new Date(offender.lastIncidentDate).toLocaleDateString()

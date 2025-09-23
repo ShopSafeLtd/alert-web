@@ -32,6 +32,7 @@ interface Props {
   brandsLoading: boolean;
   cluster: boolean;
   containerRef?: React.RefObject<HTMLElement>;
+  dateRange: { endDate: Date; startDate: Date } | null;
   groupsData: SchemeGroupsQuery | undefined;
   groupsLoading: boolean;
   heatmapIntensity: number;
@@ -39,7 +40,7 @@ interface Props {
   industriesLoading: boolean;
   multiColour: 'multi' | 'single';
   onChangeBrands: (value: string[]) => void;
-  onChangeDateRange: (value: { endDate: Date; startDate: Date }) => void;
+  onChangeDateRange: (value: { endDate: Date; startDate: Date } | null) => void;
   onChangeGroups: (value: string[]) => void;
   onChangeHeatmapIntensity: (value: number) => void;
   onChangeIncidentTypes: (value: string | string[]) => void;
@@ -48,17 +49,20 @@ interface Props {
   onChangeSchemes: (value: string[]) => void;
   // Panel control
   onClose?: () => void;
-
+  onSaveFilters?: () => void;
   onToggleBCRP: () => void;
+
   onToggleBusinesses: () => void;
   onToggleCameras: () => void;
   onToggleCluster: () => void;
   onToggleHeatmap: () => void;
   onToggleMarkers: () => void;
-
   onTogglePolice: () => void;
+
   onToggleRetailParks: () => void;
+  onToggleUKDistricts: () => void;
   onToggleViewMode: () => void;
+  savingFilters?: boolean;
   // Filter data and handlers
   schemes: { scheme: { id: string; name: string } }[];
   selectedBrands: string[];
@@ -82,6 +86,7 @@ interface Props {
   showMarkers: boolean;
   showPolice: boolean;
   showRetailParks: boolean;
+  showUKDistricts: boolean;
   useBcu: boolean;
   viewMode: 'popup' | 'sidebar';
 }
@@ -93,6 +98,7 @@ const FloatingFilterPanel: React.FC<Props> = ({
   brandsLoading,
   cluster,
   containerRef,
+  dateRange,
   groupsData,
   groupsLoading,
   heatmapIntensity,
@@ -108,6 +114,7 @@ const FloatingFilterPanel: React.FC<Props> = ({
   onChangePoliceAreas,
   onChangeSchemes,
   onClose,
+  onSaveFilters,
   onToggleBCRP,
   onToggleBusinesses,
   onToggleCameras,
@@ -116,7 +123,9 @@ const FloatingFilterPanel: React.FC<Props> = ({
   onToggleMarkers,
   onTogglePolice,
   onToggleRetailParks,
+  onToggleUKDistricts,
   onToggleViewMode,
+  savingFilters,
   schemes,
   selectedBrands,
   selectedGroups,
@@ -135,6 +144,7 @@ const FloatingFilterPanel: React.FC<Props> = ({
   showMarkers,
   showPolice,
   showRetailParks,
+  showUKDistricts,
   useBcu,
   viewMode,
 }) => {
@@ -297,6 +307,7 @@ const FloatingFilterPanel: React.FC<Props> = ({
     onChangeIndustries([]);
     onChangeIncidentTypes([]);
     onChangePoliceAreas([]);
+    onChangeDateRange(null);
   }, [
     onChangeSchemes,
     onChangeGroups,
@@ -304,6 +315,7 @@ const FloatingFilterPanel: React.FC<Props> = ({
     onChangeIndustries,
     onChangeIncidentTypes,
     onChangePoliceAreas,
+    onChangeDateRange,
   ]);
 
   // Count active filters
@@ -314,6 +326,7 @@ const FloatingFilterPanel: React.FC<Props> = ({
     selectedIndustries.length,
     selectedIncidentTypes.length,
     selectedPoliceAreas.length,
+    dateRange ? 1 : 0,
   ].reduce((sum, count) => sum + (count > 0 ? 1 : 0), 0);
   const ranges = usePresetDateRanges();
 
@@ -532,6 +545,17 @@ const FloatingFilterPanel: React.FC<Props> = ({
                       size="small"
                     />
                   </div>
+
+                  <div className={classes.switchRow}>
+                    <Text className={classes.switchLabel}>
+                      <FormattedMessage defaultMessage="Show Connect Regions" />
+                    </Text>
+                    <Switch
+                      checked={showUKDistricts}
+                      onChange={onToggleUKDistricts}
+                      size="small"
+                    />
+                  </div>
                 </>
               )}
 
@@ -590,16 +614,23 @@ const FloatingFilterPanel: React.FC<Props> = ({
                 style={{ marginBottom: '12px' }}
               >
                 <DatePicker.RangePicker
+                  allowClear
                   onChange={(value) => {
-                    if (value && value[0] && value[1])
+                    if (value && value[0] && value[1]) {
                       onChangeDateRange({
                         endDate: new Date(value[1].valueOf()),
                         startDate: new Date(value[0].valueOf()),
                       });
+                    } else {
+                      onChangeDateRange(null);
+                    }
                   }}
                   ranges={ranges}
                   size="small"
                   style={{ width: '100%' }}
+                  value={
+                    dateRange ? [dateRange.startDate, dateRange.endDate] : null
+                  }
                 />
               </Form.Item>
 
@@ -608,24 +639,32 @@ const FloatingFilterPanel: React.FC<Props> = ({
                 style={{ marginBottom: '12px' }}
               >
                 <Select
+                  filterOption={(input, option) =>
+                    (option?.children as unknown as string)
+                      ?.toLowerCase()
+                      .includes(input.toLowerCase())
+                  }
                   maxTagCount={2}
                   mode="multiple"
                   onChange={onChangeSchemes}
                   placeholder={intl.formatMessage({
                     defaultMessage: 'Select schemes',
                   })}
+                  showSearch
                   size="small"
                   style={{ width: '100%' }}
                   value={selectedSchemes}
                 >
-                  {schemes.map((scheme) => (
-                    <Select.Option
-                      key={scheme.scheme.id}
-                      value={scheme.scheme.id}
-                    >
-                      {scheme.scheme.name}
-                    </Select.Option>
-                  ))}
+                  {[...schemes]
+                    .sort((a, b) => a.scheme.name.localeCompare(b.scheme.name))
+                    .map((scheme) => (
+                      <Select.Option
+                        key={scheme.scheme.id}
+                        value={scheme.scheme.id}
+                      >
+                        {scheme.scheme.name}
+                      </Select.Option>
+                    ))}
                 </Select>
               </Form.Item>
 
@@ -634,6 +673,11 @@ const FloatingFilterPanel: React.FC<Props> = ({
                 style={{ marginBottom: '12px' }}
               >
                 <Select
+                  filterOption={(input, option) =>
+                    (option?.children as unknown as string)
+                      ?.toLowerCase()
+                      .includes(input.toLowerCase())
+                  }
                   loading={groupsLoading}
                   maxTagCount={2}
                   mode="multiple"
@@ -641,15 +685,19 @@ const FloatingFilterPanel: React.FC<Props> = ({
                   placeholder={intl.formatMessage({
                     defaultMessage: 'Select groups',
                   })}
+                  showSearch
                   size="small"
                   style={{ width: '100%' }}
                   value={selectedGroups}
                 >
-                  {groupsData?.groups.map((group) => (
-                    <Select.Option key={group.id} value={group.id}>
-                      {group.name}
-                    </Select.Option>
-                  ))}
+                  {groupsData?.groups
+                    .slice()
+                    .sort((a, b) => a.name.localeCompare(b.name))
+                    .map((group) => (
+                      <Select.Option key={group.id} value={group.id}>
+                        {group.name}
+                      </Select.Option>
+                    ))}
                 </Select>
               </Form.Item>
 
@@ -658,6 +706,11 @@ const FloatingFilterPanel: React.FC<Props> = ({
                 style={{ marginBottom: '12px' }}
               >
                 <Select
+                  filterOption={(input, option) =>
+                    (option?.children as unknown as string)
+                      ?.toLowerCase()
+                      .includes(input.toLowerCase())
+                  }
                   loading={brandsLoading}
                   maxTagCount={2}
                   mode="multiple"
@@ -665,15 +718,19 @@ const FloatingFilterPanel: React.FC<Props> = ({
                   placeholder={intl.formatMessage({
                     defaultMessage: 'Select brands',
                   })}
+                  showSearch
                   size="small"
                   style={{ width: '100%' }}
                   value={selectedBrands}
                 >
-                  {brandsData?.brands.edges.map(({ node: brand }) => (
-                    <Select.Option key={brand.id} value={brand.id}>
-                      {brand.name}
-                    </Select.Option>
-                  ))}
+                  {brandsData?.brands.edges
+                    .slice()
+                    .sort((a, b) => a.node.name.localeCompare(b.node.name))
+                    .map(({ node: brand }) => (
+                      <Select.Option key={brand.id} value={brand.id}>
+                        {brand.name}
+                      </Select.Option>
+                    ))}
                 </Select>
               </Form.Item>
 
@@ -682,6 +739,11 @@ const FloatingFilterPanel: React.FC<Props> = ({
                 style={{ marginBottom: '12px' }}
               >
                 <Select
+                  filterOption={(input, option) =>
+                    (option?.children as unknown as string)
+                      ?.toLowerCase()
+                      .includes(input.toLowerCase())
+                  }
                   loading={industriesLoading}
                   maxTagCount={2}
                   mode="multiple"
@@ -689,15 +751,19 @@ const FloatingFilterPanel: React.FC<Props> = ({
                   placeholder={intl.formatMessage({
                     defaultMessage: 'Select industries',
                   })}
+                  showSearch
                   size="small"
                   style={{ width: '100%' }}
                   value={selectedIndustries}
                 >
-                  {industriesData?.industries.map((industry) => (
-                    <Select.Option key={industry.id} value={industry.id}>
-                      {industry.name}
-                    </Select.Option>
-                  ))}
+                  {industriesData?.industries
+                    .slice()
+                    .sort((a, b) => a.name.localeCompare(b.name))
+                    .map((industry) => (
+                      <Select.Option key={industry.id} value={industry.id}>
+                        {industry.name}
+                      </Select.Option>
+                    ))}
                 </Select>
               </Form.Item>
 
@@ -743,6 +809,18 @@ const FloatingFilterPanel: React.FC<Props> = ({
                   type="default"
                 >
                   <FormattedMessage defaultMessage="Clear All Filters" />
+                </Button>
+              )}
+
+              {onSaveFilters && (
+                <Button
+                  loading={savingFilters}
+                  onClick={onSaveFilters}
+                  size="small"
+                  style={{ marginTop: 8, width: '100%' }}
+                  type="primary"
+                >
+                  <FormattedMessage defaultMessage="Save Filters as Default" />
                 </Button>
               )}
             </div>

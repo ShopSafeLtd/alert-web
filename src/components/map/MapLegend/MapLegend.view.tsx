@@ -11,22 +11,31 @@ interface LegendItem {
   type: 'circle' | 'cluster' | 'heatmap';
 }
 
+interface BrandInfo {
+  color: string;
+  name: string;
+}
+
 interface Props {
+  brands?: BrandInfo[];
   showBCRP: boolean;
   showBusinesses: boolean;
   showCameras: boolean;
   showHeatmap: boolean;
   showMarkers: boolean;
   showRetailParks: boolean;
+  showUKDistricts: boolean;
 }
 
 const MapLegend: React.FC<Props> = ({
+  brands = [],
   showBCRP,
   showBusinesses,
   showCameras,
   showHeatmap,
   showMarkers,
   showRetailParks,
+  showUKDistricts,
 }) => {
   const currentTheme = useStoreState((state) => state.theme.currentTheme);
   const classes = useStyles({ colorScheme: currentTheme } as Parameters<
@@ -56,11 +65,34 @@ const MapLegend: React.FC<Props> = ({
     );
   }
 
-  if (showBusinesses) {
+  if (showBusinesses && brands.length > 0) {
+    // Add a section header for businesses
+    legendItems.push({
+      color: 'transparent',
+      label: (
+        <span style={{ fontSize: '11px', fontWeight: 600 }}>
+          <FormattedMessage defaultMessage="Businesses by Brand" />
+        </span>
+      ),
+      type: 'circle',
+    });
+    // Add each brand with its color
+    for (const brand of brands) {
+      legendItems.push({
+        color: brand.color,
+        label: (
+          <span style={{ fontSize: '11px', marginLeft: '8px' }}>
+            {brand.name}
+          </span>
+        ),
+        type: 'circle',
+      });
+    }
+  } else if (showBusinesses) {
+    // Fallback if no brands are loaded yet
     legendItems.push({
       color: '#6366f1',
       label: <FormattedMessage defaultMessage="Businesses" />,
-      subLabel: <FormattedMessage defaultMessage="(color by brand)" />,
       type: 'circle',
     });
   }
@@ -98,6 +130,14 @@ const MapLegend: React.FC<Props> = ({
     });
   }
 
+  if (showUKDistricts) {
+    legendItems.push({
+      color: '#9333EA',
+      label: <FormattedMessage defaultMessage="UK Districts" />,
+      type: 'circle',
+    });
+  }
+
   // Don't render if no items are visible
   if (legendItems.length === 0) {
     return null;
@@ -126,6 +166,9 @@ const MapLegend: React.FC<Props> = ({
                     <FormattedMessage defaultMessage="10+" />
                   </span>
                 </div>
+              ) : item.color === 'transparent' ? (
+                // Don't render symbol for headers
+                <div style={{ width: '14px' }} />
               ) : (
                 <div
                   className={classes.circleSymbol}
