@@ -16,6 +16,7 @@ import { FormattedMessage } from 'react-intl';
 
 const customStockAllowed = new Set(['cltr752fn001kwdcafx5pbq29']);
 const restrictedImportsScheme = 'cm9a19w1r00l58q01ss3wm0c1';
+const mccImportAllowed = new Set(['cma6m6fmi0sou9301rl6yr1hf']);
 
 const ImportMenu = () => {
   const classes = useSharedStyles();
@@ -171,6 +172,20 @@ const ImportMenu = () => {
             iconColor: '#ff7a45',
             title: <FormattedMessage defaultMessage="JD Site Import" />,
             to: '/app/scheme-settings/data-import/jd-site-import',
+          },
+        ]
+      : []),
+    ...(mccImportAllowed.has(schemeId)
+      ? [
+          {
+            description: (
+              <FormattedMessage defaultMessage="Import data from MCC system into alert." />
+            ),
+            icon: <FontAwesomeIcon icon={faCloudUpload} />,
+            iconBackground: '#f759ab',
+            iconColor: '#f759ab',
+            title: <FormattedMessage defaultMessage="MCC Import" />,
+            to: '/app/scheme-settings/data-import/mcc-import',
           },
         ]
       : []),
