@@ -4,12 +4,14 @@ import VisionMatchDrawer from '#/views/vision/vision-centre/components/VisionMat
 import { useAiVisionMatchesQuery } from '#/views/vision/vision-centre/components/VisionMatches/__generated__/VisionMatches.generated';
 import { faFilter, faRefresh } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, Col, Input, Row, Skeleton, Typography } from 'antd';
+import { Button, Col, Row, Skeleton, Typography } from 'antd';
 import { AiVisionMatchConfidence, SortOrder } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
 import React, { useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
+import DebouncedInput from '#/utils/debounced-input';
+import { useDismissAiMatchMutation } from '#/views/vision/vision-centre/components/VisionMatches/graphql/mutations/__generated__/DismissMatch.generated';
 
 const VisionMatched = () => {
   const currentScheme = useAtomValue(currentSchemeIdAtom);
@@ -23,15 +25,16 @@ const VisionMatched = () => {
 
   const intl = useIntl();
 
+  const [dismissMatchMutation] = useDismissAiMatchMutation();
+
   const { data, loading, refetch } = useAiVisionMatchesQuery({
-    pollInterval: 5000,
     variables: {
       orderBy: [
         {
           createdAt: SortOrder.Desc,
         },
       ],
-      take: 6,
+      take: 10,
       where: {
         confidenceRating: [
           AiVisionMatchConfidence.Medium,
@@ -42,6 +45,17 @@ const VisionMatched = () => {
       },
     },
   });
+
+  const dismissMatch = async (id: string) => {
+    await dismissMatchMutation({
+      variables: {
+        id,
+      },
+      onCompleted: () => {
+        void refetch();
+      },
+    });
+  };
 
   const handleRefresh = async () => {
     await refetch();
@@ -76,12 +90,14 @@ const VisionMatched = () => {
       </Row>
 
       <div>
-        <Input
-          onChange={(event) => setSearch(event.target.value)}
+        <DebouncedInput
+          allowClear
           placeholder={intl.formatMessage({
             defaultMessage: 'Search suggestions...',
           })}
-          value={search}
+          onChange={(event) => setSearch(event.target.value)}
+          size="small"
+          // value={search}
         />
       </div>
       <div style={{ marginTop: 20, width: '100%' }}>
@@ -103,7 +119,9 @@ const VisionMatched = () => {
             <AiVisionMatchCard
               data={edge.node}
               key={edge.node.id}
-              onDismissSuggestion={() => {}}
+              onDismissSuggestion={() => {
+                void dismissMatch(edge.node.id);
+              }}
               onReview={() => {
                 setMatchId(edge.node.id);
               }}

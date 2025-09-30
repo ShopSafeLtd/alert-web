@@ -79,6 +79,7 @@ interface Props {
 }
 
 const VisionMatchDrawer = ({ matchId, onClose, setMatchId }: Props) => {
+  if (!matchId) return null;
   const intl = useIntl();
   const classes = useStyles();
 
@@ -88,7 +89,7 @@ const VisionMatchDrawer = ({ matchId, onClose, setMatchId }: Props) => {
 
   const { data, loading } = useAiVisionMatchDrawerQuery({
     variables: {
-      take: 5,
+      take: 10,
       where: {
         id: matchId ?? '',
       },
@@ -97,7 +98,6 @@ const VisionMatchDrawer = ({ matchId, onClose, setMatchId }: Props) => {
 
   return (
     <Drawer
-      bodyStyle={{ backgroundColor: '#fafafb' }}
       onClose={onClose}
       open={visible}
       title={intl.formatMessage({
@@ -384,7 +384,7 @@ const VisionMatchDrawer = ({ matchId, onClose, setMatchId }: Props) => {
             style={{ marginBottom: 20, marginTop: 20 }}
           >
             <Typography.Title level={4} style={{ marginBottom: 14 }}>
-              <FormattedMessage defaultMessage="Previous Dections" />
+              <FormattedMessage defaultMessage="Previous Dections (10 most recent)" />
             </Typography.Title>
             <Table
               columns={[
@@ -438,13 +438,23 @@ const VisionMatchDrawer = ({ matchId, onClose, setMatchId }: Props) => {
                 ) ?? []
               }
               size="small"
+              pagination={{
+                pageSize: 10,
+                showSizeChanger: false,
+                hideOnSinglePage: true,
+              }}
             />
           </div>
           <div className={classes.card} style={{ marginBottom: 20 }}>
             <Typography.Title level={4} style={{ marginBottom: 6 }}>
-              <FormattedMessage defaultMessage="Previous Incidents" />
+              <FormattedMessage defaultMessage="Previous Incidents (10 most recent)" />
             </Typography.Title>
             <Table
+              pagination={{
+                pageSize: 10,
+                showSizeChanger: false,
+                hideOnSinglePage: true,
+              }}
               columns={[
                 {
                   dataIndex: 'reference',
