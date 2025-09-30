@@ -65,13 +65,30 @@ export type AiVisionCamera = {
   __typename?: 'AIVisionCamera';
   business: Business;
   createdAt: Scalars['Date'];
+  duplicateMatchTimeout: Scalars['String'];
   groups: Array<Group>;
   id: Scalars['ID'];
+  lastUploaded?: Maybe<Scalars['Date']>;
   make?: Maybe<Scalars['String']>;
   model?: Maybe<Scalars['String']>;
+  onDetect: Array<DetectActionConfig>;
   osVersion?: Maybe<Scalars['String']>;
   serialNumber?: Maybe<Scalars['String']>;
   updatedAt: Scalars['Date'];
+};
+
+export type AiVisionCameraInput = {
+  business: Scalars['String'];
+  duplicateMatchTimeout?: InputMaybe<Scalars['String']>;
+  groups?: InputMaybe<GroupsConnectDisconnect>;
+  id?: InputMaybe<Scalars['String']>;
+  make?: InputMaybe<Scalars['String']>;
+  model?: InputMaybe<Scalars['String']>;
+  onDetect?: InputMaybe<DetectConfigConnectDisconnect>;
+  osVersion?: InputMaybe<Scalars['String']>;
+  scheme: Scalars['String'];
+  serialNumber?: InputMaybe<Scalars['String']>;
+  tag?: InputMaybe<Scalars['String']>;
 };
 
 export type AiVisionEvent = {
@@ -4957,12 +4974,47 @@ export type DependWeightInput = {
   weight: Scalars['String'];
 };
 
+export type DetectActionConfig = {
+  __typename?: 'DetectActionConfig';
+  camera: Array<AiVisionCamera>;
+  cameraCount: Scalars['Int'];
+  createdAt: Scalars['DateTime'];
+  eventData: EventData;
+  id: Scalars['ID'];
+  minimumConfidenceTrigger: AiVisionMatchConfidence;
+  minimumPriorityTrigger: AiVisionMatchPriority;
+  name: Scalars['String'];
+  scheme: Scheme;
+  schemeId: Scalars['String'];
+  type: DetectActionType;
+  updatedAt: Scalars['DateTime'];
+  usersToGet: UsersToGetFrom;
+};
+
+export type DetectActionConfigInput = {
+  /** Event configuration data */
+  eventData: EventDataInput;
+  id?: InputMaybe<Scalars['String']>;
+  minimumConfidenceTrigger?: InputMaybe<AiVisionMatchConfidence>;
+  minimumPriorityTrigger?: InputMaybe<AiVisionMatchPriority>;
+  name: Scalars['String'];
+  scheme: Scalars['String'];
+  type: DetectActionType;
+  /** User selection criteria */
+  usersToGet: UsersToGetInput;
+};
+
 export enum DetectActionType {
   Activity = 'ACTIVITY',
   Email = 'EMAIL',
   PushNotification = 'PUSH_NOTIFICATION',
   Sms = 'SMS'
 }
+
+export type DetectConfigConnectDisconnect = {
+  connect?: InputMaybe<Array<Scalars['String']>>;
+  disconnect?: InputMaybe<Array<Scalars['String']>>;
+};
 
 export type DetectedFace = {
   __typename?: 'DetectedFace';
@@ -4971,6 +5023,13 @@ export type DetectedFace = {
   confidence: Scalars['Float'];
   faceId: Scalars['String'];
   similarityMatches?: Maybe<Array<FaceMatch>>;
+};
+
+export type DetectionConfigWhere = {
+  schemeId: Scalars['String'];
+  search?: InputMaybe<Scalars['String']>;
+  searchedIds?: InputMaybe<Array<Scalars['String']>>;
+  type?: InputMaybe<Array<DetectActionType>>;
 };
 
 export type DeviceInfo = {
@@ -6284,6 +6343,21 @@ export type EnumWorkflowTriggerWithAggregatesFilter = {
   notIn?: InputMaybe<Array<WorkflowTrigger>>;
 };
 
+export type EventData = {
+  __typename?: 'EventData';
+  sendEmail?: Maybe<SendEmailData>;
+  sendNotification?: Maybe<SendNotificationData>;
+  sendSMS?: Maybe<SendSmsData>;
+  task?: Maybe<TaskData>;
+};
+
+export type EventDataInput = {
+  sendEmail?: InputMaybe<SendEmailInput>;
+  sendNotification?: InputMaybe<SendNotificationInput>;
+  sendSMS?: InputMaybe<SendSmsInput>;
+  task?: InputMaybe<TaskInput>;
+};
+
 export type ExpoPushToken = {
   __typename?: 'ExpoPushToken';
   createdAt: Scalars['Date'];
@@ -7450,6 +7524,11 @@ export type GroupWhereUniqueInput = {
   uploaded?: InputMaybe<BoolFilter>;
   users?: InputMaybe<UserListRelationFilter>;
   vehicles?: InputMaybe<VehicleListRelationFilter>;
+};
+
+export type GroupsConnectDisconnect = {
+  connect?: InputMaybe<Array<Scalars['String']>>;
+  disconnect?: InputMaybe<Array<Scalars['String']>>;
 };
 
 export type GroupsNestedSetConnectDisconnect = {
@@ -11344,12 +11423,14 @@ export type Mutation = {
   deleteBrand: Brand;
   deleteBusiness: Business;
   deleteBusinessQuestion: BusinessQuestion;
+  deleteCamera: AiVisionCamera;
   deleteChat: Chat;
   deleteCrimeGroup: CrimeGroup;
   deleteCustomGallery: CustomGallery;
   deleteDashboardTemplate?: Maybe<Dashboard>;
   deleteDemDevice: DemDevice;
   deleteDemGroup: DemGroup;
+  deleteDetectionConfig: DetectActionConfig;
   deleteDocument: Document;
   deleteEvidence: Document;
   deleteExpired: SystemTask;
@@ -11380,6 +11461,7 @@ export type Mutation = {
   deleteUserFromScheme?: Maybe<User>;
   deleteVehicle: Vehicle;
   discImportData: SystemTask;
+  dismissAiMatch: AiVisionMatch;
   dismissAiSuggestion: AiSuggestion;
   dismissMatch: RekMatch;
   dunelmImportData: SystemTask;
@@ -11511,6 +11593,7 @@ export type Mutation = {
   updateStockRemovalRequest: StockRemovalRequest;
   updateTag: Tag;
   updateTagQs: Array<TagQuestion>;
+  updateTimeoutDetectionConfig: Scalars['String'];
   updateTodo: Todo;
   updateTodoMention: Array<Todo>;
   updateUpdate: Update;
@@ -11521,9 +11604,11 @@ export type Mutation = {
   uploadImage: Image;
   uploadToImage: Image;
   upsertBrand: Brand;
+  upsertCamera: AiVisionCamera;
   upsertContact: Contact;
   upsertDemDevice: DemDevice;
   upsertDemGroup: DemGroup;
+  upsertDetectionConfig: DetectActionConfig;
   upsertFolder: Folder;
   upsertIncident: Incident;
   upsertIncidentForm: IncidentForm;
@@ -11978,6 +12063,11 @@ export type MutationDeleteBusinessQuestionArgs = {
 };
 
 
+export type MutationDeleteCameraArgs = {
+  where: UniqueId;
+};
+
+
 export type MutationDeleteChatArgs = {
   where: UniqueId;
 };
@@ -12005,6 +12095,11 @@ export type MutationDeleteDemDeviceArgs = {
 
 export type MutationDeleteDemGroupArgs = {
   where: DemGroupWhereUniqueInput;
+};
+
+
+export type MutationDeleteDetectionConfigArgs = {
+  where: UniqueId;
 };
 
 
@@ -12152,6 +12247,11 @@ export type MutationDeleteVehicleArgs = {
 
 export type MutationDiscImportDataArgs = {
   data: DiscImportDataInput;
+};
+
+
+export type MutationDismissAiMatchArgs = {
+  where: UniqueId;
 };
 
 
@@ -12788,6 +12888,11 @@ export type MutationUpdateTagQsArgs = {
 };
 
 
+export type MutationUpdateTimeoutDetectionConfigArgs = {
+  data: UpdateSchemeDefaultTimeoutConfigInput;
+};
+
+
 export type MutationUpdateTodoArgs = {
   data: TodoUpdateInput;
   where: UniqueId;
@@ -12847,6 +12952,11 @@ export type MutationUpsertBrandArgs = {
 };
 
 
+export type MutationUpsertCameraArgs = {
+  data: AiVisionCameraInput;
+};
+
+
 export type MutationUpsertContactArgs = {
   data: UpsertContactInput;
 };
@@ -12859,6 +12969,11 @@ export type MutationUpsertDemDeviceArgs = {
 
 export type MutationUpsertDemGroupArgs = {
   data: UpsertDemGroup;
+};
+
+
+export type MutationUpsertDetectionConfigArgs = {
+  data: DetectActionConfigInput;
 };
 
 
@@ -13958,6 +14073,11 @@ export type OffenderAddressesArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<AddressWhereInput>;
+};
+
+
+export type OffenderAiVisionDetectionsArgs = {
+  take?: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -15297,6 +15417,8 @@ export type Query = {
   demDevices: QueryDemDevicesConnection;
   demGroup: DemGroup;
   demGroups: QueryDemGroupsConnection;
+  detectionConfig: DetectActionConfig;
+  detectionConfigs: QueryDetectionConfigsConnection;
   documents: QueryDocumentsConnection;
   documentsNoFolder: QueryDocumentsNoFolderConnection;
   featureAdoptionRate: Array<FeatureAdoptionRate>;
@@ -15921,6 +16043,22 @@ export type QueryDemGroupsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<DemGroupWhereInput>;
+};
+
+
+export type QueryDetectionConfigArgs = {
+  where: UniqueId;
+};
+
+
+export type QueryDetectionConfigsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where: DetectionConfigWhere;
 };
 
 
@@ -17357,6 +17495,19 @@ export type QueryDemGroupsConnectionEdge = {
   __typename?: 'QueryDemGroupsConnectionEdge';
   cursor: Scalars['String'];
   node: DemGroup;
+};
+
+export type QueryDetectionConfigsConnection = {
+  __typename?: 'QueryDetectionConfigsConnection';
+  edges: Array<QueryDetectionConfigsConnectionEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type QueryDetectionConfigsConnectionEdge = {
+  __typename?: 'QueryDetectionConfigsConnectionEdge';
+  cursor: Scalars['String'];
+  node: DetectActionConfig;
 };
 
 export type QueryDocumentsConnection = {
@@ -18977,6 +19128,7 @@ export type Scheme = {
   documents: Array<Document>;
   dontAutoSetTimeDate: Scalars['Boolean'];
   draftIncidents: Scalars['Boolean'];
+  duplicateMatchTimeout: Scalars['String'];
   facialDetection: Scalars['Boolean'];
   facialRecognition: Scalars['Boolean'];
   facialRedaction: Scalars['Boolean'];
@@ -19983,6 +20135,37 @@ export type SectionInput = {
   order: Scalars['Int'];
   subsections: Array<SubsectionInput>;
   title: Scalars['String'];
+};
+
+export type SendEmailData = {
+  __typename?: 'SendEmailData';
+  message: Scalars['String'];
+  title: Scalars['String'];
+};
+
+export type SendEmailInput = {
+  message: Scalars['String'];
+  title: Scalars['String'];
+};
+
+export type SendNotificationData = {
+  __typename?: 'SendNotificationData';
+  message: Scalars['String'];
+  title: Scalars['String'];
+};
+
+export type SendNotificationInput = {
+  message: Scalars['String'];
+  title: Scalars['String'];
+};
+
+export type SendSmsData = {
+  __typename?: 'SendSMSData';
+  message: Scalars['String'];
+};
+
+export type SendSmsInput = {
+  message: Scalars['String'];
 };
 
 export type SentrysysImportBusinessesInput = {
@@ -21658,6 +21841,23 @@ export type TargetedGood = {
   totalSuccessRate: Scalars['Float'];
 };
 
+export type TaskData = {
+  __typename?: 'TaskData';
+  businesses?: Maybe<Array<Scalars['String']>>;
+  dueDays: Scalars['Int'];
+  name: Scalars['String'];
+  questionGroupId?: Maybe<Scalars['String']>;
+  questions: Array<Scalars['String']>;
+};
+
+export type TaskInput = {
+  businesses?: InputMaybe<Array<Scalars['String']>>;
+  dueDays: Scalars['Int'];
+  name: Scalars['String'];
+  questionGroupId?: InputMaybe<Scalars['String']>;
+  questions: Array<Scalars['String']>;
+};
+
 export type TaskQuestion = {
   __typename?: 'TaskQuestion';
   answers: Array<Answer>;
@@ -22852,6 +23052,12 @@ export type UpdateScalarWhereWithAggregatesInput = {
   type?: InputMaybe<EnumUpdateTypeWithAggregatesFilter>;
   updatedAt?: InputMaybe<DateTimeWithAggregatesFilter>;
   vehicleId?: InputMaybe<StringNullableWithAggregatesFilter>;
+};
+
+export type UpdateSchemeDefaultTimeoutConfigInput = {
+  scheme: Scalars['String'];
+  timeout: Scalars['String'];
+  updateAllCamerasOnDefault?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type UpdateShoe = {
@@ -24753,6 +24959,27 @@ export type UserWhereUniqueInput = {
   uploaded?: InputMaybe<BoolFilter>;
   userTerms?: InputMaybe<UserTermListRelationFilter>;
   vehicles?: InputMaybe<VehicleListRelationFilter>;
+};
+
+export type UsersToGetFrom = {
+  __typename?: 'UsersToGetFrom';
+  adminGroups?: Maybe<Array<Scalars['String']>>;
+  createdBy?: Maybe<Scalars['Boolean']>;
+  groups?: Maybe<Array<Scalars['String']>>;
+  parentGroups?: Maybe<Scalars['Boolean']>;
+  parentGroupsAdmin?: Maybe<Scalars['Boolean']>;
+  roles?: Maybe<Array<Scalars['String']>>;
+  users?: Maybe<Array<Scalars['String']>>;
+};
+
+export type UsersToGetInput = {
+  adminGroups?: InputMaybe<Array<Scalars['String']>>;
+  createdBy?: InputMaybe<Scalars['Boolean']>;
+  groups?: InputMaybe<Array<Scalars['String']>>;
+  parentGroups?: InputMaybe<Scalars['Boolean']>;
+  parentGroupsAdmin?: InputMaybe<Scalars['Boolean']>;
+  roles?: InputMaybe<Array<Scalars['String']>>;
+  users?: InputMaybe<Array<Scalars['String']>>;
 };
 
 export type ValueTotals = {
