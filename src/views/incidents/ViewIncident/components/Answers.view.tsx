@@ -336,7 +336,34 @@ const Answers = ({
                   answer.dependentQuestions[0]?.tagQuestionId
             );
 
-            return parent?.answer.toLowerCase() === answer.answer.toLowerCase();
+            if (!parent) {
+              return false;
+            }
+
+            const dependentQuestion = answer.dependentQuestions[0] as {
+              answer?: string;
+              dependentMatchMode?: string;
+              tagQuestionId?: string;
+            };
+            const expectedAnswer = dependentQuestion?.answer;
+            if (!expectedAnswer) {
+              return true; // If no expected answer specified, show the field
+            }
+
+            const parentAnswerLower = parent.answer.toLowerCase();
+
+            // Handle multiple acceptable answers separated by '|||'
+            if (
+              typeof expectedAnswer === 'string' &&
+              expectedAnswer.includes('|||')
+            ) {
+              const acceptableAnswers = expectedAnswer
+                .split('|||')
+                .map((a) => a.toLowerCase());
+              return acceptableAnswers.includes(parentAnswerLower);
+            }
+
+            return parentAnswerLower === String(expectedAnswer).toLowerCase();
           }
 
           return true;
