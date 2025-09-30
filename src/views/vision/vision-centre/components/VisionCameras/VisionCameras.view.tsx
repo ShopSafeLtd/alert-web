@@ -5,6 +5,13 @@ import { useAtomValue } from 'jotai/index';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
+const uploadInLast24Hours = (lastUploaded: Date) => {
+  const uploadedDate = new Date(lastUploaded);
+  const now = new Date();
+  const diffInMs = now.getTime() - uploadedDate.getTime();
+  const diffInHours = diffInMs / (1000 * 60 * 60);
+  return diffInHours <= 24;
+};
 const AiTrends = () => {
   const currentScheme = useAtomValue(currentSchemeIdAtom);
 
@@ -17,6 +24,15 @@ const AiTrends = () => {
     },
   });
 
+  const sortedData = data?.aiVisionCameras.edges.slice().sort((a, b) => {
+    const dateA = a.node.lastUploaded
+      ? new Date(a.node.lastUploaded).getTime()
+      : 0;
+    const dateB = b.node.lastUploaded
+      ? new Date(b.node.lastUploaded).getTime()
+      : 0;
+    return dateB - dateA;
+  });
   return (
     <>
       <Row
@@ -74,15 +90,26 @@ const AiTrends = () => {
             key: 'model',
             title: <FormattedMessage defaultMessage="Model" />,
           },
+          {
+            dataIndex: 'lastUploaded',
+            key: 'lastUploaded',
+            title: <FormattedMessage defaultMessage="Last Uploaded" />,
+          },
         ]}
         dataSource={
-          data?.aiVisionCameras.edges.map((edge) => ({
+          sortedData?.map((edge) => ({
             business: edge.node.business.name,
             make: edge.node.make,
             model: edge.node.model,
             serialNumber: edge.node.serialNumber,
             status:
-              edge.node.serialNumber === 'B8A44FA96B70' ? 'Online' : 'Offline',
+              edge.node.lastUploaded &&
+              uploadInLast24Hours(new Date(edge.node.lastUploaded))
+                ? 'Online'
+                : 'Offline',
+            lastUploaded: edge.node.lastUploaded
+              ? new Date(edge.node.lastUploaded).toLocaleString()
+              : 'No uploads',
           })) ?? []
         }
         pagination={false}

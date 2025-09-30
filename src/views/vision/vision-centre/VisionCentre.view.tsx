@@ -23,9 +23,7 @@ function duplicateItems(
 }
 
 const VisionCentre = () => {
-  const { data } = useAiVisionStatsQuery({
-    pollInterval: 2000,
-  });
+  const { data } = useAiVisionStatsQuery({});
 
   return (
     <div style={{ padding: 20 }}>

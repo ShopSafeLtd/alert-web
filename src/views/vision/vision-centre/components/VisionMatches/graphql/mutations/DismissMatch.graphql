@@ -1,0 +1,5 @@
+mutation DismissAiMatch($id: String!) {
+    dismissAiMatch(where: {id: $id}) {
+        id
+    }
+}

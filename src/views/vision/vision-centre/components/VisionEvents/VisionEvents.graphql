@@ -1,5 +1,5 @@
-query aiVisionEvents($where: AiVisionEventWhereInput!, $orderBy: [AiVisionEventOrderByInput!], $take: Int) {
-    aiVisionEvents(where: $where, orderBy: $orderBy, take: $take) {
+query aiVisionEvents($where: AiVisionEventWhereInput!, $orderBy: [AiVisionEventOrderByInput!], $take: Int, $skip: Int) {
+    aiVisionEvents(where: $where, orderBy: $orderBy, take: $take, skip: $skip) {
         edges {
             node {
                 id
@@ -16,5 +16,6 @@ query aiVisionEvents($where: AiVisionEventWhereInput!, $orderBy: [AiVisionEventO
                 type
             }
         }
+        totalCount
     }
 }

@@ -1,10 +1,10 @@
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { useAiVisionEventsQuery } from '#/views/vision/vision-centre/components/VisionEvents/__generated__/VisionEvents.generated';
-import { Button, Col, Row, Table, Typography } from 'antd';
+import { Col, Row, Table, Typography } from 'antd';
 import dayjs from 'dayjs';
 import { SortOrder } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
-import React from 'react';
+import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 const formatCameraEventType = () => (
@@ -13,21 +13,25 @@ const formatCameraEventType = () => (
 
 const AiTrends = () => {
   const currentScheme = useAtomValue(currentSchemeIdAtom);
+  const [page, setPage] = useState(1);
+  const pageSize = 20;
 
-  const { data } = useAiVisionEventsQuery({
-    pollInterval: 100_000,
+  const { data, loading, previousData } = useAiVisionEventsQuery({
     variables: {
       orderBy: [
         {
           createdAt: SortOrder.Desc,
         },
       ],
-      take: 100,
+      take: pageSize,
+      skip: (page - 1) * pageSize,
       where: {
         schemeIds: [currentScheme],
       },
     },
   });
+
+  const dataFormatted = data ?? previousData;
 
   return (
     <>
@@ -48,14 +52,15 @@ const AiTrends = () => {
             <FormattedMessage defaultMessage="Camera Events" />
           </Typography.Title>
         </Col>
-        <Col>
-          <Button type="text">
-            <FormattedMessage defaultMessage="View All Events" />
-          </Button>
-        </Col>
+        {/* <Col>*/}
+        {/*  <Button type="text">*/}
+        {/*    <FormattedMessage defaultMessage="View All Events" />*/}
+        {/*  </Button>*/}
+        {/* </Col>*/}
       </Row>
 
       <Table
+        loading={loading}
         columns={[
           {
             dataIndex: 'type',
@@ -86,7 +91,7 @@ const AiTrends = () => {
           },
         ]}
         dataSource={
-          data?.aiVisionEvents.edges.map((edge) => ({
+          dataFormatted?.aiVisionEvents.edges.map((edge) => ({
             business: edge.node.business.name,
             camera: edge.node.camera.serialNumber,
             createdAt: edge.node.createdAt,
@@ -95,8 +100,22 @@ const AiTrends = () => {
           })) ?? []
         }
         pagination={{
-          defaultPageSize: 30,
-          pageSize: 30,
+          current: page,
+          pageSize,
+          total: data?.aiVisionEvents.totalCount ?? 0,
+          onChange: (newPage) => setPage(newPage),
+          showSizeChanger: false,
+          showQuickJumper: false,
+          showTotal: (total, range) => (
+            <FormattedMessage
+              defaultMessage="{start}-{end} of {total} events"
+              values={{
+                start: range[0],
+                end: range[1],
+                total,
+              }}
+            />
+          ),
         }}
         size="small"
       />
