@@ -138,6 +138,9 @@ const BusinessOptions = lazy(
 const DashboardManagement = lazy(
   () => import('../dashboard-management/router')
 );
+const ListStockItems = lazy(
+  () => import('../../../views/settings/stock-items/ListStockItems')
+);
 
 const SchemeSettings = (): JSX.Element => {
   const [collapsed, setCollapsed] = useState(false);
@@ -866,6 +869,19 @@ const SchemeSettings = (): JSX.Element => {
                 </PermissionCheckWrapper>
               }
               path="activity-settings"
+            />
+            <Route
+              element={
+                <PermissionCheckWrapper
+                  permission={{
+                    method: PermissionMethod.Read,
+                    model: PermissionModel.Businesses,
+                  }}
+                >
+                  <ListStockItems />
+                </PermissionCheckWrapper>
+              }
+              path="stock-items"
             />
           </Routes>
         </Suspense>

@@ -11,6 +11,7 @@ import {
   DesktopOutlined,
   EyeOutlined,
   FileTextOutlined,
+  InboxOutlined,
   LeftOutlined,
   PictureOutlined,
   QuestionCircleOutlined,
@@ -162,6 +163,17 @@ const SettingsSideMenu = ({
             defaultMessage: 'Business Options',
           }),
           to: '/app/scheme-settings/business-options',
+        },
+        {
+          icon: <InboxOutlined />,
+          permissions: {
+            method: PermissionMethod.Read,
+            model: PermissionModel.Businesses,
+          },
+          title: intl.formatMessage({
+            defaultMessage: 'Stock Items',
+          }),
+          to: '/app/scheme-settings/stock-items',
         },
       ],
     },
