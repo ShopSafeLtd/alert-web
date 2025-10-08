@@ -1,0 +1,6 @@
+mutation MarkStockRemovalRequestAsCollected($where: UniqueId!) {
+    markStockRemovalRequestAsCollected(where: $where) {
+        id
+        status
+    }
+}

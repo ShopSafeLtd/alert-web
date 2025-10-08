@@ -31,11 +31,11 @@ export const AiVisionCamerasDocument = gql`
 }
     `;
 export function useAiVisionCamerasQuery(baseOptions: Apollo.QueryHookOptions<AiVisionCamerasQuery, AiVisionCamerasQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions};
+        const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<AiVisionCamerasQuery, AiVisionCamerasQueryVariables>(AiVisionCamerasDocument, options);
       }
 export function useAiVisionCamerasLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AiVisionCamerasQuery, AiVisionCamerasQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions};
+          const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<AiVisionCamerasQuery, AiVisionCamerasQueryVariables>(AiVisionCamerasDocument, options);
         }
 export type AiVisionCamerasQueryHookResult = ReturnType<typeof useAiVisionCamerasQuery>;

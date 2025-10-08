@@ -1,0 +1,19 @@
+mutation UpdateIncidentStatus($where: IncidentWhereUniqueInput!, $data: UpdateIncidentStatusInput!) {
+  updateIncidentStatus(where: $where, data: $data) {
+    id
+    status {
+      id
+      name
+      tooltip
+    }
+    actions {
+      id
+      type
+      description
+      createdAt
+      byUser {
+        fullName
+      }
+    }
+  }
+}

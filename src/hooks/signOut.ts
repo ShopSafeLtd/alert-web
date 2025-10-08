@@ -2,11 +2,11 @@ import { useStoreActions } from '#/state';
 import { useAuth as useAuthClerk } from '@clerk/clerk-react';
 
 export const useSignOut = (): {
-  signOut: () => void;
+  signOut: () => Promise<void>;
 } => {
   const { signOut: signOutClerk } = useAuthClerk();
   const handleSignOut = useStoreActions((actions) => actions.auth.signOut);
-  const signOut = (): void => {
+  const signOut = async (): Promise<void> => {
     handleSignOut();
     const logo = window.localStorage.getItem('logo');
     const dLogo = window.localStorage.getItem('logo-dark');
@@ -16,9 +16,9 @@ export const useSignOut = (): {
     window.localStorage.setItem('logo-dark', dLogo || '');
     window.localStorage.setItem('theme', theme || 'light');
     window.sessionStorage.clear();
-    void signOutClerk();
+    await signOutClerk();
 
-    window.location.reload();
+    window.location.href = '/sign-in';
   };
   return { signOut };
 };

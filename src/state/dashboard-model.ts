@@ -166,6 +166,7 @@ export type AvailableDashboardElements =
   | 'incidentValue'
   | 'latestIncident'
   | 'latestIncidents'
+  | 'myStockRequests'
   | 'searchRow'
   | 'targetedGoods'
   | 'timeOfDayBar';

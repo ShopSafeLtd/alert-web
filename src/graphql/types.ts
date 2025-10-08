@@ -6065,6 +6065,13 @@ export type EnumPoliceResponseTimeNullableWithAggregatesFilter = {
   notIn?: InputMaybe<Array<PoliceResponseTime>>;
 };
 
+export type EnumPoliceTriageStatusFilter = {
+  equals?: InputMaybe<PoliceTriageStatus>;
+  in?: InputMaybe<Array<PoliceTriageStatus>>;
+  not?: InputMaybe<NestedEnumPoliceTriageStatusFilter>;
+  notIn?: InputMaybe<Array<PoliceTriageStatus>>;
+};
+
 export type EnumQuestionModelFieldUpdateOperationsInput = {
   set?: InputMaybe<QuestionModel>;
 };
@@ -7409,6 +7416,26 @@ export type GroupCreateInput = {
   users?: InputMaybe<ConnectOnlyArrayHelper>;
 };
 
+export type GroupKpiStat = {
+  __typename?: 'GroupKpiStat';
+  /** Average data quality score (0-100) */
+  averageQualityScore: Scalars['Float'];
+  /** Group ID */
+  groupId: Scalars['String'];
+  /** Group name */
+  groupName: Scalars['String'];
+  /** Number of offenders with at least one image */
+  offendersWithImages: Scalars['Int'];
+  /** Total number of incidents in the group */
+  totalIncidents: Scalars['Int'];
+  /** Total number of offenders in the group */
+  totalOffenders: Scalars['Int'];
+  /** Success rate (0-1) based on recovery rates */
+  totalOutcomes: Scalars['Float'];
+  /** Total number of ID verified offenders in the group */
+  totalVerifiedOffenders: Scalars['Int'];
+};
+
 export type GroupListRelationFilter = {
   every?: InputMaybe<GroupWhereInput>;
   none?: InputMaybe<GroupWhereInput>;
@@ -8089,6 +8116,7 @@ export type Incident = {
   answers: Array<Answer>;
   approved?: Maybe<Scalars['Boolean']>;
   articleColumns: Array<ArticleColumn>;
+  assignedUsers: Array<User>;
   business?: Maybe<Business>;
   businessId?: Maybe<Scalars['String']>;
   cctvRecords: Array<CctvRecord>;
@@ -8114,6 +8142,8 @@ export type Incident = {
   geoLat?: Maybe<Scalars['String']>;
   geoLng?: Maybe<Scalars['String']>;
   groups: Array<Group>;
+  hasNamedOffender: Scalars['Boolean'];
+  hasYouthOffender: Scalars['Boolean'];
   hourOfDay?: Maybe<Scalars['Int']>;
   id: Scalars['ID'];
   images: Array<Image>;
@@ -8131,7 +8161,9 @@ export type Incident = {
   mg11: Array<Mg11>;
   monthOfYear?: Maybe<Scalars['Int']>;
   motiveTags: Array<Tag>;
+  newIncident: Scalars['Boolean'];
   notifications: Array<Notification>;
+  offenderIdentityScore?: Maybe<Scalars['Int']>;
   offenders: Array<Offender>;
   originalDescription: Scalars['String'];
   policeDay?: Maybe<Scalars['Boolean']>;
@@ -8146,10 +8178,25 @@ export type Incident = {
   policeObstructions?: Maybe<Scalars['String']>;
   policeReasonRemember?: Maybe<Scalars['String']>;
   policeRef?: Maybe<Scalars['String']>;
+  policeReportEligible: Scalars['Boolean'];
+  policeReportSubmitted: Scalars['Boolean'];
+  policeReportSubmittedDate?: Maybe<Scalars['Date']>;
   policeReported: Scalars['Boolean'];
   policeResponse?: Maybe<PoliceResponseTime>;
   policeStatement?: Maybe<Scalars['String']>;
   policeTimePassed?: Maybe<Scalars['String']>;
+  policeTriageBestOffenderScore?: Maybe<Scalars['Int']>;
+  policeTriageCompositeScore?: Maybe<Scalars['Int']>;
+  policeTriageConfidence?: Maybe<Scalars['Int']>;
+  policeTriageDate?: Maybe<Scalars['Date']>;
+  policeTriageHighImpactFlag: Scalars['Boolean'];
+  policeTriageIncidentQuality?: Maybe<Scalars['String']>;
+  policeTriageOffenderImpact?: Maybe<Scalars['String']>;
+  policeTriageOffenderQuality?: Maybe<Scalars['String']>;
+  policeTriageReason?: Maybe<Scalars['String']>;
+  policeTriageRepeatOffender: Scalars['Boolean'];
+  policeTriageScore?: Maybe<Scalars['Int']>;
+  policeTriageStatus: PoliceTriageStatus;
   priority: IncidentPriority;
   recoveredValue?: Maybe<Scalars['Float']>;
   recycleBin?: Maybe<RecycledItem>;
@@ -8166,6 +8213,8 @@ export type Incident = {
   schemes: Array<Scheme>;
   skipFeedItem: Scalars['Boolean'];
   skipNotification: Scalars['Boolean'];
+  status?: Maybe<IncidentStatus>;
+  statusId?: Maybe<Scalars['String']>;
   subject: Scalars['String'];
   subscribed: Scalars['Boolean'];
   subscribedUsers: Array<User>;
@@ -8204,6 +8253,16 @@ export type IncidentArticleColumnsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<ArticleColumnWhereInput>;
+};
+
+
+export type IncidentAssignedUsersArgs = {
+  cursor?: InputMaybe<UserWhereUniqueInput>;
+  distinct?: InputMaybe<Array<UserScalarFieldEnum>>;
+  orderBy?: InputMaybe<Array<UserOrderByWithRelationInput>>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<UserWhereInput>;
 };
 
 
@@ -8933,6 +8992,8 @@ export type IncidentOrderByWithRelationInput = {
   geoLat?: InputMaybe<SortOrder>;
   geoLng?: InputMaybe<SortOrder>;
   groups?: InputMaybe<GroupOrderByRelationAggregateInput>;
+  hasNamedOffender?: InputMaybe<SortOrder>;
+  hasYouthOffender?: InputMaybe<SortOrder>;
   hourOfDay?: InputMaybe<SortOrder>;
   id?: InputMaybe<SortOrder>;
   images?: InputMaybe<ImageOrderByRelationAggregateInput>;
@@ -8947,12 +9008,28 @@ export type IncidentOrderByWithRelationInput = {
   mg11?: InputMaybe<Mg11OrderByRelationAggregateInput>;
   monthOfYear?: InputMaybe<SortOrder>;
   notifications?: InputMaybe<NotificationOrderByRelationAggregateInput>;
+  offenderIdentityScore?: InputMaybe<SortOrder>;
   offenders?: InputMaybe<OffenderOrderByRelationAggregateInput>;
   policeInvolved?: InputMaybe<SortOrder>;
   policeNo?: InputMaybe<SortOrder>;
   policeRef?: InputMaybe<SortOrder>;
+  policeReportEligible?: InputMaybe<SortOrder>;
+  policeReportSubmitted?: InputMaybe<SortOrder>;
+  policeReportSubmittedDate?: InputMaybe<SortOrder>;
   policeReported?: InputMaybe<SortOrder>;
   policeResponse?: InputMaybe<SortOrder>;
+  policeTriageBestOffenderScore?: InputMaybe<SortOrder>;
+  policeTriageCompositeScore?: InputMaybe<SortOrder>;
+  policeTriageConfidence?: InputMaybe<SortOrder>;
+  policeTriageDate?: InputMaybe<SortOrder>;
+  policeTriageHighImpactFlag?: InputMaybe<SortOrder>;
+  policeTriageIncidentQuality?: InputMaybe<SortOrder>;
+  policeTriageOffenderImpact?: InputMaybe<SortOrder>;
+  policeTriageOffenderQuality?: InputMaybe<SortOrder>;
+  policeTriageReason?: InputMaybe<SortOrder>;
+  policeTriageRepeatOffender?: InputMaybe<SortOrder>;
+  policeTriageScore?: InputMaybe<SortOrder>;
+  policeTriageStatus?: InputMaybe<SortOrder>;
   recoveredValue?: InputMaybe<SortOrder>;
   recycleBin?: InputMaybe<RecycledItemOrderByWithRelationInput>;
   recycleDate?: InputMaybe<SortOrder>;
@@ -9078,6 +9155,29 @@ export enum IncidentScalarFieldEnum {
   WeekOfYear = 'weekOfYear'
 }
 
+export type IncidentStatus = {
+  __typename?: 'IncidentStatus';
+  createdAt: Scalars['Date'];
+  description?: Maybe<Scalars['String']>;
+  descriptionTranslation?: Maybe<Scalars['JSON']>;
+  id: Scalars['ID'];
+  incidents: Array<Incident>;
+  name: Scalars['String'];
+  nameTranslation: Scalars['JSON'];
+  tooltip?: Maybe<Scalars['String']>;
+  updatedAt: Scalars['Date'];
+};
+
+
+export type IncidentStatusIncidentsArgs = {
+  cursor?: InputMaybe<IncidentWhereUniqueInput>;
+  distinct?: InputMaybe<Array<IncidentScalarFieldEnum>>;
+  orderBy?: InputMaybe<Array<IncidentOrderByWithRelationInput>>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<IncidentWhereInput>;
+};
+
 export type IncidentSummary = {
   __typename?: 'IncidentSummary';
   incidentsReportedToPolice: Scalars['Int'];
@@ -9167,6 +9267,7 @@ export type IncidentWhereInput = {
   answers?: InputMaybe<AnswerListRelationFilter>;
   approved?: InputMaybe<BoolNullableFilter>;
   articleColumns?: InputMaybe<ArticleColumnListRelationFilter>;
+  assignedUsers?: InputMaybe<UserListRelationFilter>;
   business?: InputMaybe<BusinessWhereInput>;
   businessId?: InputMaybe<StringNullableFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
@@ -9185,6 +9286,8 @@ export type IncidentWhereInput = {
   geoLat?: InputMaybe<StringNullableFilter>;
   geoLng?: InputMaybe<StringNullableFilter>;
   groups?: InputMaybe<GroupListRelationFilter>;
+  hasNamedOffender?: InputMaybe<BoolFilter>;
+  hasYouthOffender?: InputMaybe<BoolFilter>;
   hourOfDay?: InputMaybe<IntNullableFilter>;
   id?: InputMaybe<StringFilter>;
   images?: InputMaybe<ImageListRelationFilter>;
@@ -9199,12 +9302,28 @@ export type IncidentWhereInput = {
   mg11?: InputMaybe<Mg11ListRelationFilter>;
   monthOfYear?: InputMaybe<IntNullableFilter>;
   notifications?: InputMaybe<NotificationListRelationFilter>;
+  offenderIdentityScore?: InputMaybe<IntNullableFilter>;
   offenders?: InputMaybe<OffenderListRelationFilter>;
   policeInvolved?: InputMaybe<BoolFilter>;
   policeNo?: InputMaybe<StringNullableFilter>;
   policeRef?: InputMaybe<StringNullableFilter>;
+  policeReportEligible?: InputMaybe<BoolFilter>;
+  policeReportSubmitted?: InputMaybe<BoolFilter>;
+  policeReportSubmittedDate?: InputMaybe<DateTimeNullableFilter>;
   policeReported?: InputMaybe<BoolFilter>;
   policeResponse?: InputMaybe<EnumPoliceResponseTimeNullableFilter>;
+  policeTriageBestOffenderScore?: InputMaybe<IntNullableFilter>;
+  policeTriageCompositeScore?: InputMaybe<IntNullableFilter>;
+  policeTriageConfidence?: InputMaybe<IntNullableFilter>;
+  policeTriageDate?: InputMaybe<DateTimeNullableFilter>;
+  policeTriageHighImpactFlag?: InputMaybe<BoolFilter>;
+  policeTriageIncidentQuality?: InputMaybe<StringNullableFilter>;
+  policeTriageOffenderImpact?: InputMaybe<StringNullableFilter>;
+  policeTriageOffenderQuality?: InputMaybe<StringNullableFilter>;
+  policeTriageReason?: InputMaybe<StringNullableFilter>;
+  policeTriageRepeatOffender?: InputMaybe<BoolFilter>;
+  policeTriageScore?: InputMaybe<IntNullableFilter>;
+  policeTriageStatus?: InputMaybe<EnumPoliceTriageStatusFilter>;
   priority?: InputMaybe<EnumIncidentPriorityFilter>;
   recoveredValue?: InputMaybe<FloatNullableFilter>;
   recycleBin?: InputMaybe<RecycledItemWhereInput>;
@@ -9217,6 +9336,7 @@ export type IncidentWhereInput = {
   schemeId?: InputMaybe<StringFilter>;
   skipFeedItem?: InputMaybe<BoolFilter>;
   skipNotification?: InputMaybe<BoolFilter>;
+  statusId?: InputMaybe<StringNullableFilter>;
   subject?: InputMaybe<StringNullableFilter>;
   subscribedUsers?: InputMaybe<UserListRelationFilter>;
   time?: InputMaybe<DateTimeFilter>;
@@ -10965,6 +11085,13 @@ export type MapMarker = {
   name?: Maybe<Scalars['String']>;
 };
 
+export type MarkStockRemovalRequestAsPickedInput = {
+  id: Scalars['String'];
+  items: Array<PickedItemInput>;
+  tmid?: InputMaybe<Scalars['String']>;
+  tracking?: InputMaybe<Scalars['String']>;
+};
+
 export type MentionableUser = {
   __typename?: 'MentionableUser';
   businessesName: Scalars['String'];
@@ -11350,6 +11477,7 @@ export type Mutation = {
   approveAiSuggestion: AiSuggestion;
   approveIncident: Incident;
   approveOffender: Offender;
+  approvePAPStockRemovalRequest: StockRemovalRequest;
   approveStockRemovalRequest: StockRemovalRequestApproval;
   centralCoopImportData: SystemTask;
   closeInvestigation: Investigation;
@@ -11493,6 +11621,9 @@ export type Mutation = {
   linkUserToDem: User;
   mapAudioIncidentFaces: Scalars['Boolean'];
   markAsReadMessages: UserChat;
+  markStockRemovalRequestAsCollected: StockRemovalRequest;
+  markStockRemovalRequestAsPicked: StockRemovalRequest;
+  markStockRemovalRequestAsReturned: StockRemovalRequest;
   mergeBusinessesWithSameName: Business;
   mergeOffender: Offender;
   midCountiesImportData: SystemTask;
@@ -11511,6 +11642,7 @@ export type Mutation = {
   /** Refresh the incident_data_view materialized view */
   refreshIncidentDataView: Scalars['Boolean'];
   registerPushToken: ExpoPushToken;
+  rejectPAPStockRemovalRequest: StockRemovalRequest;
   rejectStockRemovalRequest: StockRemovalRequestApproval;
   removeQuestionFromTag: TagQuestion;
   removeUserFromBusiness: Business;
@@ -11573,6 +11705,7 @@ export type Mutation = {
   updateIncident: Incident;
   updateIncidentBusiness: Incident;
   updateIncidentBusinesses: SystemTask;
+  updateIncidentStatus: Incident;
   updateInvestigation: Investigation;
   updateMessage: Message;
   updateOffender: Offender;
@@ -11683,6 +11816,11 @@ export type MutationApproveIncidentArgs = {
 
 export type MutationApproveOffenderArgs = {
   data: ApproveIncidentData;
+  where: UniqueId;
+};
+
+
+export type MutationApprovePapStockRemovalRequestArgs = {
   where: UniqueId;
 };
 
@@ -12417,6 +12555,21 @@ export type MutationMarkAsReadMessagesArgs = {
 };
 
 
+export type MutationMarkStockRemovalRequestAsCollectedArgs = {
+  where: UniqueId;
+};
+
+
+export type MutationMarkStockRemovalRequestAsPickedArgs = {
+  data: MarkStockRemovalRequestAsPickedInput;
+};
+
+
+export type MutationMarkStockRemovalRequestAsReturnedArgs = {
+  where: UniqueId;
+};
+
+
 export type MutationMergeBusinessesWithSameNameArgs = {
   data: BusinessWhereUniqueInput;
 };
@@ -12484,6 +12637,11 @@ export type MutationRecycleTagArgs = {
 
 export type MutationRegisterPushTokenArgs = {
   data: RegisterPushTokenData;
+};
+
+
+export type MutationRejectPapStockRemovalRequestArgs = {
+  where: UniqueId;
 };
 
 
@@ -12775,6 +12933,12 @@ export type MutationUpdateIncidentArgs = {
 export type MutationUpdateIncidentBusinessArgs = {
   data: UpdateIncidentBusinessInput;
   where: UniqueId;
+};
+
+
+export type MutationUpdateIncidentStatusArgs = {
+  data: UpdateIncidentStatusInput;
+  where: IncidentWhereUniqueInput;
 };
 
 
@@ -13291,6 +13455,13 @@ export type NestedEnumPoliceResponseTimeNullableFilter = {
   in?: InputMaybe<Array<PoliceResponseTime>>;
   not?: InputMaybe<PoliceResponseTime>;
   notIn?: InputMaybe<Array<PoliceResponseTime>>;
+};
+
+export type NestedEnumPoliceTriageStatusFilter = {
+  equals?: InputMaybe<PoliceTriageStatus>;
+  in?: InputMaybe<Array<PoliceTriageStatus>>;
+  not?: InputMaybe<PoliceTriageStatus>;
+  notIn?: InputMaybe<Array<PoliceTriageStatus>>;
 };
 
 export type NestedEnumQuestionModelFilter = {
@@ -15224,6 +15395,11 @@ export type Permissions = {
   model: PermissionModel;
 };
 
+export type PickedItemInput = {
+  itemId: Scalars['String'];
+  pickedQuantity: Scalars['Int'];
+};
+
 export type PlatformFeatureUsage = {
   __typename?: 'PlatformFeatureUsage';
   /** Feature name */
@@ -15319,6 +15495,22 @@ export type PoliceSummary = {
   totalReportedIncidents: Scalars['Int'];
   totalVerifiedOffenders: Scalars['Int'];
 };
+
+export type PoliceTriageStatistics = {
+  __typename?: 'PoliceTriageStatistics';
+  averageScores: TriageAverageScores;
+  exclusionReasons: TriageExclusionReasons;
+  overview: TriageOverview;
+  reporting: TriageReporting;
+  statusBreakdown: TriageStatusBreakdown;
+};
+
+export enum PoliceTriageStatus {
+  DoNotReport = 'DO_NOT_REPORT',
+  Pending = 'PENDING',
+  Report = 'REPORT',
+  Review = 'REVIEW'
+}
 
 export type PreSelectedGood = {
   __typename?: 'PreSelectedGood';
@@ -15431,6 +15623,7 @@ export type Query = {
   getAudioIncidentSession: Scalars['JSON'];
   goodsTypes: Array<GoodsType>;
   group: Group;
+  groupKpiStats: Array<GroupKpiStat>;
   groups: Array<Group>;
   health: Scalars['Boolean'];
   image: Image;
@@ -15446,6 +15639,7 @@ export type Query = {
   incidentMonthlyByScheme: Array<IncidentMonthlyByScheme>;
   incidentOffenderRatio: IncidentOffenderRatio;
   incidentRelaySimple: QueryIncidentRelaySimpleConnection;
+  incidentStatuses: Array<IncidentStatus>;
   incidentTableReport: ListIncidentPerformance;
   incidents: Array<Incident>;
   incidentsDayOfWeek: Array<Graph>;
@@ -15518,6 +15712,8 @@ export type Query = {
   performanceReport: PerformanceReport;
   platformFeatureUsage: Array<PlatformFeatureUsage>;
   platformUsageBreakdown: Array<PlatformUsageBreakdown>;
+  policeTriageByStore: Array<StoreTriageStatistics>;
+  policeTriageStatistics: PoliceTriageStatistics;
   previewIncidentExport: IncidentExport;
   question: Question;
   questions: QueryQuestionsConnection;
@@ -16154,6 +16350,13 @@ export type QueryGoodsTypesArgs = {
 
 export type QueryGroupArgs = {
   where: GroupWhereUniqueInput;
+};
+
+
+export type QueryGroupKpiStatsArgs = {
+  dateRange?: InputMaybe<DateRangeInput>;
+  groupIds?: InputMaybe<Array<Scalars['String']>>;
+  schemeId: Scalars['String'];
 };
 
 
@@ -16804,6 +17007,20 @@ export type QueryPlatformUsageBreakdownArgs = {
   endDate?: InputMaybe<Scalars['String']>;
   schemeId: Scalars['String'];
   startDate?: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryPoliceTriageByStoreArgs = {
+  endDate?: InputMaybe<Scalars['Date']>;
+  schemeId: Scalars['String'];
+  startDate?: InputMaybe<Scalars['Date']>;
+};
+
+
+export type QueryPoliceTriageStatisticsArgs = {
+  endDate?: InputMaybe<Scalars['Date']>;
+  schemeId: Scalars['String'];
+  startDate?: InputMaybe<Scalars['Date']>;
 };
 
 
@@ -19013,6 +19230,7 @@ export enum ReportType {
   CheckListTable = 'CHECK_LIST_TABLE',
   CrimeGroup = 'CRIME_GROUP',
   CrimeGroupsTable = 'CRIME_GROUPS_TABLE',
+  GroupTable = 'GROUP_TABLE',
   IncidentItemsTable = 'INCIDENT_ITEMS_TABLE',
   IncidentMap = 'INCIDENT_MAP',
   IncidentTable = 'INCIDENT_TABLE',
@@ -21024,6 +21242,8 @@ export type StockRemovalRequest = {
   status: StockRemovalRequestStatus;
   storeOrDC?: Maybe<Scalars['String']>;
   title: Scalars['String'];
+  tmid?: Maybe<Scalars['String']>;
+  tracking?: Maybe<Scalars['String']>;
   willStockBeReturned?: Maybe<Scalars['String']>;
 };
 
@@ -21042,9 +21262,15 @@ export enum StockRemovalRequestApprovalStatus {
 }
 
 export enum StockRemovalRequestStatus {
+  AwaitingPapApproval = 'AWAITING_PAP_APPROVAL',
+  AwaitingReturn = 'AWAITING_RETURN',
   Closed = 'CLOSED',
+  Collected = 'COLLECTED',
   Open = 'OPEN',
-  PendingApproval = 'PENDING_APPROVAL'
+  PendingApproval = 'PENDING_APPROVAL',
+  Picked = 'PICKED',
+  Picking = 'PICKING',
+  Returned = 'RETURNED'
 }
 
 export type StockRemovalRequestsOrderBy = {
@@ -21057,6 +21283,60 @@ export type StockRemovalRequestsWhere = {
   schemeId: Scalars['String'];
   search?: InputMaybe<Scalars['String']>;
   status?: InputMaybe<Array<StockRemovalRequestStatus>>;
+};
+
+export type StoreAgeBreakdown = {
+  __typename?: 'StoreAgeBreakdown';
+  nonYouth: Scalars['Int'];
+  youth: Scalars['Int'];
+};
+
+export type StoreIncidentMetrics = {
+  __typename?: 'StoreIncidentMetrics';
+  totalCount: Scalars['Int'];
+  totalValue: Scalars['Float'];
+  withCCTV: Scalars['Int'];
+  withoutCCTV: Scalars['Int'];
+};
+
+export type StoreOffenderBreakdown = {
+  __typename?: 'StoreOffenderBreakdown';
+  named: Scalars['Int'];
+  nickname: Scalars['Int'];
+  unknown: Scalars['Int'];
+};
+
+export type StorePoliceInteraction = {
+  __typename?: 'StorePoliceInteraction';
+  notReported: Scalars['Int'];
+  policeCalled: Scalars['Int'];
+  policeResponded: Scalars['Int'];
+};
+
+export type StoreQualityMetrics = {
+  __typename?: 'StoreQualityMetrics';
+  averageActionableScore: Scalars['Int'];
+  averageOffenderIdentityScore: Scalars['Int'];
+  averageTriageScore: Scalars['Int'];
+};
+
+export type StoreRepeatOffenders = {
+  __typename?: 'StoreRepeatOffenders';
+  count: Scalars['Int'];
+  hotOffenders: Scalars['Int'];
+  totalIncidents: Scalars['Int'];
+};
+
+export type StoreTriageStatistics = {
+  __typename?: 'StoreTriageStatistics';
+  ageBreakdown: StoreAgeBreakdown;
+  incidentMetrics: StoreIncidentMetrics;
+  offenderBreakdown: StoreOffenderBreakdown;
+  policeInteraction: StorePoliceInteraction;
+  qualityMetrics: StoreQualityMetrics;
+  repeatOffenders: StoreRepeatOffenders;
+  storeId: Scalars['String'];
+  storeName: Scalars['String'];
 };
 
 export type StreamAudioData = {
@@ -22676,6 +22956,45 @@ export type Tree = {
   parentId: Scalars['String'];
 };
 
+export type TriageAverageScores = {
+  __typename?: 'TriageAverageScores';
+  actionableData: Scalars['Int'];
+  bestOffenderScore: Scalars['Int'];
+  compositeScore: Scalars['Int'];
+  confidence: Scalars['Int'];
+  offenderIdentity: Scalars['Int'];
+};
+
+export type TriageExclusionReasons = {
+  __typename?: 'TriageExclusionReasons';
+  lowQualityData: Scalars['Int'];
+  noNamedOffender: Scalars['Int'];
+  youthOffenders: Scalars['Int'];
+};
+
+export type TriageOverview = {
+  __typename?: 'TriageOverview';
+  totalIncidents: Scalars['Int'];
+  totalTriaged: Scalars['Int'];
+  triageRate: Scalars['Float'];
+};
+
+export type TriageReporting = {
+  __typename?: 'TriageReporting';
+  eligible: Scalars['Int'];
+  pending: Scalars['Int'];
+  submissionRate: Scalars['Float'];
+  submitted: Scalars['Int'];
+};
+
+export type TriageStatusBreakdown = {
+  __typename?: 'TriageStatusBreakdown';
+  doNotReport: Scalars['Int'];
+  pending: Scalars['Int'];
+  report: Scalars['Int'];
+  review: Scalars['Int'];
+};
+
 export type UrlImage = {
   filename: Scalars['String'];
   id?: InputMaybe<Scalars['String']>;
@@ -22907,6 +23226,10 @@ export enum UpdateIcon {
 
 export type UpdateIncidentBusinessInput = {
   business: NullableConnectDisconnectHelper;
+};
+
+export type UpdateIncidentStatusInput = {
+  statusId: Scalars['String'];
 };
 
 export type UpdateInvestigationInput = {

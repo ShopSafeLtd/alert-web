@@ -4,9 +4,16 @@ query StockRemovalRequests($where: StockRemovalRequestsWhere!, $orderBy: [StockR
             node {
                 id
                 createdAt
+                createdBy {
+                    id
+                }
                 title
                 status
                 reference
+                business {
+                    id
+                    name
+                }
                 approvers {
                     status
                     user {

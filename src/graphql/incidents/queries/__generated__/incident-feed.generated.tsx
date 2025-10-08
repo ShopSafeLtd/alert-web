@@ -15,7 +15,7 @@ export type IncidentFeedQueryVariables = Types.Exact<{
 }>;
 
 
-export type IncidentFeedQuery = { __typename?: 'Query', incidentFeed: Array<{ __typename?: 'Incident', id: string, subject: string, description: string, dayTime: string, reference?: number | null, policeRef?: string | null, approved?: boolean | null, uploaded?: boolean | null, crimeTypes: Array<{ __typename?: 'Tag', id: string, name: string }>, business?: { __typename?: 'Business', id: string, name: string } | null, createdBy: { __typename?: 'User', id: string, fullName: string, businesses: Array<{ __typename?: 'Business', id: string, name: string }> }, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: Types.ImagePosition, rotation: number, card?: string | null, offenders: Array<{ __typename?: 'Offender', id: string }> }>, groups: Array<{ __typename?: 'Group', id: string, name: string }>, offenders: Array<{ __typename?: 'Offender', id: string, name?: string | null }> }> };
+export type IncidentFeedQuery = { __typename?: 'Query', incidentFeed: Array<{ __typename?: 'Incident', id: string, subject: string, description: string, dayTime: string, reference?: number | null, policeRef?: string | null, newIncident: boolean, approved?: boolean | null, uploaded?: boolean | null, status?: { __typename?: 'IncidentStatus', id: string, name: string, tooltip?: string | null } | null, crimeTypes: Array<{ __typename?: 'Tag', id: string, name: string }>, business?: { __typename?: 'Business', id: string, name: string } | null, createdBy: { __typename?: 'User', id: string, fullName: string, businesses: Array<{ __typename?: 'Business', id: string, name: string }> }, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: Types.ImagePosition, rotation: number, card?: string | null, offenders: Array<{ __typename?: 'Offender', id: string }> }>, groups: Array<{ __typename?: 'Group', id: string, name: string }>, offenders: Array<{ __typename?: 'Offender', id: string, name?: string | null }> }> };
 
 
 export const IncidentFeedDocument = gql`
@@ -36,6 +36,12 @@ export const IncidentFeedDocument = gql`
     dayTime
     reference
     policeRef
+    newIncident
+    status {
+      id
+      name
+      tooltip
+    }
     crimeTypes {
       id
       name

@@ -38,11 +38,11 @@ export const AiVisionEventsDocument = gql`
 }
     `;
 export function useAiVisionEventsQuery(baseOptions: Apollo.QueryHookOptions<AiVisionEventsQuery, AiVisionEventsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions};
+        const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<AiVisionEventsQuery, AiVisionEventsQueryVariables>(AiVisionEventsDocument, options);
       }
 export function useAiVisionEventsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AiVisionEventsQuery, AiVisionEventsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions};
+          const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<AiVisionEventsQuery, AiVisionEventsQueryVariables>(AiVisionEventsDocument, options);
         }
 export type AiVisionEventsQueryHookResult = ReturnType<typeof useAiVisionEventsQuery>;

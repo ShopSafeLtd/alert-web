@@ -24,6 +24,12 @@ query incidentFeed(
     dayTime
     reference
     policeRef
+    newIncident
+    status {
+      id
+      name
+      tooltip
+    }
     crimeTypes {
       id
       name
