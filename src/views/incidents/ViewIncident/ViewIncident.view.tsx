@@ -36,6 +36,12 @@ import useStyles from './ViewIncident.styles';
 
 const { confirm } = Modal;
 
+interface IncidentStatus {
+  id: string;
+  name: string;
+  tooltip?: null | string;
+}
+
 interface Props {
   data: ViewIncidentQuery | undefined;
   deleteRights: boolean;
@@ -45,11 +51,14 @@ interface Props {
   hasApprovePermission: boolean;
   hideIncident: boolean;
   incidentId: string;
+  incidentStatuses?: IncidentStatus[];
   loading: boolean;
   onEditAddress: (value: LocationData) => void;
+  onStatusChange?: (statusId: string) => Promise<void>;
   saving: boolean;
   setSaving: (value: boolean) => void;
   showAiDetails: boolean;
+  statusLoading?: boolean;
   toggleEditAddress: () => void;
   toggleEditImages: () => void;
   toggleShowAiDetails: () => void;
@@ -65,11 +74,14 @@ const ViewIncident = ({
   hasApprovePermission,
   hideIncident,
   incidentId,
+  incidentStatuses = [],
   loading,
   onEditAddress,
+  onStatusChange,
   saving,
   setSaving,
   showAiDetails,
+  statusLoading = false,
   toggleEditAddress,
   toggleEditImages,
   toggleShowAiDetails,
@@ -254,7 +266,10 @@ const ViewIncident = ({
                             data={data}
                             editAddress={editAddress}
                             editRights={editRights}
+                            incidentStatuses={incidentStatuses}
                             loading={loading}
+                            onStatusChange={onStatusChange}
+                            statusLoading={statusLoading}
                           />
                           <PermissionCheckWrapper
                             permission={{

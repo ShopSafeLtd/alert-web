@@ -1,0 +1,10 @@
+mutation UpdateIncidentStatusData($where: UniqueId!, $data: IncidentStatusUpdateInput!) {
+  updateIncidentStatusData(where: $where, data: $data) {
+    id
+    name
+    tooltip
+    description
+    createdAt
+    updatedAt
+  }
+}

@@ -3,5 +3,6 @@ query ListIncidentStatuses {
     id
     name
     tooltip
+    description
   }
 }

@@ -1,6 +1,6 @@
-import React from 'react';
 import { Tag } from 'antd';
 import { IncidentPriority } from 'graphql/types';
+import React from 'react';
 
 export const getIncidentPriorityText = (value: IncidentPriority) => {
   if (value === IncidentPriority.Medium) return 'Medium';
@@ -8,9 +8,9 @@ export const getIncidentPriorityText = (value: IncidentPriority) => {
   return 'Normal';
 };
 export const getIncidentPriorityColor = (value: IncidentPriority) => {
-  if (value === IncidentPriority.Medium) return 'gold';
+  if (value === IncidentPriority.Medium) return 'orange';
   if (value === IncidentPriority.High) return 'red';
-  return 'none';
+  return 'green';
 };
 
 interface Props {

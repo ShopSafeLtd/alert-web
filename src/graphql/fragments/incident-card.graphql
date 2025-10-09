@@ -14,6 +14,10 @@ fragment IncidentCard on Incident {
     name
     tooltip
   }
+  assignedUsers {
+    id
+    fullName
+  }
   images {
     low
     id

@@ -1,17 +1,18 @@
 import DatePicker from '#/components/util-components/DatePicker';
+import { useAmericanDateFormatAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { Col, Form, Input, Row, Typography } from 'antd';
+import { useAtomValue } from 'jotai/index';
 import React from 'react';
 import { useIntl } from 'react-intl';
-import { useAtomValue } from 'jotai/index';
-import { useAmericanDateFormatAtom } from '#/providers/SchemeProvider/SchemeProvider';
 
 const { Paragraph, Title } = Typography;
 
 interface Props {
+  descriptionTitle?: string;
   saving: boolean;
 }
 
-const IncidentDetails = ({ saving }: Props): JSX.Element => {
+const IncidentDetails = ({ descriptionTitle, saving }: Props): JSX.Element => {
   const intl = useIntl();
   let dateFormat = 'HH:mm - DD/MM/YY';
   const shouldUseUs = useAtomValue(useAmericanDateFormatAtom);
@@ -81,9 +82,12 @@ const IncidentDetails = ({ saving }: Props): JSX.Element => {
         </Col>
         <Col span={20}>
           <Form.Item
-            label={intl.formatMessage({
-              defaultMessage: 'Please describe the incident',
-            })}
+            label={
+              descriptionTitle ||
+              intl.formatMessage({
+                defaultMessage: 'Please describe the incident',
+              })
+            }
             name="description"
             rules={[
               {

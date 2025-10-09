@@ -1,8 +1,10 @@
 import type { ViewIncidentQuery } from '#/views/incidents/ViewIncident/__generated__/view-incident.generated';
 
+import IncidentAssignedUsers from '#/components/incidents/IncidentAssignedUsers';
 import IncidentPriorityTag from '#/components/incidents/IncidentPriority/IncidentPriorityTag.view';
 import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import useStyles from '#/views/incidents/ViewIncident/ViewIncident.styles';
+import IncidentStatusChanger from '#/views/incidents/ViewIncident/components/IncidentStatusChanger';
 import {
   faBuilding,
   faClock,
@@ -25,18 +27,35 @@ import { Link } from 'react-router-dom';
 
 const { Paragraph, Text, Title } = Typography;
 
+interface IncidentStatus {
+  id: string;
+  name: string;
+  tooltip?: null | string;
+}
+
 interface Props {
   data: ViewIncidentQuery | undefined;
   editAddress: boolean;
   editRights: boolean;
+  incidentStatuses?: IncidentStatus[];
   loading: boolean;
+  onStatusChange?: (statusId: string) => Promise<void>;
+  statusLoading?: boolean;
 }
 
-const IncidentDetails = ({ data, editRights, loading }: Props) => {
+const IncidentDetails = ({
+  data,
+  editRights,
+  incidentStatuses = [],
+  loading,
+  onStatusChange,
+  statusLoading = false,
+}: Props) => {
   const classes = useStyles();
   const intl = useIntl();
 
-  const languageCount = useAtomValue(currentSchemeAtom)?.languageCount ?? 1;
+  const currentScheme = useAtomValue(currentSchemeAtom);
+  const languageCount = currentScheme?.languageCount ?? 1;
 
   const [showOriginal, setShowOriginal] = useState(false);
 
@@ -46,9 +65,25 @@ const IncidentDetails = ({ data, editRights, loading }: Props) => {
 
   return (
     <Card loading={loading}>
-      <Title className={classes.headerTitle} level={4}>
-        {data?.incident?.subject}
-      </Title>
+      <Row align="middle" gutter={8} style={{ marginBottom: 8 }}>
+        <Col>
+          <Title
+            className={classes.headerTitle}
+            level={4}
+            style={{ marginBottom: 0 }}
+          >
+            {data?.incident?.subject}
+          </Title>
+        </Col>
+        {data?.incident?.newIncident && (
+          <Col>
+            <Tag color="blue">
+              <FormattedMessage defaultMessage="NEW" />
+            </Tag>
+          </Col>
+        )}
+      </Row>
+
       <Text>
         {intl.formatMessage(
           {
@@ -59,7 +94,8 @@ const IncidentDetails = ({ data, editRights, loading }: Props) => {
           }
         )}
       </Text>
-      <Paragraph style={{ marginTop: 10 }} type="secondary">
+
+      <Paragraph style={{ marginBottom: 16, marginTop: 10 }} type="secondary">
         {showOriginal
           ? data?.incident.originalDescription
           : data?.incident?.description}
@@ -86,6 +122,53 @@ const IncidentDetails = ({ data, editRights, loading }: Props) => {
       <Row gutter={32}>
         <Col span={12}>
           <Descriptions className={classes.desc} column={1}>
+            {onStatusChange && (
+              <Descriptions.Item
+                className={classes.detail}
+                label={
+                  <span>
+                    <FontAwesomeIcon
+                      className={classes.descIcon}
+                      icon={faExclamationCircle}
+                    />
+                    {intl.formatMessage({
+                      defaultMessage: 'Status',
+                    })}
+                  </span>
+                }
+              >
+                <IncidentStatusChanger
+                  currentStatus={data?.incident?.status}
+                  editRights={editRights}
+                  incidentId={data?.incident?.id || ''}
+                  loading={statusLoading}
+                  onStatusChange={onStatusChange}
+                  statuses={incidentStatuses}
+                />
+              </Descriptions.Item>
+            )}
+            {currentScheme?.incidentAssignmentEnabled && (
+              <Descriptions.Item
+                className={classes.detail}
+                label={
+                  <span>
+                    <FontAwesomeIcon
+                      className={classes.descIcon}
+                      icon={faUser}
+                    />
+                    {intl.formatMessage({
+                      defaultMessage: 'Assigned To',
+                    })}
+                  </span>
+                }
+              >
+                <IncidentAssignedUsers
+                  assignedUsers={data?.incident?.assignedUsers || []}
+                  editRights={editRights}
+                  incidentId={data?.incident?.id || ''}
+                />
+              </Descriptions.Item>
+            )}
             {data?.incident.priority === IncidentPriority.Normal ? undefined : (
               <Descriptions.Item
                 className={classes.detail}
@@ -137,6 +220,22 @@ const IncidentDetails = ({ data, editRights, loading }: Props) => {
               className={classes.detail}
               label={
                 <span>
+                  <FontAwesomeIcon
+                    className={classes.descIcon}
+                    icon={faClock}
+                  />
+                  {intl.formatMessage({
+                    defaultMessage: 'Date & Time',
+                  })}
+                </span>
+              }
+            >
+              {data?.incident?.dayTime}
+            </Descriptions.Item>
+            <Descriptions.Item
+              className={classes.detail}
+              label={
+                <span>
                   <FontAwesomeIcon className={classes.descIcon} icon={faUser} />
                   {intl.formatMessage({
                     defaultMessage: 'Created By',
@@ -153,38 +252,6 @@ const IncidentDetails = ({ data, editRights, loading }: Props) => {
                     : intl.formatMessage({ defaultMessage: 'Unknown' }),
                 }}
               />
-            </Descriptions.Item>
-            {/* <Descriptions.Item
-              className={classes.detail}
-              label={
-                <span>
-                  <FontAwesomeIcon
-                    className={classes.descIcon}
-                    icon={faClock}
-                  />
-                  {intl.formatMessage({
-                    defaultMessage: 'Approved By',
-                  })}
-                </span>
-              }
-            >
-              {data?.incident}
-            </Descriptions.Item> */}
-            <Descriptions.Item
-              className={classes.detail}
-              label={
-                <span>
-                  <FontAwesomeIcon
-                    className={classes.descIcon}
-                    icon={faClock}
-                  />
-                  {intl.formatMessage({
-                    defaultMessage: 'Date & Time',
-                  })}
-                </span>
-              }
-            >
-              {data?.incident?.dayTime}
             </Descriptions.Item>
           </Descriptions>
         </Col>

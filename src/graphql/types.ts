@@ -148,6 +148,7 @@ export type Action = {
   reason?: Maybe<Scalars['String']>;
   reference?: Maybe<Scalars['Int']>;
   type: ActionType;
+  workflowResults?: Maybe<Scalars['JSON']>;
 };
 
 export type ActionListRelationFilter = {
@@ -246,7 +247,8 @@ export enum ActionType {
   Restore = 'RESTORE',
   SaveDraft = 'SAVE_DRAFT',
   Update = 'UPDATE',
-  View = 'VIEW'
+  View = 'VIEW',
+  WorkflowCheck = 'WORKFLOW_CHECK'
 }
 
 export type ActionWhereInput = {
@@ -8588,6 +8590,7 @@ export type IncidentFormFieldsMetadataInput = {
   draftDescription?: InputMaybe<Scalars['String']>;
   draftTitle?: InputMaybe<Scalars['String']>;
   mode?: InputMaybe<Scalars['String']>;
+  titles?: InputMaybe<Scalars['JSON']>;
 };
 
 export type IncidentFormInput = {
@@ -9178,6 +9181,21 @@ export type IncidentStatusIncidentsArgs = {
   where?: InputMaybe<IncidentWhereInput>;
 };
 
+export type IncidentStatusCreateInput = {
+  description?: InputMaybe<Scalars['String']>;
+  name: Scalars['String'];
+  scheme: ConnectHelper;
+};
+
+export type IncidentStatusUpdateInput = {
+  description?: InputMaybe<NullableSetStringHelper>;
+  name?: InputMaybe<SetStringHelper>;
+};
+
+export type IncidentStatusWhereUniqueInput = {
+  id?: InputMaybe<Scalars['String']>;
+};
+
 export type IncidentSummary = {
   __typename?: 'IncidentSummary';
   incidentsReportedToPolice: Scalars['Int'];
@@ -9235,6 +9253,7 @@ export type IncidentUpdateInput = {
   activityAuthorised?: InputMaybe<NullableSetBooleanHelper>;
   answers?: InputMaybe<AnswerUpdateManyWithoutIncidentInput>;
   approved?: InputMaybe<SetBooleanHelper>;
+  assignedUsers?: InputMaybe<UserUpdateManyWithoutAssignedIncidents>;
   business?: InputMaybe<NullableConnectDisconnectHelper>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutIncidents>;
   crimeTypes?: InputMaybe<TagUpdateManyWithoutIncidentsInput>;
@@ -11511,6 +11530,7 @@ export type Mutation = {
   createIncident: Incident;
   createIncidentForm: IncidentForm;
   createIncidentFromAudioSession: Incident;
+  createIncidentStatus: IncidentStatus;
   createInvestigation: Investigation;
   createInvestigationCsvZip: Scalars['String'];
   /** NOTE: This is triggered without context externally by auth0, no way to know what scheme they are logging into. May have to add a update query one they have logged in  that updates the last login with the scheme they are logging into */
@@ -11567,6 +11587,7 @@ export type Mutation = {
   deleteFolder: Folder;
   deleteGroup: Group;
   deleteIncident: Incident;
+  deleteIncidentStatus: IncidentStatus;
   deleteInvestigation: Investigation;
   deleteMessage?: Maybe<Message>;
   deleteOffender: Offender;
@@ -11706,6 +11727,7 @@ export type Mutation = {
   updateIncidentBusiness: Incident;
   updateIncidentBusinesses: SystemTask;
   updateIncidentStatus: Incident;
+  updateIncidentStatusData: IncidentStatus;
   updateInvestigation: Investigation;
   updateMessage: Message;
   updateOffender: Offender;
@@ -11723,6 +11745,7 @@ export type Mutation = {
   updateScheme: Scheme;
   updateSharingConfig: SharingConfig;
   updateShoe: Shoe;
+  updateStockItem: StockItem;
   updateStockRemovalRequest: StockRemovalRequest;
   updateTag: Tag;
   updateTagQs: Array<TagQuestion>;
@@ -12001,6 +12024,11 @@ export type MutationCreateIncidentFromAudioSessionArgs = {
 };
 
 
+export type MutationCreateIncidentStatusArgs = {
+  data: IncidentStatusCreateInput;
+};
+
+
 export type MutationCreateInvestigationArgs = {
   data: CreateInvestigationInput;
 };
@@ -12272,6 +12300,11 @@ export type MutationDeleteGroupArgs = {
 
 
 export type MutationDeleteIncidentArgs = {
+  where: UniqueId;
+};
+
+
+export type MutationDeleteIncidentStatusArgs = {
   where: UniqueId;
 };
 
@@ -12942,6 +12975,12 @@ export type MutationUpdateIncidentStatusArgs = {
 };
 
 
+export type MutationUpdateIncidentStatusDataArgs = {
+  data: IncidentStatusUpdateInput;
+  where: UniqueId;
+};
+
+
 export type MutationUpdateInvestigationArgs = {
   data: UpdateInvestigationInput;
   where: UniqueId;
@@ -13031,6 +13070,12 @@ export type MutationUpdateSharingConfigArgs = {
 
 export type MutationUpdateShoeArgs = {
   data: UpdateShoe;
+  where: UniqueId;
+};
+
+
+export type MutationUpdateStockItemArgs = {
+  data: UpdateStockItemInput;
   where: UniqueId;
 };
 
@@ -15639,6 +15684,7 @@ export type Query = {
   incidentMonthlyByScheme: Array<IncidentMonthlyByScheme>;
   incidentOffenderRatio: IncidentOffenderRatio;
   incidentRelaySimple: QueryIncidentRelaySimpleConnection;
+  incidentStatus: IncidentStatus;
   incidentStatuses: Array<IncidentStatus>;
   incidentTableReport: ListIncidentPerformance;
   incidents: Array<Incident>;
@@ -15742,6 +15788,7 @@ export type Query = {
   statementTemplate: StatementTemplate;
   statementTemplates: Array<StatementTemplate>;
   stockItemsRelay: QueryStockItemsRelayConnection;
+  stockItemsRelayFast: QueryStockItemsRelayFastConnection;
   stockItemsSearch: StockItemSearchResult;
   stockRemovalRequest: StockRemovalRequest;
   stockRemovalRequests: QueryStockRemovalRequestsConnection;
@@ -16469,6 +16516,11 @@ export type QueryIncidentRelaySimpleArgs = {
   last?: InputMaybe<Scalars['Int']>;
   order?: InputMaybe<Array<IncidentOrderByWithRelationInput>>;
   where?: InputMaybe<IncidentRelaySimpleInput>;
+};
+
+
+export type QueryIncidentStatusArgs = {
+  where: IncidentStatusWhereUniqueInput;
 };
 
 
@@ -17241,6 +17293,17 @@ export type QueryStockItemsRelayArgs = {
 };
 
 
+export type QueryStockItemsRelayFastArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  includeTotalCount?: InputMaybe<Scalars['Boolean']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<StockItemRelayOrderInput>;
+  where: StockItemRelayWhereInput;
+};
+
+
 export type QueryStockItemsSearchArgs = {
   after?: InputMaybe<Scalars['String']>;
   orderBy?: InputMaybe<StockItemRelayOrderInput>;
@@ -17983,6 +18046,19 @@ export type QueryStockItemsRelayConnection = {
 
 export type QueryStockItemsRelayConnectionEdge = {
   __typename?: 'QueryStockItemsRelayConnectionEdge';
+  cursor: Scalars['String'];
+  node: StockItem;
+};
+
+export type QueryStockItemsRelayFastConnection = {
+  __typename?: 'QueryStockItemsRelayFastConnection';
+  edges: Array<QueryStockItemsRelayFastConnectionEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type QueryStockItemsRelayFastConnectionEdge = {
+  __typename?: 'QueryStockItemsRelayFastConnectionEdge';
   cursor: Scalars['String'];
   node: StockItem;
 };
@@ -19334,6 +19410,7 @@ export type Scheme = {
   defaultGroups: Array<Group>;
   defaultIncidentEmail: Scalars['Boolean'];
   defaultIncidentPush: Scalars['Boolean'];
+  defaultIncidentStatus?: Maybe<IncidentStatus>;
   defaultMessagePush: Scalars['Boolean'];
   defaultOffenderEmail: Scalars['Boolean'];
   defaultOffenderPush: Scalars['Boolean'];
@@ -19357,11 +19434,13 @@ export type Scheme = {
   id: Scalars['ID'];
   images: Array<Image>;
   imagesRequiredOnOffenders: Scalars['Boolean'];
+  incidentAssignmentEnabled: Scalars['Boolean'];
   incidentCustomQuestionRadio: Scalars['Boolean'];
   incidentForm: Array<IncidentForm>;
   incidentImpact: Scalars['Boolean'];
   incidentPriority: Scalars['Boolean'];
   incidentRetention?: Maybe<Scalars['Int']>;
+  incidentStatusEnabled: Scalars['Boolean'];
   incidentTypeTooltip?: Maybe<Scalars['String']>;
   incidents: Array<Incident>;
   incidentsByType: IncidentsByType;
@@ -19402,7 +19481,9 @@ export type Scheme = {
   requireActivityAuthorised: Scalars['Boolean'];
   requireBusinessOnIncident: Scalars['Boolean'];
   requireSiteNumberForUsers: Scalars['Boolean'];
+  restrictBusinessAccessByRelation: Scalars['Boolean'];
   restrictIncidentAccess: Scalars['Boolean'];
+  restrictIncidentAccessByRole: Scalars['Boolean'];
   roles: Array<CustomRole>;
   schemeTags: Array<Tag>;
   sharingFrom: Array<SharingConfig>;
@@ -19421,6 +19502,7 @@ export type Scheme = {
   updatesCreated: Scalars['Int'];
   uploadOffenderImagesOnMobile: Scalars['Boolean'];
   usDateFormat: Scalars['Boolean'];
+  usPoliceData: Scalars['Boolean'];
   useBusinessGroupsOnIncident: Scalars['Boolean'];
   userCount: Scalars['Int'];
   userNotifications: Scalars['Int'];
@@ -20083,6 +20165,8 @@ export type SchemeTier = {
 
 export type SchemeUpdateInput = {
   activityAssignToUser?: InputMaybe<SetBooleanHelper>;
+  aiDataEnrichment?: InputMaybe<SetBooleanHelper>;
+  allowTodoTemplateOverride?: InputMaybe<SetBooleanHelper>;
   approvalDueDays?: InputMaybe<Scalars['Int']>;
   autoApproveIncidents?: InputMaybe<SetBooleanHelper>;
   autoApproveOffenders?: InputMaybe<SetBooleanHelper>;
@@ -20096,6 +20180,7 @@ export type SchemeUpdateInput = {
   defaultGroups?: InputMaybe<Array<Scalars['String']>>;
   defaultIncidentEmail?: InputMaybe<SetBooleanHelper>;
   defaultIncidentPush?: InputMaybe<SetBooleanHelper>;
+  defaultIncidentStatusId?: InputMaybe<SetStringHelper>;
   defaultMessagePush?: InputMaybe<SetBooleanHelper>;
   defaultOffenderEmail?: InputMaybe<SetBooleanHelper>;
   defaultOffenderPush?: InputMaybe<SetBooleanHelper>;
@@ -20104,13 +20189,20 @@ export type SchemeUpdateInput = {
   defaultSubscribedOffenderOnly?: InputMaybe<SetBooleanHelper>;
   demCompanyId?: InputMaybe<SetStringHelper>;
   disableGalleryOnNative?: InputMaybe<Scalars['Boolean']>;
+  disablePassword?: InputMaybe<SetBooleanHelper>;
+  dontAutoSetTimeDate?: InputMaybe<SetBooleanHelper>;
+  draftIncidents?: InputMaybe<SetBooleanHelper>;
   facialDetection?: InputMaybe<SetBooleanHelper>;
   facialRecognition?: InputMaybe<SetBooleanHelper>;
   facialRedaction?: InputMaybe<SetBooleanHelper>;
   goodsMode?: InputMaybe<EnumGoodsModeFieldUpdateOperationsInput>;
   imagesRequiredOnOffenders?: InputMaybe<SetBooleanHelper>;
+  incidentAssignmentEnabled?: InputMaybe<SetBooleanHelper>;
   incidentCustomQuestionRadio?: InputMaybe<SetBooleanHelper>;
+  incidentImpact?: InputMaybe<SetBooleanHelper>;
+  incidentPriority?: InputMaybe<SetBooleanHelper>;
   incidentRetention?: InputMaybe<SetIntHelper>;
+  incidentStatusEnabled?: InputMaybe<SetBooleanHelper>;
   incidentTypeTooltip?: InputMaybe<SetStringHelper>;
   labels?: InputMaybe<Array<Scalars['String']>>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeDarkNestedInput>;
@@ -20119,14 +20211,26 @@ export type SchemeUpdateInput = {
   needJustification?: InputMaybe<SetBooleanHelper>;
   offenderRetention?: InputMaybe<SetIntHelper>;
   oneSelectedIncidentTypeOnly?: InputMaybe<SetBooleanHelper>;
+  optionalBusinessOnUsers?: InputMaybe<SetBooleanHelper>;
+  policeReporting?: InputMaybe<SetBooleanHelper>;
+  policeReportingApprovalFlow?: InputMaybe<SetBooleanHelper>;
   policeSharing?: InputMaybe<SetBooleanHelper>;
   policeSharingGroupIds?: InputMaybe<Array<Scalars['String']>>;
   policeSharingTagIds?: InputMaybe<Array<Scalars['String']>>;
   reportOnly?: InputMaybe<SetBooleanHelper>;
+  reportToAllBusinessesDefault?: InputMaybe<SetBooleanHelper>;
   requireActivityAuthorised?: InputMaybe<SetBooleanHelper>;
+  requireBusinessOnIncident?: InputMaybe<SetBooleanHelper>;
   requireSiteNumberForUsers?: InputMaybe<SetBooleanHelper>;
+  restrictBusinessAccessByRelation?: InputMaybe<SetBooleanHelper>;
   restrictIncidentAccess?: InputMaybe<SetBooleanHelper>;
+  restrictIncidentAccessByRole?: InputMaybe<SetBooleanHelper>;
+  skipLocationToAddress?: InputMaybe<SetBooleanHelper>;
+  smartApprove?: InputMaybe<SetBooleanHelper>;
   taskTimeTracking?: InputMaybe<Scalars['Boolean']>;
+  uploadOffenderImagesOnMobile?: InputMaybe<SetBooleanHelper>;
+  usDateFormat?: InputMaybe<SetBooleanHelper>;
+  usPoliceData?: InputMaybe<SetBooleanHelper>;
   useBusinessGroupsOnIncident?: InputMaybe<SetBooleanHelper>;
 };
 
@@ -20991,6 +21095,7 @@ export type StockItem = {
   costPriceLocal?: Maybe<Scalars['Float']>;
   costPriceStandard?: Maybe<Scalars['Float']>;
   createdAt: Scalars['Date'];
+  currency?: Maybe<Currency>;
   division?: Maybe<Scalars['String']>;
   goodsType?: Maybe<GoodsType>;
   goodsTypeId?: Maybe<Scalars['String']>;
@@ -23413,6 +23518,20 @@ export type UpdateSimpleLocationOnOffender = {
   upsert?: InputMaybe<Array<LocationUpsert>>;
 };
 
+export type UpdateStockItemInput = {
+  barcode?: InputMaybe<Scalars['String']>;
+  brand?: InputMaybe<Scalars['String']>;
+  currency?: InputMaybe<Currency>;
+  division?: InputMaybe<Scalars['String']>;
+  goodsTypeId?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
+  salesPriceLocal?: InputMaybe<Scalars['Float']>;
+  salesPriceStandard?: InputMaybe<Scalars['Float']>;
+  schemeId?: InputMaybe<Scalars['String']>;
+  sku?: InputMaybe<Scalars['String']>;
+  variant?: InputMaybe<Scalars['String']>;
+};
+
 export type UpdateStockRemovalItemInput = {
   id: Scalars['String'];
   quantity: Scalars['Int'];
@@ -25110,6 +25229,12 @@ export type UserUpdateInput = {
   termsSigned?: InputMaybe<SetBooleanHelper>;
 };
 
+export type UserUpdateManyWithoutAssignedIncidents = {
+  connect?: InputMaybe<Array<UserWhereUniqueInput>>;
+  disconnect?: InputMaybe<Array<UserWhereUniqueInput>>;
+  set?: InputMaybe<Array<UserWhereUniqueInput>>;
+};
+
 export type UserUpdateManyWithoutGroups = {
   connect?: InputMaybe<Array<UserWhereUniqueInput>>;
   disconnect?: InputMaybe<Array<UserWhereUniqueInput>>;
@@ -26150,8 +26275,22 @@ export type StockItemRelayOrderInput = {
 };
 
 export type StockItemRelayWhereInput = {
+  barcode?: InputMaybe<StringNullableFilter>;
+  brand?: InputMaybe<StringNullableFilter>;
+  createdAt?: InputMaybe<DateTimeFilter>;
   currency?: InputMaybe<Currency>;
+  division?: InputMaybe<StringNullableFilter>;
   divisionIds?: InputMaybe<Array<Scalars['String']>>;
+  goodsTypeId?: InputMaybe<StringNullableFilter>;
+  id?: InputMaybe<StringFilter>;
+  name?: InputMaybe<StringNullableFilter>;
+  salesPriceLocal?: InputMaybe<FloatNullableFilter>;
+  salesPriceStandard?: InputMaybe<FloatNullableFilter>;
+  schemeId?: InputMaybe<StringNullableFilter>;
   schemeIds: Array<Scalars['String']>;
   search?: InputMaybe<Scalars['String']>;
+  searchColumns?: InputMaybe<StringNullableFilter>;
+  sku?: InputMaybe<StringNullableFilter>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
+  variant?: InputMaybe<StringNullableFilter>;
 };

@@ -141,6 +141,9 @@ const DashboardManagement = lazy(
 const ListStockItems = lazy(
   () => import('../../../views/settings/stock-items/ListStockItems')
 );
+const ListIncidentStatuses = lazy(
+  () => import('../../../views/settings/incident-statuses/ListIncidentStatuses')
+);
 
 const SchemeSettings = (): JSX.Element => {
   const [collapsed, setCollapsed] = useState(false);
@@ -484,6 +487,19 @@ const SchemeSettings = (): JSX.Element => {
                 </PermissionCheckWrapper>
               }
               path="crime-types/*"
+            />
+            <Route
+              element={
+                <PermissionCheckWrapper
+                  permission={{
+                    method: PermissionMethod.Read,
+                    model: PermissionModel.IncidentOptions,
+                  }}
+                >
+                  <ListIncidentStatuses />
+                </PermissionCheckWrapper>
+              }
+              path="incident-statuses"
             />
             <Route
               element={

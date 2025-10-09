@@ -4,6 +4,7 @@ import {
   AppstoreOutlined,
   BranchesOutlined,
   CalendarOutlined,
+  CheckCircleOutlined,
   CommentOutlined,
   ContainerOutlined,
   DashboardOutlined,
@@ -237,6 +238,17 @@ const SettingsSideMenu = ({
             defaultMessage: 'Incident Options',
           }),
           to: '/app/scheme-settings/crime-types',
+        },
+        {
+          icon: <CheckCircleOutlined />,
+          permissions: {
+            method: PermissionMethod.Read,
+            model: PermissionModel.IncidentOptions,
+          },
+          title: intl.formatMessage({
+            defaultMessage: 'Incident Statuses',
+          }),
+          to: '/app/scheme-settings/incident-statuses',
         },
         {
           icon: <WarningOutlined />,

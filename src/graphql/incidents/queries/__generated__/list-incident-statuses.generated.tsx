@@ -6,7 +6,7 @@ const defaultOptions = {} as const;
 export type ListIncidentStatusesQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type ListIncidentStatusesQuery = { __typename?: 'Query', incidentStatuses: Array<{ __typename?: 'IncidentStatus', id: string, name: string, tooltip?: string | null }> };
+export type ListIncidentStatusesQuery = { __typename?: 'Query', incidentStatuses: Array<{ __typename?: 'IncidentStatus', id: string, name: string, tooltip?: string | null, description?: string | null }> };
 
 
 export const ListIncidentStatusesDocument = gql`
@@ -15,6 +15,7 @@ export const ListIncidentStatusesDocument = gql`
     id
     name
     tooltip
+    description
   }
 }
     `;

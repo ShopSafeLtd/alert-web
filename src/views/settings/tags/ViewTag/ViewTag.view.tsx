@@ -91,6 +91,7 @@ interface Props {
     draftTitle: string;
   };
   editIncidentType: string;
+  fieldTitles: Record<string, string>;
   incidentFormFields: IncidentFormFieldState;
   incidentFormLayout: ExtendedLayout[];
   incidentFormLayoutChanged: boolean;
@@ -113,6 +114,7 @@ interface Props {
     }>
   >;
   setEditIncidentType: (value: string) => void;
+  setFieldTitles: (value: Record<string, string>) => void;
   setIncidentFormLayout: (value: ExtendedLayout[]) => void;
   setIncidentFormLayoutChanged: (value: boolean) => void;
   setParentTag: (value: string) => void;
@@ -147,6 +149,7 @@ const ViewTag = ({
   deleteQuestion,
   draftState,
   editIncidentType,
+  fieldTitles,
   incidentFormFields,
   incidentFormLayout,
   incidentFormLayoutChanged,
@@ -163,6 +166,7 @@ const ViewTag = ({
   setConditionsModalOpen,
   setDraftState,
   setEditIncidentType,
+  setFieldTitles,
   setIncidentFormLayout,
   setIncidentFormLayoutChanged,
   setParentTag,
@@ -728,14 +732,13 @@ const ViewTag = ({
       >
         <Card
           style={{
-            border: incidentFormFields.POLICE
-              ? '1px solid #1890ff'
-              : '1px solid #d9d9d9',
+            border: '1px solid #1890ff',
             marginBottom: 0,
-            opacity: incidentFormFields.POLICE ? 1 : 0.7,
+            opacity: 1,
             transition: 'all 0.3s ease',
           }}
         >
+          {/* Details Section - Always On */}
           <Row align="middle" gutter={8}>
             <Col span={1}>
               <Tooltip
@@ -752,24 +755,60 @@ const ViewTag = ({
             </Col>
             <Col flex={1}>
               <div>
-                <div>
-                  <FormattedMessage defaultMessage="Details/Police" />
-                  {getConditionCount(IncidentFormField.Police) > 0 && (
-                    <Badge
-                      count={getConditionCount(IncidentFormField.Police)}
-                      style={{ marginLeft: 12 }}
-                      title={intl.formatMessage(
-                        {
-                          defaultMessage: '{count} condition(s) active',
-                        },
-                        { count: getConditionCount(IncidentFormField.Police) }
-                      )}
-                    />
-                  )}
-                </div>
-                <Typography.Text style={{ fontSize: 12 }} type="secondary">
-                  <FormattedMessage defaultMessage="Details section is always required" />
-                </Typography.Text>
+                <FormattedMessage defaultMessage="Details" />
+                <Tag color="red" style={{ marginLeft: 8 }}>
+                  <FormattedMessage defaultMessage="Required" />
+                </Tag>
+              </div>
+            </Col>
+            <Col>
+              <Typography.Text type="secondary">
+                <FormattedMessage defaultMessage="Always enabled" />
+              </Typography.Text>
+            </Col>
+          </Row>
+          <Row gutter={[16, 16]} style={{ marginLeft: 24, marginTop: 8 }}>
+            <Col span={24}>
+              <Input
+                addonBefore={intl.formatMessage({
+                  defaultMessage: 'Description Field Title',
+                })}
+                className="cancelDrag"
+                onChange={(e) => {
+                  setFieldTitles({
+                    ...fieldTitles,
+                    description: e.target.value,
+                  });
+                  if (!incidentFormLayoutChanged) {
+                    setIncidentFormLayoutChanged(true);
+                  }
+                }}
+                placeholder={intl.formatMessage({
+                  defaultMessage: 'Please describe the incident',
+                })}
+                value={fieldTitles.description || ''}
+              />
+            </Col>
+          </Row>
+
+          {/* Police Section - Toggleable */}
+          <Row align="middle" gutter={8} style={{ marginTop: 16 }}>
+            <Col span={1} />
+            <Col flex={1}>
+              <div>
+                <FormattedMessage defaultMessage="Police Reporting" />
+                {getConditionCount(IncidentFormField.Police) > 0 && (
+                  <Badge
+                    count={getConditionCount(IncidentFormField.Police)}
+                    style={{ marginLeft: 12 }}
+                    title={intl.formatMessage(
+                      {
+                        defaultMessage: '{count} condition(s) active',
+                      },
+                      { count: getConditionCount(IncidentFormField.Police) }
+                    )}
+                  />
+                )}
               </div>
             </Col>
             <Col>
@@ -1115,7 +1154,13 @@ const ViewTag = ({
       incidentFormLayout.map(
         (component) => incidentFormElements[component.i as FieldLayout]
       ),
-    [incidentFormLayout, incidentFormFields, involvedMode]
+    [
+      incidentFormLayout,
+      incidentFormFields,
+      involvedMode,
+      fieldTitles,
+      draftState,
+    ]
   );
 
   const qElements = useMemo(
