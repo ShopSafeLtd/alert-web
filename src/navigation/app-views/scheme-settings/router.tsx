@@ -132,6 +132,9 @@ const JDSiteImport = lazy(
 const OneStop = lazy(
   () => import('../../../views/settings/data-import/onestop/OneStop.view')
 );
+const MCCImport = lazy(
+  () => import('../../../views/settings/data-import/mcc-import/MCCImport.view')
+);
 const BusinessOptions = lazy(
   () => import('../../../views/settings/business-options/BusinessOptions.view')
 );
@@ -753,6 +756,19 @@ const SchemeSettings = (): JSX.Element => {
                 </PermissionCheckWrapper>
               }
               path="data-import/onestop"
+            />
+            <Route
+              element={
+                <PermissionCheckWrapper
+                  permission={{
+                    method: PermissionMethod.Read,
+                    model: PermissionModel.DataImport,
+                  }}
+                >
+                  <MCCImport />
+                </PermissionCheckWrapper>
+              }
+              path="data-import/mcc-import"
             />
             <Route
               element={
