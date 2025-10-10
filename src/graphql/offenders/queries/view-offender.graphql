@@ -118,5 +118,19 @@ query ViewOffender(
     updates(orderBy: { createdAt: desc }) {
       ...Updates
     }
+    articles(take: 100, orderBy: [{ createdAt: desc }]) {
+      id
+      title
+      createdAt
+      updatedAt
+      priority
+      status
+      previewImage
+      previewText
+      createdBy {
+        id
+        fullName
+      }
+    }
   }
 }

@@ -107,7 +107,31 @@ const DocumentCard = ({ data, onDelete }: Props) => {
           >
             <Button
               onClick={() => {
-                window.open(data?.url);
+                void (async () => {
+                  try {
+                    // Fetch the file from Azure Blob Storage
+                    const response = await fetch(data?.url);
+                    const blob = await response.blob();
+
+                    // Create a temporary URL for the blob
+                    const blobUrl = window.URL.createObjectURL(blob);
+
+                    // Create a temporary anchor element and trigger download
+                    const link = document.createElement('a');
+                    link.href = blobUrl;
+                    link.download = data?.name || 'download';
+                    document.body.append(link);
+                    link.click();
+
+                    // Clean up
+                    link.remove();
+                    window.URL.revokeObjectURL(blobUrl);
+                  } catch (error) {
+                    console.error('Download failed:', error);
+                    // Fallback to opening in new tab
+                    window.open(data?.url, '_blank');
+                  }
+                })();
               }}
               type="text"
             >

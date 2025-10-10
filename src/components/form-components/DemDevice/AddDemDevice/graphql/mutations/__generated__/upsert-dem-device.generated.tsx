@@ -1,4 +1,4 @@
-import type * as Types from '../../../../../../../graphql/types.js';
+import type * as Types from '../../../../../../../graphql/types';
 
 import { gql } from '@apollo/client';
 import { DemDevicesFragmentDoc } from '../../../../../../../graphql/fragments/__generated__/dem-device.generated';

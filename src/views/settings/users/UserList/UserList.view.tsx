@@ -1,14 +1,27 @@
 import type { UserListQuery } from '#/views/settings/users/UserList/__generated__/UserList.generated';
 import type { MutationUpdaterFn } from '@apollo/client';
-import type {
-  CreateUserInDatabaseMutation
-} from 'graphql/users/mutations/__generated__/create-user-in-databse.generated';
+import type { CreateUserInDatabaseMutation } from 'graphql/users/mutations/__generated__/create-user-in-databse.generated';
 import type { InviteExistingUserMutation } from 'graphql/users/mutations/__generated__/invite-exiting-user.generated';
 import type { UserSort } from 'types/enums/user_sort';
 
-import { faEdit, faFilter, faPlus } from '@fortawesome/pro-light-svg-icons';
+import DebouncedInput from '#/utils/debounced-input';
+import {
+  faEdit,
+  faFilter,
+  faPaperPlane,
+  faPlus,
+} from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, Col, Drawer, Row, Table, Tag, Typography } from 'antd';
+import {
+  Button,
+  Col,
+  Drawer,
+  Row,
+  Table,
+  Tag,
+  Tooltip,
+  Typography,
+} from 'antd';
 import AddUser from 'components/form-components/user/AddUser';
 import EditUser from 'components/form-components/user/EditUser';
 import UserFilter from 'components/users/UserFilter';
@@ -17,10 +30,11 @@ import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { GetUserStatusValues, userStatusValues } from 'types/enums/user_status';
-import DebouncedInput from '#/utils/debounced-input';
 
 interface Props {
   addUser: boolean;
+  bulkInviteConfirm: () => void;
+  bulkInviting: boolean;
   clearFilters: () => void;
   currentPage: number;
   currentPageSize: number;
@@ -32,9 +46,11 @@ interface Props {
   onPaginationChange: (page: number, pageSize: number) => void;
   order: UserSort;
   selectedGroups: string[];
+  selectedUserIds: string[];
   setOrder: (value: UserSort) => void;
   setSearch: (value: string) => void;
   setSelectedGroups: (value: string[]) => void;
+  setSelectedUserIds: (value: string[]) => void;
   setUserRole: (value: string[]) => void;
   setUserStatus: (value: UserStatus[]) => void;
   sortFilter: boolean;
@@ -54,6 +70,8 @@ const getTextStatus = (value: UserStatus) => {
 };
 const UserList = ({
   addUser,
+  bulkInviteConfirm,
+  bulkInviting,
   clearFilters,
   currentPage,
   currentPageSize,
@@ -65,9 +83,11 @@ const UserList = ({
   onPaginationChange,
   order,
   selectedGroups,
+  selectedUserIds,
   setOrder,
   setSearch,
   setSelectedGroups,
+  setSelectedUserIds,
   setUserRole,
   setUserStatus,
   sortFilter,
@@ -88,6 +108,14 @@ const UserList = ({
     .map((id) => groupData?.find((el) => el.id === id))
     .map((el) => ({ text: el?.name || '', value: el?.id || '' }));
 
+  // Row selection config
+  const rowSelection = {
+    onChange: (selectedRowKeys: React.Key[]) => {
+      setSelectedUserIds(selectedRowKeys as string[]);
+    },
+    selectedRowKeys: selectedUserIds,
+  };
+
   return (
     <div className="list-view">
       <Row gutter={8} style={{ marginBottom: 10 }}>
@@ -103,6 +131,37 @@ const UserList = ({
           />
         </Col>
         <Col flex={1} />
+        {selectedUserIds.length > 0 && (
+          <Col>
+            <Tooltip
+              title={intl.formatMessage(
+                {
+                  defaultMessage:
+                    'Resend invitations to {count} selected users',
+                },
+                { count: selectedUserIds.length }
+              )}
+            >
+              <Button
+                disabled={bulkInviting}
+                icon={
+                  <FontAwesomeIcon
+                    icon={faPaperPlane}
+                    size="lg"
+                    style={{ marginRight: 5 }}
+                  />
+                }
+                loading={bulkInviting}
+                onClick={bulkInviteConfirm}
+              >
+                <FormattedMessage
+                  defaultMessage="Reinvite Selected ({count})"
+                  values={{ count: selectedUserIds.length }}
+                />
+              </Button>
+            </Tooltip>
+          </Col>
+        )}
         <Col>
           <Button
             icon={
@@ -257,6 +316,7 @@ const UserList = ({
           showTotal: (total) => `Total Users: ${total}`,
           total: data?.listUsers.total,
         }}
+        rowSelection={rowSelection}
         size="small"
       />
       <Drawer

@@ -436,6 +436,13 @@ const Items = ({
                       }),
                     },
                     {
+                      dataIndex: 'barcode',
+                      key: 'barcode',
+                      title: intl.formatMessage({
+                        defaultMessage: 'Barcode',
+                      }),
+                    },
+                    {
                       dataIndex: 'value',
                       key: 'value',
                       render: (value: number) =>
@@ -542,6 +549,7 @@ const Items = ({
                   ]
             }
             dataSource={data?.incident?.incidentItems.map((item) => ({
+              barcode: item.stockItem?.barcode ?? '',
               item,
               itemTotal:
                 goodsMode === GoodsMode.Generic

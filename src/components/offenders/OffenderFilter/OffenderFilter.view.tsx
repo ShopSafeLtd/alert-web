@@ -1,10 +1,21 @@
 import type { OffenderFilters } from 'state/data-model';
 import type { DateType } from 'types/DataType';
 
+import BusinessesSelect from '#/components/form-components/BusinessesSelect/BusinessesSelect.view';
 import CrimeTypesSelect from '#/components/form-components/CrimeTypesSelect/CrimeTypesSelect.view';
 import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
 import DatePicker from '#/components/util-components/DatePicker';
-import { Button, Col, Form, Input, Row, Select, Typography } from 'antd';
+import { formatPoliceForceLabel } from '#/utils/formatPoliceAreas';
+import {
+  Button,
+  Checkbox,
+  Col,
+  Form,
+  Input,
+  Row,
+  Select,
+  Typography,
+} from 'antd';
 import dayjs from 'dayjs';
 import { Age, Build, Gender, PoliceForce, Race } from 'graphql/types';
 import React from 'react';
@@ -12,8 +23,6 @@ import { useIntl } from 'react-intl';
 import { OffenderSort } from 'state';
 
 import useStyles from './OffenderFilter.styles';
-import { formatPoliceForceLabel } from '#/utils/formatPoliceAreas';
-import BusinessesSelect from '#/components/form-components/BusinessesSelect/BusinessesSelect.view';
 
 const { RangePicker } = DatePicker;
 const { useForm } = Form;
@@ -34,11 +43,12 @@ interface Props {
   setEthnicity: (value: Race[]) => void;
   setGroupsFilter: (value: string[]) => void;
   setHair: (value: string) => void;
+  setHasNoIncidents: (value: boolean) => void;
   setOrder: (value: OffenderSort) => void;
   setPeculiarities: (value: string) => void;
+  setPoliceAreas: (value: PoliceForce[]) => void;
   setSex: (value: Gender[]) => void;
   setWarnings: (value: string[]) => void;
-  setPoliceAreas: (value: PoliceForce[]) => void;
   tags: { label: string; value: string }[];
   tagsLoading: boolean;
   variables: OffenderFilters;
@@ -56,14 +66,15 @@ const OffenderFilter = ({
   setEthnicity,
   setGroupsFilter,
   setHair,
+  setHasNoIncidents,
   setOrder,
   setPeculiarities,
+  setPoliceAreas,
   setSex,
   setWarnings,
   tags,
   tagsLoading,
   variables,
-  setPoliceAreas,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const [form] = useForm<FormData>();
@@ -78,10 +89,11 @@ const OffenderFilter = ({
     ethnicity,
     groups: groupsFilter,
     hair,
+    hasNoIncidents,
     peculiarities,
+    policeAreas,
     sex,
     warnings,
-    policeAreas,
   } = variables;
   return (
     <Form<FormData>
@@ -458,6 +470,23 @@ const OffenderFilter = ({
         <Col span={24}>
           <Typography.Paragraph className={classes.selectTitle}>
             {intl.formatMessage({
+              defaultMessage: 'Show only offenders with no incidents',
+            })}
+          </Typography.Paragraph>
+          <Checkbox
+            checked={hasNoIncidents}
+            onChange={(e) => setHasNoIncidents(e.target.checked)}
+          >
+            {intl.formatMessage({
+              defaultMessage: 'Has no incidents',
+            })}
+          </Checkbox>
+        </Col>
+      </Row>
+      <Row gutter={16}>
+        <Col span={24}>
+          <Typography.Paragraph className={classes.selectTitle}>
+            {intl.formatMessage({
               defaultMessage: 'Offender has incidents at...',
             })}
           </Typography.Paragraph>
@@ -469,7 +498,7 @@ const OffenderFilter = ({
             placeholder={intl.formatMessage({
               defaultMessage: 'Select Businesses',
             })}
-            style={{ width: '100%', marginBottom: 10 }}
+            style={{ marginBottom: 10, width: '100%' }}
             value={businesses}
           />
         </Col>

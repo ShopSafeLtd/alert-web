@@ -475,7 +475,12 @@ const useViewTag = (): Return => {
       const conditionsMap: Record<string, ModuleCondition[]> = {};
       for (const field of data.tag.incidentForm.fields) {
         if (field.conditions && Array.isArray(field.conditions)) {
-          conditionsMap[field.type] = field.conditions as ModuleCondition[];
+          conditionsMap[field.type] = (
+            field.conditions as ModuleCondition[]
+          ).map((c) => ({
+            ...c,
+            mode: c.mode || 'SHOW', // Default legacy conditions to SHOW
+          }));
         }
       }
       setModuleConditions(conditionsMap);

@@ -238,22 +238,7 @@ const HistoryTimeline: React.FC<Props> = ({ actions }) => {
           setSelectedWorkflowResults(null);
         }}
         visible={modalVisible}
-        workflowResults={
-          selectedWorkflowResults as {
-            checklistId?: string;
-            evaluatedAt: string;
-            incidentReference?: number;
-            trigger: string;
-            workflows: Array<{
-              actionsTriggered?: unknown;
-              conditions: Record<string, unknown>;
-              passed: boolean;
-              workflowActionId?: string;
-              workflowId: string;
-              workflowName: string;
-            }>;
-          } | null
-        }
+        workflowResults={selectedWorkflowResults}
       />
     </div>
   );

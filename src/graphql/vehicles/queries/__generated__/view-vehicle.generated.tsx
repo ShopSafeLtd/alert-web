@@ -1,4 +1,4 @@
-import type * as Types from '../../../types.js';
+import type * as Types from '../../../types';
 
 import { gql } from '@apollo/client';
 import { ImagesFragmentDoc } from '../../../fragments/__generated__/images.generated';

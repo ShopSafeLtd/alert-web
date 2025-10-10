@@ -1,4 +1,4 @@
-import type * as Types from '../../types.js';
+import type * as Types from '../../types';
 
 import { gql } from '@apollo/client';
 export type DocumentsFragment = { __typename?: 'Document', id: string, name: string, url: string, fileType?: Types.FileType | null, tags: Array<{ __typename?: 'Tag', name: string }> };

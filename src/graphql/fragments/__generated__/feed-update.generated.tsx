@@ -1,4 +1,4 @@
-import type * as Types from '../../types.js';
+import type * as Types from '../../types';
 
 import { gql } from '@apollo/client';
 import { FeedImageFragmentDoc } from './feed-image.generated';

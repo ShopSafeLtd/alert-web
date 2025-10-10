@@ -30,6 +30,8 @@ mutation updateUser(
     messagePush
     offenderEmail
     offenderPush
+    activityEmail
+    activityPush
     groups(where: $groupWhere) {
       id
       name

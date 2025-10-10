@@ -40,6 +40,7 @@ interface Props {
   division: string | undefined;
   dontKnowGoods: () => void;
   goods: {
+    barcode?: string;
     goodsType?: string;
     name?: string;
     quantity?: number;
@@ -376,7 +377,7 @@ const IncidentGoods = ({
                           <Input readOnly style={{ width: '100%' }} />
                         </Form.Item>
                       </Col>
-                      <Col lg={4} md={6} sm={12} span={24}>
+                      <Col lg={3} md={6} sm={12} span={24}>
                         <Form.Item
                           {...restField}
                           label={
@@ -387,16 +388,26 @@ const IncidentGoods = ({
                                 })
                           }
                           name={[name, 'sku']}
-                          rules={[
-                            {
-                              message: intl.formatMessage({
-                                defaultMessage: 'Please enter the SKU',
-                              }),
-                              required: true,
-                            },
-                          ]}
                           tooltip={intl.formatMessage({
                             defaultMessage: 'The SKU of the item.',
+                          })}
+                        >
+                          <Input readOnly style={{ width: '100%' }} />
+                        </Form.Item>
+                      </Col>
+                      <Col lg={3} md={6} sm={12} span={24}>
+                        <Form.Item
+                          {...restField}
+                          label={
+                            index
+                              ? ''
+                              : intl.formatMessage({
+                                  defaultMessage: 'Barcode',
+                                })
+                          }
+                          name={[name, 'barcode']}
+                          tooltip={intl.formatMessage({
+                            defaultMessage: 'The barcode of the item.',
                           })}
                         >
                           <Input readOnly style={{ width: '100%' }} />

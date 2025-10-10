@@ -10,13 +10,9 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  /** A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar. */
   Date: Date;
-  /** A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar. */
   DateTime: Date;
-  /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
   JSON: { [key: string]: any };
-  /** The `Upload` scalar type represents a file upload. */
   Upload: any;
 };
 
@@ -14176,6 +14172,7 @@ export type Offender = {
   alias: Array<Scalars['String']>;
   approved?: Maybe<Scalars['Boolean']>;
   articleColumns: Array<ArticleColumn>;
+  articles: Array<Article>;
   /** To be used on the known associates field to show the linking crime groups */
   associatedCrimeGroups: Array<CrimeGroup>;
   /** To be used on the known associates field to show the linking incidents */
@@ -14304,6 +14301,16 @@ export type OffenderArticleColumnsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<ArticleColumnWhereInput>;
+};
+
+
+export type OffenderArticlesArgs = {
+  cursor?: InputMaybe<ArticleWhereUniqueInput>;
+  distinct?: InputMaybe<Array<ArticleScalarFieldEnum>>;
+  orderBy?: InputMaybe<Array<ArticleOrderByWithRelationInput>>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<ArticleWhereInput>;
 };
 
 
@@ -23901,6 +23908,8 @@ export type User = {
   __typename?: 'User';
   actions: Array<Action>;
   actionsByUser: Array<Action>;
+  activityEmail: Scalars['Boolean'];
+  activityPush: Scalars['Boolean'];
   addresses: Array<Address>;
   approverGroups: Array<Group>;
   articles: Array<Article>;
@@ -24942,12 +24951,21 @@ export enum UserScalarFieldEnum {
 
 export type UserScheme = {
   __typename?: 'UserScheme';
+  activityEmail: Scalars['Boolean'];
+  activityPush: Scalars['Boolean'];
+  bulletinEmails: Scalars['Boolean'];
+  bulletinPush: Scalars['Boolean'];
   createdAt: Scalars['Date'];
   dashboard?: Maybe<Dashboard>;
   fullName: Scalars['String'];
   id: Scalars['String'];
+  incidentEmail: Scalars['Boolean'];
+  incidentPush: Scalars['Boolean'];
   isAdmin: Scalars['Boolean'];
+  messagePush: Scalars['Boolean'];
   notificationCount: Scalars['Int'];
+  offenderEmail: Scalars['Boolean'];
+  offenderPush: Scalars['Boolean'];
   orignalPermissions?: Maybe<CustomRole>;
   permissions: Array<Permissions>;
   permissionsId?: Maybe<Scalars['String']>;
@@ -24955,6 +24973,8 @@ export type UserScheme = {
   role: Role;
   scheme: Scheme;
   schemeId: Scalars['String'];
+  subscribedIncidentOnly: Scalars['Boolean'];
+  subscribedOffenderOnly: Scalars['Boolean'];
   updatedAt: Scalars['Date'];
   user: User;
   userId: Scalars['String'];
@@ -24978,6 +24998,8 @@ export type UserSchemeOnUserInput = {
 };
 
 export type UserSchemeOnUserUpdateInput = {
+  activityEmail?: InputMaybe<SetBooleanHelper>;
+  activityPush?: InputMaybe<SetBooleanHelper>;
   bulletinEmails?: InputMaybe<SetBooleanHelper>;
   bulletinPush?: InputMaybe<SetBooleanHelper>;
   disabled?: InputMaybe<SetBooleanHelper>;
@@ -25201,6 +25223,8 @@ export enum UserType {
 }
 
 export type UserUpdateInput = {
+  activityEmail?: InputMaybe<SetBooleanHelper>;
+  activityPush?: InputMaybe<SetBooleanHelper>;
   approverGroups?: InputMaybe<NullableConnectArrayHelper>;
   bulletinEmails?: InputMaybe<SetBooleanHelper>;
   bulletinPush?: InputMaybe<SetBooleanHelper>;

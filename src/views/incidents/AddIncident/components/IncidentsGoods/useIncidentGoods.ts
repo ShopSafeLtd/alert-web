@@ -18,6 +18,7 @@ interface Return {
   businessCurrency?: Currency | null;
   division: string | undefined;
   goods: {
+    barcode?: string;
     goodsType?: string;
     name?: string;
     quantity?: number;
@@ -91,6 +92,7 @@ const useIncidentGoods = ({
       goods: [
         ...goods,
         {
+          barcode: data.barcode || '',
           name: data.name || '',
           quantity: undefined,
           recoveredQuantity: 0,

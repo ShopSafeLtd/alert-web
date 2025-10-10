@@ -30,14 +30,14 @@ const useStyles = createUseStyles({
     marginBottom: 12,
   },
   conditionDescription: {
-    color: '#595959',
     fontSize: 13,
+    opacity: 0.85,
   },
   conditionLabel: {
-    color: '#8c8c8c',
     fontSize: 12,
-    fontWeight: 500,
+    fontWeight: 600,
     marginBottom: 4,
+    opacity: 0.85,
     textTransform: 'uppercase',
   },
   failReason: {
@@ -58,36 +58,58 @@ const useStyles = createUseStyles({
   },
   workflowPanel: {
     '& .ant-collapse-header': {
+      '& .ant-collapse-header-text': {
+        fontWeight: 600,
+      },
       alignItems: 'center !important',
     },
   },
 });
 
+interface NamedEntity {
+  id: string;
+  name: string;
+}
+
+interface QuestionEntity {
+  id: string;
+  name?: string;
+  text: string;
+}
+
+interface GroupsCondition {
+  allOrAny?: 'all' | 'any';
+  failReason: string;
+  groupsOnCondition?: Array<NamedEntity | string>;
+  groupsOnIncident?: Array<NamedEntity | string>;
+  passed: boolean;
+}
+
 interface WorkflowCondition {
   actual?: number;
   allOrAny?: 'all' | 'any';
-  brandsOnCondition?: string[];
-  brandsOnIncident?: string[];
+  brandsOnCondition?: Array<NamedEntity | string>;
+  brandsOnIncident?: Array<NamedEntity | string>;
   checklistTemplateId?: string;
-  countriesOnCondition?: string[];
-  countriesOnIncident?: string[];
-  divisionsOnCondition?: string[];
-  divisionsOnIncident?: string[];
+  countriesOnCondition?: Array<NamedEntity | string>;
+  countriesOnIncident?: Array<NamedEntity | string>;
+  divisionsOnCondition?: Array<NamedEntity | string>;
+  divisionsOnIncident?: Array<NamedEntity | string>;
   expected?: number;
   expectedTemplates?: string[];
   expectedWords?: string[];
   failReason: string;
-  goodsTypesOnCondition?: string[];
-  goodsTypesOnIncident?: string[];
+  goodsTypesOnCondition?: Array<NamedEntity | string>;
+  goodsTypesOnIncident?: Array<NamedEntity | string>;
   greaterThan?: boolean;
   passed: boolean;
   prioritiesOnCondition?: string[];
   priorityOnIncident?: string;
-  questionsOnCondition?: string[];
-  questionsOnIncident?: string[];
+  questionsOnCondition?: Array<QuestionEntity | string>;
+  questionsOnIncident?: Array<QuestionEntity | string>;
   score?: number;
-  tagsOnCondition?: string[];
-  tagsOnIncident?: string[];
+  tagsOnCondition?: Array<NamedEntity | string>;
+  tagsOnIncident?: Array<NamedEntity | string>;
   threshold?: number;
   wordsInDescription?: string[];
 }
@@ -135,8 +157,28 @@ interface WorkflowResults {
 interface Props {
   onClose: () => void;
   visible: boolean;
-  workflowResults: WorkflowResults | null;
+  workflowResults: WorkflowResults | null | undefined;
 }
+
+const getEntityName = (item: NamedEntity | string): string => {
+  if (typeof item === 'string') return item;
+  return item.name;
+};
+
+const getEntityKey = (item: NamedEntity | string): string => {
+  if (typeof item === 'string') return item;
+  return item.id;
+};
+
+const getQuestionText = (item: QuestionEntity | string): string => {
+  if (typeof item === 'string') return item;
+  return item.text || item.name || '';
+};
+
+const getQuestionKey = (item: QuestionEntity | string): string => {
+  if (typeof item === 'string') return item;
+  return item.id;
+};
 
 const WorkflowResultsModal: React.FC<Props> = ({
   onClose,
@@ -240,11 +282,11 @@ const WorkflowResultsModal: React.FC<Props> = ({
     if (conditionName === 'tags' && condition.tagsOnIncident) {
       return (
         <Space wrap>
-          <Text type="secondary">
+          <Text strong style={{ opacity: 0.85 }}>
             {intl.formatMessage({ defaultMessage: 'On incident:' })}
           </Text>
           {condition.tagsOnIncident.map((tag) => (
-            <Tag key={tag}>{tag}</Tag>
+            <Tag key={getEntityKey(tag)}>{getEntityName(tag)}</Tag>
           ))}
         </Space>
       );
@@ -253,11 +295,11 @@ const WorkflowResultsModal: React.FC<Props> = ({
     if (conditionName === 'questions' && condition.questionsOnIncident) {
       return (
         <Space wrap>
-          <Text type="secondary">
+          <Text strong style={{ opacity: 0.85 }}>
             {intl.formatMessage({ defaultMessage: 'On incident:' })}
           </Text>
           {condition.questionsOnIncident.map((q) => (
-            <Tag key={q}>{q}</Tag>
+            <Tag key={getQuestionKey(q)}>{getQuestionText(q)}</Tag>
           ))}
         </Space>
       );
@@ -266,11 +308,11 @@ const WorkflowResultsModal: React.FC<Props> = ({
     if (conditionName === 'brands' && condition.brandsOnIncident) {
       return (
         <Space wrap>
-          <Text type="secondary">
+          <Text strong style={{ opacity: 0.85 }}>
             {intl.formatMessage({ defaultMessage: 'On incident:' })}
           </Text>
           {condition.brandsOnIncident.map((brand) => (
-            <Tag key={brand}>{brand}</Tag>
+            <Tag key={getEntityKey(brand)}>{getEntityName(brand)}</Tag>
           ))}
         </Space>
       );
@@ -279,7 +321,7 @@ const WorkflowResultsModal: React.FC<Props> = ({
     if (conditionName === 'priority' && condition.priorityOnIncident) {
       return (
         <Space>
-          <Text type="secondary">
+          <Text strong style={{ opacity: 0.85 }}>
             {intl.formatMessage({ defaultMessage: 'Priority:' })}
           </Text>
           <Tag>{condition.priorityOnIncident}</Tag>
@@ -287,10 +329,65 @@ const WorkflowResultsModal: React.FC<Props> = ({
       );
     }
 
+    if (conditionName === 'countries' && condition.countriesOnIncident) {
+      return (
+        <Space wrap>
+          <Text strong style={{ opacity: 0.85 }}>
+            {intl.formatMessage({ defaultMessage: 'On incident:' })}
+          </Text>
+          {condition.countriesOnIncident.map((country) => (
+            <Tag key={getEntityKey(country)}>{getEntityName(country)}</Tag>
+          ))}
+        </Space>
+      );
+    }
+
+    if (conditionName === 'division' && condition.divisionsOnIncident) {
+      return (
+        <Space wrap>
+          <Text strong style={{ opacity: 0.85 }}>
+            {intl.formatMessage({ defaultMessage: 'On incident:' })}
+          </Text>
+          {condition.divisionsOnIncident.map((division) => (
+            <Tag key={getEntityKey(division)}>{getEntityName(division)}</Tag>
+          ))}
+        </Space>
+      );
+    }
+
+    if (conditionName === 'goodsType' && condition.goodsTypesOnIncident) {
+      return (
+        <Space wrap>
+          <Text strong style={{ opacity: 0.85 }}>
+            {intl.formatMessage({ defaultMessage: 'On incident:' })}
+          </Text>
+          {condition.goodsTypesOnIncident.map((goodsType) => (
+            <Tag key={getEntityKey(goodsType)}>{getEntityName(goodsType)}</Tag>
+          ))}
+        </Space>
+      );
+    }
+
+    if (conditionName === 'groups') {
+      const groupsCondition = condition as GroupsCondition & WorkflowCondition;
+      if (groupsCondition.groupsOnIncident) {
+        return (
+          <Space wrap>
+            <Text strong style={{ opacity: 0.85 }}>
+              {intl.formatMessage({ defaultMessage: 'On incident:' })}
+            </Text>
+            {groupsCondition.groupsOnIncident.map((group) => (
+              <Tag key={getEntityKey(group)}>{getEntityName(group)}</Tag>
+            ))}
+          </Space>
+        );
+      }
+    }
+
     if (conditionName === 'description' && condition.wordsInDescription) {
       return (
         <Space wrap>
-          <Text type="secondary">
+          <Text strong style={{ opacity: 0.85 }}>
             {intl.formatMessage({ defaultMessage: 'Words found:' })}
           </Text>
           {condition.wordsInDescription.map((word) => (
@@ -462,15 +559,15 @@ const WorkflowResultsModal: React.FC<Props> = ({
             >
               {/* Conditions */}
               <div style={{ marginBottom: 16 }}>
-                <div className={classes.conditionLabel}>
+                <Title level={5} style={{ marginBottom: 12 }}>
                   <FontAwesomeIcon
                     icon={faInfoCircle}
-                    style={{ marginRight: 6 }}
+                    style={{ marginRight: 8 }}
                   />
                   {intl.formatMessage({
                     defaultMessage: 'Conditions Evaluated',
                   })}
-                </div>
+                </Title>
                 {Object.entries(workflow.conditions).map(([key, condition]) =>
                   renderConditionDetails(key, condition)
                 )}

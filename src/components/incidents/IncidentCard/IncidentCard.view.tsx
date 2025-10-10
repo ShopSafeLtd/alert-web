@@ -100,6 +100,21 @@ const IncidentCard = ({
   const classes = useStyles();
   const currentScheme = useAtomValue(currentSchemeAtom);
 
+  // Get fallback image from offender if incident has no images
+  const getFallbackOffenderImage = () => {
+    if (incident.totalImages && incident.totalImages > 0) return null;
+
+    const offenderWithImage = incident.offenders.find(
+      (offender) => offender.images && offender.images.length > 0
+    );
+
+    return offenderWithImage?.images?.[0] || null;
+  };
+
+  const fallbackImage = getFallbackOffenderImage();
+  const hasImages =
+    (incident.totalImages && incident.totalImages > 0) || fallbackImage;
+
   const getPriorityBorder = () => {
     if (incident.priority === IncidentPriority.High)
       return '6px solid rgb(222, 68, 54)';
@@ -234,57 +249,67 @@ const IncidentCard = ({
           )}
 
           <Row wrap={false}>
-            {incident.totalImages && incident.totalImages > 0 ? (
+            {hasImages ? (
               <Col>
                 <div className={classes.imageContainer}>
-                  <Carousel
-                    afterChange={(currentSlide: number) => {
-                      setEditImageId(incident.images[currentSlide].id);
-                    }}
-                    ref={imagesRef}
-                  >
-                    {incident?.images.map((image) => (
-                      <div className={classes.image} key={image.id}>
-                        <WatermarkImage
-                          position={image.position}
-                          rotation={image.rotation}
-                          url={image.low}
-                        />
-                      </div>
-                    ))}
-                  </Carousel>
-                  {incident.totalImages && incident.totalImages > 1 ? (
-                    <Row className={classes.cardControls}>
-                      <Col>
-                        <FontAwesomeIcon
-                          className={classes.cardControl}
-                          icon={faAngleLeft}
-                          onClick={() => imagesRef.current?.prev()}
-                        />
-                      </Col>
-                      <Col flex={1} />
-                      <Col>
-                        <FontAwesomeIcon
-                          className={classes.cardControl}
-                          icon={faAngleRight}
-                          onClick={() => imagesRef.current?.next()}
-                        />
-                      </Col>
-                    </Row>
-                  ) : null}
                   {incident.totalImages && incident.totalImages > 0 ? (
-                    <FontAwesomeIcon
-                      className={classes.imageExpand}
-                      icon={faArrowsMaximize}
-                      onClick={() =>
-                        openLightbox(
-                          incident?.images.map((image) => ({
-                            src: image.low || '',
-                          })) || [],
-                          0
-                        )
-                      }
-                    />
+                    <>
+                      <Carousel
+                        afterChange={(currentSlide: number) => {
+                          setEditImageId(incident.images[currentSlide].id);
+                        }}
+                        ref={imagesRef}
+                      >
+                        {incident?.images.map((image) => (
+                          <div className={classes.image} key={image.id}>
+                            <WatermarkImage
+                              position={image.position}
+                              rotation={image.rotation}
+                              url={image.low}
+                            />
+                          </div>
+                        ))}
+                      </Carousel>
+                      {incident.totalImages && incident.totalImages > 1 ? (
+                        <Row className={classes.cardControls}>
+                          <Col>
+                            <FontAwesomeIcon
+                              className={classes.cardControl}
+                              icon={faAngleLeft}
+                              onClick={() => imagesRef.current?.prev()}
+                            />
+                          </Col>
+                          <Col flex={1} />
+                          <Col>
+                            <FontAwesomeIcon
+                              className={classes.cardControl}
+                              icon={faAngleRight}
+                              onClick={() => imagesRef.current?.next()}
+                            />
+                          </Col>
+                        </Row>
+                      ) : null}
+                      <FontAwesomeIcon
+                        className={classes.imageExpand}
+                        icon={faArrowsMaximize}
+                        onClick={() =>
+                          openLightbox(
+                            incident?.images.map((image) => ({
+                              src: image.low || '',
+                            })) || [],
+                            0
+                          )
+                        }
+                      />
+                    </>
+                  ) : fallbackImage ? (
+                    <div className={classes.image}>
+                      <WatermarkImage
+                        position={fallbackImage.position}
+                        rotation={fallbackImage.rotation}
+                        url={fallbackImage.low}
+                      />
+                    </div>
                   ) : null}
                 </div>
               </Col>
@@ -479,61 +504,69 @@ const IncidentCard = ({
 
           <div>
             {incident.totalImages && incident.totalImages > 0 ? (
-              <Carousel
-                afterChange={(currentSlide: number) => {
-                  setEditImageId(incident.images[currentSlide].id);
-                }}
-                ref={imagesRef}
-              >
-                {incident?.images.map((image) => (
-                  <div key={image.id}>
-                    <div className="incident-card-image">
-                      <WatermarkImage
-                        position={image.position}
-                        rotation={image.rotation}
-                        url={image.low}
-                      />
+              <>
+                <Carousel
+                  afterChange={(currentSlide: number) => {
+                    setEditImageId(incident.images[currentSlide].id);
+                  }}
+                  ref={imagesRef}
+                >
+                  {incident?.images.map((image) => (
+                    <div key={image.id}>
+                      <div className="incident-card-image">
+                        <WatermarkImage
+                          position={image.position}
+                          rotation={image.rotation}
+                          url={image.low}
+                        />
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </Carousel>
+                  ))}
+                </Carousel>
+                {incident.totalImages && incident.totalImages > 1 ? (
+                  <Row className="incident-card-controls">
+                    <Col>
+                      <FontAwesomeIcon
+                        className="incident-card-control"
+                        icon={faAngleLeft}
+                        onClick={() => imagesRef.current?.prev()}
+                      />
+                    </Col>
+                    <Col flex={1} />
+                    <Col>
+                      <FontAwesomeIcon
+                        className="incident-card-control"
+                        icon={faAngleRight}
+                        onClick={() => imagesRef.current?.next()}
+                      />
+                    </Col>
+                  </Row>
+                ) : null}
+                <FontAwesomeIcon
+                  className="incident-card-expand"
+                  icon={faArrowsMaximize}
+                  onClick={() =>
+                    openLightbox(
+                      incident?.images.map((image) => ({
+                        src: image.low || '',
+                      })) || [],
+                      0
+                    )
+                  }
+                />
+              </>
+            ) : fallbackImage ? (
+              <div className="incident-card-image">
+                <WatermarkImage
+                  position={fallbackImage.position}
+                  rotation={fallbackImage.rotation}
+                  url={fallbackImage.low}
+                />
+              </div>
             ) : (
               <SkeletonImage height={280} />
             )}
           </div>
-          {incident.totalImages && incident.totalImages > 1 ? (
-            <Row className="incident-card-controls">
-              <Col>
-                <FontAwesomeIcon
-                  className="incident-card-control"
-                  icon={faAngleLeft}
-                  onClick={() => imagesRef.current?.prev()}
-                />
-              </Col>
-              <Col flex={1} />
-              <Col>
-                <FontAwesomeIcon
-                  className="incident-card-control"
-                  icon={faAngleRight}
-                  onClick={() => imagesRef.current?.next()}
-                />
-              </Col>
-            </Row>
-          ) : null}
-          {incident.totalImages && incident.totalImages > 0 ? (
-            <FontAwesomeIcon
-              className="incident-card-expand"
-              icon={faArrowsMaximize}
-              onClick={() =>
-                openLightbox(
-                  incident?.images.map((image) => ({
-                    src: image.low || '',
-                  })) || [],
-                  0
-                )
-              }
-            />
-          ) : null}
           <div className="incident-card-content">
             <Space direction="vertical">
               <Row align="middle" gutter={8}>
