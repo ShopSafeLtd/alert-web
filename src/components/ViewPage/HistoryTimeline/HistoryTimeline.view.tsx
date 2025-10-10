@@ -19,17 +19,14 @@ import React, { useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { createUseStyles } from 'react-jss';
 
+// Import WorkflowResults type from modal
+import type { WorkflowResults } from './WorkflowResultsModal.view';
+
 import WorkflowResultsModal from './WorkflowResultsModal.view';
 
 // Define extended action type with workflow results
 type ActionWithWorkflowResults = {
-  workflowResults?: {
-    checklistId?: string;
-    evaluatedAt: string;
-    incidentReference?: number;
-    trigger: string;
-    workflows: unknown[];
-  };
+  workflowResults?: WorkflowResults;
 } & NonNullable<NonNullable<Props['actions']>[number]>;
 
 dayjs.extend(relativeTime);

@@ -110,7 +110,13 @@ const AddStockRemovalRequest = ({ onClose }: Props) => {
           stockRemovalRequests: {
             edges: [
               {
-                node: res.createStockRemovalRequest,
+                node: {
+                  ...res.createStockRemovalRequest,
+                  createdBy: {
+                    __typename: 'User' as const,
+                    id: currentUserId || '',
+                  },
+                },
               },
               ...existingData.stockRemovalRequests.edges,
             ],

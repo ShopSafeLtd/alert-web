@@ -70,9 +70,13 @@ const useListStockItems = (): Return => {
     if (businessFilter.length === 0) {
       // Clear division filter when business is deselected
       setDivisionFilter('');
-    } else if (businessData?.business?.division) {
+    } else if (businessData?.business) {
       // Set division from selected business
-      setDivisionFilter(String(businessData.business.division));
+      const division = (businessData.business as { division?: string })
+        .division;
+      if (division) {
+        setDivisionFilter(String(division));
+      }
     }
   }, [businessData, businessFilter]);
 

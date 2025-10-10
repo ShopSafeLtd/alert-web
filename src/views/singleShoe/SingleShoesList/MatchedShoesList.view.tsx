@@ -1,4 +1,4 @@
-import type { SingleShoeFragment } from 'graphql/fragments/__generated__/shoe.generated';
+import type { SingleShoeFragment } from 'graphql/fragments/__generated__/singleShoe.generated';
 
 import { getShoeSide, getShoeType } from '#/types/enums/shoe';
 import { faEye, faTrash } from '@fortawesome/pro-light-svg-icons';

@@ -132,6 +132,7 @@ export const defaultCurrentUserSchemeAtom: UserSchemeState = {
     goodsMode: GoodsMode.Generic,
     id: '',
     imagesRequiredOnOffenders: false,
+    incidentAssignmentEnabled: false,
     incidentStatusEnabled: false,
     incidentTypeTooltip: '',
     languageCount: 0,

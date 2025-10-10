@@ -309,9 +309,11 @@ const AddIncident = ({
             case IncidentFormField.Details: {
               const metadata = field.metadata?.[0];
               // Support both new format (titles.description) and legacy format (descriptionTitle)
+              const titles = metadata?.titles as
+                | { description?: string }
+                | undefined;
               const descriptionTitle =
-                (metadata?.titles?.description as string) ||
-                (metadata?.descriptionTitle as string);
+                titles?.description || (metadata?.descriptionTitle as string);
               return (
                 <Card className={classes.card}>
                   <IncidentDetails

@@ -13,7 +13,6 @@ interface IncidentStatus {
 interface Props {
   currentStatus?: IncidentStatus | null;
   editRights: boolean;
-  incidentId: string;
   loading?: boolean;
   onStatusChange: (statusId: string) => Promise<void>;
   statuses: IncidentStatus[];
@@ -22,7 +21,6 @@ interface Props {
 const IncidentStatusChanger = ({
   currentStatus,
   editRights,
-  incidentId,
   loading = false,
   onStatusChange,
   statuses,
@@ -37,7 +35,6 @@ const IncidentStatusChanger = ({
     return (
       <IncidentStatusSelect
         currentStatusId={currentStatus?.id}
-        incidentId={incidentId}
         onStatusChange={onStatusChange}
         statuses={statuses}
       />

@@ -140,7 +140,6 @@ const IncidentDetails = ({
                 <IncidentStatusChanger
                   currentStatus={data?.incident?.status}
                   editRights={editRights}
-                  incidentId={data?.incident?.id || ''}
                   loading={statusLoading}
                   onStatusChange={onStatusChange}
                   statuses={incidentStatuses}

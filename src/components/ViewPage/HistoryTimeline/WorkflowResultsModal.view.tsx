@@ -146,7 +146,7 @@ interface WorkflowEvaluation {
   workflowName: string;
 }
 
-interface WorkflowResults {
+export interface WorkflowResults {
   checklistId?: string;
   evaluatedAt: string;
   incidentReference?: number;

@@ -145,6 +145,7 @@ const EvidenceTable = ({
                     icon={<FontAwesomeIcon icon={faFileArrowDown} />}
                     onClick={() => {
                       void (async () => {
+                        if (!record.fileUrl) return;
                         try {
                           // Fetch the file from Azure Blob Storage
                           const response = await fetch(record.fileUrl);

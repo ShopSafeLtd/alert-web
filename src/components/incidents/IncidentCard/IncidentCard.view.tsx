@@ -61,7 +61,8 @@ const getInitials = (fullName: string): string => {
   if (names.length === 1) {
     return names[0].slice(0, 2).toUpperCase();
   }
-  return `${names[0][0]}${names.at(-1)[0]}`.toUpperCase();
+  const lastName = names.at(-1);
+  return `${names[0][0]}${lastName?.[0] || ''}`.toUpperCase();
 };
 
 interface Props {

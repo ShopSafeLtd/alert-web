@@ -193,11 +193,11 @@ const StockRemovalRequestsList = () => {
   // Build query filters
   const queryWhere = useMemo(() => {
     const where: {
-      schemeId: null | string;
+      schemeId: string;
       search?: string;
       status?: string[];
     } = {
-      schemeId,
+      schemeId: schemeId || '',
     };
 
     // Filter by status
@@ -505,15 +505,10 @@ const StockRemovalRequestsList = () => {
                         style={
                           hasDeletePermission
                             ? { borderRadius: 0 }
-                            : requiresPicking
-                              ? {
-                                  borderBottomLeftRadius: 0,
-                                  borderTopLeftRadius: 0,
-                                }
-                              : {
-                                  borderBottomLeftRadius: 0,
-                                  borderTopLeftRadius: 0,
-                                }
+                            : {
+                                borderBottomLeftRadius: 0,
+                                borderTopLeftRadius: 0,
+                              }
                         }
                       >
                         <FontAwesomeIcon icon={faEdit} />
@@ -565,12 +560,13 @@ const StockRemovalRequestsList = () => {
           // Check if this request requires picking
           // - DC users can pick any request with status "Picking"
           // - Store users can pick requests for their assigned businesses with status "Picking"
-          const requiresPicking =
+          const requiresPicking = Boolean(
             node.status === StockRemovalRequestStatus.Picking &&
-            (isUserInDCGroup ||
-              (isStoreUser &&
-                node.business &&
-                userBusinessIds.includes(node.business.id)));
+              (isUserInDCGroup ||
+                (isStoreUser &&
+                  node.business &&
+                  userBusinessIds.includes(node.business.id)))
+          );
 
           return {
             approvers: node.approvers.map((approver) => ({

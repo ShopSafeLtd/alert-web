@@ -303,15 +303,15 @@ const ListStockItems = ({
               },
             ]}
             dataSource={filteredData?.map((node) => ({
-              barcode: node.barcode,
-              brand: node.brand,
-              currency: node.currency,
-              division: node.division,
+              barcode: node.barcode ?? null,
+              brand: node.brand ?? null,
+              currency: node.currency ?? null,
+              division: node.division ?? null,
               key: node.id,
               name: node.name || '-',
-              salesPrice: node.salesPriceLocal,
-              sku: node.sku,
-              variant: node.variant,
+              salesPrice: node.salesPriceLocal ?? null,
+              sku: node.sku ?? null,
+              variant: node.variant ?? null,
             }))}
             loading={loading}
             pagination={false}
