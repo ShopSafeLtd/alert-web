@@ -2,6 +2,7 @@ import type { ViewIncidentQuery } from '#/views/incidents/ViewIncident/__generat
 
 import {
   faCircle,
+  faDiagramProject,
   faKey,
   faPlus,
   faToggleOff,
@@ -11,12 +12,22 @@ import {
   faUserSlash,
 } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Avatar, Empty, Timeline, Tooltip, Typography } from 'antd';
+import { Avatar, Button, Empty, Timeline, Tooltip, Typography } from 'antd';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { createUseStyles } from 'react-jss';
+
+// Import WorkflowResults type from modal
+import type { WorkflowResults } from './WorkflowResultsModal.view';
+
+import WorkflowResultsModal from './WorkflowResultsModal.view';
+
+// Define extended action type with workflow results
+type ActionWithWorkflowResults = {
+  workflowResults?: WorkflowResults;
+} & NonNullable<NonNullable<Props['actions']>[number]>;
 
 dayjs.extend(relativeTime);
 
@@ -45,6 +56,12 @@ const useStyles = createUseStyles({
   },
   timelineItem: {
     paddingBottom: 20,
+  },
+  viewResultsButton: {
+    fontSize: 12,
+    height: 24,
+    marginTop: 8,
+    padding: '0 12px',
   },
 });
 
@@ -98,6 +115,9 @@ const getActionIcon = (
     case 'RESET_PASSWORD': {
       return { color: '#1890ff', icon: faKey };
     }
+    case 'WORKFLOW_CHECK': {
+      return { color: '#722ed1', icon: faDiagramProject };
+    }
     default: {
       return { color: '#d9d9d9', icon: faCircle };
     }
@@ -107,12 +127,24 @@ const getActionIcon = (
 const HistoryTimeline: React.FC<Props> = ({ actions }) => {
   const classes = useStyles();
   const intl = useIntl();
+  const [selectedWorkflowResults, setSelectedWorkflowResults] = useState<
+    ActionWithWorkflowResults['workflowResults'] | null
+  >(null);
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const handleViewWorkflowResults = (
+    workflowResults: ActionWithWorkflowResults['workflowResults']
+  ) => {
+    setSelectedWorkflowResults(workflowResults);
+    setModalVisible(true);
+  };
 
   const timelineItems = useMemo(() => {
     if (!actions || actions.length === 0) return [];
 
     return actions.map((action) => {
       const { color, icon } = getActionIcon(action.type || 'CREATE');
+      const isWorkflowCheck = action.type?.toUpperCase() === 'WORKFLOW_CHECK';
 
       return {
         children: (
@@ -150,6 +182,21 @@ const HistoryTimeline: React.FC<Props> = ({ actions }) => {
                 <span>{dayjs(action.createdAt).fromNow()}</span>
               </Tooltip>
             </div>
+            {isWorkflowCheck &&
+              (action as ActionWithWorkflowResults).workflowResults && (
+                <Button
+                  className={classes.viewResultsButton}
+                  onClick={() =>
+                    handleViewWorkflowResults(
+                      (action as ActionWithWorkflowResults).workflowResults
+                    )
+                  }
+                  size="small"
+                  type="link"
+                >
+                  {intl.formatMessage({ defaultMessage: 'View Results' })}
+                </Button>
+              )}
           </div>
         ),
         color,
@@ -182,6 +229,14 @@ const HistoryTimeline: React.FC<Props> = ({ actions }) => {
           </Timeline.Item>
         ))}
       </Timeline>
+      <WorkflowResultsModal
+        onClose={() => {
+          setModalVisible(false);
+          setSelectedWorkflowResults(null);
+        }}
+        visible={modalVisible}
+        workflowResults={selectedWorkflowResults}
+      />
     </div>
   );
 };
@@ -205,6 +260,9 @@ const getActionDescription = (
     REDUCE: intl.formatMessage({ defaultMessage: 'Reduced' }),
     REMOVE: intl.formatMessage({ defaultMessage: 'Removed' }),
     RESET_PASSWORD: intl.formatMessage({ defaultMessage: 'Reset password' }),
+    WORKFLOW_CHECK: intl.formatMessage({
+      defaultMessage: 'Workflows evaluated',
+    }),
   };
 
   return (

@@ -4,6 +4,7 @@ import type { Dispatch, SetStateAction } from 'react';
 import type RGL from 'react-grid-layout';
 
 import {
+  faBoxCheck,
   faBoxes,
   faCalendarAlt,
   faChartBar,
@@ -207,6 +208,16 @@ const DashboardSelectorDrawer = ({
       icon: faTasks,
       id: 'adminTodos',
       name: intl.formatMessage({ defaultMessage: 'Admin Tasks' }),
+    },
+    {
+      category: 'Management',
+      defaultSize: { h: 5, w: 3 },
+      description: intl.formatMessage({
+        defaultMessage: 'Stock removal requests requiring action',
+      }),
+      icon: faBoxCheck,
+      id: 'myStockRequests',
+      name: intl.formatMessage({ defaultMessage: 'My Stock Requests' }),
     },
   ];
 

@@ -1,4 +1,4 @@
-import type { SingleShoeFragment } from 'graphql/fragments/__generated__/shoe.generated';
+import type { SingleShoeFragment } from 'graphql/fragments/__generated__/singleShoe.generated';
 
 import { ShoeStatus } from '#/graphql/types';
 import { getShoeSide, getShoeStatus, getShoeType } from '#/types/enums/shoe';

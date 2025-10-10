@@ -1,5 +1,4 @@
 import type { Action } from 'easy-peasy';
-import { action } from 'easy-peasy';
 import type {
   Age,
   ArticlePriority,
@@ -11,8 +10,10 @@ import type {
   PoliceForce,
   Race,
 } from 'graphql/types';
-import { IncidentPriority, SortOrder } from 'graphql/types';
 import type { DateType } from 'types/DataType';
+
+import { action } from 'easy-peasy';
+import { IncidentPriority, SortOrder } from 'graphql/types';
 
 export enum IncidentSort {
   createdAtAsc = 'CREATED_AT_ASC',
@@ -39,10 +40,10 @@ export interface IncidentFilters {
   groups: string[];
   incidentDate: DateType | undefined;
   peculiarities: string;
+  policeAreas?: PoliceForce[];
   priority: IncidentPriority[];
   search: string;
   tableView: boolean;
-  policeAreas?: PoliceForce[];
 }
 
 export interface OffenderFilters {
@@ -63,12 +64,13 @@ export interface OffenderFilters {
   gallery: string[];
   groups: string[];
   hair: string;
+  hasNoIncidents: boolean;
   peculiarities: string;
+  policeAreas?: PoliceForce[];
   search: string;
   sex: Gender[];
   tableView: boolean;
   warnings: string[];
-  policeAreas?: PoliceForce[];
 }
 
 export interface FeedItemFilters {
@@ -96,8 +98,8 @@ export interface VehicleFilters {
   gallery: string[];
   groups: string[];
   order: SortOrder;
-  search: string;
   policeAreas?: PoliceForce[];
+  search: string;
 }
 
 export interface CrimeGroupFilters {
@@ -221,6 +223,7 @@ export interface DataModel {
   incidents: Incidents;
   investigations: Investigations;
   offenders: Offenders;
+  policeAreas?: PoliceForce[];
   setArticles: Action<DataModel, Articles>;
   setCrimeGroups: Action<DataModel, CrimeGroups>;
   setFeedItems: Action<DataModel, FeedItems>;
@@ -234,7 +237,6 @@ export interface DataModel {
   setOffenders: Action<DataModel, Offenders>;
   setVehicles: Action<DataModel, Vehicles>;
   vehicles: Vehicles;
-  policeAreas?: PoliceForce[];
 }
 
 const dataModel: DataModel = {
@@ -334,6 +336,7 @@ const dataModel: DataModel = {
       gallery: [],
       groups: [],
       hair: '',
+      hasNoIncidents: false,
       peculiarities: '',
       search: '',
       sex: [],

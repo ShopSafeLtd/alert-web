@@ -97,6 +97,7 @@ import MapCard from 'components/map/MapCard/MapCard.view';
 import AssociatedOffender from 'components/offenders/AssociatedOffender';
 import OffenderSideList from 'components/offenders/OffenderSideList';
 import OffenderMatches from 'components/rekognition/OffenderMatches/OffenderMatches.container';
+import ArticleTable from 'components/tables/ArticleTable';
 import CrimeGroupTable from 'components/tables/CrimeGroupTable';
 import EvidenceTable from 'components/tables/EvidenceTable';
 import InvestigationTable from 'components/tables/InvestigationTable';
@@ -1997,6 +1998,38 @@ const ViewOffender = ({
                                   description={intl.formatMessage({
                                     defaultMessage:
                                       'No crime groups for this offender',
+                                  })}
+                                  image={Empty.PRESENTED_IMAGE_SIMPLE}
+                                />
+                              )}
+                            </Card>
+                          </PermissionCheckWrapper>
+
+                          <PermissionCheckWrapper
+                            permission={{
+                              method: PermissionMethod.Read,
+                              model: PermissionModel.Articles,
+                            }}
+                            unauthorizedElement={<div />}
+                          >
+                            <Card loading={loading}>
+                              <Title level={4}>
+                                {intl.formatMessage({
+                                  defaultMessage: 'Bulletins',
+                                })}
+                              </Title>
+                              {data?.offender?.articles &&
+                              data.offender.articles.length > 0 &&
+                              !loading ? (
+                                <ArticleTable
+                                  articles={data.offender.articles}
+                                  hasNavigation
+                                />
+                              ) : (
+                                <Empty
+                                  description={intl.formatMessage({
+                                    defaultMessage:
+                                      'No bulletins for this offender',
                                   })}
                                   image={Empty.PRESENTED_IMAGE_SIMPLE}
                                 />

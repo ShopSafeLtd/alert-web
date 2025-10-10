@@ -266,8 +266,12 @@ const Answers = ({
         }
 
         const isMultiple = answer.type === AnswerType.Select;
-        const currentValue =
-          isMultiple && value ? value.split(',').filter(Boolean) : value;
+        const currentValue = (() => {
+          if (!value || value === '') {
+            return isMultiple ? [] : undefined;
+          }
+          return isMultiple ? value.split(',').filter(Boolean) : value;
+        })();
 
         return (
           <Select
@@ -276,7 +280,7 @@ const Answers = ({
             onChange={(val) =>
               handleAnswerChange(
                 answer.id,
-                Array.isArray(val) ? val.join(',') : val
+                Array.isArray(val) ? val.filter(Boolean).join(',') : val || ''
               )
             }
             placeholder={intl.formatMessage({

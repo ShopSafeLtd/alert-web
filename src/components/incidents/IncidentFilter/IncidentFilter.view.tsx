@@ -6,15 +6,15 @@ import IncidentTypesSelect from '#/components/form-components/IncidentTypesSelec
 import UsersSelect from '#/components/form-components/UsersSelect/UsersSelect.view';
 import GoodsSelect from '#/components/form-components/goodsSelect/GoodsSelect.view';
 import DatePicker from '#/components/util-components/DatePicker';
+import { formatPoliceForceLabel } from '#/utils/formatPoliceAreas';
 import { Button, Col, Form, Input, Row, Select, Space, Typography } from 'antd';
 import dayjs from 'dayjs';
+import { PoliceForce } from 'graphql/types';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import { IncidentSort, useStoreActions, useStoreState } from 'state';
 
 import useStyles from './IncidentFilter.styles';
-import { PoliceForce } from 'graphql/types';
-import { formatPoliceForceLabel } from '#/utils/formatPoliceAreas';
 
 const { RangePicker } = DatePicker;
 const { useForm } = Form;
@@ -339,6 +339,27 @@ const IncidentFilter = ({
               treeCheckable
               value={crimeTypesValue}
             />
+          </Col>
+        </Row>
+        <Row gutter={16}>
+          <Col span={23}>
+            <Typography.Paragraph className={classes.selectTitle}>
+              {intl.formatMessage({
+                defaultMessage: 'Status',
+              })}
+            </Typography.Paragraph>
+            <Select
+              allowClear
+              className={classes.select}
+              mode="multiple"
+              placeholder={intl.formatMessage({
+                defaultMessage: 'Select Status',
+              })}
+              size="small"
+              style={{ width: '100%' }}
+            >
+              {/* Status options will be populated when backend provides the data */}
+            </Select>
           </Col>
         </Row>
         <Typography.Paragraph className={classes.filtersTitle}>

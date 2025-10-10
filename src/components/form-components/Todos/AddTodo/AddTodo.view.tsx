@@ -566,11 +566,14 @@ const AddTodo = ({
                       return;
                     }
 
-                    if (data.assignedUsers === undefined) {
+                    if (
+                      data.assignedUsers === undefined ||
+                      data.assignedUsers.length === 0
+                    ) {
                       Modal.error({
                         content: intl.formatMessage({
                           defaultMessage:
-                            'Select assigned users for the activity before creating it.',
+                            'Please assign this activity to at least one user.',
                         }),
                         title: intl.formatMessage({
                           defaultMessage: 'Missing Assigned Users',

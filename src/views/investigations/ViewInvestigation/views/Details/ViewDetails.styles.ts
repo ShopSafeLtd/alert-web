@@ -8,6 +8,9 @@ const useStyles = createUseStyles((theme: Theme) => ({
     display: 'flex',
     flexDirection: 'column',
     gap: 12,
+    maxHeight: '100%',
+    overflow: 'auto',
+    paddingRight: 4,
   },
   activityAssignees: {
     alignItems: 'center',

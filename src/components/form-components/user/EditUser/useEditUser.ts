@@ -22,6 +22,8 @@ import { useIntl } from 'react-intl';
 import errorNotification from 'types/mutation_notifications/error_notification';
 
 export interface FormData {
+  activityEmail: boolean;
+  activityPush: boolean;
   approverGroups: string[];
   bulletinEmails: boolean;
   bulletinPush: boolean;
@@ -294,6 +296,8 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
             },
           },
           data: {
+            activityEmail: { set: data.activityEmail },
+            activityPush: { set: data.activityPush },
             approverGroups: data.approverGroups
               ? {
                   connect: data.approverGroups
@@ -385,6 +389,8 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
               update: [
                 {
                   data: {
+                    activityEmail: { set: data.activityEmail },
+                    activityPush: { set: data.activityPush },
                     bulletinEmails: { set: data.bulletinEmails },
                     bulletinPush: { set: data.bulletinPush },
                     fullName: { set: data.fullName },

@@ -1,0 +1,18 @@
+mutation MarkStockRemovalRequestAsPicked($data: MarkStockRemovalRequestAsPickedInput!) {
+    markStockRemovalRequestAsPicked(data: $data) {
+        id
+        status
+        tmid
+        tracking
+        items {
+            id
+            name
+            brand
+            sku
+            barcode
+            requestedQuantity
+            pickedQuantity
+            value
+        }
+    }
+}

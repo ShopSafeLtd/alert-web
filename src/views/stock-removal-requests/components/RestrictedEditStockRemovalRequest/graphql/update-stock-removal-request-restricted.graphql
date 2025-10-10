@@ -1,0 +1,14 @@
+mutation UpdateStockRemovalRequestRestricted($where: UniqueId!, $data: UpdateStockRemovalRequestInput!) {
+    updateStockRemovalRequest(where: $where, data: $data) {
+        id
+        shippingAddress
+        approvers {
+            status
+            id
+            user {
+                id
+                fullName
+            }
+        }
+    }
+}

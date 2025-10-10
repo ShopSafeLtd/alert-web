@@ -23,6 +23,7 @@ import {
   faBolt,
   faCircle,
   faEdit,
+  faEnvelope,
   faMagnifyingGlass,
   faPaperPlane,
   faPlus,
@@ -81,6 +82,8 @@ interface Props {
   addDemDevice: boolean;
   addTodo: boolean;
   addUserVisible: boolean;
+  bulkInviteConfirm: () => void;
+  bulkInviting: boolean;
   businessId: string | undefined;
   completeTodoVisible: null | string;
   data: BusinessQuery | undefined;
@@ -96,8 +99,10 @@ interface Props {
   onRemoveBusiness: (value: string) => void;
   onRemoveDevice: (value: string) => void;
   saving: boolean;
+  selectedUserIds: string[];
   setCompleteTodoVisible: (value: null | string) => void;
   setEditDeviceData: (value: DemDeviceData | undefined) => void;
+  setSelectedUserIds: (value: string[]) => void;
   setViewTodoVisible: (value: null | string) => void;
   templatesData: QuestionGroupOnSchemeQuery | undefined;
   templatesLoading: boolean;
@@ -124,6 +129,8 @@ const ViewBusiness = ({
   addDemDevice,
   addTodo,
   addUserVisible,
+  bulkInviteConfirm,
+  bulkInviting,
   businessId,
   completeTodoVisible,
   data,
@@ -139,8 +146,10 @@ const ViewBusiness = ({
   onRemoveBusiness,
   onRemoveDevice,
   saving,
+  selectedUserIds,
   setCompleteTodoVisible,
   setEditDeviceData,
+  setSelectedUserIds,
   setViewTodoVisible,
   templatesData,
   templatesLoading,
@@ -163,6 +172,15 @@ const ViewBusiness = ({
 }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
+
+  // Row selection config
+  const rowSelection = {
+    onChange: (selectedRowKeys: React.Key[]) => {
+      setSelectedUserIds(selectedRowKeys as string[]);
+    },
+    selectedRowKeys: selectedUserIds,
+  };
+
   return (
     <div className="page-container">
       <Row wrap={false}>
@@ -426,6 +444,39 @@ const ViewBusiness = ({
                     })}
                   </Typography.Title>
                 </Col>
+                {selectedUserIds.length > 0 && (
+                  <Col>
+                    <Tooltip
+                      title={intl.formatMessage(
+                        {
+                          defaultMessage:
+                            'Resend invitations to {count} selected users',
+                        },
+                        { count: selectedUserIds.length }
+                      )}
+                    >
+                      <Button
+                        disabled={bulkInviting}
+                        icon={
+                          <FontAwesomeIcon
+                            icon={faEnvelope}
+                            style={{ marginRight: 5 }}
+                          />
+                        }
+                        loading={bulkInviting}
+                        onClick={bulkInviteConfirm}
+                        size="small"
+                      >
+                        {intl.formatMessage(
+                          {
+                            defaultMessage: 'Reinvite Selected ({count})',
+                          },
+                          { count: selectedUserIds.length }
+                        )}
+                      </Button>
+                    </Tooltip>
+                  </Col>
+                )}
                 <Col>
                   <Dropdown
                     overlay={
@@ -570,6 +621,7 @@ const ViewBusiness = ({
                   hideOnSinglePage: true,
                   pageSize: 10,
                 }}
+                rowSelection={rowSelection}
                 size="small"
               />
             </Card>

@@ -30,6 +30,8 @@ query User(
     messagePush
     offenderEmail
     offenderPush
+    activityEmail
+    activityPush
     signedTerms {
       id
       signature

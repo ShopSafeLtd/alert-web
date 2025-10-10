@@ -1,4 +1,4 @@
-import type * as Types from '../../../../../../graphql/types.js';
+import type * as Types from '../../../../../../graphql/types';
 
 import { gql } from '@apollo/client';
 import { OffendersFragmentDoc } from '../../../../../../graphql/fragments/__generated__/offenders.generated';

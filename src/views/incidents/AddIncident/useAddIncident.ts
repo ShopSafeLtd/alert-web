@@ -1361,11 +1361,15 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
             if (item?.conditions && item.conditions.length > 0) {
               const conditions = item.conditions as {
                 conditionValues: string[];
+                mode?: 'HIDE' | 'SHOW';
                 questionId?: string;
                 type: 'BUSINESS_GROUPS' | 'CUSTOM_QUESTION' | 'USER_ROLE';
               }[];
 
-              const checkedConditions = conditions.map((condition) => {
+              // Helper function to evaluate a single condition
+              const evaluateCondition = (
+                condition: (typeof conditions)[0]
+              ): boolean => {
                 if (condition.type === 'CUSTOM_QUESTION') {
                   const questionId = condition.questionId ?? '';
                   const questionValue = form.getFieldValue(
@@ -1388,12 +1392,32 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
                   );
                 }
 
-                return true;
-              });
+                return false;
+              };
 
-              return checkedConditions.includes(true);
+              // Separate SHOW and HIDE conditions
+              const showConditions = conditions.filter(
+                (c) => !c.mode || c.mode === 'SHOW'
+              );
+              const hideConditions = conditions.filter(
+                (c) => c.mode === 'HIDE'
+              );
+
+              // Evaluate conditions
+              const showResults = showConditions.map(evaluateCondition);
+              const hideResults = hideConditions.map(evaluateCondition);
+
+              // Logic:
+              // - If SHOW conditions exist, ALL must be true to show
+              // - If HIDE conditions exist, ALL must be true to hide
+              const shouldShow =
+                showConditions.length === 0 || showResults.every(Boolean);
+              const shouldHide =
+                hideConditions.length > 0 && hideResults.every(Boolean);
+
+              return shouldShow && !shouldHide;
             }
-            return true;
+            return true; // No conditions = always show
           })
           .map((item) => ({ metadata: [item?.metadata], type: item?.type }));
 

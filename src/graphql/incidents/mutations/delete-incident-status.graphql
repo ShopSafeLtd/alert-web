@@ -1,0 +1,6 @@
+mutation DeleteIncidentStatus($where: UniqueId!) {
+  deleteIncidentStatus(where: $where) {
+    id
+    name
+  }
+}

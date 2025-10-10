@@ -1,7 +1,7 @@
-import type * as Types from '../../types.js';
+import type * as Types from '../../types';
 
 import { gql } from '@apollo/client';
-export type IncidentItemsFragment = { __typename?: 'IncidentItem', id: string, name?: string | null, value?: number | null, recoveredValue?: number | null, sku?: string | null, quantity?: number | null, recoveredQuantity?: number | null, goodsType?: { __typename?: 'GoodsType', id: string } | null, stockItem?: { __typename?: 'StockItem', id: string } | null };
+export type IncidentItemsFragment = { __typename?: 'IncidentItem', id: string, name?: string | null, value?: number | null, recoveredValue?: number | null, sku?: string | null, quantity?: number | null, recoveredQuantity?: number | null, goodsType?: { __typename?: 'GoodsType', id: string } | null, stockItem?: { __typename?: 'StockItem', id: string, barcode?: string | null } | null };
 
 export const IncidentItemsFragmentDoc = gql`
     fragment IncidentItems on IncidentItem {
@@ -17,6 +17,7 @@ export const IncidentItemsFragmentDoc = gql`
   }
   stockItem {
     id
+    barcode
   }
 }
     `;
