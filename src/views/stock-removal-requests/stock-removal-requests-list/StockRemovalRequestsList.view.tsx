@@ -52,6 +52,22 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import { createUseStyles } from 'react-jss';
 import { useParams } from 'react-router-dom';
 
+interface StockRemovalRequestTableData {
+  approvers: {
+    name: string;
+    status: StockRemovalRequestApprovalStatus;
+    userId: string;
+  }[];
+  businessId: string | undefined;
+  createdAt: Date;
+  key: string;
+  reference: null | number | undefined;
+  requiresMyApproval: boolean;
+  requiresPicking: boolean;
+  status: StockRemovalRequestStatus;
+  title: string;
+}
+
 const useStyles = createUseStyles((theme: Theme) => ({
   highlightedRow: {
     backgroundColor:
@@ -195,14 +211,14 @@ const StockRemovalRequestsList = () => {
     const where: {
       schemeId: string;
       search?: string;
-      status?: string[];
+      status?: StockRemovalRequestStatus[];
     } = {
       schemeId: schemeId || '',
     };
 
     // Filter by status
     if (statusFilter !== 'ALL') {
-      where.status = [statusFilter];
+      where.status = [statusFilter as StockRemovalRequestStatus];
     }
 
     // Search filter
@@ -398,16 +414,8 @@ const StockRemovalRequestsList = () => {
             dataIndex: 'approvers',
             key: 'approvers',
             render: (
-              values: {
-                name: string;
-                status: StockRemovalRequestApprovalStatus;
-                userId: string;
-              }[],
-              record: {
-                key: string;
-                requiresMyApproval: boolean;
-                requiresPicking: boolean;
-              }
+              values: StockRemovalRequestTableData['approvers'],
+              record: StockRemovalRequestTableData
             ) => (
               <Row gutter={16}>
                 {values.map((item) => (
@@ -438,11 +446,7 @@ const StockRemovalRequestsList = () => {
                 key,
                 requiresMyApproval,
                 requiresPicking,
-              }: {
-                key: string;
-                requiresMyApproval: boolean;
-                requiresPicking: boolean;
-              }
+              }: StockRemovalRequestTableData
             ) => {
               const viewTooltip = requiresMyApproval
                 ? intl.formatMessage({ defaultMessage: 'Review Request' })
@@ -584,10 +588,7 @@ const StockRemovalRequestsList = () => {
             title: node.title,
           };
         })}
-        rowClassName={(record: {
-          requiresMyApproval: boolean;
-          requiresPicking: boolean;
-        }) =>
+        rowClassName={(record: StockRemovalRequestTableData) =>
           record.requiresMyApproval || record.requiresPicking
             ? classes.highlightedRow
             : ''
