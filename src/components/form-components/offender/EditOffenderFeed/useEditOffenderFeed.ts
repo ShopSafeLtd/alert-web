@@ -45,6 +45,7 @@ export interface FormData {
   name: string;
   peculiarities: string;
   race: Race;
+  sourceDetails?: string;
   tags: string[];
   targetedGoods: string[];
 }
@@ -175,6 +176,7 @@ const useEditOffender = ({ offenderId, onClose }: Props): Return => {
           name: data.name,
           peculiarities: data.peculiarities,
           race: data.race,
+          sourceDetails: data.sourceDetails,
           tagIds: data.tags,
         },
         where: offenderId,
