@@ -1,34 +1,36 @@
-import React from 'react';
 import type { CustomGalleryData } from 'types/DataType';
+
+import React from 'react';
+
 import View from './AddCustomGallery.view';
 import useAddCustomGallery from './useAddCustomGallery';
 
 interface Props {
-  onClose: () => void;
-  update: (value: CustomGalleryData) => void;
-  saving?: boolean;
   data?: CustomGalleryData;
+  onClose: () => void;
+  saving?: boolean;
+  update: (value: CustomGalleryData) => void;
 }
 
 const AddCustomGallery = ({
-  onClose,
-  update,
-  saving,
   data,
+  onClose,
+  saving,
+  update,
 }: Props): JSX.Element => {
-  const { onSubmit, groupsData, groupsLoading } = useAddCustomGallery({
-    update,
+  const { groupsData, groupsLoading, onSubmit } = useAddCustomGallery({
     data,
+    update,
   });
 
   return (
     <View
-      onSubmit={onSubmit}
-      onClose={onClose}
-      saving={saving || false}
       data={data}
       groupsData={groupsData}
       groupsLoading={groupsLoading}
+      onClose={onClose}
+      onSubmit={onSubmit}
+      saving={saving || false}
     />
   );
 };

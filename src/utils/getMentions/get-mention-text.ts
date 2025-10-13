@@ -1,4 +1,5 @@
 import { Mentions } from 'antd';
+
 import type { SchemeUserData } from '../../types/DataType';
 
 /**
@@ -34,7 +35,7 @@ export const appendDuplicates = (arr: SchemeUserData[]) => {
 
 export const getText = (
   text: string,
-  schemeUsers: SchemeUserData[] | Map<string, SchemeUserData> | undefined
+  schemeUsers: Map<string, SchemeUserData> | SchemeUserData[] | undefined
 ) => {
   const mentions = getMentions(text);
   let newText = text;

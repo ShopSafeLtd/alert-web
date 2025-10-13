@@ -1,5 +1,5 @@
-import React from 'react';
 import { Col, Row, Skeleton } from 'antd';
+import React from 'react';
 
 const CheckTagsLoading = () => (
   <Row gutter={[10, 10]}>

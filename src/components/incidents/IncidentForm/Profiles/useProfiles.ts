@@ -1,14 +1,14 @@
 import { useState } from 'react';
 
 interface Return {
-  addNewOffenderOpen: boolean;
   addExistingOffenderOpen: boolean;
-  addNewVehicleOpen: boolean;
   addExistingVehicleOpen: boolean;
-  toggleAddNewOffenderOpen: () => void;
-  toggleAddExistingOffenderOpen: () => void;
-  toggleAddNewVehicleOpen: () => void;
+  addNewOffenderOpen: boolean;
+  addNewVehicleOpen: boolean;
   toggleAddExisingVehicleOpen: () => void;
+  toggleAddExistingOffenderOpen: () => void;
+  toggleAddNewOffenderOpen: () => void;
+  toggleAddNewVehicleOpen: () => void;
 }
 
 const useProfiles = (): Return => {
@@ -31,14 +31,14 @@ const useProfiles = (): Return => {
   };
 
   return {
-    addNewOffenderOpen,
     addExistingOffenderOpen,
     addExistingVehicleOpen,
+    addNewOffenderOpen,
     addNewVehicleOpen,
     toggleAddExisingVehicleOpen,
     toggleAddExistingOffenderOpen,
-    toggleAddNewVehicleOpen,
     toggleAddNewOffenderOpen,
+    toggleAddNewVehicleOpen,
   };
 };
 

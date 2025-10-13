@@ -1,35 +1,34 @@
-import { useState } from 'react';
-
-import { notification } from 'antd';
-import { useIntl } from 'react-intl';
 import {
   useSetPasswordMutation
 } from '#/components/form-components/SetPassword/graphql/mutations/__generated__/set-password.generated';
+import { notification } from 'antd';
+import { useState } from 'react';
+import { useIntl } from 'react-intl';
 
 interface FormData {
   password: string;
 }
 interface Props {
-  userId: string;
   onClose: () => void;
+  userId: string;
 }
 interface Return {
   onSubmit: (value: FormData) => void;
   saving: boolean;
 }
 
-const useSetPassword = ({ userId, onClose }: Props): Return => {
+const useSetPassword = ({ onClose, userId }: Props): Return => {
   const [saving, setSaving] = useState(false);
   const intl = useIntl();
   const [updatePassword] = useSetPasswordMutation({
     onCompleted: () => {
       setSaving(false);
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Updated!',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'The password has been successfully updated.',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Updated!',
         }),
         placement: 'bottomRight',
       });

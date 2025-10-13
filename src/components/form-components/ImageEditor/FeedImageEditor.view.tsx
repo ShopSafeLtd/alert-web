@@ -1,63 +1,65 @@
-import React, { useState } from 'react';
-import { Button, Col, Form, Modal, Row, Select, Skeleton, Switch } from 'antd';
-import WatermarkImage from 'components/images/WatermarkImage.view';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import type { EditFeedImage } from 'types/DataType';
+
 import {
   faRotateBackward,
   faRotateForward,
 } from '@fortawesome/pro-light-svg-icons';
-import { FormattedMessage, useIntl } from 'react-intl';
-import type { EditFeedImage } from 'types/DataType';
-import useStyles from './ImageEditor.styles';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Col, Form, Modal, Row, Select, Skeleton, Switch } from 'antd';
+import WatermarkImage from 'components/images/WatermarkImage.view';
 import { ImagePosition } from 'graphql/types';
+import React, { useState } from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
+
+import useStyles from './ImageEditor.styles';
 
 const positionOptions = [
   {
-    value: ImagePosition.CenterBottom,
     label: <FormattedMessage defaultMessage="Center Bottom" />,
+    value: ImagePosition.CenterBottom,
   },
   {
-    value: ImagePosition.CenterCenter,
     label: <FormattedMessage defaultMessage="Center Center" />,
+    value: ImagePosition.CenterCenter,
   },
   {
-    value: ImagePosition.CenterTop,
     label: <FormattedMessage defaultMessage="Center Top" />,
+    value: ImagePosition.CenterTop,
   },
   {
-    value: ImagePosition.LeftBottom,
     label: <FormattedMessage defaultMessage="Left Bottom" />,
+    value: ImagePosition.LeftBottom,
   },
   {
-    value: ImagePosition.LeftCenter,
     label: <FormattedMessage defaultMessage="Left Center" />,
+    value: ImagePosition.LeftCenter,
   },
   {
-    value: ImagePosition.LeftTop,
     label: <FormattedMessage defaultMessage="Left Top" />,
+    value: ImagePosition.LeftTop,
   },
   {
-    value: ImagePosition.RightBottom,
     label: <FormattedMessage defaultMessage="Right Bottom" />,
+    value: ImagePosition.RightBottom,
   },
   {
-    value: ImagePosition.RightCenter,
     label: <FormattedMessage defaultMessage="Right Center" />,
+    value: ImagePosition.RightCenter,
   },
   {
-    value: ImagePosition.RightTop,
     label: <FormattedMessage defaultMessage="Right Top" />,
+    value: ImagePosition.RightTop,
   },
 ];
 
 interface Props {
-  open: boolean;
   image: EditFeedImage | null | undefined;
-  submitImage: (value: EditFeedImage) => void;
   onClose: () => void;
+  open: boolean;
+  submitImage: (value: EditFeedImage) => void;
 }
 
-const FeedImageEditor = ({ open, image, submitImage, onClose }: Props) => {
+const FeedImageEditor = ({ image, onClose, open, submitImage }: Props) => {
   if (!image) return <div />;
   const intl = useIntl();
   const classes = useStyles();
@@ -72,16 +74,16 @@ const FeedImageEditor = ({ open, image, submitImage, onClose }: Props) => {
     if (image) {
       console.log({
         ...image,
+        policeImage,
         position,
         primary,
-        policeImage,
         rotation,
       });
       submitImage({
         ...image,
+        policeImage,
         position,
         primary,
-        policeImage,
         rotation,
       });
     }
@@ -102,31 +104,31 @@ const FeedImageEditor = ({ open, image, submitImage, onClose }: Props) => {
 
   return (
     <Modal
-      width={600}
-      open={open}
-      title={intl.formatMessage({
-        defaultMessage: 'Edit Image',
-      })}
       bodyStyle={{ padding: 0 }}
       okText={intl.formatMessage({
         defaultMessage: 'Save Image',
       })}
-      onOk={handleSubmit}
       onCancel={() => {
         onClose();
       }}
+      onOk={handleSubmit}
+      open={open}
+      title={intl.formatMessage({
+        defaultMessage: 'Edit Image',
+      })}
+      width={600}
     >
       {open && (
         <Row wrap={false}>
           <Col className={classes.toolbar}>
             <Form
               className={classes.select}
-              layout="vertical"
               initialValues={{
+                policeImage: image?.policeImage,
                 position: image?.position || ImagePosition.CenterCenter,
                 primaryImage: image?.primary,
-                policeImage: image?.policeImage,
               }}
+              layout="vertical"
               // onFinish={onSubmit}
             >
               <Form.Item
@@ -135,9 +137,9 @@ const FeedImageEditor = ({ open, image, submitImage, onClose }: Props) => {
                 })}
               >
                 <Select
-                  value={position}
                   onChange={setPosition}
                   options={positionOptions}
+                  value={position}
                 />
               </Form.Item>
               <Form.Item
@@ -147,12 +149,12 @@ const FeedImageEditor = ({ open, image, submitImage, onClose }: Props) => {
               >
                 <Row gutter={8}>
                   <Col>
-                    <Button size="small" onClick={onRotateLeft}>
+                    <Button onClick={onRotateLeft} size="small">
                       <FontAwesomeIcon icon={faRotateBackward} />
                     </Button>
                   </Col>
                   <Col>
-                    <Button size="small" onClick={onRotateRight}>
+                    <Button onClick={onRotateRight} size="small">
                       <FontAwesomeIcon icon={faRotateForward} />
                     </Button>
                   </Col>
@@ -164,9 +166,9 @@ const FeedImageEditor = ({ open, image, submitImage, onClose }: Props) => {
                 })}
                 name="primaryImage"
                 style={{
-                  marginBottom: 0,
                   flexDirection: 'row',
                   justifyItems: 'center',
+                  marginBottom: 0,
                 }}
               >
                 <Switch
@@ -182,9 +184,9 @@ const FeedImageEditor = ({ open, image, submitImage, onClose }: Props) => {
                 })}
                 name="policeImage"
                 style={{
-                  marginBottom: 0,
                   flexDirection: 'row',
                   justifyItems: 'center',
+                  marginBottom: 0,
                 }}
               >
                 <Switch
@@ -201,9 +203,9 @@ const FeedImageEditor = ({ open, image, submitImage, onClose }: Props) => {
               <div className={classes.mockupCard}>
                 <div className={classes.cardImage}>
                   <WatermarkImage
-                    url={image.optimised}
                     position={position}
                     rotation={rotation}
+                    url={image.optimised}
                   />
                 </div>
                 <div className={classes.cardBody}>

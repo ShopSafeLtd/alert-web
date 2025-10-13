@@ -1,39 +1,40 @@
+import Loading from '#/components/shared-components/AntD/Loading';
 import React, { Suspense } from 'react';
+
 import View from './SchemeDetail.view';
 import useSchemeDetail from './useSchemeDetail';
-import Loading from '#/components/shared-components/AntD/Loading';
 
 const SchemeDetail = (): JSX.Element => {
   const {
-    data,
-    loading,
-    saving,
-    onSubmit,
     beforeUpload,
-    onPreview,
-    imgChange,
-    fileList,
-    darkImgChange,
     darkFileList,
+    darkImgChange,
+    data,
+    fileList,
+    form,
+    imgChange,
+    loading,
+    onPreview,
+    onSubmit,
+    saving,
     tags,
     updateTagParent,
-    form,
   } = useSchemeDetail();
 
   return (
     <Suspense fallback={<Loading cover="content" />}>
       <View
-        form={form}
+        beforeUpload={beforeUpload}
         darkFileList={darkFileList}
         darkImgChange={darkImgChange}
         data={data}
-        loading={loading}
-        saving={saving}
-        onSubmit={onSubmit}
         fileList={fileList}
-        beforeUpload={beforeUpload}
+        form={form}
         imgChange={imgChange}
+        loading={loading}
         onPreview={onPreview}
+        onSubmit={onSubmit}
+        saving={saving}
         tags={tags}
         updateTagParent={updateTagParent}
       />

@@ -1,6 +1,6 @@
 enum LocationOptions {
   'ACCOUNT' = 'ACCOUNT',
-  'PREVIOUS' = 'PREVIOUS',
   'NEW' = 'NEW',
+  'PREVIOUS' = 'PREVIOUS',
 }
 export default LocationOptions;

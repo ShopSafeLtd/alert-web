@@ -138,7 +138,7 @@ export const ViewOffenderDocument = gql`
     updates(orderBy: {createdAt: desc}) {
       ...Updates
     }
-    articles(take: 100, orderBy: [{createdAt: desc}]) {
+    articles {
       id
       title
       createdAt

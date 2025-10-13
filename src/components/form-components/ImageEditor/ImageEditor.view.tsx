@@ -1,63 +1,65 @@
-import React, { useState } from 'react';
 import type { UploadFile } from 'antd';
-import { Button, Col, Form, Modal, Row, Select, Skeleton, Switch } from 'antd';
-import WatermarkImage from 'components/images/WatermarkImage.view';
-import { ImagePosition } from 'graphql/types';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import {
   faRotateBackward,
   faRotateForward,
 } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Col, Form, Modal, Row, Select, Skeleton, Switch } from 'antd';
+import WatermarkImage from 'components/images/WatermarkImage.view';
+import { ImagePosition } from 'graphql/types';
+import React, { useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
+
 import useStyles from './ImageEditor.styles';
 
 const positionOptions = [
   {
-    value: ImagePosition.CenterBottom,
     label: <FormattedMessage defaultMessage="Center Bottom" />,
+    value: ImagePosition.CenterBottom,
   },
   {
-    value: ImagePosition.CenterCenter,
     label: <FormattedMessage defaultMessage="Center Center" />,
+    value: ImagePosition.CenterCenter,
   },
   {
-    value: ImagePosition.CenterTop,
     label: <FormattedMessage defaultMessage="Center Top" />,
+    value: ImagePosition.CenterTop,
   },
   {
-    value: ImagePosition.LeftBottom,
     label: <FormattedMessage defaultMessage="Left Bottom" />,
+    value: ImagePosition.LeftBottom,
   },
   {
-    value: ImagePosition.LeftCenter,
     label: <FormattedMessage defaultMessage="Left Center" />,
+    value: ImagePosition.LeftCenter,
   },
   {
-    value: ImagePosition.LeftTop,
     label: <FormattedMessage defaultMessage="Left Top" />,
+    value: ImagePosition.LeftTop,
   },
   {
-    value: ImagePosition.RightBottom,
     label: <FormattedMessage defaultMessage="Right Bottom" />,
+    value: ImagePosition.RightBottom,
   },
   {
-    value: ImagePosition.RightCenter,
     label: <FormattedMessage defaultMessage="Right Center" />,
+    value: ImagePosition.RightCenter,
   },
   {
-    value: ImagePosition.RightTop,
     label: <FormattedMessage defaultMessage="Right Top" />,
+    value: ImagePosition.RightTop,
   },
 ];
 
 interface Image extends UploadFile {
   offenders?: {
     id: string;
-    name?: string | undefined | null;
+    name?: null | string | undefined;
   }[];
+  policeImage?: boolean;
   position?: ImagePosition;
   primary?: boolean;
-  policeImage?: boolean;
   rotation?: number;
 }
 // interface FormData {
@@ -66,21 +68,21 @@ interface Image extends UploadFile {
 // }
 
 interface Props {
-  open: boolean;
   image: Image | null;
-  submitImage: (value: Image) => void;
   onClose: () => void;
+  open: boolean;
   primaryImage: string;
   setPrimaryImage: (value: string) => void;
+  submitImage: (value: Image) => void;
 }
 
 const ImageEditor = ({
-  open,
   image,
-  submitImage,
   onClose,
+  open,
   primaryImage,
   setPrimaryImage,
+  submitImage,
 }: Props) => {
   if (!image) return <div />;
   const intl = useIntl();
@@ -101,8 +103,8 @@ const ImageEditor = ({
       if (!isPrimaryImage && image.uid === primaryImage) setPrimaryImage('');
       submitImage({
         ...image,
-        position,
         policeImage,
+        position,
         rotation,
       });
     }
@@ -122,31 +124,31 @@ const ImageEditor = ({
 
   return (
     <Modal
-      width={600}
-      open={open}
-      title={intl.formatMessage({
-        defaultMessage: 'Edit Image',
-      })}
       bodyStyle={{ padding: 0 }}
       okText={intl.formatMessage({
         defaultMessage: 'Save Image',
       })}
-      onOk={handleSubmit}
       onCancel={() => {
         onClose();
       }}
+      onOk={handleSubmit}
+      open={open}
+      title={intl.formatMessage({
+        defaultMessage: 'Edit Image',
+      })}
+      width={600}
     >
       {open && (
         <Row wrap={false}>
           <Col className={classes.toolbar}>
             <Form
               className={classes.select}
-              layout="vertical"
               initialValues={{
+                policeImage: image?.policeImage,
                 position: image?.position || ImagePosition.CenterCenter,
                 primaryImage: image?.uid === primaryImage,
-                policeImage: image?.policeImage,
               }}
+              layout="vertical"
               // onFinish={onSubmit}
             >
               <Form.Item
@@ -155,9 +157,9 @@ const ImageEditor = ({
                 })}
               >
                 <Select
-                  value={position}
                   onChange={setPosition}
                   options={positionOptions}
+                  value={position}
                 />
               </Form.Item>
               <Form.Item
@@ -167,12 +169,12 @@ const ImageEditor = ({
               >
                 <Row gutter={8}>
                   <Col>
-                    <Button size="small" onClick={onRotateLeft}>
+                    <Button onClick={onRotateLeft} size="small">
                       <FontAwesomeIcon icon={faRotateBackward} />
                     </Button>
                   </Col>
                   <Col>
-                    <Button size="small" onClick={onRotateRight}>
+                    <Button onClick={onRotateRight} size="small">
                       <FontAwesomeIcon icon={faRotateForward} />
                     </Button>
                   </Col>
@@ -184,9 +186,9 @@ const ImageEditor = ({
                 })}
                 name="primaryImage"
                 style={{
-                  marginBottom: 0,
                   flexDirection: 'row',
                   justifyItems: 'center',
+                  marginBottom: 0,
                 }}
               >
                 <Switch
@@ -202,9 +204,9 @@ const ImageEditor = ({
                 })}
                 name="policeImage"
                 style={{
-                  marginBottom: 0,
                   flexDirection: 'row',
                   justifyItems: 'center',
+                  marginBottom: 0,
                 }}
               >
                 <Switch
@@ -221,9 +223,9 @@ const ImageEditor = ({
               <div className={classes.mockupCard}>
                 <div className={classes.cardImage}>
                   <WatermarkImage
-                    url={image?.url}
                     position={position}
                     rotation={rotation}
+                    url={image?.url}
                   />
                 </div>
                 <div className={classes.cardBody}>

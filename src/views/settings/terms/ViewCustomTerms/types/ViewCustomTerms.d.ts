@@ -2,7 +2,7 @@ import type { CurrentSchemeTermsQuery } from 'graphql/scheme/queries/current-ter
 
 export interface ReturnProps {
   data: CurrentSchemeTermsQuery | undefined;
-  loading: boolean;
-  isAdmin: boolean;
   editTerms: () => void;
+  isAdmin: boolean;
+  loading: boolean;
 }

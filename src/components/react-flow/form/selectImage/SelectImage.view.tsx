@@ -1,22 +1,23 @@
-import React from 'react';
 import { Button, Col, Row } from 'antd';
 import WatermarkImage from 'components/images/WatermarkImage.view';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
+
 import type { ImagesData } from './useSelectImage';
 
 interface Props {
   data: ImagesData | undefined;
-  onSubmit: (item: { key: string }) => void;
-  onClose: () => void;
   loading: boolean;
+  onClose: () => void;
+  onSubmit: (item: { key: string }) => void;
 }
 
 const LinkIncident = ({
   data,
-  onSubmit,
-  onClose,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   loading,
+  onClose,
+  onSubmit,
 }: Props): JSX.Element => (
   <div>
     <Row gutter={16} style={{ paddingBottom: 30 }}>
@@ -40,7 +41,7 @@ const LinkIncident = ({
         </Col>
       ))}
     </Row>
-    <Row gutter={16} style={{ paddingBottom: 30 }} justify="end">
+    <Row gutter={16} justify="end" style={{ paddingBottom: 30 }}>
       <Col>
         <Button onClick={onClose} type="text">
           <FormattedMessage defaultMessage="Cancel" />

@@ -1,5 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router';
+
 import View from './ViewVehicle.view';
 import useViewVehicle from './useViewVehicle';
 
@@ -7,113 +8,113 @@ const ViewVehicle = () => {
   const vehicleId = useParams().id || '';
 
   const {
+    addDocument,
+    addExistingOffender,
+    addInvestigation,
+    addOffender,
+    confirmDeleteUpdate,
     data,
-    loading,
-    saving,
-    editVehicle,
-    toggleEditVehicle,
-    onDeleteVehicle,
+    editImageData,
+    editImages,
+    editOffenderData,
     editRights,
-    optionRowShow,
-    setOptionRowShow,
-    userId,
-    openLightbox,
-    lightBoxOpen,
     editUpdate,
     editUpdateInput,
+    editVehicle,
     handleEditUpdate,
+    lightBoxOpen,
     lightboxElements,
-    replyTo,
-    scrolledToTop,
-    setEditUpdate,
-    setEditUpdateInput,
-    setReplyTo,
     loadMore,
-    confirmDeleteUpdate,
-    toggleSubscribe,
-    submitEditVehicle,
-    toggleAddDocument,
-    addDocument,
-    updateDocumentList,
-    updateDeleteDocument,
-    addInvestigation,
-    toggleAddInvestigation,
-    updateInvestigationList,
-    editImages,
-    toggleEditImages,
-    editImageData,
-    setEditImageData,
+    loading,
+    onAddExistingOffender,
+    onCompletedAddOffender,
+    onCompletedEditOffender,
     onDeleteImage,
+    onDeleteOffender,
+    onDeleteVehicle,
     onEditImage,
     onUpdateImages,
-    addOffender,
-    addExistingOffender,
-    editOffenderData,
+    openLightbox,
+    optionRowShow,
+    replyTo,
+    saving,
+    scrolledToTop,
+    setEditImageData,
     setEditOffenderData,
-    onDeleteOffender,
-    toggleAddOffender,
+    setEditUpdate,
+    setEditUpdateInput,
+    setOptionRowShow,
+    setReplyTo,
+    submitEditVehicle,
+    toggleAddDocument,
     toggleAddExistingOffender,
-    onAddExistingOffender,
-    updateEditOffenderList,
-    onCompletedEditOffender,
-    onCompletedAddOffender,
+    toggleAddInvestigation,
+    toggleAddOffender,
+    toggleEditImages,
+    toggleEditVehicle,
+    toggleSubscribe,
     updateAddOffenderList,
+    updateDeleteDocument,
+    updateDocumentList,
+    updateEditOffenderList,
+    updateInvestigationList,
+    userId,
   } = useViewVehicle(vehicleId);
 
   return (
     <View
-      data={data}
-      loading={loading}
-      saving={saving}
-      editVehicle={editVehicle}
-      toggleEditVehicle={toggleEditVehicle}
-      onDeleteVehicle={onDeleteVehicle}
-      loadMore={loadMore}
-      scrolledToTop={scrolledToTop}
-      userId={userId}
-      replyTo={replyTo}
-      setReplyTo={setReplyTo}
+      addDocument={addDocument}
+      addExistingOffender={addExistingOffender}
+      addInvestigation={addInvestigation}
+      addOffender={addOffender}
       confirmDeleteUpdate={confirmDeleteUpdate}
+      data={data}
+      editImageData={editImageData}
+      editImages={editImages}
+      editOffenderData={editOffenderData}
+      editRights={editRights}
       editUpdate={editUpdate}
       editUpdateInput={editUpdateInput}
+      editVehicle={editVehicle}
       handleEditUpdate={handleEditUpdate}
-      setEditUpdate={setEditUpdate}
-      setEditUpdateInput={setEditUpdateInput}
-      lightboxElements={lightboxElements}
       lightBoxOpen={lightBoxOpen}
-      openLightbox={openLightbox}
-      optionRowShow={optionRowShow}
-      setOptionRowShow={setOptionRowShow}
-      editRights={editRights}
-      vehicleId={vehicleId}
-      toggleSubscribe={toggleSubscribe}
-      submitEditVehicle={submitEditVehicle}
-      toggleAddDocument={toggleAddDocument}
-      addDocument={addDocument}
-      updateDocumentList={updateDocumentList}
-      updateDeleteDocument={updateDeleteDocument}
-      addInvestigation={addInvestigation}
-      toggleAddInvestigation={toggleAddInvestigation}
-      updateInvestigationList={updateInvestigationList}
-      editImages={editImages}
-      toggleEditImages={toggleEditImages}
-      editImageData={editImageData}
-      setEditImageData={setEditImageData}
+      lightboxElements={lightboxElements}
+      loadMore={loadMore}
+      loading={loading}
+      onAddExistingOffender={onAddExistingOffender}
+      onCompletedAddOffender={onCompletedAddOffender}
+      onCompletedEditOffender={onCompletedEditOffender}
       onDeleteImage={onDeleteImage}
+      onDeleteOffender={onDeleteOffender}
+      onDeleteVehicle={onDeleteVehicle}
       onEditImage={onEditImage}
       onUpdateImages={onUpdateImages}
-      addOffender={addOffender}
-      addExistingOffender={addExistingOffender}
-      editOffenderData={editOffenderData}
+      openLightbox={openLightbox}
+      optionRowShow={optionRowShow}
+      replyTo={replyTo}
+      saving={saving}
+      scrolledToTop={scrolledToTop}
+      setEditImageData={setEditImageData}
       setEditOffenderData={setEditOffenderData}
-      onDeleteOffender={onDeleteOffender}
-      toggleAddOffender={toggleAddOffender}
+      setEditUpdate={setEditUpdate}
+      setEditUpdateInput={setEditUpdateInput}
+      setOptionRowShow={setOptionRowShow}
+      setReplyTo={setReplyTo}
+      submitEditVehicle={submitEditVehicle}
+      toggleAddDocument={toggleAddDocument}
       toggleAddExistingOffender={toggleAddExistingOffender}
-      onAddExistingOffender={onAddExistingOffender}
-      updateEditOffenderList={updateEditOffenderList}
-      onCompletedEditOffender={onCompletedEditOffender}
+      toggleAddInvestigation={toggleAddInvestigation}
+      toggleAddOffender={toggleAddOffender}
+      toggleEditImages={toggleEditImages}
+      toggleEditVehicle={toggleEditVehicle}
+      toggleSubscribe={toggleSubscribe}
       updateAddOffenderList={updateAddOffenderList}
-      onCompletedAddOffender={onCompletedAddOffender}
+      updateDeleteDocument={updateDeleteDocument}
+      updateDocumentList={updateDocumentList}
+      updateEditOffenderList={updateEditOffenderList}
+      updateInvestigationList={updateInvestigationList}
+      userId={userId}
+      vehicleId={vehicleId}
     />
   );
 };

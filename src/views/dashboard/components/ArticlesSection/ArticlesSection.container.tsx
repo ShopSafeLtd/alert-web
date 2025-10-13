@@ -1,49 +1,49 @@
+import { useDashboardContext } from '#/views/dashboard/Dashboard.context';
 import React, { useMemo } from 'react';
 
-import { useDashboardContext } from '#/views/dashboard/Dashboard.context';
 import View from './ArticlesSection.view';
 import useArticlesSection from './useArticlesSection';
 
 const ArticlesSection = (): JSX.Element => {
   const {
-    variables: {
-      search: fullSearch,
-      groups: fullGroupFilter,
-      createdAt: fullCreatedAtFilter,
-      gallery: fullGallery,
-    },
-    saving,
     getWidth,
     layout,
+    saving,
+    variables: {
+      createdAt: fullCreatedAtFilter,
+      gallery: fullGallery,
+      groups: fullGroupFilter,
+      search: fullSearch,
+    },
   } = useDashboardContext();
   const {
     data,
+    fetchMoreScroll,
     loading,
     search,
     setSearch,
     sortFilter,
     toggleSortFilter,
-    fetchMoreScroll,
   } = useArticlesSection({
-    fullSearch,
-    fullGroupFilter,
     fullCreatedAtFilter,
     fullGallery,
+    fullGroupFilter,
+    fullSearch,
   });
 
   const width = useMemo(() => getWidth('articlesSection'), [layout]);
 
   return (
     <View
-      width={width}
       data={data}
+      fetchMoreScroll={fetchMoreScroll}
       loading={loading}
       saving={saving}
       search={search}
       setSearch={setSearch}
       sortFilter={sortFilter}
       toggleSortFilter={toggleSortFilter}
-      fetchMoreScroll={fetchMoreScroll}
+      width={width}
     />
   );
 };

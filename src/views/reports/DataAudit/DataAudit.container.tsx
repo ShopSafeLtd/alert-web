@@ -1,4 +1,5 @@
 import React from 'react';
+
 import View from './DataAudit.view';
 import useDataAudit from './useDataAudit';
 
@@ -7,23 +8,23 @@ const DataAudit = () => {
     data,
     loading,
     offenderId,
-    setOffenderId,
     search,
+    setOffenderId,
     setSearch,
-    toggleSortFilter,
     sortFilter,
+    toggleSortFilter,
   } = useDataAudit();
 
   return (
     <View
-      loading={loading}
       data={data}
+      loading={loading}
       offenderId={offenderId}
-      setOffenderId={setOffenderId}
       search={search}
+      setOffenderId={setOffenderId}
       setSearch={setSearch}
-      toggleSortFilter={toggleSortFilter}
       sortFilter={sortFilter}
+      toggleSortFilter={toggleSortFilter}
     />
   );
 };

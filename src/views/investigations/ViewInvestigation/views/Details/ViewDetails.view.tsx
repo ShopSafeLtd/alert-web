@@ -255,7 +255,7 @@ const ViewInvestigation = ({
   // Get outlet context for sidebar state management
   const outletContext = useOutletContext<{
     rightSidebarOpen: boolean;
-    setRightSidebarOpen: (open: boolean) => void;
+    setRightSidebarOpen:(open: boolean) => void;
   }>();
 
   // Use outlet context if available, otherwise fall back to local state

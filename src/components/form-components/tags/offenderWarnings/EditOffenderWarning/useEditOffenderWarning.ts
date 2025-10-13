@@ -1,28 +1,29 @@
-import { useState } from 'react';
+import type { TagQuery} from 'graphql/tag/queries/__generated__/tag.generated';
 
 import { notification } from 'antd';
-import errorNotification from 'types/mutation_notifications/error_notification';
-import { useIntl } from 'react-intl';
-import { TagQuery, useTagQuery } from 'graphql/tag/queries/__generated__/tag.generated';
 import { useUpdateTagMutation } from 'graphql/tag/mutation/__generated__/update_tag.generated';
+import { useTagQuery } from 'graphql/tag/queries/__generated__/tag.generated';
+import { useState } from 'react';
+import { useIntl } from 'react-intl';
+import errorNotification from 'types/mutation_notifications/error_notification';
 
 
 interface FormData {
-  name: string;
   description: string;
+  name: string;
 }
 interface Props {
-  onClose: () => void;
   offenderId: string;
+  onClose: () => void;
 }
 interface Return {
-  onSubmit: (value: FormData) => void;
   data: TagQuery | undefined;
   loading: boolean;
+  onSubmit: (value: FormData) => void;
   saving: boolean;
 }
 
-const useEditOffenderWarning = ({ onClose, offenderId }: Props): Return => {
+const useEditOffenderWarning = ({ offenderId, onClose }: Props): Return => {
   const [saving, setSaving] = useState(false);
   const intl = useIntl();
   const { data: TagData, loading } = useTagQuery({
@@ -39,11 +40,11 @@ const useEditOffenderWarning = ({ onClose, offenderId }: Props): Return => {
       setSaving(false);
       onClose();
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Updated!',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'The offender warning has been updated.',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Updated!',
         }),
         placement: 'bottomRight',
       });
@@ -59,21 +60,21 @@ const useEditOffenderWarning = ({ onClose, offenderId }: Props): Return => {
     if (offenderId)
       void updateTag({
         variables: {
+          data: {
+            description: { set: data.description },
+            name: { set: data.name },
+          },
           where: {
             id: offenderId,
-          },
-          data: {
-            name: { set: data.name },
-            description: { set: data.description },
           },
         },
       });
   };
 
   return {
-    onSubmit,
     data: TagData,
     loading,
+    onSubmit,
     saving,
   };
 };

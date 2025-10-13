@@ -3,14 +3,14 @@
 import { TodoType } from 'graphql/types';
 
 export interface TodoData {
+  chatId?: null | string;
+  crimeGroupId?: null | string;
+  incidentId?: null | string;
+  investigationId?: null | string;
+  offenderId?: null | string;
+  similarOffenderIds?: null | string[];
   type?: TodoType | null;
-  vehicleId?: string | null;
-  offenderId?: string | null;
-  crimeGroupId?: string | null;
-  incidentId?: string | null;
-  investigationId?: string | null;
-  similarOffenderIds?: string[] | null;
-  chatId?: string | null;
+  vehicleId?: null | string;
 }
 // calculate the difference in days between start and end date
 const getTodoUrl = (todo: TodoData) => {

@@ -1,22 +1,23 @@
-import React from 'react';
-import { useIntl } from 'react-intl';
-import { Button, Card, Col, Form, Input, Row, Switch, Typography } from 'antd';
 import type { AccountData } from '#/components/onboarding/Onboarding/AccountDetail/useAccountDetail';
 
-const { Title, Text } = Typography;
+import { Button, Card, Col, Form, Input, Row, Switch, Typography } from 'antd';
+import React from 'react';
+import { useIntl } from 'react-intl';
+
+const { Text, Title } = Typography;
 
 interface Props {
-  onSubmit: (value: AccountData) => void;
   data: AccountData;
-  saving: boolean;
   loading: boolean;
+  onSubmit: (value: AccountData) => void;
+  saving: boolean;
 }
 
 const EditProfile = ({
-  onSubmit,
   data,
-  saving,
   loading,
+  onSubmit,
+  saving,
 }: Props): JSX.Element => {
   const intl = useIntl();
 
@@ -39,9 +40,9 @@ const EditProfile = ({
       </Row>
       <Card
         bordered={false}
+        loading={loading}
         // title="Account Details"
         style={{ width: '98%' }}
-        loading={loading}
       >
         <Form
           initialValues={{
@@ -52,16 +53,16 @@ const EditProfile = ({
           <Row gutter={50}>
             <Col span={11}>
               <Form.Item
-                name="fullName"
                 label={intl.formatMessage({
                   defaultMessage: 'Full Name',
                 })}
+                name="fullName"
                 rules={[
                   {
-                    required: true,
                     message: intl.formatMessage({
                       defaultMessage: 'Please enter a name for the user.',
                     }),
+                    required: true,
                   },
                 ]}
               >
@@ -69,7 +70,7 @@ const EditProfile = ({
               </Form.Item>
             </Col>
           </Row>
-          <Row gutter={20} style={{ marginTop: 20, marginBottom: 20 }}>
+          <Row gutter={20} style={{ marginBottom: 20, marginTop: 20 }}>
             <Col>
               <Title level={3}>
                 {intl.formatMessage({
@@ -94,8 +95,8 @@ const EditProfile = ({
                 'Only receive notifications for incidents that I report or follow',
             })}
             name="subscribedIncidentOnly"
-            valuePropName="checked"
             style={{ margin: 5, marginLeft: 20 }}
+            valuePropName="checked"
           >
             <Switch disabled={saving} />
           </Form.Item>
@@ -104,8 +105,8 @@ const EditProfile = ({
               defaultMessage: 'Push Notifications (Mobile App)',
             })}
             name="incidentPush"
-            valuePropName="checked"
             style={{ margin: 5, marginLeft: 20 }}
+            valuePropName="checked"
           >
             <Switch disabled={saving} />
           </Form.Item>
@@ -114,8 +115,8 @@ const EditProfile = ({
               defaultMessage: 'Email Notifications',
             })}
             name="incidentEmail"
-            valuePropName="checked"
             style={{ margin: 5, marginLeft: 20 }}
+            valuePropName="checked"
           >
             <Switch disabled={saving} />
           </Form.Item>
@@ -133,8 +134,8 @@ const EditProfile = ({
                 'Only receive notifications for offenders that I report or follow',
             })}
             name="subscribedOffenderOnly"
-            valuePropName="checked"
             style={{ margin: 5, marginLeft: 20 }}
+            valuePropName="checked"
           >
             <Switch disabled={saving} />
           </Form.Item>
@@ -143,8 +144,8 @@ const EditProfile = ({
               defaultMessage: 'Push Notifications (Mobile App)',
             })}
             name="offenderPush"
-            valuePropName="checked"
             style={{ margin: 5, marginLeft: 20 }}
+            valuePropName="checked"
           >
             <Switch disabled={saving} />
           </Form.Item>
@@ -153,8 +154,8 @@ const EditProfile = ({
               defaultMessage: 'Email Notifications',
             })}
             name="offenderEmail"
-            valuePropName="checked"
             style={{ margin: 5, marginLeft: 20 }}
+            valuePropName="checked"
           >
             <Switch disabled={saving} />
           </Form.Item>
@@ -168,20 +169,20 @@ const EditProfile = ({
               defaultMessage: 'Receive notifications for new messages',
             })}
             name="messagePush"
-            valuePropName="checked"
             style={{ margin: 5, marginLeft: 20 }}
+            valuePropName="checked"
           >
             <Switch disabled={saving} style={{ marginLeft: 5 }} />
           </Form.Item>
 
           <Form.Item>
-            <Row style={{ marginTop: 30 }} gutter={20} justify="end">
+            <Row gutter={20} justify="end" style={{ marginTop: 30 }}>
               <Col>
                 <Button
                   disabled={saving}
+                  htmlType="submit"
                   loading={saving}
                   type="primary"
-                  htmlType="submit"
                 >
                   {intl.formatMessage({ defaultMessage: 'Next' })}
                 </Button>

@@ -1,5 +1,6 @@
-import React from 'react';
 import type { BanData } from 'types/DataType';
+
+import React from 'react';
 
 import View from './AddExclusion.view';
 import useAddExclusion from './useAddExclusion';
@@ -9,19 +10,19 @@ interface Props {
   update: (value: BanData) => void;
 }
 
-const AddExclusion = ({ update, onClose }: Props): JSX.Element => {
-  const { onSubmit, saving, setStartDate, disabledDate } = useAddExclusion({
+const AddExclusion = ({ onClose, update }: Props): JSX.Element => {
+  const { disabledDate, onSubmit, saving, setStartDate } = useAddExclusion({
     onClose,
     update,
   });
 
   return (
     <View
-      onSubmit={onSubmit}
+      disabledDate={disabledDate}
       onClose={onClose}
+      onSubmit={onSubmit}
       saving={saving}
       setStartDate={setStartDate}
-      disabledDate={disabledDate}
     />
   );
 };

@@ -1,39 +1,40 @@
 import React from 'react';
+
 import View from './AddDocument.view';
 import useAddDocument from './useAddDocument';
 
 interface Props {
-  onClose: () => void;
   investigationId: string;
+  onClose: () => void;
 }
 
-const AddEvidence = ({ onClose, investigationId }: Props) => {
+const AddEvidence = ({ investigationId, onClose }: Props) => {
   const {
-    onSubmit,
-    selectedCategories,
     categories,
     categoriesChange,
     categoriesLoading,
+    onSubmit,
     saving,
-    toggleSearchEvidence,
-    selectedEvidence,
     searchEvidence,
     selectEvidence,
-  } = useAddDocument({ onClose, investigationId });
+    selectedCategories,
+    selectedEvidence,
+    toggleSearchEvidence,
+  } = useAddDocument({ investigationId, onClose });
 
   return (
     <View
-      selectEvidence={selectEvidence}
-      searchEvidence={searchEvidence}
-      toggleSearchEvidence={toggleSearchEvidence}
-      selectedEvidence={selectedEvidence}
-      onSubmit={onSubmit}
-      onClose={onClose}
-      saving={saving}
       categories={categories}
-      selectedCategories={selectedCategories}
       categoriesChange={categoriesChange}
       categoriesLoading={categoriesLoading}
+      onClose={onClose}
+      onSubmit={onSubmit}
+      saving={saving}
+      searchEvidence={searchEvidence}
+      selectEvidence={selectEvidence}
+      selectedCategories={selectedCategories}
+      selectedEvidence={selectedEvidence}
+      toggleSearchEvidence={toggleSearchEvidence}
     />
   );
 };

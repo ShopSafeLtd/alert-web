@@ -1,20 +1,20 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return,@typescript-eslint/no-unsafe-assignment */
+import { NodeResizer } from '@reactflow/node-resizer';
+import '@reactflow/node-resizer/dist/style.css';
 import { Card, Input } from 'antd';
 import React, { memo, useCallback } from 'react';
 import { Handle, Position, useReactFlow, useStoreApi } from 'reactflow';
-import { NodeResizer } from '@reactflow/node-resizer';
-import '@reactflow/node-resizer/dist/style.css';
 
 interface Props {
   data: {
     text: string;
   };
-  isConnectable: boolean;
   id: string;
+  isConnectable: boolean;
   selected: boolean;
 }
 
-export default memo(({ data, isConnectable, selected, id }: Props) => {
+export default memo(({ data, id, isConnectable, selected }: Props) => {
   const { setNodes } = useReactFlow();
   const store = useStoreApi();
   const { nodeInternals } = store.getState();
@@ -44,33 +44,33 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
       <NodeResizer
         color="#ff0071"
         isVisible={selected}
-        minWidth={100}
         lineStyle={{
-          borderWidth: 2,
           borderRadius: 2,
+          borderWidth: 2,
         }}
         minHeight={30}
+        minWidth={100}
       />
-      <Card style={{ height: '100%' }} bodyStyle={{ height: '100%' }}>
+      <Card bodyStyle={{ height: '100%' }} style={{ height: '100%' }}>
         <Handle
-          type="target"
+          isConnectable={isConnectable}
           position={Position.Left}
           style={{ background: '#555' }}
-          isConnectable={isConnectable}
+          type="target"
         />
         <TextArea
-          style={{ height: '100%', width: '100%' }}
           defaultValue={data.text}
           onChange={(event) => {
             onChange(event.target.value, id);
           }}
+          style={{ height: '100%', width: '100%' }}
         />
 
         <Handle
-          type="source"
+          isConnectable={isConnectable}
           position={Position.Right}
           style={{ background: '#555' }}
-          isConnectable={isConnectable}
+          type="source"
         />
       </Card>
     </>

@@ -1,60 +1,62 @@
-import React from 'react';
 import type { ImageCardData } from 'types/DataType';
+
+import React from 'react';
+
 import View from './EditImageList.view';
 import useEditImageList from './useEditImageList';
 
 interface Props {
-  onClose: () => void;
-  update: (value: ImageCardData[]) => void;
-  images: ImageCardData[] | undefined | null;
-  title: string;
-  saving: boolean;
   facialDet?: boolean;
+  images: ImageCardData[] | null | undefined;
+  onClose: () => void;
+  saving: boolean;
+  title: string;
+  update: (value: ImageCardData[]) => void;
 }
 
 const EditImageList = ({
-  onClose,
-  update,
-  images,
-  title,
-  saving: origSaving,
   facialDet,
+  images,
+  onClose,
+  saving: origSaving,
+  title,
+  update,
 }: Props): JSX.Element => {
   const {
-    onSubmit,
-    saving,
-    imgChange,
     beforeUpload,
-    fileList,
-    onRemoveImage,
-    onEditImage,
-    toggleEditImage,
     editImage,
+    fileList,
+    imgChange,
+    onEditImage,
+    onRemoveImage,
+    onSubmit,
     primaryImage,
+    saving,
     setPrimaryImage,
+    toggleEditImage,
   } = useEditImageList({
+    facialDet,
+    images,
     onClose,
     update,
-    images,
-    facialDet,
   });
 
   return (
     <View
-      onSubmit={onSubmit}
-      onClose={onClose}
-      saving={saving || origSaving}
-      imgChange={imgChange}
       beforeUpload={beforeUpload}
-      fileList={fileList}
-      onRemoveImage={onRemoveImage}
-      onEditImage={onEditImage}
-      toggleEditImage={toggleEditImage}
       editImage={editImage}
+      facialDet={facialDet || false}
+      fileList={fileList}
+      imgChange={imgChange}
+      onClose={onClose}
+      onEditImage={onEditImage}
+      onRemoveImage={onRemoveImage}
+      onSubmit={onSubmit}
       primaryImage={primaryImage}
+      saving={saving || origSaving}
       setPrimaryImage={setPrimaryImage}
       title={title}
-      facialDet={facialDet || false}
+      toggleEditImage={toggleEditImage}
     />
   );
 };

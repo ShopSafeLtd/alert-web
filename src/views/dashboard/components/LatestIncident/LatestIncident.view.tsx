@@ -19,14 +19,14 @@ const LatestIncident = ({
       {data ? (
         <Link to={`/app/incidents/view/${data.id}`}>
           <Statistic
+            loading={loading}
             title={intl.formatMessage({
               defaultMessage: 'Latest Incident',
             })}
-            valueStyle={{ color: '#ff0000' }}
             value={new Date(data.date).toLocaleString('en-GB', {
               timeZone: 'UTC',
             })}
-            loading={loading}
+            valueStyle={{ color: '#ff0000' }}
           />
         </Link>
       ) : (

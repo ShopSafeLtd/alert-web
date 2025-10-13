@@ -23,10 +23,15 @@ const useStyles = createUseStyles((theme: Theme) => ({
 type PickedProps = Pick<
   WorkflowProps,
   | 'availableQuestions'
+  | 'brands'
+  | 'brandsLoading'
   | 'brandsSelected'
   | 'checklistOption'
+  | 'countries'
   | 'countriesSelected'
   | 'descriptionCheck'
+  | 'divisions'
+  | 'divisionsLoading'
   | 'divisionsSelected'
   | 'form'
   | 'goods'
@@ -54,11 +59,6 @@ type PickedProps = Pick<
   | 'taskQuestions'
   | 'typeWatch'
   | 'valueSelected'
-  | 'brands'
-  | 'brandsLoading'
-  | 'countries'
-  | 'divisions'
-  | 'divisionsLoading'
 >;
 
 const WorkflowConditions: React.FC<PickedProps> = ({
@@ -127,16 +127,16 @@ const WorkflowConditions: React.FC<PickedProps> = ({
 
       {modelSelected === Model.Incident && (
         <IncidentConditions
+          availableQuestions={props.availableQuestions}
           brands={props.brands}
           brandsLoading={props.brandsLoading}
-          countries={props.countries}
-          divisions={props.divisions}
-          divisionsLoading={props.divisionsLoading}
-          availableQuestions={props.availableQuestions}
           brandsSelected={props.brandsSelected}
           classes={classes}
+          countries={props.countries}
           countriesSelected={props.countriesSelected}
           descriptionCheck={props.descriptionCheck}
+          divisions={props.divisions}
+          divisionsLoading={props.divisionsLoading}
           divisionsSelected={props.divisionsSelected}
           goods={props.goods}
           goodsTypeCheck={props.goodsTypeCheck}

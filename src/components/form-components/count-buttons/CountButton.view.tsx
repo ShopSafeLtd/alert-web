@@ -1,5 +1,6 @@
-import React from 'react';
 import { Row, Tooltip, Typography } from 'antd';
+import React from 'react';
+
 import useStyles from './count-buttons.styles';
 
 const { Text } = Typography;
@@ -11,7 +12,7 @@ interface Props {
   tooltip: React.ReactNode;
 }
 
-const CountButton = ({ onClick, selected = false, tooltip, text }: Props) => {
+const CountButton = ({ onClick, selected = false, text, tooltip }: Props) => {
   const classes = useStyles();
   return (
     <Tooltip title={tooltip}>

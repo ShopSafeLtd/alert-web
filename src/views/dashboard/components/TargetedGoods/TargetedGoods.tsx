@@ -1,6 +1,7 @@
-import React from 'react';
 import { Card } from 'antd';
+import React from 'react';
 import { useIntl } from 'react-intl';
+
 import BarGraph from '../../../../components/reports/graphs/barGraph';
 
 interface Props {
@@ -12,9 +13,9 @@ const TargetedGoodsGraph = ({ data, loading }: Props) => {
 
   return (
     <Card
+      bodyStyle={{ height: '90%' }}
       loading={loading}
       style={{ height: '100%' }}
-      bodyStyle={{ height: '90%' }}
       title={intl.formatMessage({
         defaultMessage: 'Top 5 Targeted Goods',
       })}
@@ -26,9 +27,9 @@ const TargetedGoodsGraph = ({ data, loading }: Props) => {
         })}
         margin={{
           bottom: 30,
-          top: 10,
-          right: 10,
           left: 20,
+          right: 10,
+          top: 10,
         }}
       />
     </Card>

@@ -1,17 +1,17 @@
-import React from 'react';
-import { Input } from 'antd';
 import {
   ArrowDownOutlined,
   ArrowUpOutlined,
   FilterOutlined,
   SearchOutlined,
 } from '@ant-design/icons';
+import { Input } from 'antd';
+import React from 'react';
 import { useIntl } from 'react-intl';
 
 interface Props {
+  openFilter: () => void;
   searchInput: string;
   setSearchInput: React.Dispatch<React.SetStateAction<string>>;
-  openFilter: () => void;
 }
 /**
  *
@@ -24,22 +24,22 @@ interface Props {
  * @description Provides a search bar (AntD Input) which fires the provided setSearchInput function onChange. The provided openFilter function is fired when the filter icons are clicked.
  */
 const SearchFilterBar: React.FC<Props> = ({
+  openFilter,
   searchInput,
   setSearchInput,
-  openFilter,
 }: Props) => {
   const intl = useIntl();
   return (
     <div className="search-filter-bar">
       <div className="input-container">
         <Input
+          onChange={(e) => setSearchInput(e.target.value)}
           placeholder={intl.formatMessage({
             defaultMessage: 'Search...',
           })}
-          size="large"
           prefix={<SearchOutlined className="search-icon" />}
+          size="large"
           value={searchInput}
-          onChange={(e) => setSearchInput(e.target.value)}
         />
       </div>
       <div className="icons-container" onClick={openFilter}>

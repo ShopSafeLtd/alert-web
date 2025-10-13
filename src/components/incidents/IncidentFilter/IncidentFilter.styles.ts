@@ -1,15 +1,15 @@
 import { createUseStyles } from 'react-jss';
 
 const useStyles = createUseStyles({
-  selectTitle: {
+  filtersTitle: {
+    fontWeight: 600,
     marginBottom: '5px !important',
   },
   select: {
     marginBottom: 20,
     width: '100%',
   },
-  filtersTitle: {
-    fontWeight: 600,
+  selectTitle: {
     marginBottom: '5px !important',
   },
 });

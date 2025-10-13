@@ -1,11 +1,12 @@
-import React from 'react';
-import { Card, Col, Row, Typography } from 'antd';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClock, faLocationDot } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Card, Col, Row, Typography } from 'antd';
+import React from 'react';
 import { useIntl } from 'react-intl';
+
 import type { Incident } from '../incident-details-node';
 
-const { Title, Text } = Typography;
+const { Text, Title } = Typography;
 
 interface Props {
   incident: Incident;
@@ -17,10 +18,10 @@ const IncidentCard = ({ incident }: Props): JSX.Element => {
     <Card
       className="incident-card"
       key={incident.id || ''}
-      style={{ zIndex: 4, height: '100%' }}
+      style={{ height: '100%', zIndex: 4 }}
     >
       <div className="incident-card-content">
-        <Title level={4} ellipsis style={{ marginBottom: 2 }}>
+        <Title ellipsis level={4} style={{ marginBottom: 2 }}>
           {incident?.description}
         </Title>
         <Text type="secondary">
@@ -36,23 +37,23 @@ const IncidentCard = ({ incident }: Props): JSX.Element => {
         <Row>
           <Col flex={1}>
             <FontAwesomeIcon
-              size="sm"
               className="incident-card-icon"
               icon={faClock}
+              size="sm"
             />
             <Text type="secondary">{incident?.dayTime}</Text>
           </Col>
         </Row>
-        <Row gutter={8} className="incident-card-location-row">
+        <Row className="incident-card-location-row" gutter={8}>
           <Col span={1}>
             <FontAwesomeIcon
-              size="sm"
               className="incident-card-icon"
               icon={faLocationDot}
+              size="sm"
             />
           </Col>
           <Col span={23}>
-            <Text style={{ width: '100%' }} ellipsis type="secondary">
+            <Text ellipsis style={{ width: '100%' }} type="secondary">
               {incident?.location}
             </Text>
           </Col>

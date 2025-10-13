@@ -6,9 +6,9 @@ import ViewWorkflow from 'views/workflows/ViewWorkflow/WorkflowForm.container';
 const WorkFlow = (): JSX.Element => (
   // <ChatRouter />
   <Routes>
-    <Route index element={<ListWorkflows />} />
-    <Route path="/add" element={<ViewWorkflow />} />
-    <Route path="/edit/:id" element={<ViewWorkflow />} />
+    <Route element={<ListWorkflows />} index />
+    <Route element={<ViewWorkflow />} path="/add" />
+    <Route element={<ViewWorkflow />} path="/edit/:id" />
   </Routes>
 );
 

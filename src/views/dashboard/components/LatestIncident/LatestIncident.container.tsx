@@ -1,4 +1,5 @@
 import React from 'react';
+
 import View from './LatestIncident.view';
 import useLatestIncident from './useLatestIncident';
 

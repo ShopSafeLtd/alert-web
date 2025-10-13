@@ -4,18 +4,18 @@ const useStyles = createUseStyles({
   actions: {
     marginBottom: 10,
   },
+  filtersTitle: {
+    fontWeight: 600,
+    marginBottom: '5px !important',
+  },
   page: {
     padding: 15,
-  },
-  selectTitle: {
-    marginBottom: '5px !important',
   },
   select: {
     marginBottom: 20,
     width: '100%',
   },
-  filtersTitle: {
-    fontWeight: 600,
+  selectTitle: {
     marginBottom: '5px !important',
   },
 });

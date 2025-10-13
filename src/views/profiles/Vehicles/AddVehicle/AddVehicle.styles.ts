@@ -1,7 +1,7 @@
 import { createUseStyles } from 'react-jss';
 
 const useStyles = createUseStyles({
-  page: { padding: 15, marginRight: 15 },
+  page: { marginRight: 15, padding: 15 },
 });
 
 export default useStyles;

@@ -1,52 +1,18 @@
 import type { Theme } from 'configs/ThemeConfig';
+
 import { createUseStyles } from 'react-jss';
 
 const useStyles = createUseStyles((theme: Theme) => ({
-  compactCard: {
-    padding: 0,
-    margin: 0,
-    display: 'flex',
-    flexDirection: 'row',
-    overflow: 'hidden',
-    height: 150,
-    width: '100%',
+  alertId: {
+    marginBottom: 8,
+    marginTop: -5,
   },
-  cardOverlay: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0,
-    zIndex: 10,
-    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+  bottomRow: { marginTop: 'auto' },
+
+  cardContent: {
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'center',
-    borderRadius: 10,
-  },
-
-  imageContainer: {
-    width: 150,
-    height: 150,
-    overflow: 'hidden',
-    position: 'relative',
-  },
-  image: {
-    width: 150,
-    height: 150,
-    backgroundRepeat: 'no-repeat',
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
-  },
-
-  cardControls: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    top: 65,
-    zIndex: 2,
+    padding: '8px 5px 5px 12px ',
   },
   cardControl: {
     color: '#fff',
@@ -54,40 +20,75 @@ const useStyles = createUseStyles((theme: Theme) => ({
     padding: '0 5px',
     transition: 'all 0.2s ease',
   },
-  cardContent: {
-    padding: '8px 5px 5px 12px ',
-    display: 'flex',
-    flexDirection: 'column',
-  },
 
-  menuButton: {
-    margin: 0,
-    padding: 0,
-    width: 35,
-    height: 35,
-    marginTop: -25,
-    marginRight: -6,
-    zIndex: 2,
-    borderRadius: 0,
-    borderBottomLeftRadius: 10,
-  },
-
-  imageExpand: {
+  cardControls: {
+    left: 0,
     position: 'absolute',
     right: 0,
+    top: 65,
+    zIndex: 2,
+  },
+  cardOverlay: {
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    borderRadius: 10,
+    bottom: 0,
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    left: 0,
+    position: 'absolute',
+    right: 0,
+    top: 0,
+    zIndex: 10,
+  },
+  compactCard: {
+    display: 'flex',
+    flexDirection: 'row',
+    height: 150,
+    margin: 0,
+    overflow: 'hidden',
+    padding: 0,
+    width: '100%',
+  },
+
+  icon: { color: theme.primary, marginRight: 5 },
+
+  image: {
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'cover',
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+    height: 150,
+    width: 150,
+  },
+
+  imageContainer: {
+    height: 150,
+    overflow: 'hidden',
+    position: 'relative',
+    width: 150,
+  },
+  imageExpand: {
     bottom: 0,
     color: '#fff',
     cursor: 'pointer',
     padding: 5,
+    position: 'absolute',
+    right: 0,
     transition: 'all 0.2s ease',
     zIndex: 100,
   },
-
-  alertId: {
-    marginTop: -5,
-    marginBottom: 8,
+  menuButton: {
+    borderBottomLeftRadius: 10,
+    borderRadius: 0,
+    height: 35,
+    margin: 0,
+    marginRight: -6,
+    marginTop: -25,
+    padding: 0,
+    width: 35,
+    zIndex: 2,
   },
-  icon: { marginRight: 5, color: theme.primary },
-  bottomRow: { marginTop: 'auto' },
 }));
 export default useStyles;

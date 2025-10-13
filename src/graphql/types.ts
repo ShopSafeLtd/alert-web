@@ -147,57 +147,8 @@ export type Action = {
   workflowResults?: Maybe<Scalars['JSON']>;
 };
 
-export type ActionListRelationFilter = {
-  every?: InputMaybe<ActionWhereInput>;
-  none?: InputMaybe<ActionWhereInput>;
-  some?: InputMaybe<ActionWhereInput>;
-};
-
-export type ActionOrderByRelationAggregateInput = {
-  _count?: InputMaybe<SortOrder>;
-};
-
 export type ActionOrderByWithRelationInput = {
-  Address?: InputMaybe<AddressOrderByWithRelationInput>;
-  Ban?: InputMaybe<BanOrderByWithRelationInput>;
-  Chat?: InputMaybe<ChatOrderByWithRelationInput>;
-  Group?: InputMaybe<GroupOrderByWithRelationInput>;
-  addressId?: InputMaybe<SortOrder>;
-  article?: InputMaybe<ArticleOrderByWithRelationInput>;
-  articleId?: InputMaybe<SortOrder>;
-  banId?: InputMaybe<SortOrder>;
-  business?: InputMaybe<BusinessOrderByWithRelationInput>;
-  businessId?: InputMaybe<SortOrder>;
-  byUser?: InputMaybe<UserOrderByWithRelationInput>;
-  byUserId?: InputMaybe<SortOrder>;
-  chatId?: InputMaybe<SortOrder>;
   createdAt?: InputMaybe<SortOrder>;
-  crimeGroup?: InputMaybe<CrimeGroupOrderByWithRelationInput>;
-  crimeGroupId?: InputMaybe<SortOrder>;
-  dataType?: InputMaybe<SortOrder>;
-  description?: InputMaybe<SortOrder>;
-  groupId?: InputMaybe<SortOrder>;
-  id?: InputMaybe<SortOrder>;
-  imageId?: InputMaybe<SortOrder>;
-  images?: InputMaybe<ImageOrderByWithRelationInput>;
-  inScheme?: InputMaybe<SchemeOrderByWithRelationInput>;
-  inSchemeId?: InputMaybe<SortOrder>;
-  incident?: InputMaybe<IncidentOrderByWithRelationInput>;
-  incidentId?: InputMaybe<SortOrder>;
-  message?: InputMaybe<MessageOrderByWithRelationInput>;
-  messageId?: InputMaybe<SortOrder>;
-  offender?: InputMaybe<OffenderOrderByWithRelationInput>;
-  offenderId?: InputMaybe<SortOrder>;
-  reason?: InputMaybe<SortOrder>;
-  scheme?: InputMaybe<SchemeOrderByWithRelationInput>;
-  schemeId?: InputMaybe<SortOrder>;
-  tag?: InputMaybe<TagOrderByWithRelationInput>;
-  tagId?: InputMaybe<SortOrder>;
-  type?: InputMaybe<SortOrder>;
-  user?: InputMaybe<UserOrderByWithRelationInput>;
-  userId?: InputMaybe<SortOrder>;
-  vehicle?: InputMaybe<VehicleOrderByWithRelationInput>;
-  vehicleId?: InputMaybe<SortOrder>;
 };
 
 export enum ActionScalarFieldEnum {
@@ -248,49 +199,8 @@ export enum ActionType {
 }
 
 export type ActionWhereInput = {
-  AND?: InputMaybe<Array<ActionWhereInput>>;
-  Address?: InputMaybe<AddressWhereInput>;
-  Ban?: InputMaybe<BanWhereInput>;
-  Chat?: InputMaybe<ChatWhereInput>;
-  Group?: InputMaybe<GroupWhereInput>;
-  NOT?: InputMaybe<Array<ActionWhereInput>>;
-  OR?: InputMaybe<Array<ActionWhereInput>>;
-  addressId?: InputMaybe<StringNullableFilter>;
-  article?: InputMaybe<ArticleWhereInput>;
-  articleId?: InputMaybe<StringNullableFilter>;
-  banId?: InputMaybe<StringNullableFilter>;
   business?: InputMaybe<BusinessWhereInput>;
-  businessId?: InputMaybe<StringNullableFilter>;
-  byUser?: InputMaybe<UserWhereInput>;
-  byUserId?: InputMaybe<StringFilter>;
-  chatId?: InputMaybe<StringNullableFilter>;
-  createdAt?: InputMaybe<DateTimeFilter>;
-  crimeGroup?: InputMaybe<CrimeGroupWhereInput>;
-  crimeGroupId?: InputMaybe<StringNullableFilter>;
-  dataType?: InputMaybe<EnumModelFilter>;
-  description?: InputMaybe<StringNullableFilter>;
-  groupId?: InputMaybe<StringNullableFilter>;
-  id?: InputMaybe<StringFilter>;
-  imageId?: InputMaybe<StringNullableFilter>;
-  images?: InputMaybe<ImageWhereInput>;
   inScheme?: InputMaybe<SchemeWhereInput>;
-  inSchemeId?: InputMaybe<StringNullableFilter>;
-  incident?: InputMaybe<IncidentWhereInput>;
-  incidentId?: InputMaybe<StringNullableFilter>;
-  message?: InputMaybe<MessageWhereInput>;
-  messageId?: InputMaybe<StringNullableFilter>;
-  offender?: InputMaybe<OffenderWhereInput>;
-  offenderId?: InputMaybe<StringNullableFilter>;
-  reason?: InputMaybe<StringNullableFilter>;
-  scheme?: InputMaybe<SchemeWhereInput>;
-  schemeId?: InputMaybe<StringNullableFilter>;
-  tag?: InputMaybe<TagWhereInput>;
-  tagId?: InputMaybe<StringNullableFilter>;
-  type?: InputMaybe<EnumActionTypeFilter>;
-  user?: InputMaybe<UserWhereInput>;
-  userId?: InputMaybe<StringNullableFilter>;
-  vehicle?: InputMaybe<VehicleWhereInput>;
-  vehicleId?: InputMaybe<StringNullableFilter>;
 };
 
 export enum ActionableLevelEnum {
@@ -317,16 +227,6 @@ export type ActiveChecklist = {
   updatedAt: Scalars['Date'];
 };
 
-
-export type ActiveChecklistFieldsArgs = {
-  cursor?: InputMaybe<ActiveChecklistFieldsWhereUniqueInput>;
-  distinct?: InputMaybe<Array<ActiveChecklistFieldsScalarFieldEnum>>;
-  orderBy?: InputMaybe<Array<ActiveChecklistFieldsOrderByWithRelationInput>>;
-  skip?: InputMaybe<Scalars['Int']>;
-  take?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<ActiveChecklistFieldsWhereInput>;
-};
-
 export type ActiveChecklistAnswerInput = {
   additionalInfo?: InputMaybe<Scalars['String']>;
   answer?: InputMaybe<Scalars['String']>;
@@ -351,31 +251,6 @@ export type ActiveChecklistFields = {
   type: ChecklistAnswerType;
 };
 
-export type ActiveChecklistFieldsListRelationFilter = {
-  every?: InputMaybe<ActiveChecklistFieldsWhereInput>;
-  none?: InputMaybe<ActiveChecklistFieldsWhereInput>;
-  some?: InputMaybe<ActiveChecklistFieldsWhereInput>;
-};
-
-export type ActiveChecklistFieldsOrderByRelationAggregateInput = {
-  _count?: InputMaybe<SortOrder>;
-};
-
-export type ActiveChecklistFieldsOrderByWithRelationInput = {
-  activeChecklist?: InputMaybe<ActiveChecklistOrderByWithRelationInput>;
-  activeChecklistId?: InputMaybe<SortOrder>;
-  answerTranslations?: InputMaybe<SortOrder>;
-  availableAnswers?: InputMaybe<SortOrder>;
-  createdAt?: InputMaybe<SortOrder>;
-  id?: InputMaybe<SortOrder>;
-  question?: InputMaybe<SortOrder>;
-  section?: InputMaybe<SortOrder>;
-  subsection?: InputMaybe<SortOrder>;
-  type?: InputMaybe<SortOrder>;
-  updatedAt?: InputMaybe<SortOrder>;
-  weight?: InputMaybe<SortOrder>;
-};
-
 export enum ActiveChecklistFieldsScalarFieldEnum {
   ActiveChecklistId = 'activeChecklistId',
   AnswerTranslations = 'answerTranslations',
@@ -390,84 +265,12 @@ export enum ActiveChecklistFieldsScalarFieldEnum {
   Weight = 'weight'
 }
 
-export type ActiveChecklistFieldsScalarWhereWithAggregatesInput = {
-  AND?: InputMaybe<Array<ActiveChecklistFieldsScalarWhereWithAggregatesInput>>;
-  NOT?: InputMaybe<Array<ActiveChecklistFieldsScalarWhereWithAggregatesInput>>;
-  OR?: InputMaybe<Array<ActiveChecklistFieldsScalarWhereWithAggregatesInput>>;
-  activeChecklistId?: InputMaybe<StringWithAggregatesFilter>;
-  createdAt?: InputMaybe<DateTimeWithAggregatesFilter>;
-  id?: InputMaybe<StringWithAggregatesFilter>;
-  question?: InputMaybe<JsonWithAggregatesFilter>;
-  section?: InputMaybe<IntWithAggregatesFilter>;
-  subsection?: InputMaybe<IntWithAggregatesFilter>;
-  type?: InputMaybe<EnumChecklistAnswerTypeWithAggregatesFilter>;
-  updatedAt?: InputMaybe<DateTimeWithAggregatesFilter>;
-  weight?: InputMaybe<IntWithAggregatesFilter>;
-};
-
-export type ActiveChecklistFieldsWhereInput = {
-  AND?: InputMaybe<Array<ActiveChecklistFieldsWhereInput>>;
-  NOT?: InputMaybe<Array<ActiveChecklistFieldsWhereInput>>;
-  OR?: InputMaybe<Array<ActiveChecklistFieldsWhereInput>>;
-  activeChecklist?: InputMaybe<ActiveChecklistWhereInput>;
-  activeChecklistId?: InputMaybe<StringFilter>;
-  createdAt?: InputMaybe<DateTimeFilter>;
-  id?: InputMaybe<StringFilter>;
-  question?: InputMaybe<JsonFilter>;
-  section?: InputMaybe<IntFilter>;
-  subsection?: InputMaybe<IntFilter>;
-  type?: InputMaybe<EnumChecklistAnswerTypeFilter>;
-  updatedAt?: InputMaybe<DateTimeFilter>;
-  weight?: InputMaybe<IntFilter>;
-};
-
-export type ActiveChecklistFieldsWhereUniqueInput = {
-  AND?: InputMaybe<Array<ActiveChecklistFieldsWhereInput>>;
-  NOT?: InputMaybe<Array<ActiveChecklistFieldsWhereInput>>;
-  OR?: InputMaybe<Array<ActiveChecklistFieldsWhereInput>>;
-  activeChecklist?: InputMaybe<ActiveChecklistWhereInput>;
-  activeChecklistId?: InputMaybe<StringFilter>;
-  createdAt?: InputMaybe<DateTimeFilter>;
-  id?: InputMaybe<Scalars['String']>;
-  question?: InputMaybe<JsonFilter>;
-  section?: InputMaybe<IntFilter>;
-  subsection?: InputMaybe<IntFilter>;
-  type?: InputMaybe<EnumChecklistAnswerTypeFilter>;
-  updatedAt?: InputMaybe<DateTimeFilter>;
-  weight?: InputMaybe<IntFilter>;
-};
-
-export type ActiveChecklistListRelationFilter = {
-  every?: InputMaybe<ActiveChecklistWhereInput>;
-  none?: InputMaybe<ActiveChecklistWhereInput>;
-  some?: InputMaybe<ActiveChecklistWhereInput>;
-};
-
-export type ActiveChecklistOrderByRelationAggregateInput = {
-  _count?: InputMaybe<SortOrder>;
-};
-
 export type ActiveChecklistOrderByWithRelationInput = {
-  business?: InputMaybe<BusinessOrderByWithRelationInput>;
-  businessId?: InputMaybe<SortOrder>;
-  checklist?: InputMaybe<ChecklistOrderByWithRelationInput>;
-  checklistId?: InputMaybe<SortOrder>;
-  comments?: InputMaybe<SortOrder>;
   completedAt?: InputMaybe<SortOrder>;
-  completedBy?: InputMaybe<UserOrderByWithRelationInput>;
-  completedById?: InputMaybe<SortOrder>;
   createdAt?: InputMaybe<SortOrder>;
-  document?: InputMaybe<DocumentOrderByWithRelationInput>;
-  fields?: InputMaybe<ActiveChecklistFieldsOrderByRelationAggregateInput>;
-  id?: InputMaybe<SortOrder>;
-  maxWeight?: InputMaybe<SortOrder>;
   name?: InputMaybe<SortOrder>;
   percentComplete?: InputMaybe<SortOrder>;
-  percentScore?: InputMaybe<SortOrder>;
-  signature?: InputMaybe<SortOrder>;
   status?: InputMaybe<SortOrder>;
-  totalWeight?: InputMaybe<SortOrder>;
-  updatedAt?: InputMaybe<SortOrder>;
 };
 
 export enum ActiveChecklistScalarFieldEnum {
@@ -497,52 +300,17 @@ export type ActiveChecklistSections = {
 };
 
 export type ActiveChecklistWhereInput = {
-  AND?: InputMaybe<Array<ActiveChecklistWhereInput>>;
-  NOT?: InputMaybe<Array<ActiveChecklistWhereInput>>;
   OR?: InputMaybe<Array<ActiveChecklistWhereInput>>;
   business?: InputMaybe<BusinessWhereInput>;
-  businessId?: InputMaybe<StringNullableFilter>;
   checklist?: InputMaybe<ChecklistWhereInput>;
-  checklistId?: InputMaybe<StringFilter>;
-  comments?: InputMaybe<StringNullableFilter>;
-  completedAt?: InputMaybe<DateTimeNullableFilter>;
   completedBy?: InputMaybe<UserWhereInput>;
-  completedById?: InputMaybe<StringNullableFilter>;
-  createdAt?: InputMaybe<DateTimeFilter>;
   deleted?: InputMaybe<BoolFilter>;
-  document?: InputMaybe<DocumentWhereInput>;
   id?: InputMaybe<StringFilter>;
-  maxWeight?: InputMaybe<IntFilter>;
-  percentComplete?: InputMaybe<IntFilter>;
-  percentScore?: InputMaybe<IntFilter>;
-  signature?: InputMaybe<StringNullableFilter>;
   status?: InputMaybe<EnumChecklistStatusFilter>;
-  totalWeight?: InputMaybe<IntFilter>;
-  updatedAt?: InputMaybe<DateTimeFilter>;
 };
 
 export type ActiveChecklistWhereUniqueInput = {
-  AND?: InputMaybe<Array<ActiveChecklistWhereInput>>;
-  NOT?: InputMaybe<Array<ActiveChecklistWhereInput>>;
-  OR?: InputMaybe<Array<ActiveChecklistWhereInput>>;
-  business?: InputMaybe<BusinessWhereInput>;
-  businessId?: InputMaybe<StringNullableFilter>;
-  checklist?: InputMaybe<ChecklistWhereInput>;
-  checklistId?: InputMaybe<StringFilter>;
-  comments?: InputMaybe<StringNullableFilter>;
-  completedAt?: InputMaybe<DateTimeNullableFilter>;
-  completedBy?: InputMaybe<UserWhereInput>;
-  completedById?: InputMaybe<StringNullableFilter>;
-  createdAt?: InputMaybe<DateTimeFilter>;
-  document?: InputMaybe<DocumentWhereInput>;
   id?: InputMaybe<Scalars['String']>;
-  maxWeight?: InputMaybe<IntFilter>;
-  percentComplete?: InputMaybe<IntFilter>;
-  percentScore?: InputMaybe<IntFilter>;
-  signature?: InputMaybe<StringNullableFilter>;
-  status?: InputMaybe<EnumChecklistStatusFilter>;
-  totalWeight?: InputMaybe<IntFilter>;
-  updatedAt?: InputMaybe<DateTimeFilter>;
 };
 
 export type ActivityExportWhere = {
@@ -618,39 +386,7 @@ export type Address = {
 };
 
 export type AddressListRelationFilter = {
-  every?: InputMaybe<AddressWhereInput>;
-  none?: InputMaybe<AddressWhereInput>;
   some?: InputMaybe<AddressWhereInput>;
-};
-
-export type AddressOrderByRelationAggregateInput = {
-  _count?: InputMaybe<SortOrder>;
-};
-
-export type AddressOrderByWithRelationInput = {
-  actions?: InputMaybe<ActionOrderByRelationAggregateInput>;
-  alias?: InputMaybe<SortOrder>;
-  building?: InputMaybe<SortOrder>;
-  business?: InputMaybe<BusinessOrderByWithRelationInput>;
-  businessId?: InputMaybe<SortOrder>;
-  country?: InputMaybe<SortOrder>;
-  county?: InputMaybe<SortOrder>;
-  createdAt?: InputMaybe<SortOrder>;
-  geoLat?: InputMaybe<SortOrder>;
-  geoLng?: InputMaybe<SortOrder>;
-  id?: InputMaybe<SortOrder>;
-  incident?: InputMaybe<IncidentOrderByWithRelationInput>;
-  incidentId?: InputMaybe<SortOrder>;
-  offender?: InputMaybe<OffenderOrderByWithRelationInput>;
-  offenderId?: InputMaybe<SortOrder>;
-  postcode?: InputMaybe<SortOrder>;
-  premises?: InputMaybe<SortOrder>;
-  primary?: InputMaybe<SortOrder>;
-  street?: InputMaybe<SortOrder>;
-  townCity?: InputMaybe<SortOrder>;
-  updatedAt?: InputMaybe<SortOrder>;
-  user?: InputMaybe<UserOrderByWithRelationInput>;
-  userId?: InputMaybe<SortOrder>;
 };
 
 export enum AddressScalarFieldEnum {
@@ -675,57 +411,19 @@ export enum AddressScalarFieldEnum {
 }
 
 export type AddressWhereInput = {
-  AND?: InputMaybe<Array<AddressWhereInput>>;
-  NOT?: InputMaybe<Array<AddressWhereInput>>;
-  OR?: InputMaybe<Array<AddressWhereInput>>;
-  actions?: InputMaybe<ActionListRelationFilter>;
-  alias?: InputMaybe<StringNullableFilter>;
-  building?: InputMaybe<StringNullableFilter>;
   business?: InputMaybe<BusinessWhereInput>;
-  businessId?: InputMaybe<StringNullableFilter>;
-  country?: InputMaybe<StringNullableFilter>;
-  county?: InputMaybe<StringNullableFilter>;
-  createdAt?: InputMaybe<DateTimeFilter>;
   geoLat?: InputMaybe<FloatNullableFilter>;
-  geoLng?: InputMaybe<FloatNullableFilter>;
-  id?: InputMaybe<StringFilter>;
   incident?: InputMaybe<IncidentWhereInput>;
-  incidentId?: InputMaybe<StringNullableFilter>;
   offender?: InputMaybe<OffenderWhereInput>;
-  offenderId?: InputMaybe<StringNullableFilter>;
   postcode?: InputMaybe<StringNullableFilter>;
-  premises?: InputMaybe<StringNullableFilter>;
   primary?: InputMaybe<BoolNullableFilter>;
   street?: InputMaybe<StringNullableFilter>;
   townCity?: InputMaybe<StringNullableFilter>;
-  updatedAt?: InputMaybe<DateTimeFilter>;
   user?: InputMaybe<UserWhereInput>;
-  userId?: InputMaybe<StringNullableFilter>;
 };
 
 export type AddressWhereUniqueInput = {
-  alias?: InputMaybe<StringNullableFilter>;
-  building?: InputMaybe<StringNullableFilter>;
-  business?: InputMaybe<BusinessWhereInput>;
-  businessId?: InputMaybe<StringNullableFilter>;
-  country?: InputMaybe<StringNullableFilter>;
-  county?: InputMaybe<StringNullableFilter>;
-  createdAt?: InputMaybe<DateTimeFilter>;
-  geoLat?: InputMaybe<FloatNullableFilter>;
-  geoLng?: InputMaybe<FloatNullableFilter>;
   id?: InputMaybe<Scalars['String']>;
-  incident?: InputMaybe<IncidentWhereInput>;
-  incidentId?: InputMaybe<Scalars['String']>;
-  offender?: InputMaybe<OffenderWhereInput>;
-  offenderId?: InputMaybe<StringNullableFilter>;
-  postcode?: InputMaybe<StringNullableFilter>;
-  premises?: InputMaybe<StringNullableFilter>;
-  primary?: InputMaybe<BoolNullableFilter>;
-  street?: InputMaybe<StringNullableFilter>;
-  townCity?: InputMaybe<StringNullableFilter>;
-  updatedAt?: InputMaybe<DateTimeFilter>;
-  user?: InputMaybe<UserWhereInput>;
-  userId?: InputMaybe<StringNullableFilter>;
 };
 
 export type AdminDashboardData = {
@@ -1030,36 +728,17 @@ export type AnswerCreateWithoutIncidentInput = {
   type: AnswerType;
 };
 
-export type AnswerListRelationFilter = {
-  every?: InputMaybe<AnswerWhereInput>;
-  none?: InputMaybe<AnswerWhereInput>;
-  some?: InputMaybe<AnswerWhereInput>;
-};
-
 export type AnswerOption = {
   __typename?: 'AnswerOption';
   label: Scalars['String'];
   value: Scalars['String'];
 };
 
-export type AnswerOrderByRelationAggregateInput = {
-  _count?: InputMaybe<SortOrder>;
-};
-
 export type AnswerOrderByWithRelationInput = {
-  answer?: InputMaybe<SortOrder>;
-  createdAt?: InputMaybe<SortOrder>;
-  id?: InputMaybe<SortOrder>;
-  incident?: InputMaybe<IncidentOrderByWithRelationInput>;
-  incidentId?: InputMaybe<SortOrder>;
   tagId?: InputMaybe<SortOrder>;
   tagQuestion?: InputMaybe<TagQuestionOrderByWithRelationInput>;
   taskId?: InputMaybe<SortOrder>;
   taskQuestion?: InputMaybe<TaskQuestionOrderByWithRelationInput>;
-  todo?: InputMaybe<TodoOrderByWithRelationInput>;
-  todoId?: InputMaybe<SortOrder>;
-  type?: InputMaybe<SortOrder>;
-  updatedAt?: InputMaybe<SortOrder>;
 };
 
 export enum AnswerScalarFieldEnum {
@@ -1075,33 +754,7 @@ export enum AnswerScalarFieldEnum {
 }
 
 export type AnswerScalarWhereInput = {
-  AND?: InputMaybe<Array<AnswerScalarWhereInput>>;
-  NOT?: InputMaybe<Array<AnswerScalarWhereInput>>;
-  OR?: InputMaybe<Array<AnswerScalarWhereInput>>;
-  answer?: InputMaybe<StringFilter>;
-  createdAt?: InputMaybe<DateTimeFilter>;
   id?: InputMaybe<StringFilter>;
-  incidentId?: InputMaybe<StringNullableFilter>;
-  tagId?: InputMaybe<StringNullableFilter>;
-  taskId?: InputMaybe<StringNullableFilter>;
-  todoId?: InputMaybe<StringNullableFilter>;
-  type?: InputMaybe<EnumAnswerTypeFilter>;
-  updatedAt?: InputMaybe<DateTimeFilter>;
-};
-
-export type AnswerScalarWhereWithAggregatesInput = {
-  AND?: InputMaybe<Array<AnswerScalarWhereWithAggregatesInput>>;
-  NOT?: InputMaybe<Array<AnswerScalarWhereWithAggregatesInput>>;
-  OR?: InputMaybe<Array<AnswerScalarWhereWithAggregatesInput>>;
-  answer?: InputMaybe<StringWithAggregatesFilter>;
-  createdAt?: InputMaybe<DateTimeWithAggregatesFilter>;
-  id?: InputMaybe<StringWithAggregatesFilter>;
-  incidentId?: InputMaybe<StringNullableWithAggregatesFilter>;
-  tagId?: InputMaybe<StringNullableWithAggregatesFilter>;
-  taskId?: InputMaybe<StringNullableWithAggregatesFilter>;
-  todoId?: InputMaybe<StringNullableWithAggregatesFilter>;
-  type?: InputMaybe<EnumAnswerTypeWithAggregatesFilter>;
-  updatedAt?: InputMaybe<DateTimeWithAggregatesFilter>;
 };
 
 export enum AnswerType {
@@ -1122,9 +775,6 @@ export enum AnswerTypeInput {
 }
 
 export type AnswerUpdateManyWithoutIncidentInput = {
-  create?: InputMaybe<Array<AnswerCreateWithoutIncidentInput>>;
-  deleteMany?: InputMaybe<Array<AnswerScalarWhereInput>>;
-  set?: InputMaybe<Array<AnswerCreateWithoutIncidentInput>>;
   update?: InputMaybe<Array<AnswerUpdateWithWhereUniqueWithoutIncidentInput>>;
 };
 
@@ -1143,7 +793,6 @@ export type AnswerUpdateWithWhereUniqueWithoutIncidentInput = {
 
 export type AnswerUpdateWithoutIncidentInput = {
   answer?: InputMaybe<Scalars['String']>;
-  type?: InputMaybe<AnswerType>;
 };
 
 export type AnswerWeight = {
@@ -1157,23 +806,6 @@ export type AnswerWeightInput = {
   weight?: InputMaybe<Scalars['Int']>;
 };
 
-export type AnswerWeightListRelationFilter = {
-  every?: InputMaybe<AnswerWeightWhereInput>;
-  none?: InputMaybe<AnswerWeightWhereInput>;
-  some?: InputMaybe<AnswerWeightWhereInput>;
-};
-
-export type AnswerWeightOrderByRelationAggregateInput = {
-  _count?: InputMaybe<SortOrder>;
-};
-
-export type AnswerWeightOrderByWithRelationInput = {
-  answer?: InputMaybe<SortOrder>;
-  id?: InputMaybe<SortOrder>;
-  questionId?: InputMaybe<SortOrder>;
-  weight?: InputMaybe<SortOrder>;
-};
-
 export enum AnswerWeightScalarFieldEnum {
   Answer = 'answer',
   Id = 'id',
@@ -1181,82 +813,8 @@ export enum AnswerWeightScalarFieldEnum {
   Weight = 'weight'
 }
 
-export type AnswerWeightScalarWhereInput = {
-  AND?: InputMaybe<Array<AnswerWeightScalarWhereInput>>;
-  NOT?: InputMaybe<Array<AnswerWeightScalarWhereInput>>;
-  OR?: InputMaybe<Array<AnswerWeightScalarWhereInput>>;
-  answer?: InputMaybe<StringFilter>;
-  id?: InputMaybe<StringFilter>;
-  questionId?: InputMaybe<StringFilter>;
-  weight?: InputMaybe<IntFilter>;
-};
-
-export type AnswerWeightScalarWhereWithAggregatesInput = {
-  AND?: InputMaybe<Array<AnswerWeightScalarWhereWithAggregatesInput>>;
-  NOT?: InputMaybe<Array<AnswerWeightScalarWhereWithAggregatesInput>>;
-  OR?: InputMaybe<Array<AnswerWeightScalarWhereWithAggregatesInput>>;
-  answer?: InputMaybe<StringWithAggregatesFilter>;
-  id?: InputMaybe<StringWithAggregatesFilter>;
-  questionId?: InputMaybe<StringWithAggregatesFilter>;
-  weight?: InputMaybe<IntWithAggregatesFilter>;
-};
-
-export type AnswerWeightWhereInput = {
-  AND?: InputMaybe<Array<AnswerWeightWhereInput>>;
-  NOT?: InputMaybe<Array<AnswerWeightWhereInput>>;
-  OR?: InputMaybe<Array<AnswerWeightWhereInput>>;
-  answer?: InputMaybe<StringFilter>;
-  id?: InputMaybe<StringFilter>;
-  questionId?: InputMaybe<StringFilter>;
-  weight?: InputMaybe<IntFilter>;
-};
-
-export type AnswerWeightWhereUniqueInput = {
-  AND?: InputMaybe<Array<AnswerWeightWhereInput>>;
-  NOT?: InputMaybe<Array<AnswerWeightWhereInput>>;
-  OR?: InputMaybe<Array<AnswerWeightWhereInput>>;
-  answer?: InputMaybe<StringFilter>;
-  id?: InputMaybe<Scalars['String']>;
-  questionId?: InputMaybe<StringFilter>;
-  weight?: InputMaybe<IntFilter>;
-};
-
-export type AnswerWhereInput = {
-  AND?: InputMaybe<Array<AnswerWhereInput>>;
-  NOT?: InputMaybe<Array<AnswerWhereInput>>;
-  OR?: InputMaybe<Array<AnswerWhereInput>>;
-  answer?: InputMaybe<StringFilter>;
-  createdAt?: InputMaybe<DateTimeFilter>;
-  id?: InputMaybe<StringFilter>;
-  incident?: InputMaybe<IncidentWhereInput>;
-  incidentId?: InputMaybe<StringNullableFilter>;
-  tagId?: InputMaybe<StringNullableFilter>;
-  tagQuestion?: InputMaybe<TagQuestionWhereInput>;
-  taskId?: InputMaybe<StringNullableFilter>;
-  taskQuestion?: InputMaybe<TaskQuestionWhereInput>;
-  todo?: InputMaybe<TodoWhereInput>;
-  todoId?: InputMaybe<StringNullableFilter>;
-  type?: InputMaybe<EnumAnswerTypeFilter>;
-  updatedAt?: InputMaybe<DateTimeFilter>;
-};
-
 export type AnswerWhereUniqueInput = {
-  AND?: InputMaybe<Array<AnswerWhereInput>>;
-  NOT?: InputMaybe<Array<AnswerWhereInput>>;
-  OR?: InputMaybe<Array<AnswerWhereInput>>;
-  answer?: InputMaybe<StringFilter>;
-  createdAt?: InputMaybe<DateTimeFilter>;
   id?: InputMaybe<Scalars['String']>;
-  incident?: InputMaybe<IncidentWhereInput>;
-  incidentId?: InputMaybe<StringNullableFilter>;
-  tagId?: InputMaybe<StringNullableFilter>;
-  tagQuestion?: InputMaybe<TagQuestionWhereInput>;
-  taskId?: InputMaybe<StringNullableFilter>;
-  taskQuestion?: InputMaybe<TaskQuestionWhereInput>;
-  todo?: InputMaybe<TodoWhereInput>;
-  todoId?: InputMaybe<StringNullableFilter>;
-  type?: InputMaybe<EnumAnswerTypeFilter>;
-  updatedAt?: InputMaybe<DateTimeFilter>;
 };
 
 export type AnswersInput = {
@@ -1307,63 +865,14 @@ export type Article = {
 };
 
 
-export type ArticleDocumentsArgs = {
-  cursor?: InputMaybe<DocumentWhereUniqueInput>;
-  distinct?: InputMaybe<Array<DocumentScalarFieldEnum>>;
-  orderBy?: InputMaybe<Array<DocumentOrderByWithRelationInput>>;
-  skip?: InputMaybe<Scalars['Int']>;
-  take?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<DocumentWhereInput>;
-};
-
-
 export type ArticleGroupsArgs = {
-  cursor?: InputMaybe<GroupWhereUniqueInput>;
-  distinct?: InputMaybe<Array<GroupScalarFieldEnum>>;
-  orderBy?: InputMaybe<Array<GroupOrderByWithRelationInput>>;
-  skip?: InputMaybe<Scalars['Int']>;
-  take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<GroupWhereInput>;
 };
 
 
 export type ArticleImagesArgs = {
-  cursor?: InputMaybe<ImageWhereUniqueInput>;
-  distinct?: InputMaybe<Array<ImageScalarFieldEnum>>;
-  orderBy?: InputMaybe<Array<ImageOrderByWithRelationInput>>;
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<ImageWhereInput>;
-};
-
-
-export type ArticleRowsArgs = {
-  cursor?: InputMaybe<ArticleRowWhereUniqueInput>;
-  distinct?: InputMaybe<Array<ArticleRowScalarFieldEnum>>;
-  orderBy?: InputMaybe<Array<ArticleRowOrderByWithRelationInput>>;
-  skip?: InputMaybe<Scalars['Int']>;
-  take?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<ArticleRowWhereInput>;
-};
-
-
-export type ArticleSchemesArgs = {
-  cursor?: InputMaybe<SchemeWhereUniqueInput>;
-  distinct?: InputMaybe<Array<SchemeScalarFieldEnum>>;
-  orderBy?: InputMaybe<Array<SchemeOrderByWithRelationInput>>;
-  skip?: InputMaybe<Scalars['Int']>;
-  take?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<SchemeWhereInput>;
-};
-
-
-export type ArticleTagsArgs = {
-  cursor?: InputMaybe<TagWhereUniqueInput>;
-  distinct?: InputMaybe<Array<TagScalarFieldEnum>>;
-  orderBy?: InputMaybe<Array<TagOrderByWithRelationInput>>;
-  skip?: InputMaybe<Scalars['Int']>;
-  take?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<TagWhereInput>;
 };
 
 export type ArticleColumn = {
@@ -1375,48 +884,12 @@ export type ArticleColumn = {
 
 
 export type ArticleColumnIncidentsArgs = {
-  cursor?: InputMaybe<IncidentWhereUniqueInput>;
-  distinct?: InputMaybe<Array<IncidentScalarFieldEnum>>;
-  orderBy?: InputMaybe<Array<IncidentOrderByWithRelationInput>>;
-  skip?: InputMaybe<Scalars['Int']>;
-  take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<IncidentWhereInput>;
 };
 
 
 export type ArticleColumnOffendersArgs = {
-  cursor?: InputMaybe<OffenderWhereUniqueInput>;
-  distinct?: InputMaybe<Array<OffenderScalarFieldEnum>>;
-  orderBy?: InputMaybe<Array<OffenderOrderByWithRelationInput>>;
-  skip?: InputMaybe<Scalars['Int']>;
-  take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<OffenderWhereInput>;
-};
-
-export type ArticleColumnListRelationFilter = {
-  every?: InputMaybe<ArticleColumnWhereInput>;
-  none?: InputMaybe<ArticleColumnWhereInput>;
-  some?: InputMaybe<ArticleColumnWhereInput>;
-};
-
-export type ArticleColumnOrderByRelationAggregateInput = {
-  _count?: InputMaybe<SortOrder>;
-};
-
-export type ArticleColumnOrderByWithRelationInput = {
-  createdAt?: InputMaybe<SortOrder>;
-  id?: InputMaybe<SortOrder>;
-  images?: InputMaybe<ImageOrderByRelationAggregateInput>;
-  incidents?: InputMaybe<IncidentOrderByRelationAggregateInput>;
-  offenders?: InputMaybe<OffenderOrderByRelationAggregateInput>;
-  position?: InputMaybe<SortOrder>;
-  reportData?: InputMaybe<SortOrder>;
-  row?: InputMaybe<ArticleRowOrderByWithRelationInput>;
-  rowId?: InputMaybe<SortOrder>;
-  text?: InputMaybe<SortOrder>;
-  type?: InputMaybe<SortOrder>;
-  updatedAt?: InputMaybe<SortOrder>;
-  width?: InputMaybe<SortOrder>;
 };
 
 export enum ArticleColumnScalarFieldEnum {
@@ -1431,87 +904,8 @@ export enum ArticleColumnScalarFieldEnum {
   Width = 'width'
 }
 
-export type ArticleColumnWhereInput = {
-  AND?: InputMaybe<Array<ArticleColumnWhereInput>>;
-  NOT?: InputMaybe<Array<ArticleColumnWhereInput>>;
-  OR?: InputMaybe<Array<ArticleColumnWhereInput>>;
-  createdAt?: InputMaybe<DateTimeFilter>;
-  id?: InputMaybe<StringFilter>;
-  images?: InputMaybe<ImageListRelationFilter>;
-  incidents?: InputMaybe<IncidentListRelationFilter>;
-  offenders?: InputMaybe<OffenderListRelationFilter>;
-  position?: InputMaybe<IntFilter>;
-  reportData?: InputMaybe<JsonNullableFilter>;
-  row?: InputMaybe<ArticleRowWhereInput>;
-  rowId?: InputMaybe<StringFilter>;
-  text?: InputMaybe<StringNullableFilter>;
-  type?: InputMaybe<EnumArticleSectionTypeFilter>;
-  updatedAt?: InputMaybe<DateTimeFilter>;
-  width?: InputMaybe<IntFilter>;
-};
-
-export type ArticleColumnWhereUniqueInput = {
-  AND?: InputMaybe<Array<ArticleColumnWhereInput>>;
-  NOT?: InputMaybe<Array<ArticleColumnWhereInput>>;
-  OR?: InputMaybe<Array<ArticleColumnWhereInput>>;
-  createdAt?: InputMaybe<DateTimeFilter>;
-  id?: InputMaybe<Scalars['String']>;
-  images?: InputMaybe<ImageListRelationFilter>;
-  incidents?: InputMaybe<IncidentListRelationFilter>;
-  offenders?: InputMaybe<OffenderListRelationFilter>;
-  position?: InputMaybe<IntFilter>;
-  reportData?: InputMaybe<JsonNullableFilter>;
-  row?: InputMaybe<ArticleRowWhereInput>;
-  rowId?: InputMaybe<StringFilter>;
-  text?: InputMaybe<StringNullableFilter>;
-  type?: InputMaybe<EnumArticleSectionTypeFilter>;
-  updatedAt?: InputMaybe<DateTimeFilter>;
-  width?: InputMaybe<IntFilter>;
-};
-
-export type ArticleListRelationFilter = {
-  every?: InputMaybe<ArticleWhereInput>;
-  none?: InputMaybe<ArticleWhereInput>;
-  some?: InputMaybe<ArticleWhereInput>;
-};
-
-export type ArticleOrderByRelationAggregateInput = {
-  _count?: InputMaybe<SortOrder>;
-};
-
 export type ArticleOrderByWithRelationInput = {
-  actions?: InputMaybe<ActionOrderByRelationAggregateInput>;
-  completedAt?: InputMaybe<SortOrder>;
-  createdAt?: InputMaybe<SortOrder>;
-  createdBy?: InputMaybe<UserOrderByWithRelationInput>;
-  createdById?: InputMaybe<SortOrder>;
-  documents?: InputMaybe<DocumentOrderByRelationAggregateInput>;
-  feedItems?: InputMaybe<FeedItemOrderByRelationAggregateInput>;
-  frequency?: InputMaybe<SortOrder>;
-  groups?: InputMaybe<GroupOrderByRelationAggregateInput>;
-  hideWatermark?: InputMaybe<SortOrder>;
-  id?: InputMaybe<SortOrder>;
-  image?: InputMaybe<ImageOrderByWithRelationInput>;
-  imageId?: InputMaybe<SortOrder>;
-  images?: InputMaybe<ImageOrderByRelationAggregateInput>;
-  impressions?: InputMaybe<ImpressionOrderByRelationAggregateInput>;
-  notifications?: InputMaybe<NotificationOrderByRelationAggregateInput>;
-  previewImage?: InputMaybe<SortOrder>;
-  previewText?: InputMaybe<SortOrder>;
-  priority?: InputMaybe<SortOrder>;
-  recurring?: InputMaybe<SortOrder>;
-  recycleDate?: InputMaybe<SortOrder>;
-  recycled?: InputMaybe<SortOrder>;
-  rows?: InputMaybe<ArticleRowOrderByRelationAggregateInput>;
-  schemes?: InputMaybe<SchemeOrderByRelationAggregateInput>;
-  start?: InputMaybe<SortOrder>;
-  status?: InputMaybe<SortOrder>;
-  tags?: InputMaybe<TagOrderByRelationAggregateInput>;
-  title?: InputMaybe<SortOrder>;
   updatedAt?: InputMaybe<SortOrder>;
-  users?: InputMaybe<UserOrderByRelationAggregateInput>;
-  watermarkImage?: InputMaybe<SortOrder>;
-  when?: InputMaybe<SortOrder>;
 };
 
 export enum ArticlePriority {
@@ -1525,36 +919,6 @@ export type ArticleRow = {
   columns: Array<ArticleColumn>;
 };
 
-
-export type ArticleRowColumnsArgs = {
-  cursor?: InputMaybe<ArticleColumnWhereUniqueInput>;
-  distinct?: InputMaybe<Array<ArticleColumnScalarFieldEnum>>;
-  orderBy?: InputMaybe<Array<ArticleColumnOrderByWithRelationInput>>;
-  skip?: InputMaybe<Scalars['Int']>;
-  take?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<ArticleColumnWhereInput>;
-};
-
-export type ArticleRowListRelationFilter = {
-  every?: InputMaybe<ArticleRowWhereInput>;
-  none?: InputMaybe<ArticleRowWhereInput>;
-  some?: InputMaybe<ArticleRowWhereInput>;
-};
-
-export type ArticleRowOrderByRelationAggregateInput = {
-  _count?: InputMaybe<SortOrder>;
-};
-
-export type ArticleRowOrderByWithRelationInput = {
-  article?: InputMaybe<ArticleOrderByWithRelationInput>;
-  articleId?: InputMaybe<SortOrder>;
-  columns?: InputMaybe<ArticleColumnOrderByRelationAggregateInput>;
-  createdAt?: InputMaybe<SortOrder>;
-  id?: InputMaybe<SortOrder>;
-  position?: InputMaybe<SortOrder>;
-  updatedAt?: InputMaybe<SortOrder>;
-};
-
 export enum ArticleRowScalarFieldEnum {
   ArticleId = 'articleId',
   CreatedAt = 'createdAt',
@@ -1562,32 +926,6 @@ export enum ArticleRowScalarFieldEnum {
   Position = 'position',
   UpdatedAt = 'updatedAt'
 }
-
-export type ArticleRowWhereInput = {
-  AND?: InputMaybe<Array<ArticleRowWhereInput>>;
-  NOT?: InputMaybe<Array<ArticleRowWhereInput>>;
-  OR?: InputMaybe<Array<ArticleRowWhereInput>>;
-  article?: InputMaybe<ArticleWhereInput>;
-  articleId?: InputMaybe<StringFilter>;
-  columns?: InputMaybe<ArticleColumnListRelationFilter>;
-  createdAt?: InputMaybe<DateTimeFilter>;
-  id?: InputMaybe<StringFilter>;
-  position?: InputMaybe<IntFilter>;
-  updatedAt?: InputMaybe<DateTimeFilter>;
-};
-
-export type ArticleRowWhereUniqueInput = {
-  AND?: InputMaybe<Array<ArticleRowWhereInput>>;
-  NOT?: InputMaybe<Array<ArticleRowWhereInput>>;
-  OR?: InputMaybe<Array<ArticleRowWhereInput>>;
-  article?: InputMaybe<ArticleWhereInput>;
-  articleId?: InputMaybe<StringFilter>;
-  columns?: InputMaybe<ArticleColumnListRelationFilter>;
-  createdAt?: InputMaybe<DateTimeFilter>;
-  id?: InputMaybe<Scalars['String']>;
-  position?: InputMaybe<IntFilter>;
-  updatedAt?: InputMaybe<DateTimeFilter>;
-};
 
 export enum ArticleScalarFieldEnum {
   CreatedAt = 'createdAt',
@@ -1621,77 +959,18 @@ export enum ArticleSectionType {
 }
 
 export type ArticleWhereInput = {
-  AND?: InputMaybe<Array<ArticleWhereInput>>;
-  NOT?: InputMaybe<Array<ArticleWhereInput>>;
   OR?: InputMaybe<Array<ArticleWhereInput>>;
-  actions?: InputMaybe<ActionListRelationFilter>;
-  completedAt?: InputMaybe<DateTimeNullableFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
   createdBy?: InputMaybe<UserWhereInput>;
-  createdById?: InputMaybe<StringFilter>;
-  documents?: InputMaybe<DocumentListRelationFilter>;
-  feedItems?: InputMaybe<FeedItemListRelationFilter>;
-  frequency?: InputMaybe<IntNullableFilter>;
   groups?: InputMaybe<GroupListRelationFilter>;
-  hideWatermark?: InputMaybe<BoolFilter>;
   id?: InputMaybe<StringFilter>;
-  image?: InputMaybe<ImageWhereInput>;
-  imageId?: InputMaybe<StringNullableFilter>;
-  images?: InputMaybe<ImageListRelationFilter>;
-  impressions?: InputMaybe<ImpressionListRelationFilter>;
-  notifications?: InputMaybe<NotificationListRelationFilter>;
-  previewImage?: InputMaybe<StringNullableFilter>;
-  previewText?: InputMaybe<StringNullableFilter>;
   priority?: InputMaybe<EnumArticlePriorityFilter>;
-  recurring?: InputMaybe<BoolFilter>;
-  recycleDate?: InputMaybe<DateTimeFilter>;
-  recycled?: InputMaybe<BoolFilter>;
-  rows?: InputMaybe<ArticleRowListRelationFilter>;
-  schemes?: InputMaybe<SchemeListRelationFilter>;
-  start?: InputMaybe<DateTimeNullableFilter>;
   status?: InputMaybe<EnumCompleteStatusFilter>;
-  tags?: InputMaybe<TagListRelationFilter>;
   title?: InputMaybe<StringFilter>;
-  updatedAt?: InputMaybe<DateTimeFilter>;
-  users?: InputMaybe<UserListRelationFilter>;
-  watermarkImage?: InputMaybe<BoolFilter>;
-  when?: InputMaybe<EnumWhenNullableFilter>;
 };
 
 export type ArticleWhereUniqueInput = {
-  AND?: InputMaybe<Array<ArticleWhereInput>>;
-  NOT?: InputMaybe<Array<ArticleWhereInput>>;
-  OR?: InputMaybe<Array<ArticleWhereInput>>;
-  actions?: InputMaybe<ActionListRelationFilter>;
-  createdAt?: InputMaybe<DateTimeFilter>;
-  createdBy?: InputMaybe<UserWhereInput>;
-  createdById?: InputMaybe<StringFilter>;
-  documents?: InputMaybe<DocumentListRelationFilter>;
-  feedItems?: InputMaybe<FeedItemListRelationFilter>;
-  frequency?: InputMaybe<IntNullableFilter>;
-  groups?: InputMaybe<GroupListRelationFilter>;
-  hideWatermark?: InputMaybe<BoolFilter>;
   id?: InputMaybe<Scalars['String']>;
-  image?: InputMaybe<ImageWhereInput>;
-  imageId?: InputMaybe<Scalars['String']>;
-  images?: InputMaybe<ImageListRelationFilter>;
-  impressions?: InputMaybe<ImpressionListRelationFilter>;
-  notifications?: InputMaybe<NotificationListRelationFilter>;
-  previewImage?: InputMaybe<StringNullableFilter>;
-  previewText?: InputMaybe<StringNullableFilter>;
-  priority?: InputMaybe<EnumArticlePriorityFilter>;
-  recurring?: InputMaybe<BoolFilter>;
-  recycleDate?: InputMaybe<DateTimeFilter>;
-  recycled?: InputMaybe<BoolFilter>;
-  rows?: InputMaybe<ArticleRowListRelationFilter>;
-  schemes?: InputMaybe<SchemeListRelationFilter>;
-  start?: InputMaybe<DateTimeNullableFilter>;
-  tags?: InputMaybe<TagListRelationFilter>;
-  title?: InputMaybe<StringFilter>;
-  updatedAt?: InputMaybe<DateTimeFilter>;
-  users?: InputMaybe<UserListRelationFilter>;
-  watermarkImage?: InputMaybe<BoolFilter>;
-  when?: InputMaybe<EnumWhenNullableFilter>;
 };
 
 export type AudioAnalyticsReport = {
@@ -1834,15 +1113,12 @@ export type BanCreateInput = {
   fineValue?: InputMaybe<Scalars['Float']>;
   location: Scalars['String'];
   months?: InputMaybe<Scalars['Int']>;
-  reference?: InputMaybe<Scalars['Int']>;
   scheme: ConnectHelper;
   startDate: Scalars['Date'];
   type?: InputMaybe<BanType>;
 };
 
 export type BanListRelationFilter = {
-  every?: InputMaybe<BanWhereInput>;
-  none?: InputMaybe<BanWhereInput>;
   some?: InputMaybe<BanWhereInput>;
 };
 
@@ -1851,32 +1127,9 @@ export type BanNestedUpdate = {
   where?: InputMaybe<BanWhereUniqueInput>;
 };
 
-export type BanOrderByRelationAggregateInput = {
-  _count?: InputMaybe<SortOrder>;
-};
-
 export type BanOrderByWithRelationInput = {
-  actions?: InputMaybe<ActionOrderByRelationAggregateInput>;
-  active?: InputMaybe<SortOrder>;
-  createdAt?: InputMaybe<SortOrder>;
-  createdBy?: InputMaybe<UserOrderByWithRelationInput>;
-  createdById?: InputMaybe<SortOrder>;
-  description?: InputMaybe<SortOrder>;
   endDate?: InputMaybe<SortOrder>;
-  feedItems?: InputMaybe<FeedItemOrderByRelationAggregateInput>;
-  groups?: InputMaybe<GroupOrderByRelationAggregateInput>;
-  id?: InputMaybe<SortOrder>;
-  location?: InputMaybe<SortOrder>;
-  notifications?: InputMaybe<NotificationOrderByRelationAggregateInput>;
-  offender?: InputMaybe<OffenderOrderByWithRelationInput>;
-  offenderId?: InputMaybe<SortOrder>;
-  reference?: InputMaybe<SortOrder>;
-  scheme?: InputMaybe<SchemeOrderByWithRelationInput>;
-  schemeId?: InputMaybe<SortOrder>;
   startDate?: InputMaybe<SortOrder>;
-  title?: InputMaybe<SortOrder>;
-  type?: InputMaybe<SortOrder>;
-  updatedAt?: InputMaybe<SortOrder>;
 };
 
 export enum BanScalarFieldEnum {
@@ -1923,57 +1176,12 @@ export type BanUpdateInput = {
 };
 
 export type BanWhereInput = {
-  AND?: InputMaybe<Array<BanWhereInput>>;
-  NOT?: InputMaybe<Array<BanWhereInput>>;
-  OR?: InputMaybe<Array<BanWhereInput>>;
-  actions?: InputMaybe<ActionListRelationFilter>;
   active?: InputMaybe<BoolFilter>;
-  createdAt?: InputMaybe<DateTimeFilter>;
-  createdBy?: InputMaybe<UserWhereInput>;
-  createdById?: InputMaybe<StringFilter>;
-  description?: InputMaybe<StringNullableFilter>;
-  endDate?: InputMaybe<DateTimeFilter>;
-  feedItems?: InputMaybe<FeedItemListRelationFilter>;
   groups?: InputMaybe<GroupListRelationFilter>;
-  id?: InputMaybe<StringFilter>;
-  location?: InputMaybe<StringFilter>;
-  notifications?: InputMaybe<NotificationListRelationFilter>;
-  offender?: InputMaybe<OffenderWhereInput>;
-  offenderId?: InputMaybe<StringFilter>;
-  reference?: InputMaybe<IntNullableFilter>;
-  scheme?: InputMaybe<SchemeWhereInput>;
-  schemeId?: InputMaybe<StringFilter>;
-  startDate?: InputMaybe<DateTimeFilter>;
-  title?: InputMaybe<StringNullableFilter>;
-  type?: InputMaybe<EnumBanTypeNullableFilter>;
-  updatedAt?: InputMaybe<DateTimeFilter>;
 };
 
 export type BanWhereUniqueInput = {
-  AND?: InputMaybe<Array<BanWhereInput>>;
-  NOT?: InputMaybe<Array<BanWhereInput>>;
-  OR?: InputMaybe<Array<BanWhereInput>>;
-  actions?: InputMaybe<ActionListRelationFilter>;
-  active?: InputMaybe<BoolFilter>;
-  createdAt?: InputMaybe<DateTimeFilter>;
-  createdBy?: InputMaybe<UserWhereInput>;
-  createdById?: InputMaybe<StringFilter>;
-  description?: InputMaybe<StringNullableFilter>;
-  endDate?: InputMaybe<DateTimeFilter>;
-  feedItems?: InputMaybe<FeedItemListRelationFilter>;
-  groups?: InputMaybe<GroupListRelationFilter>;
   id?: InputMaybe<Scalars['String']>;
-  location?: InputMaybe<StringFilter>;
-  notifications?: InputMaybe<NotificationListRelationFilter>;
-  offender?: InputMaybe<OffenderWhereInput>;
-  offenderId?: InputMaybe<StringFilter>;
-  reference?: InputMaybe<IntNullableFilter>;
-  scheme?: InputMaybe<SchemeWhereInput>;
-  schemeId?: InputMaybe<StringFilter>;
-  startDate?: InputMaybe<DateTimeFilter>;
-  title?: InputMaybe<StringNullableFilter>;
-  type?: InputMaybe<EnumBanTypeNullableFilter>;
-  updatedAt?: InputMaybe<DateTimeFilter>;
 };
 
 export type BansOnOffenderUpdate = {
@@ -2042,11 +1250,7 @@ export type BrandOrderBy = {
 };
 
 export type BrandOrderByWithRelationInput = {
-  businesses?: InputMaybe<BusinessOrderByRelationAggregateInput>;
-  createdAt?: InputMaybe<SortOrder>;
-  id?: InputMaybe<SortOrder>;
   name?: InputMaybe<SortOrder>;
-  updatedAt?: InputMaybe<SortOrder>;
 };
 
 export type BrandWhereInput = {
@@ -2054,8 +1258,6 @@ export type BrandWhereInput = {
   NOT?: InputMaybe<Array<BrandWhereInput>>;
   OR?: InputMaybe<Array<BrandWhereInput>>;
   businesses?: InputMaybe<BusinessListRelationFilter>;
-  createdAt?: InputMaybe<DateTimeFilter>;
-  description?: InputMaybe<StringNullableFilter>;
   id?: InputMaybe<StringFilter>;
   industry?: InputMaybe<IndustryWhereInput>;
   name?: InputMaybe<StringFilter>;
@@ -2065,17 +1267,7 @@ export type BrandWhereInput = {
 };
 
 export type BrandWhereUniqueInput = {
-  AND?: InputMaybe<Array<BrandWhereInput>>;
-  NOT?: InputMaybe<Array<BrandWhereInput>>;
-  OR?: InputMaybe<Array<BrandWhereInput>>;
-  businesses?: InputMaybe<BusinessListRelationFilter>;
-  createdAt?: InputMaybe<DateTimeFilter>;
-  description?: InputMaybe<StringNullableFilter>;
   id?: InputMaybe<Scalars['String']>;
-  name?: InputMaybe<StringFilter>;
-  recycled?: InputMaybe<BoolFilter>;
-  scheme?: InputMaybe<SchemeWhereInput>;
-  schemeId?: InputMaybe<StringFilter>;
 };
 
 export enum Build {
@@ -2124,65 +1316,13 @@ export type Business = {
 };
 
 
-export type BusinessActionsArgs = {
-  distinct?: InputMaybe<Array<ActionScalarFieldEnum>>;
-  orderBy?: InputMaybe<Array<ActionOrderByWithRelationInput>>;
-  skip?: InputMaybe<Scalars['Int']>;
-  take?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<ActionWhereInput>;
-};
-
-
-export type BusinessChecklistsArgs = {
-  cursor?: InputMaybe<ActiveChecklistWhereUniqueInput>;
-  distinct?: InputMaybe<Array<ActiveChecklistScalarFieldEnum>>;
-  orderBy?: InputMaybe<Array<ActiveChecklistOrderByWithRelationInput>>;
-  skip?: InputMaybe<Scalars['Int']>;
-  take?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<ActiveChecklistWhereInput>;
-};
-
-
-export type BusinessChildrenArgs = {
-  cursor?: InputMaybe<BusinessWhereUniqueInput>;
-  distinct?: InputMaybe<Array<BusinessScalarFieldEnum>>;
-  orderBy?: InputMaybe<Array<BusinessOrderByWithRelationInput>>;
-  skip?: InputMaybe<Scalars['Int']>;
-  take?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<BusinessWhereInput>;
-};
-
-
-export type BusinessDemDevicesArgs = {
-  cursor?: InputMaybe<DemDeviceWhereUniqueInput>;
-  distinct?: InputMaybe<Array<DemDeviceScalarFieldEnum>>;
-  orderBy?: InputMaybe<Array<DemDeviceOrderByWithRelationInput>>;
-  skip?: InputMaybe<Scalars['Int']>;
-  take?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<DemDeviceWhereInput>;
-};
-
-
 export type BusinessGoodsTypesTotalsArgs = {
   endDate: Scalars['DateTime'];
   startDate: Scalars['DateTime'];
 };
 
 
-export type BusinessGroupsArgs = {
-  cursor?: InputMaybe<GroupWhereUniqueInput>;
-  distinct?: InputMaybe<Array<GroupScalarFieldEnum>>;
-  orderBy?: InputMaybe<Array<GroupOrderByWithRelationInput>>;
-  skip?: InputMaybe<Scalars['Int']>;
-  take?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<GroupWhereInput>;
-};
-
-
 export type BusinessIncidentsArgs = {
-  cursor?: InputMaybe<IncidentWhereUniqueInput>;
-  distinct?: InputMaybe<Array<IncidentScalarFieldEnum>>;
-  orderBy?: InputMaybe<Array<IncidentOrderByWithRelationInput>>;
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<IncidentWhereInput>;
@@ -2190,52 +1330,12 @@ export type BusinessIncidentsArgs = {
 
 
 export type BusinessLocationsArgs = {
-  cursor?: InputMaybe<AddressWhereUniqueInput>;
-  distinct?: InputMaybe<Array<AddressScalarFieldEnum>>;
-  orderBy?: InputMaybe<Array<AddressOrderByWithRelationInput>>;
-  skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<AddressWhereInput>;
-};
-
-
-export type BusinessSchemesArgs = {
-  cursor?: InputMaybe<SchemeWhereUniqueInput>;
-  distinct?: InputMaybe<Array<SchemeScalarFieldEnum>>;
-  orderBy?: InputMaybe<Array<SchemeOrderByWithRelationInput>>;
-  skip?: InputMaybe<Scalars['Int']>;
-  take?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<SchemeWhereInput>;
-};
-
-
-export type BusinessTagsArgs = {
-  cursor?: InputMaybe<TagWhereUniqueInput>;
-  distinct?: InputMaybe<Array<TagScalarFieldEnum>>;
-  orderBy?: InputMaybe<Array<TagOrderByWithRelationInput>>;
-  skip?: InputMaybe<Scalars['Int']>;
-  take?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<TagWhereInput>;
 };
 
 
 export type BusinessTodosArgs = {
-  cursor?: InputMaybe<TodoWhereUniqueInput>;
-  distinct?: InputMaybe<Array<TodoScalarFieldEnum>>;
-  orderBy?: InputMaybe<Array<TodoOrderByWithRelationInput>>;
-  skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<TodoWhereInput>;
-};
-
-
-export type BusinessUsersArgs = {
-  cursor?: InputMaybe<UserWhereUniqueInput>;
-  distinct?: InputMaybe<Array<UserScalarFieldEnum>>;
-  orderBy?: InputMaybe<Array<UserOrderByWithRelationInput>>;
-  skip?: InputMaybe<Scalars['Int']>;
-  take?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<UserWhereInput>;
 };
 
 
@@ -2271,18 +1371,10 @@ export type BusinessContributions = {
   totalUsers: Scalars['Int'];
 };
 
-export type BusinessCreateNestedManyRelationInput = {
-  connect?: InputMaybe<Array<BusinessWhereUniqueInput>>;
-  create?: InputMaybe<Array<CreateBusinessRelationDataInput>>;
-  disconnect?: InputMaybe<Array<BusinessWhereUniqueInput>>;
-  update?: InputMaybe<Array<UpdateBusinessRelationEnvelope>>;
-};
-
 export type BusinessCreateNestedManyWithoutUsersInput = {
   connect?: InputMaybe<Array<BusinessWhereUniqueInput>>;
   create?: InputMaybe<Array<CreateBusinessOnUserDataInput>>;
   disconnect?: InputMaybe<Array<BusinessWhereUniqueInput>>;
-  update?: InputMaybe<Array<UpdateBusinessOnUserEnvelope>>;
 };
 
 export type BusinessGoodsTotals = {
@@ -2359,34 +1451,6 @@ export type BusinessOrderBy = {
   name?: InputMaybe<SortOrder>;
 };
 
-export type BusinessOrderByRelationAggregateInput = {
-  _count?: InputMaybe<SortOrder>;
-};
-
-export type BusinessOrderByWithRelationInput = {
-  actions?: InputMaybe<ActionOrderByRelationAggregateInput>;
-  checklists?: InputMaybe<ActiveChecklistOrderByRelationAggregateInput>;
-  children?: InputMaybe<BusinessOrderByRelationAggregateInput>;
-  createdAt?: InputMaybe<SortOrder>;
-  demId?: InputMaybe<SortOrder>;
-  division?: InputMaybe<SortOrder>;
-  groups?: InputMaybe<GroupOrderByRelationAggregateInput>;
-  id?: InputMaybe<SortOrder>;
-  incidents?: InputMaybe<IncidentOrderByRelationAggregateInput>;
-  locations?: InputMaybe<AddressOrderByRelationAggregateInput>;
-  name?: InputMaybe<SortOrder>;
-  parent?: InputMaybe<BusinessOrderByWithRelationInput>;
-  parentId?: InputMaybe<SortOrder>;
-  publicName?: InputMaybe<SortOrder>;
-  recycled?: InputMaybe<SortOrder>;
-  reference?: InputMaybe<SortOrder>;
-  schemes?: InputMaybe<SchemeOrderByRelationAggregateInput>;
-  tags?: InputMaybe<TagOrderByRelationAggregateInput>;
-  todos?: InputMaybe<TodoOrderByRelationAggregateInput>;
-  updatedAt?: InputMaybe<SortOrder>;
-  users?: InputMaybe<UserOrderByRelationAggregateInput>;
-};
-
 export type BusinessParentInput = {
   connect?: InputMaybe<UniqueId>;
   disconnect?: InputMaybe<Scalars['Boolean']>;
@@ -2415,15 +1479,7 @@ export type BusinessQuestion = {
   updatedAt: Scalars['DateTime'];
 };
 
-export type BusinessQuestionOrderBy = {
-  createdAt?: InputMaybe<SortOrder>;
-  id?: InputMaybe<SortOrder>;
-  priority?: InputMaybe<SortOrder>;
-  updatedAt?: InputMaybe<SortOrder>;
-};
-
 export type BusinessQuestionRelayOrderInput = {
-  createdAt?: InputMaybe<SortOrder>;
   priority?: InputMaybe<SortOrder>;
 };
 
@@ -2504,19 +1560,12 @@ export type BusinessWhereInput = {
   AND?: InputMaybe<Array<BusinessWhereInput>>;
   NOT?: InputMaybe<Array<BusinessWhereInput>>;
   OR?: InputMaybe<Array<BusinessWhereInput>>;
-  actions?: InputMaybe<ActionListRelationFilter>;
   brands?: InputMaybe<BrandListRelationFilter>;
-  children?: InputMaybe<BusinessListRelationFilter>;
-  createdAt?: InputMaybe<DateTimeFilter>;
-  demId?: InputMaybe<StringNullableFilter>;
-  division?: InputMaybe<StringNullableFilter>;
   groups?: InputMaybe<GroupListRelationFilter>;
   id?: InputMaybe<StringFilter>;
-  incidents?: InputMaybe<IncidentListRelationFilter>;
   locations?: InputMaybe<AddressListRelationFilter>;
   name?: InputMaybe<StringFilter>;
   parent?: InputMaybe<BusinessWhereInput>;
-  parentId?: InputMaybe<StringNullableFilter>;
   policeArea?: InputMaybe<EnumPoliceForceNullableListFilter>;
   publicName?: InputMaybe<BoolFilter>;
   recycled?: InputMaybe<BoolFilter>;
@@ -2524,7 +1573,6 @@ export type BusinessWhereInput = {
   schemes?: InputMaybe<SchemeListRelationFilter>;
   siteNumber?: InputMaybe<StringFilter>;
   tags?: InputMaybe<TagListRelationFilter>;
-  todos?: InputMaybe<TodoListRelationFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
   users?: InputMaybe<UserListRelationFilter>;
 };
@@ -2533,7 +1581,6 @@ export type BusinessWhereUniqueInput = {
   AND?: InputMaybe<Array<BusinessWhereInput>>;
   NOT?: InputMaybe<Array<BusinessWhereInput>>;
   OR?: InputMaybe<Array<BusinessWhereInput>>;
-  actions?: InputMaybe<ActionListRelationFilter>;
   children?: InputMaybe<BusinessListRelationFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
   demId?: InputMaybe<StringNullableFilter>;
@@ -2664,7 +1711,6 @@ export type ChatOrderByRelationAggregateInput = {
 };
 
 export type ChatOrderByWithRelationInput = {
-  actions?: InputMaybe<ActionOrderByRelationAggregateInput>;
   createdAt?: InputMaybe<SortOrder>;
   description?: InputMaybe<SortOrder>;
   id?: InputMaybe<SortOrder>;
@@ -2689,7 +1735,6 @@ export type ChatWhereInput = {
   AND?: InputMaybe<Array<ChatWhereInput>>;
   NOT?: InputMaybe<Array<ChatWhereInput>>;
   OR?: InputMaybe<Array<ChatWhereInput>>;
-  actions?: InputMaybe<ActionListRelationFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
   description?: InputMaybe<StringNullableFilter>;
   id?: InputMaybe<StringFilter>;
@@ -2708,7 +1753,6 @@ export type ChatWhereUniqueInput = {
   AND?: InputMaybe<Array<ChatWhereInput>>;
   NOT?: InputMaybe<Array<ChatWhereInput>>;
   OR?: InputMaybe<Array<ChatWhereInput>>;
-  actions?: InputMaybe<ActionListRelationFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
   description?: InputMaybe<StringNullableFilter>;
   id?: InputMaybe<Scalars['String']>;
@@ -2812,7 +1856,6 @@ export type ChecklistDateRange = {
 };
 
 export type ChecklistOrderByWithRelationInput = {
-  activeChecklists?: InputMaybe<ActiveChecklistOrderByRelationAggregateInput>;
   createdAt?: InputMaybe<SortOrder>;
   description?: InputMaybe<SortOrder>;
   descriptionTranslations?: InputMaybe<SortOrder>;
@@ -2854,12 +1897,9 @@ export type ChecklistQuestion = {
 
 
 export type ChecklistQuestionWeightArgs = {
-  cursor?: InputMaybe<AnswerWeightWhereUniqueInput>;
   distinct?: InputMaybe<Array<AnswerWeightScalarFieldEnum>>;
-  orderBy?: InputMaybe<Array<AnswerWeightOrderByWithRelationInput>>;
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<AnswerWeightWhereInput>;
 };
 
 export type ChecklistQuestionPerformance = {
@@ -2940,7 +1980,6 @@ export type ChecklistWhereInput = {
   AND?: InputMaybe<Array<ChecklistWhereInput>>;
   NOT?: InputMaybe<Array<ChecklistWhereInput>>;
   OR?: InputMaybe<Array<ChecklistWhereInput>>;
-  activeChecklists?: InputMaybe<ActiveChecklistListRelationFilter>;
   business?: InputMaybe<BusinessListRelationFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
   deleted?: InputMaybe<BoolFilter>;
@@ -2955,7 +1994,6 @@ export type ChecklistWhereUniqueInput = {
   AND?: InputMaybe<Array<ChecklistWhereInput>>;
   NOT?: InputMaybe<Array<ChecklistWhereInput>>;
   OR?: InputMaybe<Array<ChecklistWhereInput>>;
-  activeChecklists?: InputMaybe<ActiveChecklistListRelationFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
   id?: InputMaybe<Scalars['String']>;
   schemes?: InputMaybe<SchemeListRelationFilter>;
@@ -3228,16 +2266,6 @@ export type CreateBusinessQuestionInput = {
   roleIds?: InputMaybe<Array<Scalars['String']>>;
   schemeId: Scalars['String'];
   tooltip?: InputMaybe<Scalars['String']>;
-};
-
-export type CreateBusinessRelationDataInput = {
-  groups?: InputMaybe<ConnectArrayHelper>;
-  locations?: InputMaybe<CreateSimpleLocationEnvelope>;
-  name: Scalars['String'];
-  parent?: InputMaybe<BusinessParentInput>;
-  publicName: Scalars['Boolean'];
-  schemes: ConnectArrayHelper;
-  tags?: InputMaybe<NullableConnectArrayHelper>;
 };
 
 export type CreateCollectionInput = {
@@ -3887,7 +2915,6 @@ export type CrimeGroupOrderByRelationAggregateInput = {
 };
 
 export type CrimeGroupOrderByWithRelationInput = {
-  actions?: InputMaybe<ActionOrderByRelationAggregateInput>;
   alias?: InputMaybe<SortOrder>;
   createdAt?: InputMaybe<SortOrder>;
   createdBy?: InputMaybe<UserOrderByWithRelationInput>;
@@ -3970,7 +2997,6 @@ export type CrimeGroupWhereInput = {
   AND?: InputMaybe<Array<CrimeGroupWhereInput>>;
   NOT?: InputMaybe<Array<CrimeGroupWhereInput>>;
   OR?: InputMaybe<Array<CrimeGroupWhereInput>>;
-  actions?: InputMaybe<ActionListRelationFilter>;
   alias?: InputMaybe<StringNullableFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
   createdBy?: InputMaybe<UserWhereInput>;
@@ -4001,7 +3027,6 @@ export type CrimeGroupWhereUniqueInput = {
   AND?: InputMaybe<Array<CrimeGroupWhereInput>>;
   NOT?: InputMaybe<Array<CrimeGroupWhereInput>>;
   OR?: InputMaybe<Array<CrimeGroupWhereInput>>;
-  actions?: InputMaybe<ActionListRelationFilter>;
   alias?: InputMaybe<StringNullableFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
   createdBy?: InputMaybe<UserWhereInput>;
@@ -4788,7 +3813,6 @@ export type DemDeviceModel = {
 };
 
 export type DemDeviceOrderByWithRelationInput = {
-  business?: InputMaybe<BusinessOrderByWithRelationInput>;
   createdAt?: InputMaybe<SortOrder>;
   evidence?: InputMaybe<DocumentOrderByRelationAggregateInput>;
   id?: InputMaybe<SortOrder>;
@@ -4797,16 +3821,6 @@ export type DemDeviceOrderByWithRelationInput = {
   schemeId?: InputMaybe<SortOrder>;
   updatedAt?: InputMaybe<SortOrder>;
 };
-
-export enum DemDeviceScalarFieldEnum {
-  CreatedAt = 'createdAt',
-  DemId = 'demId',
-  Id = 'id',
-  Name = 'name',
-  SchemeId = 'schemeId',
-  SerialNumber = 'serialNumber',
-  UpdatedAt = 'updatedAt'
-}
 
 export type DemDeviceScalarWhereWithAggregatesInput = {
   AND?: InputMaybe<Array<DemDeviceScalarWhereWithAggregatesInput>>;
@@ -4823,7 +3837,6 @@ export type DemDeviceWhereInput = {
   AND?: InputMaybe<Array<DemDeviceWhereInput>>;
   NOT?: InputMaybe<Array<DemDeviceWhereInput>>;
   OR?: InputMaybe<Array<DemDeviceWhereInput>>;
-  actions?: InputMaybe<ActionListRelationFilter>;
   business?: InputMaybe<BusinessWhereInput>;
   businessId?: InputMaybe<StringFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
@@ -4841,7 +3854,6 @@ export type DemDeviceWhereUniqueInput = {
   AND?: InputMaybe<Array<DemDeviceWhereInput>>;
   NOT?: InputMaybe<Array<DemDeviceWhereInput>>;
   OR?: InputMaybe<Array<DemDeviceWhereInput>>;
-  actions?: InputMaybe<ActionListRelationFilter>;
   business?: InputMaybe<BusinessWhereInput>;
   createdAt?: InputMaybe<DateTimeFilter>;
   demId?: InputMaybe<Scalars['String']>;
@@ -5238,7 +4250,6 @@ export type DocumentOrderByRelationAggregateInput = {
 };
 
 export type DocumentOrderByWithRelationInput = {
-  articles?: InputMaybe<ArticleOrderByRelationAggregateInput>;
   checklist?: InputMaybe<ActiveChecklistOrderByWithRelationInput>;
   checklistId?: InputMaybe<SortOrder>;
   createdAt?: InputMaybe<SortOrder>;
@@ -5289,7 +4300,6 @@ export type DocumentWhereInput = {
   AND?: InputMaybe<Array<DocumentWhereInput>>;
   NOT?: InputMaybe<Array<DocumentWhereInput>>;
   OR?: InputMaybe<Array<DocumentWhereInput>>;
-  articles?: InputMaybe<ArticleListRelationFilter>;
   checklist?: InputMaybe<ActiveChecklistWhereInput>;
   checklistId?: InputMaybe<StringNullableFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
@@ -5322,7 +4332,6 @@ export type DocumentWhereUniqueInput = {
   AND?: InputMaybe<Array<DocumentWhereInput>>;
   NOT?: InputMaybe<Array<DocumentWhereInput>>;
   OR?: InputMaybe<Array<DocumentWhereInput>>;
-  articles?: InputMaybe<ArticleListRelationFilter>;
   checklist?: InputMaybe<ActiveChecklistWhereInput>;
   checklistId?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<DateTimeFilter>;
@@ -7445,11 +6454,7 @@ export type GroupOrderByRelationAggregateInput = {
 };
 
 export type GroupOrderByWithRelationInput = {
-  actions?: InputMaybe<ActionOrderByRelationAggregateInput>;
   approver?: InputMaybe<UserOrderByRelationAggregateInput>;
-  articles?: InputMaybe<ArticleOrderByRelationAggregateInput>;
-  bans?: InputMaybe<BanOrderByRelationAggregateInput>;
-  businesses?: InputMaybe<BusinessOrderByRelationAggregateInput>;
   createdAt?: InputMaybe<SortOrder>;
   crimeGroups?: InputMaybe<CrimeGroupOrderByRelationAggregateInput>;
   customGalleries?: InputMaybe<CustomGalleryOrderByRelationAggregateInput>;
@@ -7499,9 +6504,7 @@ export type GroupWhereInput = {
   AND?: InputMaybe<Array<GroupWhereInput>>;
   NOT?: InputMaybe<Array<GroupWhereInput>>;
   OR?: InputMaybe<Array<GroupWhereInput>>;
-  actions?: InputMaybe<ActionListRelationFilter>;
   approver?: InputMaybe<UserListRelationFilter>;
-  articles?: InputMaybe<ArticleListRelationFilter>;
   bans?: InputMaybe<BanListRelationFilter>;
   businesses?: InputMaybe<BusinessListRelationFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
@@ -7527,9 +6530,7 @@ export type GroupWhereUniqueInput = {
   AND?: InputMaybe<Array<GroupWhereInput>>;
   NOT?: InputMaybe<Array<GroupWhereInput>>;
   OR?: InputMaybe<Array<GroupWhereInput>>;
-  actions?: InputMaybe<ActionListRelationFilter>;
   approver?: InputMaybe<UserListRelationFilter>;
-  articles?: InputMaybe<ArticleListRelationFilter>;
   bans?: InputMaybe<BanListRelationFilter>;
   businesses?: InputMaybe<BusinessListRelationFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
@@ -7726,11 +6727,8 @@ export type ImageOrderByRelationAggregateInput = {
 
 export type ImageOrderByWithRelationInput = {
   Scheme?: InputMaybe<SchemeOrderByRelationAggregateInput>;
-  actions?: InputMaybe<ActionOrderByRelationAggregateInput>;
   artcleColumnId?: InputMaybe<SortOrder>;
   article?: InputMaybe<ArticleOrderByWithRelationInput>;
-  articleColumn?: InputMaybe<ArticleColumnOrderByWithRelationInput>;
-  articles?: InputMaybe<ArticleOrderByRelationAggregateInput>;
   card?: InputMaybe<SortOrder>;
   createdAt?: InputMaybe<SortOrder>;
   faces?: InputMaybe<RekFaceOrderByRelationAggregateInput>;
@@ -7869,11 +6867,8 @@ export type ImageWhereInput = {
   NOT?: InputMaybe<Array<ImageWhereInput>>;
   OR?: InputMaybe<Array<ImageWhereInput>>;
   Scheme?: InputMaybe<SchemeListRelationFilter>;
-  actions?: InputMaybe<ActionListRelationFilter>;
   artcleColumnId?: InputMaybe<StringNullableFilter>;
   article?: InputMaybe<ArticleWhereInput>;
-  articleColumn?: InputMaybe<ArticleColumnWhereInput>;
-  articles?: InputMaybe<ArticleListRelationFilter>;
   card?: InputMaybe<StringNullableFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
   faces?: InputMaybe<RekFaceListRelationFilter>;
@@ -7918,11 +6913,8 @@ export type ImageWhereUniqueInput = {
   NOT?: InputMaybe<Array<ImageWhereInput>>;
   OR?: InputMaybe<Array<ImageWhereInput>>;
   Scheme?: InputMaybe<SchemeListRelationFilter>;
-  actions?: InputMaybe<ActionListRelationFilter>;
   artcleColumnId?: InputMaybe<StringNullableFilter>;
   article?: InputMaybe<ArticleWhereInput>;
-  articleColumn?: InputMaybe<ArticleColumnWhereInput>;
-  articles?: InputMaybe<ArticleListRelationFilter>;
   card?: InputMaybe<StringNullableFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
   faces?: InputMaybe<RekFaceListRelationFilter>;
@@ -8240,17 +7232,12 @@ export type IncidentAnswersArgs = {
   orderBy?: InputMaybe<Array<AnswerOrderByWithRelationInput>>;
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<AnswerWhereInput>;
 };
 
 
 export type IncidentArticleColumnsArgs = {
-  cursor?: InputMaybe<ArticleColumnWhereUniqueInput>;
-  distinct?: InputMaybe<Array<ArticleColumnScalarFieldEnum>>;
-  orderBy?: InputMaybe<Array<ArticleColumnOrderByWithRelationInput>>;
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<ArticleColumnWhereInput>;
 };
 
 
@@ -8969,12 +7956,8 @@ export type IncidentOrderByRelationAggregateInput = {
 };
 
 export type IncidentOrderByWithRelationInput = {
-  actions?: InputMaybe<ActionOrderByRelationAggregateInput>;
   activityAuthorised?: InputMaybe<SortOrder>;
-  answers?: InputMaybe<AnswerOrderByRelationAggregateInput>;
   approved?: InputMaybe<SortOrder>;
-  articleColumns?: InputMaybe<ArticleColumnOrderByRelationAggregateInput>;
-  business?: InputMaybe<BusinessOrderByWithRelationInput>;
   businessId?: InputMaybe<SortOrder>;
   createdAt?: InputMaybe<SortOrder>;
   createdBy?: InputMaybe<UserOrderByWithRelationInput>;
@@ -9001,7 +7984,6 @@ export type IncidentOrderByWithRelationInput = {
   intel?: InputMaybe<IntelOrderByRelationAggregateInput>;
   investigations?: InputMaybe<InvestigationOrderByRelationAggregateInput>;
   linkedUpdates?: InputMaybe<UpdateOrderByRelationAggregateInput>;
-  location?: InputMaybe<AddressOrderByWithRelationInput>;
   matches?: InputMaybe<RekMatchOrderByRelationAggregateInput>;
   messages?: InputMaybe<MessageOrderByRelationAggregateInput>;
   mg11?: InputMaybe<Mg11OrderByRelationAggregateInput>;
@@ -9277,11 +8259,8 @@ export type IncidentWhereInput = {
   AND?: InputMaybe<Array<IncidentWhereInput>>;
   NOT?: InputMaybe<Array<IncidentWhereInput>>;
   OR?: InputMaybe<Array<IncidentWhereInput>>;
-  actions?: InputMaybe<ActionListRelationFilter>;
   activityAuthorised?: InputMaybe<BoolFilter>;
-  answers?: InputMaybe<AnswerListRelationFilter>;
   approved?: InputMaybe<BoolNullableFilter>;
-  articleColumns?: InputMaybe<ArticleColumnListRelationFilter>;
   assignedUsers?: InputMaybe<UserListRelationFilter>;
   business?: InputMaybe<BusinessWhereInput>;
   businessId?: InputMaybe<StringNullableFilter>;
@@ -9369,11 +8348,8 @@ export type IncidentWhereUniqueInput = {
   AND?: InputMaybe<Array<IncidentWhereInput>>;
   NOT?: InputMaybe<Array<IncidentWhereInput>>;
   OR?: InputMaybe<Array<IncidentWhereInput>>;
-  actions?: InputMaybe<ActionListRelationFilter>;
   activityAuthorised?: InputMaybe<BoolFilter>;
-  answers?: InputMaybe<AnswerListRelationFilter>;
   approved?: InputMaybe<BoolNullableFilter>;
-  articleColumns?: InputMaybe<ArticleColumnListRelationFilter>;
   business?: InputMaybe<BusinessWhereInput>;
   businessId?: InputMaybe<StringNullableFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
@@ -11301,8 +10277,6 @@ export type MessageOrderByRelationAggregateInput = {
 };
 
 export type MessageOrderByWithRelationInput = {
-  actions?: InputMaybe<ActionOrderByRelationAggregateInput>;
-  articles?: InputMaybe<ArticleOrderByRelationAggregateInput>;
   chat?: InputMaybe<ChatOrderByWithRelationInput>;
   chatId?: InputMaybe<SortOrder>;
   content?: InputMaybe<SortOrder>;
@@ -11370,8 +10344,6 @@ export type MessageWhereInput = {
   AND?: InputMaybe<Array<MessageWhereInput>>;
   NOT?: InputMaybe<Array<MessageWhereInput>>;
   OR?: InputMaybe<Array<MessageWhereInput>>;
-  actions?: InputMaybe<ActionListRelationFilter>;
-  articles?: InputMaybe<ArticleListRelationFilter>;
   chat?: InputMaybe<ChatWhereInput>;
   chatId?: InputMaybe<StringFilter>;
   content?: InputMaybe<StringFilter>;
@@ -11396,8 +10368,6 @@ export type MessageWhereUniqueInput = {
   AND?: InputMaybe<Array<MessageWhereInput>>;
   NOT?: InputMaybe<Array<MessageWhereInput>>;
   OR?: InputMaybe<Array<MessageWhereInput>>;
-  actions?: InputMaybe<ActionListRelationFilter>;
-  articles?: InputMaybe<ArticleListRelationFilter>;
   chat?: InputMaybe<ChatWhereInput>;
   chatId?: InputMaybe<StringFilter>;
   content?: InputMaybe<StringFilter>;
@@ -14282,7 +13252,6 @@ export type OffenderActionsArgs = {
 export type OffenderAddressesArgs = {
   cursor?: InputMaybe<AddressWhereUniqueInput>;
   distinct?: InputMaybe<Array<AddressScalarFieldEnum>>;
-  orderBy?: InputMaybe<Array<AddressOrderByWithRelationInput>>;
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<AddressWhereInput>;
@@ -14295,12 +13264,9 @@ export type OffenderAiVisionDetectionsArgs = {
 
 
 export type OffenderArticleColumnsArgs = {
-  cursor?: InputMaybe<ArticleColumnWhereUniqueInput>;
   distinct?: InputMaybe<Array<ArticleColumnScalarFieldEnum>>;
-  orderBy?: InputMaybe<Array<ArticleColumnOrderByWithRelationInput>>;
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<ArticleColumnWhereInput>;
 };
 
 
@@ -14677,15 +13643,11 @@ export type OffenderOrderByRelationAggregateInput = {
 };
 
 export type OffenderOrderByWithRelationInput = {
-  actions?: InputMaybe<ActionOrderByRelationAggregateInput>;
   active?: InputMaybe<SortOrder>;
-  addresses?: InputMaybe<AddressOrderByRelationAggregateInput>;
   age?: InputMaybe<SortOrder>;
   aiImpactScore?: InputMaybe<SortOrder>;
   alias?: InputMaybe<SortOrder>;
   approved?: InputMaybe<SortOrder>;
-  articleColumns?: InputMaybe<ArticleColumnOrderByRelationAggregateInput>;
-  bans?: InputMaybe<BanOrderByRelationAggregateInput>;
   build?: InputMaybe<SortOrder>;
   comment?: InputMaybe<SortOrder>;
   createdAt?: InputMaybe<SortOrder>;
@@ -15064,14 +14026,12 @@ export type OffenderWhereInput = {
   AND?: InputMaybe<Array<OffenderWhereInput>>;
   NOT?: InputMaybe<Array<OffenderWhereInput>>;
   OR?: InputMaybe<Array<OffenderWhereInput>>;
-  actions?: InputMaybe<ActionListRelationFilter>;
   active?: InputMaybe<BoolNullableFilter>;
   addresses?: InputMaybe<AddressListRelationFilter>;
   age?: InputMaybe<EnumAgeNullableFilter>;
   aiImpactScore?: InputMaybe<IntNullableFilter>;
   alias?: InputMaybe<StringNullableListFilter>;
   approved?: InputMaybe<BoolNullableFilter>;
-  articleColumns?: InputMaybe<ArticleColumnListRelationFilter>;
   bans?: InputMaybe<BanListRelationFilter>;
   build?: InputMaybe<EnumBuildNullableFilter>;
   comment?: InputMaybe<StringNullableFilter>;
@@ -15136,13 +14096,11 @@ export type OffenderWhereUniqueInput = {
   AND?: InputMaybe<Array<OffenderWhereInput>>;
   NOT?: InputMaybe<Array<OffenderWhereInput>>;
   OR?: InputMaybe<Array<OffenderWhereInput>>;
-  actions?: InputMaybe<ActionListRelationFilter>;
   active?: InputMaybe<BoolNullableFilter>;
   addresses?: InputMaybe<AddressListRelationFilter>;
   age?: InputMaybe<EnumAgeNullableFilter>;
   alias?: InputMaybe<StringNullableListFilter>;
   approved?: InputMaybe<BoolNullableFilter>;
-  articleColumns?: InputMaybe<ArticleColumnListRelationFilter>;
   bans?: InputMaybe<BanListRelationFilter>;
   build?: InputMaybe<EnumBuildNullableFilter>;
   comment?: InputMaybe<StringNullableFilter>;
@@ -15902,7 +14860,6 @@ export type QueryAddressArgs = {
 
 
 export type QueryAddressesArgs = {
-  orderBy?: InputMaybe<Array<AddressOrderByWithRelationInput>>;
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<AddressWhereInput>;
@@ -16686,7 +15643,6 @@ export type QueryListArticlesRelayArgs = {
 
 
 export type QueryListBusinessQuestionsArgs = {
-  orderBy?: InputMaybe<Array<BusinessQuestionOrderBy>>;
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<BusinessQuestionWhereInput>;
@@ -16847,6 +15803,7 @@ export type QueryListNotificationsArgs = {
 
 export type QueryListOffendersArgs = {
   after?: InputMaybe<OffenderWhereUniqueInput>;
+  hasNoIncidents?: InputMaybe<Scalars['Boolean']>;
   order?: InputMaybe<OffenderOrderByWithRelationInput>;
   scheme: SchemeWhereUniqueInput;
   skip?: InputMaybe<Scalars['Int']>;
@@ -16868,6 +15825,7 @@ export type QueryListOffendersRelayArgs = {
   after?: InputMaybe<Scalars['String']>;
   before?: InputMaybe<Scalars['String']>;
   first?: InputMaybe<Scalars['Int']>;
+  hasNoIncidents?: InputMaybe<Scalars['Boolean']>;
   last?: InputMaybe<Scalars['Int']>;
   order?: InputMaybe<OffenderOrderByWithRelationInput>;
   orderByValue?: InputMaybe<SortOrder>;
@@ -19560,7 +18518,6 @@ export type SchemeBansArgs = {
 export type SchemeBusinessesArgs = {
   cursor?: InputMaybe<BusinessWhereUniqueInput>;
   distinct?: InputMaybe<BusinessScalarFieldEnum>;
-  orderBy?: InputMaybe<BusinessOrderByWithRelationInput>;
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<BusinessWhereInput>;
@@ -20012,16 +18969,11 @@ export type SchemeOrderByRelationAggregateInput = {
 
 export type SchemeOrderByWithRelationInput = {
   Checklist?: InputMaybe<ChecklistOrderByWithRelationInput>;
-  actions?: InputMaybe<ActionOrderByRelationAggregateInput>;
-  actionsInScheme?: InputMaybe<ActionOrderByRelationAggregateInput>;
   activityAssignToUser?: InputMaybe<SortOrder>;
   approvalDueDays?: InputMaybe<SortOrder>;
-  articles?: InputMaybe<ArticleOrderByRelationAggregateInput>;
   autoApproveIncidents?: InputMaybe<SortOrder>;
   autoApproveOffenders?: InputMaybe<SortOrder>;
   autoPopulateDescription?: InputMaybe<SortOrder>;
-  bans?: InputMaybe<BanOrderByRelationAggregateInput>;
-  businesses?: InputMaybe<BusinessOrderByRelationAggregateInput>;
   chats?: InputMaybe<ChatOrderByRelationAggregateInput>;
   checklistFeatureActive?: InputMaybe<SortOrder>;
   checklistId?: InputMaybe<SortOrder>;
@@ -20246,11 +19198,8 @@ export type SchemeWhereInput = {
   Checklist?: InputMaybe<ChecklistWhereInput>;
   NOT?: InputMaybe<Array<SchemeWhereInput>>;
   OR?: InputMaybe<Array<SchemeWhereInput>>;
-  actions?: InputMaybe<ActionListRelationFilter>;
-  actionsInScheme?: InputMaybe<ActionListRelationFilter>;
   activityAssignToUser?: InputMaybe<BoolFilter>;
   approvalDueDays?: InputMaybe<IntNullableFilter>;
-  articles?: InputMaybe<ArticleListRelationFilter>;
   autoApproveIncidents?: InputMaybe<BoolFilter>;
   autoApproveOffenders?: InputMaybe<BoolFilter>;
   autoPopulateDescription?: InputMaybe<BoolFilter>;
@@ -20342,11 +19291,8 @@ export type SchemeWhereUniqueInput = {
   Checklist?: InputMaybe<ChecklistWhereInput>;
   NOT?: InputMaybe<Array<SchemeWhereInput>>;
   OR?: InputMaybe<Array<SchemeWhereInput>>;
-  actions?: InputMaybe<ActionListRelationFilter>;
-  actionsInScheme?: InputMaybe<ActionListRelationFilter>;
   activityAssignToUser?: InputMaybe<BoolFilter>;
   approvalDueDays?: InputMaybe<IntNullableFilter>;
-  articles?: InputMaybe<ArticleListRelationFilter>;
   autoApproveIncidents?: InputMaybe<BoolFilter>;
   autoApproveOffenders?: InputMaybe<BoolFilter>;
   autoPopulateDescription?: InputMaybe<BoolFilter>;
@@ -20452,6 +19398,7 @@ export type SearchOffenderWhere = {
   gender?: InputMaybe<OffenderInNotInGender>;
   groups?: InputMaybe<Array<Scalars['String']>>;
   hair?: InputMaybe<Scalars['String']>;
+  hasNoIncidents?: InputMaybe<Scalars['Boolean']>;
   height?: InputMaybe<OffenderInNotInHeight>;
   peculiarities?: InputMaybe<Scalars['String']>;
   race?: InputMaybe<OffenderInNotInRace>;
@@ -20633,7 +19580,6 @@ export type Session = {
 };
 
 export type SessionOrderByWithRelationInput = {
-  actions?: InputMaybe<ActionOrderByRelationAggregateInput>;
   app?: InputMaybe<SortOrder>;
   createdAt?: InputMaybe<SortOrder>;
   id?: InputMaybe<SortOrder>;
@@ -20664,7 +19610,6 @@ export type SessionWhereInput = {
   AND?: InputMaybe<Array<SessionWhereInput>>;
   NOT?: InputMaybe<Array<SessionWhereInput>>;
   OR?: InputMaybe<Array<SessionWhereInput>>;
-  actions?: InputMaybe<ActionListRelationFilter>;
   app?: InputMaybe<EnumAppTypeFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
   id?: InputMaybe<StringFilter>;
@@ -20681,7 +19626,6 @@ export type SessionWhereUniqueInput = {
   AND?: InputMaybe<Array<SessionWhereInput>>;
   NOT?: InputMaybe<Array<SessionWhereInput>>;
   OR?: InputMaybe<Array<SessionWhereInput>>;
-  actions?: InputMaybe<ActionListRelationFilter>;
   app?: InputMaybe<EnumAppTypeFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
   id?: InputMaybe<Scalars['String']>;
@@ -20852,7 +19796,6 @@ export type Shoe = {
 
 export type ShoeOrderByWithRelationInput = {
   box?: InputMaybe<SortOrder>;
-  business?: InputMaybe<BusinessOrderByWithRelationInput>;
   createdAt?: InputMaybe<SortOrder>;
   id?: InputMaybe<SortOrder>;
   retailPrice?: InputMaybe<SortOrder>;
@@ -21691,7 +20634,6 @@ export type TagArticlesArgs = {
 export type TagBusinessesArgs = {
   cursor?: InputMaybe<BusinessWhereUniqueInput>;
   distinct?: InputMaybe<BusinessScalarFieldEnum>;
-  orderBy?: InputMaybe<BusinessOrderByWithRelationInput>;
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<BusinessWhereInput>;
@@ -21822,9 +20764,6 @@ export type TagOrderByRelationAggregateInput = {
 };
 
 export type TagOrderByWithRelationInput = {
-  actions?: InputMaybe<ActionOrderByRelationAggregateInput>;
-  articles?: InputMaybe<ArticleOrderByRelationAggregateInput>;
-  businesses?: InputMaybe<BusinessOrderByRelationAggregateInput>;
   childTags?: InputMaybe<TagOrderByRelationAggregateInput>;
   createdAt?: InputMaybe<SortOrder>;
   createdBy?: InputMaybe<UserOrderByWithRelationInput>;
@@ -21959,7 +20898,6 @@ export type TagQuestionOrderByRelationAggregateInput = {
 };
 
 export type TagQuestionOrderByWithRelationInput = {
-  answers?: InputMaybe<AnswerOrderByRelationAggregateInput>;
   createdAt?: InputMaybe<SortOrder>;
   deleted?: InputMaybe<SortOrder>;
   dependentQuestions?: InputMaybe<SortOrder>;
@@ -22019,7 +20957,6 @@ export type TagQuestionWhereInput = {
   AND?: InputMaybe<Array<TagQuestionWhereInput>>;
   NOT?: InputMaybe<Array<TagQuestionWhereInput>>;
   OR?: InputMaybe<Array<TagQuestionWhereInput>>;
-  answers?: InputMaybe<AnswerListRelationFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
   deleted?: InputMaybe<BoolFilter>;
   dependentQuestions?: InputMaybe<JsonNullableListFilter>;
@@ -22037,7 +20974,6 @@ export type TagQuestionWhereUniqueInput = {
   AND?: InputMaybe<Array<TagQuestionWhereInput>>;
   NOT?: InputMaybe<Array<TagQuestionWhereInput>>;
   OR?: InputMaybe<Array<TagQuestionWhereInput>>;
-  answers?: InputMaybe<AnswerListRelationFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
   deleted?: InputMaybe<BoolFilter>;
   dependentQuestions?: InputMaybe<JsonNullableListFilter>;
@@ -22145,8 +21081,6 @@ export type TagWhereInput = {
   AND?: InputMaybe<Array<TagWhereInput>>;
   NOT?: InputMaybe<Array<TagWhereInput>>;
   OR?: InputMaybe<Array<TagWhereInput>>;
-  actions?: InputMaybe<ActionListRelationFilter>;
-  articles?: InputMaybe<ArticleListRelationFilter>;
   businesses?: InputMaybe<BusinessListRelationFilter>;
   childTags?: InputMaybe<TagListRelationFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
@@ -22182,8 +21116,6 @@ export type TagWhereUniqueInput = {
   AND?: InputMaybe<Array<TagWhereInput>>;
   NOT?: InputMaybe<Array<TagWhereInput>>;
   OR?: InputMaybe<Array<TagWhereInput>>;
-  actions?: InputMaybe<ActionListRelationFilter>;
-  articles?: InputMaybe<ArticleListRelationFilter>;
   businesses?: InputMaybe<BusinessListRelationFilter>;
   childTags?: InputMaybe<TagListRelationFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
@@ -22292,7 +21224,6 @@ export type TaskQuestionOrderByRelationAggregateInput = {
 };
 
 export type TaskQuestionOrderByWithRelationInput = {
-  answers?: InputMaybe<AnswerOrderByRelationAggregateInput>;
   createdAt?: InputMaybe<SortOrder>;
   deleted?: InputMaybe<SortOrder>;
   id?: InputMaybe<SortOrder>;
@@ -22351,7 +21282,6 @@ export type TaskQuestionWhereInput = {
   AND?: InputMaybe<Array<TaskQuestionWhereInput>>;
   NOT?: InputMaybe<Array<TaskQuestionWhereInput>>;
   OR?: InputMaybe<Array<TaskQuestionWhereInput>>;
-  answers?: InputMaybe<AnswerListRelationFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
   deleted?: InputMaybe<BoolFilter>;
   id?: InputMaybe<StringFilter>;
@@ -22368,7 +21298,6 @@ export type TaskQuestionWhereUniqueInput = {
   AND?: InputMaybe<Array<TaskQuestionWhereInput>>;
   NOT?: InputMaybe<Array<TaskQuestionWhereInput>>;
   OR?: InputMaybe<Array<TaskQuestionWhereInput>>;
-  answers?: InputMaybe<AnswerListRelationFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
   deleted?: InputMaybe<BoolFilter>;
   id?: InputMaybe<Scalars['String']>;
@@ -22742,10 +21671,8 @@ export type TodoOrderByRelationAggregateInput = {
 };
 
 export type TodoOrderByWithRelationInput = {
-  answers?: InputMaybe<AnswerOrderByRelationAggregateInput>;
   assignedUsers?: InputMaybe<UserOrderByRelationAggregateInput>;
   authorised?: InputMaybe<SortOrder>;
-  business?: InputMaybe<BusinessOrderByWithRelationInput>;
   businessId?: InputMaybe<SortOrder>;
   chat?: InputMaybe<ChatOrderByWithRelationInput>;
   chatId?: InputMaybe<SortOrder>;
@@ -22931,7 +21858,6 @@ export type TodoWhereInput = {
   AND?: InputMaybe<Array<TodoWhereInput>>;
   NOT?: InputMaybe<Array<TodoWhereInput>>;
   OR?: InputMaybe<Array<TodoWhereInput>>;
-  answers?: InputMaybe<AnswerListRelationFilter>;
   assignedUsers?: InputMaybe<UserListRelationFilter>;
   authorised?: InputMaybe<BoolNullableFilter>;
   business?: InputMaybe<BusinessWhereInput>;
@@ -22973,7 +21899,6 @@ export type TodoWhereUniqueInput = {
   AND?: InputMaybe<Array<TodoWhereInput>>;
   NOT?: InputMaybe<Array<TodoWhereInput>>;
   OR?: InputMaybe<Array<TodoWhereInput>>;
-  answers?: InputMaybe<AnswerListRelationFilter>;
   assignedUsers?: InputMaybe<UserListRelationFilter>;
   authorised?: InputMaybe<BoolNullableFilter>;
   business?: InputMaybe<BusinessWhereInput>;
@@ -23248,11 +22173,6 @@ export type UpdateRepliesArgs = {
   where?: InputMaybe<UpdateWhereInput>;
 };
 
-export type UpdateBusinessOnUserEnvelope = {
-  data?: InputMaybe<BusinessUpdateInput>;
-  where?: InputMaybe<BusinessWhereUniqueInput>;
-};
-
 export type UpdateBusinessQuestionInput = {
   actions?: InputMaybe<Array<Scalars['JSON']>>;
   deleted?: InputMaybe<Scalars['Boolean']>;
@@ -23265,11 +22185,6 @@ export type UpdateBusinessQuestionInput = {
   req?: InputMaybe<Scalars['Boolean']>;
   roleIds?: InputMaybe<Array<Scalars['String']>>;
   tooltip?: InputMaybe<Scalars['String']>;
-};
-
-export type UpdateBusinessRelationEnvelope = {
-  data?: InputMaybe<BusinessUpdateInput>;
-  where?: InputMaybe<BusinessWhereUniqueInput>;
 };
 
 export type UpdateCrimeGroupDataInput = {
@@ -23384,7 +22299,6 @@ export type UpdateOrderByWithRelationInput = {
   incidentId?: InputMaybe<SortOrder>;
   investigation?: InputMaybe<InvestigationOrderByWithRelationInput>;
   investigationId?: InputMaybe<SortOrder>;
-  linkedArticles?: InputMaybe<ArticleOrderByRelationAggregateInput>;
   linkedCrimeGroups?: InputMaybe<CrimeGroupOrderByRelationAggregateInput>;
   linkedIncidents?: InputMaybe<IncidentOrderByRelationAggregateInput>;
   linkedInvestigations?: InputMaybe<InvestigationOrderByRelationAggregateInput>;
@@ -23618,7 +22532,6 @@ export type UpdateWhereInput = {
   incidentId?: InputMaybe<StringNullableFilter>;
   investigation?: InputMaybe<InvestigationWhereInput>;
   investigationId?: InputMaybe<StringNullableFilter>;
-  linkedArticles?: InputMaybe<ArticleListRelationFilter>;
   linkedCrimeGroups?: InputMaybe<CrimeGroupListRelationFilter>;
   linkedIncidents?: InputMaybe<IncidentListRelationFilter>;
   linkedInvestigations?: InputMaybe<InvestigationListRelationFilter>;
@@ -23657,7 +22570,6 @@ export type UpdateWhereUniqueInput = {
   incidentId?: InputMaybe<StringNullableFilter>;
   investigation?: InputMaybe<InvestigationWhereInput>;
   investigationId?: InputMaybe<StringNullableFilter>;
-  linkedArticles?: InputMaybe<ArticleListRelationFilter>;
   linkedCrimeGroups?: InputMaybe<CrimeGroupListRelationFilter>;
   linkedIncidents?: InputMaybe<IncidentListRelationFilter>;
   linkedInvestigations?: InputMaybe<InvestigationListRelationFilter>;
@@ -24036,7 +22948,6 @@ export type UserActionsByUserArgs = {
 export type UserAddressesArgs = {
   cursor?: InputMaybe<AddressWhereUniqueInput>;
   distinct?: InputMaybe<Array<AddressScalarFieldEnum>>;
-  orderBy?: InputMaybe<Array<AddressOrderByWithRelationInput>>;
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<AddressWhereInput>;
@@ -24086,7 +22997,6 @@ export type UserBansArgs = {
 export type UserBusinessesArgs = {
   cursor?: InputMaybe<BusinessWhereUniqueInput>;
   distinct?: InputMaybe<BusinessScalarFieldEnum>;
-  orderBy?: InputMaybe<BusinessOrderByWithRelationInput>;
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<BusinessWhereInput>;
@@ -24804,23 +23714,15 @@ export type UserOrderByRelationAggregateInput = {
 };
 
 export type UserOrderByWithRelationInput = {
-  actions?: InputMaybe<ActionOrderByRelationAggregateInput>;
-  actionsByUser?: InputMaybe<ActionOrderByRelationAggregateInput>;
-  addresses?: InputMaybe<AddressOrderByRelationAggregateInput>;
   approverGroups?: InputMaybe<GroupOrderByRelationAggregateInput>;
-  articles?: InputMaybe<ArticleOrderByRelationAggregateInput>;
   assignedTodos?: InputMaybe<TodoOrderByRelationAggregateInput>;
   auth0Id?: InputMaybe<SortOrder>;
-  bans?: InputMaybe<BanOrderByRelationAggregateInput>;
   bulletinEmails?: InputMaybe<SortOrder>;
   bulletinPush?: InputMaybe<SortOrder>;
-  businesses?: InputMaybe<BusinessOrderByRelationAggregateInput>;
   chats?: InputMaybe<UserChatOrderByRelationAggregateInput>;
-  checklists?: InputMaybe<ActiveChecklistOrderByRelationAggregateInput>;
   completedTodos?: InputMaybe<TodoOrderByRelationAggregateInput>;
   contact?: InputMaybe<ContactOrderByWithRelationInput>;
   contactId?: InputMaybe<SortOrder>;
-  createdArticles?: InputMaybe<ArticleOrderByRelationAggregateInput>;
   createdAt?: InputMaybe<SortOrder>;
   createdTags?: InputMaybe<TagOrderByRelationAggregateInput>;
   createdTodos?: InputMaybe<TodoOrderByRelationAggregateInput>;
@@ -25269,11 +24171,8 @@ export type UserWhereInput = {
   AND?: InputMaybe<Array<UserWhereInput>>;
   NOT?: InputMaybe<Array<UserWhereInput>>;
   OR?: InputMaybe<Array<UserWhereInput>>;
-  actions?: InputMaybe<ActionListRelationFilter>;
-  actionsByUser?: InputMaybe<ActionListRelationFilter>;
   addresses?: InputMaybe<AddressListRelationFilter>;
   approverGroups?: InputMaybe<GroupListRelationFilter>;
-  articles?: InputMaybe<ArticleListRelationFilter>;
   assignedTodos?: InputMaybe<TodoListRelationFilter>;
   auth0Id?: InputMaybe<StringNullableFilter>;
   bans?: InputMaybe<BanListRelationFilter>;
@@ -25284,7 +24183,6 @@ export type UserWhereInput = {
   completedTodos?: InputMaybe<TodoListRelationFilter>;
   contact?: InputMaybe<ContactWhereInput>;
   contactId?: InputMaybe<StringNullableFilter>;
-  createdArticles?: InputMaybe<ArticleListRelationFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
   createdTags?: InputMaybe<TagListRelationFilter>;
   createdTodos?: InputMaybe<TodoListRelationFilter>;
@@ -25353,11 +24251,8 @@ export type UserWhereUniqueInput = {
   AND?: InputMaybe<Array<UserWhereInput>>;
   NOT?: InputMaybe<Array<UserWhereInput>>;
   OR?: InputMaybe<Array<UserWhereInput>>;
-  actions?: InputMaybe<ActionListRelationFilter>;
-  actionsByUser?: InputMaybe<ActionListRelationFilter>;
   addresses?: InputMaybe<AddressListRelationFilter>;
   approverGroups?: InputMaybe<GroupListRelationFilter>;
-  articles?: InputMaybe<ArticleListRelationFilter>;
   assignedTodos?: InputMaybe<TodoListRelationFilter>;
   auth0Id?: InputMaybe<Scalars['String']>;
   bans?: InputMaybe<BanListRelationFilter>;
@@ -25368,7 +24263,6 @@ export type UserWhereUniqueInput = {
   completedTodos?: InputMaybe<TodoListRelationFilter>;
   contact?: InputMaybe<ContactWhereInput>;
   contactId?: InputMaybe<Scalars['String']>;
-  createdArticles?: InputMaybe<ArticleListRelationFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
   createdTags?: InputMaybe<TagListRelationFilter>;
   createdTodos?: InputMaybe<TodoListRelationFilter>;
@@ -25722,7 +24616,6 @@ export type VehicleOrderByRelationAggregateInput = {
 };
 
 export type VehicleOrderByWithRelationInput = {
-  actions?: InputMaybe<ActionOrderByRelationAggregateInput>;
   colour?: InputMaybe<SortOrder>;
   createdAt?: InputMaybe<SortOrder>;
   createdBy?: InputMaybe<UserOrderByWithRelationInput>;
@@ -25880,7 +24773,6 @@ export type VehicleWhereInput = {
   AND?: InputMaybe<Array<VehicleWhereInput>>;
   NOT?: InputMaybe<Array<VehicleWhereInput>>;
   OR?: InputMaybe<Array<VehicleWhereInput>>;
-  actions?: InputMaybe<ActionListRelationFilter>;
   colour?: InputMaybe<StringNullableFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
   createdBy?: InputMaybe<UserWhereInput>;
@@ -25917,7 +24809,6 @@ export type VehicleWhereUniqueInput = {
   AND?: InputMaybe<Array<VehicleWhereInput>>;
   NOT?: InputMaybe<Array<VehicleWhereInput>>;
   OR?: InputMaybe<Array<VehicleWhereInput>>;
-  actions?: InputMaybe<ActionListRelationFilter>;
   colour?: InputMaybe<StringNullableFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
   createdBy?: InputMaybe<UserWhereInput>;

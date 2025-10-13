@@ -1,36 +1,37 @@
-import { createUseStyles } from 'react-jss';
 import type { Theme } from 'configs/ThemeConfig';
 
+import { createUseStyles } from 'react-jss';
+
 const useStyles = createUseStyles((theme: Theme) => ({
-  toolbar: {
-    backgroundColor: theme.bodyBackground,
-    padding: 10,
-  },
-  cardPreviewSection: {
-    backgroundColor: theme.bodyBackground,
-    width: '100%',
-    display: 'flex',
-    padding: 30,
-    justifyContent: 'center',
-  },
-  mockupCard: {
-    height: 400,
-    width: 300,
-    backgroundColor: theme.componentBackground,
-    overflow: 'hidden',
-    border: `1px solid ${theme.borderColor}`,
-    borderRadius: 10,
-  },
-  cardImage: {
-    width: '100%',
-    height: 200,
-  },
   cardBody: {
     backgroundColor: theme.componentBackground,
     padding: '15px 10px',
   },
+  cardImage: {
+    height: 200,
+    width: '100%',
+  },
+  cardPreviewSection: {
+    backgroundColor: theme.bodyBackground,
+    display: 'flex',
+    justifyContent: 'center',
+    padding: 30,
+    width: '100%',
+  },
+  mockupCard: {
+    backgroundColor: theme.componentBackground,
+    border: `1px solid ${theme.borderColor}`,
+    borderRadius: 10,
+    height: 400,
+    overflow: 'hidden',
+    width: 300,
+  },
   select: {
     width: 150,
+  },
+  toolbar: {
+    backgroundColor: theme.bodyBackground,
+    padding: 10,
   },
 }));
 

@@ -1,96 +1,97 @@
 /* eslint-disable formatjs/no-literal-string-in-jsx */
-import React from 'react';
-import './styles.css';
 import type { FormInstance } from 'antd';
-import { Button, Col, Form, Tabs, Upload, Row, Select } from 'antd';
-import ReactDOMServer from 'react-dom/server';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import { faFileUpload } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Col, Form, Row, Select, Tabs, Upload } from 'antd';
+import { Mg11Status } from 'graphql/types';
+import React from 'react';
+import ReactDOMServer from 'react-dom/server';
 import { useNavigate } from 'react-router';
 
+import SignatureInput from '../../../components/SignBox';
 import SigSeal from '../../../components/onboarding/Onboarding/SchemeTerms/SigSeal';
 import FONT_FAMILIES from '../../../components/onboarding/Onboarding/SchemeTerms/utils/Fonts';
-import SignatureInput from '../../../components/SignBox';
 import processText from '../../../utils/generate-text';
-import { Mg11Status } from 'graphql/types';
+import './styles.css';
 
 interface Props {
+  data: Mg11Data;
+  file: { file: string; name: string } | null;
+  form: FormInstance;
+  name: string;
   onSubmit: () => void;
   saving: boolean;
-  form: FormInstance;
-  setSign: (value: string) => void;
-  update: (value: string) => void;
   selectedFont: string;
-  name: string;
-  file: { file: string; name: string } | null;
-  setTab: (value: string) => void;
-  tab: string;
-  setSelectedFont: (value: string) => void;
   setFile: (value: { file: string; name: string } | null) => void;
-  data: Mg11Data;
-  status: Mg11Status;
+  setSelectedFont: (value: string) => void;
+  setSign: (value: string) => void;
+  setTab: (value: string) => void;
   sign: string;
+  status: Mg11Status;
+  tab: string;
+  update: (value: string) => void;
 }
 
 export interface Mg11Data {
-  name: string;
-  urn: string;
-  age: string;
-  witnessSignature: string;
-  witnessSignatureDate: string;
-  visualRecording: boolean;
-  statement: string;
   address: string;
-  postcode: string;
-  homeTel: string;
-  workTel: string;
-  mobileTel: string;
-  email: string;
-  occupation: string;
-  prefContact: string;
-  gender: string;
-  dobPlace: string;
-  formerName: string;
-  height: string;
-  ethnicity: string;
+  age: string;
   availability: string;
-  likelyToAttend: boolean;
-  likelyToAttendReason: string;
-  specialMeasures: boolean;
   careNeeds: boolean;
   careNeedsDetails: string;
-  station: string;
-  statementWhereWhen: string;
-  detailsExplained: boolean;
-  leafletReceived: boolean;
-  medicalReleasedPolice: string;
-  medicalReleasedDefence: string;
   civilProceedingsRelease: string;
-  witnessServiceDisclose: boolean;
-  statementTakerName: string;
-  interviewerSignature: string;
+  detailsExplained: boolean;
+  dobPlace: string;
+  email: string;
+  ethnicity: string;
+  formerName: string;
+  gender: string;
+  height: string;
+  homeTel: string;
   incidentId: string;
+  interviewerSignature: string;
+  leafletReceived: boolean;
+  likelyToAttend: boolean;
+  likelyToAttendReason: string;
+  medicalReleasedDefence: string;
+  medicalReleasedPolice: string;
+  mobileTel: string;
+  name: string;
+  occupation: string;
+  postcode: string;
+  prefContact: string;
+  specialMeasures: boolean;
+  statement: string;
+  statementTakerName: string;
+  statementWhereWhen: string;
+  station: string;
+  urn: string;
+  visualRecording: boolean;
+  witnessServiceDisclose: boolean;
+  witnessSignature: string;
+  witnessSignatureDate: string;
+  workTel: string;
 }
 // wait to check
 const generateMg11 = ({
+  data,
+  file,
+  form,
+  name,
   onSubmit,
   saving,
-  form,
-  setSign,
-  update,
   selectedFont,
-  name,
-  file,
-  setTab,
-  tab,
-  setSelectedFont,
   setFile,
-  data,
+  setSelectedFont,
+  setSign,
+  setTab,
   sign,
   status,
+  tab,
+  update,
 }: Props) => {
   const navigate = useNavigate();
-  const { text1, text2, noPages } = processText(data.statement || '');
+  const { noPages, text1, text2 } = processText(data.statement || '');
 
   if (status === Mg11Status.Completed) {
     navigate(`/incidents/view/${data.incidentId}`);
@@ -141,7 +142,7 @@ const generateMg11 = ({
               </div>
               <div
                 className="field"
-                style={{ marginBottom: 0, height: 50, alignItems: 'flex-end' }}
+                style={{ alignItems: 'flex-end', height: 50, marginBottom: 0 }}
               >
                 <div className="field-signature">
                   Signature:{' '}
@@ -184,7 +185,7 @@ const generateMg11 = ({
         </div>
         <div
           className="field-bottom"
-          style={{ marginBottom: 0, height: 50, alignItems: 'flex-end' }}
+          style={{ alignItems: 'flex-end', height: 50, marginBottom: 0 }}
         >
           <div className="field-signature-bottom">
             Signature:{' '}
@@ -221,7 +222,7 @@ const generateMg11 = ({
           </div>
           <div
             className="field-bottom"
-            style={{ marginBottom: 0, height: 50, alignItems: 'flex-end' }}
+            style={{ alignItems: 'flex-end', height: 50, marginBottom: 0 }}
           >
             <div className="field-signature-bottom">
               Signature:{' '}
@@ -365,7 +366,7 @@ const generateMg11 = ({
                 </div>
                 <div
                   className="field-label"
-                  style={{ width: '80%', marginRight: 10 }}
+                  style={{ marginRight: 10, width: '80%' }}
                 >
                   The criminal justice process and Victim Personal Statement
                   scheme (victims only) has been explained to me
@@ -380,7 +381,7 @@ const generateMg11 = ({
                 </div>
                 <div
                   className="field-label"
-                  style={{ width: '80%', marginRight: 10 }}
+                  style={{ marginRight: 10, width: '80%' }}
                 >
                   I have been given the leaflet &lsquo;Giving a witness
                   statement to police - what happens next?&lsquo;{' '}
@@ -395,7 +396,7 @@ const generateMg11 = ({
                 </div>
                 <div
                   className="field-label"
-                  style={{ width: '80%', marginRight: 10 }}
+                  style={{ marginRight: 10, width: '80%' }}
                 >
                   I consent to the police having access to my medical records in
                   relation to this matter{' '}
@@ -410,7 +411,7 @@ const generateMg11 = ({
                 </div>
                 <div
                   className="field-label"
-                  style={{ width: '80%', marginRight: 10 }}
+                  style={{ marginRight: 10, width: '80%' }}
                 >
                   I consent to the defence having access to my medical records
                   in relation to this matter{' '}
@@ -426,7 +427,7 @@ const generateMg11 = ({
                 </div>
                 <div
                   className="field-label"
-                  style={{ width: '80%', marginRight: 10 }}
+                  style={{ marginRight: 10, width: '80%' }}
                 >
                   I consent to the statement being disclosed for the purposes of
                   civil proceedings (if applicable){' '}
@@ -441,7 +442,7 @@ const generateMg11 = ({
                 </div>
                 <div
                   className="field-label"
-                  style={{ width: '80%', marginRight: 10 }}
+                  style={{ marginRight: 10, width: '80%' }}
                 >
                   The information recorded above will be disclosed to the
                   Witness Service so they can offer help and support, unless you
@@ -453,7 +454,7 @@ const generateMg11 = ({
               </div>
               <div
                 className="field"
-                style={{ marginBottom: 0, height: 50, alignItems: 'flex-end' }}
+                style={{ alignItems: 'flex-end', height: 50, marginBottom: 0 }}
               >
                 <div className="field-signature">
                   Signature of witness:
@@ -488,7 +489,7 @@ const generateMg11 = ({
               </div>
               <div
                 className="field"
-                style={{ marginBottom: 0, height: 50, alignItems: 'flex-end' }}
+                style={{ alignItems: 'flex-end', height: 50, marginBottom: 0 }}
               >
                 <div className="field-signature">
                   Signature of witness:
@@ -508,14 +509,14 @@ const generateMg11 = ({
           initialValues={{
             interviewerSignature: '',
           }}
-          onFinish={onSubmit}
           layout="vertical"
+          onFinish={onSubmit}
         >
           <Row gutter={10}>
             <Col span={24}>
               <Form.Item
-                name="termsSignature"
                 label="Please Sign here"
+                name="termsSignature"
                 rules={[
                   () => ({
                     validator() {
@@ -548,9 +549,10 @@ const generateMg11 = ({
                   }),
                 ]}
               >
-                <div style={{ width: '100%', display: 'flex' }}>
+                <div style={{ display: 'flex', width: '100%' }}>
                   <Tabs
                     activeKey={tab}
+                    destroyInactiveTabPane
                     onChange={(tabKey) => {
                       setTab(tabKey);
                       if (tabKey === 'upload' && file?.file) {
@@ -559,9 +561,9 @@ const generateMg11 = ({
                         update(
                           ReactDOMServer.renderToString(
                             <img
-                              src={`data:application/pdf;base64,${file?.file}`}
                               alt="file"
                               height={100}
+                              src={`data:application/pdf;base64,${file?.file}`}
                               width={300}
                             />
                           )
@@ -572,10 +574,10 @@ const generateMg11 = ({
                         update(
                           ReactDOMServer.renderToString(
                             <SigSeal
-                              key={selectedFont}
-                              name={name}
                               font={selectedFont}
                               height={100}
+                              key={selectedFont}
+                              name={name}
                               width={300}
                             />
                           )
@@ -585,56 +587,54 @@ const generateMg11 = ({
                         update('');
                       }
                     }}
-                    type="card"
                     style={{ height: 250, width: 500 }}
-                    destroyInactiveTabPane
+                    type="card"
                   >
-                    <Tabs.TabPane tab="Generate" key="generate">
+                    <Tabs.TabPane key="generate" tab="Generate">
                       <Select
-                        style={{
-                          fontFamily: selectedFont,
-                          marginBottom: 20,
-                        }}
                         defaultValue={selectedFont}
                         onChange={(value) => {
                           setSelectedFont(value);
                           update(
                             ReactDOMServer.renderToString(
                               <SigSeal
-                                key={selectedFont}
-                                name={name}
                                 font={selectedFont}
                                 height={100}
+                                key={selectedFont}
+                                name={name}
                                 width={300}
                               />
                             )
                           );
                         }}
+                        style={{
+                          fontFamily: selectedFont,
+                          marginBottom: 20,
+                        }}
                       >
                         {FONT_FAMILIES.map((font) => (
                           <Select.Option
                             key={font}
-                            value={font}
                             style={{
                               fontFamily: font,
                             }}
+                            value={font}
                           >
                             {name}
                           </Select.Option>
                         ))}
                       </Select>
                       <SigSeal
-                        key={selectedFont}
-                        name={name}
                         font={selectedFont}
                         height={100}
+                        key={selectedFont}
+                        name={name}
                         width={300}
                       />
                     </Tabs.TabPane>
-                    <Tabs.TabPane tab="Upload" key="upload">
+                    <Tabs.TabPane key="upload" tab="Upload">
                       <>
                         <Upload
-                          showUploadList={false}
                           beforeUpload={(f) => {
                             const reader = new FileReader();
                             reader.addEventListener('load', (e) => {
@@ -650,9 +650,9 @@ const generateMg11 = ({
                                   update(
                                     ReactDOMServer.renderToString(
                                       <img
-                                        src={base64File}
                                         alt="file"
                                         height={100}
+                                        src={base64File}
                                         width={300}
                                       />
                                     )
@@ -664,6 +664,7 @@ const generateMg11 = ({
                             // Prevent upload
                             return false;
                           }}
+                          showUploadList={false}
                         >
                           <Button key="uploadButton" type="primary">
                             <FontAwesomeIcon
@@ -674,18 +675,18 @@ const generateMg11 = ({
                           </Button>
                         </Upload>
                         {file && (
-                          <div style={{ paddingTop: 10, paddingLeft: 10 }}>
+                          <div style={{ paddingLeft: 10, paddingTop: 10 }}>
                             <img
-                              src={`data:application/pdf;base64,${file.file}`}
                               alt="file"
                               height={100}
+                              src={`data:application/pdf;base64,${file.file}`}
                               width={300}
                             />
                           </div>
                         )}
                       </>
                     </Tabs.TabPane>
-                    <Tabs.TabPane tab="Draw" key="draw">
+                    <Tabs.TabPane key="draw" tab="Draw">
                       <SignatureInput
                         hidden={false}
                         onChange={(val: string) => {
@@ -702,7 +703,7 @@ const generateMg11 = ({
 
           {/* Buttons */}
           <Form.Item>
-            <Row style={{ marginTop: 10 }} gutter={10} justify="end">
+            <Row gutter={10} justify="end" style={{ marginTop: 10 }}>
               <Col>
                 <Button disabled={saving} onClick={() => window.history.back()}>
                   Cancel
@@ -711,9 +712,9 @@ const generateMg11 = ({
               <Col>
                 <Button
                   disabled={saving}
+                  htmlType="submit"
                   loading={saving}
                   type="primary"
-                  htmlType="submit"
                 >
                   Submit
                 </Button>

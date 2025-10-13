@@ -1,8 +1,8 @@
 function processText(text: string) {
   const result = {
+    noPages: 2,
     text1: '',
     text2: '',
-    noPages: 2,
   };
 
   if (text.length <= 4644) {

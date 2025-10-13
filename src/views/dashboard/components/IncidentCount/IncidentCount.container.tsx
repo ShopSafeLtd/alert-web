@@ -1,4 +1,5 @@
 import React from 'react';
+
 import View from './IncidentCount.view';
 import useIncidentCount from './useIncidentCount';
 

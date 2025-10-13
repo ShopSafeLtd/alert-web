@@ -1,25 +1,26 @@
 import React from 'react';
+
 import View from './ListStatements.view';
 import useListStatements from './useListStatements';
 
 const ListStatements = () => {
   const {
+    createTemplate,
     data,
+    editTemplate,
     loading,
     toggleCreate,
     toggleEdit,
-    createTemplate,
-    editTemplate,
   } = useListStatements();
 
   return (
     <View
+      createTemplate={createTemplate}
       data={data}
+      editTemplate={editTemplate}
       loading={loading}
       toggleCreate={toggleCreate}
       toggleEdit={toggleEdit}
-      createTemplate={createTemplate}
-      editTemplate={editTemplate}
     />
   );
 };

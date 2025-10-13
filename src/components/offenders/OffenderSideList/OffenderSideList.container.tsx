@@ -1,4 +1,5 @@
 import React from 'react';
+
 import View from './OffenderSideList.view';
 import useOffenderSideList from './useOffenderSideList';
 
@@ -9,14 +10,14 @@ interface Props {
 }
 
 const OffenderSideList = ({ current, to }: Props): JSX.Element => {
-  const { data, loading, fetchMoreScroll } = useOffenderSideList();
+  const { data, fetchMoreScroll, loading } = useOffenderSideList();
 
   return (
     <View
-      data={data}
-      loading={loading}
       current={current}
+      data={data}
       fetchMoreScroll={fetchMoreScroll}
+      loading={loading}
       to={to}
     />
   );

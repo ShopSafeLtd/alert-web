@@ -4,46 +4,46 @@ import View from './AddExistingOffender.view';
 import useAddExistingOffender from './useAddExistingOffender';
 
 interface Props {
-  onClose: () => void;
   // update: (value: OffenderData) => void;
   offenderIds: string[] | undefined;
+  onClose: () => void;
 }
 
 const AddExistingOffender = ({
-  onClose,
   // update,
   offenderIds,
+  onClose,
 }: Props): JSX.Element => {
   const {
-    onSubmit,
-    saving,
     data,
-    loading,
-    search,
-    setSearch,
-    onPaginationChange,
-    setCurrentId,
-    selectedOffender,
-    openLightbox,
     lightBoxOpen,
+    loading,
+    onPaginationChange,
+    onSubmit,
+    openLightbox,
     publicOffenderDOB,
-  } = useAddExistingOffender({ onClose, offenderIds });
+    saving,
+    search,
+    selectedOffender,
+    setCurrentId,
+    setSearch,
+  } = useAddExistingOffender({ offenderIds, onClose });
 
   return (
     <View
-      lightBoxOpen={lightBoxOpen}
-      openLightbox={openLightbox}
-      onSubmit={onSubmit}
-      saving={saving}
       data={data}
-      search={search}
-      setSearch={setSearch}
+      lightBoxOpen={lightBoxOpen}
       loading={loading}
       onClose={onClose}
       onPaginationChange={onPaginationChange}
-      setCurrentId={setCurrentId}
-      selectedOffender={selectedOffender}
+      onSubmit={onSubmit}
+      openLightbox={openLightbox}
       publicOffenderDOB={publicOffenderDOB}
+      saving={saving}
+      search={search}
+      selectedOffender={selectedOffender}
+      setCurrentId={setCurrentId}
+      setSearch={setSearch}
     />
   );
 };

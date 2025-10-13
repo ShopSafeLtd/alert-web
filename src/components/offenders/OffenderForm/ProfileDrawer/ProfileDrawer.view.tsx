@@ -1,98 +1,98 @@
-import React from 'react';
-import { Drawer } from 'antd';
-
 import type { CrimeGroupData, VehicleData } from 'types/DataType';
+
+import { Drawer } from 'antd';
 import AddVehicle from 'components/form-components/Vehicle/AddVehicle';
-import LinkVehicle from 'components/form-components/linkOptions/LinkVehicle';
 import LinkCrimeGroup from 'components/form-components/linkOptions/LinkCrimeGroup';
+import LinkVehicle from 'components/form-components/linkOptions/LinkVehicle';
+import React from 'react';
 import { useIntl } from 'react-intl';
 
 interface Props {
+  addExistingCrimeGroup: boolean;
+  addExistingVehicle: boolean;
   addNewVehicle: boolean;
+  crimeGroupsData: CrimeGroupData[];
+  fromOffender?: boolean;
+  onAddCrimeGroup: (value: CrimeGroupData) => void;
+  onAddVehicle: (data: VehicleData, existing: boolean) => void;
+  toggleAddExistingCrimeGroup: () => void;
+  toggleAddExistingVehicle: () => void;
   toggleAddNewVehicle: () => void;
   vehiclesData: VehicleData[];
-  addExistingVehicle: boolean;
-  toggleAddExistingVehicle: () => void;
-  crimeGroupsData: CrimeGroupData[];
-  addExistingCrimeGroup: boolean;
-  toggleAddExistingCrimeGroup: () => void;
-  onAddCrimeGroup: (value: CrimeGroupData) => void;
-  fromOffender?: boolean;
-  onAddVehicle: (data: VehicleData, existing: boolean) => void;
 }
 
 const ProfileDrawer = ({
-  vehiclesData,
-  addExistingVehicle,
-  toggleAddExistingVehicle,
-  crimeGroupsData,
   addExistingCrimeGroup,
-  toggleAddExistingCrimeGroup,
-  onAddCrimeGroup,
-  fromOffender,
-  onAddVehicle,
+  addExistingVehicle,
   addNewVehicle,
+  crimeGroupsData,
+  fromOffender,
+  onAddCrimeGroup,
+  onAddVehicle,
+  toggleAddExistingCrimeGroup,
+  toggleAddExistingVehicle,
   toggleAddNewVehicle,
+  vehiclesData,
 }: Props): JSX.Element => {
   const intl = useIntl();
   return (
     <>
       <Drawer
+        bodyStyle={{ overflow: 'hidden' }}
+        onClose={toggleAddExistingVehicle}
+        open={addExistingVehicle}
         title={intl.formatMessage({
           defaultMessage: 'Add Existing Vehicles',
         })}
-        open={addExistingVehicle}
         width="800"
-        onClose={toggleAddExistingVehicle}
         zIndex={1001}
-        bodyStyle={{ overflow: 'hidden' }}
       >
         {addExistingVehicle ? (
           <LinkVehicle
+            onClose={toggleAddExistingVehicle}
             update={(data) => onAddVehicle(data, true)}
             vehicleIds={vehiclesData.map(({ id }) => id)}
-            onClose={toggleAddExistingVehicle}
           />
         ) : (
           <div />
         )}
       </Drawer>
       <Drawer
+        onClose={toggleAddNewVehicle}
+        open={addNewVehicle}
         title={intl.formatMessage({
           defaultMessage: 'Add New Vehicle',
         })}
-        open={addNewVehicle}
         width="700"
         zIndex={999}
-        onClose={toggleAddNewVehicle}
       >
         {addNewVehicle ? (
           <AddVehicle
+            fromOffender={!!fromOffender}
+            onClose={toggleAddNewVehicle}
             update={(data) => {
               onAddVehicle(data, false);
               toggleAddNewVehicle();
             }}
-            onClose={toggleAddNewVehicle}
-            fromOffender={!!fromOffender}
           />
         ) : (
           <div />
         )}
       </Drawer>
       <Drawer
+        onClose={toggleAddExistingCrimeGroup}
+        open={addExistingCrimeGroup}
         title={intl.formatMessage({
           defaultMessage: 'Add Existing Crime Groups',
         })}
-        open={addExistingCrimeGroup}
         width="800"
-        onClose={toggleAddExistingCrimeGroup}
         zIndex={1001}
       >
         {addExistingCrimeGroup ? (
           <LinkCrimeGroup
-            update={onAddCrimeGroup}
             crimeGroupIds={crimeGroupsData.map(({ id }) => id)}
             onClose={toggleAddExistingCrimeGroup}
+            update={onAddCrimeGroup}
           />
         ) : (
           <div />

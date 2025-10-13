@@ -1,44 +1,46 @@
-import React from 'react';
+import type { ListStatementTemplatesQuery } from 'graphql/statementTemplates/queries/__generated__/list-templates.generated';
 
-import { Button, Col, Drawer, Row, Table } from 'antd';
 import { faEdit, faPlus } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Col, Drawer, Row, Table } from 'antd';
+import React from 'react';
 import { useIntl } from 'react-intl';
-import useStyles from './ListBusinesses.styles';
+
 import CreateEditStatementContainer from '../../../../components/form-components/statements/createEditStatement.container';
-import { ListStatementTemplatesQuery } from 'graphql/statementTemplates/queries/__generated__/list-templates.generated';
+import useStyles from './ListBusinesses.styles';
 
 interface TableData {
+  content: string;
   key: string;
   name: string;
-  content: string;
 }
 
 interface Props {
+  createTemplate: boolean;
   data: ListStatementTemplatesQuery | undefined;
+  editTemplate: null | string;
   loading: boolean;
   toggleCreate: () => void;
-  toggleEdit: (t: string | null) => void;
-  createTemplate: boolean;
-  editTemplate: string | null;
+  toggleEdit: (t: null | string) => void;
 }
 
 const ListBusinesses = ({
+  createTemplate,
   data,
+  editTemplate,
   loading,
   toggleCreate,
   toggleEdit,
-  createTemplate,
-  editTemplate,
 }: Props) => {
   const classNames = useStyles();
   const intl = useIntl();
   return (
     <div className={classNames.page}>
-      <Row gutter={8} className={classNames.actions}>
+      <Row className={classNames.actions} gutter={8}>
         <Col flex={1} />
         <Col>
           <Button
+            danger
             icon={
               <FontAwesomeIcon
                 icon={faPlus}
@@ -46,7 +48,6 @@ const ListBusinesses = ({
                 style={{ marginRight: 5 }}
               />
             }
-            danger
             onClick={toggleCreate}
           >
             {intl.formatMessage({
@@ -58,28 +59,33 @@ const ListBusinesses = ({
       <Table<TableData>
         columns={[
           {
-            key: 'name',
             dataIndex: 'name',
+            key: 'name',
             title: intl.formatMessage({
               defaultMessage: 'Name',
             }),
           },
           {
-            key: 'actions',
-            title: '',
             dataIndex: 'actions',
-            width: 50,
+            key: 'actions',
             render: (_, record) => (
               <Button
+                onClick={() => toggleEdit(record.key)}
                 size="small"
                 type="text"
-                onClick={() => toggleEdit(record.key)}
               >
-                <FontAwesomeIcon size="lg" icon={faEdit} />
+                <FontAwesomeIcon icon={faEdit} size="lg" />
               </Button>
             ),
+            title: '',
+            width: 50,
           },
         ]}
+        dataSource={data?.statementTemplates.map((item) => ({
+          content: item.content,
+          key: item.id,
+          name: item.name,
+        }))}
         expandable={{
           // eslint-disable-next-line react/no-unstable-nested-components
           expandedRowRender: (record) => (
@@ -87,22 +93,17 @@ const ListBusinesses = ({
           ),
           rowExpandable: (record) => !!record.content,
         }}
-        dataSource={data?.statementTemplates.map((item) => ({
-          key: item.id,
-          name: item.name,
-          content: item.content,
-        }))}
         loading={loading}
-        size="small"
         pagination={{
           hideOnSinglePage: true,
           pageSize: 30,
         }}
+        size="small"
       />
 
       <Drawer
-        open={createTemplate}
         onClose={toggleCreate}
+        open={createTemplate}
         title={intl.formatMessage({
           defaultMessage: 'Create statement',
         })}
@@ -116,8 +117,8 @@ const ListBusinesses = ({
         )}
       </Drawer>
       <Drawer
-        open={!!editTemplate}
         onClose={() => toggleEdit(null)}
+        open={!!editTemplate}
         title={intl.formatMessage({
           defaultMessage: 'Edit statement',
         })}
@@ -125,9 +126,10 @@ const ListBusinesses = ({
       >
         {editTemplate && (
           <CreateEditStatementContainer
+            id={editTemplate}
             initData={{
-              name: '',
               content: '',
+              name: '',
               ...data?.statementTemplates.find(
                 (item) => item.id === editTemplate
               ),
@@ -142,7 +144,6 @@ const ListBusinesses = ({
             onClose={() => {
               toggleEdit(null);
             }}
-            id={editTemplate}
           />
         )}
       </Drawer>

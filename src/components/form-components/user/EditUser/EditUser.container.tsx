@@ -1,58 +1,59 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
+
 import View from './EditUser.view';
 import useEditUser from './useEditUser';
 
 interface Props {
-  onClose: () => void;
   id?: string | undefined;
+  onClose: () => void;
 }
 
-const EditUser = ({ onClose, id }: Props): JSX.Element => {
+const EditUser = ({ id, onClose }: Props): JSX.Element => {
   const userId = useParams().id || id || '';
   const {
-    onSubmit,
-    data,
-    loading,
-    groupsData,
-    groupsLoading,
+    addBusinessVisible,
+    availableRoles,
     chatsData,
     chatsLoading,
-    saving,
+    data,
+    form,
+    groupsData,
+    groupsLoading,
 
-    selectedRole,
-    setSelectedRole,
+    loading,
+    onSubmit,
+    saving,
     selectedGroups,
+    selectedRole,
     setSelectedGroups,
-    addBusinessVisible,
+    setSelectedRole,
     toggleAddBusinessVisible,
     updateNewBusinessData,
-    form,
-    availableRoles,
   } = useEditUser({
     onClose,
     userId,
   });
   return (
     <View
-      onSubmit={onSubmit}
-      onClose={onClose}
-      data={data}
-      loading={loading}
-      groupsData={groupsData}
-      groupsLoading={groupsLoading}
+      addBusinessVisible={addBusinessVisible}
+      availableRoles={availableRoles}
       chatsData={chatsData}
       chatsLoading={chatsLoading}
+      data={data}
+      form={form}
+      groupsData={groupsData}
+      groupsLoading={groupsLoading}
+      loading={loading}
+      onClose={onClose}
+      onSubmit={onSubmit}
       saving={saving}
-      selectedRole={selectedRole}
-      setSelectedRole={setSelectedRole}
       selectedGroups={selectedGroups}
+      selectedRole={selectedRole}
       setSelectedGroups={setSelectedGroups}
-      addBusinessVisible={addBusinessVisible}
+      setSelectedRole={setSelectedRole}
       toggleAddBusinessVisible={toggleAddBusinessVisible}
       updateNewBusinessData={updateNewBusinessData}
-      form={form}
-      availableRoles={availableRoles}
     />
   );
 };

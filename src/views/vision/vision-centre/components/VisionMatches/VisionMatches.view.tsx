@@ -1,7 +1,9 @@
 import AiVisionMatchCard from '#/components/ai-vision/AiVisionMatchCard.view';
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import DebouncedInput from '#/utils/debounced-input';
 import VisionMatchDrawer from '#/views/vision/vision-centre/components/VisionMatchDrawer/VisionMatchDrawer.view';
 import { useAiVisionMatchesQuery } from '#/views/vision/vision-centre/components/VisionMatches/__generated__/VisionMatches.generated';
+import { useDismissAiMatchMutation } from '#/views/vision/vision-centre/components/VisionMatches/graphql/mutations/__generated__/DismissMatch.generated';
 import { faFilter, faRefresh } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Col, Row, Skeleton, Typography } from 'antd';
@@ -10,8 +12,6 @@ import { useAtomValue } from 'jotai/index';
 import React, { useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
-import DebouncedInput from '#/utils/debounced-input';
-import { useDismissAiMatchMutation } from '#/views/vision/vision-centre/components/VisionMatches/graphql/mutations/__generated__/DismissMatch.generated';
 
 const VisionMatched = () => {
   const currentScheme = useAtomValue(currentSchemeIdAtom);
@@ -48,11 +48,11 @@ const VisionMatched = () => {
 
   const dismissMatch = async (id: string) => {
     await dismissMatchMutation({
-      variables: {
-        id,
-      },
       onCompleted: () => {
         void refetch();
+      },
+      variables: {
+        id,
       },
     });
   };
@@ -92,10 +92,10 @@ const VisionMatched = () => {
       <div>
         <DebouncedInput
           allowClear
+          onChange={(event) => setSearch(event.target.value)}
           placeholder={intl.formatMessage({
             defaultMessage: 'Search suggestions...',
           })}
-          onChange={(event) => setSearch(event.target.value)}
           size="small"
           // value={search}
         />

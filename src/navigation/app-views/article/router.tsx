@@ -1,13 +1,14 @@
-import React from 'react';
-import { Route, Routes } from 'react-router';
-import CreateArticle from 'views/article/CreateEditArticle/CreateEditArticle.container';
-import ArticleFeed from 'views/article/ArticleFeed';
-import ViewArticle from 'views/article/ViewArticle/ViewArticle.container';
-import PermissionCheckWrapper from '../../../components/PermissionCheck/PermissionCheckWrapper';
-import { PermissionMethod, PermissionModel } from 'graphql/types';
-import { useIntl } from 'react-intl';
 import RouteWrapper from '#/navigation/utils/route-wrapper';
+import { PermissionMethod, PermissionModel } from 'graphql/types';
+import React from 'react';
+import { useIntl } from 'react-intl';
+import { Route, Routes } from 'react-router';
 import { Navigate, useParams } from 'react-router-dom';
+import ArticleFeed from 'views/article/ArticleFeed';
+import CreateArticle from 'views/article/CreateEditArticle/CreateEditArticle.container';
+import ViewArticle from 'views/article/ViewArticle/ViewArticle.container';
+
+import PermissionCheckWrapper from '../../../components/PermissionCheck/PermissionCheckWrapper';
 
 const RedirectOffenders = () => {
   const { id } = useParams();
@@ -24,57 +25,57 @@ const Article = (): JSX.Element => {
     >
       <Routes>
         <Route
-          index
           element={
             <PermissionCheckWrapper
               permission={{
-                model: PermissionModel.Articles,
                 method: PermissionMethod.Read,
+                model: PermissionModel.Articles,
               }}
             >
               <ArticleFeed />
             </PermissionCheckWrapper>
           }
+          index
         />
         <Route
-          path="add"
           element={
             <PermissionCheckWrapper
               permission={{
-                model: PermissionModel.Articles,
                 method: PermissionMethod.Write,
+                model: PermissionModel.Articles,
               }}
             >
               <CreateArticle />
             </PermissionCheckWrapper>
           }
+          path="add"
         />
         <Route
-          path="view/:id"
           element={
             <PermissionCheckWrapper
               permission={{
-                model: PermissionModel.Articles,
                 method: PermissionMethod.Read,
+                model: PermissionModel.Articles,
               }}
             >
               <ViewArticle />
             </PermissionCheckWrapper>
           }
+          path="view/:id"
         />
-        <Route path="offenders/view/:id" element={<RedirectOffenders />} />
+        <Route element={<RedirectOffenders />} path="offenders/view/:id" />
         <Route
-          path="edit/:id"
           element={
             <PermissionCheckWrapper
               permission={{
-                model: PermissionModel.Articles,
                 method: PermissionMethod.Edit,
+                model: PermissionModel.Articles,
               }}
             >
               <CreateArticle />
             </PermissionCheckWrapper>
           }
+          path="edit/:id"
         />
       </Routes>
     </RouteWrapper>

@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
 import type { UploadFile } from 'antd/lib/upload/interface';
 import type { OffenderData } from 'types/DataType';
+
+import { useEffect, useState } from 'react';
 
 // interface OffenderData {
 //   id: string;
@@ -40,31 +41,31 @@ import type { OffenderData } from 'types/DataType';
 interface Image extends UploadFile {
   offenders?: {
     id: string;
-    name?: string | undefined | null;
+    name?: null | string | undefined;
   }[];
 }
 
 interface Props {
-  offenderData: OffenderData[];
   image: Image | undefined;
+  offenderData: OffenderData[];
   onSubmit: (data: { image: Image; offenders: OffenderData[] }) => void;
 }
 
 interface Return {
-  offendersData: OffenderData[];
-  addOffender: boolean;
-  toggleAddOffender: () => void;
   addExistingOffender: boolean;
-  toggleAddExistingOffender: () => void;
+  addOffender: boolean;
+  offendersData: OffenderData[];
   onAddOffender: (value: OffenderData, existing: boolean) => void;
-  toggleOffender: (id: string) => void;
   selected: string[];
   submitImage: () => void;
+  toggleAddExistingOffender: () => void;
+  toggleAddOffender: () => void;
+  toggleOffender: (id: string) => void;
 }
 
 const useAssignImageOffender = ({
-  offenderData,
   image,
+  offenderData,
   onSubmit,
 }: Props): Return => {
   const [offendersData, setOffendersData] = useState<OffenderData[]>([]);
@@ -135,12 +136,12 @@ const useAssignImageOffender = ({
               images: [
                 ...images,
                 {
+                  fileName: image.fileName,
                   id: image.uid,
                   new: true,
                   optimised: image.url,
-                  url: image.url,
-                  fileName: image.fileName,
                   type: image.type,
+                  url: image.url,
                 },
               ],
             };
@@ -149,15 +150,15 @@ const useAssignImageOffender = ({
   };
 
   return {
-    offendersData,
     addExistingOffender,
-    toggleAddExistingOffender,
     addOffender,
-    toggleAddOffender,
+    offendersData,
     onAddOffender,
-    toggleOffender,
     selected,
     submitImage,
+    toggleAddExistingOffender,
+    toggleAddOffender,
+    toggleOffender,
   };
 };
 

@@ -6,8 +6,8 @@ const useStyles = createUseStyles(() => ({
       minHeight: 0,
     },
     '& .ant-upload.ant-upload-select-picture-card': {
-      width: '125px',
       height: '125px',
+      width: '125px',
     },
   },
   sideMargin: {

@@ -1,6 +1,7 @@
-import React from 'react';
 import { Button, Col, Form, Input, Row } from 'antd';
+import React from 'react';
 import { useIntl } from 'react-intl';
+
 import type { FormData } from './useAddJustification';
 
 interface Props {
@@ -10,21 +11,21 @@ interface Props {
 }
 
 const AddJustification = ({
+  onClose,
   onSubmit,
   saving,
-  onClose,
 }: Props): JSX.Element => {
   const intl = useIntl();
   return (
     <div className="list-view">
-      <Form onFinish={onSubmit} layout="vertical">
+      <Form layout="vertical" onFinish={onSubmit}>
         <Row gutter={30}>
           <Col span={24}>
             <Form.Item
-              name="justification"
               label={intl.formatMessage({
                 defaultMessage: 'Justification',
               })}
+              name="justification"
               tooltip={intl.formatMessage({
                 defaultMessage:
                   "Enter a justification to explain why this offender doesn't connect with an incident.",
@@ -46,7 +47,7 @@ const AddJustification = ({
         </Row>
 
         <Form.Item>
-          <Row style={{ marginTop: 30 }} gutter={10} justify="end">
+          <Row gutter={10} justify="end" style={{ marginTop: 30 }}>
             <Col>
               <Button disabled={saving} onClick={onClose}>
                 {intl.formatMessage({
@@ -57,9 +58,9 @@ const AddJustification = ({
             <Col>
               <Button
                 disabled={saving}
+                htmlType="submit"
                 loading={saving}
                 type="primary"
-                htmlType="submit"
               >
                 {intl.formatMessage({
                   defaultMessage: 'Save',

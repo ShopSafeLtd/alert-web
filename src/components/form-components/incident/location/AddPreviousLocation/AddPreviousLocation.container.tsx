@@ -9,10 +9,10 @@ interface Props {
 }
 const ViewOffender = ({ onClose, update }: Props): JSX.Element => {
   const {
-    onSubmit,
-    saving,
     data,
     loading,
+    onSubmit,
+    saving,
     // checkedList, setCheckedList
   } = useViewOffender({
     onClose,
@@ -21,11 +21,11 @@ const ViewOffender = ({ onClose, update }: Props): JSX.Element => {
 
   return (
     <View
-      onSubmit={onSubmit}
-      onClose={onClose}
-      saving={saving}
       data={data}
       loading={loading}
+      onClose={onClose}
+      onSubmit={onSubmit}
+      saving={saving}
       // checkedList={checkedList}
       // setCheckedList={setCheckedList}
     />

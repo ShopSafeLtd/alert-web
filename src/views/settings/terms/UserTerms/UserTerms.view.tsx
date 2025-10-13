@@ -1,6 +1,6 @@
 /* eslint-disable formatjs/no-literal-string-in-jsx */
-import React from 'react';
 import { Card, Col, Row, Space, Typography } from 'antd';
+import React from 'react';
 // wait to check
 const { Text, Title } = Typography;
 const UserTerms = (): JSX.Element => (
@@ -21,7 +21,7 @@ const UserTerms = (): JSX.Element => (
       </Col>
     </Row>
     <Card style={{ width: '98%' }}>
-      <Space direction="vertical" style={{ fontSize: 13 }} size={1}>
+      <Space direction="vertical" size={1} style={{ fontSize: 13 }}>
         <Text strong>
           By accessing Alert! you have entered into an Agreement to accept these
           Terms of Use.

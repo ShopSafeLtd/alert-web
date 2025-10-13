@@ -42,18 +42,12 @@ const useBrandList = (): Return => {
   const [saving, setSaving] = useState(false);
   const [addBrand, setAddBrand] = useState(false);
 
-  const variables = {
+  const variables: BrandsQueryVariables = {
     where: {
       OR: search
         ? [
             {
               name: {
-                contains: search,
-                mode: QueryMode.Insensitive,
-              },
-            },
-            {
-              description: {
                 contains: search,
                 mode: QueryMode.Insensitive,
               },

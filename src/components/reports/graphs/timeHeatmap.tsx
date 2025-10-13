@@ -1,24 +1,24 @@
-import { Empty } from 'antd';
-import React from 'react';
-import { useStoreState } from '#/state';
-
-import { ResponsiveHeatMap } from '@nivo/heatmap';
 import type { TimeHeatMap as TimeHeatMapT } from 'graphql/types';
 
+import { useStoreState } from '#/state';
+import { ResponsiveHeatMap } from '@nivo/heatmap';
+import { Empty } from 'antd';
+import React from 'react';
+
 const TimeHeatmap = ({
+  bottomLabel,
   data,
   emptyLabel,
+  isPrinting = false,
   labelFormat,
   margin,
-  isPrinting = false,
-  bottomLabel,
 }: {
+  bottomLabel?: string;
   data: Array<TimeHeatMapT | null> | null | undefined;
   emptyLabel: string;
-  labelFormat?: string;
-  margin?: { top: number; right: number; bottom: number; left: number };
   isPrinting?: boolean; // required if printing to make it light mode
-  bottomLabel?: string;
+  labelFormat?: string;
+  margin?: { bottom: number; left: number; right: number; top: number };
 }) => {
   const darkMode =
     useStoreState((state) => state.theme.currentTheme) === 'dark';
@@ -30,51 +30,51 @@ const TimeHeatmap = ({
 
   return (
     <div
-      style={{ height: '100%', width: '100%%', marginLeft: 15 }}
       className="no-break"
+      style={{ height: '100%', marginLeft: 15, width: '100%%' }}
     >
       {data && data.length > 0 ? (
         <ResponsiveHeatMap
-          data={filteredTs}
-          theme={{
-            text: {
-              color: isDark ? '#fff' : '#000',
-              fill: isDark ? '#fff' : '#000',
-            },
+          axisBottom={
+            bottomLabel
+              ? {
+                  legend: '',
+                  legendOffset: 36,
+                  legendPosition: 'middle',
+                  tickPadding: 5,
+                  tickRotation: 0,
+                  tickSize: 5,
+                  truncateTickAt: 0,
+                }
+              : undefined
+          }
+          axisLeft={{
+            legend: labelFormat,
+            legendOffset: -72,
+            legendPosition: 'middle',
+            tickPadding: 5,
+            tickRotation: 0,
+            tickSize: 5,
+            truncateTickAt: 0,
           }}
-          labelTextColor={isDark ? '#fff' : '#000'}
-          margin={margin ?? { top: 10, right: 20, bottom: 40, left: 80 }}
+          axisRight={null}
+          axisTop={null}
           borderColor={{
             from: 'color',
             modifiers: [['darker', 1.6]],
           }}
           colors={{
-            type: 'sequential',
             scheme: 'reds',
+            type: 'sequential',
           }}
-          axisBottom={
-            bottomLabel
-              ? {
-                  tickSize: 5,
-                  tickPadding: 5,
-                  tickRotation: 0,
-                  legend: '',
-                  legendPosition: 'middle',
-                  legendOffset: 36,
-                  truncateTickAt: 0,
-                }
-              : undefined
-          }
-          axisTop={null}
-          axisRight={null}
-          axisLeft={{
-            tickSize: 5,
-            tickPadding: 5,
-            tickRotation: 0,
-            legend: labelFormat,
-            legendPosition: 'middle',
-            legendOffset: -72,
-            truncateTickAt: 0,
+          data={filteredTs}
+          labelTextColor={isDark ? '#fff' : '#000'}
+          margin={margin ?? { bottom: 40, left: 80, right: 20, top: 10 }}
+          theme={{
+            text: {
+              color: isDark ? '#fff' : '#000',
+              fill: isDark ? '#fff' : '#000',
+            },
           }}
         />
       ) : (

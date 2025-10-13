@@ -1,24 +1,25 @@
 import React from 'react';
+
 import View from './ChatList.view';
 import useChatList from './useChatList';
 
 const ChatList = (): JSX.Element => {
   const {
+    addChat,
     data,
     loading,
     search,
     setSearch,
-    addChat,
     toggleAddChat,
     updateChatList,
   } = useChatList();
   return (
     <View
+      addChat={addChat}
       data={data}
       loading={loading}
       search={search}
       setSearch={setSearch}
-      addChat={addChat}
       toggleAddChat={toggleAddChat}
       updateChatList={updateChatList}
     />

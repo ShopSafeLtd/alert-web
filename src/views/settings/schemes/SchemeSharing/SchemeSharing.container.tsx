@@ -1,18 +1,19 @@
 import React from 'react';
+
 import View from './SchemeSharing.view';
 import useSchemeSharing from './useSchemeSharing';
 
 const SchemeSharing = (): JSX.Element => {
-  const { data, loading, toggleDrawerOpen, connectOpen, onUnlink } =
+  const { connectOpen, data, loading, onUnlink, toggleDrawerOpen } =
     useSchemeSharing();
 
   return (
     <View
+      connectOpen={connectOpen}
       data={data}
       loading={loading}
-      connectOpen={connectOpen}
-      toggleDrawerOpen={toggleDrawerOpen}
       onUnlink={onUnlink}
+      toggleDrawerOpen={toggleDrawerOpen}
     />
   );
 };

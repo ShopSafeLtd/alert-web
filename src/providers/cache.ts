@@ -188,6 +188,6 @@ const { cache } = (function () {
   return {
     cache: cache2,
   };
-})();
+}());
 
 export { cache, defaultFeedCacheMerge };

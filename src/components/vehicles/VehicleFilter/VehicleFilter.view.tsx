@@ -2,6 +2,7 @@ import type { VehicleFilters } from 'state/data-model';
 import type { DateType } from 'types/DataType';
 
 import DatePicker from '#/components/util-components/DatePicker';
+import { formatPoliceForceLabel } from '#/utils/formatPoliceAreas';
 import { Button, Col, Form, Row, Select, Typography } from 'antd';
 import dayjs from 'dayjs';
 import { PoliceForce, SortOrder } from 'graphql/types';
@@ -9,7 +10,6 @@ import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import useStyles from './VehicleFilter.styles';
-import { formatPoliceForceLabel } from '#/utils/formatPoliceAreas';
 
 const { RangePicker } = DatePicker;
 const { useForm } = Form;
@@ -24,8 +24,8 @@ interface Props {
   setCreatedAtFilter: (value: DateType | undefined) => void;
   setGroupsFilter: (value: string[]) => void;
   setOrder: (value: SortOrder) => void;
-  variables: VehicleFilters;
   setPoliceAreas: (value: PoliceForce[]) => void;
+  variables: VehicleFilters;
 }
 
 const VehicleFilter = ({
@@ -35,8 +35,8 @@ const VehicleFilter = ({
   setCreatedAtFilter,
   setGroupsFilter,
   setOrder,
-  variables,
   setPoliceAreas,
+  variables,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const [form] = useForm<FormData>();

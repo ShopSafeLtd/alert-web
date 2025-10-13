@@ -6,7 +6,7 @@ interface OnSubmitValues {
 
 interface Props {
   onClose: () => void;
-  onSubmit: (arg0: string, method: 'update' | 'create') => void;
+  onSubmit: (arg0: string, method: 'create' | 'update') => void;
 }
 
 interface Return {

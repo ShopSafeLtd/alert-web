@@ -1,40 +1,41 @@
 import React from 'react';
+
 import View from './ManageChatMember.view';
 import useManageChat from './useManageChatMember';
 
 interface Props {
-  onClose: () => void;
   chatId: string;
+  onClose: () => void;
 }
 
-const ManageChat = ({ onClose, chatId }: Props): JSX.Element => {
+const ManageChat = ({ chatId, onClose }: Props): JSX.Element => {
   const {
-    onSubmit,
-    addMemberUpdate,
-    loading,
-    usersData,
-    saving,
     addMember,
-    toggleAddMember,
-    membersData,
+    addMemberUpdate,
     deleteConfirm,
+    loading,
+    membersData,
+    onSubmit,
+    saving,
+    toggleAddMember,
+    usersData,
   } = useManageChat({
-    onClose,
     chatId,
+    onClose,
   });
 
   return (
     <View
-      onSubmit={onSubmit}
-      onClose={onClose}
-      addMemberUpdate={addMemberUpdate}
-      loading={loading}
-      usersData={usersData}
-      saving={saving}
       addMember={addMember}
-      toggleAddMember={toggleAddMember}
-      membersData={membersData}
+      addMemberUpdate={addMemberUpdate}
       deleteConfirm={deleteConfirm}
+      loading={loading}
+      membersData={membersData}
+      onClose={onClose}
+      onSubmit={onSubmit}
+      saving={saving}
+      toggleAddMember={toggleAddMember}
+      usersData={usersData}
     />
   );
 };

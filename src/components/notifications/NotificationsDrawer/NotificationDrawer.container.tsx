@@ -10,26 +10,26 @@ interface Props {
 const NotificationsDrawer = ({ onClose }: Props): JSX.Element => {
   const {
     data,
-    loading,
-    saving,
-    toggleTakeAllSchemes,
-    handleMarkAsRead,
     handleMarkAllRead,
+    handleMarkAsRead,
+    loading,
     onRefresh,
     refreshing,
+    saving,
+    toggleTakeAllSchemes,
   } = useNotificationLists();
 
   return (
     <View
       data={data}
-      loading={loading}
-      saving={saving}
-      toggleTakeAllSchemes={toggleTakeAllSchemes}
-      handleMarkAsRead={handleMarkAsRead}
       handleMarkAllRead={handleMarkAllRead}
+      handleMarkAsRead={handleMarkAsRead}
+      loading={loading}
+      onClose={onClose}
       onRefresh={onRefresh}
       refreshing={refreshing}
-      onClose={onClose}
+      saving={saving}
+      toggleTakeAllSchemes={toggleTakeAllSchemes}
     />
   );
 };

@@ -1,47 +1,43 @@
 query schemeUsers(
-  $scheme: String
-  $search: String
-  $orderByName: SortOrder
-  $orderByBusinesses: BusinessOrderByRelationAggregateInput
-  $orderByCreatedAt: SortOrder
-  $disabled: BoolFilter
-  $newUser: BoolFilter
-  $role: Role
-  $after: UserWhereUniqueInput
+    $scheme: String
+    $search: String
+    $orderByName: SortOrder
+    $disabled: BoolFilter
+    $newUser: BoolFilter
+    $role: Role
+    $after: UserWhereUniqueInput
 ) {
-  users(
-    where: {
-      schemes: {
-        some: {
-          recycled: { equals: false }
-          role: { equals: $role }
-          scheme: { id: { equals: $scheme } }
+    users(
+        where: {
+            schemes: {
+                some: {
+                    recycled: { equals: false }
+                    role: { equals: $role }
+                    scheme: { id: { equals: $scheme } }
+                }
+            }
+            recycled: { equals: false }
+            OR: [{ fullName: { contains: $search } }]
+            disabled: $disabled
+            newUser: $newUser
         }
-      }
-      recycled: { equals: false }
-      OR: [{ fullName: { contains: $search } }]
-      disabled: $disabled
-      newUser: $newUser
+        orderBy: {
+            fullName: $orderByName
+        }
+        after: $after
+    ) {
+        id
+        fullName
+        businesses {
+            id
+            name
+            fullName
+        }
+        newUser
+        disabled
+        schemes(where: { scheme: { id: { equals: $scheme } } }) {
+            id
+            role
+        }
     }
-    orderBy: {
-      fullName: $orderByName
-      businesses: $orderByBusinesses
-      createdAt: $orderByCreatedAt
-    }
-    after: $after
-  ) {
-    id
-    fullName
-    businesses {
-      id
-      name
-      fullName
-    }
-    newUser
-    disabled
-    schemes(where: { scheme: { id: { equals: $scheme } } }) {
-      id
-      role
-    }
-  }
 }

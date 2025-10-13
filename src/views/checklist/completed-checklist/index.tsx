@@ -1,14 +1,16 @@
 import React from 'react';
-import CompletedChecklistView from './CompletedChecklist.view';
+
 import type { ActiveChecklistSection } from '../active-checklist/useActiveChecklist';
 
+import CompletedChecklistView from './CompletedChecklist.view';
+
 interface Data {
-  checklistSections: ActiveChecklistSection[];
-  title: string;
   additionalInfo: string;
-  signature: string;
-  completedByUser: string;
+  checklistSections: ActiveChecklistSection[];
   completedAt: string;
+  completedByUser: string;
+  signature: string;
+  title: string;
 }
 
 const generateMg11 = () => {
@@ -18,14 +20,14 @@ const generateMg11 = () => {
 
   return (
     <CompletedChecklistView
+      additionalInfo={data.additionalInfo}
       checklistSections={data.checklistSections}
-      title={data.title}
       completedAt={data.completedAt}
       completedByUser={data.completedByUser}
-      additionalInfo={data.additionalInfo}
+      generating
       signature={data.signature}
       theme="light"
-      generating
+      title={data.title}
     />
   );
 };

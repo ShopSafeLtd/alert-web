@@ -1,21 +1,21 @@
-import React from 'react';
+import { ArrowDownOutlined, ArrowUpOutlined } from '@ant-design/icons';
 import { Card } from 'antd';
-import { ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons';
+import React from 'react';
 
 interface Props {
-  title: string | JSX.Element;
-  value: string;
+  prefix: string;
   status: number;
   subtitle: string;
-  prefix: string;
+  title: JSX.Element | string;
+  value: string;
 }
 
 const StatisticWidget = ({
-  title,
-  value,
+  prefix,
   status,
   subtitle,
-  prefix,
+  title,
+  value,
 }: Props): JSX.Element => (
   <Card>
     {title && <h4 className="mb-0">{title}</h4>}

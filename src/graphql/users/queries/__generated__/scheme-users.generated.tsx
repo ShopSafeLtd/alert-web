@@ -7,8 +7,6 @@ export type SchemeUsersQueryVariables = Types.Exact<{
   scheme?: Types.InputMaybe<Types.Scalars['String']>;
   search?: Types.InputMaybe<Types.Scalars['String']>;
   orderByName?: Types.InputMaybe<Types.SortOrder>;
-  orderByBusinesses?: Types.InputMaybe<Types.BusinessOrderByRelationAggregateInput>;
-  orderByCreatedAt?: Types.InputMaybe<Types.SortOrder>;
   disabled?: Types.InputMaybe<Types.BoolFilter>;
   newUser?: Types.InputMaybe<Types.BoolFilter>;
   role?: Types.InputMaybe<Types.Role>;
@@ -20,10 +18,10 @@ export type SchemeUsersQuery = { __typename?: 'Query', users: Array<{ __typename
 
 
 export const SchemeUsersDocument = gql`
-    query schemeUsers($scheme: String, $search: String, $orderByName: SortOrder, $orderByBusinesses: BusinessOrderByRelationAggregateInput, $orderByCreatedAt: SortOrder, $disabled: BoolFilter, $newUser: BoolFilter, $role: Role, $after: UserWhereUniqueInput) {
+    query schemeUsers($scheme: String, $search: String, $orderByName: SortOrder, $disabled: BoolFilter, $newUser: BoolFilter, $role: Role, $after: UserWhereUniqueInput) {
   users(
     where: {schemes: {some: {recycled: {equals: false}, role: {equals: $role}, scheme: {id: {equals: $scheme}}}}, recycled: {equals: false}, OR: [{fullName: {contains: $search}}], disabled: $disabled, newUser: $newUser}
-    orderBy: {fullName: $orderByName, businesses: $orderByBusinesses, createdAt: $orderByCreatedAt}
+    orderBy: {fullName: $orderByName}
     after: $after
   ) {
     id

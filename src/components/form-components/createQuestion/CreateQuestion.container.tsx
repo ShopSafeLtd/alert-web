@@ -1,11 +1,12 @@
 import React from 'react';
-import useCreateQuestion from './useCreateQuestion';
+
 import View from './CreateQuestion.view';
+import useCreateQuestion from './useCreateQuestion';
 
 interface Props {
+  ids?: string[];
   onClose: () => void;
   update: (id: string, question: string) => void;
-  ids?: string[];
 }
 
 /**
@@ -18,25 +19,25 @@ interface Props {
  * For use with tasks
  */
 const CreateQuestionContainer = ({
+  ids,
   onClose,
   update,
-  ids,
 }: Props): JSX.Element => {
-  const { data, form, saving, onSubmit, questionData, loading } =
+  const { data, form, loading, onSubmit, questionData, saving } =
     useCreateQuestion({
+      ids,
       onClose,
       update,
-      ids,
     });
   return (
     <View
       data={data}
       form={form}
-      onSubmit={onSubmit}
-      saving={saving}
-      onClose={onClose}
-      questionData={questionData}
       loading={loading}
+      onClose={onClose}
+      onSubmit={onSubmit}
+      questionData={questionData}
+      saving={saving}
     />
   );
 };

@@ -1,22 +1,23 @@
 import type { Theme } from 'configs/ThemeConfig';
+
 import { createUseStyles } from 'react-jss';
 
 const styles = createUseStyles((theme: Theme) => ({
-  contentContainer: {},
-  contentHeader: {
-    paddingLeft: 15,
-    paddingRight: 8,
-    height: 30,
-  },
+  bottomRow: { marginTop: 'auto' },
   content: {
-    padding: '8px 8px 5px 15px ',
+    cursor: 'pointer',
     display: 'flex',
     flexDirection: 'column',
-    cursor: 'pointer',
     overflow: 'hidden',
+    padding: '8px 8px 5px 15px ',
   },
-  bottomRow: { marginTop: 'auto' },
-  icon: { marginRight: 5, color: theme.primary },
+  contentContainer: {},
+  contentHeader: {
+    height: 30,
+    paddingLeft: 15,
+    paddingRight: 8,
+  },
+  icon: { color: theme.primary, marginRight: 5 },
 }));
 
 export default styles;

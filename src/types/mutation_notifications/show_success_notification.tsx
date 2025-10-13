@@ -1,6 +1,7 @@
 import { notification } from 'antd';
-import { FormattedMessage } from 'react-intl';
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
+
 import type {
   ProfileUpdatedModel,
   ProfileUpdatedType,
@@ -12,21 +13,21 @@ const successNotifications = (
   title?: ProfileUpdatedModel
 ) =>
   notification.success({
-    message: (
-      <FormattedMessage
-        defaultMessage="Successfully {type}!"
-        values={{ type }}
-      />
-    ),
     description: title ? (
       <FormattedMessage
         defaultMessage="The {title} of the {subject} have been {type}!"
-        values={{ title, subject, type }}
+        values={{ subject, title, type }}
       />
     ) : (
       <FormattedMessage
         defaultMessage="The {subject} have been {type}!"
         values={{ subject, type }}
+      />
+    ),
+    message: (
+      <FormattedMessage
+        defaultMessage="Successfully {type}!"
+        values={{ type }}
       />
     ),
 

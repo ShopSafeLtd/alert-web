@@ -1,23 +1,24 @@
 import React from 'react';
+
 import View from './EditOffenderWarning.view';
 import useEditOffenderWarning from './useEditOffenderWarning';
 
 interface Props {
-  onClose: () => void;
   offenderId: string;
+  onClose: () => void;
 }
 
-const EditOffenderWarning = ({ onClose, offenderId }: Props): JSX.Element => {
-  const { onSubmit, data, loading, saving } = useEditOffenderWarning({
-    onClose,
+const EditOffenderWarning = ({ offenderId, onClose }: Props): JSX.Element => {
+  const { data, loading, onSubmit, saving } = useEditOffenderWarning({
     offenderId,
+    onClose,
   });
   return (
     <View
-      onSubmit={onSubmit}
-      onClose={onClose}
       data={data}
       loading={loading}
+      onClose={onClose}
+      onSubmit={onSubmit}
       saving={saving}
     />
   );

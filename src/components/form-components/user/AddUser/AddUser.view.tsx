@@ -1,5 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-argument */
 import type { FormInstance } from 'antd';
+import type { BusinessData, SelectOptions } from 'types/DataType';
+
+import BusinessesSelect from '#/components/form-components/BusinessesSelect/BusinessesSelect.view';
+import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import { faPlus } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
   Col,
@@ -11,12 +17,6 @@ import {
   Switch,
   Typography,
 } from 'antd';
-import type { BusinessData, SelectOptions } from 'types/DataType';
-
-import BusinessesSelect from '#/components/form-components/BusinessesSelect/BusinessesSelect.view';
-import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
-import { faPlus } from '@fortawesome/pro-light-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PhoneInput from 'antd-phone-input';
 import AddBusiness from 'components/form-components/businesses/AddBusiness';
 import { Role } from 'graphql/types';
@@ -407,11 +407,11 @@ const AddUser = ({
                 label={intl.formatMessage({
                   defaultMessage: 'Admin Groups',
                 })}
+                name="approverGroups"
                 tooltip={intl.formatMessage({
                   defaultMessage:
                     'Group members who can have specific workflows triggered for them',
                 })}
-                name="approverGroups"
               >
                 <Select
                   disabled={saving}

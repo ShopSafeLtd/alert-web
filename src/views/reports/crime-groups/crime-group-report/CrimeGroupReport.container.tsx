@@ -1,54 +1,55 @@
-import React, { useState } from 'react';
+import ReportsSideMenu from '#/components/reports/ReportsSideMenu/ReportsSideMenu.view';
 import { Col, Row } from 'antd';
+import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
+
+import CrimeGroupSideList from '../../../../components/crimeGroups/sidelist';
 import View from './CrimeGroupReport.view';
 import useCrimeGroupReport from './hooks/useCrimeGroupReport';
-import CrimeGroupSideList from '../../../../components/crimeGroups/sidelist';
-import ReportsSideMenu from '#/components/reports/ReportsSideMenu/ReportsSideMenu.view';
-import { useParams } from 'react-router-dom';
 
 const CrimeGroupReport = () => {
   const {
-    data,
-    loading,
-    setDateRange,
-    dateRange,
-    groups,
-    setSelectedGroups,
-    groupsLoading,
-    selectedGroups,
-    businesses,
-    selectedBusiness,
-    setSelectedBusiness,
-    selectedCrimeGroup,
-    componentRef,
-    handlePrint,
     addLogo,
     addLogoDrawer,
+    businesses,
     changeSize,
+    componentRef,
+    data,
+    dateRange,
     editMode,
+    groups,
+    groupsLoading,
+    handlePrint,
+    incidentsTableData,
     isPrinting,
     layout,
+    loading,
     logo,
     logos,
     metadata,
     minDrawer,
+    offendersTableData,
     removeItem,
     removeLogo,
     saveAsDrawer,
     saveTemplate,
     selectTemplate,
+    selectedBusiness,
+    selectedCrimeGroup,
+    selectedGroups,
     selectedTemplate,
     setAddLogoDrawer,
+    setDateRange,
     setEditMode,
     setLayout,
     setMetadata,
     setMinDrawer,
     setSaveAsDrawer,
-    templates,
+    setSelectedBusiness,
+    setSelectedGroups,
     targetedBusinessData,
     targetedGoodsData,
-    offendersTableData,
-    incidentsTableData,
+    templates,
   } = useCrimeGroupReport();
   const [collapsed, setCollapsed] = useState(true);
   const { reportId } = useParams();
@@ -57,60 +58,60 @@ const CrimeGroupReport = () => {
     <Row wrap={false}>
       <Col style={{ width: collapsed ? 0 : undefined }}>
         <ReportsSideMenu
-          selectedId={reportId ?? ''}
           collapsed={collapsed}
+          selectedId={reportId ?? ''}
           setCollapsed={setCollapsed}
         />
       </Col>
       <Col>
         <CrimeGroupSideList
-          to={`/app/reports/crime-groups/${reportId}/`}
           current={selectedCrimeGroup || ''}
+          to={`/app/reports/crime-groups/${reportId}/`}
         />
       </Col>
       <Col flex={1}>
         <View
-          targetedBusinessData={targetedBusinessData}
-          targetedGoodsData={targetedGoodsData}
-          offendersTableData={offendersTableData}
-          incidentsTableData={incidentsTableData}
-          isPrinting={isPrinting}
-          removeItem={removeItem}
-          changeSize={changeSize}
-          layout={layout}
-          setLayout={setLayout}
-          minDrawer={minDrawer}
-          setMinDrawer={setMinDrawer}
           addLogo={addLogo}
           addLogoDrawer={addLogoDrawer}
+          businesses={businesses}
+          changeSize={changeSize}
+          componentRef={componentRef}
+          data={data}
+          dateRange={dateRange}
+          editMode={editMode}
+          groups={groups}
+          groupsLoading={groupsLoading}
+          handlePrint={handlePrint}
+          incidentsTableData={incidentsTableData}
+          isPrinting={isPrinting}
+          layout={layout}
+          loading={loading}
           logo={logo}
           logos={logos}
           metadata={metadata}
+          minDrawer={minDrawer}
+          offendersTableData={offendersTableData}
+          removeItem={removeItem}
           removeLogo={removeLogo}
           saveAsDrawer={saveAsDrawer}
           saveTemplate={saveTemplate}
           selectTemplate={selectTemplate}
+          selectedBusiness={selectedBusiness}
+          selectedCrimeGroup={selectedCrimeGroup}
+          selectedGroups={selectedGroups}
           selectedTemplate={selectedTemplate}
           setAddLogoDrawer={setAddLogoDrawer}
-          setEditMode={setEditMode}
-          setMetadata={setMetadata}
-          setSaveAsDrawer={setSaveAsDrawer}
-          templates={templates}
-          editMode={editMode}
-          selectedCrimeGroup={selectedCrimeGroup}
-          componentRef={componentRef}
-          handlePrint={handlePrint}
-          setSelectedGroups={setSelectedGroups}
-          selectedGroups={selectedGroups}
-          loading={loading}
-          data={data}
           setDateRange={setDateRange}
-          dateRange={dateRange}
-          groups={groups}
-          groupsLoading={groupsLoading}
+          setEditMode={setEditMode}
+          setLayout={setLayout}
+          setMetadata={setMetadata}
+          setMinDrawer={setMinDrawer}
+          setSaveAsDrawer={setSaveAsDrawer}
           setSelectedBusiness={setSelectedBusiness}
-          selectedBusiness={selectedBusiness}
-          businesses={businesses}
+          setSelectedGroups={setSelectedGroups}
+          targetedBusinessData={targetedBusinessData}
+          targetedGoodsData={targetedGoodsData}
+          templates={templates}
         />
       </Col>
     </Row>

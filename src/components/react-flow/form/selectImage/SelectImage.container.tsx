@@ -1,25 +1,26 @@
 import React from 'react';
+
 import View from './SelectImage.view';
 import useSelectImage from './useSelectImage';
 
 interface Props {
+  investigationId: string;
   onClose: () => void;
   onSelect: (value: string) => void;
-  investigationId: string;
 }
 const LinkIncident = ({
+  investigationId,
   onClose,
   onSelect,
-  investigationId,
 }: Props): JSX.Element => {
   const { data, loading, onSubmit } = useSelectImage({
+    investigationId,
     onClose,
     onSelect,
-    investigationId,
   });
 
   return (
-    <View onSubmit={onSubmit} data={data} onClose={onClose} loading={loading} />
+    <View data={data} loading={loading} onClose={onClose} onSubmit={onSubmit} />
   );
 };
 

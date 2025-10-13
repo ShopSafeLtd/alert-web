@@ -1,41 +1,42 @@
 import React from 'react';
+
 import View from './CompareOffender.view';
 import useCompareIncident from './useCompareIncident';
 
 const CompareIncident = () => {
   const {
-    offenders,
-    preview,
     addOffender,
     addOffenders,
-    toggleAddOffender,
-    selected,
-    toggleSelected,
-    removeOffender,
-    onMerge,
     mode,
-    setMode,
-    selectedImages,
-    toggleSelectedImages,
+    offenders,
+    onMerge,
     onSubmitImages,
+    preview,
+    removeOffender,
+    selected,
+    selectedImages,
+    setMode,
+    toggleAddOffender,
+    toggleSelected,
+    toggleSelectedImages,
   } = useCompareIncident();
 
   return (
     <View
-      offenders={offenders}
-      preview={preview}
       addOffender={addOffender}
       addOffenders={addOffenders}
-      toggleAddOffender={toggleAddOffender}
-      selected={selected}
-      toggleSelected={toggleSelected}
-      removeOffender={removeOffender}
-      onMerge={onMerge}
       mode={mode}
-      setMode={setMode}
-      selectedImages={selectedImages}
-      toggleSelectedImages={toggleSelectedImages}
+      offenders={offenders}
+      onMerge={onMerge}
       onSubmitImages={onSubmitImages}
+      preview={preview}
+      removeOffender={removeOffender}
+      selected={selected}
+      selectedImages={selectedImages}
+      setMode={setMode}
+      toggleAddOffender={toggleAddOffender}
+      toggleSelected={toggleSelected}
+      toggleSelectedImages={toggleSelectedImages}
     />
   );
 };

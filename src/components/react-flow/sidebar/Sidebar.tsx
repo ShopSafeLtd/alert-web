@@ -21,8 +21,8 @@ const SideBar = () => {
       </div>
       <div
         className="dndnode input"
-        onDragStart={(event) => onDragStart(event, 'input')}
         draggable
+        onDragStart={(event) => onDragStart(event, 'input')}
       >
         {intl.formatMessage({
           defaultMessage: 'Input Node',
@@ -30,8 +30,8 @@ const SideBar = () => {
       </div>
       <div
         className="dndnode"
-        onDragStart={(event) => onDragStart(event, 'default')}
         draggable
+        onDragStart={(event) => onDragStart(event, 'default')}
       >
         {intl.formatMessage({
           defaultMessage: 'Default Node',
@@ -39,8 +39,8 @@ const SideBar = () => {
       </div>
       <div
         className="dndnode output"
-        onDragStart={(event) => onDragStart(event, 'output')}
         draggable
+        onDragStart={(event) => onDragStart(event, 'output')}
       >
         {intl.formatMessage({
           defaultMessage: 'Output Node',

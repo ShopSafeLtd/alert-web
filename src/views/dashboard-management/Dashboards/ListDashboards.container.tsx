@@ -1,35 +1,36 @@
 import React from 'react';
-import useListDashboards from './useDashboards';
+
 import View from './ListDashboards.view';
+import useListDashboards from './useDashboards';
 
 const ListDashboards = () => {
   const {
-    data,
-    loading,
-    deleteDashboard,
     addDashboard,
-    updateDashboard,
     createDashboard,
-    toggleEditDashboard,
+    data,
+    deleteDashboard,
     editDashboard,
-    toggleCreateDashboard,
+    loading,
     rolesData,
     schemeId,
+    toggleCreateDashboard,
+    toggleEditDashboard,
+    updateDashboard,
   } = useListDashboards();
 
   return (
     <View
-      schemeId={schemeId}
-      rolesData={rolesData}
-      toggleEditDashboard={toggleEditDashboard}
-      editDashboard={editDashboard}
-      data={data}
-      loading={loading}
       addDashboard={addDashboard}
-      toggleCreateDashboard={toggleCreateDashboard}
       createDashboard={createDashboard}
-      updateDashboard={updateDashboard}
+      data={data}
       deleteDashboard={deleteDashboard}
+      editDashboard={editDashboard}
+      loading={loading}
+      rolesData={rolesData}
+      schemeId={schemeId}
+      toggleCreateDashboard={toggleCreateDashboard}
+      toggleEditDashboard={toggleEditDashboard}
+      updateDashboard={updateDashboard}
     />
   );
 };

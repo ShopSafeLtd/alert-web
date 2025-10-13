@@ -1,13 +1,14 @@
-import { createUseStyles } from 'react-jss';
 import type { Theme } from '#/configs/ThemeConfig';
 
+import { createUseStyles } from 'react-jss';
+
 const useStyles = createUseStyles((theme: Theme) => ({
-  title: { marginTop: 8, fontSize: 16 },
-  header: { padding: '10px 25px' },
   contentRow: {
-    padding: '10px 20px',
     backgroundColor: theme.componentBackground,
+    padding: '10px 20px',
   },
+  header: { padding: '10px 25px' },
+  title: { fontSize: 16, marginTop: 8 },
 }));
 
 export default useStyles;

@@ -1,20 +1,22 @@
 import React from 'react';
-import View from './AccountDetail.view';
+
 import type { AccountData } from './useAccountDetail';
+
+import View from './AccountDetail.view';
 import useEditProfile from './useAccountDetail';
 
 interface Props {
-  update: (value: AccountData | undefined) => void;
   accountDetail: AccountData | undefined;
+  update: (value: AccountData | undefined) => void;
 }
 
-const EditProfile = ({ update, accountDetail }: Props): JSX.Element => {
-  const { onSubmit, data, loading } = useEditProfile({
-    update,
+const EditProfile = ({ accountDetail, update }: Props): JSX.Element => {
+  const { data, loading, onSubmit } = useEditProfile({
     accountDetail,
+    update,
   });
   return (
-    <View onSubmit={onSubmit} saving={false} data={data} loading={loading} />
+    <View data={data} loading={loading} onSubmit={onSubmit} saving={false} />
   );
 };
 

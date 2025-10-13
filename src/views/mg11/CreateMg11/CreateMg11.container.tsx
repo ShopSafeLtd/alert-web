@@ -1,61 +1,62 @@
 import React from 'react';
+
 import View from './CreateMg11.view';
 import useAddIncident from './useCreateMg11';
 
 const CreateMg11 = (): JSX.Element => {
   const {
-    onSubmit,
-    saving,
+    file,
     form,
-    setSign,
-    sign,
-    setInterviewerSign,
-    interviewerName,
     interviewerFile,
+    interviewerName,
+    interviewerSelectedFont,
     interviewerSetFile,
     interviewerSetSelectedFont,
-    interviewerSelectedFont,
-    interviewerSign,
-    file,
-    selectedFont,
-    name,
-    setFile,
-    setSelectedFont,
-    updateInterviewer,
-    update,
-    tab,
-    setTab,
     interviewerSetTab,
+    interviewerSign,
     interviewerTab,
+    name,
+    onSubmit,
+    saving,
+    selectedFont,
+    setFile,
+    setInterviewerSign,
+    setSelectedFont,
+    setSign,
+    setTab,
+    sign,
     statementTemplates,
+    tab,
+    update,
+    updateInterviewer,
   } = useAddIncident();
 
   return (
     <View
-      statementTemplates={statementTemplates}
+      file={file}
       form={form}
-      onSubmit={onSubmit}
-      saving={saving}
-      setSign={setSign}
-      sign={sign}
-      setInterviewerSign={setInterviewerSign}
-      interviewerName={interviewerName}
       interviewerFile={interviewerFile}
+      interviewerName={interviewerName}
+      interviewerSelectedFont={interviewerSelectedFont}
       interviewerSetFile={interviewerSetFile}
       interviewerSetSelectedFont={interviewerSetSelectedFont}
-      interviewerSelectedFont={interviewerSelectedFont}
-      interviewerSign={interviewerSign}
-      file={file}
-      selectedFont={selectedFont}
-      name={name}
-      setFile={setFile}
-      setSelectedFont={setSelectedFont}
-      updateInterviewer={updateInterviewer}
-      update={update}
-      tab={tab}
-      setTab={setTab}
       interviewerSetTab={interviewerSetTab}
+      interviewerSign={interviewerSign}
       interviewerTab={interviewerTab}
+      name={name}
+      onSubmit={onSubmit}
+      saving={saving}
+      selectedFont={selectedFont}
+      setFile={setFile}
+      setInterviewerSign={setInterviewerSign}
+      setSelectedFont={setSelectedFont}
+      setSign={setSign}
+      setTab={setTab}
+      sign={sign}
+      statementTemplates={statementTemplates}
+      tab={tab}
+      update={update}
+      updateInterviewer={updateInterviewer}
     />
   );
 };

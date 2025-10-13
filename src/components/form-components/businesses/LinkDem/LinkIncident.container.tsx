@@ -1,25 +1,26 @@
 import React from 'react';
+
 import View from './LinkIncident.view';
 import useLinkDem from './useLinkDem';
 
 interface Props {
-  onClose: () => void;
   businessId: string;
+  onClose: () => void;
 }
-const LinkDem = ({ onClose, businessId }: Props): JSX.Element => {
-  const { onSubmit, saving, data, loading, onSelect } = useLinkDem({
-    onClose,
+const LinkDem = ({ businessId, onClose }: Props): JSX.Element => {
+  const { data, loading, onSelect, onSubmit, saving } = useLinkDem({
     businessId,
+    onClose,
   });
 
   return (
     <View
-      onSubmit={onSubmit}
-      saving={saving}
       data={data}
       loading={loading}
       onClose={onClose}
       onSelect={onSelect}
+      onSubmit={onSubmit}
+      saving={saving}
     />
   );
 };

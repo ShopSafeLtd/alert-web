@@ -1,4 +1,5 @@
 import React from 'react';
+
 import View from './KnowOffender.view';
 import useKnowOffender from './useKnowOffender';
 
@@ -11,7 +12,7 @@ const KnowOffender = ({ offenderId, onClose }: Props): JSX.Element => {
   const { onSubmit, saving } = useKnowOffender({ offenderId, onClose });
   return (
     <div>
-      <View onSubmit={onSubmit} saving={saving} onClose={onClose} />
+      <View onClose={onClose} onSubmit={onSubmit} saving={saving} />
     </div>
   );
 };

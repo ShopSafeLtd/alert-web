@@ -1,28 +1,29 @@
-import { createUseStyles } from 'react-jss';
 import type { Theme } from 'configs/ThemeConfig';
 
+import { createUseStyles } from 'react-jss';
+
 const useStyles = createUseStyles((theme: Theme) => ({
-  image: {
-    height: 150,
-    width: 150,
-    borderRadius: 10,
-    overflow: 'hidden',
-    border: `1px solid ${theme.borderColor}`,
+  check: {
+    background: '#FFF',
+    borderRadius: '100%',
     cursor: 'pointer',
+    height: 21,
+    position: 'absolute',
+    right: 12,
+    top: 5,
+    width: 21,
+    zIndex: 10,
   },
   container: {
     position: 'relative',
   },
-  check: {
-    position: 'absolute',
-    top: 5,
-    right: 12,
-    zIndex: 10,
-    background: '#FFF',
-    borderRadius: '100%',
-    width: 21,
-    height: 21,
+  image: {
+    border: `1px solid ${theme.borderColor}`,
+    borderRadius: 10,
     cursor: 'pointer',
+    height: 150,
+    overflow: 'hidden',
+    width: 150,
   },
   row: { marginTop: 10 },
 }));

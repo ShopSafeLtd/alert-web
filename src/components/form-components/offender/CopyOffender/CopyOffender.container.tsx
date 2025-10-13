@@ -1,4 +1,5 @@
 import React from 'react';
+
 import View from './CopyOffender.view';
 import useCopyOffender from './useCopyOffender';
 
@@ -7,32 +8,32 @@ interface Props {
   onClose: () => void;
 }
 
-const CopyOffender = ({ onClose, offenderId }: Props): JSX.Element => {
+const CopyOffender = ({ offenderId, onClose }: Props): JSX.Element => {
   const {
+    form,
+    groups,
+    groupsLoading,
     onSubmit,
     saving,
-    userSchemes,
-    groupsLoading,
-    groups,
     selectSchemeId,
     setSelectSchemeId,
-    form,
+    userSchemes,
   } = useCopyOffender({
-    onClose,
     offenderId,
+    onClose,
   });
 
   return (
     <View
-      onSubmit={onSubmit}
-      onClose={onClose}
-      saving={saving || false}
-      userSchemes={userSchemes}
-      groupsLoading={groupsLoading}
+      form={form}
       groups={groups}
+      groupsLoading={groupsLoading}
+      onClose={onClose}
+      onSubmit={onSubmit}
+      saving={saving || false}
       selectSchemeId={selectSchemeId}
       setSelectSchemeId={setSelectSchemeId}
-      form={form}
+      userSchemes={userSchemes}
     />
   );
 };

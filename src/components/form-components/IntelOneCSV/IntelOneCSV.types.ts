@@ -1,18 +1,18 @@
 export interface IntelOneCSVData {
-  siteName: string;
-  reportDate: Date;
-  reference: string;
-  type: string;
-  offenderName: string[];
-  value: number;
-  postcode?: string;
-  lng?: string;
-  lat?: string;
-  description: string;
-  crimeRef?: string;
-  registration?: string;
-  model?: string;
-  make?: string;
   colour?: string;
+  crimeRef?: string;
+  description: string;
   group?: string;
+  lat?: string;
+  lng?: string;
+  make?: string;
+  model?: string;
+  offenderName: string[];
+  postcode?: string;
+  reference: string;
+  registration?: string;
+  reportDate: Date;
+  siteName: string;
+  type: string;
+  value: number;
 }

@@ -1,8 +1,8 @@
 /* eslint-disable formatjs/no-literal-string-in-jsx */
-import React from 'react';
 import { Card, Col, Row, Space, Typography } from 'antd';
+import React from 'react';
 // wait to check
-const { Text, Title, Paragraph } = Typography;
+const { Paragraph, Text, Title } = Typography;
 const SchemeTerms = (): JSX.Element => (
   <div className="list-view">
     <Row style={{ margin: 10 }}>
@@ -15,8 +15,8 @@ const SchemeTerms = (): JSX.Element => (
       </Col>
     </Row>
     <Card style={{ width: '98%' }}>
-      <Space direction="vertical" style={{ fontSize: 12 }} size={1}>
-        <Title style={{ fontSize: 14, marginTop: 20, marginBottom: 20 }}>
+      <Space direction="vertical" size={1} style={{ fontSize: 12 }}>
+        <Title style={{ fontSize: 14, marginBottom: 20, marginTop: 20 }}>
           1 Background
         </Title>
         <Paragraph>
@@ -59,7 +59,7 @@ const SchemeTerms = (): JSX.Element => (
           The parties wish to record their commitments under this Agreement.
         </Paragraph>
 
-        <Title style={{ fontSize: 14, marginTop: 20, marginBottom: 20 }}>
+        <Title style={{ fontSize: 14, marginBottom: 20, marginTop: 20 }}>
           2 Definitions and Interpretation
         </Title>
 
@@ -109,7 +109,7 @@ const SchemeTerms = (): JSX.Element => (
           protection or crime prevention.
         </Paragraph>
 
-        <Title style={{ fontSize: 14, marginTop: 20, marginBottom: 20 }}>
+        <Title style={{ fontSize: 14, marginBottom: 20, marginTop: 20 }}>
           3 The Services and Data Processing
         </Title>
 
@@ -166,7 +166,7 @@ const SchemeTerms = (): JSX.Element => (
           processing activities in accordance with the GDPR Article 32 (2).
         </Text>
 
-        <Title style={{ fontSize: 14, marginTop: 20, marginBottom: 20 }}>
+        <Title style={{ fontSize: 14, marginBottom: 20, marginTop: 20 }}>
           4 Instruction
         </Title>
 
@@ -204,7 +204,7 @@ const SchemeTerms = (): JSX.Element => (
           not be liable for any loss or damages of any kind whatsoever.
         </Text>
 
-        <Title style={{ fontSize: 14, marginTop: 20, marginBottom: 20 }}>
+        <Title style={{ fontSize: 14, marginBottom: 20, marginTop: 20 }}>
           5 The Data Controller’s and Administrator’s Obligations
         </Title>
 
@@ -255,7 +255,7 @@ const SchemeTerms = (): JSX.Element => (
           from accessing the Alert! System.
         </Text>
 
-        <Title style={{ fontSize: 14, marginTop: 20, marginBottom: 20 }}>
+        <Title style={{ fontSize: 14, marginBottom: 20, marginTop: 20 }}>
           6 The Data Processor’s Obligations
         </Title>
 
@@ -364,7 +364,7 @@ const SchemeTerms = (): JSX.Element => (
           the European Economic Area.
         </Text>
 
-        <Title style={{ fontSize: 14, marginTop: 20, marginBottom: 20 }}>
+        <Title style={{ fontSize: 14, marginBottom: 20, marginTop: 20 }}>
           7 Sub-Processors
         </Title>
 
@@ -410,7 +410,7 @@ const SchemeTerms = (): JSX.Element => (
           2.
         </Text>
 
-        <Title style={{ fontSize: 14, marginTop: 20, marginBottom: 20 }}>
+        <Title style={{ fontSize: 14, marginBottom: 20, marginTop: 20 }}>
           8 Remuneration and Costs
         </Title>
 
@@ -446,7 +446,7 @@ const SchemeTerms = (): JSX.Element => (
           the new Instruction and commercial terms thereof.
         </Text>
 
-        <Title style={{ fontSize: 14, marginTop: 20, marginBottom: 20 }}>
+        <Title style={{ fontSize: 14, marginBottom: 20, marginTop: 20 }}>
           9 Duration
         </Title>
 
@@ -456,7 +456,7 @@ const SchemeTerms = (): JSX.Element => (
           agreement.
         </Text>
 
-        <Title style={{ fontSize: 14, marginTop: 20, marginBottom: 20 }}>
+        <Title style={{ fontSize: 14, marginBottom: 20, marginTop: 20 }}>
           10 Data Protection Officer
         </Title>
 
@@ -465,7 +465,7 @@ const SchemeTerms = (): JSX.Element => (
           such appointment is required by Data Protection Laws and Regulations.
         </Text>
 
-        <Title style={{ fontSize: 14, marginTop: 20, marginBottom: 20 }}>
+        <Title style={{ fontSize: 14, marginBottom: 20, marginTop: 20 }}>
           10 Data Protection Officer
         </Title>
 
@@ -474,7 +474,7 @@ const SchemeTerms = (): JSX.Element => (
           such appointment is required by Data Protection Laws and Regulations.
         </Text>
 
-        <Title style={{ fontSize: 14, marginTop: 20, marginBottom: 20 }}>
+        <Title style={{ fontSize: 14, marginBottom: 20, marginTop: 20 }}>
           11 Termination and Liability
         </Title>
 
@@ -514,7 +514,7 @@ const SchemeTerms = (): JSX.Element => (
           responsibilities and liabilities under the GDPR.
         </Text>
 
-        <Title style={{ fontSize: 14, marginTop: 20, marginBottom: 20 }}>
+        <Title style={{ fontSize: 14, marginBottom: 20, marginTop: 20 }}>
           12 General
         </Title>
 
@@ -536,7 +536,7 @@ const SchemeTerms = (): JSX.Element => (
           jurisdiction of the English Courts.
         </Text>
 
-        <Title style={{ fontSize: 14, marginTop: 20, marginBottom: 20 }}>
+        <Title style={{ fontSize: 14, marginBottom: 20, marginTop: 20 }}>
           Appendix A
         </Title>
 
@@ -588,7 +588,7 @@ const SchemeTerms = (): JSX.Element => (
         </Text>
         <Text style={{ marginLeft: '12px' }}>- Users of Alert!</Text>
 
-        <Title style={{ fontSize: 14, marginTop: 20, marginBottom: 20 }}>
+        <Title style={{ fontSize: 14, marginBottom: 20, marginTop: 20 }}>
           Appendix B
         </Title>
 
@@ -616,7 +616,7 @@ const SchemeTerms = (): JSX.Element => (
         </Text>
         <Text style={{ marginLeft: '12px' }}>i. N/a</Text>
 
-        <Title style={{ fontSize: 14, marginTop: 20, marginBottom: 20 }}>
+        <Title style={{ fontSize: 14, marginBottom: 20, marginTop: 20 }}>
           Appendix C
         </Title>
 

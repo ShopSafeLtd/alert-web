@@ -1,27 +1,28 @@
 import React from 'react';
+
 import View from './search.view';
 import useOffenderProfile from './use-search';
 
 const OffenderProfile = () => {
   const {
+    currentSearchPage,
+    handleSearchChange,
+    onSearchPageChange,
     searchOffenderLoading,
     searchOffendersData,
     searchValue,
-    handleSearchChange,
     setSelectedOffender,
-    currentSearchPage,
-    onSearchPageChange,
   } = useOffenderProfile();
 
   return (
     <View
+      currentSearchPage={currentSearchPage}
+      handleSearchChange={handleSearchChange}
+      onSearchPageChange={onSearchPageChange}
       searchOffenderLoading={searchOffenderLoading}
       searchOffendersData={searchOffendersData}
       searchValue={searchValue}
-      handleSearchChange={handleSearchChange}
       setSelectedOffender={setSelectedOffender}
-      currentSearchPage={currentSearchPage}
-      onSearchPageChange={onSearchPageChange}
     />
   );
 };
