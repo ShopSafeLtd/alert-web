@@ -3,6 +3,8 @@ fragment Images on Image {
   url
   optimised
   position
+  positionX
+  positionY
   rotation
   primary
   policeImage

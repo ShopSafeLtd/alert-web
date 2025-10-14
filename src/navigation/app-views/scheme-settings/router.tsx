@@ -132,11 +132,20 @@ const JDSiteImport = lazy(
 const OneStop = lazy(
   () => import('../../../views/settings/data-import/onestop/OneStop.view')
 );
+const MCCImport = lazy(
+  () => import('../../../views/settings/data-import/mcc-import/MCCImport.view')
+);
 const BusinessOptions = lazy(
   () => import('../../../views/settings/business-options/BusinessOptions.view')
 );
 const DashboardManagement = lazy(
   () => import('../dashboard-management/router')
+);
+const ListStockItems = lazy(
+  () => import('../../../views/settings/stock-items/ListStockItems')
+);
+const ListIncidentStatuses = lazy(
+  () => import('../../../views/settings/incident-statuses/ListIncidentStatuses')
 );
 
 const SchemeSettings = (): JSX.Element => {
@@ -487,6 +496,19 @@ const SchemeSettings = (): JSX.Element => {
                 <PermissionCheckWrapper
                   permission={{
                     method: PermissionMethod.Read,
+                    model: PermissionModel.IncidentOptions,
+                  }}
+                >
+                  <ListIncidentStatuses />
+                </PermissionCheckWrapper>
+              }
+              path="incident-statuses"
+            />
+            <Route
+              element={
+                <PermissionCheckWrapper
+                  permission={{
+                    method: PermissionMethod.Read,
                     model: PermissionModel.DataImport,
                   }}
                 >
@@ -743,6 +765,19 @@ const SchemeSettings = (): JSX.Element => {
                     model: PermissionModel.DataImport,
                   }}
                 >
+                  <MCCImport />
+                </PermissionCheckWrapper>
+              }
+              path="data-import/mcc-import"
+            />
+            <Route
+              element={
+                <PermissionCheckWrapper
+                  permission={{
+                    method: PermissionMethod.Read,
+                    model: PermissionModel.DataImport,
+                  }}
+                >
                   <CSVImport />
                 </PermissionCheckWrapper>
               }
@@ -866,6 +901,19 @@ const SchemeSettings = (): JSX.Element => {
                 </PermissionCheckWrapper>
               }
               path="activity-settings"
+            />
+            <Route
+              element={
+                <PermissionCheckWrapper
+                  permission={{
+                    method: PermissionMethod.Read,
+                    model: PermissionModel.Businesses,
+                  }}
+                >
+                  <ListStockItems />
+                </PermissionCheckWrapper>
+              }
+              path="stock-items"
             />
           </Routes>
         </Suspense>

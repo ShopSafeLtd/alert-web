@@ -1,4 +1,4 @@
-import type * as Types from '../../types.js';
+import type * as Types from '../../types';
 
 import { gql } from '@apollo/client';
 export type LocationsFragment = { __typename?: 'Address', id: string, building?: string | null, street?: string | null, townCity?: string | null, county?: string | null, postcode?: string | null, geoLat?: number | null, geoLng?: number | null, full: string, alias?: string | null };

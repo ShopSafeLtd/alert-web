@@ -1,5 +1,6 @@
 import type { Dispatch } from 'react';
-import React from 'react';
+import type { IFileInfo } from 'react-csv-reader';
+
 import {
   Button,
   Card,
@@ -11,31 +12,32 @@ import {
   Table,
   Typography,
 } from 'antd';
+import { Role } from 'graphql/types';
+import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
-import type { IFileInfo } from 'react-csv-reader';
 
 import type { Action, CSVData, DataType, State } from './useImport';
+
 import CSVReader from '../../../../../components/CSVReader/CSVReader';
-import { Role } from 'graphql/types';
 
 interface Props {
+  dispatch: Dispatch<Action>;
   onItemsLoaded: (
     data: CSVData,
     _: IFileInfo,
     originalFile: File | undefined
   ) => void;
-  dispatch: Dispatch<Action>;
-  state: State;
-  saving: boolean;
   onSubmit: () => void;
+  saving: boolean;
+  state: State;
 }
 
 const ImportStockItems = ({
-  onItemsLoaded,
   dispatch,
-  state,
-  saving,
+  onItemsLoaded,
   onSubmit,
+  saving,
+  state,
 }: Props) => {
   const intl = useIntl();
   // eslint-disable-next-line react/no-unstable-nested-components
@@ -43,23 +45,23 @@ const ImportStockItems = ({
     if (state.dataTypes === 'stockItems') {
       return (
         <Select
+          defaultValue={state.additionalInfo.goodsType}
+          onChange={(value: string) =>
+            dispatch({
+              payload: {
+                ...state.additionalInfo,
+                goodsType: value,
+              },
+              type: 'SET_ADDITIONAL_INFO',
+            })
+          }
+          options={state.goods}
           placeholder={intl.formatMessage({
             defaultMessage: 'Goods Type',
           })}
           style={{
             width: '80%',
           }}
-          defaultValue={state.additionalInfo.goodsType}
-          options={state.goods}
-          onChange={(value: string) =>
-            dispatch({
-              type: 'SET_ADDITIONAL_INFO',
-              payload: {
-                ...state.additionalInfo,
-                goodsType: value,
-              },
-            })
-          }
         />
       );
     }
@@ -68,10 +70,16 @@ const ImportStockItems = ({
         <Row gutter={[8, 8]}>
           <Col>
             <Select
-              placeholder={intl.formatMessage({
-                defaultMessage: 'Role',
-              })}
               defaultValue={state.additionalInfo.role}
+              onChange={(value: string) =>
+                dispatch({
+                  payload: {
+                    ...state.additionalInfo,
+                    role: value,
+                  },
+                  type: 'SET_ADDITIONAL_INFO',
+                })
+              }
               options={[
                 {
                   label: intl.formatMessage({
@@ -86,49 +94,43 @@ const ImportStockItems = ({
                   value: Role.User,
                 },
               ]}
-              onChange={(value: string) =>
-                dispatch({
-                  type: 'SET_ADDITIONAL_INFO',
-                  payload: {
-                    ...state.additionalInfo,
-                    role: value,
-                  },
-                })
-              }
+              placeholder={intl.formatMessage({
+                defaultMessage: 'Role',
+              })}
             />
           </Col>
           <Col>
             <Input
               defaultValue={state.additionalInfo.password || undefined}
-              placeholder={intl.formatMessage({
-                defaultMessage: 'Default Password',
-              })}
               onChange={(e) =>
                 dispatch({
-                  type: 'SET_ADDITIONAL_INFO',
                   payload: {
                     ...state.additionalInfo,
                     password: e.target.value,
                   },
+                  type: 'SET_ADDITIONAL_INFO',
                 })
               }
+              placeholder={intl.formatMessage({
+                defaultMessage: 'Default Password',
+              })}
             />
           </Col>
           <Col>
             <Input
               defaultValue={state.additionalInfo.password || undefined}
-              placeholder={intl.formatMessage({
-                defaultMessage: 'Organisation',
-              })}
               onChange={(e) =>
                 dispatch({
-                  type: 'SET_ADDITIONAL_INFO',
                   payload: {
                     ...state.additionalInfo,
                     organisation: e.target.value,
                   },
+                  type: 'SET_ADDITIONAL_INFO',
                 })
               }
+              placeholder={intl.formatMessage({
+                defaultMessage: 'Organisation',
+              })}
             />
           </Col>
         </Row>
@@ -141,85 +143,85 @@ const ImportStockItems = ({
       case 'stockItems': {
         return [
           {
+            dataIndex: 0,
+            key: 'name',
             title: intl.formatMessage({
               defaultMessage: 'Name',
             }),
-            key: 'name',
-            dataIndex: 0,
           },
           {
+            dataIndex: 1,
+            key: 'brand',
             title: intl.formatMessage({
               defaultMessage: 'Brand',
             }),
-            key: 'brand',
-            dataIndex: 1,
           },
           {
+            dataIndex: 2,
             key: 'sku',
             title: intl.formatMessage({
               defaultMessage: 'SKU',
             }),
-            dataIndex: 2,
           },
           {
+            dataIndex: 3,
             key: 'barcode',
             title: intl.formatMessage({
               defaultMessage: 'Barcode',
             }),
-            dataIndex: 3,
           },
           {
+            dataIndex: 4,
             key: 'costPrice',
             title: intl.formatMessage({
               defaultMessage: 'Cost Price',
             }),
-            dataIndex: 4,
           },
           {
+            dataIndex: 5,
             key: 'salePrice',
             title: intl.formatMessage({
               defaultMessage: 'Sale Price',
             }),
-            dataIndex: 5,
           },
           {
+            dataIndex: 6,
             key: 'division',
             title: intl.formatMessage({
               defaultMessage: 'Division',
             }),
-            dataIndex: 6,
           },
         ];
       }
       case 'users': {
         return [
           {
+            dataIndex: 0,
+            key: 'name',
             title: intl.formatMessage({
               defaultMessage: 'Name',
             }),
-            key: 'name',
-            dataIndex: 0,
           },
           {
+            dataIndex: 1,
+            key: 'email',
             title: intl.formatMessage({
               defaultMessage: 'Email',
             }),
-            key: 'email',
-            dataIndex: 1,
           },
           {
+            dataIndex: 2,
+            key: 'groups',
             title: intl.formatMessage({
               defaultMessage: 'Groups',
             }),
-            key: 'groups',
-            dataIndex: 2,
           },
           {
+            dataIndex: 3,
+            key: 'businesses',
             title: intl.formatMessage({
               defaultMessage: 'Businesses',
             }),
-            key: 'businesses',
-            dataIndex: 3,
           },
         ];
       }
@@ -232,64 +234,64 @@ const ImportStockItems = ({
       case 'groups': {
         return [
           {
+            dataIndex: 0,
+            key: 'name',
             title: intl.formatMessage({
               defaultMessage: 'Name',
             }),
-            key: 'name',
-            dataIndex: 0,
           },
           {
+            dataIndex: 1,
+            key: 'description',
             title: intl.formatMessage({
               defaultMessage: 'Description',
             }),
-            key: 'description',
-            dataIndex: 1,
           },
         ];
       }
       case 'businesses': {
         return [
           {
+            dataIndex: 0,
+            key: 'name',
             title: intl.formatMessage({
               defaultMessage: 'Name',
             }),
-            key: 'name',
-            dataIndex: 0,
           },
           {
+            dataIndex: 1,
+            key: 'division',
             title: intl.formatMessage({
               defaultMessage: 'Division',
             }),
-            key: 'division',
-            dataIndex: 1,
           },
           {
+            dataIndex: 2,
+            key: 'address',
             title: intl.formatMessage({
               defaultMessage: 'Address',
             }),
-            key: 'address',
-            dataIndex: 2,
           },
           {
+            dataIndex: 3,
+            key: 'postcode',
             title: intl.formatMessage({
               defaultMessage: 'Postcode',
             }),
-            key: 'postcode',
-            dataIndex: 3,
           },
           {
+            dataIndex: 4,
+            key: 'country',
             title: intl.formatMessage({
               defaultMessage: 'Country',
             }),
-            key: 'country',
-            dataIndex: 4,
           },
           {
+            dataIndex: 5,
+            key: 'coordinates',
             title: intl.formatMessage({
               defaultMessage: 'Coordinates',
             }),
-            key: 'coordinates',
-            dataIndex: 5,
           },
         ];
       }
@@ -334,8 +336,8 @@ const ImportStockItems = ({
         defaultMessage: 'Stock Items: ',
       })}
       <a
-        href="https://shopsafealert.blob.core.windows.net/csv/Stock_Item_Template.csv?sp=r&st=2023-09-29T17:48:01Z&se=2030-09-30T01:48:01Z&spr=https&sv=2022-11-02&sr=b&sig=kQqHQCpmrFAut53Wu%2Frme3%2B1VNRh%2BBaA68SDKAolYis%3D"
         download
+        href="https://shopsafealert.blob.core.windows.net/csv/Stock_Item_Template.csv?sp=r&st=2023-09-29T17:48:01Z&se=2030-09-30T01:48:01Z&spr=https&sv=2022-11-02&sr=b&sig=kQqHQCpmrFAut53Wu%2Frme3%2B1VNRh%2BBaA68SDKAolYis%3D"
       >
         {intl.formatMessage({
           defaultMessage: 'Download',
@@ -346,8 +348,8 @@ const ImportStockItems = ({
         defaultMessage: 'Groups: ',
       })}
       <a
-        href="https://shopsafealert.blob.core.windows.net/csv/Group_Template.csv?sp=r&st=2023-09-29T17:52:22Z&se=2030-09-30T01:52:22Z&spr=https&sv=2022-11-02&sr=b&sig=i3%2BLGJm7EuwenYcdkcBp2SWc8lHxC47IpEQZgPL22QQ%3D"
         download
+        href="https://shopsafealert.blob.core.windows.net/csv/Group_Template.csv?sp=r&st=2023-09-29T17:52:22Z&se=2030-09-30T01:52:22Z&spr=https&sv=2022-11-02&sr=b&sig=i3%2BLGJm7EuwenYcdkcBp2SWc8lHxC47IpEQZgPL22QQ%3D"
       >
         {intl.formatMessage({
           defaultMessage: 'Download',
@@ -358,8 +360,8 @@ const ImportStockItems = ({
         defaultMessage: 'Businesses: ',
       })}
       <a
-        href="https://shopsafealert.blob.core.windows.net/csv/Business_Template.csv?sp=r&st=2023-09-29T17:52:46Z&se=2030-09-30T01:52:46Z&spr=https&sv=2022-11-02&sr=b&sig=AbqBLI0RWVmgjFpHyk1O44gsAmcvVvBLD6oiJBM0zBI%3D"
         download
+        href="https://shopsafealert.blob.core.windows.net/csv/Business_Template.csv?sp=r&st=2023-09-29T17:52:46Z&se=2030-09-30T01:52:46Z&spr=https&sv=2022-11-02&sr=b&sig=AbqBLI0RWVmgjFpHyk1O44gsAmcvVvBLD6oiJBM0zBI%3D"
       >
         {intl.formatMessage({
           defaultMessage: 'Download',
@@ -370,8 +372,8 @@ const ImportStockItems = ({
         defaultMessage: 'Users: ',
       })}
       <a
-        href="https://shopsafealert.blob.core.windows.net/csv/User_Template.csv?sp=r&st=2023-09-29T17:51:59Z&se=2030-09-30T01:51:59Z&spr=https&sv=2022-11-02&sr=b&sig=toX26Crlo1bol%2Fg7x1UxtKe8VkdLMRA0SMesivzxG8k%3D"
         download
+        href="https://shopsafealert.blob.core.windows.net/csv/User_Template.csv?sp=r&st=2023-09-29T17:51:59Z&se=2030-09-30T01:51:59Z&spr=https&sv=2022-11-02&sr=b&sig=toX26Crlo1bol%2Fg7x1UxtKe8VkdLMRA0SMesivzxG8k%3D"
       >
         {intl.formatMessage({
           defaultMessage: 'Download',
@@ -395,8 +397,8 @@ const ImportStockItems = ({
             <Radio.Group
               onChange={(e) =>
                 dispatch({
-                  type: 'SET_DATA_TYPE',
                   payload: e.target.value as DataType,
+                  type: 'SET_DATA_TYPE',
                 })
               }
             >
@@ -450,9 +452,9 @@ const ImportStockItems = ({
             })}
           >
             <Table
+              columns={getColumns(state.dataTypes)}
               dataSource={state.tableData}
               size="small"
-              columns={getColumns(state.dataTypes)}
             />
           </Card>
           <Row justify="end">
@@ -466,8 +468,8 @@ const ImportStockItems = ({
                 <FormattedMessage defaultMessage="Please complete the additional info" />
               ) : (
                 <Button
-                  loading={saving}
                   disabled={saving}
+                  loading={saving}
                   onClick={onSubmit}
                   type="primary"
                 >

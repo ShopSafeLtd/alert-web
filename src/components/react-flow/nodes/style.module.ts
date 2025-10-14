@@ -1,54 +1,55 @@
 import type { Theme } from 'configs/ThemeConfig';
+
 import { createUseStyles } from 'react-jss';
 
 const useStyles = createUseStyles((theme: Theme) => ({
-  node: {
-    width: '100%',
+  editing: {
+    alignItems: 'center',
+    backdropFilter: 'blur(20px)',
+    display: 'flex',
+
     height: '100%',
-    borderRadius: '15px',
-    border: '1px solid #000',
+    left: 0,
+    padding: 10,
+    position: 'absolute',
+    top: 0,
+    width: '100%',
+    zIndex: 5,
+  },
+  image: {
+    height: 'inherit',
+    objectFit: 'cover',
+    padding: '0px',
+    position: 'relative',
+    width: 'inherit',
+    zIndex: 4,
+  },
+  incidentListNode: {
     backgroundColor: theme.componentBackground,
+    border: '1px solid #000',
+    borderRadius: '15px',
     boxSizing: 'border-box',
+    height: 'min-content',
+    width: 'max-content',
+  },
+  node: {
+    backgroundColor: theme.componentBackground,
+    border: '1px solid #000',
+    borderRadius: '15px',
+    boxSizing: 'border-box',
+    height: '100%',
+    width: '100%',
   },
   nodeContainer: {
-    padding: 15,
     height: '100%',
+    padding: 15,
     width: '100%',
   },
   nodeContainerList: {
-    padding: 10,
     height: '100%',
-    width: '100%',
     overflow: 'hidden',
-  },
-  editing: {
-    backdropFilter: 'blur(20px)',
-    zIndex: 5,
-    position: 'absolute',
-
-    height: '100%',
-    width: '100%',
-    display: 'flex',
-    alignItems: 'center',
-    top: 0,
-    left: 0,
     padding: 10,
-  },
-  incidentListNode: {
-    width: 'max-content',
-    height: 'min-content',
-    borderRadius: '15px',
-    border: '1px solid #000',
-    backgroundColor: theme.componentBackground,
-    boxSizing: 'border-box',
-  },
-  image: {
-    objectFit: 'cover',
-    width: 'inherit',
-    height: 'inherit',
-    zIndex: 4,
-    position: 'relative',
-    padding: '0px',
+    width: '100%',
   },
 }));
 export default useStyles;

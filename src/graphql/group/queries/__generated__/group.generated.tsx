@@ -1,4 +1,4 @@
-import type * as Types from '../../../types.js';
+import type * as Types from '../../../types';
 
 import { gql } from '@apollo/client';
 import { OffenderSettingsFragmentDoc } from '../../../fragments/__generated__/offender-settings.generated';

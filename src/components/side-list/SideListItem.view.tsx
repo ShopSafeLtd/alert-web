@@ -1,49 +1,50 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
-import type { ReactNode } from 'react';
-import React from 'react';
-import { Card } from 'antd';
 import type { Theme } from 'configs/ThemeConfig';
+import type { ReactNode } from 'react';
+
+import { Card } from 'antd';
+import React from 'react';
 import { createUseStyles } from 'react-jss';
 
 const useStyles = createUseStyles((theme: Theme) => ({
   item: {
-    width: '100%',
-    marginBottom: 8,
-    backgroundColor: theme.componentBackground,
-    borderRadius: 10,
-    overflow: 'hidden',
-
-    '&:hover': {
-      backgroundColor: theme.itemHoverBackground,
-    },
     '&.current': {
       backgroundColor: theme.itemSelectedBackground,
     },
     '&.loading': {
       height: 70,
     },
+    '&:hover': {
+      backgroundColor: theme.itemHoverBackground,
+    },
+    backgroundColor: theme.componentBackground,
+    borderRadius: 10,
+
+    marginBottom: 8,
+    overflow: 'hidden',
+    width: '100%',
   },
 }));
 
 interface Props {
   children: ReactNode;
   current: boolean;
-  noCard?: boolean;
   loading?: boolean;
+  noCard?: boolean;
   style?: React.CSSProperties;
 }
 
-const SideList = ({ children, current, loading, style, noCard }: Props) => {
+const SideList = ({ children, current, loading, noCard, style }: Props) => {
   const classes = useStyles();
 
   return (
     <Card
+      bodyStyle={{ padding: loading ? 10 : 0, ...style }}
       bordered={!noCard}
-      loading={loading || false}
       className={`${classes.item} ${current ? 'current' : undefined} ${
         loading ? 'loading' : undefined
       }`}
-      bodyStyle={{ padding: loading ? 10 : 0, ...style }}
+      loading={loading || false}
     >
       {children}
     </Card>

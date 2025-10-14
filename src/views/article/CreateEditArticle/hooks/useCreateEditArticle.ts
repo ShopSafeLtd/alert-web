@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-argument */
 import type { OffenderData } from '#/components/form-components/offender/AddExistingOffender/AddExistingOffender.container';
 import type { SelectProps, UploadProps } from 'antd';
-import { Form } from 'antd';
 import type { UploadFile } from 'antd/es/upload/interface';
 import type { Editor } from 'tinymce';
 
@@ -12,6 +11,7 @@ import {
   userIdAtom,
   userSchemesAtom,
 } from '#/providers/UserProvider/UserProvider';
+import { Form } from 'antd';
 import { useCreateArticleMutation } from 'graphql/article/mutations/__generated__/create-article.generated';
 import { useEditArticleMutation } from 'graphql/article/mutations/__generated__/edit-article.generated';
 import { useArticleQuery } from 'graphql/article/queries/__generated__/view-article.generated';

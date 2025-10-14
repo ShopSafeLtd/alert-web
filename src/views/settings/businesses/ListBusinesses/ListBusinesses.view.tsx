@@ -28,12 +28,12 @@ import {
 } from 'antd';
 import AddBusiness from 'components/form-components/businesses/AddBusiness';
 import LinkBusiness from 'components/form-components/businesses/LinkBusiness';
+import { PoliceForce } from 'graphql/types';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 
 import useStyles from './ListBusinesses.styles';
-import { PoliceForce } from 'graphql/types';
 
 interface TableData {
   key: string;
@@ -59,19 +59,19 @@ interface Props {
   pagination: { page: number; pageSize: number };
   parentData: FilterLabels[];
   parentFilter: string[];
+  policeAreaFilter: PoliceForce[];
   saving: boolean;
   searchValue: string;
   setGroupFilter: (value: string[]) => void;
   setPagination: (value: { page: number; pageSize: number }) => void;
   setParentFilter: (value: string[]) => void;
+  setPoliceAreaFilter: (value: PoliceForce[]) => void;
   setTagFilter: (value: string[]) => void;
   tagFilter: string[];
   tags: FilterLabels[];
   toggleAddVisible: () => void;
   toggleFiltersOpen: () => void;
   toggleLinkVisible: () => void;
-  policeAreaFilter: PoliceForce[];
-  setPoliceAreaFilter: (value: PoliceForce[]) => void;
 }
 
 const ListBusinesses = ({
@@ -89,19 +89,19 @@ const ListBusinesses = ({
   pagination,
   parentData,
   parentFilter,
+  policeAreaFilter,
   saving,
   searchValue,
   setGroupFilter,
   setPagination,
   setParentFilter,
+  setPoliceAreaFilter,
   setTagFilter,
   tagFilter,
   tags,
   toggleAddVisible,
   toggleFiltersOpen,
   toggleLinkVisible,
-  policeAreaFilter,
-  setPoliceAreaFilter,
 }: Props) => {
   const classNames = useStyles();
   const intl = useIntl();

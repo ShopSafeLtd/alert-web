@@ -1,19 +1,19 @@
-import React from 'react';
 import { Card, Tooltip, Typography } from 'antd';
 import WatermarkImage from 'components/images/WatermarkImage.view';
+import React from 'react';
 import { useIntl } from 'react-intl';
 import { createUseStyles } from 'react-jss';
 
 const { Paragraph } = Typography;
 
 const useStyles = createUseStyles({
+  details: {
+    overflow: 'hidden',
+    padding: 10,
+  },
   image: {
     height: 140,
     width: 140,
-  },
-  details: {
-    padding: 10,
-    overflow: 'hidden',
   },
   text: {
     marginBottom: '5px !important',
@@ -21,19 +21,19 @@ const useStyles = createUseStyles({
 });
 
 interface Props {
-  vehicle: {
-    id: string;
-    reference?: number | null | undefined;
-    images: { optimised?: string | null | undefined }[];
-    registration?: string | null;
-    model?: string | null;
-    make?: string | null;
-    colour?: string | null;
-  };
   onClick: () => void;
+  vehicle: {
+    colour?: null | string;
+    id: string;
+    images: { optimised?: null | string | undefined }[];
+    make?: null | string;
+    model?: null | string;
+    reference?: null | number | undefined;
+    registration?: null | string;
+  };
 }
 
-const VehicleTile = ({ vehicle, onClick }: Props): JSX.Element => {
+const VehicleTile = ({ onClick, vehicle }: Props): JSX.Element => {
   const intl = useIntl();
   const classes = useStyles();
   const unknown = intl.formatMessage({
@@ -51,18 +51,18 @@ const VehicleTile = ({ vehicle, onClick }: Props): JSX.Element => {
       )}
     >
       <Card
-        onClick={onClick}
         bodyStyle={{
-          position: 'relative',
-          padding: 0,
           borderRadius: '0.625rem',
-          overflow: 'hidden',
-          display: 'flex',
-          // alignItems: 'center',
           // justifyContent: 'center',
           cursor: 'pointer',
+          display: 'flex',
           height: 140,
+          overflow: 'hidden',
+          // alignItems: 'center',
+          padding: 0,
+          position: 'relative',
         }}
+        onClick={onClick}
       >
         {vehicle.images.length > 0 && (
           <div className={classes.image}>
@@ -70,13 +70,13 @@ const VehicleTile = ({ vehicle, onClick }: Props): JSX.Element => {
           </div>
         )}
         <div className={classes.details}>
-          <Paragraph ellipsis className={classes.text}>
+          <Paragraph className={classes.text} ellipsis>
             {intl.formatMessage(
               { defaultMessage: 'Alert ID: {ref}' },
               { ref: vehicle.reference }
             )}
           </Paragraph>
-          <Paragraph ellipsis className={classes.text}>
+          <Paragraph className={classes.text} ellipsis>
             {intl.formatMessage(
               { defaultMessage: 'Registration: {reg}' },
               {
@@ -84,7 +84,7 @@ const VehicleTile = ({ vehicle, onClick }: Props): JSX.Element => {
               }
             )}
           </Paragraph>
-          <Paragraph ellipsis className={classes.text}>
+          <Paragraph className={classes.text} ellipsis>
             {intl.formatMessage(
               { defaultMessage: 'Make: {make}' },
               {
@@ -92,7 +92,7 @@ const VehicleTile = ({ vehicle, onClick }: Props): JSX.Element => {
               }
             )}
           </Paragraph>
-          <Paragraph ellipsis className={classes.text}>
+          <Paragraph className={classes.text} ellipsis>
             {intl.formatMessage(
               { defaultMessage: 'Model: {model}' },
               {
@@ -100,7 +100,7 @@ const VehicleTile = ({ vehicle, onClick }: Props): JSX.Element => {
               }
             )}
           </Paragraph>
-          <Paragraph ellipsis className={classes.text}>
+          <Paragraph className={classes.text} ellipsis>
             {intl.formatMessage(
               { defaultMessage: 'Colour: {colour}' },
               {

@@ -1,47 +1,48 @@
 /* eslint-disable formatjs/no-literal-string-in-jsx */
 import type { FormInstance } from 'antd';
+
 import { Button, Col, Form, Input, Row, Select } from 'antd';
 import React from 'react';
 
 export interface FormData {
-  name: string;
   content: string;
+  name: string;
   schemes: string[];
 }
 
 const createEditStatementView = ({
   data,
-  saving,
   form,
-  onSubmit,
-  schemes,
   onClose,
+  onSubmit,
+  saving,
+  schemes,
 }: {
   data: FormData;
-  saving: boolean;
   form: FormInstance<FormData>;
+  onClose: () => void;
   onSubmit: (data: FormData) => void;
+  saving: boolean;
   schemes: {
     label: string;
     value: string;
   }[];
-  onClose: () => void;
 }) => (
   <Form<FormData>
     form={form}
     initialValues={{
       ...data,
     }}
-    onFinish={onSubmit}
     layout="vertical"
+    onFinish={onSubmit}
   >
     <Form.Item
       label="Name"
       name="name"
       rules={[
         {
-          required: true,
           message: 'Please enter a name',
+          required: true,
         },
       ]}
     >
@@ -52,33 +53,33 @@ const createEditStatementView = ({
       name="schemes"
       rules={[
         {
-          required: true,
           message: 'Please select at least one scheme',
+          required: true,
         },
       ]}
     >
-      <Select mode="multiple" placeholder="Please select" options={schemes} />
+      <Select mode="multiple" options={schemes} placeholder="Please select" />
     </Form.Item>
     <Form.Item
       label="Content"
       name="content"
       rules={[
         {
-          required: true,
           message: 'Please enter content',
+          required: true,
         },
       ]}
     >
       <Input.TextArea
         autoSize={{
-          minRows: 8,
           maxRows: 20,
+          minRows: 8,
         }}
       />
     </Form.Item>
 
     <Form.Item>
-      <Row style={{ marginTop: 10 }} gutter={10} justify="end">
+      <Row gutter={10} justify="end" style={{ marginTop: 10 }}>
         <Col>
           <Button disabled={saving} onClick={() => onClose()}>
             Cancel
@@ -87,9 +88,9 @@ const createEditStatementView = ({
         <Col>
           <Button
             disabled={saving}
+            htmlType="submit"
             loading={saving}
             type="primary"
-            htmlType="submit"
           >
             Submit
           </Button>

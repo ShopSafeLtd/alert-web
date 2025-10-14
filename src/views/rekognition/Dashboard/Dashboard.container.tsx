@@ -1,4 +1,5 @@
 import React from 'react';
+
 import View from './Dashboard.view';
 import useDashboard from './useDashboard';
 

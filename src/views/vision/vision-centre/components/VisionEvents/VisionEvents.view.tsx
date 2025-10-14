@@ -23,8 +23,8 @@ const AiTrends = () => {
           createdAt: SortOrder.Desc,
         },
       ],
-      take: pageSize,
       skip: (page - 1) * pageSize,
+      take: pageSize,
       where: {
         schemeIds: [currentScheme],
       },
@@ -60,7 +60,6 @@ const AiTrends = () => {
       </Row>
 
       <Table
-        loading={loading}
         columns={[
           {
             dataIndex: 'type',
@@ -99,23 +98,24 @@ const AiTrends = () => {
             type: formatCameraEventType(),
           })) ?? []
         }
+        loading={loading}
         pagination={{
           current: page,
-          pageSize,
-          total: data?.aiVisionEvents.totalCount ?? 0,
           onChange: (newPage) => setPage(newPage),
-          showSizeChanger: false,
+          pageSize,
           showQuickJumper: false,
+          showSizeChanger: false,
           showTotal: (total, range) => (
             <FormattedMessage
               defaultMessage="{start}-{end} of {total} events"
               values={{
-                start: range[0],
                 end: range[1],
+                start: range[0],
                 total,
               }}
             />
           ),
+          total: data?.aiVisionEvents.totalCount ?? 0,
         }}
         size="small"
       />

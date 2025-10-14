@@ -1,5 +1,5 @@
-import React from 'react';
 import { Col, Row, Typography } from 'antd';
+import React from 'react';
 import { useIntl } from 'react-intl';
 
 interface Props {
@@ -14,10 +14,10 @@ const EmptyContent: React.FC<Props> = ({ text }: Props) => {
   const intl = useIntl();
   return (
     <Row
-      className="empty-content"
       align="middle"
-      justify="center"
+      className="empty-content"
       gutter={[0, 50]}
+      justify="center"
     >
       <Col span={24} />
       <Col span={14}>

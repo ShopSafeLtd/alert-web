@@ -1,57 +1,57 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access */
-import { useEffect, useState } from 'react';
-import { message } from 'antd';
-
+import type { StateImageData } from '#/components/incidents/IncidentForm/ImageSection/useImageSection';
 import type { RcFile, UploadProps } from 'antd/es/upload/interface';
+import type { UploadChangeParam } from 'antd/lib/upload';
 import type { Image, ImageCardData } from 'types/DataType';
+
+import { message } from 'antd';
+import { ImagePosition } from 'graphql/types';
 import update from 'immutability-helper';
+import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 
 import { compressImage } from '../../../utils/compress-images';
-import type { UploadChangeParam } from 'antd/lib/upload';
-import type { StateImageData } from '#/components/incidents/IncidentForm/ImageSection/useImageSection';
-import { ImagePosition } from 'graphql/types';
 
 interface Props {
+  facialDet?: boolean;
+  images: ImageCardData[] | null | undefined;
   onClose: () => void;
   update: (value: ImageCardData[]) => void;
-  images: ImageCardData[] | undefined | null;
-  facialDet?: boolean;
 }
 
 export interface FormData {
-  name: string;
-  make?: string;
-  model?: string;
   colour?: string;
-  reference?: number | null;
-  totalOffenders?: number | null;
-  registration?: string;
   crimeGroup?: string[];
+  customGalleries?: Array<{ label: string; value: string } | string>;
   groups?: string[];
   incidents?: string[];
+  make?: string;
+  model?: string;
+  name: string;
   offenders?: string[];
-  customGalleries?: Array<string | { value: string; label: string }>;
+  reference?: null | number;
+  registration?: string;
+  totalOffenders?: null | number;
 }
 
 interface Return {
-  onSubmit: () => void;
-  saving: boolean;
-  imgChange: UploadProps['onChange'];
   beforeUpload: (value: RcFile) => void;
-  fileList: Image[];
-  primaryImage: string;
-  setPrimaryImage: (value: string) => void;
   editImage: Image | null;
+  fileList: Image[];
+  imgChange: UploadProps['onChange'];
   onEditImage: (value: Image) => void;
   onRemoveImage: (imageId: string) => void;
+  onSubmit: () => void;
+  primaryImage: string;
+  saving: boolean;
+  setPrimaryImage: (value: string) => void;
   toggleEditImage: (value?: Image) => void;
 }
 
 const useEditImagesList = ({
-  update: updateImageList,
-  images,
   facialDet,
+  images,
+  update: updateImageList,
 }: Props): Return => {
   const intl = useIntl();
   const [saving, setSaving] = useState(false);
@@ -64,19 +64,19 @@ const useEditImagesList = ({
     if (images && images.length > 0) {
       setFileList(
         images?.map((image) => ({
-          uid: `${image.id}`,
+          edited: false,
           name: `${image.id}.png`,
-          status: 'done',
-          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-          url: `${image.optimised || image.url}`,
+          new: false,
           // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
           optimised: `${image.optimised || image.url}`,
+          policeImage: image.policeImage || false,
           position: image.position,
           primary: image.primary || false,
-          policeImage: image.policeImage || false,
           rotation: image.rotation || 0,
-          edited: false,
-          new: false,
+          status: 'done',
+          uid: `${image.id}`,
+          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+          url: `${image.optimised || image.url}`,
         }))
       );
       const findPrimaryImage = images.find(({ primary }) => primary)?.id;
@@ -104,20 +104,20 @@ const useEditImagesList = ({
         // .filter((item) => !item.optimised)
         // .filter((item) => item.new || item.edited || item.deleted)
         .map((item) => ({
-          id: item.uid || `${Math.random()}`,
-          filename: item.fileName || '',
-          mimetype: item.type || '',
-          url: item.url || '',
-          position: item.position,
-          primary: item.uid === primaryImage,
-          policeImage: item.policeImage || false,
-          rotation: item.rotation,
-
+          deleted: item.deleted,
           edited:
             (item.edited && !item.new && !item.deleted) ||
             (findPrimaryId === item.uid && findPrimaryId !== primaryImage),
+          filename: item.fileName || '',
+          id: item.uid || `${Math.random()}`,
+          mimetype: item.type || '',
           new: item.new,
-          deleted: item.deleted,
+          policeImage: item.policeImage || false,
+          position: item.position,
+
+          primary: item.uid === primaryImage,
+          rotation: item.rotation,
+          url: item.url || '',
         }));
 
       updateImageList(imagesData);
@@ -148,17 +148,17 @@ const useEditImagesList = ({
         ...fileList.filter((item) => item.uid !== info.file.uid),
         {
           ...info.file,
-          url: info.file.response[0].url,
+          edited: false,
           fileName: info.file.response[0].blobName,
-          type: info.file.response[0].mimetype,
+          new: true,
           position: ImagePosition.CenterCenter,
           rotation: 0,
           totalFaces:
             facialDet && uploadImage.faces && uploadImage.faces.length > 0
               ? uploadImage.faces.length
               : 0,
-          edited: false,
-          new: true,
+          type: info.file.response[0].mimetype,
+          url: info.file.response[0].url,
         },
       ]);
       setImageChange(true);
@@ -192,18 +192,18 @@ const useEditImagesList = ({
   };
 
   return {
-    onSubmit,
-    saving,
-    imgChange,
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     beforeUpload,
-    fileList: fileList.filter(({ deleted }) => !deleted),
-    onRemoveImage,
-    onEditImage,
-    toggleEditImage,
     editImage,
+    fileList: fileList.filter(({ deleted }) => !deleted),
+    imgChange,
+    onEditImage,
+    onRemoveImage,
+    onSubmit,
     primaryImage,
+    saving,
     setPrimaryImage,
+    toggleEditImage,
   };
 };
 export default useEditImagesList;

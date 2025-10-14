@@ -61,6 +61,8 @@ query CurrentSchemeProvider($where: UserSchemeWhereUniqueInput!) {
             requireActivityAuthorised
             requireBusinessOnIncident
             optionalBusinessOnUsers
+            incidentStatusEnabled
+            incidentAssignmentEnabled
             connectedToSchemes {
                 id
                 name

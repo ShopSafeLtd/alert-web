@@ -1,6 +1,7 @@
 import type { FormInstance } from 'antd';
-import { Col, Drawer, Form, Row } from 'antd';
 import type { Model } from 'graphql/types';
+
+import { Col, Drawer, Form, Row } from 'antd';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
@@ -36,11 +37,17 @@ interface ListData {
 export interface WorkflowProps {
   activityTemplateForm: boolean;
   availableQuestions: Question[];
+  // new
+  brands: LabelValue[];
+  brandsLoading: boolean;
   brandsSelected: boolean;
   checklistOption: { label: string; value: string }[];
+  countries: LabelValue[];
   countriesSelected: boolean;
   createNewQuestion: (id: string, question: string) => void;
   descriptionCheck: boolean;
+  divisions: LabelValue[];
+  divisionsLoading: boolean;
   divisionsSelected: boolean;
   editId?: string;
   form: FormInstance<FormData>;
@@ -75,6 +82,7 @@ export interface WorkflowProps {
   tagsSelected: boolean;
   taskOutcome: boolean;
   taskQuestions: Question[];
+
   typeWatch: string;
   updateIncidentCheck: boolean;
   updateTemplates: (
@@ -83,23 +91,21 @@ export interface WorkflowProps {
   ) => void;
   valueSelected: boolean;
   workflowTypeWatch: Model | null | undefined;
-
-  // new
-  brands: LabelValue[];
-  countries: LabelValue[];
-  divisions: LabelValue[];
-  brandsLoading: boolean;
-  divisionsLoading: boolean;
 }
 
 const WorkflowView: React.FC<WorkflowProps> = ({
   activityTemplateForm,
   availableQuestions,
+  brands,
+  brandsLoading,
   brandsSelected,
   checklistOption,
+  countries,
   countriesSelected,
   createNewQuestion,
   descriptionCheck,
+  divisions,
+  divisionsLoading,
   divisionsSelected,
   editId,
   form,
@@ -139,11 +145,6 @@ const WorkflowView: React.FC<WorkflowProps> = ({
   updateTemplates,
   valueSelected,
   workflowTypeWatch,
-  brands,
-  countries,
-  divisions,
-  brandsLoading,
-  divisionsLoading,
 }) => {
   const intl = useIntl();
 
@@ -192,16 +193,16 @@ const WorkflowView: React.FC<WorkflowProps> = ({
 
               {modelSelected && (
                 <WorkflowConditions
+                  availableQuestions={availableQuestions}
                   brands={brands}
                   brandsLoading={brandsLoading}
-                  countries={countries}
-                  divisions={divisions}
-                  divisionsLoading={divisionsLoading}
-                  availableQuestions={availableQuestions}
                   brandsSelected={brandsSelected}
                   checklistOption={checklistOption}
+                  countries={countries}
                   countriesSelected={countriesSelected}
                   descriptionCheck={descriptionCheck}
+                  divisions={divisions}
+                  divisionsLoading={divisionsLoading}
                   divisionsSelected={divisionsSelected}
                   form={form}
                   goods={goods}

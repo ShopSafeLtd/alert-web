@@ -1,4 +1,4 @@
-import type * as Types from '../../../../../graphql/types.js';
+import type * as Types from '../../../../../graphql/types';
 
 import { gql } from '@apollo/client';
 import { ImagesFragmentDoc } from '../../../../../graphql/fragments/__generated__/images.generated';
@@ -13,7 +13,7 @@ export type SearchOffenderReportsQueryVariables = Types.Exact<{
 }>;
 
 
-export type SearchOffenderReportsQuery = { __typename?: 'Query', listOffenders: { __typename?: 'ListOffenders', total: number, offenders: Array<{ __typename?: 'Offender', id: string, name?: string | null, totalIncidents: number, totalValue: number, latestIncident?: { __typename?: 'Incident', id: string, dayTime: string } | null, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: Types.ImagePosition, rotation: number, primary?: boolean | null, policeImage?: boolean | null, card?: string | null }>, tags: Array<{ __typename?: 'Tag', id: string, name: string }> }> } };
+export type SearchOffenderReportsQuery = { __typename?: 'Query', listOffenders: { __typename?: 'ListOffenders', total: number, offenders: Array<{ __typename?: 'Offender', id: string, name?: string | null, totalIncidents: number, totalValue: number, latestIncident?: { __typename?: 'Incident', id: string, dayTime: string } | null, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: Types.ImagePosition, positionX?: number | null, positionY?: number | null, rotation: number, primary?: boolean | null, policeImage?: boolean | null, card?: string | null }>, tags: Array<{ __typename?: 'Tag', id: string, name: string }> }> } };
 
 
 export const SearchOffenderReportsDocument = gql`

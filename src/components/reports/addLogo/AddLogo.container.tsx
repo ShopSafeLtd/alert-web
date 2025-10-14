@@ -1,15 +1,16 @@
 import React, { memo } from 'react';
+
 import View from './AddLogo.view';
 import useAddLogo from './useAddLogo';
 
 interface Props {
-  onClose: () => void;
   logos: string[];
+  onClose: () => void;
   onSubmit: (url: string) => void;
 }
 
-const AddLogo = memo(({ onClose, logos, onSubmit }: Props) => {
-  const { onFinish, saving, documentUploadProps } = useAddLogo({
+const AddLogo = memo(({ logos, onClose, onSubmit }: Props) => {
+  const { documentUploadProps, onFinish, saving } = useAddLogo({
     onClose,
     onSubmit,
   });
@@ -17,11 +18,11 @@ const AddLogo = memo(({ onClose, logos, onSubmit }: Props) => {
   return (
     <View
       documentUploadProps={documentUploadProps}
-      onSubmit={onFinish}
+      logos={logos}
       onClose={onClose}
+      onSubmit={onFinish}
       saving={saving}
       selectLogo={onSubmit}
-      logos={logos}
     />
   );
 });

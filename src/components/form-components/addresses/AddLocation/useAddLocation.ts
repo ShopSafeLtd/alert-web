@@ -1,34 +1,35 @@
 import type { FormInstance } from 'antd';
+import type { LocationData } from 'types/DataType';
+
 import { Form } from 'antd';
 import { useEffect, useState } from 'react';
-import type { LocationData } from 'types/DataType';
 
 const { useForm } = Form;
 export interface FormData {
   alias: string;
   building: string;
-  street: string;
-  townCity: string;
   county: string;
-  postcode: string;
   geoLat: number;
   geoLng: number;
+  postcode: string;
+  street: string;
+  townCity: string;
 }
 interface Props {
+  locationData?: LocationData;
   onClose: () => void;
   update: (value: LocationData) => void;
-  locationData?: LocationData;
 }
 
 interface Return {
+  form: FormInstance<FormData>;
+  location: LocationData | undefined;
   onSubmit: (value: FormData) => void;
   saving: boolean;
-  location: LocationData | undefined;
   setLocation: (value: LocationData) => void;
-  form: FormInstance<FormData>;
 }
 
-const useAddLocation = ({ onClose, update, locationData }: Props): Return => {
+const useAddLocation = ({ locationData, onClose, update }: Props): Return => {
   const [saving, setSaving] = useState(false);
   const [form] = useForm<FormData>();
   const [location, setLocation] = useState<LocationData>();
@@ -43,9 +44,9 @@ const useAddLocation = ({ onClose, update, locationData }: Props): Return => {
     if (data) {
       setLocation(data);
       form.setFieldsValue({
+        postcode: data.postcode || '',
         street: data.street || '',
         townCity: data.townCity || '',
-        postcode: data.postcode || '',
       });
     }
   };
@@ -55,23 +56,23 @@ const useAddLocation = ({ onClose, update, locationData }: Props): Return => {
     update({
       alias: data.alias,
       building: data.building,
-      street: data.street,
-      townCity: data.townCity,
       county: data.county,
-      postcode: data.postcode,
       geoLat: location?.geoLat ?? undefined,
       geoLng: location?.geoLng ?? undefined,
+      postcode: data.postcode,
+      street: data.street,
+      townCity: data.townCity,
     });
     onClose();
     setSaving(false);
   };
 
   return {
+    form,
+    location,
     onSubmit,
     saving,
-    location,
     setLocation: onSetLocation,
-    form,
   };
 };
 

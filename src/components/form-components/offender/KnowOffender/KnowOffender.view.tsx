@@ -1,6 +1,7 @@
-import React from 'react';
 import { Button, Col, Form, Input, Row } from 'antd';
+import React from 'react';
 import { useIntl } from 'react-intl';
+
 import type { FormData } from './useKnowOffender';
 
 interface Props {
@@ -9,29 +10,29 @@ interface Props {
   saving: boolean;
 }
 
-const KnowOffender = ({ onSubmit, saving, onClose }: Props): JSX.Element => {
+const KnowOffender = ({ onClose, onSubmit, saving }: Props): JSX.Element => {
   const intl = useIntl();
   return (
     <div className="list-view">
-      <Form onFinish={onSubmit} layout="vertical">
+      <Form layout="vertical" onFinish={onSubmit}>
         <Row gutter={30}>
           <Col span={24}>
             <Form.Item
-              name="name"
               label={intl.formatMessage({
                 defaultMessage: 'Name',
               })}
-              tooltip={intl.formatMessage({
-                defaultMessage: 'Enter the name of the offender',
-              })}
+              name="name"
               rules={[
                 {
-                  required: true,
                   message: intl.formatMessage({
                     defaultMessage: 'Please enter the name of the offender.',
                   }),
+                  required: true,
                 },
               ]}
+              tooltip={intl.formatMessage({
+                defaultMessage: 'Enter the name of the offender',
+              })}
             >
               <Input disabled={saving} />
             </Form.Item>
@@ -39,23 +40,23 @@ const KnowOffender = ({ onSubmit, saving, onClose }: Props): JSX.Element => {
 
           <Col span={24}>
             <Form.Item
-              name="infoSource"
               label={intl.formatMessage({
                 defaultMessage: 'Information Source',
               })}
-              tooltip={intl.formatMessage({
-                defaultMessage:
-                  "Enter the information source of the offender's name",
-              })}
+              name="infoSource"
               rules={[
                 {
-                  required: true,
                   message: intl.formatMessage({
                     defaultMessage:
                       "Please enter the information source of the offender's name.",
                   }),
+                  required: true,
                 },
               ]}
+              tooltip={intl.formatMessage({
+                defaultMessage:
+                  "Enter the information source of the offender's name",
+              })}
             >
               <Input.TextArea disabled={saving} />
             </Form.Item>
@@ -63,7 +64,7 @@ const KnowOffender = ({ onSubmit, saving, onClose }: Props): JSX.Element => {
         </Row>
 
         <Form.Item>
-          <Row style={{ marginTop: 30 }} gutter={10} justify="end">
+          <Row gutter={10} justify="end" style={{ marginTop: 30 }}>
             <Col>
               <Button disabled={saving} onClick={onClose}>
                 {intl.formatMessage({
@@ -74,9 +75,9 @@ const KnowOffender = ({ onSubmit, saving, onClose }: Props): JSX.Element => {
             <Col>
               <Button
                 disabled={saving}
+                htmlType="submit"
                 loading={saving}
                 type="primary"
-                htmlType="submit"
               >
                 {intl.formatMessage({
                   defaultMessage: 'Save',

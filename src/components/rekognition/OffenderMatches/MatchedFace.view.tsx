@@ -1,28 +1,29 @@
-import React from 'react';
-import { createUseStyles } from 'react-jss';
 import type { Theme } from 'configs/ThemeConfig';
-import WatermarkImage from 'components/images/WatermarkImage.view';
-import { Row, Typography } from 'antd';
-import { useIntl } from 'react-intl';
 import type { ImagePosition } from 'graphql/types';
+
+import { Row, Typography } from 'antd';
+import WatermarkImage from 'components/images/WatermarkImage.view';
+import React from 'react';
+import { useIntl } from 'react-intl';
+import { createUseStyles } from 'react-jss';
 
 const useStyles = createUseStyles((theme: Theme) => ({
   matchedFace: {
     backgroundColor: theme.imageBackgroundColor,
-    height: 150,
-    width: 150,
     borderRadius: 10,
+    cursor: 'pointer',
+    height: 150,
     overflow: 'hidden',
     position: 'relative',
-    cursor: 'pointer',
+    width: 150,
   },
   similarity: {
-    position: 'absolute',
+    background: 'rgba(0,0,0,0.6)',
     bottom: 0,
     left: 0,
-    right: 0,
     padding: '5px 10px',
-    background: 'rgba(0,0,0,0.6)',
+    position: 'absolute',
+    right: 0,
     textAlign: 'center',
   },
 }));
@@ -32,22 +33,22 @@ interface Props {
     id: string;
     image?: {
       id: string;
-      optimised?: string | null;
+      optimised?: null | string;
       position?: ImagePosition;
     } | null;
   };
-  similarity: number;
   onClick?: () => void;
+  similarity: number;
 }
 
-const MatchedFace = ({ face, similarity, onClick }: Props) => {
+const MatchedFace = ({ face, onClick, similarity }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
   return (
     <Row className={classes.matchedFace} onClick={onClick}>
       <WatermarkImage
-        url={face.image?.optimised}
         position={face.image?.position}
+        url={face.image?.optimised}
       />
       <div className={classes.similarity}>
         <Typography.Text>

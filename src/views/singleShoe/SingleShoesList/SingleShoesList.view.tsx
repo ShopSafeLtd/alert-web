@@ -1,7 +1,7 @@
 import type { UpsertShoeMutation } from '#/views/singleShoe/graphql/mutations/__generated__/upsert-shoe.generated';
 import type { ShoesQuery } from '#/views/singleShoe/graphql/queries/__generated__/shoes.generated';
 import type { MutationUpdaterFn } from '@apollo/client';
-import type { SingleShoeFragment } from 'graphql/fragments/__generated__/shoe.generated';
+import type { SingleShoeFragment } from 'graphql/fragments/__generated__/singleShoe.generated';
 
 import AddEditShoe from '#/components/form-components/shoe/AddShoe/AddShoe.container';
 import { ShoeSide } from '#/graphql/types';

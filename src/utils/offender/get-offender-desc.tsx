@@ -1,8 +1,6 @@
-import type { ReactNode } from 'react';
-import React from 'react';
-import { FormattedMessage } from 'react-intl';
-
 import type { Incident } from 'graphql/types';
+import type { ReactNode } from 'react';
+
 import {
   Age,
   BanType,
@@ -12,9 +10,11 @@ import {
   IdSource,
   Race,
 } from 'graphql/types';
+import React from 'react';
+import { FormattedMessage } from 'react-intl';
 
 export const getOffenderGender = (
-  gender: Gender | undefined | null
+  gender: Gender | null | undefined
 ): ReactNode => {
   if (gender === Gender.Female)
     return <FormattedMessage defaultMessage="Female" />;
@@ -23,7 +23,7 @@ export const getOffenderGender = (
 };
 
 export const getOffenderRace = (
-  race: Race | undefined | null,
+  race: Race | null | undefined,
   short?: boolean
 ): ReactNode => {
   if (race === Race.Ic1)
@@ -61,7 +61,7 @@ export const getOffenderRace = (
 };
 
 export const getIdSource = (
-  idSource: IdSource | undefined | null
+  idSource: IdSource | null | undefined
 ): ReactNode => {
   if (idSource === IdSource.DrivingLicence)
     return <FormattedMessage defaultMessage=": Driving Licence" />;
@@ -80,7 +80,7 @@ export const getIdSource = (
 };
 
 export const getOffenderBuild = (
-  build: Build | undefined | null
+  build: Build | null | undefined
 ): ReactNode => {
   if (build === Build.Large) return <FormattedMessage defaultMessage="Large" />;
   if (build === Build.Medium)
@@ -90,7 +90,7 @@ export const getOffenderBuild = (
 };
 
 export const getOffenderHeight = (
-  height: Height | undefined | null
+  height: Height | null | undefined
 ): ReactNode => {
   if (height === Height.Tall) return <FormattedMessage defaultMessage="Tall" />;
   if (height === Height.Average)
@@ -100,7 +100,7 @@ export const getOffenderHeight = (
   return <FormattedMessage defaultMessage="Unknown" />;
 };
 
-export const getOffenderAge = (age: Age | undefined | null): ReactNode => {
+export const getOffenderAge = (age: Age | null | undefined): ReactNode => {
   if (age === Age.EighteenThirty)
     return <FormattedMessage defaultMessage="18 - 30" />;
   if (age === Age.FiftySixty)
@@ -125,7 +125,7 @@ export const getOffenderAge = (age: Age | undefined | null): ReactNode => {
  * @param date string representation of a date, or Date object.
  * @returns number
  */
-export const calcAge = (date: string | Date): number => {
+export const calcAge = (date: Date | string): number => {
   if (!date) return -1;
   const birthDate = new Date(date).getTime();
   const now = new Date(Date.now()).getTime();
@@ -144,16 +144,17 @@ export const getLastOffence = (
   incidentsArray?: unknown[],
   short?: boolean,
   latestIncident?: {
-    id: string;
     dateAgo: number;
+    id: string;
     reportedBusinessName: string;
   }
 ): {
-  message: ReactNode | undefined;
   id: string | undefined;
+  message: ReactNode | undefined;
 } => {
   if (latestIncident) {
     return {
+      id: latestIncident.id,
       message: (
         <FormattedMessage
           defaultMessage="{reference} days {reference2}"
@@ -172,10 +173,9 @@ export const getLastOffence = (
           }}
         />
       ),
-      id: latestIncident.id,
     };
   }
-  if (!incidentsArray) return { message: undefined, id: undefined };
+  if (!incidentsArray) return { id: undefined, message: undefined };
   const incidents = [...incidentsArray] as Incident[];
 
   if (incidents.length > 0) {
@@ -198,6 +198,7 @@ export const getLastOffence = (
     );
     // eslint-disable-next-line consistent-return
     return {
+      id: incidents[0].id,
       message: (
         <FormattedMessage
           defaultMessage="{reference} days {reference2}"
@@ -207,14 +208,13 @@ export const getLastOffence = (
           }}
         />
       ),
-      id: incidents[0].id,
     };
   }
   // eslint-disable-next-line consistent-return
-  return { message: 'No offense', id: undefined };
+  return { id: undefined, message: 'No offense' };
 };
 
-export const getBanType = (type: BanType | undefined | null): ReactNode => {
+export const getBanType = (type: BanType | null | undefined): ReactNode => {
   if (type === BanType.CommunityBan)
     return <FormattedMessage defaultMessage="Community Ban" />;
   if (type === BanType.Cbo) return <FormattedMessage defaultMessage="CBO" />;

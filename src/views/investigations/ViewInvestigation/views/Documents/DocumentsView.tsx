@@ -150,7 +150,31 @@ const DocumentsView = ({
                   <Col>
                     <Button
                       onClick={() => {
-                        window.open(fileUrl);
+                        void (async () => {
+                          try {
+                            // Fetch the file from Azure Blob Storage
+                            const response = await fetch(fileUrl);
+                            const blob = await response.blob();
+
+                            // Create a temporary URL for the blob
+                            const blobUrl = window.URL.createObjectURL(blob);
+
+                            // Create a temporary anchor element and trigger download
+                            const link = document.createElement('a');
+                            link.href = blobUrl;
+                            link.download = item.name || 'download';
+                            document.body.append(link);
+                            link.click();
+
+                            // Clean up
+                            link.remove();
+                            window.URL.revokeObjectURL(blobUrl);
+                          } catch (error) {
+                            console.error('Download failed:', error);
+                            // Fallback to opening in new tab
+                            window.open(fileUrl, '_blank');
+                          }
+                        })();
                       }}
                     >
                       <FontAwesomeIcon icon={faDownload} />

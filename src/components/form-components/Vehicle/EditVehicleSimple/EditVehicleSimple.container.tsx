@@ -1,40 +1,43 @@
-import React from 'react';
 import type { VehicleData } from 'types/DataType';
+
+import React from 'react';
+
+import type { StateImageData } from '../../../incidents/IncidentForm/ImageSection/useImageSection';
+import type { ImageData } from '../../ImageSelect/ImageSelect.view';
+
 import View from './EditVehicleSimple.view';
 import useEditVehicleSimple from './useEditVehicleSimple';
-import type { ImageData } from '../../ImageSelect/ImageSelect.view';
-import type { StateImageData } from '../../../incidents/IncidentForm/ImageSection/useImageSection';
 
 interface Props {
-  onClose: () => void;
-  update: (value: VehicleData) => void;
-  editData: VehicleData | undefined | null;
+  editData: VehicleData | null | undefined;
   images?: ImageData[];
+  onClose: () => void;
   onImagesUploaded?: (values: StateImageData[]) => void;
+  update: (value: VehicleData) => void;
 }
 
 const EditVehicleSimple = ({
-  onClose,
-  update,
   editData,
   images,
+  onClose,
   onImagesUploaded,
+  update,
 }: Props): JSX.Element => {
-  const { onSubmit, saving, form } = useEditVehicleSimple({
-    onClose,
-    update,
+  const { form, onSubmit, saving } = useEditVehicleSimple({
     editData,
+    onClose,
     onImagesUploaded,
+    update,
   });
 
   return (
     <View
-      onSubmit={onSubmit}
-      onClose={onClose}
-      saving={saving}
-      form={form}
       editData={editData}
+      form={form}
       images={images}
+      onClose={onClose}
+      onSubmit={onSubmit}
+      saving={saving}
     />
   );
 };

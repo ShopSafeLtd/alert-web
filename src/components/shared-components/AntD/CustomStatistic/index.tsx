@@ -2,7 +2,7 @@ import React from 'react';
 
 interface ValueProps {
   size: string;
-  value: string | number;
+  value: number | string;
 }
 
 const Value = (props: ValueProps) => {
@@ -31,15 +31,15 @@ const Value = (props: ValueProps) => {
 
 interface Props {
   size: string;
-  value: string | number;
   title: string;
+  value: number | string;
 }
 
 export const CustomStatistic = (props: Props) => {
-  const { size = 'md', value, title } = props;
+  const { size = 'md', title, value } = props;
   return (
     <div>
-      <Value value={value} size={size} />
+      <Value size={size} value={value} />
       <p className="mb-0 text-muted">{title}</p>
     </div>
   );

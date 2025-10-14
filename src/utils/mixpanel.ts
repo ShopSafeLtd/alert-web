@@ -4,50 +4,50 @@ const ENV_CHECK = import.meta.env.PROD;
 
 const Mixpanel = ENV_CHECK
   ? {
-      identify: (id: string) => {
-        // if (env_check) mixpanel.identify(id);
-        mixpanel.identify(id);
-      },
       alias: (id: string) => {
         // if (env_check) mixpanel.alias(id);
         mixpanel.alias(id);
       },
-      track: (
-        name: string,
-        props?: {
-          [key: string]: string | number | boolean | undefined;
-        }
-      ) => {
-        // if (env_check) mixpanel.track(name, props);
-        mixpanel.track(name, props);
+      identify: (id: string) => {
+        // if (env_check) mixpanel.identify(id);
+        mixpanel.identify(id);
       },
       people: {
         set: (props: {
-          name: string;
-          businessName: string;
           businessId: string;
+          businessName: string;
+          name: string;
         }) => {
           // if (env_check) mixpanel.people.set(props);
           mixpanel.people.set(props);
         },
       },
+      track: (
+        name: string,
+        props?: {
+          [key: string]: boolean | number | string | undefined;
+        }
+      ) => {
+        // if (env_check) mixpanel.track(name, props);
+        mixpanel.track(name, props);
+      },
     }
   : {
-      identify: (_id: string) => null,
       alias: (_id: string) => null,
+      identify: (_id: string) => null,
+      people: {
+        set: (_props: {
+          businessId: string;
+          businessName: string;
+          name: string;
+        }) => null,
+      },
       track: (
         _name: string,
         _props?: {
-          [key: string]: string | number | boolean | undefined;
+          [key: string]: boolean | number | string | undefined;
         }
       ) => null,
-      people: {
-        set: (_props: {
-          name: string;
-          businessName: string;
-          businessId: string;
-        }) => null,
-      },
     };
 
 export default Mixpanel;

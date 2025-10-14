@@ -34,6 +34,32 @@ export type CustomTranslationResponse =
 export async function fetchCustomTranslation(
   id: string
 ): Promise<CustomTranslationResponse> {
+  if (!id) {
+    return null;
+  }
+  if (window.location.hostname === 'localhost') {
+    // use the VITE_GRAPHQL_URL env -/graphql to get the base url
+
+    const url = import.meta.env.VITE_GRAPHQL_URL;
+    const urlBase = url.replace('/graphql', '');
+
+    const response = await fetch(`${urlBase}/custom-translation/${id}`, {
+      headers: {
+        // Include the Authorization header if token exists
+        Authorization: 'translation',
+        'Content-Type': 'application/json',
+      },
+      method: 'GET',
+    });
+
+    if (!response.ok) {
+      throw new Error(
+        `Failed to fetch custom translation. Status: ${response.status}`
+      );
+    }
+
+    return response.json() as Promise<CustomTranslationResponse>;
+  }
   const response = await fetch(`/api/custom-translation/${id}`, {
     headers: {
       // Include the Authorization header if token exists

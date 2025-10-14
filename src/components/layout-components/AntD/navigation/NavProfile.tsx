@@ -412,7 +412,7 @@ export const NavProfile = () => {
               <div
                 className={classes.signOutItem}
                 onClick={() => {
-                  signOut();
+                  void signOut();
                 }}
               >
                 <FontAwesomeIcon

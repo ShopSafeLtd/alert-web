@@ -1,5 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
+
 import View from './EditChat.view';
 import useEditChat from './useEditChat';
 
@@ -10,20 +11,20 @@ interface Props {
 const EditChat = ({ onClose }: Props): JSX.Element => {
   const chatId = useParams().id || '';
 
-  const { onSubmit, data, loading, usersData, usersLoading, saving } =
+  const { data, loading, onSubmit, saving, usersData, usersLoading } =
     useEditChat({
-      onClose,
       chatId,
+      onClose,
     });
   return (
     <View
-      onSubmit={onSubmit}
-      onClose={onClose}
       data={data}
       loading={loading}
+      onClose={onClose}
+      onSubmit={onSubmit}
+      saving={saving}
       usersData={usersData}
       usersLoading={usersLoading}
-      saving={saving}
     />
   );
 };

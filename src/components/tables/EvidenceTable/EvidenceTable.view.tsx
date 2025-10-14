@@ -144,7 +144,32 @@ const EvidenceTable = ({
                     disabled={saving}
                     icon={<FontAwesomeIcon icon={faFileArrowDown} />}
                     onClick={() => {
-                      window.open(record.fileUrl);
+                      void (async () => {
+                        if (!record.fileUrl) return;
+                        try {
+                          // Fetch the file from Azure Blob Storage
+                          const response = await fetch(record.fileUrl);
+                          const blob = await response.blob();
+
+                          // Create a temporary URL for the blob
+                          const blobUrl = window.URL.createObjectURL(blob);
+
+                          // Create a temporary anchor element and trigger download
+                          const link = document.createElement('a');
+                          link.href = blobUrl;
+                          link.download = record.name || 'download';
+                          document.body.append(link);
+                          link.click();
+
+                          // Clean up
+                          link.remove();
+                          window.URL.revokeObjectURL(blobUrl);
+                        } catch (error) {
+                          console.error('Download failed:', error);
+                          // Fallback to opening in new tab
+                          window.open(record.fileUrl, '_blank');
+                        }
+                      })();
                     }}
                     size="small"
                   />

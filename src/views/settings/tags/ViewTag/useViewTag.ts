@@ -54,6 +54,7 @@ interface Return {
     draftTitle: string;
   };
   editIncidentType: string;
+  fieldTitles: Record<string, string>;
   incidentFormFields: IncidentFormFieldState;
   incidentFormLayout: ExtendedLayout[];
   incidentFormLayoutChanged: boolean;
@@ -80,6 +81,7 @@ interface Return {
     }>
   >;
   setEditIncidentType: (value: string) => void;
+  setFieldTitles: (value: Record<string, string>) => void;
   setIncidentFormLayout: (value: ExtendedLayout[]) => void;
   setIncidentFormLayoutChanged: (value: boolean) => void;
   setParentTag: (value: string) => void;
@@ -187,7 +189,7 @@ const useViewTag = (): Return => {
       y: 4,
     },
     {
-      h: 3.8,
+      h: 5.5,
       i: 'police',
       moved: false,
       static: false,
@@ -316,6 +318,8 @@ const useViewTag = (): Return => {
     draftDescription: '',
     draftTitle: '',
   });
+
+  const [fieldTitles, setFieldTitles] = useState<Record<string, string>>({});
   const { data, loading, refetch } = useViewTagQuery({
     variables: {
       listWhere: {
@@ -446,10 +450,15 @@ const useViewTag = (): Return => {
         formattedSort
       );
 
-      const initialLayout = newIncidentFormLayout.map((i, index) => ({
-        ...(defaultIncidentFormLayout.find((l) => l.i === i) as ExtendedLayout),
-        y: index,
-      }));
+      const initialLayout = newIncidentFormLayout.map((i, index) => {
+        const defaultItem = defaultIncidentFormLayout.find(
+          (l) => l.i === i
+        ) as ExtendedLayout;
+        return {
+          ...defaultItem,
+          y: index,
+        };
+      });
 
       const highestY = Math.max(...initialLayout.map((l) => l.y));
       const newFields = defaultIncidentFormLayout
@@ -466,7 +475,12 @@ const useViewTag = (): Return => {
       const conditionsMap: Record<string, ModuleCondition[]> = {};
       for (const field of data.tag.incidentForm.fields) {
         if (field.conditions && Array.isArray(field.conditions)) {
-          conditionsMap[field.type] = field.conditions as ModuleCondition[];
+          conditionsMap[field.type] = (
+            field.conditions as ModuleCondition[]
+          ).map((c) => ({
+            ...c,
+            mode: c.mode || 'SHOW', // Default legacy conditions to SHOW
+          }));
         }
       }
       setModuleConditions(conditionsMap);
@@ -488,6 +502,27 @@ const useViewTag = (): Return => {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         draftTitle: (found?.metadata?.draftTitle as string) || '',
       });
+    }
+    // Load field titles from metadata
+    const detailsField = data?.tag?.incidentForm?.fields?.find(
+      (field) => field.type === IncidentFormField.Details
+    );
+    if (detailsField?.metadata) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      const titles = detailsField.metadata.titles as Record<string, string>;
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      const legacyDescriptionTitle = detailsField.metadata
+        .descriptionTitle as string;
+
+      // Migrate legacy format to new format
+      if (titles) {
+        setFieldTitles(titles);
+      } else if (legacyDescriptionTitle) {
+        // Backwards compatibility: migrate old descriptionTitle to new format
+        setFieldTitles({ description: legacyDescriptionTitle });
+      } else {
+        setFieldTitles({});
+      }
     }
   }, [data]);
 
@@ -838,7 +873,13 @@ const useViewTag = (): Return => {
                 return draftState;
               }
 
-              console.log(t.type === IncidentFormField.Involved, involvedMode);
+              const isDetails = t.type === IncidentFormField.Details;
+              if (isDetails && Object.keys(fieldTitles).length > 0) {
+                return {
+                  titles: fieldTitles,
+                };
+              }
+
               if (t.type === IncidentFormField.Involved && involvedMode)
                 return {
                   mode: 'SINGLE_SELECT',
@@ -863,7 +904,8 @@ const useViewTag = (): Return => {
 
             return {
               conditions: getConditions(),
-              metadata: getMetaData(),
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
+              metadata: getMetaData() as any,
               position: 1000 - index,
               type: t.type,
             };
@@ -981,6 +1023,7 @@ const useViewTag = (): Return => {
     deleteQuestion,
     draftState,
     editIncidentType,
+    fieldTitles,
     incidentFormFields,
     incidentFormLayout,
     incidentFormLayoutChanged,
@@ -1001,6 +1044,7 @@ const useViewTag = (): Return => {
     setConditionsModalOpen,
     setDraftState,
     setEditIncidentType,
+    setFieldTitles,
     setIncidentFormLayout,
     setIncidentFormLayoutChanged,
     setParentTag,

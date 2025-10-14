@@ -1,12 +1,13 @@
-import React from 'react';
-import { Route, Routes } from 'react-router';
-import ListCrimeGroups from 'views/profiles/crime-groups/list-crime-groups';
-import CreateCrimeGroup from 'views/profiles/crime-groups/create-crime-group';
-import ViewCrimeGroup from 'views/profiles/crime-groups/view-crime-group';
-import PermissionCheckWrapper from '../../../components/PermissionCheck/PermissionCheckWrapper';
-import { PermissionMethod, PermissionModel } from 'graphql/types';
-import { useIntl } from 'react-intl';
 import RouteWrapper from '#/navigation/utils/route-wrapper';
+import { PermissionMethod, PermissionModel } from 'graphql/types';
+import React from 'react';
+import { useIntl } from 'react-intl';
+import { Route, Routes } from 'react-router';
+import CreateCrimeGroup from 'views/profiles/crime-groups/create-crime-group';
+import ListCrimeGroups from 'views/profiles/crime-groups/list-crime-groups';
+import ViewCrimeGroup from 'views/profiles/crime-groups/view-crime-group';
+
+import PermissionCheckWrapper from '../../../components/PermissionCheck/PermissionCheckWrapper';
 
 const CrimeGroups = (): JSX.Element => {
   const intl = useIntl();
@@ -18,43 +19,43 @@ const CrimeGroups = (): JSX.Element => {
     >
       <Routes>
         <Route
-          index
           element={
             <PermissionCheckWrapper
               permission={{
-                model: PermissionModel.CrimeGroups,
                 method: PermissionMethod.Read,
+                model: PermissionModel.CrimeGroups,
               }}
             >
               <ListCrimeGroups />
             </PermissionCheckWrapper>
           }
+          index
         />
         <Route
-          path="create"
           element={
             <PermissionCheckWrapper
               permission={{
-                model: PermissionModel.CrimeGroups,
                 method: PermissionMethod.Write,
+                model: PermissionModel.CrimeGroups,
               }}
             >
               <CreateCrimeGroup />
             </PermissionCheckWrapper>
           }
+          path="create"
         />
         <Route
-          path="view/:id"
           element={
             <PermissionCheckWrapper
               permission={{
-                model: PermissionModel.CrimeGroups,
                 method: PermissionMethod.Read,
+                model: PermissionModel.CrimeGroups,
               }}
             >
               <ViewCrimeGroup />
             </PermissionCheckWrapper>
           }
+          path="view/:id"
         />
       </Routes>
     </RouteWrapper>

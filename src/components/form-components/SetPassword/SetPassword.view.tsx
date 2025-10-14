@@ -1,5 +1,5 @@
-import React from 'react';
 import { Button, Col, Form, Input, Row } from 'antd';
+import React from 'react';
 import { useIntl } from 'react-intl';
 
 interface FormData {
@@ -7,59 +7,59 @@ interface FormData {
 }
 
 interface Props {
+  onClose: () => void;
   onSubmit: (value: FormData) => void;
   saving: boolean;
-  onClose: () => void;
 }
-const SetPassword = ({ onSubmit, saving, onClose }: Props): JSX.Element => {
+const SetPassword = ({ onClose, onSubmit, saving }: Props): JSX.Element => {
   const intl = useIntl();
   return (
-    <Form onFinish={onSubmit} labelCol={{ span: 8 }} wrapperCol={{ span: 16 }}>
+    <Form labelCol={{ span: 8 }} onFinish={onSubmit} wrapperCol={{ span: 16 }}>
       <Row>
         <Col span={24}>
           <Form.Item
-            name="password"
+            hasFeedback
             label={intl.formatMessage({
               defaultMessage: 'New Password',
             })}
-            hasFeedback
+            name="password"
             rules={[
               {
-                required: true,
                 message: intl.formatMessage({
                   defaultMessage: 'Please set a password for the account.',
                 }),
+                required: true,
               },
               {
-                pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[\dA-Za-z]{8,}$/,
                 message: intl.formatMessage({
                   defaultMessage:
                     'Password must contain upper and lower case letters, a number, and be at least 8 characters long.',
                 }),
+                pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[\dA-Za-z]{8,}$/,
               },
             ]}
           >
             <Input.Password
-              size="large"
+              disabled={saving}
               placeholder={intl.formatMessage({
                 defaultMessage: 'Input Password',
               })}
-              disabled={saving}
+              size="large"
             />
           </Form.Item>
           <Form.Item
-            name="confirmPassword"
+            dependencies={['password']}
+            hasFeedback
             label={intl.formatMessage({
               defaultMessage: 'Confirm Password',
             })}
-            dependencies={['password']}
-            hasFeedback
+            name="confirmPassword"
             rules={[
               {
-                required: true,
                 message: intl.formatMessage({
                   defaultMessage: 'Please confirm your password!',
                 }),
+                required: true,
               },
               ({ getFieldValue }) => ({
                 validator(_, value) {
@@ -79,18 +79,18 @@ const SetPassword = ({ onSubmit, saving, onClose }: Props): JSX.Element => {
             ]}
           >
             <Input.Password
-              size="large"
               disabled={saving}
               placeholder={intl.formatMessage({
                 defaultMessage: 'Confirm Password',
               })}
+              size="large"
             />
           </Form.Item>
         </Col>
       </Row>
 
       <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-        <Row style={{ marginTop: 30 }} gutter={20} justify="end">
+        <Row gutter={20} justify="end" style={{ marginTop: 30 }}>
           <Col>
             <Button disabled={saving} onClick={onClose}>
               {intl.formatMessage({
@@ -101,9 +101,9 @@ const SetPassword = ({ onSubmit, saving, onClose }: Props): JSX.Element => {
           <Col>
             <Button
               disabled={saving}
+              htmlType="submit"
               loading={saving}
               type="primary"
-              htmlType="submit"
             >
               {intl.formatMessage({
                 defaultMessage: 'Set Password',

@@ -22,6 +22,7 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
       reason
       type
       reference
+      workflowResults
       byUser {
         id
         fullName
@@ -34,6 +35,16 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
     activityAuthorised
     priority
     customerRef
+    newIncident
+    status {
+      id
+      name
+      tooltip
+    }
+    assignedUsers {
+      id
+      fullName
+    }
     subscribed
     totalValue
     totalRecoveredValue

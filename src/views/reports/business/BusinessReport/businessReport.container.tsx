@@ -1,100 +1,101 @@
 import React from 'react';
+
 import View from './BusinessReport.view';
 import useBusinessReport from './hooks/useBusinessReport';
 
 const BusinessReport = (): JSX.Element => {
   const {
-    removeItem,
-    changeSize,
-    minDrawer,
-    setMinDrawer,
-    layout,
-    setLayout,
-    data,
-    loading,
-    setDateRange,
-    dateRange,
-    groups,
-    setSelectedGroups,
-    groupsLoading,
-    selectedGroups,
-    componentRef,
-    handlePrint,
-    isPrinting,
-    editMode,
-    setEditMode,
-    incidentsTableData,
-    targetedGoodsData,
-    crimeGroups,
-    setSelectedCrimeGroups,
-    selectedCrimeGroups,
-    offenders,
-    setSelectedOffenders,
-    selectedOffenders,
-    businessName,
     addLogo,
     addLogoDrawer,
+    businessName,
+    changeSize,
+    componentRef,
+    crimeGroups,
+    data,
+    dateRange,
+    editMode,
+    filterCount,
+    filtersOpen,
+    groups,
+    groupsLoading,
+    handlePrint,
+    incidentsTableData,
+    isPrinting,
+    layout,
+    loading,
     logos,
     metadata,
+    minDrawer,
+    offenders,
+    removeItem,
     removeLogo,
     saveAsDrawer,
     saveTemplate,
     selectTemplate,
+    selectedCrimeGroups,
+    selectedGroups,
+    selectedOffenders,
     selectedTemplate,
-    setMetadata,
     setAddLogoDrawer,
+    setDateRange,
+    setEditMode,
+    setLayout,
+    setMetadata,
+    setMinDrawer,
     setSaveAsDrawer,
+    setSelectedCrimeGroups,
+    setSelectedGroups,
+    setSelectedOffenders,
+    targetedGoodsData,
     templates,
-    filterCount,
     toggleFiltersOpen,
-    filtersOpen,
   } = useBusinessReport();
   return (
     <View
-      isPrinting={isPrinting}
-      removeItem={removeItem}
-      changeSize={changeSize}
-      layout={layout}
-      setLayout={setLayout}
-      minDrawer={minDrawer}
-      setMinDrawer={setMinDrawer}
-      targetedGoodsData={targetedGoodsData}
-      businessName={businessName}
-      crimeGroups={crimeGroups}
-      offenders={offenders}
-      selectedCrimeGroups={selectedCrimeGroups}
-      selectedOffenders={selectedOffenders}
-      setSelectedCrimeGroups={setSelectedCrimeGroups}
-      setSelectedOffenders={setSelectedOffenders}
-      incidentsTableData={incidentsTableData}
-      editMode={editMode}
-      setEditMode={setEditMode}
-      componentRef={componentRef}
-      handlePrint={handlePrint}
-      setSelectedGroups={setSelectedGroups}
-      selectedGroups={selectedGroups}
-      loading={loading}
-      data={data}
-      setDateRange={setDateRange}
-      dateRange={dateRange}
-      groups={groups}
-      groupsLoading={groupsLoading}
       addLogo={addLogo}
       addLogoDrawer={addLogoDrawer}
+      businessName={businessName}
+      changeSize={changeSize}
+      componentRef={componentRef}
+      crimeGroups={crimeGroups}
+      data={data}
+      dateRange={dateRange}
+      editMode={editMode}
+      filterCount={filterCount}
+      filtersOpen={filtersOpen}
+      groups={groups}
+      groupsLoading={groupsLoading}
+      handlePrint={handlePrint}
+      incidentsTableData={incidentsTableData}
+      isPrinting={isPrinting}
+      layout={layout}
+      loading={loading}
       logos={logos}
       metadata={metadata}
+      minDrawer={minDrawer}
+      offenders={offenders}
+      removeItem={removeItem}
       removeLogo={removeLogo}
       saveAsDrawer={saveAsDrawer}
       saveTemplate={saveTemplate}
       selectTemplate={selectTemplate}
+      selectedCrimeGroups={selectedCrimeGroups}
+      selectedGroups={selectedGroups}
+      selectedOffenders={selectedOffenders}
       selectedTemplate={selectedTemplate}
-      setMetadata={setMetadata}
       setAddLogoDrawer={setAddLogoDrawer}
+      setDateRange={setDateRange}
+      setEditMode={setEditMode}
+      setLayout={setLayout}
+      setMetadata={setMetadata}
+      setMinDrawer={setMinDrawer}
       setSaveAsDrawer={setSaveAsDrawer}
+      setSelectedCrimeGroups={setSelectedCrimeGroups}
+      setSelectedGroups={setSelectedGroups}
+      setSelectedOffenders={setSelectedOffenders}
+      targetedGoodsData={targetedGoodsData}
       templates={templates}
-      filterCount={filterCount}
       toggleFiltersOpen={toggleFiltersOpen}
-      filtersOpen={filtersOpen}
     />
   );
 };

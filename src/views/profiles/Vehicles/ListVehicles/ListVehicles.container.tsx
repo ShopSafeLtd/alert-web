@@ -18,17 +18,16 @@ const ListVehicles = () => {
     setGallery,
     setGroupsFilter,
     setOrder,
+    setPoliceAreas,
     setSearch,
     sortFilter,
     toggleAddInvestigation,
     toggleSortFilter,
     variables,
-    setPoliceAreas,
   } = useListVehicles();
 
   return (
     <View
-      setPoliceAreas={setPoliceAreas}
       addInvestigation={addInvestigation}
       clearFilters={clearFilters}
       customGalleriesData={customGalleriesData}
@@ -42,6 +41,7 @@ const ListVehicles = () => {
       setGallery={setGallery}
       setGroupsFilter={setGroupsFilter}
       setOrder={setOrder}
+      setPoliceAreas={setPoliceAreas}
       setSearch={setSearch}
       sortFilter={sortFilter}
       toggleAddInvestigation={toggleAddInvestigation}

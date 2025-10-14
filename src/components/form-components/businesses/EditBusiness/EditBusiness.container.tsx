@@ -1,51 +1,52 @@
 import React from 'react';
+
 import View from './EditBusiness.view';
 import useEditBusiness from './useEditBusiness';
 
 interface Props {
-  onClose: () => void;
   businessId: string | undefined;
+  onClose: () => void;
 }
 
-const EditBusiness = ({ onClose, businessId }: Props) => {
+const EditBusiness = ({ businessId, onClose }: Props) => {
   const {
-    onSubmit,
-    onSearchBusiness,
-    saving,
+    addTag,
+    brands,
+    brandsLoading,
     form,
+    groups,
+    groupsLoading,
     loading,
     location,
+    onSearchBusiness,
+    onSubmit,
+    saving,
     setLocation,
     tags,
     tagsLoading,
-    addTag,
     toggleAddTag,
     updateNewTagData,
-    groups,
-    groupsLoading,
-    brands,
-    brandsLoading,
-  } = useEditBusiness({ onClose, businessId });
+  } = useEditBusiness({ businessId, onClose });
 
   return (
     <View
-      onSubmit={onSubmit}
-      onClose={onClose}
-      onSearchBusiness={onSearchBusiness}
-      saving={saving}
+      addTag={addTag}
+      brands={brands}
+      brandsLoading={brandsLoading}
       form={form}
+      groups={groups}
+      groupsLoading={groupsLoading}
       loading={loading}
       location={location}
+      onClose={onClose}
+      onSearchBusiness={onSearchBusiness}
+      onSubmit={onSubmit}
+      saving={saving}
       setLocation={setLocation}
       tags={tags}
       tagsLoading={tagsLoading}
-      addTag={addTag}
       toggleAddTag={toggleAddTag}
       updateNewTagData={updateNewTagData}
-      groups={groups}
-      groupsLoading={groupsLoading}
-      brands={brands}
-      brandsLoading={brandsLoading}
     />
   );
 };

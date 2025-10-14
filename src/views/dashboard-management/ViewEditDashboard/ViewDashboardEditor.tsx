@@ -17,6 +17,7 @@ import IncidentCount from '#/views/dashboard/components/IncidentCount/IncidentCo
 import IncidentValue from '#/views/dashboard/components/IncidentValues/IncidentValueTemplate.view';
 import LatestIncident from '#/views/dashboard/components/LatestIncident/LatestIncidentTemplate.view';
 import LatestIncidentsTemplate from '#/views/dashboard/components/LatestIncidents/LatestIncidentsTemplate';
+import MyStockRequestsTemplate from '#/views/dashboard/components/MyStockRequests/MyStockRequestsTemplate';
 import SearchRow from '#/views/dashboard/components/SearchRow/SearchRowTemplate';
 import TargetedGoodsGraph from '#/views/dashboard/components/TargetedGoods/TargetedGoodsTemplate';
 import { useUpdateDashboardTemplateMutation } from '#/views/dashboard-management/graphql/mutations/__generated__/dashboard.generated';
@@ -299,6 +300,9 @@ const ViewDashboardEditor = () => {
       }
       case 'latestIncidents': {
         return <LatestIncidentsTemplate removeItem={removeItemHandler} />;
+      }
+      case 'myStockRequests': {
+        return <MyStockRequestsTemplate removeItem={removeItemHandler} />;
       }
       case 'searchRow': {
         return <SearchRow />;

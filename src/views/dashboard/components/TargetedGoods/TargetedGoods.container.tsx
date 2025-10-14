@@ -1,6 +1,7 @@
 import React from 'react';
-import useTargetedGoods from './useTargetedGoods';
+
 import View from './TargetedGoods';
+import useTargetedGoods from './useTargetedGoods';
 
 const TargetedGoodsContainer = () => {
   const { data, loading } = useTargetedGoods();

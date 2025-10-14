@@ -1,10 +1,11 @@
 import React from 'react';
+
 import View from './Roles.view';
 import useRoles from './useRoles';
 
 const RolesContainer = () => {
-  const { data, loading, fetchPage } = useRoles();
-  return <View data={data} loading={loading} fetchPage={fetchPage} />;
+  const { data, fetchPage, loading } = useRoles();
+  return <View data={data} fetchPage={fetchPage} loading={loading} />;
 };
 
 export default RolesContainer;

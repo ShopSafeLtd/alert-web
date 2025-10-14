@@ -1,14 +1,14 @@
 import { useState } from 'react';
 
 interface DrawerStateType<T extends string> {
-  visible: boolean;
-  id: T | 'null';
   defaultTitle: string;
+  id: 'null' | T;
+  visible: boolean;
 }
 
 export interface DrawerType<T extends string> extends DrawerStateType<T> {
-  open(input: Omit<DrawerStateType<T>, 'visible'>): void;
   close(): void;
+  open(input: Omit<DrawerStateType<T>, 'visible'>): void;
 }
 
 /**
@@ -19,23 +19,23 @@ export interface DrawerType<T extends string> extends DrawerStateType<T> {
  */
 const useDrawerState = <T extends string>(): { drawer: DrawerType<T> } => {
   const [drawer, setDrawer] = useState<DrawerStateType<T>>({
-    visible: false,
-    id: 'null',
     defaultTitle: '',
+    id: 'null',
+    visible: false,
   });
 
   const openDrawer = (input: Omit<DrawerStateType<T>, 'visible'>) => {
     setDrawer({ ...input, visible: true });
   };
   const closeDrawer = () => {
-    setDrawer({ visible: false, id: 'null', defaultTitle: '' });
+    setDrawer({ defaultTitle: '', id: 'null', visible: false });
   };
 
   return {
     drawer: {
       ...drawer,
-      open: openDrawer,
       close: closeDrawer,
+      open: openDrawer,
     },
   };
 };

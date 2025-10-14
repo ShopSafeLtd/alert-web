@@ -1,4 +1,4 @@
-import { Input, Form } from 'antd';
+import { Form, Input } from 'antd';
 import React from 'react';
 
 const stringPreview = ({ question }: { question: string }) => (

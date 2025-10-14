@@ -1,4 +1,5 @@
 import React from 'react';
+
 import View from './BusinessSideList.view';
 import useBusinessSideList from './useBusinessSideList';
 
@@ -12,7 +13,7 @@ const BusinessSideList = ({ current, to }: Props): JSX.Element => {
   const { data, loading, next } = useBusinessSideList();
 
   return (
-    <View data={data} loading={loading} current={current} next={next} to={to} />
+    <View current={current} data={data} loading={loading} next={next} to={to} />
   );
 };
 

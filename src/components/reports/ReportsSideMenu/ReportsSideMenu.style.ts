@@ -1,58 +1,29 @@
-import { createUseStyles } from 'react-jss';
 import type { Theme } from 'configs/ThemeConfig';
+
+import { createUseStyles } from 'react-jss';
 
 const useStyles = createUseStyles((theme: Theme) => ({
   container: {
-    paddingTop: 10,
-    paddingBottom: 10,
-    borderRight: `1px solid ${theme.borderColor}`,
-    borderLeft: `1px solid ${theme.borderColor}`,
-    height: '100vh',
-    overflow: 'auto',
     backgroundColor: theme.componentBackground,
+    borderLeft: `1px solid ${theme.borderColor}`,
+    borderRight: `1px solid ${theme.borderColor}`,
+    height: '100vh',
     minWidth: 182,
-  },
-  section: {
-    marginBottom: 15,
+    overflow: 'auto',
+    paddingBottom: 10,
+    paddingTop: 10,
   },
   item: {
-    marginTop: 5,
-    marginBottom: 5,
-    paddingTop: 3,
-    paddingBottom: 3,
-    paddingLeft: 8,
-    paddingRight: 8,
-    borderRadius: 5,
     '&:hover': {
       backgroundColor: theme.hoverBackground,
     },
-  },
-  selectedItem: {
-    marginTop: 5,
+    borderRadius: 5,
     marginBottom: 5,
-    paddingTop: 3,
+    marginTop: 5,
     paddingBottom: 3,
     paddingLeft: 8,
     paddingRight: 8,
-    borderRadius: 5,
-    backgroundColor: theme.itemSelectedBackground,
-    borderLeft: `2px solid ${theme.primary}`,
-    '&:hover': {
-      backgroundColor: theme.hoverBackground,
-    },
-  },
-  text: {},
-  menuTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    marginBottom: '5px !important',
-    paddingLeft: 15,
-    paddingRight: 15,
-  },
-  title: {
-    marginBottom: 10,
-    fontSize: 13,
-    fontWeight: '600',
+    paddingTop: 3,
   },
   menuSubTitle: {
     fontSize: 15,
@@ -60,10 +31,40 @@ const useStyles = createUseStyles((theme: Theme) => ({
     marginBottom: '8px !important',
     paddingTop: 8,
   },
-  subMenu: {
+  menuTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    marginBottom: '5px !important',
     paddingLeft: 15,
     paddingRight: 15,
+  },
+  section: {
+    marginBottom: 15,
+  },
+  selectedItem: {
+    '&:hover': {
+      backgroundColor: theme.hoverBackground,
+    },
+    backgroundColor: theme.itemSelectedBackground,
+    borderLeft: `2px solid ${theme.primary}`,
+    borderRadius: 5,
+    marginBottom: 5,
+    marginTop: 5,
+    paddingBottom: 3,
+    paddingLeft: 8,
+    paddingRight: 8,
+    paddingTop: 3,
+  },
+  subMenu: {
     paddingBottom: 15,
+    paddingLeft: 15,
+    paddingRight: 15,
+  },
+  text: {},
+  title: {
+    fontSize: 13,
+    fontWeight: '600',
+    marginBottom: 10,
   },
 }));
 export default useStyles;

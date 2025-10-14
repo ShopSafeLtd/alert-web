@@ -1,11 +1,11 @@
 import type { Age, Build, Gender, PoliceForce, Race } from 'graphql/types';
-import { Model, SortOrder } from 'graphql/types';
 import type { OffenderFilters } from 'state/data-model';
 import type { DateType } from 'types/DataType';
 
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import publicOffenderDob from '#/utils/public-offender-dob';
 import { useTagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
+import { Model, SortOrder } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
 import { OffenderSort, useStoreActions, useStoreState } from 'state';
 
@@ -21,14 +21,15 @@ interface Return {
   setEthnicity: (value: Race[]) => void;
   setGroupsFilter: (value: string[]) => void;
   setHair: (value: string) => void;
+  setHasNoIncidents: (value: boolean) => void;
   setOrder: (value: OffenderSort) => void;
   setPeculiarities: (value: string) => void;
+  setPoliceAreas: (value: PoliceForce[]) => void;
   setSex: (value: Gender[]) => void;
   setWarnings: (value: string[]) => void;
   tags: { label: string; value: string }[];
   tagsLoading: boolean;
   variables: OffenderFilters;
-  setPoliceAreas: (value: PoliceForce[]) => void;
 }
 
 const useOffenderFilter = (): Return => {
@@ -194,6 +195,17 @@ const useOffenderFilter = (): Return => {
     });
   };
 
+  const setHasNoIncidents = (value: boolean) => {
+    setOffendersState({
+      order,
+      pagination,
+      variables: {
+        ...variables,
+        hasNoIncidents: value,
+      },
+    });
+  };
+
   const clearFilters = () => {
     setOffendersState({
       order: OffenderSort.updatedAtDesc,
@@ -209,11 +221,12 @@ const useOffenderFilter = (): Return => {
         gallery: [],
         groups: [],
         hair: '',
+        hasNoIncidents: false,
         peculiarities: '',
+        policeAreas: [],
         search: '',
         sex: [],
         warnings: [],
-        policeAreas: [],
       },
     });
   };
@@ -230,15 +243,16 @@ const useOffenderFilter = (): Return => {
     setEthnicity,
     setGroupsFilter,
     setHair,
+    setHasNoIncidents,
     setOrder,
     setPeculiarities,
+    setPoliceAreas,
     setSex,
     setWarnings,
     tags:
       tagsData?.tags.map((tag) => ({ label: tag.name, value: tag.id })) || [],
     tagsLoading,
     variables,
-    setPoliceAreas,
   };
 };
 

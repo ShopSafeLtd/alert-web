@@ -1,7 +1,8 @@
-import React from 'react';
 import type { UploadProps } from 'antd';
-import { Button, Card, Col, Form, Row, Upload } from 'antd';
+
 import { UploadOutlined } from '@ant-design/icons';
+import { Button, Card, Col, Form, Row, Upload } from 'antd';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 interface OnSubmitValues {
@@ -9,20 +10,20 @@ interface OnSubmitValues {
 }
 
 interface Props {
-  onSubmit: (values: OnSubmitValues) => void;
-  saving: boolean;
-  onClose: () => void;
-  selectLogo: (url: string) => void;
   documentUploadProps: UploadProps;
   logos: string[];
+  onClose: () => void;
+  onSubmit: (values: OnSubmitValues) => void;
+  saving: boolean;
+  selectLogo: (url: string) => void;
 }
 
 const AddLogoView = ({
-  onSubmit,
-  saving,
-  onClose,
   documentUploadProps,
   logos,
+  onClose,
+  onSubmit,
+  saving,
   selectLogo,
 }: Props) => (
   <Card style={{ marginLeft: 20, marginRight: 20 }}>
@@ -30,10 +31,10 @@ const AddLogoView = ({
       logos?.map((logo) => (
         <Row gutter={[16, 16]} style={{ marginBottom: '15px' }}>
           <Col span={18}>
-            <div style={{ width: '100%', height: 100 }}>
+            <div style={{ height: 100, width: '100%' }}>
               <img
-                src={logo}
                 alt=""
+                src={logo}
                 style={{
                   height: '100%',
                   marginRight: 10,
@@ -44,13 +45,13 @@ const AddLogoView = ({
           <Col span={6}>
             <div
               style={{
-                height: '100%',
                 alignContent: 'center',
-                flexWrap: 'wrap',
                 display: 'flex',
+                flexWrap: 'wrap',
+                height: '100%',
               }}
             >
-              <Button type="primary" onClick={() => selectLogo(logo)}>
+              <Button onClick={() => selectLogo(logo)} type="primary">
                 <FormattedMessage defaultMessage="Select" />
               </Button>
             </div>
@@ -68,8 +69,8 @@ const AddLogoView = ({
           // eslint-disable-next-line react/jsx-props-no-spreading
           {...documentUploadProps}
           listType="picture"
-          style={{ display: 'flex' }}
           maxCount={1}
+          style={{ display: 'flex' }}
         >
           <Button icon={<UploadOutlined />}>
             <FormattedMessage defaultMessage="Upload Logo" />
@@ -77,7 +78,7 @@ const AddLogoView = ({
         </Upload>
       </Row>
       <Form.Item>
-        <Row style={{ marginTop: 30 }} gutter={10} justify="end">
+        <Row gutter={10} justify="end" style={{ marginTop: 30 }}>
           <Col>
             <Button disabled={saving} onClick={onClose}>
               <FormattedMessage defaultMessage="Cancel" />
@@ -85,10 +86,10 @@ const AddLogoView = ({
           </Col>
           <Col>
             <Button
-              loading={saving}
               disabled={saving}
-              type="primary"
               htmlType="submit"
+              loading={saving}
+              type="primary"
             >
               <FormattedMessage defaultMessage="Submit" />
             </Button>

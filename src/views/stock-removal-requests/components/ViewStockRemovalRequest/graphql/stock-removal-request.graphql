@@ -19,11 +19,21 @@ query stockRemovalRequest($where: UniqueId!) {
         socialHandles
         storeOrDC
         willStockBeReturned
+        tmid
+        tracking
+        createdBy {
+            id
+            fullName
+        }
         items {
             id
             name
+            brand
+            sku
+            barcode
             requestedQuantity
             pickedQuantity
+            value
         }
         business {
             id

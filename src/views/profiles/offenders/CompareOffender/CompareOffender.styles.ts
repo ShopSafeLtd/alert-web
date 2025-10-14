@@ -1,90 +1,91 @@
 import type { Theme } from 'configs/ThemeConfig';
+
 import { createUseStyles } from 'react-jss';
 
 const useStyles = createUseStyles((theme: Theme) => ({
-  page: {
+  addContainer: {
+    alignItems: 'center',
+    display: 'flex',
     padding: 20,
   },
-  imageContainer: {
-    backgroundColor: 'rgba(190, 190, 190, 0.2)',
-    height: 250,
-    width: '100%',
-    display: 'flex',
-    justifyContent: 'center',
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
-    overflow: 'hidden',
+  card: {
+    width: 300,
   },
-  image: {
-    height: 250,
-    width: 298,
-    backgroundRepeat: 'no-repeat',
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
+  cardTitle: {
+    margin: '0px !important',
+  },
+  field: {
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'row',
+    height: 56,
+    padding: '15px 20px',
   },
   firstCard: {
     marginTop: 41,
     minWidth: 141,
   },
-  imagePlaceholder: {
-    height: 250,
+  gridCard: {
+    '& > .react-resizable-handle': {
+      background: 'transparent',
+    },
+    '& > .react-resizable-handle::after': {
+      borderBottom: `3px solid ${theme.borderColor}`,
+      borderRight: `3px solid ${theme.borderColor}`,
+      bottom: 5,
+      height: 10,
+      right: 5,
+      width: 10,
+    },
+    cursor: 'pointer',
   },
-  field: {
-    padding: '15px 20px',
-    display: 'flex',
-    flexDirection: 'row',
-    height: 56,
-    alignItems: 'center',
-  },
-  titleField: {
-    textAlign: 'right',
-    width: '100%',
-    padding: '15px',
-    height: 56,
-    alignItems: 'center',
-    display: 'flex',
-  },
-  text: {
-    flex: 1,
-  },
-  card: {
-    width: 300,
-  },
-  headerRow: {
-    marginBottom: 5,
-    height: 36,
-  },
-  cardTitle: {
-    margin: '0px !important',
-  },
-  addContainer: {
-    display: 'flex',
-    alignItems: 'center',
-    padding: 20,
+  gridCheck: {
+    marginLeft: 10,
   },
   gridImage: {
     backgroundPosition: 'center',
     backgroundSize: 'cover',
   },
-  gridCheck: {
-    marginLeft: 10,
-  },
   gridName: {
     padding: '10px 20px',
   },
-  gridCard: {
-    cursor: 'pointer',
-    '& > .react-resizable-handle::after': {
-      borderRight: `3px solid ${theme.borderColor}`,
-      borderBottom: `3px solid ${theme.borderColor}`,
-      width: 10,
-      height: 10,
-      right: 5,
-      bottom: 5,
-    },
-    '& > .react-resizable-handle': {
-      background: 'transparent',
-    },
+  headerRow: {
+    height: 36,
+    marginBottom: 5,
+  },
+  image: {
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'cover',
+    height: 250,
+    width: 298,
+  },
+  imageContainer: {
+    backgroundColor: 'rgba(190, 190, 190, 0.2)',
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+    display: 'flex',
+    height: 250,
+    justifyContent: 'center',
+    overflow: 'hidden',
+    width: '100%',
+  },
+  imagePlaceholder: {
+    height: 250,
+  },
+  page: {
+    padding: 20,
+  },
+  text: {
+    flex: 1,
+  },
+  titleField: {
+    alignItems: 'center',
+    display: 'flex',
+    height: 56,
+    padding: '15px',
+    textAlign: 'right',
+    width: '100%',
   },
 }));
 

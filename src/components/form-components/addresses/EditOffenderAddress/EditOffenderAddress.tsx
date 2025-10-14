@@ -1,16 +1,17 @@
+import type { LocationData } from 'types/DataType';
+
 import { Button, Col, Form, Input, Row } from 'antd';
 import React from 'react';
 import { useIntl } from 'react-intl';
-import type { LocationData } from 'types/DataType';
 
 interface AddressForm {
-  id: string;
   alias: string;
   building: string;
+  county: string;
+  id: string;
+  postcode: string;
   street: string;
   townCity: string;
-  county: string;
-  postcode: string;
 }
 
 interface Props {
@@ -19,7 +20,7 @@ interface Props {
   onSubmit: (data: AddressForm) => void;
 }
 
-const EditOffenderAddress = ({ onClose, onSubmit, data }: Props) => {
+const EditOffenderAddress = ({ data, onClose, onSubmit }: Props) => {
   const intl = useIntl();
 
   return (
@@ -50,10 +51,10 @@ const EditOffenderAddress = ({ onClose, onSubmit, data }: Props) => {
       <Row gutter={16}>
         <Col span={12}>
           <Form.Item
-            name="alias"
             label={intl.formatMessage({
               defaultMessage: 'Label',
             })}
+            name="alias"
             tooltip={intl.formatMessage({
               defaultMessage:
                 'A friendly name for the address to identify it, such as home',
@@ -64,10 +65,10 @@ const EditOffenderAddress = ({ onClose, onSubmit, data }: Props) => {
         </Col>
         <Col span={12}>
           <Form.Item
-            name="building"
             label={intl.formatMessage({
               defaultMessage: 'Building',
             })}
+            name="building"
           >
             <Input />
           </Form.Item>
@@ -76,16 +77,16 @@ const EditOffenderAddress = ({ onClose, onSubmit, data }: Props) => {
       <Row gutter={16}>
         <Col span={12}>
           <Form.Item
-            name="street"
             label={intl.formatMessage({
               defaultMessage: 'Street',
             })}
+            name="street"
             rules={[
               {
-                required: true,
                 message: intl.formatMessage({
                   defaultMessage: 'Please enter a street for the new address.',
                 }),
+                required: true,
               },
             ]}
           >
@@ -94,17 +95,17 @@ const EditOffenderAddress = ({ onClose, onSubmit, data }: Props) => {
         </Col>
         <Col span={12}>
           <Form.Item
-            name="townCity"
             label={intl.formatMessage({
               defaultMessage: 'Town/City',
             })}
+            name="townCity"
             rules={[
               {
-                required: true,
                 message: intl.formatMessage({
                   defaultMessage:
                     'Please enter a town/city for the new address.',
                 }),
+                required: true,
               },
             ]}
           >
@@ -115,27 +116,27 @@ const EditOffenderAddress = ({ onClose, onSubmit, data }: Props) => {
       <Row gutter={16}>
         <Col span={12}>
           <Form.Item
-            name="county"
             label={intl.formatMessage({
               defaultMessage: 'County',
             })}
+            name="county"
           >
             <Input />
           </Form.Item>
         </Col>
         <Col span={12}>
           <Form.Item
-            name="postcode"
             label={intl.formatMessage({
               defaultMessage: 'Postcode',
             })}
+            name="postcode"
             rules={[
               {
-                required: true,
                 message: intl.formatMessage({
                   defaultMessage:
                     'Please enter a postcode for the new address.',
                 }),
+                required: true,
               },
             ]}
           >
@@ -145,14 +146,14 @@ const EditOffenderAddress = ({ onClose, onSubmit, data }: Props) => {
       </Row>
 
       <Form.Item>
-        <Row style={{ marginTop: 30 }} gutter={10} justify="end">
+        <Row gutter={10} justify="end" style={{ marginTop: 30 }}>
           <Col>
             <Button onClick={onClose}>
               {intl.formatMessage({ defaultMessage: 'Cancel' })}
             </Button>
           </Col>
           <Col>
-            <Button type="primary" htmlType="submit">
+            <Button htmlType="submit" type="primary">
               {intl.formatMessage({
                 defaultMessage: 'Save Address',
               })}

@@ -1,40 +1,40 @@
 export enum Race {
-  'UNKNOWN' = 'UNKNOWN',
   'IC1' = 'IC1',
   'IC2' = 'IC2',
   'IC3' = 'IC3',
   'IC4' = 'IC4',
   'IC5' = 'IC5',
   'IC6' = 'IC6',
+  'UNKNOWN' = 'UNKNOWN',
 }
 // wait to check
 export const raceValues = [
   {
-    value: 'UNKNOWN',
     label: 'Unknown',
+    value: 'UNKNOWN',
   },
   {
-    value: 'IC1',
     label: 'IC1 - White - North European',
+    value: 'IC1',
   },
   {
-    value: 'IC2',
     label: 'IC2 - White - South European',
+    value: 'IC2',
   },
   {
-    value: 'IC3',
     label: 'IC3 - Black',
+    value: 'IC3',
   },
   {
-    value: 'IC4',
     label: 'IC4 - South Asian',
+    value: 'IC4',
   },
   {
-    value: 'IC5',
     label: 'IC5 - Southeast Asian',
+    value: 'IC5',
   },
   {
-    value: 'IC6',
     label: 'IC6 - North African or Arab',
+    value: 'IC6',
   },
 ];

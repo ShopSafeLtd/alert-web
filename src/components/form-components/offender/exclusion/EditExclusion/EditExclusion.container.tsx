@@ -1,28 +1,30 @@
-import React from 'react';
 import type { BanData } from 'types/DataType';
+
+import React from 'react';
+
 import View from './EditExclusion.view';
 import useEditExclusion from './useEditExclusion';
 
 interface Props {
-  onClose: () => void;
   banData: BanData | null;
+  onClose: () => void;
   update: (value: BanData) => void;
 }
 
-const EditExclusion = ({ onClose, banData, update }: Props): JSX.Element => {
-  const { onSubmit, saving, setStartDate, disabledDate } = useEditExclusion({
-    onClose,
+const EditExclusion = ({ banData, onClose, update }: Props): JSX.Element => {
+  const { disabledDate, onSubmit, saving, setStartDate } = useEditExclusion({
     banData,
+    onClose,
     update,
   });
   return (
     <View
-      onSubmit={onSubmit}
-      onClose={onClose}
       banData={banData}
+      disabledDate={disabledDate}
+      onClose={onClose}
+      onSubmit={onSubmit}
       saving={saving}
       setStartDate={setStartDate}
-      disabledDate={disabledDate}
     />
   );
 };

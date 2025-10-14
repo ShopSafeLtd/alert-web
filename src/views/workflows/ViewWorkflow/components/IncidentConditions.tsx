@@ -23,9 +23,14 @@ import type { OverUnder } from '../useWorkflowForm';
 type PickedBase = Pick<
   WorkflowProps,
   | 'availableQuestions'
+  | 'brands'
+  | 'brandsLoading'
   | 'brandsSelected'
+  | 'countries'
   | 'countriesSelected'
   | 'descriptionCheck'
+  | 'divisions'
+  | 'divisionsLoading'
   | 'divisionsSelected'
   | 'goods'
   | 'goodsTypeCheck'
@@ -42,11 +47,6 @@ type PickedBase = Pick<
   | 'tags'
   | 'tagsSelected'
   | 'valueSelected'
-  | 'brands'
-  | 'brandsLoading'
-  | 'countries'
-  | 'divisions'
-  | 'divisionsLoading'
 >;
 
 type IncidentConditionsProps = {
@@ -55,10 +55,15 @@ type IncidentConditionsProps = {
 
 const IncidentConditions: React.FC<IncidentConditionsProps> = ({
   availableQuestions,
+  brands,
+  brandsLoading,
   brandsSelected,
   classes,
+  countries,
   countriesSelected,
   descriptionCheck,
+  divisions,
+  divisionsLoading,
   divisionsSelected,
   goods,
   goodsTypeCheck,
@@ -75,11 +80,6 @@ const IncidentConditions: React.FC<IncidentConditionsProps> = ({
   tags,
   tagsSelected,
   valueSelected,
-  brands,
-  brandsLoading,
-  countries,
-  divisions,
-  divisionsLoading,
 }) => {
   const intl = useIntl();
 
@@ -291,10 +291,10 @@ const IncidentConditions: React.FC<IncidentConditionsProps> = ({
               name="brands"
             >
               <Select
+                loading={brandsLoading}
                 mode="multiple"
                 optionFilterProp="label"
                 options={brands}
-                loading={brandsLoading}
                 placeholder={intl.formatMessage({
                   defaultMessage: 'Select brands...',
                 })}
@@ -412,10 +412,10 @@ const IncidentConditions: React.FC<IncidentConditionsProps> = ({
               name="divisions"
             >
               <Select
+                loading={divisionsLoading}
                 mode="multiple"
                 optionFilterProp="label"
                 options={divisions}
-                loading={divisionsLoading}
                 placeholder={intl.formatMessage({
                   defaultMessage: 'Select divisions...',
                 })}

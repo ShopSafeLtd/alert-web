@@ -1,18 +1,19 @@
-import { FormattedMessage, useIntl } from 'react-intl';
-import React, { useState } from 'react';
-import { Col, Row, Tooltip, Typography } from 'antd';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMinusCircle, faPlusCircle } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Col, Row, Tooltip, Typography } from 'antd';
+import React, { useState } from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
+
 import useStyles from './count-buttons.styles';
 
 const { Text } = Typography;
 
 interface CounterButtonProps {
-  onClick: (count: number) => void;
   dataName: string;
+  onClick: (count: number) => void;
 }
 
-const CounterButtonView = ({ onClick, dataName }: CounterButtonProps) => {
+const CounterButtonView = ({ dataName, onClick }: CounterButtonProps) => {
   const intl = useIntl();
   const classes = useStyles();
   const [count, setCount] = useState(5);
@@ -24,7 +25,7 @@ const CounterButtonView = ({ onClick, dataName }: CounterButtonProps) => {
           className={classes.countCardButtonLeft}
           onClick={() => setCount(count > 0 ? count - 1 : 0)}
         >
-          <FontAwesomeIcon size="xl" icon={faMinusCircle} />
+          <FontAwesomeIcon icon={faMinusCircle} size="xl" />
         </Col>
         <Tooltip
           title={intl.formatMessage(

@@ -1,20 +1,21 @@
+import { Col, Row } from 'antd';
+import Loading from 'components/shared-components/AntD/Loading';
 import React, { memo } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import Loading from 'components/shared-components/AntD/Loading';
-import { Col, Row } from 'antd';
+
 import useStyles from './InfiniteSideList.styles';
 import SideListItem from './SideListItem.view';
 
 type InfiniteScrollListProps = {
-  next: () => void;
-  isLoading: boolean;
   dataLength?: number;
-  hasMore?: boolean;
-  loadingItems?: JSX.Element[];
-  items?: JSX.Element[];
-  loader?: JSX.Element;
   endMessage?: JSX.Element;
   filters?: JSX.Element;
+  hasMore?: boolean;
+  isLoading: boolean;
+  items?: JSX.Element[];
+  loader?: JSX.Element;
+  loadingItems?: JSX.Element[];
+  next: () => void;
 };
 
 interface ItemsLoadingProps {
@@ -27,7 +28,7 @@ const ItemsLoading: React.FC<ItemsLoadingProps> = memo(
     <>
       {Array.from({ length: 24 }).map((_, index) => (
         // eslint-disable-next-line react/no-array-index-key
-        <SideListItem key={index} loading current={false}>
+        <SideListItem current={false} key={index} loading>
           <Row wrap={false}>
             <Col className={itemContent} flex={1}>
               <div />
@@ -39,20 +40,20 @@ const ItemsLoading: React.FC<ItemsLoadingProps> = memo(
   )
 );
 const InfiniteSideScrollList: React.FC<InfiniteScrollListProps> = ({
-  next,
   dataLength = 0,
-  hasMore = false,
-  isLoading,
-  loadingItems,
-  filters,
-  items = [],
-  loader = <Loading />,
   endMessage = (
     <p style={{ textAlign: 'center' }}>
       {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
       <b>-----------</b>
     </p>
   ),
+  filters,
+  hasMore = false,
+  isLoading,
+  items = [],
+  loader = <Loading />,
+  loadingItems,
+  next,
 }) => {
   const classes = useStyles();
 
@@ -60,14 +61,14 @@ const InfiniteSideScrollList: React.FC<InfiniteScrollListProps> = ({
     <div className={classes.sideList}>
       {filters || null}
       <InfiniteScroll
-        dataLength={dataLength}
-        next={next}
-        hasMore={hasMore}
-        loader={loader}
-        style={{ overflowX: 'hidden' }}
-        height="100vh"
-        endMessage={endMessage}
         className={classes.infiniteScroll}
+        dataLength={dataLength}
+        endMessage={endMessage}
+        hasMore={hasMore}
+        height="100vh"
+        loader={loader}
+        next={next}
+        style={{ overflowX: 'hidden' }}
       >
         {isLoading ? loadingItems || <ItemsLoading classes={classes} /> : items}
       </InfiniteScroll>

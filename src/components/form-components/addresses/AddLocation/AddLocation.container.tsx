@@ -1,36 +1,38 @@
-import React from 'react';
 import type { LocationData } from 'types/DataType';
-import useAddLocation from './useAddLocation';
+
+import React from 'react';
+
 import View from './AddLocation.view';
+import useAddLocation from './useAddLocation';
 
 interface Props {
-  onClose: () => void;
-  update: (value: LocationData) => void;
   locationData?: LocationData;
+  onClose: () => void;
   showAlias?: boolean;
+  update: (value: LocationData) => void;
 }
 const AddLocation = ({
-  onClose,
-  update,
   locationData,
+  onClose,
   showAlias,
+  update,
 }: Props): JSX.Element => {
-  const { onSubmit, saving, location, setLocation, form } = useAddLocation({
+  const { form, location, onSubmit, saving, setLocation } = useAddLocation({
+    locationData,
     onClose,
     update,
-    locationData,
   });
 
   return (
     <div>
       <View
-        onSubmit={onSubmit}
-        onClose={onClose}
-        saving={saving}
-        location={location}
-        setLocation={setLocation}
         form={form}
+        location={location}
         locationData={locationData}
+        onClose={onClose}
+        onSubmit={onSubmit}
+        saving={saving}
+        setLocation={setLocation}
         showAlias={showAlias}
       />
     </div>

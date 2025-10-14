@@ -1,34 +1,36 @@
-import React from 'react';
 import type { TagData } from 'types/DataType';
+
+import React from 'react';
+
 import View from './AddTag.view';
 import useAddTag from './useAddTag';
 
 interface Props {
-  onClose: () => void;
-  update: (value: TagData) => void;
-  saving?: boolean;
-  description?: string;
   data?: TagData;
+  description?: string;
+  onClose: () => void;
+  saving?: boolean;
+  update: (value: TagData) => void;
 }
 
 const AddTag = ({
-  onClose,
-  update,
-  saving,
-  description,
   data,
+  description,
+  onClose,
+  saving,
+  update,
 }: Props): JSX.Element => {
   const { onSubmit } = useAddTag({
-    update,
     data,
+    update,
   });
 
   return (
     <View
-      onSubmit={onSubmit}
-      onClose={onClose}
-      saving={saving || false}
       description={description}
+      onClose={onClose}
+      onSubmit={onSubmit}
+      saving={saving || false}
     />
   );
 };

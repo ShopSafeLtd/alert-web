@@ -1,26 +1,26 @@
 import React from 'react';
 
 const SigSeal = ({
-  name,
   font,
   height,
+  name,
   width,
 }: {
-  name: string;
   font: string;
   height: number;
+  name: string;
   width: number;
 }) => (
   <svg
-    xmlns="http://www.w3.org/2000/svg"
-    style={{ background: '#ffffff00' }}
-    height={height}
-    width={width}
-    viewBox="0 0 300 100"
     className="signature-svg"
+    height={height}
+    style={{ background: '#ffffff00' }}
+    viewBox="0 0 300 100"
+    width={width}
+    xmlns="http://www.w3.org/2000/svg"
   >
     {name !== '' && (
-      <text x="20" y="60" fontFamily={font} fontSize="30" fill="black">
+      <text fill="black" fontFamily={font} fontSize="30" x="20" y="60">
         {name}
       </text>
     )}

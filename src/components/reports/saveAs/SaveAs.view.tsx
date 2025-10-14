@@ -1,18 +1,18 @@
-import React from 'react';
 import { Button, Card, Col, Form, Input, Row } from 'antd';
-import { useIntl, FormattedMessage } from 'react-intl';
+import React from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 interface OnSubmitValues {
   name: string;
 }
 
 interface Props {
+  onClose: () => void;
   onSubmit: (values: OnSubmitValues) => void;
   saving: boolean;
-  onClose: () => void;
 }
 
-const SaveAs = ({ onSubmit, saving, onClose }: Props) => {
+const SaveAs = ({ onClose, onSubmit, saving }: Props) => {
   const intl = useIntl();
 
   return (
@@ -26,16 +26,16 @@ const SaveAs = ({ onSubmit, saving, onClose }: Props) => {
         <Row gutter={16} style={{ marginLeft: 10, marginRight: 10 }}>
           <Col span={24}>
             <Form.Item
-              name="name"
               label={intl.formatMessage({
                 defaultMessage: 'Name',
               })}
+              name="name"
               rules={[
                 {
-                  required: true,
                   message: intl.formatMessage({
                     defaultMessage: 'Please input a name!',
                   }),
+                  required: true,
                 },
               ]}
             >
@@ -48,7 +48,7 @@ const SaveAs = ({ onSubmit, saving, onClose }: Props) => {
           </Col>
         </Row>
         <Form.Item>
-          <Row style={{ marginTop: 30 }} gutter={10} justify="end">
+          <Row gutter={10} justify="end" style={{ marginTop: 30 }}>
             <Col>
               <Button disabled={saving} onClick={onClose}>
                 <FormattedMessage defaultMessage="Cancel" />
@@ -56,10 +56,10 @@ const SaveAs = ({ onSubmit, saving, onClose }: Props) => {
             </Col>
             <Col>
               <Button
-                loading={saving}
                 disabled={saving}
-                type="primary"
                 htmlType="submit"
+                loading={saving}
+                type="primary"
               >
                 <FormattedMessage defaultMessage="Save As" />
               </Button>

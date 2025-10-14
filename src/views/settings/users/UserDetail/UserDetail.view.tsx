@@ -1,9 +1,7 @@
 /* eslint-disable formatjs/no-literal-string-in-jsx */
 import type { ViewportData } from '#/types/DataType';
 import type { Role } from 'graphql/types';
-import { AppType, UserStatus } from 'graphql/types';
 import type { RefObject } from 'react';
-import React, { useState } from 'react';
 
 // import { EditPasswordButton } from '#/components/Password/OwnPasswordChange.view';
 import LocatingModal from '#/components/map/LocatingModal';
@@ -41,7 +39,9 @@ import {
   Typography,
 } from 'antd';
 import EditUser from 'components/form-components/user/EditUser';
+import { AppType, UserStatus } from 'graphql/types';
 import { useAtomValue } from 'jotai';
+import React, { useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { GetUserStatusValues } from 'types/enums/user_status';

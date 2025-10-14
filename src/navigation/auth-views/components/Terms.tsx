@@ -1,6 +1,7 @@
 /* eslint-disable no-irregular-whitespace,formatjs/no-literal-string-in-jsx */
-import React from 'react';
 import { Card } from 'antd';
+import React from 'react';
+
 import logo from '../../../images/icon-192.png';
 import useStyles from './Terms.styles';
 
@@ -16,17 +17,17 @@ export const TermsCard = () => {
   return (
     <div className={classes.cover}>
       <Card
-        className={classes.container}
         bodyStyle={{
           height: 'calc(100vh - 64px)',
         }}
+        className={classes.container}
       >
         <div className={classes.page}>
           <div className={classes.header}>
             <img
-              style={{ height: '40px', marginRight: '12px' }}
               alt="Alert logo"
               src={logo}
+              style={{ height: '40px', marginRight: '12px' }}
             />
             <div className={classes.headerText}>
               ShopSafe Alert! Terms of Use

@@ -1,19 +1,21 @@
-import React, { useState } from 'react';
-import { Button, Col, Row, Table } from 'antd';
-import { FormattedMessage } from 'react-intl';
 import type { VehicleData } from 'types/DataType';
+
+import { Button, Col, Row, Table } from 'antd';
+import React, { useState } from 'react';
+import { FormattedMessage } from 'react-intl';
+
 import useStyles from './MultiSelectVehicles.style';
 
 interface Props {
-  vehicles: VehicleData[] | undefined;
   handleAddSuggestion: (id: string[]) => void;
   onClose: () => void;
+  vehicles: VehicleData[] | undefined;
 }
 
 const SuggestedVehicles = ({
-  vehicles,
   handleAddSuggestion,
   onClose,
+  vehicles,
 }: Props) => {
   const classes = useStyles();
   const [selected, setSelected] = useState<string[]>([]);
@@ -32,52 +34,52 @@ const SuggestedVehicles = ({
       <Table
         columns={[
           {
-            key: 'reference',
             dataIndex: 'reference',
+            key: 'reference',
             title: <FormattedMessage defaultMessage="Alert ID" />,
           },
           {
-            key: 'registration',
             dataIndex: 'registration',
+            key: 'registration',
             title: <FormattedMessage defaultMessage="Registration" />,
           },
           {
-            key: 'make',
             dataIndex: 'make',
+            key: 'make',
             title: <FormattedMessage defaultMessage="Make" />,
           },
           {
-            key: 'model',
             dataIndex: 'model',
+            key: 'model',
             title: <FormattedMessage defaultMessage="Model" />,
           },
           {
-            key: 'colour',
             dataIndex: 'colour',
+            key: 'colour',
             title: <FormattedMessage defaultMessage="Colour" />,
           },
         ]}
         dataSource={
           vehicles?.map((item) => ({
-            reference: item.reference,
-            registration: item.registration,
-            make: item.make,
-            model: item.model,
             colour: item.colour,
             images: item.images,
             key: item.id,
+            make: item.make,
+            model: item.model,
+            reference: item.reference,
+            registration: item.registration,
           })) || []
         }
-        rowSelection={{
-          type: 'checkbox',
-          onSelect,
-        }}
         pagination={{
           hideOnSinglePage: true,
           pageSize: 15,
         }}
+        rowSelection={{
+          onSelect,
+          type: 'checkbox',
+        }}
       />
-      <Row gutter={16} style={{ marginTop: 30 }} justify="end">
+      <Row gutter={16} justify="end" style={{ marginTop: 30 }}>
         <Col>
           <Button onClick={onClose} type="text">
             <FormattedMessage defaultMessage="Cancel" />

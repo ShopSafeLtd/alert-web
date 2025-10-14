@@ -6,6 +6,8 @@ import {
   BusinessesListDocument,
   useBusinessesListQuery,
 } from '#/views/settings/businesses/ListBusinesses/graphql/queries/__generated__/list-businesses.generated';
+import type { PoliceForce } from 'graphql/types';
+import { Model, QueryMode, SortOrder } from 'graphql/types';
 import type { BusinessData } from 'types/DataType';
 
 import { useLinkBusinessToSchemeMutation } from '#/graphql/businesses/mutations/__generated__/link-business-to-scheme.generated';
@@ -16,8 +18,6 @@ import { useParentBusinessesListQuery } from '#/views/settings/businesses/ListBu
 import { Modal, notification } from 'antd';
 import { useCreateBusinessMutation } from 'graphql/businesses/mutations/__generated__/create-business.generated';
 import { useDeleteBusinessMutation } from 'graphql/businesses/mutations/__generated__/delete-business.generated';
-import type { PoliceForce } from 'graphql/types';
-import { Model, QueryMode, SortOrder } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
 import { useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -43,19 +43,19 @@ interface Return {
   pagination: { page: number; pageSize: number };
   parentData: FilterLabels[];
   parentFilter: string[];
+  policeAreaFilter: PoliceForce[];
   saving: boolean;
   searchValue: string;
   setGroupFilter: (value: string[]) => void;
   setPagination: (value: { page: number; pageSize: number }) => void;
   setParentFilter: (value: string[]) => void;
+  setPoliceAreaFilter: (value: PoliceForce[]) => void;
   setTagFilter: (value: string[]) => void;
   tagFilter: string[];
   tags: FilterLabels[];
   toggleAddVisible: () => void;
   toggleFiltersOpen: () => void;
   toggleLinkVisible: () => void;
-  policeAreaFilter: PoliceForce[];
-  setPoliceAreaFilter: (value: PoliceForce[]) => void;
 }
 
 const useListBusinesses = (): Return => {
@@ -86,8 +86,8 @@ const useListBusinesses = (): Return => {
         contains: searchValue,
         mode: QueryMode.Insensitive,
       },
-      parent:
-        parentFilter.length > 0 ? { id: { in: parentFilter } } : undefined,
+      policeArea:
+        policeAreaFilter.length > 0 ? { hasSome: policeAreaFilter } : undefined,
       schemes: {
         some: {
           id: {
@@ -95,10 +95,6 @@ const useListBusinesses = (): Return => {
           },
         },
       },
-      tags:
-        tagFilter.length > 0 ? { some: { id: { in: tagFilter } } } : undefined,
-      policeArea:
-        policeAreaFilter.length > 0 ? { hasSome: policeAreaFilter } : undefined,
     },
   };
   const { data } = useBusinessesListQuery({
@@ -418,19 +414,19 @@ const useListBusinesses = (): Return => {
     pagination,
     parentData,
     parentFilter,
+    policeAreaFilter,
     saving,
     searchValue,
     setGroupFilter,
     setPagination,
     setParentFilter,
+    setPoliceAreaFilter,
     setTagFilter,
     tagFilter,
     tags,
     toggleAddVisible,
     toggleFiltersOpen,
     toggleLinkVisible,
-    policeAreaFilter,
-    setPoliceAreaFilter,
   };
 };
 

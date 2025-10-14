@@ -1,44 +1,45 @@
-import React, { useState } from 'react';
-import { createUseStyles } from 'react-jss';
-import { Row, Col, Typography, Button, Input } from 'antd';
 import type { Theme } from '#/configs/ThemeConfig';
-import { FormattedMessage, useIntl } from 'react-intl';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faPlus,
-  faPieChart,
-  faBarChart,
-  faTable,
-  faGridHorizontal,
-  faRectangle,
-  faChartLine,
-  faMap,
-} from '@fortawesome/pro-light-svg-icons';
 import type { ReportItemTypes } from '#/views/reports/types';
+
+import {
+  faBarChart,
+  faChartLine,
+  faGridHorizontal,
+  faMap,
+  faPieChart,
+  faPlus,
+  faRectangle,
+  faTable,
+} from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Col, Input, Row, Typography } from 'antd';
 import CheckTags from 'components/form-components/check-tags/CheckTags.view';
+import React, { useState } from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
+import { createUseStyles } from 'react-jss';
 
 const useStyles = createUseStyles((theme: Theme) => ({
   container: {
     padding: 0,
   },
-  item: {
+  filters: {
     borderBottom: `1px solid ${theme.borderColor}`,
-    padding: 15,
+    padding: 10,
   },
   image: {
     width: 150,
   },
-  title: {
-    fontSize: 15,
-    marginBottom: 5,
-  },
-  filters: {
-    padding: 10,
+  item: {
     borderBottom: `1px solid ${theme.borderColor}`,
+    padding: 15,
   },
   search: {
     marginBottom: 10,
     width: '100%',
+  },
+  title: {
+    fontSize: 15,
+    marginBottom: 5,
   },
 }));
 
@@ -54,9 +55,9 @@ const getIcon = (reportItemType: ReportItemTypes) => {
 
 interface Props {
   components: {
+    description: React.ReactNode;
     key: string;
     name: string;
-    description: React.ReactNode;
     onAdd: () => void;
     reportItemTypes: ReportItemTypes[];
   }[];
@@ -73,15 +74,14 @@ const ComponentList = ({ components }: Props) => {
       <div className={classes.filters}>
         <Input
           className={classes.search}
+          onChange={(e) => setSearch(e.target.value)}
           placeholder={intl.formatMessage({
             defaultMessage: 'Search report components...',
           })}
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
         />
         <CheckTags
           mode={'check'}
-          value={typesFilter}
           onChange={setTypesFilter}
           options={[
             {
@@ -121,6 +121,7 @@ const ComponentList = ({ components }: Props) => {
               value: 'heatmap',
             },
           ]}
+          value={typesFilter}
         />
       </div>
       {components
@@ -139,7 +140,7 @@ const ComponentList = ({ components }: Props) => {
           return true;
         })
         .map((item) => (
-          <Row key={item.key} className={classes.item}>
+          <Row className={classes.item} key={item.key}>
             <Col flex={1}>
               <Typography.Text className={classes.title} strong>
                 {item.name}
@@ -147,19 +148,19 @@ const ComponentList = ({ components }: Props) => {
               <Typography.Paragraph type="secondary">
                 {item.description}
               </Typography.Paragraph>
-              <Row justify="end" gutter={16} align="middle">
+              <Row align="middle" gutter={16} justify="end">
                 <Col flex={1}>
                   <Row gutter={8}>
                     {item.reportItemTypes.map((reportItem) => (
                       <Col key={`${reportItem} ${item.key}`}>
-                        <FontAwesomeIcon size="lg" icon={getIcon(reportItem)} />
+                        <FontAwesomeIcon icon={getIcon(reportItem)} size="lg" />
                       </Col>
                     ))}
                   </Row>
                 </Col>
                 <Col>
                   <Button onClick={item.onAdd}>
-                    <FontAwesomeIcon style={{ marginRight: 5 }} icon={faPlus} />
+                    <FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />
                     <FormattedMessage defaultMessage="Add" />
                   </Button>
                 </Col>

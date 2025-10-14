@@ -1,4 +1,4 @@
-import { Radio, Form } from 'antd';
+import { Form, Radio } from 'antd';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 

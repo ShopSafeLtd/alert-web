@@ -1,16 +1,17 @@
 import React from 'react';
-import useViewTerms from './hooks/useViewTerms';
+
 import View from './ViewTerms';
+import useViewTerms from './hooks/useViewTerms';
 
 const ViewTermsContainer = () => {
-  const { data, loading, isAdmin, editTerms } = useViewTerms();
+  const { data, editTerms, isAdmin, loading } = useViewTerms();
 
   return (
     <View
       data={data}
-      loading={loading}
-      isAdmin={isAdmin}
       editTerms={editTerms}
+      isAdmin={isAdmin}
+      loading={loading}
     />
   );
 };

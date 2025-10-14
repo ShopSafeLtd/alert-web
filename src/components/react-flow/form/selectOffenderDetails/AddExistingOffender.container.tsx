@@ -1,40 +1,41 @@
 import React from 'react';
 
-import View from './AddExistingOffender.view';
 import type { Offender } from './useSelectExistingOffender';
+
+import View from './AddExistingOffender.view';
 import useSelectExistingOffender from './useSelectExistingOffender';
 
 interface Props {
+  investigationId: string;
   onClose: () => void;
   onSelect: (offender: Offender) => void;
-  investigationId: string;
 }
 
 const SelectOffenderDetails = ({
+  investigationId,
   onClose,
   onSelect,
-  investigationId,
 }: Props): JSX.Element => {
   const {
-    onSubmit,
     data,
-    loading,
-    setCurrentId,
-    selectedOffender,
-    openLightbox,
     lightBoxOpen,
-  } = useSelectExistingOffender({ onClose, onSelect, investigationId });
+    loading,
+    onSubmit,
+    openLightbox,
+    selectedOffender,
+    setCurrentId,
+  } = useSelectExistingOffender({ investigationId, onClose, onSelect });
 
   return (
     <View
-      lightBoxOpen={lightBoxOpen}
-      openLightbox={openLightbox}
-      onSubmit={onSubmit}
       data={data}
+      lightBoxOpen={lightBoxOpen}
       loading={loading}
       onClose={onClose}
-      setCurrentId={setCurrentId}
+      onSubmit={onSubmit}
+      openLightbox={openLightbox}
       selectedOffender={selectedOffender}
+      setCurrentId={setCurrentId}
     />
   );
 };

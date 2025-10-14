@@ -1,35 +1,36 @@
 import React from 'react';
 
-import View from './AddExistingVehicle.view';
-import useAddExistingVehicle from './useAddExistingVehicle';
 import type { Vehicle } from '../../../react-flow/nodes/vehicle-node';
 
+import View from './AddExistingVehicle.view';
+import useAddExistingVehicle from './useAddExistingVehicle';
+
 interface Props {
+  investigationId: string;
   onClose: () => void;
   onSubmit: (value: Vehicle) => void;
-  investigationId: string;
 }
 
 const SelectVehicleNode = ({
-  onClose,
   investigationId,
+  onClose,
   onSubmit,
 }: Props): JSX.Element => {
-  const { onSubmitButton, saving, data, loading, search, setSearch, onSelect } =
-    useAddExistingVehicle({ onClose, onSubmit, investigationId });
+  const { data, loading, onSelect, onSubmitButton, saving, search, setSearch } =
+    useAddExistingVehicle({ investigationId, onClose, onSubmit });
 
   return (
     <View
       // lightBoxOpen={lightBoxOpen}
-      // openLightbox={openLightbox}
-      onSubmit={onSubmitButton}
-      saving={saving}
       data={data}
-      search={search}
-      setSearch={setSearch}
       loading={loading}
       onClose={onClose}
       onSelect={onSelect}
+      // openLightbox={openLightbox}
+      onSubmit={onSubmitButton}
+      saving={saving}
+      search={search}
+      setSearch={setSearch}
       // onPaginationChange={onPaginationChange}
       // setCurrentId={setCurrentId}
       // selectedOffender={selectedOffender}

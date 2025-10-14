@@ -6,7 +6,9 @@ import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import hasRolePermission from '#/utils/has-role-permission';
 import useCanView from '#/utils/in-scheme';
 import { useViewIncidentQuery } from '#/views/incidents/ViewIncident/__generated__/view-incident.generated';
+import { useUpdateIncidentStatusMutation } from 'graphql/incidents/mutations/__generated__/update-incident-status.generated';
 import { useUpdateIncidentLocationMutation } from 'graphql/incidents/mutations/update/__generated__/update-incident-location.generated';
+import { useListIncidentStatusesQuery } from 'graphql/incidents/queries/__generated__/list-incident-statuses.generated';
 import { PermissionMethod, PermissionModel } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
@@ -17,6 +19,12 @@ import {
 import errorNotification from 'types/mutation_notifications/error_notification';
 import successNotification from 'types/mutation_notifications/success_notification';
 
+interface IncidentStatus {
+  id: string;
+  name: string;
+  tooltip?: null | string;
+}
+
 interface Return {
   data: ViewIncidentQuery | undefined;
   deleteRights: boolean;
@@ -25,11 +33,14 @@ interface Return {
   editRights: boolean;
   hasApprovePermission: boolean;
   hideIncident: boolean;
+  incidentStatuses: IncidentStatus[];
   loading: boolean;
   onEditAddress: (value: LocationData) => void;
+  onStatusChange: (statusId: string) => Promise<void>;
   saving: boolean;
   setSaving: (value: boolean) => void;
   showAiDetails: boolean;
+  statusLoading: boolean;
   toggleEditAddress: () => void;
   toggleEditImages: () => void;
   toggleShowAiDetails: () => void;
@@ -67,6 +78,26 @@ const useViewIncident = (incidentId: string): Return => {
     schemes: data?.incident?.schemes.map(({ id }) => id),
     type: 'incident',
   });
+
+  // Incident statuses
+  const { data: statusesData, loading: statusesLoading } =
+    useListIncidentStatusesQuery();
+  const [updateIncidentStatus, { loading: updateStatusLoading }] =
+    useUpdateIncidentStatusMutation();
+
+  const onStatusChange = async (statusId: string): Promise<void> => {
+    await updateIncidentStatus({
+      refetchQueries: ['ViewIncident'],
+      variables: {
+        data: {
+          statusId,
+        },
+        where: {
+          id: incidentId,
+        },
+      },
+    });
+  };
 
   // location
   const [updateIncidentLocation] = useUpdateIncidentLocationMutation({
@@ -145,11 +176,15 @@ const useViewIncident = (incidentId: string): Return => {
           model: PermissionModel.Incidents,
         },
       }) && restrictIncidentAccess,
+    incidentStatuses:
+      (statusesData?.incidentStatuses as IncidentStatus[]) || [],
     loading: (data === null || data === undefined) && loading,
     onEditAddress,
+    onStatusChange,
     saving,
     setSaving,
     showAiDetails,
+    statusLoading: statusesLoading || updateStatusLoading,
     toggleEditAddress,
     toggleEditImages,
     toggleShowAiDetails,

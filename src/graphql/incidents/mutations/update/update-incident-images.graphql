@@ -5,13 +5,7 @@ mutation UpdateIncidentImages(
   updateIncident(where: { id: $id }, data: { images: $images }) {
     id
     images {
-      id
-      url
-      optimised
-      position
-      primary
-      policeImage
-      rotation
+      ...Images
     }
   }
 }

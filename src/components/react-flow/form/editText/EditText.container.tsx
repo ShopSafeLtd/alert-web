@@ -1,31 +1,32 @@
 import React from 'react';
+
 import View from './EditText.view';
 import useEditText from './useEditText';
 
 interface Props {
+  data: null | string;
+  investigationId: string;
   onClose: () => void;
   onSelect: (value: string) => void;
-  investigationId: string;
-  data: string | null;
 }
 const EditTextContainer = ({
+  data,
+  investigationId,
   onClose,
   onSelect,
-  investigationId,
-  data,
 }: Props): JSX.Element => {
-  const { onSubmit, editorRef } = useEditText({
+  const { editorRef, onSubmit } = useEditText({
+    investigationId,
     onClose,
     onSelect,
-    investigationId,
   });
 
   return (
     <View
-      onSubmit={onSubmit}
       data={data}
-      onClose={onClose}
       editorRef={editorRef}
+      onClose={onClose}
+      onSubmit={onSubmit}
     />
   );
 };

@@ -1,25 +1,25 @@
 export enum Build {
-  'UNKNOWN' = 'UNKNOWN',
-  'SMALL' = 'SMALL',
-  'MEDIUM' = 'MEDIUM',
   'LARGE' = 'LARGE',
+  'MEDIUM' = 'MEDIUM',
+  'SMALL' = 'SMALL',
+  'UNKNOWN' = 'UNKNOWN',
 }
 // wait to check
 export const buildValues = [
   {
-    value: 'UNKNOWN',
     label: 'Unknown',
+    value: 'UNKNOWN',
   },
   {
-    value: 'SMALL',
     label: 'Small',
+    value: 'SMALL',
   },
   {
-    value: 'MEDIUM',
     label: 'Medium',
+    value: 'MEDIUM',
   },
   {
-    value: 'LARGE',
     label: 'Large',
+    value: 'LARGE',
   },
 ];

@@ -270,9 +270,12 @@ export interface BlurFaceData {
 
 export interface EditFeedImage {
   id: string;
+  low?: null | string | undefined;
   optimised?: null | string | undefined;
   policeImage?: boolean | null | undefined;
   position?: ImagePosition;
+  positionX?: null | number;
+  positionY?: null | number;
   primary?: boolean | null | undefined;
   rotation?: number;
   url?: null | string | undefined;

@@ -437,12 +437,12 @@ const VisionMatchDrawer = ({ matchId, onClose, setMatchId }: Props) => {
                   })
                 ) ?? []
               }
-              size="small"
               pagination={{
+                hideOnSinglePage: true,
                 pageSize: 10,
                 showSizeChanger: false,
-                hideOnSinglePage: true,
               }}
+              size="small"
             />
           </div>
           <div className={classes.card} style={{ marginBottom: 20 }}>
@@ -450,11 +450,6 @@ const VisionMatchDrawer = ({ matchId, onClose, setMatchId }: Props) => {
               <FormattedMessage defaultMessage="Previous Incidents (10 most recent)" />
             </Typography.Title>
             <Table
-              pagination={{
-                pageSize: 10,
-                showSizeChanger: false,
-                hideOnSinglePage: true,
-              }}
               columns={[
                 {
                   dataIndex: 'reference',
@@ -519,6 +514,11 @@ const VisionMatchDrawer = ({ matchId, onClose, setMatchId }: Props) => {
                   })
                 ) ?? []
               }
+              pagination={{
+                hideOnSinglePage: true,
+                pageSize: 10,
+                showSizeChanger: false,
+              }}
               size="small"
             />
           </div>

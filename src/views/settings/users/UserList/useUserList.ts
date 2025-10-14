@@ -7,15 +7,22 @@ import type { InviteExistingUserMutation } from 'graphql/users/mutations/__gener
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { userIdAtom } from '#/providers/UserProvider/UserProvider';
 import { useUserListQuery } from '#/views/settings/users/UserList/__generated__/UserList.generated';
+import { Modal, notification } from 'antd';
 import { useSchemeGroupsQuery } from 'graphql/groups/queries/__generated__/scheme-groups.generated';
 import { QueryMode, SortOrder } from 'graphql/types';
+import { useSendInviteMutation } from 'graphql/user/mutation/__generated__/send_invite.generated';
 import { ListUsersDocument } from 'graphql/users/queries/__generated__/list-users.generated';
 import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
+import { useIntl } from 'react-intl';
 import { UserSort } from 'types/enums/user_sort';
+
+const { confirm } = Modal;
 
 interface Return {
   addUser: boolean;
+  bulkInviteConfirm: () => void;
+  bulkInviting: boolean;
   clearFilters: () => void;
   currentPage: number;
   currentPageSize: number;
@@ -28,9 +35,11 @@ interface Return {
   order: UserSort;
   search: string;
   selectedGroups: string[];
+  selectedUserIds: string[];
   setOrder: (value: UserSort) => void;
   setSearch: (value: string) => void;
   setSelectedGroups: (value: string[]) => void;
+  setSelectedUserIds: (value: string[]) => void;
   setUserRole: (value: string[]) => void;
   setUserStatus: (value: UserStatus[]) => void;
   sortFilter: boolean;
@@ -44,6 +53,7 @@ interface Return {
 }
 
 const useUserList = (): Return => {
+  const intl = useIntl();
   const schemeId = useAtomValue(currentSchemeIdAtom);
   const userId = useAtomValue(userIdAtom);
   const [addUser, setAddUser] = useState(false);
@@ -56,6 +66,8 @@ const useUserList = (): Return => {
   const [selectedGroups, setSelectedGroups] = useState<string[]>([]);
   const [userStatus, setUserStatus] = useState<UserStatus[]>();
   const [userRole, setUserRole] = useState<string[] | undefined>([]);
+  const [bulkInviting, setBulkInviting] = useState(false);
+  const [selectedUserIds, setSelectedUserIds] = useState<string[]>([]);
 
   const getOrderBy = {
     [UserSort.createdAtAsc]: {
@@ -260,8 +272,104 @@ const useUserList = (): Return => {
     setPageSize(pageSizeValue);
   };
 
+  // Bulk invite mutation
+  const [sendInvite] = useSendInviteMutation();
+
+  const bulkInvite = async () => {
+    setBulkInviting(true);
+
+    // Get selected users
+    const selectedUsers =
+      data?.listUsers.users.filter((user) =>
+        selectedUserIds.includes(user.id)
+      ) || [];
+
+    if (selectedUsers.length === 0) {
+      notification.info({
+        description: intl.formatMessage({
+          defaultMessage: 'Please select users to reinvite.',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'No Users Selected',
+        }),
+        placement: 'bottomRight',
+      });
+      setBulkInviting(false);
+      return;
+    }
+
+    let successCount = 0;
+    let errorCount = 0;
+
+    // Send invites sequentially to avoid overwhelming the server
+    for (const user of selectedUsers) {
+      try {
+        await sendInvite({
+          variables: {
+            user: user.id,
+          },
+        });
+        successCount += 1;
+      } catch {
+        errorCount += 1;
+      }
+    }
+
+    setBulkInviting(false);
+    setSelectedUserIds([]); // Clear selection after inviting
+
+    if (errorCount === 0) {
+      notification.success({
+        description: intl.formatMessage(
+          {
+            defaultMessage: 'Successfully sent {count} invitations!',
+          },
+          { count: successCount }
+        ),
+        message: intl.formatMessage({
+          defaultMessage: 'Invitations Sent',
+        }),
+        placement: 'bottomRight',
+      });
+    } else {
+      notification.warning({
+        description: intl.formatMessage(
+          {
+            defaultMessage:
+              'Sent {successCount} invitations. {errorCount} failed.',
+          },
+          { errorCount, successCount }
+        ),
+        message: intl.formatMessage({
+          defaultMessage: 'Partial Success',
+        }),
+        placement: 'bottomRight',
+      });
+    }
+  };
+
+  const bulkInviteConfirm = () => {
+    confirm({
+      content: intl.formatMessage(
+        {
+          defaultMessage:
+            'This will resend invitations to {count} selected users. Each invite will reset their password and send them a new email.',
+        },
+        { count: selectedUserIds.length }
+      ),
+      onOk() {
+        void bulkInvite();
+      },
+      title: intl.formatMessage({
+        defaultMessage: 'Resend Invitations?',
+      }),
+    });
+  };
+
   return {
     addUser,
+    bulkInviteConfirm,
+    bulkInviting,
     clearFilters,
     currentPage: page,
     currentPageSize: pageSize,
@@ -278,9 +386,11 @@ const useUserList = (): Return => {
     order,
     search,
     selectedGroups,
+    selectedUserIds,
     setOrder,
     setSearch,
     setSelectedGroups,
+    setSelectedUserIds,
     setUserRole,
     setUserStatus,
     sortFilter,

@@ -1,56 +1,57 @@
-import React from 'react';
-import { Typography } from 'antd';
-
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMessageDots } from '@fortawesome/pro-light-svg-icons';
+import type { UpdateType } from 'graphql/types';
 import type {
   ArticleData,
   CrimeGroupData,
   IncidentCardData,
   VehicleData,
 } from 'types/DataType';
-import IncidentCard from 'components/MessageInput/MessageCard/IncidentCard';
-import VehicleCard from 'components/MessageInput/MessageCard/VehicleCard';
-import OffenderCard from 'components/MessageInput/MessageCard/OffenderCard';
-import CrimeGroupList from 'components/MessageInput/MessageCard/CrimeGroupList';
-import { useIntl } from 'react-intl';
-import ArticleCard from 'components/MessageInput/MessageCard/ArticleCard';
-import useStyles from './UpdateContent.styles';
-import type { UpdateType } from 'graphql/types';
 
-const { Title, Text, Paragraph } = Typography;
+import { faMessageDots } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Typography } from 'antd';
+import ArticleCard from 'components/MessageInput/MessageCard/ArticleCard';
+import CrimeGroupList from 'components/MessageInput/MessageCard/CrimeGroupList';
+import IncidentCard from 'components/MessageInput/MessageCard/IncidentCard';
+import OffenderCard from 'components/MessageInput/MessageCard/OffenderCard';
+import VehicleCard from 'components/MessageInput/MessageCard/VehicleCard';
+import React from 'react';
+import { useIntl } from 'react-intl';
+
+import useStyles from './UpdateContent.styles';
+
+const { Paragraph, Text, Title } = Typography;
 
 interface UpdateData {
   id: string;
-  text?: string | null | undefined;
-  type: UpdateType;
   images?: {
     id: string;
-    optimised?: string | null;
-    url?: string | null;
+    optimised?: null | string;
+    url?: null | string;
   }[];
+  linkedArticles: ArticleData[];
+  linkedCrimeGroups: CrimeGroupData[];
   linkedIncidents: IncidentCardData[];
   linkedOffenders: {
     id: string;
+    images?: { id: string; optimised?: null | string; url?: null | string }[];
+    name?: null | string;
     updatedAt?: Date;
-    name?: string | null;
-    images?: { id: string; optimised?: string | null; url?: string | null }[];
   }[];
   linkedVehicles: VehicleData[];
-  linkedCrimeGroups: CrimeGroupData[];
-  linkedArticles: ArticleData[];
+  text?: null | string | undefined;
+  type: UpdateType;
 }
 
 interface Props {
-  update: UpdateData | undefined;
   title: string;
+  update: UpdateData | undefined;
 }
 
 const getContent = (content: string) =>
   content.split(/(@\[.*?]\(.*?\))/).map((item) => {
     if (item.includes('@[')) {
       return (
-        <Text strong key={item}>
+        <Text key={item} strong>
           {item.replace('@[', '').replace(/(]\(.*?\))/, '')}
         </Text>
       );
@@ -58,7 +59,7 @@ const getContent = (content: string) =>
     return <Text key={item}>{item}</Text>;
   });
 
-const UpdateContent = ({ update, title }: Props): JSX.Element => {
+const UpdateContent = ({ title, update }: Props): JSX.Element => {
   const intl = useIntl();
   const classes = useStyles();
 
@@ -76,9 +77,9 @@ const UpdateContent = ({ update, title }: Props): JSX.Element => {
         <>
           <Title style={{ fontSize: 14, marginLeft: 5 }}>
             <FontAwesomeIcon
-              size="sm"
               className={classes.icon}
               icon={faMessageDots}
+              size="sm"
             />
             {update?.text
               ? getContent(update?.text)
@@ -93,9 +94,9 @@ const UpdateContent = ({ update, title }: Props): JSX.Element => {
         <>
           <Title style={{ fontSize: 14, marginLeft: 5 }}>
             <FontAwesomeIcon
-              size="sm"
               className={classes.icon}
               icon={faMessageDots}
+              size="sm"
             />
             {update?.text
               ? getContent(update?.text)
@@ -110,9 +111,9 @@ const UpdateContent = ({ update, title }: Props): JSX.Element => {
         <>
           <Title style={{ fontSize: 14, marginLeft: 5 }}>
             <FontAwesomeIcon
-              size="sm"
               className={classes.icon}
               icon={faMessageDots}
+              size="sm"
             />
             {update?.text
               ? getContent(update?.text)
@@ -127,9 +128,9 @@ const UpdateContent = ({ update, title }: Props): JSX.Element => {
         <>
           <Title style={{ fontSize: 14, marginLeft: 5 }}>
             <FontAwesomeIcon
-              size="sm"
               className={classes.icon}
               icon={faMessageDots}
+              size="sm"
             />
             {update?.text
               ? getContent(update?.text)
@@ -144,9 +145,9 @@ const UpdateContent = ({ update, title }: Props): JSX.Element => {
         <>
           <Title style={{ fontSize: 14, marginLeft: 5 }}>
             <FontAwesomeIcon
-              size="sm"
               className={classes.icon}
               icon={faMessageDots}
+              size="sm"
             />
             {update?.text
               ? getContent(update?.text)
@@ -160,20 +161,20 @@ const UpdateContent = ({ update, title }: Props): JSX.Element => {
     </div>
   ) : (
     <div>
-      <Title level={4} style={{ marginBottom: 2 }} ellipsis>
+      <Title ellipsis level={4} style={{ marginBottom: 2 }}>
         {title}
       </Title>
 
       {update?.text ? (
         <Paragraph
+          ellipsis={{ rows: 1 }}
           style={{ fontSize: 14 }}
           type="secondary"
-          ellipsis={{ rows: 1 }}
         >
           <FontAwesomeIcon
-            size="sm"
             className={classes.icon}
             icon={faMessageDots}
+            size="sm"
           />
           {getContent(update.text)}
         </Paragraph>

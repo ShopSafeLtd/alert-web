@@ -1,60 +1,61 @@
 import React from 'react';
+
 import View from './CrimeTypeList.view';
 import useCrimeTypeList from './useCrimeTypeList';
 
 const CrimeTypeList = (): JSX.Element => {
   const {
-    data,
-    // loading,
-    search,
-    setSearch,
-    incidentId,
-    setIncidentId,
-    editIncident,
-    toggleEditIncident,
+    addImpact,
     addIncident,
-    toggleAddIncident,
-    updateCrimeTypeList,
-    saving,
+    addInvolved,
+    data,
     deleteConfirm,
+    editIncident,
     impactData,
     impactLoading,
+    incidentId,
     involvedData,
     involvedLoading,
-    addImpact,
-    addInvolved,
+    saving,
+    // loading,
+    search,
+    setIncidentId,
+    setSearch,
     toggleAddImpact,
+    toggleAddIncident,
     toggleAddInvolved,
+    toggleEditIncident,
+    updateCrimeTypeList,
     updateImpactList,
     updateInvolvedList,
     updateTagParent,
   } = useCrimeTypeList();
   return (
     <View
-      updateTagParent={updateTagParent}
-      data={data}
-      // loading={loading}
-      search={search}
-      setSearch={setSearch}
-      incidentId={incidentId}
-      setIncidentId={setIncidentId}
-      editIncident={editIncident}
-      toggleEditIncident={toggleEditIncident}
+      addImpact={addImpact}
       addIncident={addIncident}
-      toggleAddIncident={toggleAddIncident}
-      updateCrimeTypeList={updateCrimeTypeList}
-      saving={saving}
+      addInvolved={addInvolved}
+      data={data}
       deleteConfirm={deleteConfirm}
+      editIncident={editIncident}
       impactData={impactData}
       impactLoading={impactLoading}
+      incidentId={incidentId}
       involvedData={involvedData}
       involvedLoading={involvedLoading}
-      addImpact={addImpact}
-      addInvolved={addInvolved}
+      saving={saving}
+      // loading={loading}
+      search={search}
+      setIncidentId={setIncidentId}
+      setSearch={setSearch}
       toggleAddImpact={toggleAddImpact}
+      toggleAddIncident={toggleAddIncident}
       toggleAddInvolved={toggleAddInvolved}
+      toggleEditIncident={toggleEditIncident}
+      updateCrimeTypeList={updateCrimeTypeList}
       updateImpactList={updateImpactList}
       updateInvolvedList={updateInvolvedList}
+      updateTagParent={updateTagParent}
     />
   );
 };

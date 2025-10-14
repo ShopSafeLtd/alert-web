@@ -1,6 +1,7 @@
 import React from 'react';
-import useIncidentGroups from './useIncidentGroups';
+
 import View from './IncidentGroups.view';
+import useIncidentGroups from './useIncidentGroups';
 
 interface Props {
   saving: boolean;

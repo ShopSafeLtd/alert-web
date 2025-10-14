@@ -1,6 +1,7 @@
-import React from 'react';
 import type { DropDownProps } from 'antd';
+
 import { Dropdown } from 'antd';
+import React from 'react';
 
 interface Props {
   options: DropDownProps['overlay'];
@@ -14,7 +15,7 @@ interface Props {
  */
 const Menu: React.FC<Props> = ({ options }: Props) => (
   <div className="dropdown-menu">
-    <Dropdown overlay={options} trigger={['hover']} placement="bottomRight">
+    <Dropdown overlay={options} placement="bottomRight" trigger={['hover']}>
       <div className="kebab">
         <div className="dot" />
         <div className="dot" />

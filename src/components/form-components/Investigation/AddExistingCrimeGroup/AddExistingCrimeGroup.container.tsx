@@ -1,31 +1,32 @@
 import React from 'react';
+
 import View from './AddExistingCrimeGroup.view';
 import useAddExistingCrimeGroup from './useAddExistingCrimeGroup';
 
 interface Props {
-  onClose: () => void;
   crimeGroupIds: string[] | undefined;
+  onClose: () => void;
 }
 
 const AddExistingCrimeGroup = ({
-  onClose,
   crimeGroupIds,
+  onClose,
 }: Props): JSX.Element => {
-  const { onSubmit, saving, data, loading, search, setSearch, onSelect } =
-    useAddExistingCrimeGroup({ onClose, crimeGroupIds });
+  const { data, loading, onSelect, onSubmit, saving, search, setSearch } =
+    useAddExistingCrimeGroup({ crimeGroupIds, onClose });
 
   return (
     <View
       // lightBoxOpen={lightBoxOpen}
-      // openLightbox={openLightbox}
-      onSubmit={onSubmit}
-      saving={saving}
       data={data}
-      search={search}
-      setSearch={setSearch}
       loading={loading}
       onClose={onClose}
       onSelect={onSelect}
+      // openLightbox={openLightbox}
+      onSubmit={onSubmit}
+      saving={saving}
+      search={search}
+      setSearch={setSearch}
       // onPaginationChange={onPaginationChange}
       // setCurrentId={setCurrentId}
       // selectedOffender={selectedOffender}

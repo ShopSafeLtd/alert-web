@@ -1,9 +1,10 @@
 import type { CurrentSchemeProviderQuery } from '#/providers/SchemeProvider/__generated__/current-scheme.generated';
-import { useCurrentSchemeProviderQuery } from '#/providers/SchemeProvider/__generated__/current-scheme.generated';
 import type { AvailableDashboardElements } from '#/state/dashboard-model';
-import { defaultAdminLayout, defaultUserLayout } from '#/state/dashboard-model';
+
+import { useCurrentSchemeProviderQuery } from '#/providers/SchemeProvider/__generated__/current-scheme.generated';
 import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import { useStoreActions } from '#/state';
+import { defaultAdminLayout, defaultUserLayout } from '#/state/dashboard-model';
 import { LocalStorageKeys } from '#/types';
 import { Currency, GoodsMode, Role } from 'graphql/types';
 import { atom, useAtomValue, useSetAtom } from 'jotai/index';
@@ -114,7 +115,6 @@ export const defaultCurrentUserSchemeAtom: UserSchemeState = {
   permissions: [],
   role: Role.User,
   scheme: {
-    usDateFormat: false,
     activityAssignToUser: false,
     allowTodoTemplateOverride: true,
     autoPopulateDescription: false,
@@ -132,6 +132,8 @@ export const defaultCurrentUserSchemeAtom: UserSchemeState = {
     goodsMode: GoodsMode.Generic,
     id: '',
     imagesRequiredOnOffenders: false,
+    incidentAssignmentEnabled: false,
+    incidentStatusEnabled: false,
     incidentTypeTooltip: '',
     languageCount: 0,
     logo: null,
@@ -146,6 +148,7 @@ export const defaultCurrentUserSchemeAtom: UserSchemeState = {
     restrictIncidentAccess: false,
     skipLocationToAddress: false,
     taskTimeTracking: false,
+    usDateFormat: false,
     useBusinessGroupsOnIncident: false,
     userTodos: 0,
   },

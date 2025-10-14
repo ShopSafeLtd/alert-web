@@ -1,0 +1,5 @@
+mutation DeleteStockRemovalRequest($where: UniqueId!) {
+    deleteStockRemovalRequest(where: $where) {
+        id
+    }
+}

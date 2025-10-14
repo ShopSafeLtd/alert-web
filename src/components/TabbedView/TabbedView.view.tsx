@@ -3,19 +3,19 @@ import { createUseStyles } from 'react-jss';
 
 const useStyles = createUseStyles({
   tabbedView: {
-    width: '100%',
-    display: 'flex',
-
-    '& .tab-content': {
-      height: '100%',
-      overflow: 'hidden',
-    },
     '& .ant-tabs': {
       flex: 1,
     },
     '& .ant-tabs-nav': {
       marginBottom: 0,
     },
+
+    '& .tab-content': {
+      height: '100%',
+      overflow: 'hidden',
+    },
+    display: 'flex',
+    width: '100%',
   },
 });
 

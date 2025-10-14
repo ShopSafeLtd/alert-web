@@ -1,9 +1,20 @@
 import { createUseStyles } from 'react-jss';
+
 import type { Theme } from '../../../configs/ThemeConfig';
 
 const useStyles = createUseStyles((theme: Theme) => ({
   '@media print': {
     offenderSideList: 'display: none !important;',
+  },
+  borderLeft: {
+    background: theme.bodyBackground,
+    borderLeft: `1px solid ${theme.borderColor}`,
+
+    height: '100vh',
+    overflow: 'auto',
+    padding: '0 5px',
+
+    paddingLeft: 10,
   },
   content: {
     padding: 10,
@@ -18,16 +29,6 @@ const useStyles = createUseStyles((theme: Theme) => ({
   pageView: {
     padding: 15,
     paddingBottom: 0,
-  },
-  borderLeft: {
-    borderLeft: `1px solid ${theme.borderColor}`,
-    paddingLeft: 10,
-
-    background: theme.bodyBackground,
-    height: '100vh',
-    overflow: 'auto',
-
-    padding: '0 5px',
   },
   prefixIcon: {
     marginRight: 10,

@@ -1,18 +1,18 @@
 import { Button } from 'antd';
 import React, { useRef } from 'react';
-import Signature from 'react-signature-canvas';
 import { FormattedMessage } from 'react-intl';
+import Signature from 'react-signature-canvas';
 
 type ReactSignatureCanvas = Signature;
 
 interface SignatureInputProperties {
-  onChange: ((value: string) => void) | undefined;
   hidden: boolean;
+  onChange: ((value: string) => void) | undefined;
 }
 
 const SignatureInput = ({
-  onChange,
   hidden,
+  onChange,
 }: SignatureInputProperties): JSX.Element => {
   const signatureReference = useRef<ReactSignatureCanvas | null>(null);
 
@@ -34,20 +34,20 @@ const SignatureInput = ({
     <>
       <div hidden={hidden}>
         <Signature
-          ref={signatureReference}
           canvasProps={{
-            width: 400,
-            height: 120,
             className: 'sigCanvas',
+            height: 120,
             style: {
               border: '1px #adadad solid',
               borderRadius: 10,
             },
+            width: 400,
           }}
           onEnd={handleChange}
+          ref={signatureReference}
         />
       </div>
-      <Button hidden={hidden} size="small" onClick={onClear}>
+      <Button hidden={hidden} onClick={onClear} size="small">
         <FormattedMessage defaultMessage="Clear" />
       </Button>
     </>

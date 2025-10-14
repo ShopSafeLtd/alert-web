@@ -1,44 +1,45 @@
 import React from 'react';
+
 import View from './SignMg11.view';
 import useAddIncident from './useSignMg11';
 
 const CreateMg11 = (): JSX.Element => {
   const {
+    data,
+    file,
+    form,
+    name,
     onSubmit,
     saving,
-    form,
-    setSign,
-    update,
     selectedFont,
-    name,
-    file,
-    setTab,
-    tab,
-    setSelectedFont,
     setFile,
-    data,
+    setSelectedFont,
+    setSign,
+    setTab,
     sign,
     status,
+    tab,
+    update,
   } = useAddIncident();
 
   return (
     <div>
       <View
+        data={data}
+        file={file}
         form={form}
+        name={name}
         onSubmit={onSubmit}
         saving={saving}
-        setSign={setSign}
-        update={update}
         selectedFont={selectedFont}
-        name={name}
-        file={file}
-        setTab={setTab}
-        tab={tab}
-        setSelectedFont={setSelectedFont}
         setFile={setFile}
-        data={data}
+        setSelectedFont={setSelectedFont}
+        setSign={setSign}
+        setTab={setTab}
         sign={sign}
         status={status}
+        tab={tab}
+        update={update}
       />
     </div>
   );

@@ -1,8 +1,9 @@
-import React from 'react';
-import Loading from 'components/shared-components/AntD/Loading';
 // import PageHeader from 'components/layout-components/AntD/PageHeader';
 import { Layout } from 'antd';
+import Loading from 'components/shared-components/AntD/Loading';
+import React from 'react';
 import { useThemeSwitcher } from 'react-css-theme-switcher/src';
+
 import { GuestViews } from '../../navigation/guest-views/router';
 
 const { Content } = Layout;
