@@ -3,5 +3,7 @@ fragment SimpleImages on Image {
   url
   optimised
   position
+  positionX
+  positionY
   rotation
 }

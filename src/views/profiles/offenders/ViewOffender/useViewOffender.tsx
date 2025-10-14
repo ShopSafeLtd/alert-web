@@ -625,6 +625,14 @@ const useViewOffender = (offenderId: string): Return => {
                 data: {
                   policeImage: { set: value.policeImage || false },
                   position: { set: value.position },
+                  positionX:
+                    value.positionX === undefined
+                      ? undefined
+                      : { set: value.positionX },
+                  positionY:
+                    value.positionY === undefined
+                      ? undefined
+                      : { set: value.positionY },
                   primary: { set: value.primary || false },
                   rotation: { set: value.rotation || 0 },
                 },

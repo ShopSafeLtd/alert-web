@@ -26,6 +26,8 @@ fragment OffenderCard on Offender {
     id
     rotation
     position
+    positionX
+    positionY
     optimised
     primary
     policeImage
