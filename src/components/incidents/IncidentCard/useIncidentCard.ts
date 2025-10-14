@@ -83,6 +83,8 @@ const useIncidentCard = ({ incident, update }: Props): Return => {
         data: {
           policeImage?: { set: boolean };
           position?: { set: ImagePosition | undefined };
+          positionX?: { set: number };
+          positionY?: { set: number };
           primary: { set: boolean };
           rotation?: { set: number };
         };
@@ -92,6 +94,14 @@ const useIncidentCard = ({ incident, update }: Props): Return => {
           data: {
             policeImage: { set: value.policeImage || false },
             position: { set: value.position },
+            positionX:
+              value.positionX === undefined || value.positionX === null
+                ? undefined
+                : { set: value.positionX },
+            positionY:
+              value.positionY === undefined || value.positionY === null
+                ? undefined
+                : { set: value.positionY },
             primary: { set: value.primary || false },
             rotation: { set: value.rotation || 0 },
           },

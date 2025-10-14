@@ -62,7 +62,22 @@ const useStyles = createUseStyles((theme: Theme) => ({
   },
 }));
 
-const getPosition = (position?: ImagePosition): string => {
+const getPosition = (
+  position?: ImagePosition,
+  positionX?: null | number,
+  positionY?: null | number
+): string => {
+  // If custom position values are provided, use them
+  if (
+    positionX !== undefined &&
+    positionX !== null &&
+    positionY !== undefined &&
+    positionY !== null
+  ) {
+    return `${positionX}% ${positionY}%`;
+  }
+
+  // Otherwise fall back to enum-based positioning
   switch (position) {
     case ImagePosition.CenterBottom: {
       return 'center bottom';
@@ -97,6 +112,8 @@ const getPosition = (position?: ImagePosition): string => {
 interface Props {
   image?: boolean;
   position?: ImagePosition;
+  positionX?: null | number;
+  positionY?: null | number;
   rotation?: number;
   showWatermark?: boolean;
   style?: React.CSSProperties;
@@ -107,6 +124,8 @@ interface Props {
 const WatermarkImage = ({
   image,
   position,
+  positionX,
+  positionY,
   rotation,
   showWatermark = true,
   style,
@@ -128,7 +147,7 @@ const WatermarkImage = ({
             className={classes.image}
             style={{
               backgroundImage: `url(${url})`,
-              backgroundPosition: getPosition(position),
+              backgroundPosition: getPosition(position, positionX, positionY),
               transform: `rotate(${rotation || 0}deg)`,
             }}
           />
@@ -223,7 +242,7 @@ const WatermarkImage = ({
           className={classes.image}
           style={{
             backgroundImage: `url(${url})`,
-            backgroundPosition: getPosition(position),
+            backgroundPosition: getPosition(position, positionX, positionY),
             transform: `rotate(${rotation || 0}deg)`,
           }}
         />

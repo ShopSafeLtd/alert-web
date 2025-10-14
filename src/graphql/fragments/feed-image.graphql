@@ -2,5 +2,7 @@ fragment FeedImage on Image {
   id
   low
   position
+  positionX
+  positionY
   rotation
 }

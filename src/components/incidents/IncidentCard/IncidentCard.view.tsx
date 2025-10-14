@@ -35,7 +35,7 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
-import FeedImageEditor from 'components/form-components/ImageEditor/FeedImageEditor.view';
+import ImageEditor from 'components/form-components/ImageEditor/ImageEditor.view';
 import AddInvestigation from 'components/form-components/Investigation/AddInvestigation';
 import EditIncidentFeed from 'components/form-components/incident/EditIncidentFeed';
 import SkeletonImage from 'components/images/SkeletonImage.view';
@@ -265,6 +265,8 @@ const IncidentCard = ({
                           <div className={classes.image} key={image.id}>
                             <WatermarkImage
                               position={image.position}
+                              positionX={image.positionX}
+                              positionY={image.positionY}
                               rotation={image.rotation}
                               url={image.low}
                             />
@@ -307,6 +309,8 @@ const IncidentCard = ({
                     <div className={classes.image}>
                       <WatermarkImage
                         position={fallbackImage.position}
+                        positionX={fallbackImage.positionX}
+                        positionY={fallbackImage.positionY}
                         rotation={fallbackImage.rotation}
                         url={fallbackImage.low}
                       />
@@ -517,6 +521,8 @@ const IncidentCard = ({
                       <div className="incident-card-image">
                         <WatermarkImage
                           position={image.position}
+                          positionX={image.positionX}
+                          positionY={image.positionY}
                           rotation={image.rotation}
                           url={image.low}
                         />
@@ -560,6 +566,8 @@ const IncidentCard = ({
               <div className="incident-card-image">
                 <WatermarkImage
                   position={fallbackImage.position}
+                  positionX={fallbackImage.positionX}
+                  positionY={fallbackImage.positionY}
                   rotation={fallbackImage.rotation}
                   url={fallbackImage.low}
                 />
@@ -759,7 +767,7 @@ const IncidentCard = ({
           <div />
         )}
       </Drawer>
-      <FeedImageEditor
+      <ImageEditor
         image={incident.images.find((image) => editImageId === image.id)}
         onClose={toggleEditImage}
         open={editImage}

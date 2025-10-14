@@ -23,11 +23,8 @@ mutation UpdateInvestigation(
     offenders {
       ...Offenders
       images {
-        id
-        optimised
-        optimisedPersisted
-        position
-        rotation
+        ...Images
+        optimisticUri
         isFace
       }
     }
@@ -49,19 +46,14 @@ mutation UpdateInvestigation(
       vehicles {
         ...Vehicles
         images {
-          id
-          optimised
-          position
-          rotation
+          ...Images
         }
       }
       offenders {
         ...Offenders
         images {
-          id
-          optimised
-          position
-          rotation
+          ...Images
+          optimisticUri
         }
       }
     }
@@ -76,10 +68,7 @@ mutation UpdateInvestigation(
         make
         model
         images {
-          id
-          optimised
-          position
-          rotation
+          ...Images
         }
         colour
       }
@@ -97,10 +86,8 @@ mutation UpdateInvestigation(
         hair
         peculiarities
         images {
-          id
-          optimised
-          position
-          rotation
+          ...Images
+          optimisticUri
         }
       }
     }

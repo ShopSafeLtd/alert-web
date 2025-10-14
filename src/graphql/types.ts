@@ -6658,6 +6658,8 @@ export type Image = {
   origImageUrl?: Maybe<Scalars['String']>;
   policeImage?: Maybe<Scalars['Boolean']>;
   position: ImagePosition;
+  positionX?: Maybe<Scalars['Float']>;
+  positionY?: Maybe<Scalars['Float']>;
   primary?: Maybe<Scalars['Boolean']>;
   recycled: Scalars['Boolean'];
   rekImage?: Maybe<Scalars['String']>;
@@ -6748,6 +6750,8 @@ export type ImageOrderByWithRelationInput = {
   optimisticUri?: InputMaybe<SortOrder>;
   policeImage?: InputMaybe<SortOrder>;
   position?: InputMaybe<SortOrder>;
+  positionX?: InputMaybe<SortOrder>;
+  positionY?: InputMaybe<SortOrder>;
   primary?: InputMaybe<SortOrder>;
   recycled?: InputMaybe<SortOrder>;
   rekImage?: InputMaybe<SortOrder>;
@@ -6796,6 +6800,8 @@ export enum ImageScalarFieldEnum {
   OrigImageUrl = 'origImageUrl',
   PoliceImage = 'policeImage',
   Position = 'position',
+  PositionX = 'positionX',
+  PositionY = 'positionY',
   Primary = 'primary',
   Recycled = 'recycled',
   RekImage = 'rekImage',
@@ -6814,6 +6820,8 @@ export type ImageUpdateDataWithoutIncidentInput = {
   offenders?: InputMaybe<NullableConnectArrayHelper>;
   policeImage?: InputMaybe<NullableSetBooleanHelper>;
   position?: InputMaybe<EnumImagePositionFieldUpdateOperationsInput>;
+  positionX?: InputMaybe<SetFloatHelper>;
+  positionY?: InputMaybe<SetFloatHelper>;
   primary?: InputMaybe<NullableSetBooleanHelper>;
   rotation?: InputMaybe<SetIntHelper>;
   totalFaces?: InputMaybe<SetIntHelper>;
@@ -6824,6 +6832,8 @@ export type ImageUpdateDataWithoutOffenderInput = {
   isFace?: InputMaybe<NullableSetBooleanHelper>;
   policeImage?: InputMaybe<NullableSetBooleanHelper>;
   position?: InputMaybe<EnumImagePositionFieldUpdateOperationsInput>;
+  positionX?: InputMaybe<SetFloatHelper>;
+  positionY?: InputMaybe<SetFloatHelper>;
   primary?: InputMaybe<NullableSetBooleanHelper>;
   rotation?: InputMaybe<SetIntHelper>;
   totalFaces?: InputMaybe<SetIntHelper>;
@@ -6889,6 +6899,8 @@ export type ImageWhereInput = {
   origImageUrl?: InputMaybe<StringNullableFilter>;
   policeImage?: InputMaybe<BoolNullableFilter>;
   position?: InputMaybe<EnumImagePositionFilter>;
+  positionX?: InputMaybe<FloatNullableFilter>;
+  positionY?: InputMaybe<FloatNullableFilter>;
   primary?: InputMaybe<BoolNullableFilter>;
   recycled?: InputMaybe<BoolFilter>;
   rekImage?: InputMaybe<StringNullableFilter>;
@@ -22600,6 +22612,8 @@ export type UploadIncidentImage = {
   offenders?: InputMaybe<Array<ImageOffender>>;
   policeImage?: InputMaybe<Scalars['Boolean']>;
   position?: InputMaybe<ImagePosition>;
+  positionX?: InputMaybe<Scalars['Float']>;
+  positionY?: InputMaybe<Scalars['Float']>;
   primary?: InputMaybe<Scalars['Boolean']>;
   rotation?: InputMaybe<Scalars['Int']>;
   totalFaces?: InputMaybe<Scalars['Int']>;
@@ -22623,6 +22637,8 @@ export type UploadOffenderImage = {
   isFace?: InputMaybe<Scalars['Boolean']>;
   policeImage?: InputMaybe<Scalars['Boolean']>;
   position?: InputMaybe<ImagePosition>;
+  positionX?: InputMaybe<Scalars['Float']>;
+  positionY?: InputMaybe<Scalars['Float']>;
   primary?: InputMaybe<Scalars['Boolean']>;
   rotation?: InputMaybe<Scalars['Int']>;
   totalFaces?: InputMaybe<Scalars['Int']>;
@@ -22642,6 +22658,8 @@ export type UploadVehicleImage = {
   file?: InputMaybe<Scalars['Upload']>;
   policeImage?: InputMaybe<Scalars['Boolean']>;
   position?: InputMaybe<ImagePosition>;
+  positionX?: InputMaybe<Scalars['Float']>;
+  positionY?: InputMaybe<Scalars['Float']>;
   primary?: InputMaybe<Scalars['Boolean']>;
   rotation?: InputMaybe<Scalars['Int']>;
   url?: InputMaybe<UrlImage>;

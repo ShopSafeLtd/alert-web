@@ -24,7 +24,7 @@ import {
   Skeleton,
   notification,
 } from 'antd';
-import FeedImageEditor from 'components/form-components/ImageEditor/FeedImageEditor.view';
+import ImageEditor from 'components/form-components/ImageEditor/ImageEditor.view';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import WatermarkSlide from 'components/images/WatermartkSlide.view';
 import React, { useState } from 'react';
@@ -277,6 +277,8 @@ const ImagesList = ({
                 >
                   <WatermarkImage
                     position={image.position}
+                    positionX={image.positionX}
+                    positionY={image.positionY}
                     rotation={image.rotation}
                     url={image.optimised}
                   />
@@ -290,6 +292,8 @@ const ImagesList = ({
               >
                 <WatermarkImage
                   position={image.position}
+                  positionX={image.positionX}
+                  positionY={image.positionY}
                   rotation={image.rotation}
                   url={image.optimised}
                 />
@@ -298,7 +302,7 @@ const ImagesList = ({
           </Col>
         ))}
       </Row>
-      <FeedImageEditor
+      <ImageEditor
         image={editImageData}
         onClose={() => setEditImageData(null)}
         open={!!editImageData}

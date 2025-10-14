@@ -1,7 +1,7 @@
 import type * as Types from '../../types';
 
 import { gql } from '@apollo/client';
-export type SimpleImagesFragment = { __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: Types.ImagePosition, rotation: number };
+export type SimpleImagesFragment = { __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: Types.ImagePosition, positionX?: number | null, positionY?: number | null, rotation: number };
 
 export const SimpleImagesFragmentDoc = gql`
     fragment SimpleImages on Image {
@@ -9,6 +9,8 @@ export const SimpleImagesFragmentDoc = gql`
   url
   optimised
   position
+  positionX
+  positionY
   rotation
 }
     `;
