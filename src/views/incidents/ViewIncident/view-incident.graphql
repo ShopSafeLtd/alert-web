@@ -2,6 +2,7 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
   incident(where: $where) {
     id
     subject
+    totalImages
     description
     dayTime
     date
