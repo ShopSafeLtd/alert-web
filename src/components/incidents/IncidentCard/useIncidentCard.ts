@@ -95,11 +95,11 @@ const useIncidentCard = ({ incident, update }: Props): Return => {
             policeImage: { set: value.policeImage || false },
             position: { set: value.position },
             positionX:
-              value.positionX === undefined
+              value.positionX === undefined || value.positionX === null
                 ? undefined
                 : { set: value.positionX },
             positionY:
-              value.positionY === undefined
+              value.positionY === undefined || value.positionY === null
                 ? undefined
                 : { set: value.positionY },
             primary: { set: value.primary || false },

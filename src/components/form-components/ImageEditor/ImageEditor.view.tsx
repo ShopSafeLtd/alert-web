@@ -76,7 +76,8 @@ const ImageEditor = (props: Props) => {
   const getInitialPrimaryImage = () => {
     if (isUploadFlow(props)) {
       const { primaryImage } = props;
-      return image?.uid === primaryImage;
+      const baseImage = image as BaseImage;
+      return baseImage?.uid === primaryImage;
     }
     return false;
   };
@@ -127,34 +128,35 @@ const ImageEditor = (props: Props) => {
   };
 
   const handleSubmit = () => {
-    const { submitImage: submit } = props;
     if (image) {
       if (isUploadFlow(props)) {
-        const { primaryImage, setPrimaryImage } = props;
-        if (isPrimaryImage && image.uid !== primaryImage)
-          setPrimaryImage(image.uid as string);
-        if (!isPrimaryImage && image.uid === primaryImage) setPrimaryImage('');
-      }
+        const { primaryImage, setPrimaryImage, submitImage: submit } = props;
+        const baseImage = image as BaseImage;
+        if (isPrimaryImage && baseImage.uid !== primaryImage)
+          setPrimaryImage(baseImage.uid);
+        if (!isPrimaryImage && baseImage.uid === primaryImage)
+          setPrimaryImage('');
 
-      if (isUploadFlow(props)) {
         submit({
-          ...image,
+          ...baseImage,
           policeImage,
           position: _position,
           positionX,
           positionY,
           rotation,
-        } as BaseImage);
+        });
       } else {
+        const { submitImage: submit } = props;
+        const feedImage = image as EditFeedImage;
         submit({
-          ...image,
+          ...feedImage,
           policeImage,
           position: _position,
           positionX,
           positionY,
           primary: isPrimaryImage,
           rotation,
-        } as EditFeedImage);
+        });
       }
     }
     onClose();

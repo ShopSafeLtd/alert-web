@@ -274,8 +274,8 @@ export interface EditFeedImage {
   optimised?: null | string | undefined;
   policeImage?: boolean | null | undefined;
   position?: ImagePosition;
-  positionX?: number;
-  positionY?: number;
+  positionX?: null | number;
+  positionY?: null | number;
   primary?: boolean | null | undefined;
   rotation?: number;
   url?: null | string | undefined;
