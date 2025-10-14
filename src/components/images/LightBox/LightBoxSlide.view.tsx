@@ -1,39 +1,41 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { createUseStyles } from 'react-jss';
 import type { Theme } from 'configs/ThemeConfig';
-import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
+
 import { Spin } from 'antd';
+import React, { useEffect, useRef, useState } from 'react';
+import { createUseStyles } from 'react-jss';
+import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch';
+
 import WatermarkOverlay from '../WatermarkOverlay.view';
 
 const useStyles = createUseStyles((theme: Theme) => ({
   slide: {
-    width: '100%',
-    height: '100vh',
+    alignItems: 'center',
     backgroundColor: theme.imageBackgroundColor,
     display: 'flex',
+    height: '100vh',
     justifyContent: 'center',
-    alignItems: 'center',
+    width: '100%',
   },
 }));
 
 interface Face {
+  boundingHeight?: null | number;
+  boundingLeft?: null | number;
+  boundingTop?: null | number;
+  boundingWidth?: null | number;
+  confidence?: null | number;
   id: string;
-  confidence?: number | null;
-  boundingHeight?: number | null;
-  boundingLeft?: number | null;
-  boundingTop?: number | null;
-  boundingWidth?: number | null;
   offender?: {
     id: string;
-    name?: string | null;
+    name?: null | string;
   } | null;
 }
 
 interface Props {
   image?: {
-    id: string;
-    optimised?: string | null;
     faces: Face[];
+    id: string;
+    optimised?: null | string;
   };
   showBoxes: boolean;
 }
@@ -119,9 +121,9 @@ const LightBox = ({ image, showBoxes = true }: Props) => {
         contentStyle={{ width: '100%' }}
         wrapperStyle={{ width: '100%' }}
       >
-        <div ref={containerRef} className={classes.slide}>
+        <div className={classes.slide} ref={containerRef}>
           <WatermarkOverlay>
-            <canvas ref={canvasRef} width={width} height={height} />
+            <canvas height={height} ref={canvasRef} width={width} />
           </WatermarkOverlay>
           {loading && <Spin />}
         </div>

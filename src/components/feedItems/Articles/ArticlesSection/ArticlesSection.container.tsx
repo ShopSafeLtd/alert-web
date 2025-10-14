@@ -1,51 +1,52 @@
-import React from 'react';
 import type { DateType } from 'types/DataType';
+
+import React from 'react';
 
 import View from './ArticlesSection.view';
 import useArticlesSection from './useArticlesSection';
 
 interface Props {
-  fullSearch: string;
-  fullCreatedAtFilter: DateType | undefined;
-  fullGroupFilter: string[];
-  fullGallery: string[];
-  saving: boolean;
   adminRights: boolean;
+  fullCreatedAtFilter: DateType | undefined;
+  fullGallery: string[];
+  fullGroupFilter: string[];
+  fullSearch: string;
+  saving: boolean;
 }
 const ArticlesSection = ({
-  fullSearch,
-  fullCreatedAtFilter,
-  saving,
   adminRights,
-  fullGroupFilter,
+  fullCreatedAtFilter,
   fullGallery,
+  fullGroupFilter,
+  fullSearch,
+  saving,
 }: Props): JSX.Element => {
   const {
     data,
+    fetchMoreScroll,
     loading,
     search,
     setSearch,
     sortFilter,
     toggleSortFilter,
-    fetchMoreScroll,
   } = useArticlesSection({
-    fullSearch,
-    fullGroupFilter,
     fullCreatedAtFilter,
     fullGallery,
+    fullGroupFilter,
+    fullSearch,
   });
 
   return (
     <View
+      adminRights={adminRights}
       data={data}
+      fetchMoreScroll={fetchMoreScroll}
       loading={loading}
       saving={saving}
       search={search}
       setSearch={setSearch}
       sortFilter={sortFilter}
       toggleSortFilter={toggleSortFilter}
-      fetchMoreScroll={fetchMoreScroll}
-      adminRights={adminRights}
     />
   );
 };

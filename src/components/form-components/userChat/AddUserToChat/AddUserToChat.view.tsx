@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   Button,
   Checkbox,
@@ -10,6 +9,7 @@ import {
   Tag,
   Typography,
 } from 'antd';
+import React from 'react';
 import { useIntl } from 'react-intl';
 
 const { Text } = Typography;
@@ -18,30 +18,30 @@ interface FormData {
   user: string[];
 }
 interface MemberData {
-  id: string;
-  fullName: string;
   businesses: { id: string; name: string }[];
-  firstLetter?: string | null;
+  firstLetter?: null | string;
+  fullName: string;
+  id: string;
 }
 
 interface Props {
+  loading: boolean;
   onClose: () => void;
   onSubmit: (value: FormData) => void;
-  usersData: MemberData[] | undefined;
-  loading: boolean;
+  saving: boolean;
   search: string;
   setSearch: (value: string) => void;
-  saving: boolean;
+  usersData: MemberData[] | undefined;
 }
 
 const AddUserToChat = ({
-  onSubmit,
-  onClose,
-  usersData,
   loading,
+  onClose,
+  onSubmit,
+  saving,
   search,
   setSearch,
-  saving,
+  usersData,
 }: Props): JSX.Element => {
   const intl = useIntl();
   return (
@@ -49,14 +49,14 @@ const AddUserToChat = ({
       <Row gutter={8} style={{ marginBottom: 10 }}>
         <Col span={22}>
           <Input
-            value={search}
+            allowClear
             onChange={(event) => {
               setSearch(event.target.value);
             }}
             placeholder={intl.formatMessage({
               defaultMessage: 'Search users...',
             })}
-            allowClear
+            value={search}
           />
         </Col>
       </Row>
@@ -64,27 +64,27 @@ const AddUserToChat = ({
         <Skeleton />
       ) : (
         <Form.Item
-          name="user"
           label=""
+          name="user"
           rules={[
             {
-              required: true,
               message: intl.formatMessage({
                 defaultMessage:
                   'Please at least select an user for the chat group.',
               }),
+              required: true,
             },
           ]}
         >
           <Checkbox.Group>
-            {usersData?.map(({ id, fullName, businesses }) => (
+            {usersData?.map(({ businesses, fullName, id }) => (
               <div className="offender-item" style={{ padding: 10 }}>
-                <Row wrap={false} key={id}>
+                <Row key={id} wrap={false}>
                   <Col>
                     <Checkbox value={id}>
-                      <Text style={{}} ellipsis>
+                      <Text ellipsis style={{}}>
                         {fullName}
-                        <Tag color="red" style={{ padding: 3, marginLeft: 5 }}>
+                        <Tag color="red" style={{ marginLeft: 5, padding: 3 }}>
                           {businesses[0]?.name}
                         </Tag>
                       </Text>
@@ -98,7 +98,7 @@ const AddUserToChat = ({
       )}
 
       <Form.Item>
-        <Row style={{ marginTop: 30 }} gutter={16} justify="end">
+        <Row gutter={16} justify="end" style={{ marginTop: 30 }}>
           <Col>
             <Button disabled={saving} onClick={onClose}>
               {intl.formatMessage({ defaultMessage: 'Cancel' })}
@@ -107,9 +107,9 @@ const AddUserToChat = ({
           <Col>
             <Button
               disabled={saving}
+              htmlType="submit"
               loading={saving}
               type="primary"
-              htmlType="submit"
             >
               {intl.formatMessage({
                 defaultMessage: 'Add Member',

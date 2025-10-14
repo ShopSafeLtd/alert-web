@@ -1,4 +1,4 @@
-import type * as Types from '../../../../types.js';
+import type * as Types from '../../../../types';
 
 import { gql } from '@apollo/client';
 import { ImagesFragmentDoc } from '../../../../fragments/__generated__/images.generated';
@@ -10,7 +10,7 @@ export type UpdateOffenderImagesMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateOffenderImagesMutation = { __typename?: 'Mutation', updateOffender: { __typename?: 'Offender', id: string, images: Array<{ __typename?: 'Image', optimisticUri?: string | null, id: string, url?: string | null, optimised?: string | null, position: Types.ImagePosition, rotation: number, primary?: boolean | null, policeImage?: boolean | null, card?: string | null }> } };
+export type UpdateOffenderImagesMutation = { __typename?: 'Mutation', updateOffender: { __typename?: 'Offender', id: string, images: Array<{ __typename?: 'Image', optimisticUri?: string | null, id: string, url?: string | null, optimised?: string | null, position: Types.ImagePosition, positionX?: number | null, positionY?: number | null, rotation: number, primary?: boolean | null, policeImage?: boolean | null, card?: string | null }> } };
 
 
 export const UpdateOffenderImagesDocument = gql`

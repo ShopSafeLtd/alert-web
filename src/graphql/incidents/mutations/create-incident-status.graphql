@@ -1,0 +1,10 @@
+mutation CreateIncidentStatus($data: IncidentStatusCreateInput!) {
+  createIncidentStatus(data: $data) {
+    id
+    name
+    tooltip
+    description
+    createdAt
+    updatedAt
+  }
+}

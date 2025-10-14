@@ -35,6 +35,7 @@ import {
   useBusinessQuery,
 } from 'graphql/businesses/queries/__generated__/business.generated';
 import { SortOrder } from 'graphql/types';
+import { useSendInviteMutation } from 'graphql/user/mutation/__generated__/send_invite.generated';
 import {
   ListBusinessUsersDocument,
   useListBusinessUsersQuery,
@@ -63,6 +64,8 @@ interface Return {
   addDemDevice: boolean;
   addTodo: boolean;
   addUserVisible: boolean;
+  bulkInviteConfirm: () => void;
+  bulkInviting: boolean;
   businessId: string | undefined;
   completeTodoVisible: null | string;
   data: BusinessQuery | undefined;
@@ -78,8 +81,10 @@ interface Return {
   onRemoveBusiness: (value: string) => void;
   onRemoveDevice: (value: string) => void;
   saving: boolean;
+  selectedUserIds: string[];
   setCompleteTodoVisible: (value: null | string) => void;
   setEditDeviceData: (value: DemDeviceData | undefined) => void;
+  setSelectedUserIds: (value: string[]) => void;
   setViewTodoVisible: (value: null | string) => void;
   templatesData: QuestionGroupOnSchemeQuery | undefined;
   templatesLoading: boolean;
@@ -122,6 +127,8 @@ const useViewBusiness = (): Return => {
   const [editDeviceData, setEditDeviceData] = useState<
     DemDeviceData | undefined
   >(undefined);
+  const [bulkInviting, setBulkInviting] = useState(false);
+  const [selectedUserIds, setSelectedUserIds] = useState<string[]>([]);
 
   const variables: BusinessQueryVariables = {
     incidentsWhere: {
@@ -944,12 +951,107 @@ const useViewBusiness = (): Return => {
     });
   };
 
+  // Bulk invite mutation for business users
+  const [sendInvite] = useSendInviteMutation();
+
+  const bulkInvite = async () => {
+    setBulkInviting(true);
+
+    // Get selected users
+    const selectedUsers =
+      usersData?.users.filter((user) => selectedUserIds.includes(user.id)) ||
+      [];
+
+    if (selectedUsers.length === 0) {
+      notification.info({
+        description: intl.formatMessage({
+          defaultMessage: 'Please select users to reinvite.',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'No Users Selected',
+        }),
+        placement: 'bottomRight',
+      });
+      setBulkInviting(false);
+      return;
+    }
+
+    let successCount = 0;
+    let errorCount = 0;
+
+    // Send invites sequentially to avoid overwhelming the server
+    for (const user of selectedUsers) {
+      try {
+        await sendInvite({
+          variables: {
+            user: user.id,
+          },
+        });
+        successCount += 1;
+      } catch {
+        errorCount += 1;
+      }
+    }
+
+    setBulkInviting(false);
+    setSelectedUserIds([]); // Clear selection after inviting
+
+    if (errorCount === 0) {
+      notification.success({
+        description: intl.formatMessage(
+          {
+            defaultMessage: 'Successfully sent {count} invitations!',
+          },
+          { count: successCount }
+        ),
+        message: intl.formatMessage({
+          defaultMessage: 'Invitations Sent',
+        }),
+        placement: 'bottomRight',
+      });
+    } else {
+      notification.warning({
+        description: intl.formatMessage(
+          {
+            defaultMessage:
+              'Sent {successCount} invitations. {errorCount} failed.',
+          },
+          { errorCount, successCount }
+        ),
+        message: intl.formatMessage({
+          defaultMessage: 'Partial Success',
+        }),
+        placement: 'bottomRight',
+      });
+    }
+  };
+
+  const bulkInviteConfirm = () => {
+    Modal.confirm({
+      content: intl.formatMessage(
+        {
+          defaultMessage:
+            'This will resend invitations to {count} selected users from this business. Each invite will reset their password and send them a new email.',
+        },
+        { count: selectedUserIds.length }
+      ),
+      onOk() {
+        void bulkInvite();
+      },
+      title: intl.formatMessage({
+        defaultMessage: 'Resend Invitations?',
+      }),
+    });
+  };
+
   return {
     actionsData,
     actionsLoading: !actionsData,
     addDemDevice,
     addTodo,
     addUserVisible,
+    bulkInviteConfirm,
+    bulkInviting,
     businessId: params.id,
     completeTodoVisible,
     data,
@@ -965,8 +1067,10 @@ const useViewBusiness = (): Return => {
     onRemoveBusiness,
     onRemoveDevice,
     saving,
+    selectedUserIds,
     setCompleteTodoVisible,
     setEditDeviceData,
+    setSelectedUserIds,
     setViewTodoVisible,
     templatesData,
     templatesLoading,

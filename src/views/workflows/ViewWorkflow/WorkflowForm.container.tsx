@@ -7,11 +7,16 @@ const WorkflowFormContainer = () => {
   const {
     activityTemplateForm,
     availableQuestions,
+    brands,
+    brandsLoading,
     brandsSelected,
     checklistOption,
+    countries,
     countriesSelected,
     createNewQuestion,
     descriptionCheck,
+    divisions,
+    divisionsLoading,
     divisionsSelected,
     editId,
     form,
@@ -51,27 +56,22 @@ const WorkflowFormContainer = () => {
     updateTemplates,
     valueSelected,
     workflowTypeWatch,
-    brandsLoading,
-    countries,
-    divisions,
-    divisionsLoading,
-    brands,
   } = useWorkflowForm();
 
   return (
     <View
-      brands={brands}
-      brandsLoading={brandsLoading}
-      countries={countries}
-      divisions={divisions}
-      divisionsLoading={divisionsLoading}
       activityTemplateForm={activityTemplateForm}
       availableQuestions={availableQuestions}
+      brands={brands}
+      brandsLoading={brandsLoading}
       brandsSelected={brandsSelected}
       checklistOption={checklistOption}
+      countries={countries}
       countriesSelected={countriesSelected}
       createNewQuestion={createNewQuestion}
       descriptionCheck={descriptionCheck}
+      divisions={divisions}
+      divisionsLoading={divisionsLoading}
       divisionsSelected={divisionsSelected}
       editId={editId}
       form={form}

@@ -1,28 +1,30 @@
-import React from 'react';
 import type { InvestigationDetails } from 'types/DataType';
+
+import React from 'react';
+
 import View from './EditInvestigation.view';
 import useEditInvestigation from './useEditInvestigation';
 
 interface Props {
-  onClose: () => void;
   investigationData: InvestigationDetails;
+  onClose: () => void;
 }
 
 const EditInvestigation = ({
-  onClose,
   investigationData,
+  onClose,
 }: Props): JSX.Element => {
   const { onSubmit, saving } = useEditInvestigation({
-    onClose,
     investigationData,
+    onClose,
   });
 
   return (
     <View
-      onSubmit={onSubmit}
-      onClose={onClose}
-      saving={saving}
       investigationData={investigationData}
+      onClose={onClose}
+      onSubmit={onSubmit}
+      saving={saving}
     />
   );
 };

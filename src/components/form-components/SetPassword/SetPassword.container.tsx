@@ -1,14 +1,15 @@
 import React from 'react';
+
 import View from './SetPassword.view';
 import useSetPassword from './useSetPassword';
 
 interface Props {
-  userId: string;
   onClose: () => void;
+  userId: string;
 }
-const SetPassword = ({ userId, onClose }: Props) => {
-  const { onSubmit, saving } = useSetPassword({ userId, onClose });
-  return <View onSubmit={onSubmit} saving={saving} onClose={onClose} />;
+const SetPassword = ({ onClose, userId }: Props) => {
+  const { onSubmit, saving } = useSetPassword({ onClose, userId });
+  return <View onClose={onClose} onSubmit={onSubmit} saving={saving} />;
 };
 
 export default SetPassword;

@@ -1,54 +1,56 @@
-import React from 'react';
 import type { ArticleData } from 'types/DataType';
+
+import React from 'react';
+
 import View from './LinkArticle.view';
 import useLinkArticle from './useLinkArticle';
 
 interface Props {
+  articleIds: string[] | undefined;
   onClose: () => void;
   update: (value: ArticleData) => void;
-  articleIds: string[] | undefined;
 }
 
-const LinkArticle = ({ onClose, update, articleIds }: Props): JSX.Element => {
+const LinkArticle = ({ articleIds, onClose, update }: Props): JSX.Element => {
   const {
-    onSubmit,
+    clearFilters,
     data,
-    loading,
-    setSearch,
-    selectedArticle,
-    setSelectedArticle,
-    openLightbox,
-    lightBoxOpen,
+    fetchMoreScroll,
     filterVariables,
-    setOrder,
-    setGroupsFilter,
-    setCreatedAtFilter,
     groups,
     groupsLoading,
-    clearFilters,
-    fetchMoreScroll,
+    lightBoxOpen,
+    loading,
+    onSubmit,
+    openLightbox,
+    selectedArticle,
+    setCreatedAtFilter,
+    setGroupsFilter,
+    setOrder,
     setPriorityFilter,
-  } = useLinkArticle({ onClose, update, articleIds });
+    setSearch,
+    setSelectedArticle,
+  } = useLinkArticle({ articleIds, onClose, update });
 
   return (
     <View
-      onSubmit={onSubmit}
+      clearFilters={clearFilters}
       data={data}
-      loading={loading}
-      setSearch={setSearch}
-      selectedArticle={selectedArticle}
-      setSelectedArticle={setSelectedArticle}
-      openLightbox={openLightbox}
-      lightBoxOpen={lightBoxOpen}
+      fetchMoreScroll={fetchMoreScroll}
       filterVariables={filterVariables}
-      setOrder={setOrder}
-      setGroupsFilter={setGroupsFilter}
-      setCreatedAtFilter={setCreatedAtFilter}
       groups={groups}
       groupsLoading={groupsLoading}
-      clearFilters={clearFilters}
-      fetchMoreScroll={fetchMoreScroll}
+      lightBoxOpen={lightBoxOpen}
+      loading={loading}
+      onSubmit={onSubmit}
+      openLightbox={openLightbox}
+      selectedArticle={selectedArticle}
+      setCreatedAtFilter={setCreatedAtFilter}
+      setGroupsFilter={setGroupsFilter}
+      setOrder={setOrder}
       setPriorityFilter={setPriorityFilter}
+      setSearch={setSearch}
+      setSelectedArticle={setSelectedArticle}
     />
   );
 };

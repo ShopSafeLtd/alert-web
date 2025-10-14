@@ -1,5 +1,5 @@
-import React from 'react';
 import { Card, Col, Row, Skeleton } from 'antd';
+import React from 'react';
 
 const ArticleSkeletonCard = (): JSX.Element => (
   <Card style={{ marginBottom: 10 }}>
@@ -7,9 +7,9 @@ const ArticleSkeletonCard = (): JSX.Element => (
       <Col>
         <Skeleton.Image
           style={{
-            width: 130,
-            height: 130,
             borderRadius: 5,
+            height: 130,
+            width: 130,
           }}
         />
       </Col>

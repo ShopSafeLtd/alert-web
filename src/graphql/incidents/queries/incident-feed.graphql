@@ -24,6 +24,12 @@ query incidentFeed(
     dayTime
     reference
     policeRef
+    newIncident
+    status {
+      id
+      name
+      tooltip
+    }
     crimeTypes {
       id
       name
@@ -60,6 +66,13 @@ query incidentFeed(
     offenders {
       id
       name
+      images(take: 1, orderBy: { createdAt: desc }) {
+        id
+        url
+        optimised
+        rotation
+        position
+      }
     }
   }
 }

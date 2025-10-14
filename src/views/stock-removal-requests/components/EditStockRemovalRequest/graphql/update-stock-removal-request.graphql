@@ -1,0 +1,41 @@
+mutation UpdateStockRemovalRequest($where: UniqueId!, $data: UpdateStockRemovalRequestInput!) {
+    updateStockRemovalRequest(where: $where, data: $data) {
+        id
+        createdAt
+        title
+        description
+        status
+        reference
+        costCentreCode
+        fascia
+        personalityInfluences
+        reason
+        reasonForNonReturn
+        rechargeBrand
+        rechargeReference
+        returnDate
+        shippingAddress
+        smqAccountNumber
+        socialHandles
+        storeOrDC
+        willStockBeReturned
+        items {
+            id
+            name
+            requestedQuantity
+            pickedQuantity
+        }
+        business {
+            id
+            name
+        }
+        approvers {
+            status
+            id
+            user {
+                id
+                fullName
+            }
+        }
+    }
+}

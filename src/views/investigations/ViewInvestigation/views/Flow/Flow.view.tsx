@@ -1,5 +1,5 @@
 import type { DragEvent } from 'react';
-import React, { useMemo } from 'react';
+import type { FullScreenHandle } from 'react-full-screen';
 import type {
   Edge,
   Node,
@@ -8,33 +8,34 @@ import type {
   OnNodesChange,
   ReactFlowInstance,
 } from 'reactflow';
+
+import { LoadingOutlined } from '@ant-design/icons';
+import { faExpandArrows } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Card, Spin } from 'antd';
+import FloatingEdge from 'components/react-flow/edges/floating-edge';
+import ImageNode from 'components/react-flow/nodes/image-node';
+import IncidentNode from 'components/react-flow/nodes/incident-details-node';
+import IncidentListNode from 'components/react-flow/nodes/list-incidents-node';
+import OffenderNode from 'components/react-flow/nodes/offender-node';
+import TextNode from 'components/react-flow/nodes/text-node';
+import VehicleNode from 'components/react-flow/nodes/vehicle-node';
+import React, { useMemo } from 'react';
+import { FullScreen } from 'react-full-screen';
+import { useIntl } from 'react-intl';
 import ReactFlow, {
   Background,
   ControlButton,
   Controls,
   MiniMap,
 } from 'reactflow';
-import { Button, Card, Spin } from 'antd';
-import OffenderNode from 'components/react-flow/nodes/offender-node';
-import IncidentNode from 'components/react-flow/nodes/incident-details-node';
-
-import ImageNode from 'components/react-flow/nodes/image-node';
-import TextNode from 'components/react-flow/nodes/text-node';
-import VehicleNode from 'components/react-flow/nodes/vehicle-node';
-import IncidentListNode from 'components/react-flow/nodes/list-incidents-node';
-import FloatingEdge from 'components/react-flow/edges/floating-edge';
-import { LoadingOutlined } from '@ant-design/icons';
-import type { FullScreenHandle } from 'react-full-screen';
-import { FullScreen } from 'react-full-screen';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faExpandArrows } from '@fortawesome/pro-light-svg-icons';
-import { useIntl } from 'react-intl';
-import Sidebar from './sidebar/Sidebar';
 import 'reactflow/dist/style.css';
-import './styles.css';
-import styles from './style.module.css';
-import { visualColours } from '../../../../../utils/node-colour';
+
 import { useStoreState } from '../../../../../state';
+import { visualColours } from '../../../../../utils/node-colour';
+import Sidebar from './sidebar/Sidebar';
+import styles from './style.module.css';
+import './styles.css';
 // import Cursor from './Cursors/Cursor';
 // import { WebsocketProvider } from 'y-websocket';
 
@@ -43,62 +44,62 @@ const Status = ({ success = false }: { success: boolean }) => (
 );
 
 interface FlowProps {
-  nodes: Node[];
-  onNodesChange: OnNodesChange;
-  edges: Edge[];
-  onEdgesChange: OnEdgesChange;
-  onConnect: OnConnect;
   clientCount: number;
+  // handlePointMove: (e: React.PointerEvent) => void;
+  downloadImage: () => void;
+  edges: Edge[];
+  // reactFlowInstance: ReactFlowInstance | null;
+  flowScreen: FullScreenHandle;
+  isFullScreen: boolean;
   isSynced: boolean;
-  setReactFlowInstance: (instance: ReactFlowInstance | null) => void;
-  savedWhen: string | null;
-  onSave: () => void;
-  onNodeClick: (event: React.MouseEvent, node: Node) => void;
+  loading: boolean;
+  nodes: Node[];
+  onConnect: OnConnect;
+  onDragOver: (event: DragEvent) => void;
   onDrop: (
     event: DragEvent,
     data?: {
       url?: string;
     }
   ) => void;
-  onDragOver: (event: DragEvent) => void;
-  wrapperRef: React.RefObject<HTMLDivElement>;
-  loading: boolean;
-  saving: boolean;
+  onEdgesChange: OnEdgesChange;
+  onNodeClick: (event: React.MouseEvent, node: Node) => void;
+  onNodesChange: OnNodesChange;
+  onSave: () => void;
+  savedWhen: null | string;
   // eslint-disable-next-line
-  // handlePointMove: (e: React.PointerEvent) => void;
-  downloadImage: () => void;
+  saving: boolean;
   // users: Map<number, { [p: string]: any }>;
   // provider: WebsocketProvider;
-  // reactFlowInstance: ReactFlowInstance | null;
-  flowScreen: FullScreenHandle;
-  isFullScreen: boolean;
   setFullScreen: () => void;
+  setReactFlowInstance: (instance: ReactFlowInstance | null) => void;
+  wrapperRef: React.RefObject<HTMLDivElement>;
 }
 
-const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
+const antIcon = <LoadingOutlined spin style={{ fontSize: 24 }} />;
 
 const ReactFlowView = ({
-  nodes,
-  onNodesChange,
-  edges,
-  onEdgesChange,
-  onConnect,
   clientCount,
-  isSynced,
-  setReactFlowInstance,
-  savedWhen,
-  onSave,
-  onNodeClick,
-  onDrop,
-  onDragOver,
-  loading,
-  wrapperRef,
-  saving,
   // handlePointMove,
   downloadImage,
-  isFullScreen,
-  setFullScreen,
+  edges,
   flowScreen,
+  isFullScreen,
+  isSynced,
+  loading,
+  nodes,
+  onConnect,
+  onDragOver,
+  onDrop,
+  onEdgesChange,
+  onNodeClick,
+  onNodesChange,
+  onSave,
+  savedWhen,
+  saving,
+  setFullScreen,
+  setReactFlowInstance,
+  wrapperRef,
 }: // users,
 // provider,
 // reactFlowInstance,
@@ -115,12 +116,12 @@ FlowProps) => {
 
   const nodeTypes = useMemo(
     () => ({
-      offenderDetailsNode: OffenderNode,
       imageNode: ImageNode,
+      incidentDetailsNode: IncidentNode,
+      incidentList: IncidentListNode,
+      offenderDetailsNode: OffenderNode,
       textNode: TextNode,
       vehicleNode: VehicleNode,
-      incidentList: IncidentListNode,
-      incidentDetailsNode: IncidentNode,
     }),
     []
   );
@@ -133,11 +134,11 @@ FlowProps) => {
   return (
     <div className={styles.pageView}>
       <Card
-        style={{ width: '100%', height: '90vh' }}
         bodyStyle={{
-          width: '100%',
           height: '100%',
+          width: '100%',
         }}
+        style={{ height: '90vh', width: '100%' }}
       >
         <div className="dndflow">
           <div className={styles.wrapper}>
@@ -164,43 +165,43 @@ FlowProps) => {
                 defaultMessage: 'Last Saved: ',
               })}
               {saving || loading ? (
-                <Spin style={{ marginLeft: 5 }} indicator={antIcon} />
+                <Spin indicator={antIcon} style={{ marginLeft: 5 }} />
               ) : (
                 savedWhen || intl.formatMessage({ defaultMessage: 'never' })
               )}
             </p>
             <Sidebar />
             <FullScreen
-              handle={flowScreen}
               className={
                 darkTheme
                   ? 'fullscreen-wrapper-dark'
                   : 'fullscreen-wrapper-light'
               }
+              handle={flowScreen}
             >
               <div className={styles.rfWrapper} ref={wrapperRef}>
                 <ReactFlow
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                  }}
+                  edgeTypes={edgeTypes}
+                  edges={edges}
                   elementsSelectable={!isFullScreen}
+                  fitView
+                  minZoom={0.1}
+                  nodeTypes={nodeTypes}
+                  nodes={nodes}
                   nodesConnectable={!isFullScreen}
                   nodesDraggable={!isFullScreen}
-                  onInit={setReactFlowInstance}
-                  nodes={nodes}
-                  edges={edges}
-                  onNodesChange={onNodesChange}
-                  onEdgesChange={onEdgesChange}
-                  onNodeClick={onNodeClick}
                   onConnect={onConnect}
-                  onDrop={onDrop}
                   onDragOver={onDragOver}
-                  fitView
-                  edgeTypes={edgeTypes}
-                  nodeTypes={nodeTypes}
+                  onDrop={onDrop}
+                  onEdgesChange={onEdgesChange}
+                  onInit={setReactFlowInstance}
+                  onNodeClick={onNodeClick}
+                  onNodesChange={onNodesChange}
                   proOptions={{ hideAttribution: true }}
-                  minZoom={0.1}
+                  style={{
+                    height: '100%',
+                    width: '100%',
+                  }}
                 >
                   <Controls showInteractive={!isFullScreen}>
                     <ControlButton
@@ -210,8 +211,8 @@ FlowProps) => {
                       })}
                     >
                       <FontAwesomeIcon
-                        size="sm"
                         icon={faExpandArrows}
+                        size="sm"
                         style={{
                           color: 'black',
                         }}
@@ -219,13 +220,13 @@ FlowProps) => {
                     </ControlButton>
                   </Controls>
                   <MiniMap
+                    nodeColor={(node: Node) => nodeColor(node.type as string)}
+                    nodeStrokeWidth={3}
+                    pannable
                     style={{
                       backgroundColor: darkTheme ? '#2b2b2b' : '#fff',
                     }}
-                    nodeColor={(node: Node) => nodeColor(node.type as string)}
-                    nodeStrokeWidth={3}
                     zoomable
-                    pannable
                   />
                   <Background
                     color="#99b3ec"

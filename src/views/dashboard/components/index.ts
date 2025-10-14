@@ -12,6 +12,7 @@ export { default as IncidentValues } from './IncidentValues/IncidentValue.contai
 export { default as LatestIncident } from './LatestIncident/LatestIncident.container';
 export { default as LatestIncidents } from './LatestIncidents/LatestIncidents.container';
 export { default as Marquee } from './Marquee/Marquee';
+export { default as MyStockRequests } from './MyStockRequests/MyStockRequests.container';
 export { default as SearchRow } from './SearchRow/SearchRow';
 export { default as TargetedGoodsContainer } from './TargetedGoods/TargetedGoods.container';
 export { default as TimeOfDay } from './TimeOfDay/TimeOfDay.container';

@@ -14,8 +14,8 @@ const dataFormatToBar = ({ item }: DataFormatToBarParams) => {
 interface FilteredBarDataParams {
   data:
     | Array<{
+        data: Array<{ label: string; value: number }>;
         label: string;
-        data: Array<{ value: number; label: string }>;
       } | null>
     | null
     | undefined;

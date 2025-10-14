@@ -1,10 +1,11 @@
 import React from 'react';
+
 import SearchFilterBar from './SearchFilterBar';
 
 interface Props {
+  openFilter: () => void;
   searchInput: string;
   setSearchInput: React.Dispatch<React.SetStateAction<string>>;
-  openFilter: () => void;
 }
 /**
  *
@@ -18,18 +19,18 @@ interface Props {
  * @description A layout container surrounding the SearchFilterBar component, which adds spacing and a section showing applied filters, which should be rendered as children to this component. Intended to be used in a feed at the top of the view.
  */
 const FeedSearchFilter: React.FC<Props> = ({
+  children,
+  openFilter,
   searchInput,
   setSearchInput,
-  openFilter,
-  children,
 }) => (
   <div className="feed-search-filter-container">
     <div className="spacer" />
     <div className="search-filter-bar-container">
       <SearchFilterBar
+        openFilter={openFilter}
         searchInput={searchInput}
         setSearchInput={setSearchInput}
-        openFilter={openFilter}
       />
     </div>
     <div className="applied-filters-container">

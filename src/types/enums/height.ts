@@ -1,25 +1,25 @@
 export enum Height {
-  'UNKNOWN' = 'UNKNOWN',
-  'SHORT' = 'SHORT',
   'AVERAGE' = 'AVERAGE',
+  'SHORT' = 'SHORT',
   'TALL' = 'TALL',
+  'UNKNOWN' = 'UNKNOWN',
 }
 // wait to check
 export const heightValues = [
   {
-    value: 'UNKNOWN',
     label: 'Unknown',
+    value: 'UNKNOWN',
   },
   {
-    value: 'SHORT',
     label: 'Short',
+    value: 'SHORT',
   },
   {
-    value: 'AVERAGE',
     label: 'Average',
+    value: 'AVERAGE',
   },
   {
-    value: 'TALL',
     label: 'Tall',
+    value: 'TALL',
   },
 ];

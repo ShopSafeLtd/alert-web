@@ -1,23 +1,24 @@
 /* eslint-disable formatjs/no-literal-string-in-jsx */
 import React from 'react';
+
 import './styles.css';
 
 interface BusinessImpactStatementProps {
-  businessName: string;
   businessAddress: string;
-  contactName: string;
-  telephone: string;
+  businessName: string;
+  compensation: string;
   contactAddress: string;
+  contactName: string;
   crimeNumber: string;
-  policeOfficerAttending: string;
-  financialImpact: string;
+  date: string;
   directLossStatement: string;
-  otherLossStatement: string;
+  financialImpact: string;
   nonFinancialImpact: string;
   otherComments: string;
-  compensation: string;
+  otherLossStatement: string;
+  policeOfficerAttending: string;
   signature: string;
-  date: string;
+  telephone: string;
 }
 
 const createBusinessImpact = () => {
@@ -81,7 +82,7 @@ const createBusinessImpact = () => {
               <div className="bis-field">
                 <div
                   className="bis-field-label"
-                  style={{ width: '40%', fontWeight: 'bold' }}
+                  style={{ fontWeight: 'bold', width: '40%' }}
                 >
                   Name of business affected:
                 </div>
@@ -92,7 +93,7 @@ const createBusinessImpact = () => {
               <div className="bis-field">
                 <div
                   className="bis-field-label"
-                  style={{ width: '40%', fontWeight: 'bold' }}
+                  style={{ fontWeight: 'bold', width: '40%' }}
                 >
                   Business Address:
                 </div>
@@ -103,7 +104,7 @@ const createBusinessImpact = () => {
               <div className="bis-field">
                 <div
                   className="bis-field-label"
-                  style={{ width: '40%', fontWeight: 'bold' }}
+                  style={{ fontWeight: 'bold', width: '40%' }}
                 >
                   Contact name:
                 </div>
@@ -114,7 +115,7 @@ const createBusinessImpact = () => {
               <div className="bis-field">
                 <div
                   className="bis-field-label"
-                  style={{ width: '40%', fontWeight: 'bold' }}
+                  style={{ fontWeight: 'bold', width: '40%' }}
                 >
                   Telephone Number:
                 </div>
@@ -125,7 +126,7 @@ const createBusinessImpact = () => {
               <div className="bis-field">
                 <div
                   className="bis-field-label"
-                  style={{ width: '40%', fontWeight: 'bold' }}
+                  style={{ fontWeight: 'bold', width: '40%' }}
                 >
                   Address:
                 </div>
@@ -136,7 +137,7 @@ const createBusinessImpact = () => {
               <div className="bis-field">
                 <div
                   className="bis-field-label"
-                  style={{ width: '40%', fontWeight: 'bold' }}
+                  style={{ fontWeight: 'bold', width: '40%' }}
                 >
                   Crime Number:
                 </div>
@@ -147,7 +148,7 @@ const createBusinessImpact = () => {
               <div className="bis-field">
                 <div
                   className="bis-field-label"
-                  style={{ width: '40%', fontWeight: 'bold' }}
+                  style={{ fontWeight: 'bold', width: '40%' }}
                 >
                   Police Officer Attending:
                 </div>
@@ -166,7 +167,7 @@ const createBusinessImpact = () => {
 
             <div
               className="bis-field-label"
-              style={{ width: '100%', fontWeight: 'bold', marginTop: 20 }}
+              style={{ fontWeight: 'bold', marginTop: 20, width: '100%' }}
             >
               {data.financialImpact === 'true'
                 ? 'The business has suffered a direct financial loss as a result of the crime.'
@@ -192,7 +193,7 @@ const createBusinessImpact = () => {
           </section>
           <section
             className="bis-section"
-            style={{ outline: '#0e1b2c solid 2px', height: '80%', padding: 10 }}
+            style={{ height: '80%', outline: '#0e1b2c solid 2px', padding: 10 }}
           >
             <div>{data.directLossStatement}</div>
           </section>
@@ -226,7 +227,7 @@ const createBusinessImpact = () => {
           </section>
           <section
             className="bis-section"
-            style={{ outline: '#0e1b2c solid 2px', height: '75%', padding: 10 }}
+            style={{ height: '75%', outline: '#0e1b2c solid 2px', padding: 10 }}
           >
             <div>{data.otherLossStatement}</div>
           </section>
@@ -253,7 +254,7 @@ const createBusinessImpact = () => {
           </section>
           <section
             className="bis-section"
-            style={{ outline: '#0e1b2c solid 2px', height: '85%', padding: 10 }}
+            style={{ height: '85%', outline: '#0e1b2c solid 2px', padding: 10 }}
           >
             <div>{data.otherLossStatement}</div>
           </section>
@@ -272,8 +273,8 @@ const createBusinessImpact = () => {
           <section
             className="bis-section"
             style={{
-              outline: '#0e1b2c solid 2px',
               height: '100%',
+              outline: '#0e1b2c solid 2px',
               padding: 10,
             }}
           >
@@ -308,7 +309,7 @@ const createBusinessImpact = () => {
             <div className="bis-fields">
               <div
                 className="bis-field"
-                style={{ marginBottom: 0, height: 50, alignItems: 'flex-end' }}
+                style={{ alignItems: 'flex-end', height: 50, marginBottom: 0 }}
               >
                 <div className="bis-field-signature">
                   Signature:
@@ -323,7 +324,7 @@ const createBusinessImpact = () => {
               <div className="field">
                 <div
                   className="bis-field-label"
-                  style={{ width: '90%', marginTop: 15, fontSize: 20 }}
+                  style={{ fontSize: 20, marginTop: 15, width: '90%' }}
                 >
                   Date: {data.date}
                 </div>{' '}

@@ -1,4 +1,4 @@
-import type * as Types from '../../../../../../../../graphql/types.js';
+import type * as Types from '../../../../../../../../graphql/types';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
@@ -20,7 +20,7 @@ export const DismissAiMatchDocument = gql`
     `;
 export type DismissAiMatchMutationFn = Apollo.MutationFunction<DismissAiMatchMutation, DismissAiMatchMutationVariables>;
 export function useDismissAiMatchMutation(baseOptions?: Apollo.MutationHookOptions<DismissAiMatchMutation, DismissAiMatchMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions};
+        const options = {...defaultOptions, ...baseOptions}
         return Apollo.useMutation<DismissAiMatchMutation, DismissAiMatchMutationVariables>(DismissAiMatchDocument, options);
       }
 export type DismissAiMatchMutationHookResult = ReturnType<typeof useDismissAiMatchMutation>;

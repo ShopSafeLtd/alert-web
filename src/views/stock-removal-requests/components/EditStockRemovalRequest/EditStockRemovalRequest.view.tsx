@@ -1,0 +1,706 @@
+import type {
+  StockRemovalRequestsQuery,
+  StockRemovalRequestsQueryVariables,
+} from '#/views/stock-removal-requests/stock-removal-requests-list/graphql/__generated__/stock-removal-requests.generated';
+
+import BusinessesSelect from '#/components/form-components/BusinessesSelect/BusinessesSelect.view';
+import UsersSelect from '#/components/form-components/UsersSelect/UsersSelect.view';
+import DatePicker from '#/components/util-components/DatePicker';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
+import { useUpdateStockRemovalRequestMutation } from '#/views/stock-removal-requests/components/EditStockRemovalRequest/graphql/__generated__/update-stock-removal-request.generated';
+import { useStockRemovalRequestQuery } from '#/views/stock-removal-requests/components/ViewStockRemovalRequest/graphql/__generated__/stock-removal-request.generated';
+import { StockRemovalRequestsDocument } from '#/views/stock-removal-requests/stock-removal-requests-list/graphql/__generated__/stock-removal-requests.generated';
+import {
+  Button,
+  Col,
+  Form,
+  Input,
+  Radio,
+  Row,
+  Select,
+  Skeleton,
+  notification,
+} from 'antd';
+import { SortOrder } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
+import React, { useEffect, useState } from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
+
+import StockRemovalGoods from '../StockRemovalGoods/StockRemovalGoods.container';
+
+interface Props {
+  onClose: () => void;
+  requestId: string;
+}
+
+export interface FormData {
+  approvers: string[];
+  businessId?: string[];
+  costCentreCode?: string;
+  description: string;
+  fascia: string;
+  items: {
+    goodsType?: string;
+    name?: string;
+    quantity?: number;
+    recoveredQuantity?: number;
+    recoveredValue?: number;
+    sku?: string;
+    stockItem?: string;
+    value?: number;
+  }[];
+  personalityInfluences: 'No' | 'Yes';
+  reason: string;
+  reasonForNonReturn: string;
+  rechargeBrand: 'No' | 'Yes';
+  rechargeReference?: string;
+  returnDate?: Date;
+  shippingAddress?: string;
+  smqAccountNumber?: string;
+  socialHandles?: string;
+  storeOrDC: 'DC' | 'Store';
+  title: string;
+  willStockBeReturned: 'No' | 'Yes';
+}
+
+const APPROVER_GROUP_ID = 'cmg9nfl260017ityalcaluw9r';
+
+const EditStockRemovalRequest = ({ onClose, requestId }: Props) => {
+  const intl = useIntl();
+  const [form] = Form.useForm<FormData>();
+  const currentScheme = useAtomValue(currentSchemeIdAtom);
+  const currentUserId = useAtomValue(currentUserAtom)?.id;
+
+  const [saving, setSaving] = useState(false);
+
+  const { data: requestData, loading } = useStockRemovalRequestQuery({
+    variables: {
+      where: {
+        id: requestId,
+      },
+    },
+  });
+
+  const storeOrDC = Form.useWatch('storeOrDC', form);
+  const rechargeBrand = Form.useWatch('rechargeBrand', form);
+  const willStockBeReturned = Form.useWatch('willStockBeReturned', form);
+  const personalityInfluences = Form.useWatch('personalityInfluences', form);
+
+  useEffect(() => {
+    if (requestData?.stockRemovalRequest) {
+      const request = requestData.stockRemovalRequest;
+      form.setFieldsValue({
+        approvers: request.approvers.map((a) => a.user.id),
+        businessId: request.business?.id ? [request.business.id] : undefined,
+        costCentreCode: request.costCentreCode ?? undefined,
+        description: request.description ?? '',
+        fascia: request.fascia ?? '',
+        items: request.items.map((item) => ({
+          name: item.name ?? undefined,
+          quantity: item.requestedQuantity ?? undefined,
+          stockItem: item.id,
+        })),
+        personalityInfluences:
+          (request.personalityInfluences as 'No' | 'Yes') ?? 'No',
+        reason: request.reason ?? '',
+        reasonForNonReturn: request.reasonForNonReturn ?? '',
+        rechargeBrand: (request.rechargeBrand as 'No' | 'Yes') ?? 'No',
+        rechargeReference: request.rechargeReference ?? undefined,
+        returnDate: request.returnDate
+          ? new Date(request.returnDate)
+          : undefined,
+        shippingAddress: request.shippingAddress ?? undefined,
+        smqAccountNumber: request.smqAccountNumber ?? undefined,
+        socialHandles: request.socialHandles ?? undefined,
+        storeOrDC: (request.storeOrDC as 'DC' | 'Store') ?? 'Store',
+        title: request.title,
+        willStockBeReturned:
+          (request.willStockBeReturned as 'No' | 'Yes') ?? 'No',
+      });
+    }
+  }, [requestData, form]);
+
+  const [updateRemovalRequest] = useUpdateStockRemovalRequestMutation({
+    update: (store, { data: res }) => {
+      if (
+        res?.updateStockRemovalRequest === null ||
+        res?.updateStockRemovalRequest === undefined
+      )
+        return;
+      const existingData = store.readQuery<
+        StockRemovalRequestsQuery,
+        StockRemovalRequestsQueryVariables
+      >({
+        query: StockRemovalRequestsDocument,
+        variables: {
+          orderBy: [
+            {
+              createdAt: SortOrder.Desc,
+            },
+          ],
+          where: {
+            schemeId: currentScheme,
+          },
+        },
+      });
+
+      if (!existingData?.stockRemovalRequests) return;
+
+      const updatedEdges = existingData.stockRemovalRequests.edges.map(
+        (edge) => {
+          if (edge.node.id === res.updateStockRemovalRequest.id) {
+            return {
+              node: {
+                ...edge.node,
+                ...res.updateStockRemovalRequest,
+              },
+            };
+          }
+          return edge;
+        }
+      );
+
+      store.writeQuery<
+        StockRemovalRequestsQuery,
+        StockRemovalRequestsQueryVariables
+      >({
+        data: {
+          stockRemovalRequests: {
+            edges: updatedEdges,
+            totalCount: existingData.stockRemovalRequests.totalCount,
+          },
+        },
+        query: StockRemovalRequestsDocument,
+        variables: {
+          orderBy: [
+            {
+              createdAt: SortOrder.Desc,
+            },
+          ],
+          where: {
+            schemeId: currentScheme,
+          },
+        },
+      });
+    },
+  });
+
+  const onFinish = (values: FormData) => {
+    setSaving(true);
+    void updateRemovalRequest({
+      onCompleted: (_data) => {
+        setSaving(false);
+        notification.success({
+          description: intl.formatMessage({
+            defaultMessage: 'The stock removal request has been updated.',
+          }),
+          message: intl.formatMessage({
+            defaultMessage: 'Request Updated',
+          }),
+          placement: 'bottomRight',
+        });
+        onClose();
+      },
+      onError: () => {
+        setSaving(false);
+        notification.error({
+          description: intl.formatMessage({
+            defaultMessage: 'Something went wrong.',
+          }),
+          message: intl.formatMessage({
+            defaultMessage: 'Error Updating Request',
+          }),
+          placement: 'bottomRight',
+        });
+      },
+      variables: {
+        data: {
+          approverIds: values.approvers,
+          businessId: values.businessId?.at(0) ?? '',
+          costCentreCode: values.costCentreCode,
+          description: values.description,
+          fascia: values.fascia,
+          personalityInfluences: values.personalityInfluences,
+          reason: values.reason,
+          reasonForNonReturn: values.reasonForNonReturn,
+          rechargeBrand: values.rechargeBrand,
+          rechargeReference: values.rechargeReference,
+          returnDate: values.returnDate,
+          schemeId: currentScheme,
+          shippingAddress: values.shippingAddress,
+          smqAccountNumber: values.smqAccountNumber,
+          socialHandles: values.socialHandles,
+          storeOrDC: values.storeOrDC,
+          title: values.title,
+          willStockBeReturned: values.willStockBeReturned,
+        },
+        where: {
+          id: requestId,
+        },
+      },
+    });
+  };
+
+  if (loading) {
+    return <Skeleton active />;
+  }
+
+  return (
+    <Form<FormData> form={form} layout="vertical" onFinish={onFinish}>
+      <Row>
+        <Col span={24}>
+          <Form.Item
+            label={intl.formatMessage({ defaultMessage: 'Subject' })}
+            name="title"
+            rules={[
+              {
+                message: intl.formatMessage({
+                  defaultMessage: 'Please enter a subject',
+                }),
+                required: true,
+              },
+            ]}
+          >
+            <Input disabled={saving} />
+          </Form.Item>
+          <Form.Item
+            label={intl.formatMessage({ defaultMessage: 'Description' })}
+            name="description"
+          >
+            <Input.TextArea disabled={saving} />
+          </Form.Item>
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <Form.Item
+            label={intl.formatMessage({ defaultMessage: 'Reason For Removal' })}
+            name="reason"
+            rules={[
+              {
+                message: intl.formatMessage({
+                  defaultMessage: 'Please select a reason for removal',
+                }),
+                required: true,
+              },
+            ]}
+          >
+            <Select
+              disabled={saving}
+              options={[
+                { label: 'Competition', value: 'Competition' },
+                { label: 'Influencer Seeding', value: 'Influencer Seeding' },
+                {
+                  label: 'Promotional Payment - eg. Store DJs',
+                  value: 'Promotional Payment - eg. Store DJs',
+                },
+                { label: 'Photoshoot', value: 'Photoshoot' },
+                { label: 'Product testing', value: 'Product testing' },
+                { label: 'Staff Uniform', value: 'Staff Uniform' },
+                { label: 'Senior Mgmt e.g', value: 'Senior Mgmt e.g' },
+                { label: 'Directors', value: 'Directors' },
+                { label: 'Product Development', value: 'Product Development' },
+                { label: 'Activation', value: 'Activation' },
+              ]}
+              style={{ width: 350 }}
+            />
+          </Form.Item>
+        </Col>
+      </Row>
+      <Row>
+        <Col span={12}>
+          <Form.Item
+            label={intl.formatMessage({
+              defaultMessage: 'Is this being picked from Store or DC ',
+            })}
+            name="storeOrDC"
+            rules={[
+              {
+                message: intl.formatMessage({
+                  defaultMessage: 'This is a required field.',
+                }),
+                required: true,
+              },
+            ]}
+          >
+            <Radio.Group disabled={saving}>
+              <Radio.Button value="Store">
+                <FormattedMessage defaultMessage="Store" />
+              </Radio.Button>
+              <Radio.Button value="DC">
+                <FormattedMessage defaultMessage="DC" />
+              </Radio.Button>
+            </Radio.Group>
+          </Form.Item>
+        </Col>
+        {storeOrDC === 'Store' && (
+          <Col span={12}>
+            <Form.Item
+              label={intl.formatMessage({ defaultMessage: 'Select the store' })}
+              name="businessId"
+              rules={[
+                {
+                  message: intl.formatMessage({
+                    defaultMessage: 'Please select a business',
+                  }),
+                  required: true,
+                },
+              ]}
+            >
+              <BusinessesSelect disabled={saving} maxTagCount={1} showSearch />
+            </Form.Item>
+          </Col>
+        )}
+        {storeOrDC === 'DC' && (
+          <Col span={12}>
+            <Form.Item
+              label={intl.formatMessage({ defaultMessage: 'Shipping Address' })}
+              name="shippingAddress"
+              rules={[
+                {
+                  message: intl.formatMessage({
+                    defaultMessage: 'Please provide an address',
+                  }),
+                  required: true,
+                },
+              ]}
+            >
+              <Input.TextArea disabled={saving} />
+            </Form.Item>
+          </Col>
+        )}
+      </Row>
+      <Row>
+        <Col span={12}>
+          <Form.Item
+            label={intl.formatMessage({
+              defaultMessage: 'Is this being recharged to Brand?',
+            })}
+            name="rechargeBrand"
+            rules={[
+              {
+                message: intl.formatMessage({
+                  defaultMessage: 'This is a required field.',
+                }),
+                required: true,
+              },
+            ]}
+          >
+            <Radio.Group disabled={saving}>
+              <Radio.Button value="Yes">
+                <FormattedMessage defaultMessage="Yes" />
+              </Radio.Button>
+              <Radio.Button value="No">
+                <FormattedMessage defaultMessage="No" />
+              </Radio.Button>
+            </Radio.Group>
+          </Form.Item>
+        </Col>
+        <Col span={12}>
+          {rechargeBrand === 'Yes' && (
+            <Form.Item
+              label={intl.formatMessage({
+                defaultMessage: 'Enter Brand Recharge Reference',
+              })}
+              name="rechargeReference"
+              rules={[
+                {
+                  message: intl.formatMessage({
+                    defaultMessage: 'This is a required field.',
+                  }),
+                  required: true,
+                },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+          )}
+          {rechargeBrand === 'No' && (
+            <Form.Item
+              label={intl.formatMessage({
+                defaultMessage: 'Enter Cost Centre/Nominal Budget code ',
+              })}
+              name="costCentreCode"
+              rules={[
+                {
+                  message: intl.formatMessage({
+                    defaultMessage: 'This is a required field.',
+                  }),
+                  required: true,
+                },
+                {
+                  message: intl.formatMessage({
+                    defaultMessage:
+                      'Cost centre code must be in format 0000-000000 (4 digits, dash, 6 digits)',
+                  }),
+                  pattern: /^\d{4}-\d{6}$/,
+                },
+              ]}
+            >
+              {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
+              <Input maxLength={11} placeholder="0000-000000" />
+            </Form.Item>
+          )}
+        </Col>
+      </Row>
+      <Row>
+        <Col span={12}>
+          <Form.Item
+            label={intl.formatMessage({
+              defaultMessage: 'Will the stock be returned?',
+            })}
+            name="willStockBeReturned"
+            rules={[
+              {
+                message: intl.formatMessage({
+                  defaultMessage: 'This is a required field.',
+                }),
+                required: true,
+              },
+            ]}
+          >
+            <Radio.Group disabled={saving}>
+              <Radio.Button value="Yes">
+                <FormattedMessage defaultMessage="Yes" />
+              </Radio.Button>
+              <Radio.Button value="No">
+                <FormattedMessage defaultMessage="No" />
+              </Radio.Button>
+            </Radio.Group>
+          </Form.Item>
+        </Col>
+        <Col span={12}>
+          {willStockBeReturned === 'Yes' && (
+            <Form.Item
+              label={intl.formatMessage({
+                defaultMessage: 'Enter SMQ Account Number',
+              })}
+              name="smqAccountNumber"
+              rules={[
+                {
+                  message: intl.formatMessage({
+                    defaultMessage: 'This is a required field.',
+                  }),
+                  required: true,
+                },
+                {
+                  message: intl.formatMessage({
+                    defaultMessage: 'SMQ Account Number must be 4 or 5 digits',
+                  }),
+                  pattern: /^\d{4,5}$/,
+                },
+              ]}
+            >
+              {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
+              <Input maxLength={5} placeholder="12345" />
+            </Form.Item>
+          )}
+          {willStockBeReturned === 'Yes' && (
+            <Form.Item
+              label={intl.formatMessage({
+                defaultMessage: 'Expected Return Date',
+              })}
+              name="returnDate"
+              rules={[
+                {
+                  message: intl.formatMessage({
+                    defaultMessage: 'This is a required field.',
+                  }),
+                  required: true,
+                },
+              ]}
+            >
+              <DatePicker />
+            </Form.Item>
+          )}
+          {willStockBeReturned === 'No' && (
+            <Form.Item
+              label={intl.formatMessage({
+                defaultMessage: 'Reason for the stock not being returned',
+              })}
+              name="reasonForNonReturn"
+              rules={[
+                {
+                  message: intl.formatMessage({
+                    defaultMessage: 'This is a required field.',
+                  }),
+                  required: true,
+                },
+              ]}
+            >
+              <Input.TextArea />
+            </Form.Item>
+          )}
+        </Col>
+      </Row>
+      <Row>
+        <Col span={12}>
+          <Form.Item
+            label={intl.formatMessage({
+              defaultMessage: 'Does this involve personality influences?',
+            })}
+            name="personalityInfluences"
+            rules={[
+              {
+                message: intl.formatMessage({
+                  defaultMessage: 'This is a required field.',
+                }),
+                required: true,
+              },
+            ]}
+          >
+            <Radio.Group disabled={saving}>
+              <Radio.Button value="Yes">
+                <FormattedMessage defaultMessage="Yes" />
+              </Radio.Button>
+              <Radio.Button value="No">
+                <FormattedMessage defaultMessage="No" />
+              </Radio.Button>
+            </Radio.Group>
+          </Form.Item>
+        </Col>
+        {personalityInfluences === 'Yes' && (
+          <Col span={12}>
+            <Form.Item
+              label={intl.formatMessage({
+                defaultMessage: 'Social Media Handles',
+              })}
+              name="socialHandles"
+              rules={[
+                {
+                  message: intl.formatMessage({
+                    defaultMessage: 'This is a required field.',
+                  }),
+                  required: true,
+                },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+          </Col>
+        )}
+      </Row>
+      <Row>
+        <Col span={12}>
+          <Form.Item
+            label={intl.formatMessage({ defaultMessage: 'Fascia' })}
+            name="fascia"
+            rules={[
+              {
+                message: intl.formatMessage({
+                  defaultMessage: 'This is a required field.',
+                }),
+                required: true,
+              },
+            ]}
+          >
+            <Select
+              disabled={saving}
+              options={[
+                { label: 'Alpine Bikes', value: 'Alpine Bikes' },
+                { label: 'Bertie', value: 'Bertie' },
+                {
+                  label: 'Blacks',
+                  value: 'Blacks',
+                },
+                { label: 'Champion', value: 'Champion' },
+                { label: 'Chausport', value: 'Chausport' },
+                { label: 'City Gear', value: 'City Gear' },
+                { label: 'Cosmos', value: 'Cosmos' },
+                { label: 'DeporVillage', value: 'DeporVillage' },
+                { label: 'DTLR', value: 'DTLR' },
+                { label: 'Finish Line', value: 'Finish Line' },
+                { label: 'Fishing Republic', value: 'Fishing Republic' },
+                { label: 'Footpatrol', value: 'Footpatrol' },
+                { label: 'George Fisher', value: 'George Fisher' },
+                { label: 'Go Express', value: 'Go Express' },
+                { label: 'Go Outdoors', value: 'Go Outdoors' },
+                { label: 'Hibbett', value: 'Hibbett' },
+                { label: 'JD', value: 'JD' },
+                { label: 'JD Gym', value: 'JD Gym' },
+                { label: 'Kukri', value: 'Kukri' },
+                { label: 'Livestock', value: 'Livestock' },
+                { label: 'Macys', value: 'Macys' },
+                { label: 'Naylors', value: 'Naylors' },
+                { label: 'Nice Kicks', value: 'Nice Kicks' },
+                { label: 'Oi Polloi', value: 'Oi Polloi' },
+                { label: 'Shoe Palace', value: 'Shoe Palace' },
+                { label: 'Size', value: 'Size' },
+                { label: 'Sport Zone', value: 'Sport Zone' },
+                { label: 'Sports Factory', value: 'Sports Factory' },
+                { label: 'Sprinter', value: 'Sprinter' },
+                { label: 'The Couture Club', value: 'The Couture Club' },
+                { label: 'The HIP Store', value: 'The HIP Store' },
+                { label: 'Tiso', value: 'Tiso' },
+                { label: 'Ultimate Outdoors', value: 'Ultimate Outdoors' },
+                { label: 'WellGosh', value: 'WellGosh' },
+                { label: 'Woodhouse Clothing', value: 'Woodhouse Clothing' },
+              ]}
+              style={{ width: 350 }}
+            />
+          </Form.Item>
+        </Col>
+      </Row>
+      <Row gutter={16}>
+        <Col span={12}>
+          <Form.Item
+            label={intl.formatMessage({ defaultMessage: 'Select Approvers' })}
+            name="approvers"
+            rules={[
+              {
+                message: intl.formatMessage({
+                  defaultMessage: 'Please select at least one approver.',
+                }),
+                required: true,
+              },
+            ]}
+          >
+            <UsersSelect
+              allowClear
+              mode="multiple"
+              queryVars={{
+                where: {
+                  AND: [
+                    {
+                      groups: {
+                        some: {
+                          id: {
+                            equals: APPROVER_GROUP_ID,
+                          },
+                        },
+                      },
+                    },
+                    {
+                      id: {
+                        not: {
+                          equals: currentUserId ?? '',
+                        },
+                      },
+                    },
+                  ],
+                },
+              }}
+              showSearch
+            />
+          </Form.Item>
+        </Col>
+      </Row>
+      <StockRemovalGoods form={form} />
+      <Row justify="end" style={{ paddingTop: 20 }}>
+        <Col>
+          <Button
+            disabled={saving}
+            htmlType="submit"
+            loading={saving}
+            type="primary"
+          >
+            <FormattedMessage defaultMessage="Update Request" />
+          </Button>
+        </Col>
+      </Row>
+    </Form>
+  );
+};
+
+export default EditStockRemovalRequest;

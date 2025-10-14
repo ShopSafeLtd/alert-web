@@ -1,25 +1,25 @@
 export enum UserSort {
-  createdAtDesc = 'CREATED_AT_DESC',
   createdAtAsc = 'CREATED_AT_ASC',
-  nameDesc = 'NAME_DESC',
+  createdAtDesc = 'CREATED_AT_DESC',
   nameAsc = 'NAME_ASC',
+  nameDesc = 'NAME_DESC',
 }
 // wait to check
 export const userSortValues = [
   {
-    value: 'CREATED_AT_DESC',
     label: 'Newest First',
+    value: 'CREATED_AT_DESC',
   },
   {
-    value: 'CREATED_AT_ASC',
     label: 'Oldest First',
+    value: 'CREATED_AT_ASC',
   },
   {
-    value: 'NAME_ASC',
     label: 'Name A-Z',
+    value: 'NAME_ASC',
   },
   {
-    value: 'NAME_DESC',
     label: 'Name Z-A',
+    value: 'NAME_DESC',
   },
 ];

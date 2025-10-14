@@ -5,32 +5,32 @@ import useNotificationLists from './useNotificationList';
 
 const NotificationLists = (): JSX.Element => {
   const {
-    data,
-    loading,
-    saving,
-    takeAllSchemes,
-    toggleTakeAllSchemes,
-    handleMarkAsRead,
-    handleMarkAllRead,
-    setSearch,
-    onPaginationChange,
     currentPage,
     currentPageSize,
+    data,
+    handleMarkAllRead,
+    handleMarkAsRead,
+    loading,
+    onPaginationChange,
+    saving,
+    setSearch,
+    takeAllSchemes,
+    toggleTakeAllSchemes,
   } = useNotificationLists();
 
   return (
     <View
-      data={data}
-      loading={loading}
-      saving={saving}
-      takeAllSchemes={takeAllSchemes}
-      toggleTakeAllSchemes={toggleTakeAllSchemes}
-      handleMarkAsRead={handleMarkAsRead}
-      handleMarkAllRead={handleMarkAllRead}
-      setSearch={setSearch}
-      onPaginationChange={onPaginationChange}
       currentPage={currentPage}
       currentPageSize={currentPageSize}
+      data={data}
+      handleMarkAllRead={handleMarkAllRead}
+      handleMarkAsRead={handleMarkAsRead}
+      loading={loading}
+      onPaginationChange={onPaginationChange}
+      saving={saving}
+      setSearch={setSearch}
+      takeAllSchemes={takeAllSchemes}
+      toggleTakeAllSchemes={toggleTakeAllSchemes}
     />
   );
 };

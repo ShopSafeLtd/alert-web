@@ -1,58 +1,60 @@
-import React from 'react';
 import type { VehicleData } from 'types/DataType';
+
+import React from 'react';
+
 import View from './LinkVehicle.view';
 import useLinkVehicle from './useLinkVehicle';
 
 interface Props {
   onClose: () => void;
+  takeAllSchemes?: boolean;
   update: (value: VehicleData) => void;
   vehicleIds: string[] | undefined;
-  takeAllSchemes?: boolean;
 }
 
 const LinkVehicle = ({
   onClose,
+  takeAllSchemes,
   update,
   vehicleIds,
-  takeAllSchemes,
 }: Props): JSX.Element => {
   const {
-    onSubmit,
+    clearFilters,
     data,
-    loading,
-    setSearch,
-    selectedVehicle,
-    setSelectedVehicle,
-    openLightbox,
-    lightBoxOpen,
+    fetchMoreScroll,
     filterVariables,
-    setOrder,
-    setGroupsFilter,
-    setCreatedAtFilter,
     groups,
     groupsLoading,
-    clearFilters,
-    fetchMoreScroll,
-  } = useLinkVehicle({ onClose, update, vehicleIds, takeAllSchemes });
+    lightBoxOpen,
+    loading,
+    onSubmit,
+    openLightbox,
+    selectedVehicle,
+    setCreatedAtFilter,
+    setGroupsFilter,
+    setOrder,
+    setSearch,
+    setSelectedVehicle,
+  } = useLinkVehicle({ onClose, takeAllSchemes, update, vehicleIds });
 
   return (
     <View
-      onSubmit={onSubmit}
+      clearFilters={clearFilters}
       data={data}
-      loading={loading}
-      setSearch={setSearch}
-      selectedVehicle={selectedVehicle}
-      setSelectedVehicle={setSelectedVehicle}
-      openLightbox={openLightbox}
-      lightBoxOpen={lightBoxOpen}
+      fetchMoreScroll={fetchMoreScroll}
       filterVariables={filterVariables}
-      setOrder={setOrder}
-      setGroupsFilter={setGroupsFilter}
-      setCreatedAtFilter={setCreatedAtFilter}
       groups={groups}
       groupsLoading={groupsLoading}
-      clearFilters={clearFilters}
-      fetchMoreScroll={fetchMoreScroll}
+      lightBoxOpen={lightBoxOpen}
+      loading={loading}
+      onSubmit={onSubmit}
+      openLightbox={openLightbox}
+      selectedVehicle={selectedVehicle}
+      setCreatedAtFilter={setCreatedAtFilter}
+      setGroupsFilter={setGroupsFilter}
+      setOrder={setOrder}
+      setSearch={setSearch}
+      setSelectedVehicle={setSelectedVehicle}
     />
   );
 };

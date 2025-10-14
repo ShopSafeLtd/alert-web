@@ -167,7 +167,7 @@ const IntelMessage: React.FC<Props> = ({
                 : update.createdBy.fullName}
             </Typography.Text>
             <Typography.Text className={classes.messageTime}>
-              {dayjs(update.createdAt).format('HH:mm')}
+              {dayjs(update.createdAt).format('DD/MM/YYYY HH:mm')}
             </Typography.Text>
           </div>
         </>

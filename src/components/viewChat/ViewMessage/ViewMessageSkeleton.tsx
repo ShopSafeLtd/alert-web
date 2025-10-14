@@ -1,5 +1,5 @@
-import React from 'react';
 import { Col, Row, Skeleton } from 'antd';
+import React from 'react';
 
 const ViewMessageSkeleton = (): JSX.Element => (
   <>
@@ -9,8 +9,8 @@ const ViewMessageSkeleton = (): JSX.Element => (
           active
           style={{
             borderRadius: 5,
-            marginLeft: 20,
             height: 35,
+            marginLeft: 20,
           }}
         />
       </Col>
@@ -21,8 +21,8 @@ const ViewMessageSkeleton = (): JSX.Element => (
           active
           style={{
             borderRadius: 5,
-            marginLeft: 20,
             height: 35,
+            marginLeft: 20,
             marginTop: 10,
           }}
         />
@@ -34,8 +34,8 @@ const ViewMessageSkeleton = (): JSX.Element => (
           active
           style={{
             borderRadius: 5,
-            marginRight: 20,
             height: 35,
+            marginRight: 20,
             marginTop: 10,
           }}
         />
@@ -47,8 +47,8 @@ const ViewMessageSkeleton = (): JSX.Element => (
           active
           style={{
             borderRadius: 5,
-            marginRight: 20,
             height: 35,
+            marginRight: 20,
             marginTop: 10,
           }}
         />
@@ -60,8 +60,8 @@ const ViewMessageSkeleton = (): JSX.Element => (
           active
           style={{
             borderRadius: 5,
-            marginLeft: 20,
             height: 35,
+            marginLeft: 20,
             marginTop: 10,
           }}
         />
@@ -73,8 +73,8 @@ const ViewMessageSkeleton = (): JSX.Element => (
           active
           style={{
             borderRadius: 5,
+            height: 35,
             marginRight: 20,
-            height: 35,
             marginTop: 10,
           }}
         />
@@ -86,8 +86,8 @@ const ViewMessageSkeleton = (): JSX.Element => (
           active
           style={{
             borderRadius: 5,
-            marginLeft: 20,
             height: 35,
+            marginLeft: 20,
             marginTop: 10,
           }}
         />
@@ -99,8 +99,8 @@ const ViewMessageSkeleton = (): JSX.Element => (
           active
           style={{
             borderRadius: 5,
-            marginLeft: 20,
             height: 35,
+            marginLeft: 20,
             marginTop: 10,
           }}
         />

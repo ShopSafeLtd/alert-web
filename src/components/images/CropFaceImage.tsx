@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 
 interface CropFaceImageProps {
-  url: string;
   boundingBox: {
     height: string;
     left: string;
@@ -9,10 +8,11 @@ interface CropFaceImageProps {
     width: string;
   };
   height: number;
+  url: string;
   width: number;
 }
 
-function StringToNumber(value: string | number | undefined | null): number {
+function StringToNumber(value: null | number | string | undefined): number {
   if (typeof value === 'string') {
     return Number(value);
   }
@@ -21,10 +21,10 @@ function StringToNumber(value: string | number | undefined | null): number {
 }
 
 const CropFaceImage = ({
-  url,
   boundingBox,
-  width,
   height,
+  url,
+  width,
 }: CropFaceImageProps) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
@@ -83,7 +83,7 @@ const CropFaceImage = ({
     };
   }, []);
 
-  return <canvas ref={canvasRef} width={width} height={height} />;
+  return <canvas height={height} ref={canvasRef} width={width} />;
 };
 
 export default CropFaceImage;

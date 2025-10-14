@@ -1,69 +1,70 @@
 /* eslint-disable formatjs/no-literal-string-in-jsx */
-import React from 'react';
-
 import type { FormInstance } from 'antd';
+
+import { faFileUpload } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
   Card,
+  Checkbox,
   Col,
   Form,
-  Space,
-  Tabs,
-  Upload,
-  Checkbox,
   Radio,
   Row,
   Select,
+  Space,
+  Tabs,
   Typography,
+  Upload,
 } from 'antd';
+import { Mg11Status } from 'graphql/types';
+import React from 'react';
 import ReactDOMServer from 'react-dom/server';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFileUpload } from '@fortawesome/pro-light-svg-icons';
-import useStyles from './SignMg11.styles';
+
 import type { FormData } from './useSignMg11';
+
+import SignatureInput from '../../../components/SignBox';
+import Loading from '../../../components/loading';
 import SigSeal from '../../../components/onboarding/Onboarding/SchemeTerms/SigSeal';
 import FONT_FAMILIES from '../../../components/onboarding/Onboarding/SchemeTerms/utils/Fonts';
-import SignatureInput from '../../../components/SignBox';
-
-import Loading from '../../../components/loading';
-import { Mg11Status } from 'graphql/types';
+import useStyles from './SignMg11.styles';
 
 const { Title } = Typography;
 
 interface Props {
+  data: FormData;
+  file: { file: string; name: string } | null;
+  form: FormInstance<FormData>;
+  name: string;
   onSubmit: (value: FormData) => void;
   saving: boolean;
-  form: FormInstance<FormData>;
-  setSign: (value: string) => void;
-  update: (value: string) => void;
   selectedFont: string;
-  name: string;
-  file: { file: string; name: string } | null;
-  setTab: (value: string) => void;
-  tab: string;
-  setSelectedFont: (value: string) => void;
   setFile: (value: { file: string; name: string } | null) => void;
-  data: FormData;
-  status: Mg11Status;
+  setSelectedFont: (value: string) => void;
+  setSign: (value: string) => void;
+  setTab: (value: string) => void;
   sign: string;
+  status: Mg11Status;
+  tab: string;
+  update: (value: string) => void;
 }
 
 const CreateMg11 = ({
+  data,
+  file,
+  form,
+  name,
   onSubmit,
   saving,
-  form,
-  setSign,
-  update,
   selectedFont,
-  name,
-  file,
-  setTab,
-  tab,
-  setSelectedFont,
   setFile,
-  data,
+  setSelectedFont,
+  setSign,
+  setTab,
   sign,
   status,
+  tab,
+  update,
 }: Props): JSX.Element => {
   const classes = useStyles();
   if (status === Mg11Status.Draft) {
@@ -85,7 +86,7 @@ const CreateMg11 = ({
         </Col>
       </Row>
       <Card style={{ width: '100%' }}>
-        <Space direction="vertical" style={{ fontSize: 12 }} size={1}>
+        <Space direction="vertical" size={1} style={{ fontSize: 12 }}>
           <div // eslint-disable-next-line react/no-danger
             dangerouslySetInnerHTML={{
               __html: data.statement || '',
@@ -96,31 +97,31 @@ const CreateMg11 = ({
       <Form<FormData>
         form={form}
         initialValues={data}
-        onFinish={onSubmit}
         layout="vertical"
+        onFinish={onSubmit}
       >
         <Card className={classes.card}>
           <Row align="bottom" style={{ marginBottom: 20 }}>
             <Col>
-              <Title style={{ marginBottom: 0 }} level={4}>
+              <Title level={4} style={{ marginBottom: 0 }}>
                 1.
               </Title>
             </Col>
             <Col>
-              <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
+              <Title level={4} style={{ marginBottom: 0, marginLeft: 5 }}>
                 Witness Consent
               </Title>
             </Col>
           </Row>
 
           <Form.Item
-            name="detailsExplained"
             label="The criminal justice process and Victim Personal Statement
                   scheme (victims only) has been explained to me"
+            name="detailsExplained"
             rules={[
               {
-                required: true,
                 message: 'Please choose an option.',
+                required: true,
               },
             ]}
           >
@@ -130,13 +131,13 @@ const CreateMg11 = ({
             </Radio.Group>
           </Form.Item>
           <Form.Item
-            name="leafletReceived"
             label="I have been given the leaflet &lsquo;Giving a witness
                   statement to police - what happens next?&lsquo;"
+            name="leafletReceived"
             rules={[
               {
-                required: true,
                 message: 'Please choose an option.',
+                required: true,
               },
             ]}
           >
@@ -146,13 +147,13 @@ const CreateMg11 = ({
             </Radio.Group>
           </Form.Item>
           <Form.Item
-            name="medicalReleasedPolice"
             label="I consent to the police having access to my medical records in
                   relation to this matter"
+            name="medicalReleasedPolice"
             rules={[
               {
-                required: true,
                 message: 'Please choose an option.',
+                required: true,
               },
             ]}
           >
@@ -163,13 +164,13 @@ const CreateMg11 = ({
             </Radio.Group>
           </Form.Item>
           <Form.Item
-            name="medicalReleasedDefence"
             label="I consent to the defence having access to my medical records
                   in relation to this matter"
+            name="medicalReleasedDefence"
             rules={[
               {
-                required: true,
                 message: 'Please choose an option.',
+                required: true,
               },
             ]}
           >
@@ -180,13 +181,13 @@ const CreateMg11 = ({
             </Radio.Group>
           </Form.Item>
           <Form.Item
-            name="civilProceedingsRelease"
             label="I consent to the statement being disclosed for the purposes of
                   civil proceedings (if applicable)"
+            name="civilProceedingsRelease"
             rules={[
               {
-                required: true,
                 message: 'Please choose an option.',
+                required: true,
               },
             ]}
           >
@@ -197,10 +198,10 @@ const CreateMg11 = ({
             </Radio.Group>
           </Form.Item>
           <Form.Item
-            name="witnessServiceDisclose"
             label="The information recorded above will be disclosed to the
                   Witness Service so they can offer help and support, unless you
                   ask them not to. Tick this box to decline their services."
+            name="witnessServiceDisclose"
             valuePropName="checked"
           >
             <Checkbox />
@@ -243,11 +244,11 @@ const CreateMg11 = ({
               ]}
             >
               <div>
-                <Card style={{ width: '100%', display: 'flex' }}>
+                <Card style={{ display: 'flex', width: '100%' }}>
                   <Space
                     direction="vertical"
-                    style={{ fontSize: 14, marginBottom: 15 }}
                     size={1}
+                    style={{ fontSize: 14, marginBottom: 15 }}
                   >
                     This statement is true to the best of my knowledge and
                     belief and I make it knowing that, if it is tendered in
@@ -257,6 +258,7 @@ const CreateMg11 = ({
                   </Space>
                   <Tabs
                     activeKey={tab}
+                    destroyInactiveTabPane
                     onChange={(tabKey) => {
                       setTab(tabKey);
                       if (tabKey === 'upload' && file?.file) {
@@ -265,9 +267,9 @@ const CreateMg11 = ({
                         update(
                           ReactDOMServer.renderToString(
                             <img
-                              src={`data:application/pdf;base64,${file?.file}`}
                               alt="file"
                               height={100}
+                              src={`data:application/pdf;base64,${file?.file}`}
                               width={300}
                             />
                           )
@@ -278,10 +280,10 @@ const CreateMg11 = ({
                         update(
                           ReactDOMServer.renderToString(
                             <SigSeal
-                              key={selectedFont}
-                              name={name}
                               font={selectedFont}
                               height={100}
+                              key={selectedFont}
+                              name={name}
                               width={300}
                             />
                           )
@@ -291,56 +293,54 @@ const CreateMg11 = ({
                         update('');
                       }
                     }}
-                    type="card"
                     style={{ height: 250, width: 500 }}
-                    destroyInactiveTabPane
+                    type="card"
                   >
-                    <Tabs.TabPane tab="Generate" key="generate">
+                    <Tabs.TabPane key="generate" tab="Generate">
                       <Select
-                        style={{
-                          fontFamily: selectedFont,
-                          marginBottom: 20,
-                        }}
                         defaultValue={selectedFont}
                         onChange={(value) => {
                           setSelectedFont(value);
                           update(
                             ReactDOMServer.renderToString(
                               <SigSeal
-                                key={selectedFont}
-                                name={name}
                                 font={selectedFont}
                                 height={100}
+                                key={selectedFont}
+                                name={name}
                                 width={300}
                               />
                             )
                           );
                         }}
+                        style={{
+                          fontFamily: selectedFont,
+                          marginBottom: 20,
+                        }}
                       >
                         {FONT_FAMILIES.map((font) => (
                           <Select.Option
                             key={font}
-                            value={font}
                             style={{
                               fontFamily: font,
                             }}
+                            value={font}
                           >
                             {name}
                           </Select.Option>
                         ))}
                       </Select>
                       <SigSeal
-                        key={selectedFont}
-                        name={name}
                         font={selectedFont}
                         height={100}
+                        key={selectedFont}
+                        name={name}
                         width={300}
                       />
                     </Tabs.TabPane>
-                    <Tabs.TabPane tab="Upload" key="upload">
+                    <Tabs.TabPane key="upload" tab="Upload">
                       <>
                         <Upload
-                          showUploadList={false}
                           beforeUpload={(f) => {
                             const reader = new FileReader();
                             reader.addEventListener('load', (e) => {
@@ -356,9 +356,9 @@ const CreateMg11 = ({
                                   update(
                                     ReactDOMServer.renderToString(
                                       <img
-                                        src={`data:application/pdf;base64,${base64result}`}
                                         alt="file"
                                         height={100}
+                                        src={`data:application/pdf;base64,${base64result}`}
                                         width={300}
                                       />
                                     )
@@ -370,6 +370,7 @@ const CreateMg11 = ({
                             // Prevent upload
                             return false;
                           }}
+                          showUploadList={false}
                         >
                           <Button key="uploadButton" type="primary">
                             <FontAwesomeIcon
@@ -380,18 +381,18 @@ const CreateMg11 = ({
                           </Button>
                         </Upload>
                         {file && (
-                          <div style={{ paddingTop: 10, paddingLeft: 10 }}>
+                          <div style={{ paddingLeft: 10, paddingTop: 10 }}>
                             <img
-                              src={`data:application/pdf;base64,${file.file}`}
                               alt="file"
                               height={100}
+                              src={`data:application/pdf;base64,${file.file}`}
                               width={300}
                             />
                           </div>
                         )}
                       </>
                     </Tabs.TabPane>
-                    <Tabs.TabPane tab="Draw" key="draw">
+                    <Tabs.TabPane key="draw" tab="Draw">
                       <SignatureInput
                         hidden={false}
                         onChange={(val: string) => {
@@ -409,7 +410,7 @@ const CreateMg11 = ({
 
         {/* Buttons */}
         <Form.Item>
-          <Row style={{ marginTop: 10 }} gutter={10} justify="end">
+          <Row gutter={10} justify="end" style={{ marginTop: 10 }}>
             <Col>
               <Button disabled={saving} onClick={() => window.history.back()}>
                 Cancel
@@ -418,9 +419,9 @@ const CreateMg11 = ({
             <Col>
               <Button
                 disabled={saving}
+                htmlType="submit"
                 loading={saving}
                 type="primary"
-                htmlType="submit"
               >
                 Submit
               </Button>

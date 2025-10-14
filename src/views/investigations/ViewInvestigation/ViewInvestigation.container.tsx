@@ -1,6 +1,6 @@
 import React from 'react';
-
 import { useParams } from 'react-router-dom';
+
 import View from './ViewInvestigation.view';
 import useViewCustomer from './useViewInvestigation';
 
@@ -8,162 +8,162 @@ const ViewCustomer: React.FC = () => {
   const { id } = useParams();
 
   const {
-    data,
-    offenderIds,
-    vehicleIds,
-    incidentIds,
-    crimeGroupIds,
-    toggleAddDocument,
-    addDocument,
-    toggleAddDemDocument,
-    addDemDocument,
-    demId,
-    toggleSubscribe,
-    takeAllSchemes,
-    addTodo,
-    toggleAddTodo,
-    templatesData,
-    templatesLoading,
-    setViewTodoVisible,
-    setCompleteTodoVisible,
-    completeTodoVisible,
-    viewTodoVisible,
-    updateTodo,
-    updateTodoList,
-    addOffender,
-    addExistingOffender,
-    toggleAddOffender,
-    toggleAddExistingOffender,
-    editOffenderData,
-    setEditOffenderData,
-    onDeleteOffender,
-    addVehicle,
-    addExistingVehicle,
-    toggleAddVehicle,
-    toggleAddExistingVehicle,
-    editVehicleData,
-    setEditVehicleData,
-    onDeleteVehicle,
     addCrimeGroup,
+    addDemDocument,
+    addDocument,
     addExistingCrimeGroup,
-    toggleAddCrimeGroup,
-    toggleAddExistingCrimeGroup,
-    editCrimeGroupData,
-    setEditCrimeGroupData,
     addExistingIncident,
-    toggleAddExistingIncident,
-    onAddExistingOffender,
-    onAddExistingVehicle,
+    addExistingOffender,
+    addExistingVehicle,
+    addOffender,
+    addTodo,
+    addVehicle,
+    completeTodoVisible,
+    crimeGroupIds,
+    data,
+    demId,
+    editCrimeGroupData,
+    editInvestigation,
+    editOffenderData,
+    editVehicleData,
+    incidentIds,
+    loading,
+    offenderIds,
+    onAddCrimeGroup,
     onAddExistingCrimeGroup,
     onAddExistingIncident,
+    onAddExistingOffender,
+    onAddExistingOffenders,
+    onAddExistingVehicle,
+    onAddExistingVehicles,
     onAddVehicle,
-    onEditVehicle,
-    onAddCrimeGroup,
-    onEditCrimeGroup,
+    onCloseInvestigation,
+    onCompletedAddOffender,
+    onCompletedEditOffender,
     onDeleteCrimeGroup,
+    onDeleteDocument,
     onDeleteIncident,
-    saving,
-    loading,
     onDeleteInvestigation,
+    onDeleteOffender,
+    onDeleteVehicle,
+    onEditCrimeGroup,
+    onEditVehicle,
+    onReopenInvestigation,
+    saving,
+    setCompleteTodoVisible,
+    setEditCrimeGroupData,
+    setEditOffenderData,
+    setEditVehicleData,
+    setViewTodoVisible,
+    showSuggestedOffenders,
+    showSuggestedVehicles,
     suggestedOffenders,
     suggestedVehicles,
+    takeAllSchemes,
+    templatesData,
+    templatesLoading,
+    toggleAddCrimeGroup,
+    toggleAddDemDocument,
+    toggleAddDocument,
+    toggleAddExistingCrimeGroup,
+    toggleAddExistingIncident,
+    toggleAddExistingOffender,
+    toggleAddExistingVehicle,
+    toggleAddOffender,
+    toggleAddTodo,
+    toggleAddVehicle,
     toggleCloseSuggestedOffenders,
     toggleCloseSuggestedVehicles,
-    onAddExistingOffenders,
-    onAddExistingVehicles,
-    showSuggestedVehicles,
-    showSuggestedOffenders,
-    toggleShowSuggestedVehicles,
-    toggleShowSuggestedOffenders,
-    editInvestigation,
     toggleEditInvestigation,
-    updateEditOffenderList,
-    onCompletedEditOffender,
-    onCompletedAddOffender,
-    onCloseInvestigation,
-    onReopenInvestigation,
+    toggleShowSuggestedOffenders,
+    toggleShowSuggestedVehicles,
+    toggleSubscribe,
     updateAddOffenderList,
-    onDeleteDocument,
+    updateEditOffenderList,
+    updateTodo,
+    updateTodoList,
+    vehicleIds,
+    viewTodoVisible,
   } = useViewCustomer(id || '');
 
   return (
     <View
-      loading={loading}
-      demId={demId}
-      toggleAddDocument={toggleAddDocument}
-      addDocument={addDocument}
-      toggleAddDemDocument={toggleAddDemDocument}
-      addDemDocument={addDemDocument}
-      data={data}
-      vehicleIds={vehicleIds}
-      crimeGroupIds={crimeGroupIds}
-      offenderIds={offenderIds}
-      incidentIds={incidentIds}
-      toggleSubscribe={toggleSubscribe}
-      takeAllSchemes={takeAllSchemes}
-      addTodo={addTodo}
-      toggleAddTodo={toggleAddTodo}
-      templatesData={templatesData}
-      templatesLoading={templatesLoading}
-      setViewTodoVisible={setViewTodoVisible}
-      setCompleteTodoVisible={setCompleteTodoVisible}
-      completeTodoVisible={completeTodoVisible}
-      viewTodoVisible={viewTodoVisible}
-      updateTodo={updateTodo}
-      updateTodoList={updateTodoList}
-      addOffender={addOffender}
-      addExistingOffender={addExistingOffender}
-      toggleAddOffender={toggleAddOffender}
-      toggleAddExistingOffender={toggleAddExistingOffender}
-      editOffenderData={editOffenderData}
-      setEditOffenderData={setEditOffenderData}
-      onDeleteOffender={onDeleteOffender}
-      addVehicle={addVehicle}
-      addExistingVehicle={addExistingVehicle}
-      toggleAddVehicle={toggleAddVehicle}
-      toggleAddExistingVehicle={toggleAddExistingVehicle}
-      editVehicleData={editVehicleData}
-      setEditVehicleData={setEditVehicleData}
-      onDeleteVehicle={onDeleteVehicle}
       addCrimeGroup={addCrimeGroup}
+      addDemDocument={addDemDocument}
+      addDocument={addDocument}
       addExistingCrimeGroup={addExistingCrimeGroup}
-      toggleAddCrimeGroup={toggleAddCrimeGroup}
-      toggleAddExistingCrimeGroup={toggleAddExistingCrimeGroup}
-      editCrimeGroupData={editCrimeGroupData}
-      setEditCrimeGroupData={setEditCrimeGroupData}
       addExistingIncident={addExistingIncident}
-      toggleAddExistingIncident={toggleAddExistingIncident}
-      onAddExistingOffender={onAddExistingOffender}
-      onAddExistingVehicle={onAddExistingVehicle}
+      addExistingOffender={addExistingOffender}
+      addExistingVehicle={addExistingVehicle}
+      addOffender={addOffender}
+      addTodo={addTodo}
+      addVehicle={addVehicle}
+      completeTodoVisible={completeTodoVisible}
+      crimeGroupIds={crimeGroupIds}
+      data={data}
+      demId={demId}
+      editCrimeGroupData={editCrimeGroupData}
+      editInvestigation={editInvestigation}
+      editOffenderData={editOffenderData}
+      editVehicleData={editVehicleData}
+      incidentIds={incidentIds}
+      loading={loading}
+      offenderIds={offenderIds}
+      onAddCrimeGroup={onAddCrimeGroup}
       onAddExistingCrimeGroup={onAddExistingCrimeGroup}
       onAddExistingIncident={onAddExistingIncident}
+      onAddExistingOffender={onAddExistingOffender}
+      onAddExistingOffenders={onAddExistingOffenders}
+      onAddExistingVehicle={onAddExistingVehicle}
+      onAddExistingVehicles={onAddExistingVehicles}
       onAddVehicle={onAddVehicle}
-      onEditVehicle={onEditVehicle}
-      onAddCrimeGroup={onAddCrimeGroup}
-      onEditCrimeGroup={onEditCrimeGroup}
+      onCloseInvestigation={onCloseInvestigation}
+      onCompletedAddOffender={onCompletedAddOffender}
+      onCompletedEditOffender={onCompletedEditOffender}
       onDeleteCrimeGroup={onDeleteCrimeGroup}
+      onDeleteDocument={onDeleteDocument}
       onDeleteIncident={onDeleteIncident}
-      saving={saving}
       onDeleteInvestigation={onDeleteInvestigation}
+      onDeleteOffender={onDeleteOffender}
+      onDeleteVehicle={onDeleteVehicle}
+      onEditCrimeGroup={onEditCrimeGroup}
+      onEditVehicle={onEditVehicle}
+      onReopenInvestigation={onReopenInvestigation}
+      saving={saving}
+      setCompleteTodoVisible={setCompleteTodoVisible}
+      setEditCrimeGroupData={setEditCrimeGroupData}
+      setEditOffenderData={setEditOffenderData}
+      setEditVehicleData={setEditVehicleData}
+      setViewTodoVisible={setViewTodoVisible}
+      showSuggestedOffenders={showSuggestedOffenders}
+      showSuggestedVehicles={showSuggestedVehicles}
       suggestedOffenders={suggestedOffenders}
       suggestedVehicles={suggestedVehicles}
+      takeAllSchemes={takeAllSchemes}
+      templatesData={templatesData}
+      templatesLoading={templatesLoading}
+      toggleAddCrimeGroup={toggleAddCrimeGroup}
+      toggleAddDemDocument={toggleAddDemDocument}
+      toggleAddDocument={toggleAddDocument}
+      toggleAddExistingCrimeGroup={toggleAddExistingCrimeGroup}
+      toggleAddExistingIncident={toggleAddExistingIncident}
+      toggleAddExistingOffender={toggleAddExistingOffender}
+      toggleAddExistingVehicle={toggleAddExistingVehicle}
+      toggleAddOffender={toggleAddOffender}
+      toggleAddTodo={toggleAddTodo}
+      toggleAddVehicle={toggleAddVehicle}
       toggleCloseSuggestedOffenders={toggleCloseSuggestedOffenders}
       toggleCloseSuggestedVehicles={toggleCloseSuggestedVehicles}
-      onAddExistingOffenders={onAddExistingOffenders}
-      onAddExistingVehicles={onAddExistingVehicles}
-      showSuggestedVehicles={showSuggestedVehicles}
-      showSuggestedOffenders={showSuggestedOffenders}
-      toggleShowSuggestedVehicles={toggleShowSuggestedVehicles}
-      toggleShowSuggestedOffenders={toggleShowSuggestedOffenders}
-      editInvestigation={editInvestigation}
       toggleEditInvestigation={toggleEditInvestigation}
-      updateEditOffenderList={updateEditOffenderList}
-      onCompletedEditOffender={onCompletedEditOffender}
+      toggleShowSuggestedOffenders={toggleShowSuggestedOffenders}
+      toggleShowSuggestedVehicles={toggleShowSuggestedVehicles}
+      toggleSubscribe={toggleSubscribe}
       updateAddOffenderList={updateAddOffenderList}
-      onCompletedAddOffender={onCompletedAddOffender}
-      onCloseInvestigation={onCloseInvestigation}
-      onReopenInvestigation={onReopenInvestigation}
-      onDeleteDocument={onDeleteDocument}
+      updateEditOffenderList={updateEditOffenderList}
+      updateTodo={updateTodo}
+      updateTodoList={updateTodoList}
+      vehicleIds={vehicleIds}
+      viewTodoVisible={viewTodoVisible}
     />
   );
 };

@@ -1,35 +1,35 @@
 import React from 'react';
 
 interface CursorProps {
+  color: string;
   cursor: {
     x: number;
     y: number;
   };
-  color: string;
   name: string;
 }
 
-const Cursor = React.memo(({ cursor, color, name }: CursorProps) => {
+const Cursor = React.memo(({ color, cursor, name }: CursorProps) => {
   const { x, y } = cursor;
   return (
     <div
       style={{
-        position: 'absolute',
-        pointerEvents: 'none',
-        userSelect: 'none',
         left: 0,
+        pointerEvents: 'none',
+        position: 'absolute',
         top: 0,
-        transition: 'transform 0.5s cubic-bezier(.17,.93,.38,1)',
         transform: `translateX(${x}px) translateY(${y}px)`,
+        transition: 'transform 0.5s cubic-bezier(.17,.93,.38,1)',
+        userSelect: 'none',
       }}
     >
       <svg
         className="cursor"
-        width="24"
-        height="36"
-        viewBox="0 0 24 36"
         fill="none"
+        height="36"
         stroke="white"
+        viewBox="0 0 24 36"
+        width="24"
         xmlns="http://www.w3.org/2000/svg"
       >
         <path
@@ -42,17 +42,17 @@ const Cursor = React.memo(({ cursor, color, name }: CursorProps) => {
         style={{
           backgroundColor: color,
           borderRadius: 4,
-          position: 'absolute',
-          top: 20,
           left: 10,
           padding: '5px 10px',
+          position: 'absolute',
+          top: 20,
         }}
       >
         <p
           style={{
-            whiteSpace: 'nowrap',
-            fontSize: 13,
             color: 'white',
+            fontSize: 13,
+            whiteSpace: 'nowrap',
           }}
         >
           {name}

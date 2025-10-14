@@ -1,34 +1,27 @@
 /* eslint-disable no-param-reassign */
 import type { Action } from 'easy-peasy';
+
 import { action } from 'easy-peasy';
 
 export interface AuthModel {
+  authenticated: Action<AuthModel, string>;
+  expired: Action<AuthModel>;
+  hideAuthMessage: Action<AuthModel>;
   isSet: boolean;
   loading: boolean;
-  message: string;
-  showMessage: boolean;
-  redirect: string;
-  token: string | null;
   loggedIn: boolean;
+  message: string;
 
-  authenticated: Action<AuthModel, string>;
+  redirect: string;
   setAuthMessage: Action<AuthModel, string>;
-  hideAuthMessage: Action<AuthModel>;
+  showLoading: Action<AuthModel>;
+  showMessage: boolean;
   signOut: Action<AuthModel>;
   signUp: Action<AuthModel, string>;
-  showLoading: Action<AuthModel>;
-  expired: Action<AuthModel>;
+  token: null | string;
 }
 
 const authModel: AuthModel = {
-  isSet: false,
-  loading: false,
-  message: '',
-  showMessage: false,
-  redirect: '',
-  token: null,
-  loggedIn: false,
-
   authenticated: action((state, payload) => {
     state.isSet = true;
     state.loading = false;
@@ -36,15 +29,29 @@ const authModel: AuthModel = {
     state.redirect = '/';
     state.token = payload;
   }),
-  setAuthMessage: action((state, payload) => {
-    state.message = payload;
-    state.showMessage = true;
+  expired: action((state) => {
     state.loading = false;
+    state.isSet = true;
   }),
   hideAuthMessage: action((state) => {
     state.message = '';
     state.showMessage = false;
   }),
+  isSet: false,
+  loading: false,
+  loggedIn: false,
+  message: '',
+
+  redirect: '',
+  setAuthMessage: action((state, payload) => {
+    state.message = payload;
+    state.showMessage = true;
+    state.loading = false;
+  }),
+  showLoading: action((state) => {
+    state.loading = true;
+  }),
+  showMessage: false,
   signOut: action((state) => {
     state.loggedIn = false;
     state.token = null;
@@ -56,13 +63,7 @@ const authModel: AuthModel = {
     state.loggedIn = false;
     state.token = payload;
   }),
-  showLoading: action((state) => {
-    state.loading = true;
-  }),
-  expired: action((state) => {
-    state.loading = false;
-    state.isSet = true;
-  }),
+  token: null,
 };
 
 export default authModel;

@@ -1,24 +1,25 @@
 /* eslint-disable react/require-default-props */
 import type { ReactNode } from 'react';
+
 import React from 'react';
 
 interface Props {
+  alignItems?: string;
   children: ReactNode;
   className?: string;
-  alignItems?: string;
+  flexDirection?: string;
   justifyContent?: string;
   mobileFlex?: boolean;
-  flexDirection?: string;
 }
 
 const Flex = (props: Props) => {
   const {
+    alignItems,
     children,
     className = '',
-    alignItems,
+    flexDirection = 'row',
     justifyContent,
     mobileFlex = true,
-    flexDirection = 'row',
   } = props;
   const getFlexResponsive = () => (mobileFlex ? 'd-flex' : 'd-md-flex');
   return (

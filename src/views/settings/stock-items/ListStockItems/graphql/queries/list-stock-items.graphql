@@ -1,0 +1,21 @@
+query StockItemsList(
+  $where: stockItemRelayWhereInput!
+  $take: Int!
+  $after: String
+) {
+  stockItemsSearch(where: $where, take: $take, after: $after) {
+    hasMore
+    stock {
+      id
+      name
+      sku
+      barcode
+      brand
+      division
+      variant
+      currency
+      salesPriceLocal
+      salesPriceStandard
+    }
+  }
+}

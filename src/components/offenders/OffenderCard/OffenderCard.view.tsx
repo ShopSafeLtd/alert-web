@@ -38,7 +38,7 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
-import FeedImageEditor from 'components/form-components/ImageEditor/FeedImageEditor.view';
+import ImageEditor from 'components/form-components/ImageEditor/ImageEditor.view';
 import AddInvestigation from 'components/form-components/Investigation/AddInvestigation';
 import EditOffenderFeed from 'components/form-components/offender/EditOffenderFeed';
 import KnowOffender from 'components/form-components/offender/KnowOffender';
@@ -241,6 +241,8 @@ const OffenderCard = ({
                       <div className={classes.image} key={image.id}>
                         <WatermarkImage
                           position={image.position}
+                          positionX={image.positionX}
+                          positionY={image.positionY}
                           rotation={image.rotation}
                           url={image.optimised}
                         />
@@ -562,6 +564,8 @@ const OffenderCard = ({
                     <WatermarkImage
                       // ???
                       position={image.position}
+                      positionX={image.positionX}
+                      positionY={image.positionY}
                       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                       rotation={image.rotation}
                       url={image.optimised}
@@ -907,7 +911,7 @@ const OffenderCard = ({
           <div />
         )}
       </Drawer>
-      <FeedImageEditor
+      <ImageEditor
         image={offender.images.find((image) => editImageId === image.id)}
         onClose={toggleEditImage}
         open={editImage}

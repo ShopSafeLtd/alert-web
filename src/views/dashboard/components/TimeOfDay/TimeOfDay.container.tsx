@@ -1,6 +1,7 @@
 import React from 'react';
-import useTimeOfDayGraph from './useTimeOfDayGraph';
+
 import View from './TimeOfDay.view';
+import useTimeOfDayGraph from './useTimeOfDayGraph';
 
 const TimeOfDayContainer = () => {
   const { data, loading } = useTimeOfDayGraph();

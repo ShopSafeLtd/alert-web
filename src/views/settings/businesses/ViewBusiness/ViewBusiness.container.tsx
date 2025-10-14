@@ -9,6 +9,8 @@ const ViewBusiness = () => {
     addDemDevice,
     addTodo,
     addUserVisible,
+    bulkInviteConfirm,
+    bulkInviting,
     businessId,
     completeTodoVisible,
     data,
@@ -24,8 +26,10 @@ const ViewBusiness = () => {
     onRemoveBusiness,
     onRemoveDevice,
     saving,
+    selectedUserIds,
     setCompleteTodoVisible,
     setEditDeviceData,
+    setSelectedUserIds,
     setViewTodoVisible,
     templatesData,
     templatesLoading,
@@ -53,6 +57,8 @@ const ViewBusiness = () => {
       addDemDevice={addDemDevice}
       addTodo={addTodo}
       addUserVisible={addUserVisible}
+      bulkInviteConfirm={bulkInviteConfirm}
+      bulkInviting={bulkInviting}
       businessId={businessId}
       completeTodoVisible={completeTodoVisible}
       data={data}
@@ -68,8 +74,10 @@ const ViewBusiness = () => {
       onRemoveBusiness={onRemoveBusiness}
       onRemoveDevice={onRemoveDevice}
       saving={saving}
+      selectedUserIds={selectedUserIds}
       setCompleteTodoVisible={setCompleteTodoVisible}
       setEditDeviceData={setEditDeviceData}
+      setSelectedUserIds={setSelectedUserIds}
       setViewTodoVisible={setViewTodoVisible}
       templatesData={templatesData}
       templatesLoading={templatesLoading}

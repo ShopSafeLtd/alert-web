@@ -1,7 +1,7 @@
 import type { CurrentUserProviderQuery } from '#/providers/UserProvider/__generated__/current-user.generated';
-import { useCurrentUserProviderQuery } from '#/providers/UserProvider/__generated__/current-user.generated';
 
 import { useTokenContext } from '#/context/token-context';
+import { useCurrentUserProviderQuery } from '#/providers/UserProvider/__generated__/current-user.generated';
 import { useStoreActions } from '#/state';
 import Mixpanel from '#/utils/mixpanel';
 import { useUser } from '@clerk/clerk-react';

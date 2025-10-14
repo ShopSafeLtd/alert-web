@@ -1,4 +1,12 @@
-import React from 'react';
+import type { TagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
+import type { TagData } from 'types/DataType';
+
+import {
+  faPenToSquare,
+  faPlus,
+  faTrash,
+} from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
   Col,
@@ -11,46 +19,39 @@ import {
 } from 'antd';
 import AddOffenderWarning from 'components/form-components/tags/offenderWarnings/AddOffenderWarning';
 import EditOffenderWarning from 'components/form-components/tags/offenderWarnings/EditOffenderWarning';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faPenToSquare,
-  faPlus,
-  faTrash,
-} from '@fortawesome/pro-light-svg-icons';
-import type { TagData } from 'types/DataType';
+import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { TagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
 
 interface Props {
-  data: TagsQuery | undefined;
-  loading: boolean;
-  search: string;
-  setSearch: (value: string) => void;
   addOffenderWarning: boolean;
-  toggleAddOffenderWarning: () => void;
-  onAddOffenderWarning: (value: TagData) => void;
-  offenderId: string;
-  setOffenderId: (value: string) => void;
-  editOffenderWarning: boolean;
-  toggleEditOffenderWarning: () => void;
-  saving: boolean;
+  data: TagsQuery | undefined;
   deleteConfirm: (value: string) => void;
+  editOffenderWarning: boolean;
+  loading: boolean;
+  offenderId: string;
+  onAddOffenderWarning: (value: TagData) => void;
+  saving: boolean;
+  search: string;
+  setOffenderId: (value: string) => void;
+  setSearch: (value: string) => void;
+  toggleAddOffenderWarning: () => void;
+  toggleEditOffenderWarning: () => void;
 }
 
 const OffenderWarningList = ({
-  data,
-  loading,
-  search,
-  setSearch,
-  editOffenderWarning,
-  toggleEditOffenderWarning,
   addOffenderWarning,
-  toggleAddOffenderWarning,
-  onAddOffenderWarning,
-  offenderId,
-  setOffenderId,
-  saving,
+  data,
   deleteConfirm,
+  editOffenderWarning,
+  loading,
+  offenderId,
+  onAddOffenderWarning,
+  saving,
+  search,
+  setOffenderId,
+  setSearch,
+  toggleAddOffenderWarning,
+  toggleEditOffenderWarning,
 }: Props): JSX.Element => {
   const intl = useIntl();
   return (
@@ -58,19 +59,17 @@ const OffenderWarningList = ({
       <Row gutter={8} style={{ marginBottom: 10 }}>
         <Col span={8}>
           <Input
-            value={search}
+            allowClear
             onChange={(event) => setSearch(event.target.value)}
             placeholder={intl.formatMessage({
               defaultMessage: 'Search offender tags...',
             })}
-            allowClear
+            value={search}
           />
         </Col>
         <Col flex={1} />
         <Col>
           <Button
-            type="primary"
-            onClick={toggleAddOffenderWarning}
             icon={
               <FontAwesomeIcon
                 icon={faPlus}
@@ -78,28 +77,18 @@ const OffenderWarningList = ({
                 style={{ marginRight: 5 }}
               />
             }
+            onClick={toggleAddOffenderWarning}
+            type="primary"
           >
             <FormattedMessage defaultMessage="Add Offender Warning" />
           </Button>
         </Col>
       </Row>
       <Table
-        size="small"
-        style={{ marginRight: 10 }}
-        loading={loading}
-        pagination={{
-          hideOnSinglePage: true,
-          defaultPageSize: 20,
-          pageSize: 20,
-        }}
         columns={[
           {
-            key: 'name',
-            title: intl.formatMessage({
-              defaultMessage: 'Name',
-            }),
             dataIndex: 'name',
-            width: 300,
+            key: 'name',
             render: (value, record) => (
               <Typography.Link
                 disabled={saving}
@@ -111,21 +100,23 @@ const OffenderWarningList = ({
                 {value}
               </Typography.Link>
             ),
+            title: intl.formatMessage({
+              defaultMessage: 'Name',
+            }),
+            width: 300,
           },
           {
+            dataIndex: 'description',
+            ellipsis: true,
             key: 'description',
             title: intl.formatMessage({
               defaultMessage: 'Description',
             }),
-            dataIndex: 'description',
-            ellipsis: true,
           },
 
           {
-            key: 'Options',
-            title: '',
             dataIndex: 'Options',
-            width: 100,
+            key: 'Options',
             render: (_, record) => (
               <Row gutter={8}>
                 <Col>
@@ -135,13 +126,13 @@ const OffenderWarningList = ({
                     })}
                   >
                     <Button
-                      size="small"
                       disabled={saving}
+                      icon={<FontAwesomeIcon icon={faPenToSquare} />}
                       onClick={() => {
                         setOffenderId(record.key);
                         toggleEditOffenderWarning();
                       }}
-                      icon={<FontAwesomeIcon icon={faPenToSquare} />}
+                      size="small"
                     />
                   </Tooltip>
                 </Col>
@@ -152,51 +143,61 @@ const OffenderWarningList = ({
                     })}
                   >
                     <Button
-                      size="small"
                       disabled={saving}
+                      icon={<FontAwesomeIcon icon={faTrash} />}
                       onClick={() => {
                         deleteConfirm(record.key);
                       }}
-                      icon={<FontAwesomeIcon icon={faTrash} />}
+                      size="small"
                     />
                   </Tooltip>
                 </Col>
               </Row>
             ),
+            title: '',
+            width: 100,
           },
         ]}
         dataSource={data?.tags.map((tag) => ({
+          description: tag.description,
           key: tag.id,
           name: tag.name,
-          description: tag.description,
         }))}
+        loading={loading}
+        pagination={{
+          defaultPageSize: 20,
+          hideOnSinglePage: true,
+          pageSize: 20,
+        }}
+        size="small"
+        style={{ marginRight: 10 }}
       />
 
       <Drawer
+        onClose={toggleAddOffenderWarning}
+        open={addOffenderWarning}
         title={intl.formatMessage({
           defaultMessage: 'Add Offender Warning',
         })}
-        open={addOffenderWarning}
         width="400"
-        onClose={toggleAddOffenderWarning}
       >
         {addOffenderWarning ? (
           <AddOffenderWarning
-            update={onAddOffenderWarning}
             onClose={toggleAddOffenderWarning}
             saving={saving}
+            update={onAddOffenderWarning}
           />
         ) : (
           <div />
         )}
       </Drawer>
       <Drawer
+        onClose={toggleEditOffenderWarning}
+        open={editOffenderWarning}
         title={intl.formatMessage({
           defaultMessage: 'Edit Offender Warning',
         })}
-        open={editOffenderWarning}
         width="400"
-        onClose={toggleEditOffenderWarning}
       >
         <EditOffenderWarning
           offenderId={offenderId}

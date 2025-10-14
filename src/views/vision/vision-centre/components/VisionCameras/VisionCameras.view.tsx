@@ -99,6 +99,9 @@ const AiTrends = () => {
         dataSource={
           sortedData?.map((edge) => ({
             business: edge.node.business.name,
+            lastUploaded: edge.node.lastUploaded
+              ? new Date(edge.node.lastUploaded).toLocaleString()
+              : 'No uploads',
             make: edge.node.make,
             model: edge.node.model,
             serialNumber: edge.node.serialNumber,
@@ -107,9 +110,6 @@ const AiTrends = () => {
               uploadInLast24Hours(new Date(edge.node.lastUploaded))
                 ? 'Online'
                 : 'Offline',
-            lastUploaded: edge.node.lastUploaded
-              ? new Date(edge.node.lastUploaded).toLocaleString()
-              : 'No uploads',
           })) ?? []
         }
         pagination={false}

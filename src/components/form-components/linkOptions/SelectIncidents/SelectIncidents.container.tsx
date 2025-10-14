@@ -1,78 +1,79 @@
 import React from 'react';
+
 import View from './SelectIncidents.view';
 import useSelectIncidents from './useSelectIncidents';
 
 interface Props {
-  onClose: () => void;
   incidentIds: string[] | undefined;
-  update: (value: string[]) => void;
+  onClose: () => void;
   takeAllSchemes?: boolean;
+  update: (value: string[]) => void;
 }
 const SelectIncidents = ({
-  onClose,
-  update,
   incidentIds,
+  onClose,
   takeAllSchemes,
+  update,
 }: Props): JSX.Element => {
   const {
-    onSubmit,
-    saving,
-    data,
-    loading,
-    search,
-    setSearch,
-    pagination,
-    onPaginationChange,
-    onSelect,
-    setPeculiarities,
-    setGroupsFilter,
     businesses,
-    goods,
-    setCrimeTypesFilter,
-    setGoodsFilter,
-    setBusinessesFilter,
-    goodsLoading,
     businessesLoading,
-    variables,
+    clearFilters,
+    crimeTypes,
+    data,
+    goods,
+    goodsLoading,
     groups,
     groupsLoading,
-    crimeTypes,
+    loading,
+    onPaginationChange,
+    onSelect,
+    onSubmit,
+    pagination,
+    saving,
+    search,
+    setBusinessesFilter,
+    setCrimeTypesFilter,
+    setGoodsFilter,
+    setGroupsFilter,
+    setPeculiarities,
+    setSearch,
     tagsLoading,
-    clearFilters,
+    variables,
   } = useSelectIncidents({
-    onClose,
-    update,
     incidentIds,
+    onClose,
     takeAllSchemes,
+    update,
   });
 
   return (
     <View
-      onSubmit={onSubmit}
-      saving={saving}
-      data={data}
-      search={search}
-      setSearch={setSearch}
-      loading={loading}
-      onClose={onClose}
-      pagination={pagination}
-      onPaginationChange={onPaginationChange}
-      onSelect={onSelect}
-      clearFilters={clearFilters}
-      setCrimeTypesFilter={setCrimeTypesFilter}
-      setGoodsFilter={setGoodsFilter}
-      goods={goods}
-      setGroupsFilter={setGroupsFilter}
-      setPeculiarities={setPeculiarities}
       businesses={businesses}
-      setBusinessesFilter={setBusinessesFilter}
-      goodsLoading={goodsLoading}
       businessesLoading={businessesLoading}
-      variables={variables}
+      clearFilters={clearFilters}
       crimeTypes={crimeTypes}
-      tagsLoading={tagsLoading}
+      data={data}
+      goods={goods}
+      goodsLoading={goodsLoading}
       groups={groups}
       groupsLoading={groupsLoading}
+      loading={loading}
+      onClose={onClose}
+      onPaginationChange={onPaginationChange}
+      onSelect={onSelect}
+      onSubmit={onSubmit}
+      pagination={pagination}
+      saving={saving}
+      search={search}
+      setBusinessesFilter={setBusinessesFilter}
+      setCrimeTypesFilter={setCrimeTypesFilter}
+      setGoodsFilter={setGoodsFilter}
+      setGroupsFilter={setGroupsFilter}
+      setPeculiarities={setPeculiarities}
+      setSearch={setSearch}
+      tagsLoading={tagsLoading}
+      variables={variables}
     />
   );
 };

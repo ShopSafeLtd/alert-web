@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 
 interface Props {
-  ref: React.RefObject<HTMLDivElement>;
   loaded: boolean;
   onLoad: () => void;
+  ref: React.RefObject<HTMLDivElement>;
 }
 
 const useImageLoaded = (): Props => {
@@ -20,9 +20,9 @@ const useImageLoaded = (): Props => {
   });
 
   return {
-    ref,
     loaded,
     onLoad,
+    ref,
   };
 };
 export default useImageLoaded;

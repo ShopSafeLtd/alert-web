@@ -1,4 +1,5 @@
 import React from 'react';
+
 import View from './OffenderMatches.view';
 import useOffenderMatches from './useOffenderMatches';
 
@@ -7,7 +8,7 @@ interface Props {
 }
 
 const OffenderMatches = ({ offenderId }: Props) => {
-  const { data, loading, lightBox, toggleLightBox, onDismissMatch } =
+  const { data, lightBox, loading, onDismissMatch, toggleLightBox } =
     useOffenderMatches({
       offenderId,
     });
@@ -15,10 +16,10 @@ const OffenderMatches = ({ offenderId }: Props) => {
   return (
     <View
       data={data}
-      loading={loading}
       lightBox={lightBox}
-      toggleLightBox={toggleLightBox}
+      loading={loading}
       onDismissMatch={onDismissMatch}
+      toggleLightBox={toggleLightBox}
     />
   );
 };

@@ -1,95 +1,96 @@
 import React from 'react';
+
 import View from './DiscImport.view';
 import useDiscImport from './useDiscImport';
 
 const DiscImport = () => {
   const {
-    knownSubjects,
-    members,
-    onKnownSubjectFileLoaded,
-    onMembersFileLoaded,
-    idSought,
-    onIDSoughtFileLoaded,
-    incidents,
-    onIncidentFileLoaded,
-    onGenerateData,
-    newBusinesses,
-    onDeleteNewBusiness,
-    newOffenders,
+    activeTags,
+    areas,
+    currentStep,
     fileList,
-    handleFileListChange,
-    images,
-    newUsers,
+    galleries,
+    generating,
     groupsData,
+    handleFileListChange,
+    idSought,
     idSoughtModalOpen,
     imageModalOpen,
+    images,
     incidentModalOpen,
+    incidents,
     knownSubjectModalOpen,
+    knownSubjects,
+    mappingForm,
     memberModalOpen,
+    members,
+    newBusinesses,
+    newIncidents,
+    newOffenders,
+    newUsers,
+    onDeleteNewBusiness,
+    onGenerateData,
+    onIDSoughtFileLoaded,
+    onIncidentFileLoaded,
+    onKnownSubjectFileLoaded,
+    onMembersFileLoaded,
+    onStepChange,
+    onSubmit,
+    onUpdateBusiness,
+    onUpdateIncident,
+    onUpdateOffender,
+    onUpdateUser,
+    tagData,
     toggleIdSoughtModal,
     toggleImageModal,
     toggleIncidentModal,
     toggleKnownSubjectModal,
     toggleMemberModal,
-    generating,
-    tagData,
-    newIncidents,
-    activeTags,
-    onSubmit,
-    onUpdateOffender,
-    onUpdateIncident,
-    onUpdateBusiness,
-    onUpdateUser,
-    mappingForm,
-    areas,
-    galleries,
-    currentStep,
-    onStepChange,
   } = useDiscImport();
 
   return (
     <View
-      knownSubjects={knownSubjects}
-      members={members}
-      onKnownSubjectFileLoaded={onKnownSubjectFileLoaded}
-      onMembersFileLoaded={onMembersFileLoaded}
-      idSought={idSought}
-      onIDSoughtFileLoaded={onIDSoughtFileLoaded}
-      incidents={incidents}
-      onIncidentFileLoaded={onIncidentFileLoaded}
-      onGenerateData={onGenerateData}
-      newBusinesses={newBusinesses}
-      onDeleteNewBusiness={onDeleteNewBusiness}
-      newOffenders={newOffenders}
+      activeTags={activeTags}
+      areas={areas}
+      currentStep={currentStep}
       fileList={fileList}
-      handleFileListChange={handleFileListChange}
-      images={images}
-      newUsers={newUsers}
+      galleries={galleries}
+      generating={generating}
       groupsData={groupsData}
+      handleFileListChange={handleFileListChange}
+      idSought={idSought}
       idSoughtModalOpen={idSoughtModalOpen}
       imageModalOpen={imageModalOpen}
+      images={images}
       incidentModalOpen={incidentModalOpen}
+      incidents={incidents}
       knownSubjectModalOpen={knownSubjectModalOpen}
+      knownSubjects={knownSubjects}
+      mappingForm={mappingForm}
       memberModalOpen={memberModalOpen}
+      members={members}
+      newBusinesses={newBusinesses}
+      newIncidents={newIncidents}
+      newOffenders={newOffenders}
+      newUsers={newUsers}
+      onDeleteNewBusiness={onDeleteNewBusiness}
+      onGenerateData={onGenerateData}
+      onIDSoughtFileLoaded={onIDSoughtFileLoaded}
+      onIncidentFileLoaded={onIncidentFileLoaded}
+      onKnownSubjectFileLoaded={onKnownSubjectFileLoaded}
+      onMembersFileLoaded={onMembersFileLoaded}
+      onStepChange={onStepChange}
+      onSubmit={onSubmit}
+      onUpdateBusiness={onUpdateBusiness}
+      onUpdateIncident={onUpdateIncident}
+      onUpdateOffender={onUpdateOffender}
+      onUpdateUser={onUpdateUser}
+      tagData={tagData}
       toggleIdSoughtModal={toggleIdSoughtModal}
       toggleImageModal={toggleImageModal}
       toggleIncidentModal={toggleIncidentModal}
       toggleKnownSubjectModal={toggleKnownSubjectModal}
       toggleMemberModal={toggleMemberModal}
-      generating={generating}
-      tagData={tagData}
-      newIncidents={newIncidents}
-      activeTags={activeTags}
-      onSubmit={onSubmit}
-      onUpdateOffender={onUpdateOffender}
-      onUpdateIncident={onUpdateIncident}
-      onUpdateBusiness={onUpdateBusiness}
-      onUpdateUser={onUpdateUser}
-      mappingForm={mappingForm}
-      areas={areas}
-      galleries={galleries}
-      currentStep={currentStep}
-      onStepChange={onStepChange}
     />
   );
 };

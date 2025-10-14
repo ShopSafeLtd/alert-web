@@ -7,56 +7,56 @@ export const formatBanType = (value?: BanType | null) =>
 
 const BanTypeValues = [
   {
-    value: BanType.Cbo,
     label: 'Criminal Behaviour Order',
+    value: BanType.Cbo,
   },
   {
-    value: BanType.CommunityBan,
     label: 'Community Ban',
+    value: BanType.CommunityBan,
   },
   {
-    value: BanType.Other,
     label: 'Other',
+    value: BanType.Other,
   },
   {
-    value: BanType.Cpn,
     label: 'Community Protection Notice',
+    value: BanType.Cpn,
   },
   {
-    value: BanType.Cpw,
     label: 'Community Protection Warning',
+    value: BanType.Cpw,
   },
   {
-    value: BanType.Pspo,
     label: 'Public Space Protection Order',
+    value: BanType.Pspo,
   },
   {
-    value: BanType.Wip,
     label: 'Withdrawal of Implied Permission',
+    value: BanType.Wip,
   },
   {
-    value: BanType.Arrest,
     label: 'Arrest',
+    value: BanType.Arrest,
   },
   {
-    value: BanType.Fine,
     label: 'Fine',
+    value: BanType.Fine,
   },
   {
-    value: BanType.PrisonSentence,
     label: 'Prison Sentence',
+    value: BanType.PrisonSentence,
   },
   {
-    value: BanType.RehabilitationOrder,
     label: 'Rehabilitation Order',
+    value: BanType.RehabilitationOrder,
   },
   {
-    value: BanType.CourtData,
     label: 'Court Date',
+    value: BanType.CourtData,
   },
   {
-    value: BanType.SuspendedSentence,
     label: 'Suspended Sentence',
+    value: BanType.SuspendedSentence,
   },
 ];
 export default BanTypeValues;

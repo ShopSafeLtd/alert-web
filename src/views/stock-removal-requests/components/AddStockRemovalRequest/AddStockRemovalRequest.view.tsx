@@ -61,6 +61,8 @@ export interface FormData {
   willStockBeReturned: 'No' | 'Yes';
 }
 
+const APPROVER_GROUP_ID = 'cmg9nfl260017ityalcaluw9r';
+
 const AddStockRemovalRequest = ({ onClose }: Props) => {
   const intl = useIntl();
   const [form] = Form.useForm<FormData>();
@@ -107,10 +109,16 @@ const AddStockRemovalRequest = ({ onClose }: Props) => {
         data: {
           stockRemovalRequests: {
             edges: [
-              ...existingData.stockRemovalRequests.edges,
               {
-                node: res.createStockRemovalRequest,
+                node: {
+                  ...res.createStockRemovalRequest,
+                  createdBy: {
+                    __typename: 'User' as const,
+                    id: currentUserId || '',
+                  },
+                },
               },
+              ...existingData.stockRemovalRequests.edges,
             ],
             totalCount: existingData.stockRemovalRequests.totalCount + 1,
           },
@@ -138,7 +146,7 @@ const AddStockRemovalRequest = ({ onClose }: Props) => {
         notification.success({
           description: intl.formatMessage({
             defaultMessage:
-              'The approvers have been notified of your new request.',
+              'An email will be sent to the approvers to review your request.',
           }),
           duration: 0,
           message: intl.formatMessage(
@@ -605,7 +613,28 @@ const AddStockRemovalRequest = ({ onClose }: Props) => {
             <UsersSelect
               allowClear
               mode="multiple"
-              queryVars={{ where: { id: { notIn: [currentUserId ?? ''] } } }}
+              queryVars={{
+                where: {
+                  AND: [
+                    {
+                      groups: {
+                        some: {
+                          id: {
+                            equals: APPROVER_GROUP_ID,
+                          },
+                        },
+                      },
+                    },
+                    {
+                      id: {
+                        not: {
+                          equals: currentUserId ?? '',
+                        },
+                      },
+                    },
+                  ],
+                },
+              }}
               showSearch
             />
           </Form.Item>

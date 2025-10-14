@@ -1,4 +1,5 @@
 import React from 'react';
+
 import View from './AddUserToChat.view';
 import useAddUserToChat from './useAddUserToChat';
 
@@ -6,37 +7,37 @@ interface FormData {
   user: string[];
 }
 interface MemberData {
-  id: string;
-  fullName: string;
   businesses: { id: string; name: string }[];
-  firstLetter?: string | null;
+  firstLetter?: null | string;
+  fullName: string;
+  id: string;
 }
 interface Props {
+  addMemberUpdate: (value: FormData) => void;
   membersData: MemberData[] | undefined;
   onClose: () => void;
-  addMemberUpdate: (value: FormData) => void;
 }
 
 const AddUserToChat = ({
-  onClose,
   addMemberUpdate,
   membersData,
+  onClose,
 }: Props): JSX.Element => {
-  const { onSubmit, usersData, loading, search, setSearch, saving } =
+  const { loading, onSubmit, saving, search, setSearch, usersData } =
     useAddUserToChat({
-      onClose,
-      membersData,
       addMemberUpdate,
+      membersData,
+      onClose,
     });
   return (
     <View
-      onSubmit={onSubmit}
-      onClose={onClose}
-      usersData={usersData}
       loading={loading}
+      onClose={onClose}
+      onSubmit={onSubmit}
+      saving={saving}
       search={search}
       setSearch={setSearch}
-      saving={saving}
+      usersData={usersData}
     />
   );
 };

@@ -634,9 +634,9 @@ const CompletedChecklistView = ({
             <Col>
               {signature && signature.startsWith('data:image') ? (
                 <img
-                  src={signature}
                   alt="Completed By Signature"
-                  style={{ maxWidth: 400, maxHeight: 120 }}
+                  src={signature}
+                  style={{ maxHeight: 120, maxWidth: 400 }}
                 />
               ) : (
                 <div dangerouslySetInnerHTML={{ __html: signature }} />
@@ -1108,9 +1108,9 @@ const CompletedChecklistView = ({
               <Col>
                 {signature && signature.startsWith('data:image') ? (
                   <img
-                    src={signature}
                     alt="Completed By Signature"
-                    style={{ maxWidth: 400, maxHeight: 120 }}
+                    src={signature}
+                    style={{ maxHeight: 120, maxWidth: 400 }}
                   />
                 ) : (
                   <div dangerouslySetInnerHTML={{ __html: signature }} />

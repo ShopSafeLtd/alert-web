@@ -2,8 +2,8 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 // calculate the difference in days between start and end date
 export const calcDuration = (
-  startDate: string | Date,
-  endDate: string | Date
+  startDate: Date | string,
+  endDate: Date | string
 ) => {
   const start = new Date(startDate).valueOf();
   const end = new Date(endDate).valueOf();
@@ -43,7 +43,7 @@ export const calcDuration = (
   );
 };
 // calculate if the ban has expired
-export const calcExpired = (endDate: string | Date) => {
+export const calcExpired = (endDate: Date | string) => {
   const end = new Date(endDate).valueOf();
   const now = Date.now();
 

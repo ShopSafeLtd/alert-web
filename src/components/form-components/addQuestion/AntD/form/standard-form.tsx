@@ -1,7 +1,8 @@
-import React, { useEffect, useRef } from 'react';
 import type { FormInstance, FormItemProps } from 'antd';
+
 import { Button, Form, Row } from 'antd';
 import { Grow } from 'components/layout-components/AntD';
+import React, { useEffect, useRef } from 'react';
 import { useIntl } from 'react-intl';
 
 interface Field extends FormItemProps {
@@ -11,25 +12,25 @@ interface Field extends FormItemProps {
 }
 
 interface Props<T> {
-  loading?: boolean;
-  saving: boolean;
   data?: T;
-  initialValues: T;
   fields: Field[];
-
+  initialValues: T;
+  loading?: boolean;
   onClose(): void;
 
   onSubmit(data: T): void;
+
+  saving: boolean;
 }
 
-export const StandardForm = <T,>({
+export const StandardForm = <T, >({
+  data,
+  fields,
+  initialValues,
+  loading,
   onClose,
   onSubmit,
-  loading,
   saving,
-  data,
-  initialValues,
-  fields,
 }: Props<T>) => {
   const formRef = useRef<FormInstance<T>>(null);
 
@@ -56,18 +57,18 @@ export const StandardForm = <T,>({
   const intl = useIntl();
   return (
     <Form
+      // @ts-ignore
+      initialValues={initialValues}
+      layout="vertical"
       name="basic"
       // eslint-disable-next-line @typescript-eslint/no-misused-promises
       onFinish={handleSubmit}
       onFinishFailed={() => {}}
-      ref={formRef}
-      style={{ display: 'flex', flexDirection: 'column', flex: 1 }}
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      initialValues={initialValues}
-      layout="vertical"
+      ref={formRef}
+      style={{ display: 'flex', flex: 1, flexDirection: 'column' }}
     >
-      {fields.map(({ render, name, label, rules, checkbox }) => (
+      {fields.map(({ checkbox, label, name, render, rules }) => (
         <Form.Item
           label={label}
           name={name}
@@ -84,20 +85,20 @@ export const StandardForm = <T,>({
       <Form.Item {...tailLayout}>
         <Row justify="end">
           <Button
-            type="ghost"
+            disabled={loading || saving}
             onClick={handleClose}
             style={{ marginRight: 15 }}
-            disabled={loading || saving}
+            type="ghost"
           >
             {intl.formatMessage({
               defaultMessage: 'Cancel',
             })}
           </Button>
           <Button
-            type="primary"
+            disabled={loading}
             htmlType="submit"
             loading={saving}
-            disabled={loading}
+            type="primary"
           >
             {intl.formatMessage({
               defaultMessage: 'Submit',

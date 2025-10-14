@@ -1,29 +1,30 @@
 import type React from 'react';
-import { useRef } from 'react';
 import type { Editor } from 'tinymce';
 
+import { useRef } from 'react';
+
 interface Props {
+  investigationId: string;
   onClose: () => void;
   onSelect: (value: string) => void;
-  investigationId: string;
 }
 
 export interface ImagesData {
   offenders: {
-    name: string;
     images: {
       url: string;
     }[];
+    name: string;
   }[];
 }
 
 interface Return {
-  onSubmit: () => void;
   editorRef: React.MutableRefObject<Editor | null>;
+  onSubmit: () => void;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const useEditText = ({ onClose, onSelect, investigationId }: Props): Return => {
+const useEditText = ({ investigationId, onClose, onSelect }: Props): Return => {
   const editorRef = useRef<Editor | null>(null);
 
   const onSubmit = () => {
@@ -32,8 +33,8 @@ const useEditText = ({ onClose, onSelect, investigationId }: Props): Return => {
   };
 
   return {
-    onSubmit,
     editorRef,
+    onSubmit,
   };
 };
 

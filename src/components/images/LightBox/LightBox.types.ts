@@ -1,21 +1,21 @@
 import type { Age, Build, Gender, Height, Race } from 'graphql/types';
 
 export interface Face {
+  boundingHeight?: null | number;
+  boundingLeft?: null | number;
+  boundingTop?: null | number;
+  boundingWidth?: null | number;
+  confidence?: null | number;
   id: string;
-  confidence?: number | null;
-  boundingHeight?: number | null;
-  boundingLeft?: number | null;
-  boundingTop?: number | null;
-  boundingWidth?: number | null;
   offender?: {
-    id: string;
-    name?: string | null;
-    reference?: number | null;
     age?: Age | null;
-    gender?: Gender | null;
-    race?: Race | null;
     build?: Build | null;
+    gender?: Gender | null;
     height?: Height | null;
+    id: string;
+    name?: null | string;
+    race?: Race | null;
+    reference?: null | number;
   } | null;
   rekMatchedSearches: {
     id: string;
@@ -23,7 +23,7 @@ export interface Face {
 }
 
 export interface Image {
-  id: string;
-  optimised?: string | null;
   faces: Face[];
+  id: string;
+  optimised?: null | string;
 }

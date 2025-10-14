@@ -1,30 +1,30 @@
+import colours from '#/components/reports/graphs/colours';
 import { ResponsiveBar } from '@nivo/bar';
-
 import { Empty } from 'antd';
 import React from 'react';
 import { useIntl } from 'react-intl';
-import colours from '#/components/reports/graphs/colours';
+
 import { useStoreState } from '../../../state';
 import filteredBarData from '../../../views/reports/crime-groups/crime-group-report/utils/FilteredBarData';
 
 const MultiBarGraph = ({
   data,
   emptyLabel,
+  isPrinting,
   isStacked,
   tooltip,
-  isPrinting,
   valueSymbol,
 }: {
   data:
     | Array<{
+        data: Array<{ label: string; value: number }>;
         label: string;
-        data: Array<{ value: number; label: string }>;
       } | null>
     | null
     | undefined;
   emptyLabel: string;
-  isStacked?: boolean;
   isPrinting?: boolean; // required if printing to make it light mode
+  isStacked?: boolean;
   tooltip?: boolean;
   valueSymbol?: string;
 }) => {
@@ -35,25 +35,37 @@ const MultiBarGraph = ({
 
   return (
     <div
-      style={{ height: '100%', width: '100%%', marginLeft: 15 }}
       className="no-break"
+      style={{ height: '100%', marginLeft: 15, width: '100%%' }}
     >
       {data && data.length > 0 ? (
         <ResponsiveBar
-          indexBy="label"
+          axisBottom={{
+            tickRotation: 10,
+          }}
+          axisRight={null}
+          axisTop={null}
+          borderColor={{
+            from: 'color',
+            modifiers: [['darker', 1.6]],
+          }}
+          colors={colours}
           data={
             filteredBarData({
               data,
             }) || [
               {
-                value: 'No Data',
                 // label: 'No Data',
                 label: intl.formatMessage({
                   defaultMessage: 'No Data',
                 }),
+                value: 'No Data',
               },
             ]
           }
+          groupMode={isStacked ? 'stacked' : 'grouped'}
+          indexBy="label"
+          indexScale={{ round: true, type: 'band' }}
           keys={
             Object.keys(
               filteredBarData({
@@ -68,51 +80,13 @@ const MultiBarGraph = ({
               )
             ).filter((key) => key !== 'label') || []
           }
-          valueFormat={(value) =>
-            `${valueSymbol ?? ''}${Number(value).toLocaleString('en-GB', {
-              minimumFractionDigits: 0,
-              maximumFractionDigits: 2,
-            })}`
-          }
-          margin={{ top: 50, right: 130, bottom: 60, left: 60 }}
-          padding={0.3}
-          groupMode={isStacked ? 'stacked' : 'grouped'}
-          valueScale={{ type: 'linear' }}
-          indexScale={{ type: 'band', round: true }}
-          colors={colours}
-          theme={{
-            text: {
-              color: isDark ? '#fff' : '#000',
-              fill: isDark ? '#fff' : '#000',
-            },
-          }}
-          borderColor={{
-            from: 'color',
-            modifiers: [['darker', 1.6]],
-          }}
-          axisTop={null}
-          axisRight={null}
-          axisBottom={{
-            tickRotation: 10,
-          }}
-          labelSkipWidth={12}
           labelSkipHeight={7}
-          tooltip={tooltip}
+          labelSkipWidth={12}
           legends={[
             {
-              dataFrom: 'keys',
               anchor: 'bottom-right',
+              dataFrom: 'keys',
               direction: 'column',
-              justify: false,
-              translateX: 120,
-              translateY: 0,
-              itemsSpacing: 2,
-              itemWidth: 100,
-              itemHeight: 20,
-              itemDirection: 'left-to-right',
-              itemOpacity: 0.85,
-              symbolSize: 20,
-              itemTextColor: isDark ? '#fff' : '#3a3a3a',
               effects: [
                 {
                   on: 'hover',
@@ -121,8 +95,34 @@ const MultiBarGraph = ({
                   },
                 },
               ],
+              itemDirection: 'left-to-right',
+              itemHeight: 20,
+              itemOpacity: 0.85,
+              itemTextColor: isDark ? '#fff' : '#3a3a3a',
+              itemWidth: 100,
+              itemsSpacing: 2,
+              justify: false,
+              symbolSize: 20,
+              translateX: 120,
+              translateY: 0,
             },
           ]}
+          margin={{ bottom: 60, left: 60, right: 130, top: 50 }}
+          padding={0.3}
+          theme={{
+            text: {
+              color: isDark ? '#fff' : '#000',
+              fill: isDark ? '#fff' : '#000',
+            },
+          }}
+          tooltip={tooltip}
+          valueFormat={(value) =>
+            `${valueSymbol ?? ''}${Number(value).toLocaleString('en-GB', {
+              maximumFractionDigits: 2,
+              minimumFractionDigits: 0,
+            })}`
+          }
+          valueScale={{ type: 'linear' }}
         />
       ) : (
         <Empty description={emptyLabel} />

@@ -1,5 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-argument */
 import type { FormInstance } from 'antd';
+import type { UserQuery } from 'graphql/user/queries/__generated__/user.generated';
+import type { BusinessData, SelectOptions } from 'types/DataType';
+
+import BusinessesSelect from '#/components/form-components/BusinessesSelect/BusinessesSelect.view';
+import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
+// import validateMobileWithCountryCode from '#/utils/validate-contry-code';
+import { faPlus } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
   Col,
@@ -12,14 +20,6 @@ import {
   Switch,
   Typography,
 } from 'antd';
-import type { UserQuery } from 'graphql/user/queries/__generated__/user.generated';
-import type { BusinessData, SelectOptions } from 'types/DataType';
-
-import BusinessesSelect from '#/components/form-components/BusinessesSelect/BusinessesSelect.view';
-import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
-// import validateMobileWithCountryCode from '#/utils/validate-contry-code';
-import { faPlus } from '@fortawesome/pro-light-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PhoneInput from 'antd-phone-input';
 import AddBusiness from 'components/form-components/businesses/AddBusiness';
 import { Role } from 'graphql/types';
@@ -84,6 +84,8 @@ const EditUser = ({
     <Form<FormData>
       form={form}
       initialValues={{
+        activityEmail: data?.user?.activityEmail,
+        activityPush: data?.user?.activityPush,
         approverGroups:
           data?.user?.approverGroups && data.user.approverGroups.length > 0
             ? data.user.approverGroups.map(({ id }) => id)
@@ -533,6 +535,31 @@ const EditUser = ({
           defaultMessage: 'Send app notifications for new chat messages:',
         })}
         name="messagePush"
+        valuePropName="checked"
+      >
+        <Switch className={classes.switch} disabled={saving} />
+      </Form.Item>
+      <Title style={{ fontSize: 16, marginBottom: 15, marginTop: 10 }}>
+        {intl.formatMessage({
+          defaultMessage: 'Activities:',
+        })}
+      </Title>
+      <Form.Item
+        className={classes.switchItem}
+        label={intl.formatMessage({
+          defaultMessage: 'Send app notifications for activities:',
+        })}
+        name="activityPush"
+        valuePropName="checked"
+      >
+        <Switch className={classes.switch} disabled={saving} />
+      </Form.Item>
+      <Form.Item
+        className={classes.switchItem}
+        label={intl.formatMessage({
+          defaultMessage: 'Send emails for activities:',
+        })}
+        name="activityEmail"
         valuePropName="checked"
       >
         <Switch className={classes.switch} disabled={saving} />

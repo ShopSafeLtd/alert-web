@@ -1,4 +1,4 @@
-import { TimePicker, Form } from 'antd';
+import { Form, TimePicker } from 'antd';
 import React from 'react';
 
 const TimePreview = ({ question }: { question: string }) => (

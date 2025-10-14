@@ -1,10 +1,10 @@
 interface Response {
   features: {
-    place_name: string;
     context: {
       id: string;
       text: string;
     }[];
+    place_name: string;
   }[];
 }
 
@@ -22,19 +22,19 @@ export const getAddressFromLatLng = async ({
   lat: number;
   lng: number;
 }): Promise<{
-  street: string;
   city: string;
-  postcode: string;
   lat: number;
   lng: number;
+  postcode: string;
+  street: string;
 }> => {
   if (!lat || !lng) {
     return {
-      street: '',
       city: '',
-      postcode: '',
       lat: 0,
       lng: 0,
+      postcode: '',
+      street: '',
     };
   }
   const response = await fetch(
@@ -46,11 +46,11 @@ export const getAddressFromLatLng = async ({
   const data = (await response.json()) as Response;
   if (!data)
     return {
-      street: '',
       city: '',
-      postcode: '',
       lat: 0,
       lng: 0,
+      postcode: '',
+      street: '',
     };
 
   const postcodeContext = data.features[0].context.find((context) =>
@@ -65,11 +65,11 @@ export const getAddressFromLatLng = async ({
   const postcode = postcodeContext?.text ?? '';
 
   return {
-    street,
     city,
-    postcode,
     lat,
     lng,
+    postcode,
+    street,
   };
 };
 

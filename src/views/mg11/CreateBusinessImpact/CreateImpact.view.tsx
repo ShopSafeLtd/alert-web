@@ -1,116 +1,118 @@
 /* eslint-disable formatjs/no-literal-string-in-jsx */
-import React from 'react';
-import './styles.css';
 import type { FormInstance } from 'antd';
+
+import { faFileUpload } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
   Card,
-  Collapse,
-  Form,
-  Tabs,
-  Upload,
   Col,
+  Collapse,
   Descriptions,
+  Form,
   Input,
   PageHeader,
   Radio,
   Row,
   Select,
+  Tabs,
+  Upload,
 } from 'antd';
+import React from 'react';
 import ReactDOMServer from 'react-dom/server';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFileUpload } from '@fortawesome/pro-light-svg-icons';
 import { useNavigate } from 'react-router';
 import { useParams } from 'react-router-dom';
+
+import SignatureInput from '../../../components/SignBox';
 import SigSeal from '../../../components/onboarding/Onboarding/SchemeTerms/SigSeal';
 import FONT_FAMILIES from '../../../components/onboarding/Onboarding/SchemeTerms/utils/Fonts';
-import SignatureInput from '../../../components/SignBox';
+import './styles.css';
 
 export interface BusinessImpactStatementProps {
-  businessName: string;
   businessAddress: string;
-  contactName: string;
-  telephone: string;
+  businessName: string;
+  compensation: string;
   contactAddress: string;
+  contactName: string;
   crimeNumber: string;
-  policeOfficerAttending: string;
-  financialImpact: string;
+  date: string;
   directLossStatement: string;
-  otherLossStatement: string;
+  financialImpact: string;
   nonFinancialImpact: string;
   otherComments: string;
-  compensation: string;
+  otherLossStatement: string;
+  policeOfficerAttending: string;
   signature: string;
-  date: string;
+  telephone: string;
 }
 const { TextArea } = Input;
 
 export interface FormData {
-  businessName: string;
   businessAddress: string;
-  contactName: string;
-  telephone: string;
+  businessName: string;
+  compensation: string;
   contactAddress: string;
+  contactName: string;
   crimeNumber: string;
-  policeOfficerAttending: string;
-  financialImpact: string;
+  date: string;
   directLossStatement: string;
-  otherLossStatement: string;
+  financialImpact: string;
   nonFinancialImpact: string;
   otherComments: string;
-  compensation: string;
+  otherLossStatement: string;
+  policeOfficerAttending: string;
   signature: string;
-  date: string;
+  telephone: string;
 }
 
 export interface IncidentData {
-  userName: string;
-  userAddress: string;
-  userContact: string;
-  businessName: string;
   businessAddress: string;
-  referenceNumber: string;
+  businessName: string;
+  description: string;
   incidentDate: string;
   incidentLoss: string;
   incidentRecovered: string;
-  description: string;
   lostItems: string[];
+  referenceNumber: string;
+  userAddress: string;
+  userContact: string;
+  userName: string;
 }
 
 interface Props {
+  data: FormData;
+  file: { file: string; name: string } | null;
+  form: FormInstance<FormData>;
+  incidentData: IncidentData;
+  name: string;
   onSubmit: (value: FormData) => void;
   saving: boolean;
-  form: FormInstance<FormData>;
-  sign: string;
-  setSign: (value: string) => void;
-  update: (value: string) => void;
   selectedFont: string;
-  name: string;
-  file: { file: string; name: string } | null;
-  setTab: (value: string) => void;
-  tab: string;
-  setSelectedFont: (value: string) => void;
   setFile: (value: { file: string; name: string } | null) => void;
-  incidentData: IncidentData;
-  data: FormData;
+  setSelectedFont: (value: string) => void;
+  setSign: (value: string) => void;
+  setTab: (value: string) => void;
+  sign: string;
+  tab: string;
+  update: (value: string) => void;
 }
 
 const createBusinessImpact = ({
-  incidentData,
-  form,
-  setSign,
-  sign,
-  name,
-  setFile,
-  file,
-  selectedFont,
-  setSelectedFont,
-  tab,
-  setTab,
-  update,
-  saving,
-  onSubmit,
   data,
+  file,
+  form,
+  incidentData,
+  name,
+  onSubmit,
+  saving,
+  selectedFont,
+  setFile,
+  setSelectedFont,
+  setSign,
+  setTab,
+  sign,
+  tab,
+  update,
 }: Props) => {
   const noPages = 6;
   const navigate = useNavigate();
@@ -144,9 +146,9 @@ const createBusinessImpact = ({
                       <h2
                         style={{
                           fontSize: 20,
-                          textAlign: 'center',
                           fontWeight: 600,
                           marginBottom: 0,
+                          textAlign: 'center',
                         }}
                       >
                         IMPACT STATEMENT FOR BUSINESS
@@ -206,7 +208,7 @@ const createBusinessImpact = ({
                         <div className="bis-field">
                           <div
                             className="bis-field-label"
-                            style={{ width: '40%', fontWeight: 'bold' }}
+                            style={{ fontWeight: 'bold', width: '40%' }}
                           >
                             Name of business affected:
                           </div>
@@ -222,7 +224,7 @@ const createBusinessImpact = ({
                         <div className="bis-field">
                           <div
                             className="bis-field-label"
-                            style={{ width: '40%', fontWeight: 'bold' }}
+                            style={{ fontWeight: 'bold', width: '40%' }}
                           >
                             Business Address:
                           </div>
@@ -238,7 +240,7 @@ const createBusinessImpact = ({
                         <div className="bis-field">
                           <div
                             className="bis-field-label"
-                            style={{ width: '40%', fontWeight: 'bold' }}
+                            style={{ fontWeight: 'bold', width: '40%' }}
                           >
                             Contact name:
                           </div>
@@ -254,7 +256,7 @@ const createBusinessImpact = ({
                         <div className="bis-field">
                           <div
                             className="bis-field-label"
-                            style={{ width: '40%', fontWeight: 'bold' }}
+                            style={{ fontWeight: 'bold', width: '40%' }}
                           >
                             Telephone Number:
                           </div>
@@ -270,7 +272,7 @@ const createBusinessImpact = ({
                         <div className="bis-field">
                           <div
                             className="bis-field-label"
-                            style={{ width: '40%', fontWeight: 'bold' }}
+                            style={{ fontWeight: 'bold', width: '40%' }}
                           >
                             Address:
                           </div>
@@ -286,7 +288,7 @@ const createBusinessImpact = ({
                         <div className="bis-field">
                           <div
                             className="bis-field-label"
-                            style={{ width: '40%', fontWeight: 'bold' }}
+                            style={{ fontWeight: 'bold', width: '40%' }}
                           >
                             Crime Number:
                           </div>
@@ -302,7 +304,7 @@ const createBusinessImpact = ({
                         <div className="bis-field">
                           <div
                             className="bis-field-label"
-                            style={{ width: '40%', fontWeight: 'bold' }}
+                            style={{ fontWeight: 'bold', width: '40%' }}
                           >
                             Police Officer Attending:
                           </div>
@@ -327,9 +329,9 @@ const createBusinessImpact = ({
                       <div
                         className="bis-field-label"
                         style={{
-                          width: '100%',
                           fontWeight: 'bold',
                           marginTop: 20,
+                          width: '100%',
                         }}
                       >
                         Did the business suffer a direct Financial Loss?
@@ -338,8 +340,8 @@ const createBusinessImpact = ({
                         name="financialImpact"
                         rules={[
                           {
-                            required: true,
                             message: 'Please select an option',
+                            required: true,
                           },
                         ]}
                       >
@@ -367,10 +369,10 @@ const createBusinessImpact = ({
                     <section
                       className="bis-section"
                       style={{
-                        outline: '#0e1b2c solid 2px',
                         height: '80%',
-                        padding: 10,
                         marginBottom: 20,
+                        outline: '#0e1b2c solid 2px',
+                        padding: 10,
                       }}
                     >
                       <div>
@@ -412,10 +414,10 @@ const createBusinessImpact = ({
                     <section
                       className="bis-section"
                       style={{
-                        outline: '#0e1b2c solid 2px',
                         height: '75%',
-                        padding: 10,
                         marginBottom: 20,
+                        outline: '#0e1b2c solid 2px',
+                        padding: 10,
                       }}
                     >
                       <div>
@@ -454,10 +456,10 @@ const createBusinessImpact = ({
                     <section
                       className="bis-section"
                       style={{
-                        outline: '#0e1b2c solid 2px',
                         height: '85%',
-                        padding: 10,
                         marginBottom: 20,
+                        outline: '#0e1b2c solid 2px',
+                        padding: 10,
                       }}
                     >
                       <div>
@@ -486,10 +488,10 @@ const createBusinessImpact = ({
                     <section
                       className="bis-section"
                       style={{
-                        outline: '#0e1b2c solid 2px',
                         height: '100%',
-                        padding: 10,
                         marginBottom: 20,
+                        outline: '#0e1b2c solid 2px',
+                        padding: 10,
                       }}
                     >
                       <div>
@@ -516,8 +518,8 @@ const createBusinessImpact = ({
                           name="compensation"
                           rules={[
                             {
-                              required: true,
                               message: 'Please select an option',
+                              required: true,
                             },
                           ]}
                         >
@@ -581,9 +583,10 @@ const createBusinessImpact = ({
                             ]}
                           >
                             <div>
-                              <Card style={{ width: '100%', display: 'flex' }}>
+                              <Card style={{ display: 'flex', width: '100%' }}>
                                 <Tabs
                                   activeKey={tab}
+                                  destroyInactiveTabPane
                                   onChange={(tabKey) => {
                                     setTab(tabKey);
                                     if (tabKey === 'upload' && file?.file) {
@@ -592,9 +595,9 @@ const createBusinessImpact = ({
                                       update(
                                         ReactDOMServer.renderToString(
                                           <img
-                                            src={`data:application/pdf;base64,${file?.file}`}
                                             alt="file"
                                             height={100}
+                                            src={`data:application/pdf;base64,${file?.file}`}
                                             width={300}
                                           />
                                         )
@@ -605,10 +608,10 @@ const createBusinessImpact = ({
                                       update(
                                         ReactDOMServer.renderToString(
                                           <SigSeal
-                                            key={selectedFont}
-                                            name={name}
                                             font={selectedFont}
                                             height={100}
+                                            key={selectedFont}
+                                            name={name}
                                             width={300}
                                           />
                                         )
@@ -618,56 +621,54 @@ const createBusinessImpact = ({
                                       update('');
                                     }
                                   }}
-                                  type="card"
                                   style={{ height: 250, width: 500 }}
-                                  destroyInactiveTabPane
+                                  type="card"
                                 >
-                                  <Tabs.TabPane tab="Generate" key="generate">
+                                  <Tabs.TabPane key="generate" tab="Generate">
                                     <Select
-                                      style={{
-                                        fontFamily: selectedFont,
-                                        marginBottom: 20,
-                                      }}
                                       defaultValue={selectedFont}
                                       onChange={(value) => {
                                         setSelectedFont(value);
                                         update(
                                           ReactDOMServer.renderToString(
                                             <SigSeal
-                                              key={selectedFont}
-                                              name={name}
                                               font={selectedFont}
                                               height={100}
+                                              key={selectedFont}
+                                              name={name}
                                               width={300}
                                             />
                                           )
                                         );
                                       }}
+                                      style={{
+                                        fontFamily: selectedFont,
+                                        marginBottom: 20,
+                                      }}
                                     >
                                       {FONT_FAMILIES.map((font) => (
                                         <Select.Option
                                           key={font}
-                                          value={font}
                                           style={{
                                             fontFamily: font,
                                           }}
+                                          value={font}
                                         >
                                           {name}
                                         </Select.Option>
                                       ))}
                                     </Select>
                                     <SigSeal
-                                      key={selectedFont}
-                                      name={name}
                                       font={selectedFont}
                                       height={100}
+                                      key={selectedFont}
+                                      name={name}
                                       width={300}
                                     />
                                   </Tabs.TabPane>
-                                  <Tabs.TabPane tab="Upload" key="upload">
+                                  <Tabs.TabPane key="upload" tab="Upload">
                                     <>
                                       <Upload
-                                        showUploadList={false}
                                         beforeUpload={(f) => {
                                           const reader = new FileReader();
                                           reader.addEventListener(
@@ -689,9 +690,9 @@ const createBusinessImpact = ({
                                                   update(
                                                     ReactDOMServer.renderToString(
                                                       <img
-                                                        src={`data:application/pdf;base64,${base64result}`}
                                                         alt="file"
                                                         height={100}
+                                                        src={`data:application/pdf;base64,${base64result}`}
                                                         width={300}
                                                       />
                                                     )
@@ -704,6 +705,7 @@ const createBusinessImpact = ({
                                           // Prevent upload
                                           return false;
                                         }}
+                                        showUploadList={false}
                                       >
                                         <Button
                                           key="uploadButton"
@@ -722,21 +724,21 @@ const createBusinessImpact = ({
                                       {file && (
                                         <div
                                           style={{
-                                            paddingTop: 10,
                                             paddingLeft: 10,
+                                            paddingTop: 10,
                                           }}
                                         >
                                           <img
-                                            src={`data:application/pdf;base64,${file.file}`}
                                             alt="file"
                                             height={100}
+                                            src={`data:application/pdf;base64,${file.file}`}
                                             width={300}
                                           />
                                         </div>
                                       )}
                                     </>
                                   </Tabs.TabPane>
-                                  <Tabs.TabPane tab="Draw" key="draw">
+                                  <Tabs.TabPane key="draw" tab="Draw">
                                     <SignatureInput
                                       hidden={false}
                                       onChange={(val: string) => {
@@ -755,7 +757,7 @@ const createBusinessImpact = ({
                   </div>
                 </div>
                 <Form.Item>
-                  <Row style={{ marginTop: 10 }} gutter={10} justify="end">
+                  <Row gutter={10} justify="end" style={{ marginTop: 10 }}>
                     <Col>
                       <Button
                         disabled={saving}
@@ -769,9 +771,9 @@ const createBusinessImpact = ({
                     <Col>
                       <Button
                         disabled={saving}
+                        htmlType="submit"
                         loading={saving}
                         type="primary"
-                        htmlType="submit"
                       >
                         Create Impact Statement
                       </Button>
@@ -792,14 +794,14 @@ const createBusinessImpact = ({
         >
           <Card
             style={{
+              height: 'min-content',
               position: 'sticky',
               top: 20,
               width: '100%',
-              height: 'min-content',
             }}
           >
             <Collapse defaultActiveKey={['1']}>
-              <Collapse.Panel key="1" header="User Details">
+              <Collapse.Panel header="User Details" key="1">
                 <Descriptions column={1} size="small">
                   <Descriptions.Item label="Name">
                     {incidentData.userName}
@@ -812,7 +814,7 @@ const createBusinessImpact = ({
                   </Descriptions.Item>
                 </Descriptions>
               </Collapse.Panel>
-              <Collapse.Panel key="2" header="Business Details">
+              <Collapse.Panel header="Business Details" key="2">
                 <Descriptions column={1} size="small">
                   <Descriptions.Item label="Name">
                     {incidentData.businessName}
@@ -822,7 +824,7 @@ const createBusinessImpact = ({
                   </Descriptions.Item>
                 </Descriptions>
               </Collapse.Panel>
-              <Collapse.Panel key="3" header="Incident Details">
+              <Collapse.Panel header="Incident Details" key="3">
                 <Descriptions column={1} size="small">
                   <Descriptions.Item label="Ref">
                     {incidentData.referenceNumber}

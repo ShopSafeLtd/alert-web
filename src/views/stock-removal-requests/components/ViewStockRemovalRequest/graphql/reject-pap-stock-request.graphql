@@ -1,0 +1,14 @@
+mutation RejectPAPStockRequest($where: UniqueId!) {
+    rejectPAPStockRemovalRequest(where: $where) {
+        id
+        status
+        approvers {
+            id
+            status
+            user {
+                id
+                fullName
+            }
+        }
+    }
+}

@@ -8,11 +8,24 @@ fragment IncidentCard on Incident {
   }
   priority
   customerRef
+  newIncident
+  status {
+    id
+    name
+    tooltip
+  }
+  assignedUsers {
+    id
+    fullName
+  }
   images {
     low
+    optimised
     id
     rotation
     position
+    positionX
+    positionY
     primary
   }
   subject
@@ -21,6 +34,15 @@ fragment IncidentCard on Incident {
   offenders {
     name
     id
+    images(take: 1, orderBy: { createdAt: desc }) {
+      id
+      low
+      optimised
+      rotation
+      position
+      positionX
+      positionY
+    }
   }
   dayTime
   business {

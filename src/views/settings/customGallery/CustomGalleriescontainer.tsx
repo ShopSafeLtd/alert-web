@@ -1,37 +1,38 @@
 import React from 'react';
+
 import View from './CustomGalleries.view';
 import useCustomGalleries from './useCustomGalleries';
 
 const CustomGalleries = (): JSX.Element => {
   const {
-    data,
-    loading,
-    search,
-    setSearch,
-
-    editCustomGallery,
-    setEditCustomGallery,
     addCustomGallery,
-    toggleAddCustomGallery,
-    onAddCustomGallery,
-    saving,
+    data,
     deleteConfirm,
+    editCustomGallery,
+
+    loading,
+    onAddCustomGallery,
     onEditCustomGallery,
+    saving,
+    search,
+    setEditCustomGallery,
+    setSearch,
+    toggleAddCustomGallery,
   } = useCustomGalleries();
   return (
     <View
-      data={data}
-      loading={loading}
-      search={search}
-      setSearch={setSearch}
-      editCustomGallery={editCustomGallery}
-      setEditCustomGallery={setEditCustomGallery}
       addCustomGallery={addCustomGallery}
-      toggleAddCustomGallery={toggleAddCustomGallery}
-      onAddCustomGallery={onAddCustomGallery}
-      saving={saving}
+      data={data}
       deleteConfirm={deleteConfirm}
+      editCustomGallery={editCustomGallery}
+      loading={loading}
+      onAddCustomGallery={onAddCustomGallery}
       onEditCustomGallery={onEditCustomGallery}
+      saving={saving}
+      search={search}
+      setEditCustomGallery={setEditCustomGallery}
+      setSearch={setSearch}
+      toggleAddCustomGallery={toggleAddCustomGallery}
     />
   );
 };

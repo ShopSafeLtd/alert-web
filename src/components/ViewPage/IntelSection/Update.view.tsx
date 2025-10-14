@@ -62,15 +62,7 @@ interface DatedMessages {
   vehicles?: VehicleData[];
 }
 
-const getMessageDate = (date?: Dayjs) => {
-  if (date?.week() === dayjs().week()) {
-    if (date.format('DD/MM/YY') === dayjs().add(-1, 'days').format('DD/MM/YY'))
-      return `Yesterday ${date?.format('HH:mm')}`;
-    if (date?.dayOfYear() === dayjs().dayOfYear()) return date.format('HH:mm');
-    return date.format('dddd HH:mm');
-  }
-  return date?.format('DD/MM HH:mm');
-};
+const getMessageDate = (date?: Dayjs) => date?.format('DD/MM/YYYY HH:mm');
 
 const getImageSpan = (length: number, index: number) => {
   if (length === 3) {

@@ -1,9 +1,9 @@
 function cacheOrLoading({
-  loading,
   data,
+  loading,
 }: {
-  loading: boolean;
   data: unknown;
+  loading: boolean;
 }) {
   if (data) {
     return false;

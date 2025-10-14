@@ -1,38 +1,39 @@
 import React from 'react';
+
 import View from './OffenderWarningList.view';
 import useOffenderWarningList from './useOffenderWarningList';
 
 const OffenderWarningList = (): JSX.Element => {
   const {
-    data,
-    loading,
-    search,
-    setSearch,
-    offenderId,
-    setOffenderId,
-    editOffenderWarning,
-    toggleEditOffenderWarning,
     addOffenderWarning,
-    toggleAddOffenderWarning,
+    data,
+    deleteConfirm,
+    editOffenderWarning,
+    loading,
+    offenderId,
     onAddOffenderWarning,
     saving,
-    deleteConfirm,
+    search,
+    setOffenderId,
+    setSearch,
+    toggleAddOffenderWarning,
+    toggleEditOffenderWarning,
   } = useOffenderWarningList();
   return (
     <View
-      data={data}
-      loading={loading}
-      search={search}
-      setSearch={setSearch}
-      offenderId={offenderId}
-      setOffenderId={setOffenderId}
-      editOffenderWarning={editOffenderWarning}
-      toggleEditOffenderWarning={toggleEditOffenderWarning}
       addOffenderWarning={addOffenderWarning}
-      toggleAddOffenderWarning={toggleAddOffenderWarning}
+      data={data}
+      deleteConfirm={deleteConfirm}
+      editOffenderWarning={editOffenderWarning}
+      loading={loading}
+      offenderId={offenderId}
       onAddOffenderWarning={onAddOffenderWarning}
       saving={saving}
-      deleteConfirm={deleteConfirm}
+      search={search}
+      setOffenderId={setOffenderId}
+      setSearch={setSearch}
+      toggleAddOffenderWarning={toggleAddOffenderWarning}
+      toggleEditOffenderWarning={toggleEditOffenderWarning}
     />
   );
 };

@@ -45,12 +45,12 @@ interface Props {
   setGallery: (values: string[]) => void;
   setGroupsFilter: (value: string[]) => void;
   setOrder: (value: SortOrder) => void;
+  setPoliceAreas: (value: PoliceForce[]) => void;
   setSearch: (value: string) => void;
   sortFilter: boolean;
   toggleAddInvestigation: (value: string) => void;
   toggleSortFilter: () => void;
   variables: VehicleFilters;
-  setPoliceAreas: (value: PoliceForce[]) => void;
 }
 
 const ListVehicles = ({
@@ -68,12 +68,12 @@ const ListVehicles = ({
   setGallery,
   setGroupsFilter,
   setOrder,
+  setPoliceAreas,
   setSearch,
   sortFilter,
   toggleAddInvestigation,
   toggleSortFilter,
   variables,
-  setPoliceAreas,
 }: Props) => {
   const intl = useIntl();
   const classes = useStyles();
@@ -307,8 +307,8 @@ const ListVehicles = ({
           setCreatedAtFilter={setCreatedAtFilter}
           setGroupsFilter={setGroupsFilter}
           setOrder={setOrder}
-          variables={variables}
           setPoliceAreas={setPoliceAreas}
+          variables={variables}
         />
       </Drawer>
       {/* investigation */}

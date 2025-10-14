@@ -16,6 +16,7 @@ import {
   faHistory,
   faListAlt,
   faMessages,
+  faPen,
   faPlus,
 } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -400,13 +401,18 @@ const IncidentSidebar: React.FC<Props> = ({
                         <Card
                           className={classes.activityCard}
                           key={activity.id}
-                          onClick={() => setSelectedActivity(activity.id)}
                           size="small"
                         >
                           <Row gutter={[12, 12]}>
                             <Col span={24}>
                               <Row align="middle" gutter={8}>
-                                <Col flex="1">
+                                <Col
+                                  flex="1"
+                                  onClick={() =>
+                                    setSelectedActivity(activity.id)
+                                  }
+                                  style={{ cursor: 'pointer' }}
+                                >
                                   <div>
                                     <Typography.Text
                                       className={classes.activityName}
@@ -435,11 +441,36 @@ const IncidentSidebar: React.FC<Props> = ({
                                     })}
                                   </Tag>
                                 </Col>
+                                {hasActivityEditPermission && (
+                                  <Col>
+                                    <Tooltip
+                                      title={intl.formatMessage({
+                                        defaultMessage: 'Edit Activity',
+                                      })}
+                                    >
+                                      <Button
+                                        icon={<FontAwesomeIcon icon={faPen} />}
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          setEditingActivity(activity.id);
+                                        }}
+                                        size="small"
+                                        type="text"
+                                      />
+                                    </Tooltip>
+                                  </Col>
+                                )}
                               </Row>
                             </Col>
                             {activity.assignedUsers &&
                               activity.assignedUsers.length > 0 && (
-                                <Col span={24}>
+                                <Col
+                                  onClick={() =>
+                                    setSelectedActivity(activity.id)
+                                  }
+                                  span={24}
+                                  style={{ cursor: 'pointer' }}
+                                >
                                   <div className={classes.activityAssignees}>
                                     <span className={classes.activityLabel}>
                                       {intl.formatMessage({
@@ -475,7 +506,11 @@ const IncidentSidebar: React.FC<Props> = ({
                                   </div>
                                 </Col>
                               )}
-                            <Col span={12}>
+                            <Col
+                              onClick={() => setSelectedActivity(activity.id)}
+                              span={12}
+                              style={{ cursor: 'pointer' }}
+                            >
                               <span className={classes.activityDetailLabel}>
                                 {intl.formatMessage({
                                   defaultMessage: 'Created',
@@ -486,7 +521,11 @@ const IncidentSidebar: React.FC<Props> = ({
                               </span>
                             </Col>
                             {activity.dueDate && (
-                              <Col span={12}>
+                              <Col
+                                onClick={() => setSelectedActivity(activity.id)}
+                                span={12}
+                                style={{ cursor: 'pointer' }}
+                              >
                                 <span className={classes.activityDetailLabel}>
                                   {intl.formatMessage({
                                     defaultMessage: 'Due',
@@ -557,14 +596,19 @@ const IncidentSidebar: React.FC<Props> = ({
                         <Card
                           className={classes.activityCard}
                           key={activity.id}
-                          onClick={() => setSelectedActivity(activity.id)}
                           size="small"
-                          style={{ cursor: 'pointer', opacity: 0.7 }}
+                          style={{ opacity: 0.7 }}
                         >
                           <Row gutter={[12, 12]}>
                             <Col span={24}>
                               <Row align="middle" gutter={8}>
-                                <Col flex="1">
+                                <Col
+                                  flex="1"
+                                  onClick={() =>
+                                    setSelectedActivity(activity.id)
+                                  }
+                                  style={{ cursor: 'pointer' }}
+                                >
                                   <div>
                                     <Typography.Text
                                       className={classes.activityName}
@@ -594,10 +638,33 @@ const IncidentSidebar: React.FC<Props> = ({
                                     })}
                                   </Tag>
                                 </Col>
+                                {hasActivityEditPermission && (
+                                  <Col>
+                                    <Tooltip
+                                      title={intl.formatMessage({
+                                        defaultMessage: 'Edit Activity',
+                                      })}
+                                    >
+                                      <Button
+                                        icon={<FontAwesomeIcon icon={faPen} />}
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          setEditingActivity(activity.id);
+                                        }}
+                                        size="small"
+                                        type="text"
+                                      />
+                                    </Tooltip>
+                                  </Col>
+                                )}
                               </Row>
                             </Col>
                             {activity.completedBy && activity.completedDate && (
-                              <Col span={24}>
+                              <Col
+                                onClick={() => setSelectedActivity(activity.id)}
+                                span={24}
+                                style={{ cursor: 'pointer' }}
+                              >
                                 <div style={{ color: '#8c8c8c', fontSize: 12 }}>
                                   <FontAwesomeIcon
                                     icon={faCheck}
@@ -620,7 +687,13 @@ const IncidentSidebar: React.FC<Props> = ({
                             )}
                             {activity.assignedUsers &&
                               activity.assignedUsers.length > 0 && (
-                                <Col span={24}>
+                                <Col
+                                  onClick={() =>
+                                    setSelectedActivity(activity.id)
+                                  }
+                                  span={24}
+                                  style={{ cursor: 'pointer' }}
+                                >
                                   <div className={classes.activityAssignees}>
                                     <span className={classes.activityLabel}>
                                       {intl.formatMessage({

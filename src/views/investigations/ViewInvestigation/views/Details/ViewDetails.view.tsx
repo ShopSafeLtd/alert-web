@@ -255,7 +255,7 @@ const ViewInvestigation = ({
   // Get outlet context for sidebar state management
   const outletContext = useOutletContext<{
     rightSidebarOpen: boolean;
-    setRightSidebarOpen: (open: boolean) => void;
+    setRightSidebarOpen:(open: boolean) => void;
   }>();
 
   // Use outlet context if available, otherwise fall back to local state
@@ -1164,12 +1164,40 @@ const ViewInvestigation = ({
                       {
                         dataIndex: 'fileUrl',
                         key: 'actions',
-                        render: (fileUrl: string, item: { key: string }) => (
+                        render: (
+                          fileUrl: string,
+                          item: { key: string; name: string }
+                        ) => (
                           <Row gutter={8}>
                             <Col>
                               <Button
                                 onClick={() => {
-                                  window.open(fileUrl);
+                                  void (async () => {
+                                    try {
+                                      // Fetch the file from Azure Blob Storage
+                                      const response = await fetch(fileUrl);
+                                      const blob = await response.blob();
+
+                                      // Create a temporary URL for the blob
+                                      const blobUrl =
+                                        window.URL.createObjectURL(blob);
+
+                                      // Create a temporary anchor element and trigger download
+                                      const link = document.createElement('a');
+                                      link.href = blobUrl;
+                                      link.download = item.name || 'download';
+                                      document.body.append(link);
+                                      link.click();
+
+                                      // Clean up
+                                      link.remove();
+                                      window.URL.revokeObjectURL(blobUrl);
+                                    } catch (error) {
+                                      console.error('Download failed:', error);
+                                      // Fallback to opening in new tab
+                                      window.open(fileUrl, '_blank');
+                                    }
+                                  })();
                                 }}
                                 size="small"
                               >

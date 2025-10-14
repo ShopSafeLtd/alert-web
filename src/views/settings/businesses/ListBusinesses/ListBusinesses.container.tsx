@@ -19,25 +19,23 @@ const ListBusinesses = () => {
     pagination,
     parentData,
     parentFilter,
+    policeAreaFilter,
     saving,
     searchValue,
     setGroupFilter,
     setPagination,
     setParentFilter,
+    setPoliceAreaFilter,
     setTagFilter,
     tagFilter,
     tags,
     toggleAddVisible,
     toggleFiltersOpen,
     toggleLinkVisible,
-    policeAreaFilter,
-    setPoliceAreaFilter,
   } = useListBusinesses();
 
   return (
     <View
-      setPoliceAreaFilter={setPoliceAreaFilter}
-      policeAreaFilter={policeAreaFilter}
       addVisible={addVisible}
       data={data}
       deleteConfirm={deleteConfirm}
@@ -52,11 +50,13 @@ const ListBusinesses = () => {
       pagination={pagination}
       parentData={parentData}
       parentFilter={parentFilter}
+      policeAreaFilter={policeAreaFilter}
       saving={saving}
       searchValue={searchValue}
       setGroupFilter={setGroupFilter}
       setPagination={setPagination}
       setParentFilter={setParentFilter}
+      setPoliceAreaFilter={setPoliceAreaFilter}
       setTagFilter={setTagFilter}
       tagFilter={tagFilter}
       tags={tags}

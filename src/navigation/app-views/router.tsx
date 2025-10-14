@@ -7,6 +7,8 @@ import { useAtomValue } from 'jotai/index';
 import React, { Suspense, lazy, useEffect } from 'react';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 
+import DefaultLandingRedirect from './DefaultLandingRedirect';
+
 const Onboarding = lazy(() => import('./onboarding/router'));
 const PasswordReset = lazy(() => import('./password/router'));
 const Incidents = lazy(() => import('./incidents/router'));
@@ -78,7 +80,7 @@ export const AppViews = (): JSX.Element => {
         </Routes>
       ) : (
         <Routes>
-          <Route element={<Navigate to="dashboard" />} index path="*" />
+          <Route element={<DefaultLandingRedirect />} index path="*" />
           <Route
             element={<DashboardManagement />}
             key="manage-dashboard"

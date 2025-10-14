@@ -1,5 +1,6 @@
-import React from 'react';
 import useDayOfWeekGraph from '#/views/dashboard/components/DayOfWeek/useDayOfWeekGraph';
+import React from 'react';
+
 import View from './DayOfWeekGraph';
 
 const DayOfWeekContainer = () => {

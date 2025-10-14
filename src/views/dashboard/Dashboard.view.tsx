@@ -25,6 +25,7 @@ import {
   LatestIncident,
   LatestIncidents,
   Marquee,
+  MyStockRequests,
   SearchRow,
   TargetedGoodsContainer,
   TimeOfDay,
@@ -85,6 +86,9 @@ const createElement = (
     }
     case 'latestIncidents': {
       return <LatestIncidents />;
+    }
+    case 'myStockRequests': {
+      return <MyStockRequests />;
     }
     case 'searchRow': {
       return <SearchRow />;

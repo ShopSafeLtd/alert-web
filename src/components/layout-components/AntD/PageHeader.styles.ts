@@ -1,21 +1,21 @@
 import { createUseStyles } from 'react-jss';
 
 const useStyles = createUseStyles({
-  pageHeader: {
-    paddingLeft: 20,
-    paddingRight: 20,
-    paddingBottom: 0,
-    marginTop: 10,
-    position: 'relative',
-  },
   pageActions: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
     '& > *': {
       marginLeft: 10,
     },
+    alignItems: 'center',
+    display: 'flex',
+    justifyContent: 'flex-end',
     marginRight: 10,
+  },
+  pageHeader: {
+    marginTop: 10,
+    paddingBottom: 0,
+    paddingLeft: 20,
+    paddingRight: 20,
+    position: 'relative',
   },
 });
 export default useStyles;

@@ -6,6 +6,8 @@ import useUserList from './useUserList';
 const UserList = (): JSX.Element => {
   const {
     addUser,
+    bulkInviteConfirm,
+    bulkInviting,
     clearFilters,
     currentPage,
     currentPageSize,
@@ -17,9 +19,11 @@ const UserList = (): JSX.Element => {
     onPaginationChange,
     order,
     selectedGroups,
+    selectedUserIds,
     setOrder,
     setSearch,
     setSelectedGroups,
+    setSelectedUserIds,
     setUserRole,
     setUserStatus,
     sortFilter,
@@ -35,6 +39,8 @@ const UserList = (): JSX.Element => {
   return (
     <View
       addUser={addUser}
+      bulkInviteConfirm={bulkInviteConfirm}
+      bulkInviting={bulkInviting}
       clearFilters={clearFilters}
       currentPage={currentPage}
       currentPageSize={currentPageSize}
@@ -46,9 +52,11 @@ const UserList = (): JSX.Element => {
       onPaginationChange={onPaginationChange}
       order={order}
       selectedGroups={selectedGroups}
+      selectedUserIds={selectedUserIds}
       setOrder={setOrder}
       setSearch={setSearch}
       setSelectedGroups={setSelectedGroups}
+      setSelectedUserIds={setSelectedUserIds}
       setUserRole={setUserRole}
       setUserStatus={setUserStatus}
       sortFilter={sortFilter}

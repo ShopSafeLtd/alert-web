@@ -13,11 +13,11 @@ const IncidentCount = ({
   return (
     <Card style={{ height: '100%' }}>
       <Statistic
+        loading={loading}
         title={intl.formatMessage({
           defaultMessage: 'Incident Count',
         })}
         value={data}
-        loading={loading}
       />
     </Card>
   );

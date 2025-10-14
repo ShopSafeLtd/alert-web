@@ -5,26 +5,26 @@ const useStyles = createUseStyles({
     padding: 20,
     paddingTop: 0,
   },
-  searchInput: {
-    width: 400,
+  page: {
+    // overflow: 'hidden',
+    '& .no-padding': {
+      padding: 0,
+    },
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100vh',
+    marginRight: 0,
+    paddingRight: 0,
+    // paddingTop: 10,
+    width: '100%',
   },
   row: {
     '&:hover': {
       cursor: 'pointer',
     },
   },
-  page: {
-    height: '100vh',
-    // paddingTop: 10,
-    width: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-    marginRight: 0,
-    paddingRight: 0,
-    // overflow: 'hidden',
-    '& .no-padding': {
-      padding: 0,
-    },
+  searchInput: {
+    width: 400,
   },
 });
 

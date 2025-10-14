@@ -29,6 +29,7 @@ export interface FormData {
   draftSkip?: string;
   fellingTags?: string[];
   goods?: {
+    barcode?: string;
     description?: string;
     goodsType?: string;
     name?: string;

@@ -1,43 +1,45 @@
-import React from 'react';
 import type { SelectProps } from 'antd';
+
 import { Button, Card, Col, Drawer, Form, Input, Row, Select } from 'antd';
+import React from 'react';
 import { useIntl } from 'react-intl';
+
 import LinkDem from '../ImportEvidence';
 
 interface OnSubmitValues {
+  categories: string[];
   name: string;
   url: string;
-  categories: string[];
 }
 
 interface Props {
+  categories: SelectProps['options'];
+  categoriesChange: (categories: { value: string }[]) => void;
+  categoriesLoading: boolean;
+  onClose: () => void;
   onSubmit: (values: OnSubmitValues) => void;
   saving: boolean;
-  categories: SelectProps['options'];
-  categoriesLoading: boolean;
-  selectedCategories: { value: string }[];
-  categoriesChange: (categories: { value: string }[]) => void;
-  onClose: () => void;
-  toggleSearchEvidence: () => void;
   searchEvidence: boolean;
+  selectEvidence: (evidence: { url: string }) => void;
+  selectedCategories: { value: string }[];
   selectedEvidence: {
     url: string;
   } | null;
-  selectEvidence: (evidence: { url: string }) => void;
+  toggleSearchEvidence: () => void;
 }
 
 const AddBusiness = ({
-  onSubmit,
-  saving,
-  selectedCategories,
   categories,
   categoriesChange,
   categoriesLoading,
   onClose,
-  toggleSearchEvidence,
-  selectedEvidence,
+  onSubmit,
+  saving,
   searchEvidence,
   selectEvidence,
+  selectedCategories,
+  selectedEvidence,
+  toggleSearchEvidence,
 }: Props) => {
   const intl = useIntl();
 
@@ -45,25 +47,25 @@ const AddBusiness = ({
     <Card style={{ marginLeft: 20, marginRight: 20 }}>
       <Form<OnSubmitValues>
         initialValues={{
+          categories: [],
           name: '',
           url: '',
-          categories: [],
         }}
         onFinish={onSubmit}
       >
         <Row gutter={16} style={{ marginLeft: 10, marginRight: 10 }}>
           <Col span={24}>
             <Form.Item
-              name="name"
               label={intl.formatMessage({
                 defaultMessage: 'Name',
               })}
+              name="name"
               rules={[
                 {
-                  required: true,
                   message: intl.formatMessage({
                     defaultMessage: 'Please input a name!',
                   }),
+                  required: true,
                 },
               ]}
             >
@@ -78,24 +80,24 @@ const AddBusiness = ({
         <Row gutter={16} style={{ marginLeft: 10, marginRight: 10 }}>
           <Col span={24}>
             <Form.Item
-              name="category"
               label={intl.formatMessage({
                 defaultMessage: 'Category',
               })}
+              name="category"
             >
               <Select
+                labelInValue
+                loading={categoriesLoading}
+                maxTagCount={2}
+                mode="tags"
+                onChange={categoriesChange}
+                optionFilterProp="value"
+                options={categories}
                 placeholder={intl.formatMessage({
                   defaultMessage: 'Category',
                 })}
-                mode="tags"
                 size="small"
-                maxTagCount={2}
                 style={{ minWidth: 200 }}
-                loading={categoriesLoading}
-                onChange={categoriesChange}
-                options={categories}
-                optionFilterProp="value"
-                labelInValue
                 value={selectedCategories}
               />
             </Form.Item>
@@ -104,13 +106,13 @@ const AddBusiness = ({
         <Row style={{ marginLeft: 20, marginTop: 20 }}>
           <Col>
             {selectedEvidence && selectedEvidence.url && (
-              <a href={selectedEvidence.url} target="_blank" rel="noreferrer">
+              <a href={selectedEvidence.url} rel="noreferrer" target="_blank">
                 {selectedEvidence.url}
               </a>
             )}
             <Button
-              style={{ marginLeft: '10px' }}
               onClick={toggleSearchEvidence}
+              style={{ marginLeft: '10px' }}
             >
               {intl.formatMessage({
                 defaultMessage: 'Search Evidence',
@@ -119,7 +121,7 @@ const AddBusiness = ({
           </Col>
         </Row>
         <Form.Item>
-          <Row style={{ marginTop: 30 }} gutter={10} justify="end">
+          <Row gutter={10} justify="end" style={{ marginTop: 30 }}>
             <Col>
               <Button disabled={saving} onClick={onClose}>
                 {intl.formatMessage({
@@ -129,10 +131,10 @@ const AddBusiness = ({
             </Col>
             <Col>
               <Button
-                loading={saving}
                 disabled={saving}
-                type="primary"
                 htmlType="submit"
+                loading={saving}
+                type="primary"
               >
                 {intl.formatMessage({
                   defaultMessage: 'Create Evidence',
@@ -143,18 +145,18 @@ const AddBusiness = ({
         </Form.Item>
       </Form>
       <Drawer
+        onClose={toggleSearchEvidence}
+        open={searchEvidence}
         title={intl.formatMessage({
           defaultMessage: 'Add DEM Evidence',
         })}
-        open={searchEvidence}
         width="800"
-        onClose={toggleSearchEvidence}
         zIndex={1011}
       >
         {searchEvidence ? (
           <LinkDem
-            selectEvidence={selectEvidence}
             onClose={toggleSearchEvidence}
+            selectEvidence={selectEvidence}
           />
         ) : (
           <div />

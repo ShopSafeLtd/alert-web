@@ -1,7 +1,8 @@
-import React from 'react';
-
 import type { UploadFile } from 'antd/lib/upload/interface';
 import type { OffenderData } from 'types/DataType';
+
+import React from 'react';
+
 import View from './AssignImageOffender.view';
 import useAssignImageOffender from './useAssignImageOffender';
 
@@ -40,7 +41,7 @@ import useAssignImageOffender from './useAssignImageOffender';
 interface Image extends UploadFile {
   offenders?: {
     id: string;
-    name?: string | undefined | null;
+    name?: null | string | undefined;
   }[];
 }
 
@@ -61,12 +62,12 @@ const AssignImageOffender = ({
     addExistingOffender,
     addOffender,
     offendersData,
-    toggleAddExistingOffender,
-    toggleAddOffender,
     onAddOffender,
     selected,
-    toggleOffender,
     submitImage,
+    toggleAddExistingOffender,
+    toggleAddOffender,
+    toggleOffender,
   } = useAssignImageOffender({
     image,
     offenderData,
@@ -75,17 +76,17 @@ const AssignImageOffender = ({
 
   return (
     <View
-      image={image}
-      offendersData={offendersData}
-      toggleAddExistingOffender={toggleAddExistingOffender}
-      toggleAddOffender={toggleAddOffender}
       addExistingOffender={addExistingOffender}
       addOffender={addOffender}
+      image={image}
+      offendersData={offendersData}
       onAddOffender={onAddOffender}
-      selected={selected}
-      toggleOffender={toggleOffender}
       onCancel={onCancel}
       onSubmit={submitImage}
+      selected={selected}
+      toggleAddExistingOffender={toggleAddExistingOffender}
+      toggleAddOffender={toggleAddOffender}
+      toggleOffender={toggleOffender}
     />
   );
 };

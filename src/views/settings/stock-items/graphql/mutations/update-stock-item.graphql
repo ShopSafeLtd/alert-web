@@ -1,0 +1,14 @@
+mutation UpdateStockItem($where: UniqueId!, $data: UpdateStockItemInput!) {
+  updateStockItem(where: $where, data: $data) {
+    id
+    name
+    sku
+    barcode
+    brand
+    division
+    variant
+    currency
+    salesPriceLocal
+    salesPriceStandard
+  }
+}

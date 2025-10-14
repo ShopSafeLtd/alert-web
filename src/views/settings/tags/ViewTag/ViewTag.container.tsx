@@ -15,6 +15,7 @@ const AddCrimeType = (): JSX.Element => {
     deleteQuestion,
     draftState,
     editIncidentType,
+    fieldTitles,
     incidentFormFields,
     incidentFormLayout,
     incidentFormLayoutChanged,
@@ -31,6 +32,7 @@ const AddCrimeType = (): JSX.Element => {
     setConditionsModalOpen,
     setDraftState,
     setEditIncidentType,
+    setFieldTitles,
     setIncidentFormLayout,
     setIncidentFormLayoutChanged,
     setParentTag,
@@ -58,6 +60,7 @@ const AddCrimeType = (): JSX.Element => {
       deleteQuestion={deleteQuestion}
       draftState={draftState}
       editIncidentType={editIncidentType}
+      fieldTitles={fieldTitles}
       incidentFormFields={incidentFormFields}
       incidentFormLayout={incidentFormLayout}
       incidentFormLayoutChanged={incidentFormLayoutChanged}
@@ -74,6 +77,7 @@ const AddCrimeType = (): JSX.Element => {
       setConditionsModalOpen={setConditionsModalOpen}
       setDraftState={setDraftState}
       setEditIncidentType={setEditIncidentType}
+      setFieldTitles={setFieldTitles}
       setIncidentFormLayout={setIncidentFormLayout}
       setIncidentFormLayoutChanged={setIncidentFormLayoutChanged}
       setParentTag={setParentTag}

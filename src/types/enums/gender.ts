@@ -1,20 +1,20 @@
 export enum Gender {
-  'UNKNOWN' = 'UNKNOWN',
-  'MALE' = 'MALE',
   'FEMALE' = 'FEMALE',
+  'MALE' = 'MALE',
+  'UNKNOWN' = 'UNKNOWN',
 }
 
 export const genderValues = [
   {
-    value: 'UNKNOWN',
     label: 'Unknown',
+    value: 'UNKNOWN',
   },
   {
-    value: 'MALE',
     label: 'Male',
+    value: 'MALE',
   },
   {
-    value: 'FEMALE',
     label: 'Female',
+    value: 'FEMALE',
   },
 ];

@@ -185,7 +185,7 @@ const IncidentImport = () => {
         const n = Number(s); // keep time fraction if present
         // Excel serial 1 = 1900-01-01 ⇒ epoch = 1899-12-30 (handles 1900 leap bug)
         const epoch = Date.UTC(1899, 11, 30);
-        const d = new Date(epoch + n * 86400000);
+        const d = new Date(epoch + n * 86_400_000);
 
         // Check if there's a time component (fractional part)
         const hasFractionalPart = n % 1 !== 0;

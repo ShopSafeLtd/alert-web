@@ -1,4 +1,5 @@
 import type { DrawerProps } from 'antd';
+
 import { Drawer } from 'antd';
 import React from 'react';
 
@@ -6,11 +7,11 @@ import React from 'react';
  * @description In addition to the defined props, accepts any AntD drawer props. https://ant.design/components/drawer/
  */
 interface FormDrawerProps extends DrawerProps {
+  children: JSX.Element;
+  onClose: () => void;
   title: React.ReactNode;
   visible: boolean;
-  onClose: () => void;
   width?: number;
-  children: JSX.Element;
 }
 
 /**
@@ -25,17 +26,17 @@ interface FormDrawerProps extends DrawerProps {
  * @description A small abstraction over the AntD drawer component which provides a way to keep all form drawers consistent across the application.
  */
 const FormDrawer = ({
+  children,
+  onClose,
   title,
   visible,
-  onClose,
   width = 480,
-  children,
   ...props
 }: FormDrawerProps): JSX.Element => (
   <Drawer
-    title={title}
-    open={visible}
     onClose={onClose}
+    open={visible}
+    title={title}
     width={width}
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...props}

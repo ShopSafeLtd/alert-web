@@ -16,19 +16,19 @@ const OffenderFilter = (): JSX.Element => {
     setEthnicity,
     setGroupsFilter,
     setHair,
+    setHasNoIncidents,
     setOrder,
     setPeculiarities,
+    setPoliceAreas,
     setSex,
     setWarnings,
     tags,
     tagsLoading,
     variables,
-    setPoliceAreas,
   } = useOffenderFilter();
 
   return (
     <View
-      setPoliceAreas={setPoliceAreas}
       clearFilters={clearFilters}
       order={order}
       publicOffenderDOB={publicOffenderDOB}
@@ -40,8 +40,10 @@ const OffenderFilter = (): JSX.Element => {
       setEthnicity={setEthnicity}
       setGroupsFilter={setGroupsFilter}
       setHair={setHair}
+      setHasNoIncidents={setHasNoIncidents}
       setOrder={setOrder}
       setPeculiarities={setPeculiarities}
+      setPoliceAreas={setPoliceAreas}
       setSex={setSex}
       setWarnings={setWarnings}
       tags={tags}

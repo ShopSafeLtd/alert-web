@@ -1,4 +1,4 @@
-import type * as Types from '../../../../../../graphql/types.js';
+import type * as Types from '../../../../../../graphql/types';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
@@ -95,11 +95,11 @@ export const AiVisionMatchDrawerDocument = gql`
 }
     `;
 export function useAiVisionMatchDrawerQuery(baseOptions: Apollo.QueryHookOptions<AiVisionMatchDrawerQuery, AiVisionMatchDrawerQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions};
+        const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<AiVisionMatchDrawerQuery, AiVisionMatchDrawerQueryVariables>(AiVisionMatchDrawerDocument, options);
       }
 export function useAiVisionMatchDrawerLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AiVisionMatchDrawerQuery, AiVisionMatchDrawerQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions};
+          const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<AiVisionMatchDrawerQuery, AiVisionMatchDrawerQueryVariables>(AiVisionMatchDrawerDocument, options);
         }
 export type AiVisionMatchDrawerQueryHookResult = ReturnType<typeof useAiVisionMatchDrawerQuery>;

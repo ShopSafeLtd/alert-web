@@ -1,6 +1,6 @@
+import { useDashboardContext } from '#/views/dashboard/Dashboard.context';
 import React from 'react';
 
-import { useDashboardContext } from '#/views/dashboard/Dashboard.context';
 import View from './AdminTodos.view';
 import useAdminTodos from './useAdminTodos';
 
@@ -9,28 +9,28 @@ const AdminTodos = (): JSX.Element => {
     variables: { search: fullSearch },
   } = useDashboardContext();
   const {
-    data,
-    loading,
-    saving,
     // onCompletedTodo,
     addTodo,
+    data,
+    fetchMoreScroll,
+    loading,
+    saving,
+    setSearch,
     toggleAddTodo,
     updateTodoList,
-    setSearch,
-    fetchMoreScroll,
   } = useAdminTodos({ fullSearch });
 
   return (
     <View
-      data={data}
-      loading={loading}
-      saving={saving}
       // onCompletedTodo={onCompletedTodo}
       addTodo={addTodo}
+      data={data}
+      fetchMoreScroll={fetchMoreScroll}
+      loading={loading}
+      saving={saving}
+      setSearch={setSearch}
       toggleAddTodo={toggleAddTodo}
       updateTodoList={updateTodoList}
-      setSearch={setSearch}
-      fetchMoreScroll={fetchMoreScroll}
     />
   );
 };

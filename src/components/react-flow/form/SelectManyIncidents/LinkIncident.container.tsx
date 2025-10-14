@@ -1,38 +1,40 @@
-import React from 'react';
 import type { Incident } from 'components/react-flow/nodes/list-incidents-node';
+
+import React from 'react';
+
 import View from './LinkIncident.view';
 import useLinkIncident from './useLinkIncident';
 
 interface Props {
+  ids?: string[];
   onClose: () => void;
   onSelect: (incidents: Incident[]) => void;
-  ids?: string[];
 }
-const LinkIncident = ({ onClose, onSelect, ids }: Props): JSX.Element => {
+const LinkIncident = ({ ids, onClose, onSelect }: Props): JSX.Element => {
   const {
-    onSubmit,
-    saving,
     data,
     loading,
-    search,
-    setSearch,
-    onPaginationChange,
     onChange,
+    onPaginationChange,
+    onSubmit,
+    saving,
+    search,
     selectedRowKeys,
-  } = useLinkIncident({ onClose, onSelect, ids });
+    setSearch,
+  } = useLinkIncident({ ids, onClose, onSelect });
 
   return (
     <View
-      selectedRowKeys={selectedRowKeys}
-      onSubmit={onSubmit}
-      saving={saving}
       data={data}
-      search={search}
-      setSearch={setSearch}
       loading={loading}
       onClose={onClose}
       onPaginationChange={onPaginationChange}
       onSelect={onChange}
+      onSubmit={onSubmit}
+      saving={saving}
+      search={search}
+      selectedRowKeys={selectedRowKeys}
+      setSearch={setSearch}
     />
   );
 };

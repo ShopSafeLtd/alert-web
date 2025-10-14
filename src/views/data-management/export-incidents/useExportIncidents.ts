@@ -42,13 +42,13 @@ export type ActionType =
 
 export type Action = {
   payload:
-    | { [key in Options]: SelectOption[] }
-    | { data: ExportIncidentsState['data'] }
     | {
         estimatedTime: null | string | undefined;
         jobId: null | string;
         jobSubmitted: boolean;
       }
+    | { [key in Options]: SelectOption[] }
+    | { data: ExportIncidentsState['data'] }
     | Date
     | boolean
     | null

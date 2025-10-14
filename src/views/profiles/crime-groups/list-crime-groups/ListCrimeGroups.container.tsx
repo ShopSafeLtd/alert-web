@@ -1,43 +1,44 @@
 import React from 'react';
-import useListCrimeGroups from './useListCrimeGroups';
+
 import View from './ListCrimeGroups.view';
+import useListCrimeGroups from './useListCrimeGroups';
 
 const ListCrimeGroups = () => {
   const {
-    data,
-    loading,
-    setSearch,
-    setGroupsFilter,
-    setCreatedAtFilter,
+    addInvestigation,
     clearFilters,
-    sortFilter,
-    toggleSortFilter,
-    setGallery,
-    variables,
-    setOrder,
+    data,
     groups,
     groupsLoading,
-    addInvestigation,
+    loading,
+    setCreatedAtFilter,
+    setGallery,
+    setGroupsFilter,
+    setOrder,
+    setSearch,
+    sortFilter,
     toggleAddInvestigation,
+    toggleSortFilter,
+    variables,
   } = useListCrimeGroups();
 
   return (
     <View
-      data={data}
-      loading={loading}
-      variables={variables}
-      setSearch={setSearch}
-      sortFilter={sortFilter}
+      addInvestigation={addInvestigation}
       clearFilters={clearFilters}
-      toggleSortFilter={toggleSortFilter}
-      setGallery={setGallery}
-      setGroupsFilter={setGroupsFilter}
-      setCreatedAtFilter={setCreatedAtFilter}
-      setOrder={setOrder}
+      data={data}
       groups={groups}
       groupsLoading={groupsLoading}
-      addInvestigation={addInvestigation}
+      loading={loading}
+      setCreatedAtFilter={setCreatedAtFilter}
+      setGallery={setGallery}
+      setGroupsFilter={setGroupsFilter}
+      setOrder={setOrder}
+      setSearch={setSearch}
+      sortFilter={sortFilter}
       toggleAddInvestigation={toggleAddInvestigation}
+      toggleSortFilter={toggleSortFilter}
+      variables={variables}
     />
   );
 };

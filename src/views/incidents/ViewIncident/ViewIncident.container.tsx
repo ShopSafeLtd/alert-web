@@ -14,11 +14,14 @@ const ViewIncident = (): JSX.Element => {
     editRights,
     hasApprovePermission,
     hideIncident,
+    incidentStatuses,
     loading,
     onEditAddress,
+    onStatusChange,
     saving,
     setSaving,
     showAiDetails,
+    statusLoading,
     toggleEditAddress,
     toggleEditImages,
     toggleShowAiDetails,
@@ -35,11 +38,14 @@ const ViewIncident = (): JSX.Element => {
       hasApprovePermission={hasApprovePermission}
       hideIncident={hideIncident}
       incidentId={incidentId}
+      incidentStatuses={incidentStatuses}
       loading={loading}
       onEditAddress={onEditAddress}
+      onStatusChange={onStatusChange}
       saving={saving}
       setSaving={setSaving}
       showAiDetails={showAiDetails}
+      statusLoading={statusLoading}
       toggleEditAddress={toggleEditAddress}
       toggleEditImages={toggleEditImages}
       toggleShowAiDetails={toggleShowAiDetails}

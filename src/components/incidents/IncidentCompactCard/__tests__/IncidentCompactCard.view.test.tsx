@@ -29,6 +29,8 @@ describe('Detail Officer View', () => {
     ],
     totalImages: 0,
     offenders: [],
+    newIncident: false,
+    assignedUsers: [],
   };
   it('renders the page', () => {
     const { getByText } = render(

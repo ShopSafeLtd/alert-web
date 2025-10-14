@@ -1,5 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
+
 import View from './EditGroup.view';
 import useEditGroup from './useEditGroup';
 
@@ -11,36 +12,36 @@ const EditGroup = ({ onClose }: Props): JSX.Element => {
   const groupId = useParams().id || '';
 
   const {
-    onSubmit,
+    adminUsersData,
     data,
     loading,
-    usersData,
-    usersLoading,
+    onSubmit,
     saving,
     selectedUsers,
     setSelectedUsers,
-    adminUsersData,
-    showOffenderSettings,
     setShowOffenderSettings,
+    showOffenderSettings,
+    usersData,
+    usersLoading,
   } = useEditGroup({
-    onClose,
     groupId,
+    onClose,
   });
 
   return (
     <View
-      onSubmit={onSubmit}
-      onClose={onClose}
+      adminUsersData={adminUsersData}
       data={data}
       loading={loading}
-      usersData={usersData}
-      usersLoading={usersLoading}
+      onClose={onClose}
+      onSubmit={onSubmit}
       saving={saving}
       selectedUsers={selectedUsers}
       setSelectedUsers={setSelectedUsers}
-      adminUsersData={adminUsersData}
-      showOffenderSettings={showOffenderSettings}
       setShowOffenderSettings={setShowOffenderSettings}
+      showOffenderSettings={showOffenderSettings}
+      usersData={usersData}
+      usersLoading={usersLoading}
     />
   );
 };

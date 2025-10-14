@@ -94,4 +94,4 @@ const visualColoursOpactiy = [
   'hsl(0,0%,13%)',
 ];
 
-export { visualColoursLight, visualColours, visualColoursOpactiy };
+export { visualColours, visualColoursLight, visualColoursOpactiy };

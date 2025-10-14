@@ -1,8 +1,8 @@
-import React from 'react';
-import { Route, Routes } from 'react-router';
-import LoginView from '#/views/sign-in/Login.View';
-import { useIntl } from 'react-intl';
 import RouteWrapper from '#/navigation/utils/route-wrapper';
+import LoginView from '#/views/sign-in/Login.View';
+import React from 'react';
+import { useIntl } from 'react-intl';
+import { Route, Routes } from 'react-router';
 
 const SignInPage = () => {
   const intl = useIntl();
@@ -13,7 +13,7 @@ const SignInPage = () => {
       })}
     >
       <Routes>
-        <Route index element={<LoginView />} />
+        <Route element={<LoginView />} index />
       </Routes>
     </RouteWrapper>
   );

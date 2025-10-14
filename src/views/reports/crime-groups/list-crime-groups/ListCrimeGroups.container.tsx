@@ -1,6 +1,7 @@
 import React from 'react';
-import useListCrimeGroups from './useListCrimeGroups';
+
 import View from './ListCrimeGroups.view';
+import useListCrimeGroups from './useListCrimeGroups';
 
 const ListCrimeGroups = () => {
   const { data, loading, search, setSearch } = useListCrimeGroups();

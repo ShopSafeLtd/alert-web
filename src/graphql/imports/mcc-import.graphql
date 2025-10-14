@@ -1,0 +1,5 @@
+mutation midCountiesImportData($data: MidCountiesImportDataInput!) {
+    midCountiesImportData(data: $data) {
+        success
+    }
+}

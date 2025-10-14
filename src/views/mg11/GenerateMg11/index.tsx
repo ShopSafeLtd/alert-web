@@ -1,44 +1,45 @@
 /* eslint-disable formatjs/no-literal-string-in-jsx */
 import React from 'react';
+
 import './styles.css';
 
 interface Mg11Data {
-  name: string;
-  urn: string;
-  age: string;
-  witnessSignature: string;
-  witnessSignatureDate: string;
-  visualRecording: boolean;
-  statement: string;
   address: string;
-  postcode: string;
-  homeTel: string;
-  workTel: string;
-  mobileTel: string;
-  email: string;
-  occupation: string;
-  prefContact: string;
-  gender: string;
-  dobPlace: string;
-  formerName: string;
-  height: string;
-  ethnicity: string;
+  age: string;
   availability: string;
-  likelyToAttend: boolean;
-  likelyToAttendReason: string;
-  specialMeasures: boolean;
   careNeeds: boolean;
   careNeedsDetails: string;
-  station: string;
-  statementWhereWhen: string;
-  detailsExplained: boolean;
-  leafletReceived: boolean;
-  medicalReleasedPolice: string;
-  medicalReleasedDefence: string;
   civilProceedingsRelease: string;
-  witnessServiceDisclose: boolean;
-  statementTakerName: string;
+  detailsExplained: boolean;
+  dobPlace: string;
+  email: string;
+  ethnicity: string;
+  formerName: string;
+  gender: string;
+  height: string;
+  homeTel: string;
   interviewerSignature: string;
+  leafletReceived: boolean;
+  likelyToAttend: boolean;
+  likelyToAttendReason: string;
+  medicalReleasedDefence: string;
+  medicalReleasedPolice: string;
+  mobileTel: string;
+  name: string;
+  occupation: string;
+  postcode: string;
+  prefContact: string;
+  specialMeasures: boolean;
+  statement: string;
+  statementTakerName: string;
+  statementWhereWhen: string;
+  station: string;
+  urn: string;
+  visualRecording: boolean;
+  witnessServiceDisclose: boolean;
+  witnessSignature: string;
+  witnessSignatureDate: string;
+  workTel: string;
 }
 
 const generateMg11 = () => {
@@ -106,7 +107,7 @@ const generateMg11 = () => {
               </div>
               <div
                 className="field"
-                style={{ marginBottom: 0, height: 50, alignItems: 'flex-end' }}
+                style={{ alignItems: 'flex-end', height: 50, marginBottom: 0 }}
               >
                 <div className="field-signature">
                   Signature:{' '}
@@ -141,8 +142,8 @@ const generateMg11 = () => {
                   fontSize: 12,
                   hyphens: 'auto',
                   lineHeight: 1.6, // Added better line spacing
-                  marginTop: 10,
                   marginBottom: 10,
+                  marginTop: 10,
                 }}
               >
                 {text1}
@@ -152,7 +153,7 @@ const generateMg11 = () => {
         </div>
         <div
           className="field-bottom"
-          style={{ marginBottom: 0, height: 50, alignItems: 'flex-end' }}
+          style={{ alignItems: 'flex-end', height: 50, marginBottom: 0 }}
         >
           <div className="field-signature-bottom">
             Signature:{' '}
@@ -189,8 +190,8 @@ const generateMg11 = () => {
                     fontSize: 12,
                     hyphens: 'auto',
                     lineHeight: 1.6, // Added better line spacing
-                    marginTop: 15,
                     marginBottom: 15,
+                    marginTop: 15,
                   }}
                 >
                   {text2}
@@ -200,7 +201,7 @@ const generateMg11 = () => {
           </div>
           <div
             className="field-bottom"
-            style={{ marginBottom: 0, height: 50, alignItems: 'flex-end' }}
+            style={{ alignItems: 'flex-end', height: 50, marginBottom: 0 }}
           >
             <div className="field-signature-bottom">
               Signature:{' '}
@@ -353,7 +354,7 @@ const generateMg11 = () => {
                 </div>
                 <div
                   className="field-label"
-                  style={{ width: '80%', marginRight: 10 }}
+                  style={{ marginRight: 10, width: '80%' }}
                 >
                   The criminal justice process and Victim Personal Statement
                   scheme (victims only) has been explained to me
@@ -368,7 +369,7 @@ const generateMg11 = () => {
                 </div>
                 <div
                   className="field-label"
-                  style={{ width: '80%', marginRight: 10 }}
+                  style={{ marginRight: 10, width: '80%' }}
                 >
                   I have been given the leaflet &lsquo;Giving a witness
                   statement to police - what happens next?&lsquo;{' '}
@@ -383,7 +384,7 @@ const generateMg11 = () => {
                 </div>
                 <div
                   className="field-label"
-                  style={{ width: '80%', marginRight: 10 }}
+                  style={{ marginRight: 10, width: '80%' }}
                 >
                   I consent to the police having access to my medical records in
                   relation to this matter{' '}
@@ -398,7 +399,7 @@ const generateMg11 = () => {
                 </div>
                 <div
                   className="field-label"
-                  style={{ width: '80%', marginRight: 10 }}
+                  style={{ marginRight: 10, width: '80%' }}
                 >
                   I consent to the defence having access to my medical records
                   in relation to this matter{' '}
@@ -414,7 +415,7 @@ const generateMg11 = () => {
                 </div>
                 <div
                   className="field-label"
-                  style={{ width: '80%', marginRight: 10 }}
+                  style={{ marginRight: 10, width: '80%' }}
                 >
                   I consent to the statement being disclosed for the purposes of
                   civil proceedings (if applicable){' '}
@@ -429,7 +430,7 @@ const generateMg11 = () => {
                 </div>
                 <div
                   className="field-label"
-                  style={{ width: '80%', marginRight: 10 }}
+                  style={{ marginRight: 10, width: '80%' }}
                 >
                   The information recorded above will be disclosed to the
                   Witness Service so they can offer help and support, unless you
@@ -441,7 +442,7 @@ const generateMg11 = () => {
               </div>
               <div
                 className="field"
-                style={{ marginBottom: 0, height: 50, alignItems: 'flex-end' }}
+                style={{ alignItems: 'flex-end', height: 50, marginBottom: 0 }}
               >
                 <div className="field-signature">
                   Signature of witness:
@@ -476,7 +477,7 @@ const generateMg11 = () => {
               </div>
               <div
                 className="field"
-                style={{ marginBottom: 0, height: 50, alignItems: 'flex-end' }}
+                style={{ alignItems: 'flex-end', height: 50, marginBottom: 0 }}
               >
                 <div className="field-signature">
                   Signature of witness:
