@@ -7677,6 +7677,8 @@ export type IncidentImageCreate = {
   mimetype: Scalars['String'];
   policeImage?: InputMaybe<Scalars['Boolean']>;
   position?: InputMaybe<Scalars['String']>;
+  positionX?: InputMaybe<Scalars['Float']>;
+  positionY?: InputMaybe<Scalars['Float']>;
   primary?: InputMaybe<Scalars['Boolean']>;
   rotation?: InputMaybe<Scalars['Int']>;
   totalFaces?: InputMaybe<Scalars['Int']>;
@@ -7688,6 +7690,8 @@ export type IncidentImageUpdate = {
   isFace?: InputMaybe<Scalars['Boolean']>;
   policeImage?: InputMaybe<Scalars['Boolean']>;
   position?: InputMaybe<Scalars['String']>;
+  positionX?: InputMaybe<Scalars['Float']>;
+  positionY?: InputMaybe<Scalars['Float']>;
   primary?: InputMaybe<Scalars['Boolean']>;
   rotation?: InputMaybe<Scalars['Int']>;
   totalFaces?: InputMaybe<Scalars['Int']>;
