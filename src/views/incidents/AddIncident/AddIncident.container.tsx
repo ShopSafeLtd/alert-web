@@ -41,7 +41,10 @@ const AddIncident = ({
     tagsData,
     toggleAddNewAddress,
     updateNewAddressData,
-  } = useAddIncident({ id, investigationId: investigation ? id : undefined });
+  } = useAddIncident({
+    id: investigation ? undefined : id,
+    investigationId: investigation ? id : undefined,
+  });
 
   return (
     <div>
