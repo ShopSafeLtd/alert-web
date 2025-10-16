@@ -2,29 +2,28 @@ import type {
   BusinessesSideListQuery,
   BusinessesSideListQueryVariables,
 } from '#/components/businesses/BusinessSideList/graphql/queries/__generated__/sidelist.generated';
+import { BusinessesSideListDocument } from '#/components/businesses/BusinessSideList/graphql/queries/__generated__/sidelist.generated';
 import type { FormInstance } from 'antd';
+import { Form, notification } from 'antd';
 import type {
   SearchBusinessesQuery,
   SearchBusinessesQueryVariables,
 } from 'graphql/businesses/queries/__generated__/search-businesses.generated';
+import { SearchBusinessesDocument } from 'graphql/businesses/queries/__generated__/search-businesses.generated';
 import type { BusinessUpdateInput } from 'graphql/types';
+import { Model, QueryMode, SortOrder } from 'graphql/types';
 import type { LocationData, TagData } from 'types/DataType';
-
-import { BusinessesSideListDocument } from '#/components/businesses/BusinessSideList/graphql/queries/__generated__/sidelist.generated';
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { useBrandsQuery } from '#/views/settings/brands/graphql/queries/__generated__/brands.generated';
 import { useApolloClient } from '@apollo/client';
-import { Form, notification } from 'antd';
 import { useUpdateBusinessMutation } from 'graphql/businesses/mutations/__generated__/update-business.generated';
 import { useEditBusinessQuery } from 'graphql/businesses/queries/__generated__/edit-business.generated';
-import { SearchBusinessesDocument } from 'graphql/businesses/queries/__generated__/search-businesses.generated';
-import { useSchemeGroupsQuery } from 'graphql/groups/queries/__generated__/scheme-groups.generated';
 import { useTagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
-import { Model, QueryMode, SortOrder } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
 import errorNotification from 'types/mutation_notifications/error_notification';
+import { useSchemeGroupsSelectFilterQuery } from '#/components/form-components/businesses/EditBusiness/graphql/queries/__generated__/scheme-groups.generated';
 
 export interface OnSubmitValues {
   brands?: string[];
@@ -143,21 +142,22 @@ const useEditBusiness = ({ businessId, onClose }: Props): Return => {
     },
   });
 
-  const { data: groupsData, loading: groupsLoading } = useSchemeGroupsQuery({
-    fetchPolicy: 'cache-first',
-    variables: {
-      orderBy: {
-        name: SortOrder.Asc,
-      },
-      where: {
-        scheme: {
-          id: {
-            equals: currentScheme,
+  const { data: groupsData, loading: groupsLoading } =
+    useSchemeGroupsSelectFilterQuery({
+      fetchPolicy: 'cache-first',
+      variables: {
+        orderBy: {
+          name: SortOrder.Asc,
+        },
+        where: {
+          scheme: {
+            id: {
+              equals: currentScheme,
+            },
           },
         },
       },
-    },
-  });
+    });
 
   const groups =
     groupsData?.groups.map((group) => ({

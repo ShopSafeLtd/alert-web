@@ -3,7 +3,6 @@ import { SortOrder } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
 
 import type { BusinessesSideListQuery } from './graphql/queries/__generated__/sidelist.generated';
-
 import { useBusinessesSideListQuery } from './graphql/queries/__generated__/sidelist.generated';
 
 interface Return {

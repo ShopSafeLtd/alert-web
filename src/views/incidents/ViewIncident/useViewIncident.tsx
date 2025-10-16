@@ -36,7 +36,7 @@ interface Return {
   incidentStatuses: IncidentStatus[];
   loading: boolean;
   onEditAddress: (value: LocationData) => void;
-  onStatusChange: (statusId: string) => Promise<void>;
+  onStatusChange?: (statusId: string) => Promise<void>;
   saving: boolean;
   setSaving: (value: boolean) => void;
   showAiDetails: boolean;
@@ -180,7 +180,9 @@ const useViewIncident = (incidentId: string): Return => {
       (statusesData?.incidentStatuses as IncidentStatus[]) || [],
     loading: (data === null || data === undefined) && loading,
     onEditAddress,
-    onStatusChange,
+    onStatusChange: currentScheme?.incidentStatusEnabled
+      ? onStatusChange
+      : undefined,
     saving,
     setSaving,
     showAiDetails,
