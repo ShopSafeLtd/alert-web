@@ -7,6 +7,7 @@ import VisionCameras from './components/VisionCameras/VisionCameras.view';
 import VisionEvents from './components/VisionEvents/VisionEvents.view';
 import VisionMatches from './components/VisionMatches/VisionMatches.view';
 import VisionStats from './components/VisionStats/VisionStats.view';
+import { useParams } from 'react-router-dom';
 
 function duplicateItems(
   inputArray: { count: number; geoLat: number; geoLng: number }[]
@@ -24,6 +25,7 @@ function duplicateItems(
 
 const VisionCentre = () => {
   const { data } = useAiVisionStatsQuery({});
+  const visionId = useParams().id || '';
 
   return (
     <div style={{ padding: 20 }}>
@@ -37,7 +39,7 @@ const VisionCentre = () => {
             overflow: 'scroll',
           }}
         >
-          <VisionMatches />
+          <VisionMatches initId={visionId} />
         </Col>
         <Col span={12}>
           <VisionStats data={data} />

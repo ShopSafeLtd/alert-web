@@ -37,6 +37,19 @@ const Suggestions = (): JSX.Element => {
                 model: PermissionModel.VisionAi,
               }}
             >
+              <VisionCentre />
+            </PermissionCheckWrapper>
+          }
+          path="view/:id"
+        />
+        <Route
+          element={
+            <PermissionCheckWrapper
+              permission={{
+                method: PermissionMethod.Read,
+                model: PermissionModel.VisionAi,
+              }}
+            >
               <VisionMatches />
             </PermissionCheckWrapper>
           }
