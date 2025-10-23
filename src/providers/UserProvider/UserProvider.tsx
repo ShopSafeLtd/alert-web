@@ -1,7 +1,7 @@
 import type { CurrentUserProviderQuery } from '#/providers/UserProvider/__generated__/current-user.generated';
+import { useCurrentUserProviderQuery } from '#/providers/UserProvider/__generated__/current-user.generated';
 
 import { useTokenContext } from '#/context/token-context';
-import { useCurrentUserProviderQuery } from '#/providers/UserProvider/__generated__/current-user.generated';
 import { useStoreActions } from '#/state';
 import Mixpanel from '#/utils/mixpanel';
 import { useUser } from '@clerk/clerk-react';
@@ -57,6 +57,19 @@ export const currentSchemeGroups = atom(
   () => {}
 );
 
+export const setHasPasswordAtom = atom(
+  null,
+  (get, set, hasPassword: boolean) => {
+    const currentUser = get(currentUserAtom);
+    if (currentUser) {
+      set(currentUserAtom, {
+        ...currentUser,
+        hasPassword,
+        forcePasswordReset: false,
+      });
+    }
+  }
+);
 export const currentSchemeDefaultGroups = atom(
   (get) =>
     get(currentUserAtom)?.defaultGroups.filter(

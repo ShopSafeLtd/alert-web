@@ -13,11 +13,11 @@ import React, { useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 
-const VisionMatched = () => {
+const VisionMatched = ({ initId }: { initId?: string }) => {
   const currentScheme = useAtomValue(currentSchemeIdAtom);
 
   const [search, setSearch] = useState('');
-  const [matchId, setMatchId] = React.useState<null | string>(null);
+  const [matchId, setMatchId] = React.useState<null | string>(initId || null);
 
   const onDrawerClose = () => {
     setMatchId(null);
