@@ -800,47 +800,43 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
                           townCity: offender?.address?.townCity,
                         }
                         : undefined,
-                    age: offender.age || null,
-                    alias: offender.alias
-                      ? { set: offender.alias }
-                      : undefined,
-                    build: offender.build || null,
-                    comment: offender.comment || null,
-                    createdBy: { connect: { id: userId } },
-                    dateOfBirth: offender.dateOfBirth || null,
-                    dateSource: offender.dateSource || null,
-                    gender: offender.gender || null,
-                    groups: {
-                      connect:
-                        groups && groups.length === 1
-                          ? groups.map(({ value: id }) => ({ id }))
-                          : data.groups?.map((id) => ({ id })) ?? [],
-                    },
-                    hair: offender.hair || null,
-                    height: offender.height || null,
-                    idSource: offender.idSource,
-                    idVerified:
-                      offender.idVerified === null
-                        ? false
-                        : offender.idVerified,
-                    // TODO don't know which one to use so keeping above, may need to change??
-                    images:
-                      offender?.images && offender?.images.length > 0
-                        ? {
-                          create: offender.images.map((image) => ({
-                            indexFaces: facialRecognition,
-                            url: {
-                              filename: image.fileName || '',
-                              id: image.id || '',
-                              mimetype: image.type || '',
-                              url: image.url || image.optimised || '',
-                            },
-                          })),
-                        }
-                        : undefined,
-                    localId: offender.id,
-                    name: offender.name,
-                    peculiarities: offender.peculiarities || null,
+                      build: offender.build || null,
+                      comment: offender.comment || null,
+                      createdBy: { connect: { id: userId } },
+                      dateOfBirth: offender.dateOfBirth || null,
+                      dateSource: offender.dateSource || null,
+                      gender: offender.gender || null,
+                      groups: {
+                        connect:
+                          groups && groups.length === 1
+                            ? groups.map(({ value: id }) => ({ id }))
+                            : data.groups?.map((id) => ({ id })) ?? [],
+                      },
+                      hair: offender.hair || null,
+                      height: offender.height || null,
+                      idSource: offender.idSource,
+                      idVerified:
+                        offender.idVerified === null
+                          ? false
+                          : offender.idVerified,
+                      // TODO don't know which one to use so keeping above, may need to change??
+                      images:
+                        offender?.images && offender?.images.length > 0
+                          ? {
+                              create: offender.images.map((image) => ({
+                                indexFaces: facialRecognition,
+                                url: {
+                                  filename: image.fileName || '',
+                                  id: image.id || '',
+                                  mimetype: image.type || '',
+                                  url: image.url || image.optimised || '',
+                                },
+                              })),
+                            }
+                          : undefined,
+                      localId: offender.id,
+                      name: offender.name || 'Unidentified Offender',
+                      peculiarities: offender.peculiarities || null,
 
                     race: offender.race || null,
                     scheme: { connect: { id: schemeId } },
@@ -882,7 +878,7 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
                   infoSource: { set: offender.infoSource || '' },
                   justification: { set: offender.justification || null },
                   knownFor: offender.knownFor,
-                  name: { set: offender.name || '' },
+                  name: { set: offender.name || 'Unidentified Offender' },
                   peculiarities: { set: offender.peculiarities || '' },
                   race: { set: offender.race },
                   targetedGoods: offender.targetedGoods,

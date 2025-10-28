@@ -148,6 +148,8 @@ const useOffenders = ({ form, onChange, value }: Props): Return => {
     useAtomValue(currentSchemeAtom)?.facialDetection ?? true;
   const imagesRequiredOnOffenders =
     useAtomValue(currentSchemeAtom)?.imagesRequiredOnOffenders ?? false;
+  const dontPrefillOffenderName =
+    useAtomValue(currentSchemeAtom)?.dontPrefillOffenderName ?? false;
 
   const [pristine, setPristine] = useState(true);
   const [offenders, setOffenders] = useState<StateOffenderData[]>([]);
@@ -267,7 +269,7 @@ const useOffenders = ({ form, onChange, value }: Props): Return => {
       height: Height.Unknown,
       id: Math.floor(Math.random() * 1000).toString(),
       images: [],
-      name: 'Unidentified Offender',
+      name: dontPrefillOffenderName ? undefined : 'Unidentified Offender',
       race: Race.Unknown,
     }));
     setNoOffenders(false);
