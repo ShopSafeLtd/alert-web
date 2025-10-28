@@ -124,7 +124,12 @@ const OffenderProfile = ({
         )}
         {offender.confirmedInIncident && offender.imageConfirmed && (
           <div className={classes.profileContent}>
-            <Title level={4}>{offender.name}</Title>
+            <Title level={4}>
+              {offender.name ||
+                intl.formatMessage({
+                  defaultMessage: 'Offender',
+                })}
+            </Title>
             <Row className={classes.profileDetails} gutter={[16, 8]} wrap>
               <Col>
                 <Text>
