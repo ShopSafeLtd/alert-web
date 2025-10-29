@@ -294,7 +294,10 @@ const OffenderCard = ({
                 <Row align="middle" wrap={false}>
                   <Col flex={1}>
                     <Title ellipsis level={4} style={{ marginBottom: 0 }}>
-                      {offender?.name}
+                      {offender?.name ||
+                        intl.formatMessage({
+                          defaultMessage: 'Offender',
+                        })}
                     </Title>
                   </Col>
                   {menuItems.length > 0 && (
@@ -646,7 +649,10 @@ const OffenderCard = ({
                   <Row align="middle" gutter={8} wrap={false}>
                     <Col>
                       <Title ellipsis level={4} style={{ marginBottom: 0 }}>
-                        {offender?.name}
+                        {offender?.name ||
+                          intl.formatMessage({
+                            defaultMessage: 'Offender',
+                          })}
                       </Title>
                     </Col>
                     {offender?.idVerified && (
