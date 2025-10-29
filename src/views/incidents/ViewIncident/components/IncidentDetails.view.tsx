@@ -252,6 +252,34 @@ const IncidentDetails = ({
                 }}
               />
             </Descriptions.Item>
+            {data?.incident?.approvedAction && (
+              <Descriptions.Item
+                className={classes.detail}
+                label={
+                  <span>
+                    <FontAwesomeIcon
+                      className={classes.descIcon}
+                      icon={faUser}
+                    />
+                    {intl.formatMessage({
+                      defaultMessage: 'Approved By',
+                    })}
+                  </span>
+                }
+              >
+                <FormattedMessage
+                  defaultMessage="{var1} ({var2})"
+                  values={{
+                    var1: data?.incident?.approvedAction.userName,
+                    var2: data?.incident
+                      ? dayjs(data.incident.approvedAction.when).format(
+                          'DD/MM/YY HH:mm:ss'
+                        )
+                      : intl.formatMessage({ defaultMessage: 'Unknown' }),
+                  }}
+                />
+              </Descriptions.Item>
+            )}
           </Descriptions>
         </Col>
         <Col span={12}>

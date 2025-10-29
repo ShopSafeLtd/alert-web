@@ -41,9 +41,20 @@ query ViewInvestigation($where: InvestigationWhereUniqueInput!) {
       ...Vehicles
     }
     offenders {
-      ...Offenders
+      id
+      reference
+      name
+      age
+      gender
+      race
+      build
       totalIncidents
       totalValue
+      knownFor
+      targetedBusinesses {
+        id
+        name
+      }
       latestIncident {
         id
         date
@@ -54,7 +65,6 @@ query ViewInvestigation($where: InvestigationWhereUniqueInput!) {
         optimisedPersisted
         position
         rotation
-        isFace
       }
     }
     incidents(orderBy: { date: desc }) {

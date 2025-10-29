@@ -82,6 +82,7 @@ const calcRace = (value: string) => {
   if (value === 'IC4') return Race.Ic4;
   if (value === 'IC5') return Race.Ic5;
   if (value === 'IC6') return Race.Ic6;
+  if (value === 'IC9') return Race.Ic9;
   return Race.Unknown;
 };
 

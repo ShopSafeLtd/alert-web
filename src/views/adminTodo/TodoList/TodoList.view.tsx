@@ -94,6 +94,7 @@ interface Props {
   setSearch: (value: string) => void;
   setSelectedTodo: (id: null | string) => void;
   setStatusMode: (value: TodoStatusInput) => void;
+  showBlankActivity: boolean;
   templateData: ListData[];
   toggleAddTodo: () => void;
   toggleAllSchemes: () => void;
@@ -189,6 +190,7 @@ const AdminTodos = ({
   setSearch,
   setSelectedTodo,
   setStatusMode,
+  showBlankActivity,
   templateData,
   toggleAddTodo,
   toggleAllUsers,
@@ -322,7 +324,7 @@ const AdminTodos = ({
                       label: item.name,
                       onClick: () => selectTemplate(item.id),
                     })),
-                  ],
+                  ].filter((el) => el.key !== 10_000 || showBlankActivity),
                 }}
               >
                 <Button

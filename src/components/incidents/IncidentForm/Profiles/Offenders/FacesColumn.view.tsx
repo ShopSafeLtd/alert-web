@@ -86,7 +86,7 @@ const FacesColumn = ({ facesOpen, onClose, onSubmit }: Props) => {
           name: 'Unidentified Offender',
           new: true,
           peculiarities: getPeculiaritiesFromFace(face.beard, face.mustache),
-          race: Race.Unknown,
+          race: Race.Ic9,
         })),
         offenderId: facesOpen.offenderId,
         selectedFace: selected,

@@ -10,7 +10,7 @@ import type { CreateTodoMutation } from 'graphql/todos/mutations/__generated__/c
 import { useGroupsContext } from '#/context/groups-context';
 import {
   currentPermissionsAtom,
-  currentSchemeIdAtom,
+  currentSchemeAtom,
 } from '#/providers/SchemeProvider/SchemeProvider';
 import { userIdAtom } from '#/providers/UserProvider/UserProvider';
 import hasPermission from '#/utils/has-permission';
@@ -61,8 +61,8 @@ interface Return {
   groupsData: { label: string; value: string }[];
   groupsFilter: string[];
   loading: boolean;
-
   onCompletedTodo: (id: string) => void;
+
   onDeleteTodo: (id: string) => void;
   onPaginationChange: (page: number, pageSize: number) => void;
   onTableChange: TableProps<TableItem>['onChange'];
@@ -76,6 +76,7 @@ interface Return {
   setSearch: (value: string) => void;
   setSelectedTodo: (id: null | string) => void;
   setStatusMode: (value: TodoStatusInput) => void;
+  showBlankActivity: boolean;
   templateData: ListData[];
   toggleAddTodo: () => void;
   toggleAllSchemes: () => void;
@@ -89,7 +90,9 @@ const useAdminTodos = ({
 }: {
   defaultOpen?: null | string;
 }): Return => {
-  const schemeId = useAtomValue(currentSchemeIdAtom);
+  const currentScheme = useAtomValue(currentSchemeAtom);
+  const { id: schemeId, showBlankActivity } = currentScheme;
+
   const permissions = useAtomValue(currentPermissionsAtom);
 
   const userId = useAtomValue(userIdAtom);
@@ -391,6 +394,7 @@ const useAdminTodos = ({
     setSearch,
     setSelectedTodo,
     setStatusMode,
+    showBlankActivity,
     templateData,
     toggleAddTodo,
     toggleAllSchemes,

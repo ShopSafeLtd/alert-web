@@ -125,6 +125,7 @@ const SchemeDetail = ({
             requireSiteNumberForUsers:
               data?.scheme?.requireSiteNumberForUsers || false,
             restrictIncidentAccess: data?.scheme?.restrictIncidentAccess,
+            showBlankActivity: data?.scheme?.showBlankActivity,
             useBusinessGroupsOnIncident:
               data?.scheme?.useBusinessGroupsOnIncident,
           }}
@@ -631,6 +632,20 @@ const SchemeDetail = ({
                 defaultMessage: 'Completing activities requires authorization',
               })}
               name="requireActivityAuthorised"
+              style={{ marginBottom: 0 }}
+              valuePropName="checked"
+            >
+              <Switch
+                className="scheme-detail-switch"
+                disabled={saving}
+                style={{ marginLeft: 5 }}
+              />
+            </Form.Item>
+            <Form.Item
+              label={intl.formatMessage({
+                defaultMessage: 'Show blank activity',
+              })}
+              name="showBlankActivity"
               style={{ marginBottom: 0 }}
               valuePropName="checked"
             >

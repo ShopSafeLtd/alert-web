@@ -149,6 +149,7 @@ export const defaultCurrentUserSchemeAtom: UserSchemeState = {
     requireBusinessOnIncident: false,
     requireSiteNumberForUsers: false,
     restrictIncidentAccess: false,
+    showBlankActivity: false,
     skipLocationToAddress: false,
     taskTimeTracking: false,
     usDateFormat: false,

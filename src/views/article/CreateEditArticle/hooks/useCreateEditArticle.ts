@@ -29,13 +29,13 @@ import type { Props } from '../types/CreateArticle';
 import extracted from '../../../../utils/add-default-to-article';
 import customRequest from '../../../../utils/custom-request';
 
-const { useForm } = Form;
-
 interface FormData {
+  business: string[];
   categories: SelectProps['options'];
   content: string;
   groups: string[];
   importance: ArticlePriority;
+  roles: string[];
   schemes: string[];
   title: string;
   watermarkImage: boolean;
@@ -70,12 +70,14 @@ const useCreateEditArticle = (): Props => {
   const schemeId = useAtomValue(currentSchemeIdAtom);
   const schemes = useAtomValue(userSchemesAtom);
   const userId = useAtomValue(currentUserAtom)?.id ?? '';
-  const [form] = useForm<FormData>();
+  const [form] = Form.useForm<FormData>();
   const [data, setData] = useState<FormData>({
+    business: [],
     categories: [],
     content: '',
     groups: [],
     importance: ArticlePriority.Normal,
+    roles: [],
     schemes: [],
     title: '',
     watermarkImage: true,
@@ -118,6 +120,9 @@ const useCreateEditArticle = (): Props => {
     fetchPolicy: 'network-only',
     onCompleted: (result) => {
       setData({
+        business: result?.article?.business?.id
+          ? [result?.article?.business?.id]
+          : [],
         categories:
           result?.article?.tags.map((tag) => ({
             label: tag.name || '',
@@ -126,6 +131,7 @@ const useCreateEditArticle = (): Props => {
         content: result?.article?.rows[0].columns[0].text || '',
         groups: result?.article?.groups.map((group) => group.id || '') || [],
         importance: result?.article?.priority || ArticlePriority.Normal,
+        roles: result?.article?.roles.map(({ id }) => id || '') || [],
         schemes:
           result?.article?.groups.map((group) => group.scheme.id || '') || [],
         title: result?.article?.title || '',
@@ -213,6 +219,9 @@ const useCreateEditArticle = (): Props => {
       }
 
       form.setFieldsValue({
+        business: result?.article?.business?.id
+          ? [result?.article?.business?.id]
+          : [],
         categories:
           result?.article?.tags.map((tag) => ({
             label: tag.name || '',
@@ -221,6 +230,7 @@ const useCreateEditArticle = (): Props => {
         content: result?.article?.rows[0].columns[0].text || '',
         groups: result?.article?.groups.map((group) => group.id || '') || [],
         importance: result?.article?.priority || ArticlePriority.Normal,
+        roles: result?.article?.roles.map(({ id }) => id || '') || [],
         schemes: [],
         title: result?.article?.title || '',
         watermarkImage: !!result?.article?.watermarkImage,
@@ -702,6 +712,7 @@ const useCreateEditArticle = (): Props => {
 
     const variables = {
       data: {
+        business: form.getFieldValue('business')[0],
         categories: selectedCategoryIds,
         documents:
           fileList.map((file) => ({
@@ -730,11 +741,13 @@ const useCreateEditArticle = (): Props => {
         previewImage: img,
         previewText: text,
         priority,
+        roleIds: form.getFieldValue('roles'),
         schemes:
           submittedSchemes && submittedSchemes.length > 1
             ? submittedSchemes.map((scheme) => scheme)
             : [schemeId],
         title: form.getFieldValue('title'),
+
         watermarkImage: form.getFieldValue('watermarkImage'),
         // images: {
         //   upload: previewImageFile
@@ -876,6 +889,7 @@ const useCreateEditArticle = (): Props => {
     removeOffender,
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     saveDraft,
+    schemeId,
     selectedCategories,
     selectedGroups,
     selectedSchemes,

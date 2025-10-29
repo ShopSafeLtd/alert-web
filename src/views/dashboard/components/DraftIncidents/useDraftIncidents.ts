@@ -15,7 +15,12 @@ interface Return {
 
 const useDraftIncidents = (): Return => {
   const {
-    variables: { createdAt: createdAtFilter, gallery, groups: groupsFilter },
+    variables: {
+      createdAt: createdAtFilter,
+      gallery,
+      groups: groupsFilter,
+      search,
+    },
   } = useDashboardContext();
   const thirtyDaysAgo = useMemo(() => {
     const date = new Date();
@@ -43,6 +48,7 @@ const useDraftIncidents = (): Return => {
       following: gallery.includes('FOLLOWING'),
       groupIds: groupsFilter.length > 0 ? groupsFilter : undefined,
       myData: gallery.includes('MYDATA'),
+      search,
       useBusiness: true,
     },
   };

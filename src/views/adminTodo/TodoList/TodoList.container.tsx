@@ -33,6 +33,7 @@ const AdminTodos = (): JSX.Element => {
     setSearch,
     setSelectedTodo,
     setStatusMode,
+    showBlankActivity,
     templateData,
     toggleAddTodo,
     toggleAllSchemes,
@@ -67,6 +68,7 @@ const AdminTodos = (): JSX.Element => {
       setSearch={setSearch}
       setSelectedTodo={setSelectedTodo}
       setStatusMode={setStatusMode}
+      showBlankActivity={showBlankActivity}
       templateData={templateData}
       toggleAddTodo={toggleAddTodo}
       toggleAllSchemes={toggleAllSchemes}

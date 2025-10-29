@@ -35,6 +35,7 @@ const CreateEditArticleContainer = () => {
     removeIncident,
     removeOffender,
     saveDraft,
+    schemeId,
     selectedCategories,
     selectedGroups,
     selectedSchemes,
@@ -73,6 +74,7 @@ const CreateEditArticleContainer = () => {
       removeIncident={removeIncident}
       removeOffender={removeOffender}
       saveDraft={saveDraft}
+      schemeId={schemeId}
       selectedCategories={selectedCategories}
       selectedGroups={selectedGroups}
       selectedSchemes={selectedSchemes}

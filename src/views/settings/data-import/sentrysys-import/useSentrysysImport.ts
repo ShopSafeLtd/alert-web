@@ -74,6 +74,8 @@ const calcRace = (value: string) => {
   if (value === 'Asian') return Race.Ic4;
   if (value === 'SouthEastAsian') return Race.Ic5;
   if (value === 'Arabic') return Race.Ic6;
+  // if (value === 'Arabic') return Race.Ic9;
+
   return Race.Unknown;
 };
 

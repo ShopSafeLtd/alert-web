@@ -32,6 +32,11 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
         }
       }
     }
+    approvedAction {
+      userName
+      userId
+      when
+    }
     activityAuthorised
     priority
     customerRef

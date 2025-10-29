@@ -10,6 +10,14 @@ query Article($where: ArticleWhereUniqueInput!) {
         name
       }
     }
+    business {
+      id
+      name
+    }
+    roles {
+      id
+      name
+    }
     documents {
       id
       name

@@ -48,7 +48,6 @@ export interface FormData {
   dueDate: Date;
   groups?: string[];
   name: string;
-
   questionGroup?: string;
 }
 

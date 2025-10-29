@@ -46,6 +46,7 @@ export interface Props {
   removeIncident: (id: string) => void;
   removeOffender: (id: string) => void;
   saveDraft: (value: boolean) => void;
+  schemeId: string;
   selectedCategories: { value: string }[];
   selectedGroups: string[];
   selectedSchemes: string[];
