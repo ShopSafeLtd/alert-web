@@ -104,6 +104,7 @@ interface Return {
   ) => void;
   loading: boolean;
   onFinish: (data: FormData) => void;
+  onFinishFailed: (errorInfo: unknown) => void;
   users: SelectOption[];
 }
 
@@ -311,6 +312,16 @@ export function useCreateChecklist(): Return {
     },
   });
   const navigate = useNavigate();
+
+  const onFinishFailed = (errorInfo: unknown) => {
+    console.error('Form validation failed:', errorInfo);
+    // Scroll to the first error field
+    form.scrollToField(
+      (errorInfo as { errorFields: { name: (number | string)[] }[] })
+        .errorFields[0]?.name || []
+    );
+  };
+
   const onFinish = (values: FormData) => {
     console.log('onFinish', values.groups);
 
@@ -641,6 +652,7 @@ export function useCreateChecklist(): Return {
     handleSectionChange,
     loading: loading || usersLoading,
     onFinish,
+    onFinishFailed,
     users,
   };
 }

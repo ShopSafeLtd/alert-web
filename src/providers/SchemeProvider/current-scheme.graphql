@@ -1,5 +1,5 @@
 query CurrentSchemeProvider($where: UserSchemeWhereUniqueInput!) {
-    userScheme(where: $where) {
+    I (where: $where) {
         id
         role
         isAdmin
