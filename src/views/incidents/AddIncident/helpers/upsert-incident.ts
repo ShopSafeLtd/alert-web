@@ -81,6 +81,12 @@ const upsertIncident = (
     const removedImages = originalImages?.filter(
       (offenderImage) => !images?.some((image) => image.id === offenderImage.id)
     );
+    const offenderImages = images || [];
+    const totalImages = [
+      ...(imagesFromIncident || []),
+      ...(newImages || []),
+    ].filter(Boolean);
+
     const imagesFormatted = {
       connect:
         imagesFromIncident
@@ -92,16 +98,22 @@ const upsertIncident = (
           ?.map((image) => image.id || '')
           ?.filter((image) => image !== undefined) || [],
       new: newImages
-        ?.map((image) => ({
-          filename: image.fileName || '',
-          fromIncident: newImagesFromIncident?.some(
-            (newImage) => newImage.id === image.id
-          ),
-          id: image.id || image?.originFileObj?.uid || '',
-          indexFaces: facialRecognition,
-          mimetype: image.type || '',
-          url: image.url || image.optimised || '',
-        }))
+        ?.map((image, _index) => {
+          const isPrimary: boolean =
+            offenderImages.length === 1 && totalImages.length === 1;
+
+          return {
+            filename: image.fileName || '',
+            fromIncident: newImagesFromIncident?.some(
+              (newImage) => newImage.id === image.id
+            ),
+            id: image.id || image?.originFileObj?.uid || '',
+            indexFaces: facialRecognition,
+            mimetype: image.type || '',
+            primary: isPrimary,
+            url: image.url || image.optimised || '',
+          };
+        })
         ?.filter((image) => image.url),
       removed: removedImages?.map((image) => image.id),
     };
@@ -183,7 +195,7 @@ const upsertIncident = (
       ];
 
       const changedFields: string[] = [];
-      const changes = {
+      const changes: Record<string, unknown> = {
         changedFields: [] as string[],
         id: image.id,
         updated: true,
@@ -192,13 +204,12 @@ const upsertIncident = (
       for (const field of fieldsToCheck) {
         if (incidentImage && image[field] !== incidentImage[field]) {
           changedFields.push(field);
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-          changes[field] = incidentImage[field];
+          changes[field] = incidentImage[field] as unknown;
         }
       }
 
       if (changedFields.length > 0) {
-        changes.changedFields = changedFields;
+        changes.changedFields = changedFields as unknown;
         return changes;
       }
 
