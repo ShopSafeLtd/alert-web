@@ -100,8 +100,7 @@ const upsertIncident = (
       new: newImages
         ?.map((image, _index) => {
           const isPrimary: boolean =
-            (offenderImages.length === 1 && totalImages.length === 1) ||
-            Boolean(offenderImages.find((img) => img.id === image.id)?.primary);
+            offenderImages.length === 1 && totalImages.length === 1;
 
           return {
             filename: image.fileName || '',
