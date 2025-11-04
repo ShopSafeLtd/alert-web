@@ -1454,6 +1454,7 @@ const ViewOffender = ({
                                       [
                                         BanType.Cbo,
                                         BanType.CommunityBan,
+                                        BanType.CompanyBanningNotice,
                                         BanType.Cpn,
                                         BanType.Cpw,
                                         BanType.Other,

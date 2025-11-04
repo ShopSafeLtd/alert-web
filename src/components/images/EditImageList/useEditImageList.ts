@@ -107,7 +107,8 @@ const useEditImagesList = ({
           deleted: item.deleted,
           edited:
             (item.edited && !item.new && !item.deleted) ||
-            (findPrimaryId === item.uid && findPrimaryId !== primaryImage),
+            (findPrimaryId === item.uid && findPrimaryId !== primaryImage) ||
+            (item.uid === primaryImage && findPrimaryId !== primaryImage),
           filename: item.fileName || '',
           id: item.uid || `${Math.random()}`,
           mimetype: item.type || '',

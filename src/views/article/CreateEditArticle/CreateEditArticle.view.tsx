@@ -1,4 +1,6 @@
+import BusinessesSelect from '#/components/form-components/BusinessesSelect/BusinessesSelect.view';
 import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
+import RoleSelect from '#/components/form-components/Roles/RoleSelect';
 import AddExistingOffender from '#/components/form-components/offender/AddExistingOffender/AddExistingOffender.container';
 import pdfFilePickerCallback from '#/views/article/CreateEditArticle/hooks/handlePdf';
 import { UploadOutlined } from '@ant-design/icons';
@@ -64,11 +66,13 @@ const CreateEditArticleView = ({
   removeIncident,
   removeOffender,
   saveDraft,
+  schemeId,
   selectedCategories,
   selectedSchemes,
 }: ViewProps) => {
   const intl = useIntl();
   const noSchemes = selectedSchemes;
+
   const forms = {
     addIncident:
       !noSchemes || (noSchemes && noSchemes?.length <= 1) ? (
@@ -126,10 +130,10 @@ const CreateEditArticleView = ({
           title={
             id
               ? intl.formatMessage({
-                  defaultMessage: 'Edit Article',
+                  defaultMessage: 'Edit Bulletin',
                 })
               : intl.formatMessage({
-                  defaultMessage: 'Create Article',
+                  defaultMessage: 'Create Bulletin',
                 })
           }
         />
@@ -170,8 +174,8 @@ const CreateEditArticleView = ({
             layout="vertical"
             onFinish={onSubmit}
           >
-            <Row gutter={16} style={{ marginLeft: 10, marginRight: 10 }}>
-              <Col span={8}>
+            <Row gutter={32} style={{ marginLeft: 10, marginRight: 10 }}>
+              <Col span={12}>
                 <Form.Item
                   label={intl.formatMessage({
                     defaultMessage: 'Title',
@@ -193,9 +197,7 @@ const CreateEditArticleView = ({
                   />
                 </Form.Item>
               </Col>
-            </Row>
-            <Row gutter={16} style={{ marginLeft: 10, marginRight: 10 }}>
-              <Col span={8}>
+              <Col span={12}>
                 <Form.Item
                   label={intl.formatMessage({
                     defaultMessage: 'Content Groups',
@@ -231,6 +233,65 @@ const CreateEditArticleView = ({
                   />
                 </Form.Item>
               </Col>
+            </Row>
+            <Row gutter={32} style={{ marginLeft: 10, marginRight: 10 }}>
+              <Col span={12}>
+                <Form.Item
+                  label={intl.formatMessage({
+                    defaultMessage: 'Business',
+                  })}
+                  name="business"
+                >
+                  <BusinessesSelect
+                    allowClear
+                    // disabled={saving || forceTemplateSelection || !!businessId}
+                    placeholder={intl.formatMessage({
+                      defaultMessage: 'Search for a business...',
+                    })}
+                    showSearch
+                    style={{ width: '100%' }}
+                  />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item
+                  label={intl.formatMessage({
+                    defaultMessage: 'Roles',
+                  })}
+                  name="roles"
+                >
+                  <RoleSelect
+                    multi
+                    schemeId={schemeId}
+                    // onChange={onRolesChange}
+                  />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item
+                  label={intl.formatMessage({
+                    defaultMessage: 'Category',
+                  })}
+                  name="category"
+                >
+                  <Select
+                    labelInValue
+                    loading={loading}
+                    maxTagCount={2}
+                    mode="tags"
+                    onChange={categoriesChange}
+                    optionFilterProp="value"
+                    options={categories}
+                    // select mutliple, category, can create new
+                    placeholder={intl.formatMessage({
+                      defaultMessage: 'Category',
+                    })}
+                    size="small"
+                    style={{ minWidth: 200 }}
+                    value={selectedCategories}
+                  />
+                </Form.Item>
+              </Col>
               <Col span={6}>
                 <Form.Item
                   label={intl.formatMessage({
@@ -259,32 +320,7 @@ const CreateEditArticleView = ({
                   </Select>
                 </Form.Item>
               </Col>
-              <Col span={8}>
-                <Form.Item
-                  label={intl.formatMessage({
-                    defaultMessage: 'Category',
-                  })}
-                  name="category"
-                >
-                  <Select
-                    labelInValue
-                    loading={loading}
-                    maxTagCount={2}
-                    mode="tags"
-                    onChange={categoriesChange}
-                    optionFilterProp="value"
-                    options={categories}
-                    // select mutliple, category, can create new
-                    placeholder={intl.formatMessage({
-                      defaultMessage: 'Category',
-                    })}
-                    size="small"
-                    style={{ minWidth: 200 }}
-                    value={selectedCategories}
-                  />
-                </Form.Item>
-              </Col>
-              <Col span={8}>
+              <Col span={6}>
                 <Form.Item
                   label={intl.formatMessage({
                     defaultMessage: 'Watermark Preview',
@@ -593,7 +629,7 @@ const CreateEditArticleView = ({
                           defaultMessage: 'Publish',
                         })
                       : intl.formatMessage({
-                          defaultMessage: 'Create Article',
+                          defaultMessage: 'Create Bulletin',
                         })}
                   </Button>
                 </Col>

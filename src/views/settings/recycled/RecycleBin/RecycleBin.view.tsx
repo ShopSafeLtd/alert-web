@@ -42,6 +42,7 @@ interface ColumnType {
   expiresAt: Date | undefined;
   id: string;
   key: string;
+  reference?: null | number;
   title: string;
   type: string | undefined;
 }
@@ -74,7 +75,7 @@ const RecycleBin = ({
       dataIndex: 'type',
       key: 'type',
       title: 'Type',
-      width: 200,
+      // width: 200,
     },
     {
       dataIndex: 'title',
@@ -92,8 +93,16 @@ const RecycleBin = ({
         </Typography.Link>
       ),
       title: 'Title',
-      width: 300,
+      // width: 300,
     },
+    {
+      dataIndex: 'reference',
+      key: 'reference',
+      title: intl.formatMessage({
+        defaultMessage: 'Alert ID',
+      }),
+    },
+
     {
       dataIndex: 'deletedBy',
       ellipsis: true,
@@ -164,6 +173,7 @@ const RecycleBin = ({
           expiresAt: item?.expiresAt,
           id: item?.id || '',
           key: item?.incident?.id || item?.offender?.id || '',
+          reference: item?.incident?.reference || item?.offender?.reference,
           title: item?.incident?.subject || item?.offender?.name || '',
           // eslint-disable-next-line
           type: item?.incident?.__typename || item?.offender?.__typename,

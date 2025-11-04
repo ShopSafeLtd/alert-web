@@ -833,6 +833,13 @@ export enum AppType {
   Web = 'WEB'
 }
 
+export type ApprovalUser = {
+  __typename?: 'ApprovalUser';
+  userId?: Maybe<Scalars['String']>;
+  userName?: Maybe<Scalars['String']>;
+  when?: Maybe<Scalars['Date']>;
+};
+
 export type ApproveGroupsData = {
   connect?: InputMaybe<Array<UniqueId>>;
   disconnect?: InputMaybe<Array<UniqueId>>;
@@ -844,6 +851,7 @@ export type ApproveIncidentData = {
 
 export type Article = {
   __typename?: 'Article';
+  business?: Maybe<Business>;
   completedAt?: Maybe<Scalars['Date']>;
   createdAt: Scalars['Date'];
   createdBy: User;
@@ -855,6 +863,7 @@ export type Article = {
   previewImage?: Maybe<Scalars['String']>;
   previewText?: Maybe<Scalars['String']>;
   priority: ArticlePriority;
+  roles: Array<CustomRole>;
   rows: Array<ArticleRow>;
   schemes: Array<Scheme>;
   status: CompleteStatus;
@@ -960,6 +969,7 @@ export enum ArticleSectionType {
 
 export type ArticleWhereInput = {
   OR?: InputMaybe<Array<ArticleWhereInput>>;
+  business?: InputMaybe<BusinessWhereInput>;
   createdAt?: InputMaybe<DateTimeFilter>;
   createdBy?: InputMaybe<UserWhereInput>;
   groups?: InputMaybe<GroupListRelationFilter>;
@@ -1153,6 +1163,7 @@ export enum BanType {
   Arrest = 'ARREST',
   Cbo = 'CBO',
   CommunityBan = 'COMMUNITY_BAN',
+  CompanyBanningNotice = 'COMPANY_BANNING_NOTICE',
   CourtData = 'COURT_DATA',
   Cpn = 'CPN',
   Cpw = 'CPW',
@@ -1622,6 +1633,144 @@ export type CctvRecord = {
   showIncident: Scalars['Boolean'];
   startTime: Scalars['Date'];
   updatedAt: Scalars['Date'];
+};
+
+export type CctvRecordCreateWithoutIncident = {
+  aheadBehind?: InputMaybe<Scalars['String']>;
+  cameraNumber: Scalars['String'];
+  correctTime?: InputMaybe<Scalars['Boolean']>;
+  description?: InputMaybe<Scalars['String']>;
+  endTime: Scalars['Date'];
+  incorrectBy?: InputMaybe<Scalars['Int']>;
+  showFace: Scalars['Boolean'];
+  showIncident: Scalars['Boolean'];
+  startTime: Scalars['Date'];
+};
+
+export type CctvRecordListRelationFilter = {
+  every?: InputMaybe<CctvRecordWhereInput>;
+  none?: InputMaybe<CctvRecordWhereInput>;
+  some?: InputMaybe<CctvRecordWhereInput>;
+};
+
+export type CctvRecordOrderByRelationAggregateInput = {
+  _count?: InputMaybe<SortOrder>;
+};
+
+export type CctvRecordOrderByWithRelationInput = {
+  aheadBehind?: InputMaybe<SortOrder>;
+  cameraNumber?: InputMaybe<SortOrder>;
+  correctTime?: InputMaybe<SortOrder>;
+  createdAt?: InputMaybe<SortOrder>;
+  description?: InputMaybe<SortOrder>;
+  endTime?: InputMaybe<SortOrder>;
+  id?: InputMaybe<SortOrder>;
+  incident?: InputMaybe<IncidentOrderByWithRelationInput>;
+  incidentId?: InputMaybe<SortOrder>;
+  incorrectBy?: InputMaybe<SortOrder>;
+  showFace?: InputMaybe<SortOrder>;
+  showIncident?: InputMaybe<SortOrder>;
+  startTime?: InputMaybe<SortOrder>;
+  updatedAt?: InputMaybe<SortOrder>;
+};
+
+export type CctvRecordScalarWhereInput = {
+  AND?: InputMaybe<Array<CctvRecordScalarWhereInput>>;
+  NOT?: InputMaybe<Array<CctvRecordScalarWhereInput>>;
+  OR?: InputMaybe<Array<CctvRecordScalarWhereInput>>;
+  aheadBehind?: InputMaybe<StringNullableFilter>;
+  cameraNumber?: InputMaybe<StringFilter>;
+  correctTime?: InputMaybe<BoolFilter>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  description?: InputMaybe<StringNullableFilter>;
+  endTime?: InputMaybe<DateTimeFilter>;
+  id?: InputMaybe<StringFilter>;
+  incident?: InputMaybe<IncidentWhereInput>;
+  incidentId?: InputMaybe<StringFilter>;
+  incorrectBy?: InputMaybe<IntNullableFilter>;
+  showFace?: InputMaybe<BoolFilter>;
+  showIncident?: InputMaybe<BoolFilter>;
+  startTime?: InputMaybe<DateTimeFilter>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
+};
+
+export type CctvRecordScalarWhereWithAggregatesInput = {
+  AND?: InputMaybe<Array<CctvRecordScalarWhereWithAggregatesInput>>;
+  NOT?: InputMaybe<Array<CctvRecordScalarWhereWithAggregatesInput>>;
+  OR?: InputMaybe<Array<CctvRecordScalarWhereWithAggregatesInput>>;
+  aheadBehind?: InputMaybe<StringNullableWithAggregatesFilter>;
+  cameraNumber?: InputMaybe<StringNullableWithAggregatesFilter>;
+  createdAt?: InputMaybe<DateTimeWithAggregatesFilter>;
+  description?: InputMaybe<StringNullableWithAggregatesFilter>;
+  endTime?: InputMaybe<DateTimeWithAggregatesFilter>;
+  id?: InputMaybe<StringWithAggregatesFilter>;
+  incidentId?: InputMaybe<StringWithAggregatesFilter>;
+  incorrectBy?: InputMaybe<IntNullableWithAggregatesFilter>;
+  startTime?: InputMaybe<DateTimeWithAggregatesFilter>;
+  updatedAt?: InputMaybe<DateTimeWithAggregatesFilter>;
+};
+
+export type CctvRecordUpdateManyWithoutIncidentInput = {
+  create?: InputMaybe<Array<CctvRecordCreateWithoutIncident>>;
+  deleteMany?: InputMaybe<Array<CctvRecordScalarWhereInput>>;
+  update?: InputMaybe<Array<CctvRecordUpdateWithWhereUniqueWithoutIncident>>;
+};
+
+export type CctvRecordUpdateWithWhereUniqueWithoutIncident = {
+  data: CctvRecordUpdateWithoutIncident;
+  where: CctvRecordWhereUniqueInput;
+};
+
+export type CctvRecordUpdateWithoutIncident = {
+  aheadBehind?: InputMaybe<Scalars['String']>;
+  cameraNumber?: InputMaybe<Scalars['String']>;
+  correctTime?: InputMaybe<Scalars['Boolean']>;
+  description?: InputMaybe<Scalars['String']>;
+  endTime?: InputMaybe<Scalars['Date']>;
+  incorrectBy?: InputMaybe<Scalars['Int']>;
+  showFace?: InputMaybe<Scalars['Boolean']>;
+  showIncident?: InputMaybe<Scalars['Boolean']>;
+  startTime?: InputMaybe<Scalars['Date']>;
+};
+
+export type CctvRecordWhereInput = {
+  AND?: InputMaybe<Array<CctvRecordWhereInput>>;
+  NOT?: InputMaybe<Array<CctvRecordWhereInput>>;
+  OR?: InputMaybe<Array<CctvRecordWhereInput>>;
+  aheadBehind?: InputMaybe<StringNullableFilter>;
+  cameraNumber?: InputMaybe<StringFilter>;
+  correctTime?: InputMaybe<BoolFilter>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  description?: InputMaybe<StringNullableFilter>;
+  endTime?: InputMaybe<DateTimeFilter>;
+  id?: InputMaybe<StringFilter>;
+  incident?: InputMaybe<IncidentWhereInput>;
+  incidentId?: InputMaybe<StringFilter>;
+  incorrectBy?: InputMaybe<IntNullableFilter>;
+  showFace?: InputMaybe<BoolFilter>;
+  showIncident?: InputMaybe<BoolFilter>;
+  startTime?: InputMaybe<DateTimeFilter>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
+};
+
+export type CctvRecordWhereUniqueInput = {
+  AND?: InputMaybe<Array<CctvRecordWhereInput>>;
+  NOT?: InputMaybe<Array<CctvRecordWhereInput>>;
+  OR?: InputMaybe<Array<CctvRecordWhereInput>>;
+  aheadBehind?: InputMaybe<StringNullableFilter>;
+  cameraNumber?: InputMaybe<StringFilter>;
+  correctTime?: InputMaybe<BoolFilter>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  description?: InputMaybe<StringNullableFilter>;
+  endTime?: InputMaybe<DateTimeFilter>;
+  id?: InputMaybe<Scalars['String']>;
+  incident?: InputMaybe<IncidentWhereInput>;
+  incidentId?: InputMaybe<StringFilter>;
+  incorrectBy?: InputMaybe<IntNullableFilter>;
+  showFace?: InputMaybe<BoolFilter>;
+  showIncident?: InputMaybe<BoolFilter>;
+  startTime?: InputMaybe<DateTimeFilter>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
 };
 
 export type CentralCoopIdInput = {
@@ -2196,6 +2345,7 @@ export type CreateArticleImages = {
 };
 
 export type CreateArticleInput = {
+  business?: InputMaybe<Scalars['String']>;
   categories?: InputMaybe<Array<Scalars['String']>>;
   documents?: InputMaybe<Array<CreateDocument>>;
   draft?: InputMaybe<Scalars['Boolean']>;
@@ -2208,6 +2358,7 @@ export type CreateArticleInput = {
   previewImage?: InputMaybe<Scalars['String']>;
   previewText?: InputMaybe<Scalars['String']>;
   priority: ArticlePriority;
+  roleIds?: InputMaybe<Array<Scalars['String']>>;
   schemes: Array<Scalars['String']>;
   title: Scalars['String'];
   watermarkImage?: InputMaybe<Scalars['Boolean']>;
@@ -3537,6 +3688,7 @@ export type DashboardInput = {
   following?: InputMaybe<Scalars['Boolean']>;
   groupIds?: InputMaybe<Array<Scalars['String']>>;
   myData?: InputMaybe<Scalars['Boolean']>;
+  search?: InputMaybe<Scalars['String']>;
   useBusiness?: InputMaybe<Scalars['Boolean']>;
 };
 
@@ -7117,6 +7269,7 @@ export type Incident = {
   aiSummary?: Maybe<Scalars['String']>;
   answers: Array<Answer>;
   approved?: Maybe<Scalars['Boolean']>;
+  approvedAction?: Maybe<ApprovalUser>;
   articleColumns: Array<ArticleColumn>;
   assignedUsers: Array<User>;
   business?: Maybe<Business>;
@@ -8249,6 +8402,7 @@ export type IncidentUpdateInput = {
   approved?: InputMaybe<SetBooleanHelper>;
   assignedUsers?: InputMaybe<UserUpdateManyWithoutAssignedIncidents>;
   business?: InputMaybe<NullableConnectDisconnectHelper>;
+  cctvRecords?: InputMaybe<CctvRecordUpdateManyWithoutIncidentInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutIncidents>;
   crimeTypes?: InputMaybe<TagUpdateManyWithoutIncidentsInput>;
   customerRef?: InputMaybe<SetStringHelper>;
@@ -15279,6 +15433,7 @@ export type QueryDetectionConfigsArgs = {
   before?: InputMaybe<Scalars['String']>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
+  orderByCameras?: InputMaybe<SortOrder>;
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where: DetectionConfigWhere;
@@ -18403,6 +18558,7 @@ export type Scheme = {
   divisions: Array<Scalars['String']>;
   documents: Array<Document>;
   dontAutoSetTimeDate: Scalars['Boolean'];
+  dontPrefillOffenderName: Scalars['Boolean'];
   draftIncidents: Scalars['Boolean'];
   duplicateMatchTimeout: Scalars['String'];
   facialDetection: Scalars['Boolean'];
@@ -18469,6 +18625,7 @@ export type Scheme = {
   schemeTags: Array<Tag>;
   sharingFrom: Array<SharingConfig>;
   sharingTo: Array<SharingConfig>;
+  showBlankActivity: Scalars['Boolean'];
   skipLocationToAddress: Scalars['Boolean'];
   statementTemplates: Array<StatementTemplate>;
   stockItems: Array<StockItem>;
@@ -19117,6 +19274,7 @@ export enum SchemeScalarFieldEnum {
   RequireActivityAuthorised = 'requireActivityAuthorised',
   RequireSiteNumberForUsers = 'requireSiteNumberForUsers',
   RestrictIncidentAccess = 'restrictIncidentAccess',
+  ShowBlankActivity = 'showBlankActivity',
   TaskTimeTracking = 'taskTimeTracking',
   UpdatedAt = 'updatedAt',
   UploadOffenderImagesOnMobile = 'uploadOffenderImagesOnMobile',
@@ -19166,6 +19324,7 @@ export type SchemeUpdateInput = {
   disableGalleryOnNative?: InputMaybe<Scalars['Boolean']>;
   disablePassword?: InputMaybe<SetBooleanHelper>;
   dontAutoSetTimeDate?: InputMaybe<SetBooleanHelper>;
+  dontPrefillOffenderName?: InputMaybe<SetBooleanHelper>;
   draftIncidents?: InputMaybe<SetBooleanHelper>;
   facialDetection?: InputMaybe<SetBooleanHelper>;
   facialRecognition?: InputMaybe<SetBooleanHelper>;
@@ -19200,6 +19359,7 @@ export type SchemeUpdateInput = {
   restrictBusinessAccessByRelation?: InputMaybe<SetBooleanHelper>;
   restrictIncidentAccess?: InputMaybe<SetBooleanHelper>;
   restrictIncidentAccessByRole?: InputMaybe<SetBooleanHelper>;
+  showBlankActivity?: InputMaybe<SetBooleanHelper>;
   skipLocationToAddress?: InputMaybe<SetBooleanHelper>;
   smartApprove?: InputMaybe<SetBooleanHelper>;
   taskTimeTracking?: InputMaybe<Scalars['Boolean']>;

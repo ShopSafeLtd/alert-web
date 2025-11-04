@@ -84,6 +84,9 @@ const useEditProfile = (): Return => {
       const disconnectDefaultGroups = defaultGroupIds?.filter(
         (id) => !data.defaultGroups.includes(id)
       );
+      const findScheme = userData?.currentUser?.schemes.find(
+        (el) => el.scheme.id === schemeId
+      );
       void updateUser({
         variables: {
           chatWhere: {
@@ -116,6 +119,25 @@ const useEditProfile = (): Return => {
             messagePush: { set: data.messagePush },
             offenderEmail: { set: data.offenderEmail },
             offenderPush: { set: data.offenderPush },
+            schemes: {
+              update: [
+                {
+                  data: {
+                    bulletinEmails: { set: data.bulletinEmails },
+                    bulletinPush: { set: data.bulletinPush },
+                    fullName: { set: data.fullName },
+                    incidentEmail: { set: data.incidentEmail },
+                    incidentPush: { set: data.incidentPush },
+                    messagePush: { set: data.messagePush },
+                    offenderEmail: { set: data.offenderEmail },
+                    offenderPush: { set: data.offenderPush },
+                  },
+                  where: {
+                    id: findScheme?.id,
+                  },
+                },
+              ],
+            },
           },
           groupWhere: {
             scheme: {

@@ -29,6 +29,7 @@ query recycledItems(
     expiresAt
     incident {
       id
+      reference
       createdBy {
         id
         fullName
@@ -47,6 +48,7 @@ query recycledItems(
     }
     offender {
       id
+      reference
       gender
       incidents {
         id

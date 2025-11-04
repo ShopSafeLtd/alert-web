@@ -55,6 +55,7 @@ interface Props {
   ) => void;
   loading: boolean;
   onFinish: (data: FormData) => void;
+  onFinishFailed: (errorInfo: unknown) => void;
 }
 const indexToLetter = (num: number) => (num + 10).toString(36).toUpperCase();
 
@@ -102,6 +103,7 @@ const CreateChecklistView: React.FC<Props> = ({
   handleSectionChange,
   loading,
   onFinish,
+  onFinishFailed,
 }) => {
   const intl = useIntl();
   const { id } = useParams();
@@ -128,6 +130,7 @@ const CreateChecklistView: React.FC<Props> = ({
         layout="horizontal"
         name="checklist_form"
         onFinish={onFinish}
+        onFinishFailed={onFinishFailed}
         onValuesChange={handleSectionChange}
       >
         <Card loading={loading}>

@@ -7,7 +7,12 @@ const useIncidentCount = (): {
   loading: boolean;
 } => {
   const {
-    variables: { createdAt: createdAtFilter, gallery, groups: groupsFilter },
+    variables: {
+      createdAt: createdAtFilter,
+      gallery,
+      groups: groupsFilter,
+      search,
+    },
   } = useDashboardContext();
 
   const thirtyDaysAgoMemo = useMemo(() => {
@@ -43,6 +48,7 @@ const useIncidentCount = (): {
         following: gallery.includes('FOLLOWING'),
         groupIds: groupsFilter.length > 0 ? groupsFilter : undefined,
         myData: gallery.includes('MYDATA'),
+        search,
       },
     },
   });

@@ -4,6 +4,7 @@ query schemeDetails($where: SchemeWhereUniqueInput!) {
     name
     restrictIncidentAccess
     reportOnly
+    showBlankActivity
     autoApproveIncidents
     autoApproveOffenders
     defaultPublicOffenderDOB

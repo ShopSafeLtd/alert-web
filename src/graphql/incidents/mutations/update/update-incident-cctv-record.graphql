@@ -1,0 +1,17 @@
+mutation UpdateIncidentCctvRecord(
+  $id: String!
+  $cctvRecords: CctvRecordUpdateManyWithoutIncidentInput
+) {
+  updateIncident(where: { id: $id }, data: { cctvRecords: $cctvRecords }) {
+    id
+    cctvRecords {
+      cameraNumber
+      endTime
+      id
+      showFace
+      showIncident
+      startTime
+      description
+    }
+  }
+}

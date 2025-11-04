@@ -100,6 +100,22 @@ const useArticleFeed = (): Return => {
             mode: QueryMode.Insensitive,
           },
         },
+        {
+          createdBy: {
+            fullName: {
+              contains: search,
+              mode: QueryMode.Insensitive,
+            },
+          },
+        },
+        {
+          business: {
+            name: {
+              contains: search,
+              mode: QueryMode.Insensitive,
+            },
+          },
+        },
       ],
       createdAt: createdAtFilter
         ? {

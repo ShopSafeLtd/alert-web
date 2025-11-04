@@ -190,6 +190,12 @@ const NewOffenderRow = React.memo(
                       },
                       {
                         label: intl.formatMessage({
+                          defaultMessage: 'IC9 - Unknown',
+                        }),
+                        value: Race.Ic9,
+                      },
+                      {
+                        label: intl.formatMessage({
                           defaultMessage: 'Unknown',
                         }),
                         value: Race.Unknown,

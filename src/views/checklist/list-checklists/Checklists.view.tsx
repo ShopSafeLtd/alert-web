@@ -69,10 +69,11 @@ interface ChecklistsViewProps {
   loading: boolean;
   // setChecklistSort: (args: {
   //   field: ChecklistSortOptions;
-  //   order: ChecklistSortOrder;
-  selectedChecklist: { id: string; title: string } | null;
+  saving: boolean;
   // checklistSort: {
   //   field: ChecklistSortOptions;
+  //   order: ChecklistSortOrder;
+  selectedChecklist: { id: string; title: string } | null;
   // }) => void;
   setActiveChecklistSort: (args: {
     field: ActiveChecklistSortOptions;
@@ -98,6 +99,7 @@ const ChecklistsView: React.FC<ChecklistsViewProps> = ({
   deleteChecklist,
   deleteTemplate,
   loading,
+  saving,
   selectedChecklist,
   // setChecklistSort,
   setActiveChecklistSort,
@@ -307,6 +309,7 @@ const ChecklistsView: React.FC<ChecklistsViewProps> = ({
                                   })}
                                 >
                                   <Button
+                                    disabled={saving}
                                     icon={<FontAwesomeIcon icon={faTrash} />}
                                   />
                                 </Popconfirm>
