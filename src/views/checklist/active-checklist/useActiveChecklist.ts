@@ -9,12 +9,26 @@ import {
 } from '#/views/checklist/graphql/queries/__generated__/view-active-checklist.generated';
 import { Form, type FormInstance } from 'antd';
 import { useAtomValue } from 'jotai/index';
-import { useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router';
 
 import FONT_FAMILIES from '../../../components/onboarding/Onboarding/SchemeTerms/utils/Fonts';
 
+type SaveStatus = 'error' | 'idle' | 'saved' | 'saving';
+
+interface CompletionStats {
+  answeredQuestions: number;
+  completionPercentage: number;
+  sectionCompletion: Map<
+    number,
+    { answered: number; percentage: number; total: number }
+  >;
+  totalQuestions: number;
+}
+
 interface Return {
+  activeKeys: string[];
+  completionStats: CompletionStats;
   data: ActiveChecklistQuery | undefined;
   file: { file: string; name: string } | null;
   form: FormInstance<FormData>;
@@ -23,8 +37,10 @@ interface Return {
   name: string;
   onFinish: (data: FormData) => void;
   saveDraft: () => void;
+  saveStatus: SaveStatus;
   sections: ActiveChecklistSection[];
   selectedFont: string;
+  setActiveKeys: (keys: string[]) => void;
   setFile: (value: { file: string; name: string } | null) => void;
   setSelectedFont: (value: string) => void;
   setSign: (value: string) => void;
@@ -119,9 +135,141 @@ const useActiveChecklist = (): Return => {
     name: string;
   } | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [saveStatus, setSaveStatus] = useState<SaveStatus>('idle');
+  const [activeKeys, setActiveKeys] = useState<string[]>(['0']); // First section open by default
+  const [completionStats, setCompletionStats] = useState<CompletionStats>({
+    answeredQuestions: 0,
+    completionPercentage: 0,
+    sectionCompletion: new Map(),
+    totalQuestions: 0,
+  });
+
+  const autoSaveTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const saveStatusTimerRef = useRef<NodeJS.Timeout | null>(null);
+
   const update = (value: string) => {
     setSign(value);
   };
+
+  // Calculate completion statistics
+  const calculateCompletion = useCallback(
+    (formData: FormData): CompletionStats => {
+      let totalQuestions = 0;
+      let answeredQuestions = 0;
+      const sectionCompletion = new Map<
+        number,
+        { answered: number; percentage: number; total: number }
+      >();
+
+      // Safety check - ensure sections exist
+      if (
+        !formData ||
+        !formData.sections ||
+        !Array.isArray(formData.sections)
+      ) {
+        return {
+          answeredQuestions: 0,
+          completionPercentage: 0,
+          sectionCompletion: new Map(),
+          totalQuestions: 0,
+        };
+      }
+
+      for (const section of formData.sections) {
+        let sectionTotal = 0;
+        let sectionAnswered = 0;
+
+        for (const subsection of section.subsections) {
+          for (const question of subsection.questions) {
+            // Skip dependent questions that shouldn't be shown
+            if (question.dependent) {
+              const dependentQuestion = section.subsections
+                .flatMap((s) => s.questions)
+                .find((q) => q.ogName === question.dependent?.question);
+              if (
+                !dependentQuestion ||
+                dependentQuestion.answer !== question.dependent.answer
+              ) {
+                continue; // Skip this question
+              }
+            }
+
+            sectionTotal += 1;
+            totalQuestions += 1;
+
+            // Count as answered if there's a non-empty answer
+            if (
+              question.answer &&
+              question.answer !== '' &&
+              question.answer !== null
+            ) {
+              sectionAnswered += 1;
+              answeredQuestions += 1;
+            }
+          }
+        }
+
+        const sectionPercentage =
+          sectionTotal > 0 ? (sectionAnswered / sectionTotal) * 100 : 0;
+        sectionCompletion.set(section.section, {
+          answered: sectionAnswered,
+          percentage: Math.round(sectionPercentage),
+          total: sectionTotal,
+        });
+      }
+
+      const completionPercentage =
+        totalQuestions > 0
+          ? Math.round((answeredQuestions / totalQuestions) * 100)
+          : 0;
+
+      return {
+        answeredQuestions,
+        completionPercentage,
+        sectionCompletion,
+        totalQuestions,
+      };
+    },
+    []
+  );
+
+  // Debounced auto-save function
+  const debouncedSave = useCallback(() => {
+    if (autoSaveTimerRef.current) {
+      clearTimeout(autoSaveTimerRef.current);
+    }
+
+    autoSaveTimerRef.current = setTimeout(() => {
+      setSaveStatus('saving');
+      saveChecklist(true);
+    }, 10_000); // 10 seconds
+  }, []);
+
+  // Watch form changes for completion tracking and auto-save
+  const formValues = Form.useWatch([], form);
+
+  useEffect(() => {
+    if (formValues && sections.length > 0) {
+      const stats = calculateCompletion(formValues);
+      setCompletionStats(stats);
+
+      // Trigger auto-save
+      debouncedSave();
+    }
+  }, [formValues, sections, calculateCompletion, debouncedSave]);
+
+  // Cleanup timers on unmount
+  useEffect(
+    () => () => {
+      if (autoSaveTimerRef.current) {
+        clearTimeout(autoSaveTimerRef.current);
+      }
+      if (saveStatusTimerRef.current) {
+        clearTimeout(saveStatusTimerRef.current);
+      }
+    },
+    []
+  );
 
   const { data, loading } = useActiveChecklistQuery({
     onCompleted: (initData) => {
@@ -211,6 +359,13 @@ const useActiveChecklist = (): Return => {
           sections: sectionsAndSubsections,
         });
         setSections(sectionsAndSubsections as ActiveChecklistSection[]);
+
+        // Set all sections open by default
+        const allSectionKeys = sectionsAndSubsections.map((_, index) =>
+          index.toString()
+        );
+        setActiveKeys(allSectionKeys);
+
         if (initData?.activeChecklist?.signature) {
           setSign(initData.activeChecklist.signature);
         }
@@ -228,9 +383,25 @@ const useActiveChecklist = (): Return => {
   const [completeChecklist] = useCompleteChecklistMutation({
     onCompleted: () => {
       setSubmitting(false);
+      setSaveStatus('saved');
+      // Reset save status after 3 seconds
+      if (saveStatusTimerRef.current) {
+        clearTimeout(saveStatusTimerRef.current);
+      }
+      saveStatusTimerRef.current = setTimeout(() => {
+        setSaveStatus('idle');
+      }, 3000);
     },
     onError: () => {
       setSubmitting(false);
+      setSaveStatus('error');
+      // Reset save status after 5 seconds
+      if (saveStatusTimerRef.current) {
+        clearTimeout(saveStatusTimerRef.current);
+      }
+      saveStatusTimerRef.current = setTimeout(() => {
+        setSaveStatus('idle');
+      }, 5000);
     },
     update: (cache, { data: mutationData }) => {
       try {
@@ -303,7 +474,7 @@ const useActiveChecklist = (): Return => {
               )
             )
             .reduce((a, b) => a + b, 0);
-          if (dependentTotal < threshold) {
+          if (dependentTotal > threshold) {
             continue;
           }
         } else {
@@ -441,6 +612,8 @@ const useActiveChecklist = (): Return => {
   console.log(sections);
 
   return {
+    activeKeys,
+    completionStats,
     data,
     file,
     form,
@@ -449,8 +622,10 @@ const useActiveChecklist = (): Return => {
     name,
     onFinish,
     saveDraft,
+    saveStatus,
     sections,
     selectedFont,
+    setActiveKeys,
     setFile,
     setSelectedFont,
     setSign,
