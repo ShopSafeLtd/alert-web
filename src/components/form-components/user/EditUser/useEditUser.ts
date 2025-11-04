@@ -277,7 +277,9 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
               : undefined,
         };
       };
-
+      const findScheme = userData?.user?.schemes.find(
+        (el) => el.schemeId === schemeId
+      );
       const foundRole = rolesData?.roles.edges.find(
         ({ node: role }) => role.id === data.role
       )?.node;
@@ -415,7 +417,9 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
                     },
                   },
                   where: {
-                    id: userData?.user?.schemes[0].id,
+                    // ???
+                    // id: userData?.user?.schemes[0].id,
+                    id: findScheme?.id,
                   },
                 },
               ],

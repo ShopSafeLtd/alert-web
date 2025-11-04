@@ -106,6 +106,7 @@ const EditExclusion = ({
       {[
         BanType.Cbo,
         BanType.CommunityBan,
+        BanType.CompanyBanningNotice,
         BanType.CourtData,
         BanType.Cpn,
         BanType.Cpw,
@@ -132,6 +133,7 @@ const EditExclusion = ({
           )}
           {[
             BanType.CommunityBan,
+            BanType.CompanyBanningNotice,
             BanType.CourtData,
             BanType.Cpn,
             BanType.Cpw,

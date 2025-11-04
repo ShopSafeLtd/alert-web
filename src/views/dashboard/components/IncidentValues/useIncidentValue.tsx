@@ -7,7 +7,12 @@ const useIncidentValue = (): {
   loading: boolean;
 } => {
   const {
-    variables: { createdAt: createdAtFilter, gallery, groups: groupsFilter },
+    variables: {
+      createdAt: createdAtFilter,
+      gallery,
+      groups: groupsFilter,
+      search,
+    },
   } = useDashboardContext();
   const thirtyDaysAgoMemo = useMemo(() => {
     const date = new Date();
@@ -41,6 +46,7 @@ const useIncidentValue = (): {
         following: gallery.includes('FOLLOWING'),
         groupIds: groupsFilter.length > 0 ? groupsFilter : undefined,
         myData: gallery.includes('MYDATA'),
+        search,
       },
     },
   });

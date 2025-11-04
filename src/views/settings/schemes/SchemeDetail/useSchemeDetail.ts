@@ -49,6 +49,7 @@ export interface FormData {
   requireActivityAuthorised: boolean;
   requireSiteNumberForUsers: boolean;
   restrictIncidentAccess: boolean;
+  showBlankActivity: boolean;
   useBusinessGroupsOnIncident: boolean;
 }
 
@@ -247,9 +248,9 @@ const useSchemeDetail = (): Return => {
           reportOnly: { set: data.reportOnly },
           requireActivityAuthorised: { set: data.requireActivityAuthorised },
           requireSiteNumberForUsers: { set: data.requireSiteNumberForUsers },
-          // ???
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           restrictIncidentAccess: { set: data.restrictIncidentAccess },
+          showBlankActivity: { set: data.showBlankActivity },
           // ???
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           useBusinessGroupsOnIncident: {

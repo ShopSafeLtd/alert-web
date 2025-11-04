@@ -8,6 +8,7 @@ export enum ProfileUpdatedModel {
   Address = 'address',
   Ban = 'exclusion',
   Business = 'business',
+  Cctv_Record = 'cctv record',
   Crime_Group = 'crime group',
   Image = 'image',
   Images = 'images',

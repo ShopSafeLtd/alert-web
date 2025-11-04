@@ -162,6 +162,9 @@ const UserProvider = ({ children }: Props) => {
         }
       }
       if (data.currentUser) {
+        console.log('currentUser', data.currentUser);
+        console.log('currentUserId', data.currentUser.id);
+
         Mixpanel.identify(data.currentUser.id);
         Mixpanel.people.set({
           businessId: data.currentUser.businesses[0]?.id || '',

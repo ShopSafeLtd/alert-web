@@ -47,6 +47,7 @@ query currentUser(
         defaultPublicOffenderDOB
         restrictIncidentAccess
         reportOnly
+        showBlankActivity
         facialRecognition
         facialDetection
         facialRedaction

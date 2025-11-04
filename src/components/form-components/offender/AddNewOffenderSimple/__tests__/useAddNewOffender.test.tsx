@@ -23,7 +23,7 @@ const UseAddNewOffenderTest = () => {
             name: 'offender name',
             age: Age.Unknown,
             gender: Gender.Unknown,
-            race: Race.Unknown,
+            race: Race.Ic9,
             build: Build.Unknown,
             hair: 'unknown',
             peculiarities: 'unknown',

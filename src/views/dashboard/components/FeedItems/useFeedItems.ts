@@ -5,6 +5,7 @@ import type {
   FeedItemsQueryVariables,
 } from 'graphql/feedItems/queries/__generated__/feed-items.generated';
 
+import { QueryMode } from '#/graphql/types';
 import errorNotification from '#/types/mutation_notifications/error_notification';
 import { useDashboardContext } from '#/views/dashboard/Dashboard.context';
 import { notification } from 'antd';
@@ -131,9 +132,18 @@ const useFeedItems = (): Return => {
                             ? {
                                 name: {
                                   contains: search,
+                                  mode: QueryMode.Insensitive,
                                 },
                               }
                             : undefined,
+                          policeRef: {
+                            contains: search,
+                            mode: QueryMode.Insensitive,
+                          },
+                          subject: {
+                            contains: search,
+                            mode: QueryMode.Insensitive,
+                          },
                         },
                       },
                       {

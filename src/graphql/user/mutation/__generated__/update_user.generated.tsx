@@ -12,7 +12,7 @@ export type UpdateUserMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', id: string, fullName: string, email?: string | null, status?: Types.UserStatus | null, demId?: string | null, publicName: boolean, reportToAllBusinesses?: boolean | null, disabled: boolean, newUser: boolean, incidentEmail: boolean, incidentPush: boolean, bulletinEmails: boolean, bulletinPush: boolean, subscribedIncidentOnly: boolean, subscribedOffenderOnly: boolean, messagePush: boolean, offenderEmail: boolean, offenderPush: boolean, activityEmail: boolean, activityPush: boolean, businesses: Array<{ __typename?: 'Business', id: string, name: string, fullName: string, demId?: string | null }>, groups: Array<{ __typename?: 'Group', id: string, name: string }>, approverGroups: Array<{ __typename?: 'Group', id: string, name: string }>, defaultGroups: Array<{ __typename?: 'Group', id: string, name: string }>, chats: Array<{ __typename?: 'UserChat', id: string, chat: { __typename?: 'Chat', id: string, name: string } }>, schemes: Array<{ __typename?: 'UserScheme', id: string, role: Types.Role }> } };
+export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', id: string, fullName: string, email?: string | null, status?: Types.UserStatus | null, demId?: string | null, publicName: boolean, reportToAllBusinesses?: boolean | null, disabled: boolean, newUser: boolean, incidentEmail: boolean, incidentPush: boolean, bulletinEmails: boolean, bulletinPush: boolean, subscribedIncidentOnly: boolean, subscribedOffenderOnly: boolean, messagePush: boolean, offenderEmail: boolean, offenderPush: boolean, activityEmail: boolean, activityPush: boolean, businesses: Array<{ __typename?: 'Business', id: string, name: string, fullName: string, demId?: string | null }>, groups: Array<{ __typename?: 'Group', id: string, name: string }>, approverGroups: Array<{ __typename?: 'Group', id: string, name: string }>, defaultGroups: Array<{ __typename?: 'Group', id: string, name: string }>, chats: Array<{ __typename?: 'UserChat', id: string, chat: { __typename?: 'Chat', id: string, name: string } }>, schemes: Array<{ __typename?: 'UserScheme', id: string, role: Types.Role, schemeId: string }> } };
 
 
 export const UpdateUserDocument = gql`
@@ -66,6 +66,7 @@ export const UpdateUserDocument = gql`
     schemes(where: $schemeWhere) {
       id
       role
+      schemeId
     }
   }
 }

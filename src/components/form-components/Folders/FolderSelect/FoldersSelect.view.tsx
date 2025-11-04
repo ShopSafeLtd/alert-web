@@ -1,6 +1,4 @@
-import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import { TreeSelect } from 'antd';
-import { useAtomValue } from 'jotai/index';
 import React, { useState } from 'react';
 
 import { useFoldersSelectQuery } from './graphql/__generated__/FolderSelectQuery.generated';
@@ -46,7 +44,6 @@ const FoldersSelect = ({
   value,
 }: Props) => {
   const [options, setOptions] = useState<TreeData[]>([]);
-  const userId = useAtomValue(currentUserAtom)?.id ?? '';
 
   const { loading } = useFoldersSelectQuery({
     fetchPolicy: 'cache-and-network',
@@ -68,36 +65,16 @@ const FoldersSelect = ({
     },
     variables: {
       where: {
-        AND: [
-          {
-            OR: [
-              {
-                roles: {
-                  none: {},
-                },
-              },
-              {
-                roles: {
-                  some: {
-                    users: {
-                      some: { userId: { equals: userId } },
-                    },
-                  },
-                },
-              },
-            ],
-          },
-          {
-            OR: [
+        OR: parentFolderId
+          ? [
               {
                 parentFolderId: parentFolderId
                   ? { equals: parentFolderId }
                   : undefined,
               },
               { id: parentFolderId ? { equals: parentFolderId } : undefined },
-            ],
-          },
-        ],
+            ]
+          : undefined,
       },
     },
   });

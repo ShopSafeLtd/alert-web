@@ -791,7 +791,7 @@ const ViewBusiness = ({
 
                 <ActivityTable
                   saving={saving || loading}
-                  setCompleteTodoVisible={setCompleteTodoVisible}
+                  // setCompleteTodoVisible={setCompleteTodoVisible}
                   setViewTodoVisible={setViewTodoVisible}
                   todos={data?.business?.todos}
                 />

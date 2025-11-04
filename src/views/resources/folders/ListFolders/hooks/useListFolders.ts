@@ -2,12 +2,10 @@ import type { CreateDocumentsMutation } from '#/graphql/documents/mutations/__ge
 import type { MutationUpdaterFn } from '@apollo/client';
 
 import { useDeleteDocumentMutation } from '#/graphql/documents/mutations/__generated__/delete-document.generated';
-import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import errorNotification from '#/types/mutation_notifications/error_notification';
 import hasRolePermission from '#/utils/has-role-permission';
 import { notification } from 'antd';
 import { PermissionMethod, PermissionModel, QueryMode } from 'graphql/types';
-import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
 
@@ -33,7 +31,6 @@ import {
 
 const useListFolder = (): Return => {
   const intl = useIntl();
-  const userId = useAtomValue(currentUserAtom)?.id ?? '';
 
   const [addDocument, setAddDocument] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -43,41 +40,19 @@ const useListFolder = (): Return => {
   const toggleAddFolder = () => setAddFolder(!addFolder);
   const folderVariables: FoldersQueryVariables = {
     where: {
-      AND: [
+      OR: [
         {
-          OR: [
-            {
-              roles: {
-                none: {},
-              },
-            },
-            {
-              roles: {
-                some: {
-                  users: {
-                    some: { userId: { equals: userId } },
-                  },
-                },
-              },
-            },
-          ],
+          name: {
+            contains: search,
+            mode: QueryMode.Insensitive,
+          },
         },
-        {
-          OR: [
-            {
-              name: {
-                contains: search,
-                mode: QueryMode.Insensitive,
-              },
-            },
 
-            {
-              description: {
-                contains: search,
-                mode: QueryMode.Insensitive,
-              },
-            },
-          ],
+        {
+          description: {
+            contains: search,
+            mode: QueryMode.Insensitive,
+          },
         },
       ],
     },

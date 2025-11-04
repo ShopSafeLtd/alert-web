@@ -190,7 +190,7 @@ const OffenderProfile = ({
                         })}
                       >
                         {getEthnicity(
-                          offenderProfileData?.offender?.race || Race.Unknown
+                          offenderProfileData?.offender?.race || Race.Ic9
                         )}
                       </Descriptions.Item>
                     </Descriptions>
