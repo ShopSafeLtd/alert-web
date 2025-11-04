@@ -1,6 +1,7 @@
 import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
 
 import {
+  faBuilding,
   faClock,
   faEdit,
   faEllipsisV,
@@ -11,11 +12,12 @@ import {
   faFilePdf,
   faFileWord,
   faPrint,
+  faShieldCheck,
   faTrash,
   faUser,
 } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, Card, Col, Dropdown, Menu, Row, Typography } from 'antd';
+import { Button, Card, Col, Dropdown, Menu, Row, Tag, Typography } from 'antd';
 import InlineWatermarkProcessor from 'components/images/InlineWatermarkProcessor';
 import WatermarkSlide from 'components/images/WatermartkSlide.view';
 import React from 'react';
@@ -28,6 +30,7 @@ import type { Theme } from 'configs/ThemeConfig';
 import hasRolePermission from '#/utils/has-role-permission';
 import { PermissionMethod, PermissionModel } from 'graphql/types';
 import { createUseStyles } from 'react-jss';
+import { Link } from 'react-router-dom';
 
 import type { ReturnProps as Props } from './types/ViewArticle';
 
@@ -187,11 +190,10 @@ const ViewArticleView = ({
                   </Col>
                 )}
               </Row>
-              <Row gutter={30} style={{ marginBottom: 20, marginTop: 20 }}>
-                <Col>
+              <Row gutter={30} style={{ marginBottom: 10, marginTop: 20 }}>
+                <Col span={8}>
                   <FontAwesomeIcon
                     icon={faUser}
-                    size="sm"
                     style={{ color: '#72849a', marginRight: 8 }}
                   />
                   <Text style={{ color: '#72849a', marginRight: 5 }}>
@@ -200,10 +202,9 @@ const ViewArticleView = ({
                   <Text strong>{data?.article?.createdBy?.fullName}</Text>
                 </Col>
                 {data?.article?.completedAt && (
-                  <Col>
+                  <Col span={8}>
                     <FontAwesomeIcon
                       icon={faClock}
-                      size="sm"
                       style={{ color: '#72849a', marginRight: 8 }}
                     />
                     <Text style={{ color: '#72849a', marginRight: 5 }}>
@@ -214,10 +215,9 @@ const ViewArticleView = ({
                     </Text>
                   </Col>
                 )}
-                <Col>
+                <Col span={8}>
                   <FontAwesomeIcon
                     icon={faClock}
-                    size="sm"
                     style={{ color: '#72849a', marginRight: 8 }}
                   />
                   <Text style={{ color: '#72849a', marginRight: 5 }}>
@@ -228,6 +228,44 @@ const ViewArticleView = ({
                       {FormatCalendar(data.article.updatedAt, intl)}
                     </Text>
                   )}
+                </Col>
+              </Row>
+              <Row gutter={30} style={{ marginBottom: 10 }}>
+                {data?.article.business && (
+                  <Col span={8}>
+                    <FontAwesomeIcon
+                      icon={faBuilding}
+                      style={{ color: '#72849a', marginRight: 8 }}
+                    />
+                    <Text style={{ color: '#72849a', marginRight: 5 }}>
+                      {intl.formatMessage({ defaultMessage: 'Business:' })}
+                    </Text>
+                    {/* <Text strong>{data?.article.business?.name}</Text> */}
+                    <Link
+                      to={`/app/businesses/view/${
+                        data?.article?.business?.id || ''
+                      }`}
+                    >
+                      {data?.article.business?.name}
+                    </Link>
+                  </Col>
+                )}
+
+                <Col span={16} style={{ overflow: 'auto', paddingBottom: 8 }}>
+                  <FontAwesomeIcon
+                    icon={faShieldCheck}
+                    style={{ color: '#72849a', marginRight: 8 }}
+                  />
+
+                  <Text style={{ color: '#72849a', marginRight: 5 }}>
+                    {intl.formatMessage({ defaultMessage: 'Roles:' })}
+                  </Text>
+
+                  {data?.article.roles.map((role) => (
+                    <Tag key={role.id} style={{ marginBottom: 3 }}>
+                      {role.name}
+                    </Tag>
+                  ))}
                 </Col>
               </Row>
               <Row gutter={60} style={{ marginBottom: 5 }}>
@@ -400,7 +438,6 @@ const ViewArticleView = ({
                                 <FontAwesomeIcon
                                   className={classes.documentOpenIcon}
                                   icon={faExternalLink}
-                                  size="sm"
                                 />
                               </Row>
                             </Card>

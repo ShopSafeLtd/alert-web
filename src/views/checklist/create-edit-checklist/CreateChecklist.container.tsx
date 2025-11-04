@@ -17,6 +17,7 @@ const CreateChecklistContainer = () => {
     handleSectionChange,
     loading,
     onFinish,
+    onFinishFailed,
   } = useCreateChecklist();
 
   return (
@@ -32,6 +33,7 @@ const CreateChecklistContainer = () => {
       handleSectionChange={handleSectionChange}
       loading={loading}
       onFinish={onFinish}
+      onFinishFailed={onFinishFailed}
     />
   );
 };

@@ -432,9 +432,7 @@ const CompareIncident = ({
                     <Divider style={{ margin: 0 }} />
                     <div className={classes.field}>
                       <div className={classes.text}>
-                        <Text>
-                          {getEthnicity(offender.race || Race.Unknown)}
-                        </Text>
+                        <Text>{getEthnicity(offender.race || Race.Ic9)}</Text>
                       </div>
                       <Checkbox
                         checked={selected.race === offender.id}

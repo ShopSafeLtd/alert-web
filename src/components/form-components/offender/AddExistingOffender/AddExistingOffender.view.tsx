@@ -298,6 +298,11 @@ const AddExistingOffender = ({
                   defaultMessage: 'IC6 - North African or Arab',
                 })}
               </Select.Option>
+              <Select.Option value={Race.Ic9}>
+                {intl.formatMessage({
+                  defaultMessage: 'Ic9 - Unknown',
+                })}
+              </Select.Option>
               <Select.Option value={Race.Unknown}>
                 {intl.formatMessage({
                   defaultMessage: 'Unknown',
@@ -349,6 +354,11 @@ const AddExistingOffender = ({
               <Select.Option value={Race.Ic6}>
                 {intl.formatMessage({
                   defaultMessage: 'IC6 - North African or Arab',
+                })}
+              </Select.Option>
+              <Select.Option value={Race.Ic9}>
+                {intl.formatMessage({
+                  defaultMessage: 'Ic9 - Unknown',
                 })}
               </Select.Option>
               <Select.Option value={Race.Unknown}>

@@ -17,6 +17,7 @@ const Checklists = (): JSX.Element => {
     deleteChecklist,
     deleteTemplate,
     loading,
+    saving,
     selectedChecklist,
     // setChecklistSort,
     setActiveChecklistSort,
@@ -38,6 +39,7 @@ const Checklists = (): JSX.Element => {
       deleteChecklist={deleteChecklist}
       deleteTemplate={deleteTemplate}
       loading={loading}
+      saving={saving}
       selectedChecklist={selectedChecklist}
       // setChecklistSort={setChecklistSort}
       setActiveChecklistSort={setActiveChecklistSort}

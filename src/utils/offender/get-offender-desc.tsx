@@ -217,6 +217,8 @@ export const getLastOffence = (
 export const getBanType = (type: BanType | null | undefined): ReactNode => {
   if (type === BanType.CommunityBan)
     return <FormattedMessage defaultMessage="Community Ban" />;
+  if (type === BanType.CompanyBanningNotice)
+    return <FormattedMessage defaultMessage="Company Banning Notice" />;
   if (type === BanType.Cbo) return <FormattedMessage defaultMessage="CBO" />;
   if (type === BanType.Cpn) return <FormattedMessage defaultMessage="CPN" />;
   if (type === BanType.Cpw) return <FormattedMessage defaultMessage="CPW" />;

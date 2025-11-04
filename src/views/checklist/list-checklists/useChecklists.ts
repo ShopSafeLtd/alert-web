@@ -8,6 +8,7 @@ import type { FetchResult } from '@apollo/client';
 
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
+import errorNotification from '#/types/mutation_notifications/error_notification';
 import { useCreateActiveChecklistMutation } from '#/views/checklist/graphql/mutations/__generated__/create-active-checklist.generated';
 import { useRecycleChecklistMutation } from '#/views/checklist/graphql/mutations/__generated__/recycle-checklist.generated';
 import {
@@ -15,8 +16,10 @@ import {
   useActiveChecklistsQuery,
 } from '#/views/checklist/graphql/queries/__generated__/list-active-checklists.generated';
 import { useChecklistsQuery } from '#/views/checklist/graphql/queries/__generated__/list-checklists.generated';
+import { notification } from 'antd';
 import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
+import { useIntl } from 'react-intl';
 
 import type {
   ActiveChecklistSortOptions,
@@ -55,8 +58,8 @@ interface Return {
   data: ChecklistsQuery | undefined;
   deleteChecklist: (id: string) => void;
   deleteTemplate: (id: string) => void;
-
   loading: boolean;
+  saving: boolean;
   selectedChecklist: { id: string; title: string } | null;
   setActiveChecklistSort: (args: {
     field: ActiveChecklistSortOptions;
@@ -73,6 +76,8 @@ interface Return {
 }
 
 const useChecklists = (): Return => {
+  const intl = useIntl();
+
   const { activeChecklistSort, checklistFilter, checklistSort } = useStoreState(
     (state) => state.filter
   );
@@ -80,6 +85,8 @@ const useChecklists = (): Return => {
     useStoreActions((state) => state.filter);
   const schemeId = useAtomValue(currentSchemeIdAtom);
   const userId = useAtomValue(currentUserAtom)?.id ?? '';
+  const [saving, setSaving] = useState(false);
+
   const { data, loading } = useChecklistsQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
@@ -232,7 +239,25 @@ const useChecklists = (): Return => {
       },
     });
   };
-  const [recycleActiveChecklist] = useRecycleActiveChecklistMutation();
+  const [recycleActiveChecklist] = useRecycleActiveChecklistMutation({
+    onCompleted: () => {
+      setSaving(false);
+
+      notification.success({
+        description: intl.formatMessage({
+          defaultMessage: 'The checklist has been deleted! ',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Deleted!',
+        }),
+
+        placement: 'bottomRight',
+      });
+    },
+    onError: () => {
+      errorNotification();
+    },
+  });
   const deleteChecklist = (value: string) => {
     void recycleActiveChecklist({
       update: (store, { data: res }) => {
@@ -244,6 +269,7 @@ const useChecklists = (): Return => {
 
         const existingData = store.readQuery<ActiveChecklistsQuery>({
           query: ActiveChecklistsDocument,
+          variables: activeChecklistVariables,
         });
 
         if (!existingData?.activeChecklists) return;
@@ -281,6 +307,7 @@ const useChecklists = (): Return => {
     deleteChecklist,
     deleteTemplate,
     loading,
+    saving,
     selectedChecklist,
     setActiveChecklistSort,
     setChecklistFilters,

@@ -55,7 +55,7 @@ const ListFolders = ({
             onChange={(e) => setSearch(e.target.value)}
             // style={{ width: 350 }}
             placeholder={intl.formatMessage({
-              defaultMessage: 'Search Document...',
+              defaultMessage: 'Search...',
             })}
             size="small"
             value={search}

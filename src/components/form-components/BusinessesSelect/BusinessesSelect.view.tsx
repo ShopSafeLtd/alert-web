@@ -1,8 +1,10 @@
-import type {
-  BusinessesSelectQueryVariables
-} from '#/components/form-components/BusinessesSelect/__generated__/BusinessSelectQuery.generated';
+import type { BusinessesSelectQueryVariables } from '#/components/form-components/BusinessesSelect/__generated__/BusinessSelectQuery.generated';
 import type { SizeType } from 'antd/lib/config-provider/SizeContext';
-import type { DefaultOptionType, LabeledValue, SelectProps, } from 'antd/lib/select';
+import type {
+  DefaultOptionType,
+  LabeledValue,
+  SelectProps,
+} from 'antd/lib/select';
 
 import {
   useBusinessesSideListLazyQuery,
@@ -58,7 +60,7 @@ const useStyles = createUseStyles({
     },
   },
 });
-
+// ?????
 function convertToArrayOfStrings(onChangeValue: ValueType): string[] {
   if (!onChangeValue) return [];
   if (Array.isArray(onChangeValue)) {

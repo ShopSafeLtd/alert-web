@@ -11,6 +11,10 @@ const BanTypeValues = [
     value: BanType.Cbo,
   },
   {
+    label: 'Company Banning Notice',
+    value: BanType.CompanyBanningNotice,
+  },
+  {
     label: 'Community Ban',
     value: BanType.CommunityBan,
   },

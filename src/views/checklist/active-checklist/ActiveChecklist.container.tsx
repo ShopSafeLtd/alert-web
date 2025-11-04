@@ -5,6 +5,8 @@ import useActiveChecklist from './useActiveChecklist';
 
 const ActiveChecklistContainer = () => {
   const {
+    activeKeys,
+    completionStats,
     data,
     file,
     form,
@@ -13,8 +15,10 @@ const ActiveChecklistContainer = () => {
     name,
     onFinish,
     saveDraft,
+    saveStatus,
     sections,
     selectedFont,
+    setActiveKeys,
     setFile,
     setSelectedFont,
     setSign,
@@ -27,6 +31,8 @@ const ActiveChecklistContainer = () => {
 
   return (
     <ActiveChecklistView
+      activeKeys={activeKeys}
+      completionStats={completionStats}
       data={data}
       file={file}
       form={form}
@@ -35,8 +41,10 @@ const ActiveChecklistContainer = () => {
       name={name}
       onFinish={onFinish}
       saveDraft={saveDraft}
+      saveStatus={saveStatus}
       sections={sections}
       selectedFont={selectedFont}
+      setActiveKeys={setActiveKeys}
       setFile={setFile}
       setSelectedFont={setSelectedFont}
       setSign={setSign}

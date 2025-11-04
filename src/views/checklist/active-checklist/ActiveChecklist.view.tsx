@@ -5,16 +5,25 @@ import type { FormInstance } from 'antd';
 import FormattedMessageFixed from '#/components/util-components/FormattedMessageFixed';
 import { getCustomUrls } from '#/providers/GetCustomUrls';
 import MediaUrlUploader from '#/views/checklist/active-checklist/media-component';
-import { PlusOutlined } from '@ant-design/icons';
+import {
+  CheckCircleOutlined,
+  ClockCircleOutlined,
+  CloseCircleOutlined,
+  LoadingOutlined,
+  PlusOutlined,
+} from '@ant-design/icons';
 import { faFileUpload } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
+  Badge,
   Button,
   Card,
   Col,
+  Collapse,
   Form,
   Input,
   PageHeader,
+  Progress,
   Radio,
   Row,
   Select,
@@ -39,7 +48,21 @@ import {
   type FormData,
 } from './useActiveChecklist';
 
+type SaveStatus = 'error' | 'idle' | 'saved' | 'saving';
+
+interface CompletionStats {
+  answeredQuestions: number;
+  completionPercentage: number;
+  sectionCompletion: Map<
+    number,
+    { answered: number; percentage: number; total: number }
+  >;
+  totalQuestions: number;
+}
+
 interface Props {
+  activeKeys: string[];
+  completionStats: CompletionStats;
   data: ActiveChecklistQuery | undefined;
   file: { file: string; name: string } | null;
   form: FormInstance<FormData>;
@@ -48,8 +71,10 @@ interface Props {
   name: string;
   onFinish: (data: FormData) => void;
   saveDraft: () => void;
+  saveStatus: SaveStatus;
   sections: ActiveChecklistSection[];
   selectedFont: string;
+  setActiveKeys: (keys: string[]) => void;
   setFile: (value: { file: string; name: string } | null) => void;
   setSelectedFont: (value: string) => void;
   setSign: (value: string) => void;
@@ -59,8 +84,6 @@ interface Props {
   tab: string;
   update: (value: string) => void;
 }
-
-// const indexToLetter = (num: number) => (num + 10).toString(36).toUpperCase();
 
 // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
 const normFile = (e: { fileList: never | never[] }) => {
@@ -72,6 +95,8 @@ const normFile = (e: { fileList: never | never[] }) => {
 };
 
 const ActiveChecklistView = ({
+  activeKeys,
+  completionStats,
   data,
   file,
   form,
@@ -80,8 +105,10 @@ const ActiveChecklistView = ({
   name: userName,
   onFinish,
   saveDraft,
+  saveStatus,
   sections,
   selectedFont,
+  setActiveKeys,
   setFile,
   setSelectedFont,
   setSign,
@@ -97,6 +124,38 @@ const ActiveChecklistView = ({
   const theme = useStoreState((state) => state.theme.currentTheme);
 
   const watching = Form.useWatch('sections', form);
+
+  // Render save status indicator
+  const renderSaveStatus = () => {
+    if (saveStatus === 'idle') return null;
+
+    const statusConfig = {
+      error: {
+        className: classes.saveIndicatorError,
+        icon: <CloseCircleOutlined />,
+        text: intl.formatMessage({ defaultMessage: 'Save failed' }),
+      },
+      saved: {
+        className: classes.saveIndicatorSaved,
+        icon: <CheckCircleOutlined />,
+        text: intl.formatMessage({ defaultMessage: 'Saved' }),
+      },
+      saving: {
+        className: classes.saveIndicatorSaving,
+        icon: <LoadingOutlined spin />,
+        text: intl.formatMessage({ defaultMessage: 'Saving...' }),
+      },
+    };
+
+    const config = statusConfig[saveStatus];
+
+    return (
+      <div className={`${classes.saveIndicator} ${config.className}`}>
+        {config.icon}
+        {config.text}
+      </div>
+    );
+  };
 
   localStorage.setItem(
     'data',
@@ -145,6 +204,38 @@ const ActiveChecklistView = ({
           })
         }
       />
+
+      {/* Save Status Indicator */}
+      {renderSaveStatus()}
+
+      {/* Progress Bar */}
+      {!loading && completionStats.totalQuestions > 0 && (
+        <div className={classes.progressContainer}>
+          <Progress
+            className={classes.progressBar}
+            percent={completionStats.completionPercentage}
+            status={
+              completionStats.completionPercentage === 100
+                ? 'success'
+                : 'active'
+            }
+            strokeColor={{
+              '0%': '#108ee9',
+              '100%': '#52c41a',
+            }}
+          />
+          <div className={classes.progressText}>
+            {intl.formatMessage(
+              { defaultMessage: '{answered} of {total} questions answered' },
+              {
+                answered: completionStats.answeredQuestions,
+                total: completionStats.totalQuestions,
+              }
+            )}
+          </div>
+        </div>
+      )}
+
       <Form<FormData>
         autoComplete="off"
         className={classes.form}
@@ -155,256 +246,426 @@ const ActiveChecklistView = ({
         onFinish={onFinish}
         preserve
       >
-        <Card
-          loading={loading}
-          style={loading ? { height: '100vh' } : undefined}
-        >
+        {loading ? (
+          <Card loading={loading} style={{ height: '100vh' }} />
+        ) : (
           <Form.List name="sections">
-            {(fields) =>
-              sections &&
-              fields.map(({ name }, sectionIndex) => {
-                const section = sections[sectionIndex];
-                const depends = section?.dependsOnWeight;
+            {(fields) => {
+              // Filter sections and map with field info
+              const collapseItems = fields
+                .map(({ name }, fieldIndex) => {
+                  const section = sections[fieldIndex];
+                  if (!section) return null;
 
-                // Check section dependency
-                if (depends) {
-                  const dependencyIndex = Number(depends.dependsOn) - 1;
-                  const threshold = Number(depends.weight);
-                  const dependSection = form.getFieldValue([
-                    'sections',
-                    dependencyIndex,
-                  ]) as ActiveChecklistSection | undefined;
+                  const depends = section?.dependsOnWeight;
 
-                  if (!dependSection) return null;
+                  // Check section dependency
+                  if (depends) {
+                    const dependencyIndex = Number(depends.dependsOn) - 1;
+                    const threshold = Number(depends.weight);
+                    const dependSection = form.getFieldValue([
+                      'sections',
+                      dependencyIndex,
+                    ]) as ActiveChecklistSection | undefined;
 
-                  const totalWeight = dependSection.subsections
-                    .flatMap((sub) =>
-                      sub.questions.map((q) =>
-                        q.answer === 'N/A'
-                          ? 0
-                          : q.weights.find((w) => w.answer === q.answer)
-                              ?.weight || 0
+                    if (!dependSection) return null;
+
+                    const totalWeight = dependSection.subsections
+                      .flatMap((sub) =>
+                        sub.questions.map((q) =>
+                          q.answer === 'N/A'
+                            ? 0
+                            : q.weights.find((w) => w.answer === q.answer)
+                                ?.weight || 0
+                        )
                       )
-                    )
-                    .reduce((a, b) => a + b, 0);
+                      .reduce((a, b) => a + b, 0);
 
-                  if (totalWeight < threshold) return null;
-                }
+                    if (totalWeight > threshold) return null;
+                  }
 
-                return (
-                  <div key={sectionIndex}>
-                    <h2>{section?.titleLocaled || ''}</h2>
+                  // Get section completion status
+                  const sectionStats = completionStats.sectionCompletion.get(
+                    section.section
+                  );
+                  const isComplete =
+                    sectionStats && sectionStats.percentage === 100;
 
-                    {/* Render Subsections */}
-                    <Form.List name={[name, 'subsections']}>
-                      {(subsectionsFields) => (
-                        <>
-                          {subsectionsFields.map(
-                            ({ name: subsectionName }, subsectionIndex) => {
-                              const subsection =
-                                sections[sectionIndex]?.subsections[
-                                  subsectionIndex
-                                ];
+                  return {
+                    fieldName: name,
+                    isComplete,
+                    section,
+                    sectionIndex: fieldIndex,
+                    sectionStats,
+                  };
+                })
+                .filter(Boolean);
 
-                              return (
-                                <div key={subsectionIndex}>
-                                  <h3>
-                                    {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
-                                    {subsectionIndex + 1}.{' '}
-                                    {subsection?.titleLocaled}
-                                  </h3>
+              return (
+                <Collapse
+                  activeKey={activeKeys}
+                  className={classes.collapsePanel}
+                  onChange={(keys) =>
+                    setActiveKeys(Array.isArray(keys) ? keys : [keys])
+                  }
+                >
+                  {collapseItems.map(
+                    (item) =>
+                      item && (
+                        <Collapse.Panel
+                          extra={
+                            <Badge
+                              className={
+                                item.isComplete
+                                  ? classes.sectionBadgeComplete
+                                  : classes.sectionBadgeIncomplete
+                              }
+                              count={
+                                item.isComplete ? (
+                                  <CheckCircleOutlined />
+                                ) : (
+                                  <ClockCircleOutlined />
+                                )
+                              }
+                              showZero
+                            />
+                          }
+                          header={
+                            <span>
+                              {item.section.titleLocaled}
+                              <span className={classes.sectionBadge}>
+                                {item.sectionStats
+                                  ? intl.formatMessage(
+                                      { defaultMessage: '{answered}/{total}' },
+                                      {
+                                        answered: item.sectionStats.answered,
+                                        total: item.sectionStats.total,
+                                      }
+                                    )
+                                  : ''}
+                              </span>
+                            </span>
+                          }
+                          key={item.sectionIndex.toString()}
+                        >
+                          {/* Render Subsections */}
+                          <Form.List name={[item.fieldName, 'subsections']}>
+                            {(subsectionsFields) => (
+                              <>
+                                {subsectionsFields.map(
+                                  (
+                                    { name: subsectionName },
+                                    subsectionIndex
+                                  ) => {
+                                    const subsection =
+                                      sections[item.sectionIndex]?.subsections[
+                                        subsectionIndex
+                                      ];
 
-                                  {/* Render Questions */}
-                                  <Form.List
-                                    name={[subsectionName, 'questions']}
-                                  >
-                                    {(questionFields) => (
-                                      <>
-                                        {questionFields.map(
-                                          (
-                                            { name: questionName },
-                                            questionIndex
-                                          ) => {
-                                            const question =
-                                              subsection?.questions[
-                                                questionIndex
-                                              ];
-                                            const depend = question?.dependent;
+                                    return (
+                                      <div
+                                        className={classes.subsectionContainer}
+                                        key={subsectionIndex}
+                                      >
+                                        <h3
+                                          className={classes.subsectionHeader}
+                                        >
+                                          {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
+                                          {subsectionIndex + 1}.{' '}
+                                          {subsection?.titleLocaled}
+                                        </h3>
 
-                                            // Check question dependency
-                                            if (depend) {
-                                              let shouldShow = false;
-                                              if (watching.length === 0)
-                                                return null;
+                                        {/* Render Questions */}
+                                        <Form.List
+                                          name={[subsectionName, 'questions']}
+                                        >
+                                          {(questionFields) => (
+                                            <>
+                                              {questionFields.map(
+                                                (
+                                                  { name: questionName },
+                                                  questionIndex
+                                                ) => {
+                                                  const question =
+                                                    subsection?.questions[
+                                                      questionIndex
+                                                    ];
+                                                  const depend =
+                                                    question?.dependent;
 
-                                              for (const subFields of watching) {
-                                                for (const qFields of subFields.subsections) {
-                                                  for (const ques of qFields.questions) {
-                                                    if (
-                                                      ques.ogName ===
-                                                        depend.question &&
-                                                      ques.answer ===
-                                                        depend.answer
-                                                    ) {
-                                                      shouldShow = true;
-                                                    }
-                                                  }
-                                                }
-                                              }
+                                                  // Check question dependency
+                                                  if (depend) {
+                                                    let shouldShow = false;
+                                                    if (watching.length === 0)
+                                                      return null;
 
-                                              if (!shouldShow) return null;
-                                            }
-
-                                            return (
-                                              <div key={questionIndex}>
-                                                <h4
-                                                  className={classes.sideMargin}
-                                                >
-                                                  {question?.question.en}
-                                                </h4>
-
-                                                {/* Render Answer Field */}
-                                                <Col span={13}>
-                                                  <Form.Item
-                                                    className={
-                                                      classes.sideMargin
-                                                    }
-                                                    name={[
-                                                      questionName,
-                                                      'answer',
-                                                    ]}
-                                                  >
-                                                    {question?.type ===
-                                                    'TEXT' ? (
-                                                      <Input.TextArea
-                                                        autoSize={{
-                                                          minRows: 3,
-                                                        }}
-                                                        placeholder={intl.formatMessage(
-                                                          {
-                                                            defaultMessage:
-                                                              'Enter your answer here...',
+                                                    for (const subFields of watching) {
+                                                      for (const qFields of subFields.subsections) {
+                                                        for (const ques of qFields.questions) {
+                                                          if (
+                                                            ques.ogName ===
+                                                              depend.question &&
+                                                            ques.answer ===
+                                                              depend.answer
+                                                          ) {
+                                                            shouldShow = true;
                                                           }
-                                                        )}
-                                                      />
-                                                    ) : question?.type ===
-                                                      'MEDIA' ? (
-                                                      <MediaUrlUploader />
-                                                    ) : (
-                                                      <Radio.Group
-                                                        buttonStyle="solid"
-                                                        optionType="button"
-                                                        options={question?.availableAnswers.map(
-                                                          (answer) => ({
-                                                            label: (
-                                                              <FormattedMessageFixed
-                                                                defaultMessage={
-                                                                  answer.answer
-                                                                }
-                                                                id={
-                                                                  answer.answer
-                                                                }
-                                                              />
-                                                            ),
-                                                            value:
-                                                              answer.answer,
-                                                          })
-                                                        )}
-                                                      />
-                                                    )}
-                                                  </Form.Item>
-                                                </Col>
+                                                        }
+                                                      }
+                                                    }
 
-                                                {/* Render Additional Info Field */}
-                                                {question?.type !== 'TEXT' &&
-                                                  question?.type !==
-                                                    'MEDIA' && (
-                                                    <Col span={12}>
+                                                    if (!shouldShow)
+                                                      return null;
+                                                  }
+
+                                                  // Check if question is answered
+                                                  const formValues =
+                                                    form.getFieldsValue();
+                                                  const answer =
+                                                    formValues.sections?.[
+                                                      item.sectionIndex
+                                                    ]?.subsections?.[
+                                                      subsectionIndex
+                                                    ]?.questions?.[
+                                                      questionIndex
+                                                    ]?.answer;
+                                                  const isAnswered =
+                                                    answer &&
+                                                    answer !== '' &&
+                                                    answer !== null;
+
+                                                  return (
+                                                    <div
+                                                      className={`${classes.questionCard} ${isAnswered ? classes.questionCardAnswered : ''}`}
+                                                      key={questionIndex}
+                                                    >
+                                                      <h4
+                                                        className={
+                                                          classes.questionHeader
+                                                        }
+                                                      >
+                                                        {question?.question.en}
+                                                      </h4>
+
+                                                      {/* Render Answer Field - Full Width */}
                                                       <Form.Item
                                                         className={
-                                                          classes.sideMargin
+                                                          classes.answerGroup
                                                         }
-                                                        label={intl.formatMessage(
-                                                          {
-                                                            defaultMessage:
-                                                              'Additional Info',
-                                                          }
-                                                        )}
                                                         name={[
                                                           questionName,
-                                                          'additionalComments',
+                                                          'answer',
                                                         ]}
                                                       >
-                                                        <Input.TextArea
-                                                          placeholder={intl.formatMessage(
-                                                            {
-                                                              defaultMessage:
-                                                                'Enter your comment here...',
-                                                            }
-                                                          )}
-                                                        />
+                                                        {question?.type ===
+                                                        'TEXT' ? (
+                                                          <Input.TextArea
+                                                            autoSize={{
+                                                              minRows: 4,
+                                                            }}
+                                                            maxLength={1000}
+                                                            placeholder={intl.formatMessage(
+                                                              {
+                                                                defaultMessage:
+                                                                  'Enter your answer here...',
+                                                              }
+                                                            )}
+                                                            showCount
+                                                          />
+                                                        ) : question?.type ===
+                                                          'MEDIA' ? (
+                                                          <MediaUrlUploader />
+                                                        ) : (
+                                                          <Radio.Group
+                                                            buttonStyle="solid"
+                                                            optionType="button"
+                                                            options={question?.availableAnswers.map(
+                                                              (answer) => ({
+                                                                label: (
+                                                                  <FormattedMessageFixed
+                                                                    defaultMessage={
+                                                                      answer.answer
+                                                                    }
+                                                                    id={
+                                                                      answer.answer
+                                                                    }
+                                                                  />
+                                                                ),
+                                                                value:
+                                                                  answer.answer,
+                                                              })
+                                                            )}
+                                                          />
+                                                        )}
                                                       </Form.Item>
-                                                    </Col>
-                                                  )}
 
-                                                {/* Render Image Upload Field */}
-                                                {question?.type !== 'TEXT' &&
-                                                  question?.type !==
-                                                    'MEDIA' && (
-                                                    <Form.Item
-                                                      className={
-                                                        classes.sideMargin
-                                                      }
-                                                      getValueFromEvent={
-                                                        normFile
-                                                      }
-                                                      label={intl.formatMessage(
-                                                        {
-                                                          defaultMessage:
-                                                            'Images',
-                                                        }
-                                                      )}
-                                                      name={[
-                                                        questionName,
-                                                        'images',
-                                                      ]}
-                                                      valuePropName="fileList"
-                                                    >
-                                                      <Upload
-                                                        action={checklistUpload}
-                                                        listType="picture-card"
-                                                      >
-                                                        <Button type="ghost">
-                                                          <PlusOutlined />
-                                                          {intl.formatMessage({
-                                                            defaultMessage:
-                                                              'Upload',
-                                                          })}
-                                                        </Button>
-                                                      </Upload>
-                                                    </Form.Item>
-                                                  )}
-                                              </div>
-                                            );
-                                          }
-                                        )}
-                                      </>
-                                    )}
-                                  </Form.List>
-                                </div>
-                              );
-                            }
-                          )}
-                        </>
-                      )}
-                    </Form.List>
-                  </div>
-                );
-              })
-            }
+                                                      {/* Optional Sections - Side by Side */}
+                                                      {question?.type !==
+                                                        'TEXT' &&
+                                                        question?.type !==
+                                                          'MEDIA' && (
+                                                          <Row gutter={16}>
+                                                            {/* Collapsible Additional Comments */}
+                                                            <Col span={12}>
+                                                              <div
+                                                                className={
+                                                                  classes.optionalSection
+                                                                }
+                                                              >
+                                                                <Collapse
+                                                                  bordered={
+                                                                    false
+                                                                  }
+                                                                  className={
+                                                                    classes.optionalCollapse
+                                                                  }
+                                                                  expandIconPosition="end"
+                                                                >
+                                                                  <Collapse.Panel
+                                                                    header={
+                                                                      <span
+                                                                        className={
+                                                                          classes.optionalHeader
+                                                                        }
+                                                                      >
+                                                                        {intl.formatMessage(
+                                                                          {
+                                                                            defaultMessage:
+                                                                              '+ Add Comment (Optional)',
+                                                                          }
+                                                                        )}
+                                                                      </span>
+                                                                    }
+                                                                    key="1"
+                                                                  >
+                                                                    <Form.Item
+                                                                      name={[
+                                                                        questionName,
+                                                                        'additionalComments',
+                                                                      ]}
+                                                                    >
+                                                                      <Input.TextArea
+                                                                        maxLength={
+                                                                          500
+                                                                        }
+                                                                        placeholder={intl.formatMessage(
+                                                                          {
+                                                                            defaultMessage:
+                                                                              'Enter your comment here...',
+                                                                          }
+                                                                        )}
+                                                                        rows={3}
+                                                                        showCount
+                                                                      />
+                                                                    </Form.Item>
+                                                                  </Collapse.Panel>
+                                                                </Collapse>
+                                                              </div>
+                                                            </Col>
+
+                                                            {/* Collapsible Image Upload */}
+                                                            <Col span={12}>
+                                                              <div
+                                                                className={
+                                                                  classes.optionalSection
+                                                                }
+                                                              >
+                                                                <Collapse
+                                                                  bordered={
+                                                                    false
+                                                                  }
+                                                                  className={
+                                                                    classes.optionalCollapse
+                                                                  }
+                                                                  expandIconPosition="end"
+                                                                >
+                                                                  <Collapse.Panel
+                                                                    header={
+                                                                      <span
+                                                                        className={
+                                                                          classes.optionalHeader
+                                                                        }
+                                                                      >
+                                                                        {intl.formatMessage(
+                                                                          {
+                                                                            defaultMessage:
+                                                                              '+ Attach Images (Optional)',
+                                                                          }
+                                                                        )}
+                                                                      </span>
+                                                                    }
+                                                                    key="1"
+                                                                  >
+                                                                    <Form.Item
+                                                                      getValueFromEvent={
+                                                                        normFile
+                                                                      }
+                                                                      name={[
+                                                                        questionName,
+                                                                        'images',
+                                                                      ]}
+                                                                      valuePropName="fileList"
+                                                                    >
+                                                                      <Upload
+                                                                        action={
+                                                                          checklistUpload
+                                                                        }
+                                                                        className={
+                                                                          classes.imageUpload
+                                                                        }
+                                                                        listType="picture-card"
+                                                                      >
+                                                                        <div>
+                                                                          <PlusOutlined />
+                                                                          <div
+                                                                            style={{
+                                                                              marginTop: 8,
+                                                                            }}
+                                                                          >
+                                                                            {intl.formatMessage(
+                                                                              {
+                                                                                defaultMessage:
+                                                                                  'Upload',
+                                                                              }
+                                                                            )}
+                                                                          </div>
+                                                                        </div>
+                                                                      </Upload>
+                                                                    </Form.Item>
+                                                                  </Collapse.Panel>
+                                                                </Collapse>
+                                                              </div>
+                                                            </Col>
+                                                          </Row>
+                                                        )}
+                                                    </div>
+                                                  );
+                                                }
+                                              )}
+                                            </>
+                                          )}
+                                        </Form.List>
+                                      </div>
+                                    );
+                                  }
+                                )}
+                              </>
+                            )}
+                          </Form.List>
+                        </Collapse.Panel>
+                      )
+                  )}
+                </Collapse>
+              );
+            }}
           </Form.List>
-        </Card>
-        <Card loading={loading}>
+        )}
+        <Card className={classes.signatureSection} loading={loading}>
+          <h3 className={classes.signatureHeader}>
+            {intl.formatMessage({
+              defaultMessage: 'Additional Information & Signature',
+            })}
+          </h3>
           <Col span={24}>
             <Col span={13}>
               <Form.Item
@@ -418,6 +679,7 @@ const ActiveChecklistView = ({
                   placeholder={intl.formatMessage({
                     defaultMessage: 'Enter your comment here...',
                   })}
+                  rows={4}
                 />
               </Form.Item>
             </Col>

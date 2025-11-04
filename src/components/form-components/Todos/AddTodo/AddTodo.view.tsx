@@ -272,24 +272,25 @@ const AddTodo = ({
                 defaultMessage: 'Groups',
               })}
               name="groups"
-              rules={[
-                ({ getFieldValue }) => ({
-                  validator(_, value: string[]) {
-                    const businesses = getFieldValue('businesses') as string[];
-                    if (!value?.length && !businesses?.length) {
-                      return Promise.reject(
-                        new Error(
-                          intl.formatMessage({
-                            defaultMessage:
-                              'Please select at least one group or business for the activity.',
-                          })
-                        )
-                      );
-                    }
-                    return Promise.resolve();
-                  },
-                }),
-              ]}
+              // ？？？？
+              // rules={[
+              //   ({ getFieldValue }) => ({
+              //     validator(_, value: string[]) {
+              //       const businesses = getFieldValue('businesses') as string[];
+              //       if (!value?.length && !businesses?.length) {
+              //         return Promise.reject(
+              //           new Error(
+              //             intl.formatMessage({
+              //               defaultMessage:
+              //                 'Please select at least one group or business for the activity.',
+              //             })
+              //           )
+              //         );
+              //       }
+              //       return Promise.resolve();
+              //     },
+              //   }),
+              // ]}
             >
               <Select
                 disabled={saving || forceTemplateSelection}
@@ -309,23 +310,33 @@ const AddTodo = ({
               })}
               name="businesses"
               rules={[
-                ({ getFieldValue }) => ({
-                  validator(_, value: string[]) {
-                    const groups = getFieldValue('groups') as string[];
-                    if (!value?.length && !groups?.length) {
-                      return Promise.reject(
-                        new Error(
-                          intl.formatMessage({
-                            defaultMessage:
-                              'Please select at least one group or business for the activity.',
-                          })
-                        )
-                      );
-                    }
-                    return Promise.resolve();
-                  },
-                }),
+                {
+                  message: intl.formatMessage({
+                    defaultMessage:
+                      'Please selected at least one business for the activity.',
+                  }),
+                  required: true,
+                },
               ]}
+              // ？？？？
+              // rules={[
+              //   ({ getFieldValue }) => ({
+              //     validator(_, value: string[]) {
+              //       const groups = getFieldValue('groups') as string[];
+              //       if (!value?.length && !groups?.length) {
+              //         return Promise.reject(
+              //           new Error(
+              //             intl.formatMessage({
+              //               defaultMessage:
+              //                 'Please select at least one group or business for the activity.',
+              //             })
+              //           )
+              //         );
+              //       }
+              //       return Promise.resolve();
+              //     },
+              //   }),
+              // ]}
             >
               <BusinessesSelect
                 allowClear

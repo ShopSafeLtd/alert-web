@@ -6,9 +6,11 @@ import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import { useStoreActions } from '#/state';
 import { defaultAdminLayout, defaultUserLayout } from '#/state/dashboard-model';
 import { LocalStorageKeys } from '#/types';
+import { notification } from 'antd';
 import { Currency, GoodsMode, Role } from 'graphql/types';
 import { atom, useAtomValue, useSetAtom } from 'jotai/index';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 type UserSchemeState = CurrentSchemeProviderQuery['userScheme'];
 
@@ -147,6 +149,7 @@ export const defaultCurrentUserSchemeAtom: UserSchemeState = {
     requireBusinessOnIncident: false,
     requireSiteNumberForUsers: false,
     restrictIncidentAccess: false,
+    showBlankActivity: false,
     skipLocationToAddress: false,
     taskTimeTracking: false,
     usDateFormat: false,
@@ -208,10 +211,12 @@ export const useSchemeProvider = () => {
 };
 
 const SchemeProvider = ({ children }: Props) => {
+  const navigate = useNavigate();
   const currentUserSchemeId = useAtomValue(currentUserSchemeIdAtom);
   const setCurrentUserScheme = useSetAtom(currentUserSchemeAtom);
   const setStateIsSet = useSetAtom(stateIsSetAtom);
   const setSettingScheme = useSetAtom(settingSchemeAtom);
+  const setCurrentSchemeId = useSetAtom(currentUserSchemeIdAtom);
 
   const setDashboard = useStoreActions(
     (actions) => actions.dashboard.setSchemeLayouts
@@ -264,6 +269,30 @@ const SchemeProvider = ({ children }: Props) => {
                 : defaultUserLayout.marquee),
           },
         });
+    },
+    onError: (error) => {
+      // Handle disabled scheme error
+      const errorMessage = error.message?.toLowerCase() || '';
+      if (
+        errorMessage.includes('disabled') ||
+        errorMessage.includes('permission')
+      ) {
+        notification.warning({
+          description:
+            'Your access to this scheme has been disabled. Please contact your administrator or switch to another scheme.',
+          duration: 6,
+          message: 'Scheme Access Disabled',
+          placement: 'topRight',
+        });
+
+        // Clear the current scheme
+        window.localStorage.removeItem(CURRENT_SCHEME);
+        setCurrentSchemeId(null);
+        setSettingScheme(false);
+
+        // Navigate to dashboard or home
+        navigate('/app/dashboard');
+      }
     },
     skip: currentUserSchemeId === null,
     variables: {

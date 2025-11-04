@@ -21,6 +21,7 @@ import { createPersistedQueryLink } from '@apollo/client/link/persisted-queries'
 import { getMainDefinition } from '@apollo/client/utilities';
 import { useAuth } from '@clerk/clerk-react';
 import * as Sentry from '@sentry/react';
+import { notification } from 'antd';
 import { SentryLink } from 'apollo-link-sentry';
 import { sha256 } from 'crypto-hash';
 import { print } from 'graphql';
@@ -88,6 +89,27 @@ const Apollo = ({ children }: Props): JSX.Element => {
             path,
           } of graphQLErrors) {
             const lowerCaseMessage = message.toLowerCase();
+
+            // Handle disabled user on scheme
+            if (
+              lowerCaseMessage.includes('disabled for this scheme') ||
+              lowerCaseMessage.includes('user is disabled')
+            ) {
+              notification.warning({
+                description:
+                  'Your access to this scheme has been disabled. Please switch to another scheme or contact your administrator.',
+                duration: 6,
+                message: 'Access Disabled',
+                placement: 'topRight',
+              });
+
+              // Clear current scheme from localStorage
+              window.localStorage.removeItem('CURRENT_USER_SCHEME_ID');
+
+              // Don't send to Sentry (expected business logic)
+              // Don't continue processing this error
+              continue;
+            }
 
             if (
               lowerCaseMessage.includes('user_context') ||

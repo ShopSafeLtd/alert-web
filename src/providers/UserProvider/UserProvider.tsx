@@ -1,11 +1,13 @@
 import type { CurrentUserProviderQuery } from '#/providers/UserProvider/__generated__/current-user.generated';
-import { useCurrentUserProviderQuery } from '#/providers/UserProvider/__generated__/current-user.generated';
 
 import { useTokenContext } from '#/context/token-context';
+import { useSignOut } from '#/hooks/signOut';
+import { useCurrentUserProviderQuery } from '#/providers/UserProvider/__generated__/current-user.generated';
 import { useStoreActions } from '#/state';
 import Mixpanel from '#/utils/mixpanel';
 import { useUser } from '@clerk/clerk-react';
 import * as Sentry from '@sentry/react';
+import { notification } from 'antd';
 import { atom, useAtomValue, useSetAtom } from 'jotai';
 import React, { useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router';
@@ -64,8 +66,8 @@ export const setHasPasswordAtom = atom(
     if (currentUser) {
       set(currentUserAtom, {
         ...currentUser,
-        hasPassword,
         forcePasswordReset: false,
+        hasPassword,
       });
     }
   }
@@ -112,6 +114,7 @@ const UserProvider = ({ children }: Props) => {
   const { setScheme } = useSchemeProvider();
   const { isLoaded, isSignedIn } = useUser();
   const { getToken, token } = useTokenContext();
+  const { signOut } = useSignOut();
 
   const currentSchemeId = useAtomValue(currentUserSchemeIdAtom);
   const setCurrentUser = useSetAtom(currentUserAtom);
@@ -130,7 +133,22 @@ const UserProvider = ({ children }: Props) => {
         } else if (!isLoaded && !isSignedIn) {
           navigate('/sign-in');
         }
+        return;
       }
+
+      // Check if user has no schemes (all disabled)
+      if (data.currentUser.schemes.length === 0) {
+        notification.error({
+          description:
+            'You do not have access to any schemes. Please contact your administrator.',
+          duration: 0,
+          message: 'No Scheme Access',
+          placement: 'topRight',
+        });
+        void signOut();
+        return;
+      }
+
       hasFetched.current = true;
       if (currentSchemeId === null && data.currentUser?.schemes[0]) {
         const currentScheme = localStorage.getItem(CURRENT_SCHEME);
@@ -144,6 +162,9 @@ const UserProvider = ({ children }: Props) => {
         }
       }
       if (data.currentUser) {
+        console.log('currentUser', data.currentUser);
+        console.log('currentUserId', data.currentUser.id);
+
         Mixpanel.identify(data.currentUser.id);
         Mixpanel.people.set({
           businessId: data.currentUser.businesses[0]?.id || '',
@@ -169,6 +190,7 @@ const UserProvider = ({ children }: Props) => {
       setScheme,
       setCurrentUser,
       setNewUser,
+      signOut,
     ]
   );
 

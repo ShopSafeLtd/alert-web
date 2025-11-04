@@ -97,6 +97,7 @@ const AddExclusion = ({
       {[
         BanType.Cbo,
         BanType.CommunityBan,
+        BanType.CompanyBanningNotice,
         BanType.CourtData,
         BanType.Cpn,
         BanType.Cpw,
@@ -123,6 +124,7 @@ const AddExclusion = ({
           )}
           {[
             BanType.CommunityBan,
+            BanType.CompanyBanningNotice,
             BanType.CourtData,
             BanType.Cpn,
             BanType.Cpw,

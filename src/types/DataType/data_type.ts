@@ -469,7 +469,15 @@ export interface GoodsData {
   stockItemId?: string;
   value?: null | number | undefined;
 }
-
+export interface CctvRecordData {
+  cameraNumber: string;
+  description?: null | string | undefined;
+  endTime: Date;
+  id: string;
+  showFace: boolean;
+  showIncident: boolean;
+  startTime: Date;
+}
 export enum UserSort {
   createdAtAsc = 'CREATED_AT_ASC',
   createdAtDesc = 'CREATED_AT_DESC',
