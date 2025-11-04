@@ -14,77 +14,8 @@ query listOffendersSelect(
   ) {
     offenders {
       id
-      reference
-      totalImages
-      createdAt
-      updatedAt
-      totalIncidents
-      reference
-      age
-      build
-      height
-      dateOfBirth
-      dateSource
-      hair
-      gender
       name
-      race
-      peculiarities
-      approved
-      active
-      lastActive {
-        id
-        dayTime
-      }
-      tags {
-        id
-        name
-      }
-      images {
-        id
-        optimisedPersisted
-        position
-        rotation
-        primary
-        policeImage
-        isFace
-      }
-      groups {
-        id
-        name
-      }
-      tags {
-        id
-        name
-      }
-      createdBy {
-        id
-        fullName
-        businesses {
-          id
-          name
-        }
-      }
-      incidents {
-        id
-        reference
-        subject
-        description
-        dayTime
-        date
-        location {
-          id
-          full
-        }
-        createdBy {
-          id
-          fullName
-          businesses {
-            id
-            name
-          }
-        }
-      }
+      reference
     }
     total
   }

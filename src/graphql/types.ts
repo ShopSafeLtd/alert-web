@@ -1202,6 +1202,35 @@ export type BansOnOffenderUpdate = {
   update?: InputMaybe<Array<BanNestedUpdate>>;
 };
 
+export type BillingCustomer = {
+  __typename?: 'BillingCustomer';
+  createdAt: Scalars['Date'];
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  schemeCount: Scalars['Int'];
+  schemes: Array<Scheme>;
+};
+
+export type BillingCustomerCreateInput = {
+  name: Scalars['String'];
+  schemes?: InputMaybe<NullableConnectOnlyArrayHelper>;
+};
+
+export type BillingCustomerUpdateInput = {
+  name?: InputMaybe<SetStringHelper>;
+  schemes?: InputMaybe<NullableConnectArrayHelper>;
+};
+
+export type BillingCustomerWhereUniqueInput = {
+  id?: InputMaybe<Scalars['String']>;
+};
+
+export enum BillingMode {
+  FlatRate = 'FLAT_RATE',
+  PerBusiness = 'PER_BUSINESS',
+  PerUser = 'PER_USER'
+}
+
 export type BlurImageInput = {
   id: Scalars['String'];
   url: Scalars['String'];
@@ -4154,6 +4183,8 @@ export type DetectActionConfig = {
 };
 
 export type DetectActionConfigInput = {
+  camerasToAdd?: InputMaybe<Array<Scalars['String']>>;
+  camerasToRemove?: InputMaybe<Array<Scalars['String']>>;
   /** Event configuration data */
   eventData: EventDataInput;
   id?: InputMaybe<Scalars['String']>;
@@ -8587,6 +8618,21 @@ export type IncidentsByType = {
   types: Array<Scalars['String']>;
 };
 
+export type IndexOffenderImagesInput = {
+  /** The ID of the scheme to process offender images for */
+  schemeId: Scalars['String'];
+};
+
+export type IndexOffenderImagesResult = {
+  __typename?: 'IndexOffenderImagesResult';
+  /** Estimated time for completion */
+  estimatedTime?: Maybe<Scalars['String']>;
+  /** The ID of the queued face indexing job */
+  jobId: Scalars['String'];
+  /** Status message for the user */
+  message: Scalars['String'];
+};
+
 export type Industry = {
   __typename?: 'Industry';
   id: Scalars['ID'];
@@ -10262,6 +10308,22 @@ export type MentionableUser = {
   oldFullName: Scalars['String'];
 };
 
+export type MergeBusinessesInput = {
+  aiImprovements?: InputMaybe<Scalars['JSON']>;
+  aiSummary?: InputMaybe<Scalars['String']>;
+  businessIds: Array<Scalars['String']>;
+  currency?: InputMaybe<Currency>;
+  division?: InputMaybe<Scalars['String']>;
+  mainBusinessId: Scalars['String'];
+  metadata?: InputMaybe<Scalars['JSON']>;
+  name?: InputMaybe<Scalars['String']>;
+  policeArea?: InputMaybe<Array<PoliceForce>>;
+  publicName?: InputMaybe<Scalars['Boolean']>;
+  reference?: InputMaybe<Scalars['Int']>;
+  siteNumber?: InputMaybe<Scalars['String']>;
+  timezone?: InputMaybe<Scalars['String']>;
+};
+
 export type MergeOffendersInput = {
   age?: InputMaybe<Age>;
   build?: InputMaybe<Build>;
@@ -10645,6 +10707,7 @@ export type Mutation = {
   createActiveChecklist: ActiveChecklist;
   createActivityCsvZip: Scalars['String'];
   createArticle: Article;
+  createBillingCustomer: BillingCustomer;
   createBlankImage: Image;
   createBlurFaces: Image;
   createBusiness: Business;
@@ -10704,6 +10767,7 @@ export type Mutation = {
   createVehicle: Vehicle;
   deleteArticle: Article;
   deleteBan: Ban;
+  deleteBillingCustomer: BillingCustomer;
   deleteBrand: Brand;
   deleteBusiness: Business;
   deleteBusinessQuestion: BusinessQuestion;
@@ -10770,6 +10834,7 @@ export type Mutation = {
   indexExistingImages: SystemTask;
   indexFaces: SystemTask;
   indexImage: Image;
+  indexOffenderImagesForScheme: IndexOffenderImagesResult;
   intelOneImportData: SystemTask;
   inviteExistingUser: User;
   jdSiteImport: SystemTask;
@@ -10781,6 +10846,7 @@ export type Mutation = {
   markStockRemovalRequestAsCollected: StockRemovalRequest;
   markStockRemovalRequestAsPicked: StockRemovalRequest;
   markStockRemovalRequestAsReturned: StockRemovalRequest;
+  mergeBusinesses: Business;
   mergeBusinessesWithSameName: Business;
   mergeOffender: Offender;
   midCountiesImportData: SystemTask;
@@ -10818,6 +10884,7 @@ export type Mutation = {
   setDefaultTemplate?: Maybe<ReportTemplate>;
   setPassword: User;
   setSchemeSharing: Scheme;
+  setupFaceRecognition: RekCollection;
   shareData: SystemTask;
   shareIncident: Incident;
   signTerms: UserTerm;
@@ -10846,6 +10913,7 @@ export type Mutation = {
   unsubscribeToCrimeGroup: CrimeGroup;
   unsubscribeToInvestigation: Investigation;
   unsubscribeToVehicle: Vehicle;
+  updateBillingCustomer: BillingCustomer;
   updateBusiness: Business;
   updateBusinessQuestion: BusinessQuestion;
   updateChat: Chat;
@@ -11044,6 +11112,11 @@ export type MutationCreateActivityCsvZipArgs = {
 
 export type MutationCreateArticleArgs = {
   data: CreateArticleInput;
+};
+
+
+export type MutationCreateBillingCustomerArgs = {
+  data: BillingCustomerCreateInput;
 };
 
 
@@ -11346,6 +11419,11 @@ export type MutationDeleteArticleArgs = {
 
 
 export type MutationDeleteBanArgs = {
+  where: UniqueId;
+};
+
+
+export type MutationDeleteBillingCustomerArgs = {
   where: UniqueId;
 };
 
@@ -11679,6 +11757,11 @@ export type MutationIndexImageArgs = {
 };
 
 
+export type MutationIndexOffenderImagesForSchemeArgs = {
+  data: IndexOffenderImagesInput;
+};
+
+
 export type MutationIntelOneImportDataArgs = {
   data: IntelOneImportDataInput;
 };
@@ -11736,6 +11819,11 @@ export type MutationMarkStockRemovalRequestAsPickedArgs = {
 
 export type MutationMarkStockRemovalRequestAsReturnedArgs = {
   where: UniqueId;
+};
+
+
+export type MutationMergeBusinessesArgs = {
+  data: MergeBusinessesInput;
 };
 
 
@@ -11898,6 +11986,12 @@ export type MutationSetSchemeSharingArgs = {
 };
 
 
+export type MutationSetupFaceRecognitionArgs = {
+  data: SetupFaceRecognitionInput;
+  where: SchemeWhereUniqueInput;
+};
+
+
 export type MutationShareDataArgs = {
   data: ShareDataInput;
 };
@@ -11987,6 +12081,7 @@ export type MutationTjxImportDataArgs = {
 
 export type MutationToggleUserArgs = {
   id: Scalars['ID'];
+  schemeId?: InputMaybe<Scalars['ID']>;
 };
 
 
@@ -12011,6 +12106,12 @@ export type MutationUnsubscribeToInvestigationArgs = {
 
 
 export type MutationUnsubscribeToVehicleArgs = {
+  where: UniqueId;
+};
+
+
+export type MutationUpdateBillingCustomerArgs = {
+  data: BillingCustomerUpdateInput;
   where: UniqueId;
 };
 
@@ -14748,6 +14849,8 @@ export type Query = {
   availableTaskQuestions: Array<Question>;
   ban: Ban;
   bans: Array<Ban>;
+  billingCustomer: BillingCustomer;
+  billingCustomers: QueryBillingCustomersConnection;
   brand: Brand;
   brands: QueryBrandsConnection;
   business: Business;
@@ -15154,6 +15257,22 @@ export type QueryBansArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<BanWhereInput>;
+};
+
+
+export type QueryBillingCustomerArgs = {
+  where: BillingCustomerWhereUniqueInput;
+};
+
+
+export type QueryBillingCustomersArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  search?: InputMaybe<Scalars['String']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -16807,6 +16926,19 @@ export type QueryAiVisionMatchesConnectionEdge = {
   __typename?: 'QueryAiVisionMatchesConnectionEdge';
   cursor: Scalars['String'];
   node: AiVisionMatch;
+};
+
+export type QueryBillingCustomersConnection = {
+  __typename?: 'QueryBillingCustomersConnection';
+  edges: Array<QueryBillingCustomersConnectionEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type QueryBillingCustomersConnectionEdge = {
+  __typename?: 'QueryBillingCustomersConnectionEdge';
+  cursor: Scalars['String'];
+  node: BillingCustomer;
 };
 
 export type QueryBrandsConnection = {
@@ -18523,6 +18655,9 @@ export type Scheme = {
   autoApproveOffenders: Scalars['Boolean'];
   autoPopulateDescription: Scalars['Boolean'];
   bans: Array<Ban>;
+  billingCustomer?: Maybe<BillingCustomer>;
+  billingMode?: Maybe<BillingMode>;
+  billingRate?: Maybe<Scalars['Float']>;
   businessCount: Scalars['Int'];
   businesses: Array<Business>;
   chats: Array<Chat>;
@@ -18563,6 +18698,8 @@ export type Scheme = {
   duplicateMatchTimeout: Scalars['String'];
   facialDetection: Scalars['Boolean'];
   facialRecognition: Scalars['Boolean'];
+  /** Returns true if facial recognition is enabled and properly configured with an AWS collection */
+  facialRecognitionConfigured: Scalars['Boolean'];
   facialRedaction: Scalars['Boolean'];
   feedItems: Array<FeedItem>;
   goodsMode: GoodsMode;
@@ -19861,6 +19998,11 @@ export type SetStringArrayHelper = {
 
 export type SetStringHelper = {
   set: Scalars['String'];
+};
+
+export type SetupFaceRecognitionInput = {
+  /** Name for the facial recognition collection */
+  collectionName: Scalars['String'];
 };
 
 export type ShareDataInput = {
@@ -24041,6 +24183,7 @@ export type UserScheme = {
   bulletinPush: Scalars['Boolean'];
   createdAt: Scalars['Date'];
   dashboard?: Maybe<Dashboard>;
+  disabled: Scalars['Boolean'];
   fullName: Scalars['String'];
   id: Scalars['String'];
   incidentEmail: Scalars['Boolean'];
