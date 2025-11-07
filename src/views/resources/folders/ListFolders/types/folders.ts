@@ -17,6 +17,7 @@ export interface Props {
   fetchMoreScroll: () => void;
   loading: boolean;
   onDelete: (value: string) => void;
+  onDeleteFolder: (value: string) => void;
   saving: boolean;
   search: string;
   setSearch: (value: string) => void;

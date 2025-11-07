@@ -1,6 +1,6 @@
 import AddFolder from '#/components/form-components/Folders/AddFolder';
 import AddDocuments from '#/components/form-components/documents/AddDocuments';
-import { faPen, faPlus } from '@fortawesome/pro-light-svg-icons';
+import { faPen, faPlus, faTrash } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
@@ -33,6 +33,7 @@ const ViewFolder = ({
   editRights,
   loading,
   onDelete,
+  onDeleteFolder,
   saving,
   search,
   setSearch,
@@ -64,7 +65,7 @@ const ViewFolder = ({
           <Input
             onChange={(e) => setSearch(e.target.value)}
             placeholder={intl.formatMessage({
-              defaultMessage: 'Search Document...',
+              defaultMessage: 'Search...',
             })}
             size="small"
             // style={{ width: 400 }}
@@ -105,7 +106,7 @@ const ViewFolder = ({
                   />
                 }
                 onClick={() => toggleAddFolder()}
-                type="primary"
+                // type="primary"
               >
                 {intl.formatMessage({
                   defaultMessage: 'Add Folder',
@@ -123,7 +124,7 @@ const ViewFolder = ({
                   />
                 }
                 onClick={() => toggleAddDocument()}
-                type="primary"
+                // type="primary"
               >
                 {intl.formatMessage({
                   defaultMessage: 'Add Document',
@@ -131,6 +132,31 @@ const ViewFolder = ({
               </Button>
             </Col>
           </>
+        )}
+        {deleteRights && (
+          <Col>
+            <Button
+              disabled={
+                saving ||
+                loading ||
+                (data?.folder && data?.folder.totalChildFolders > 0) ||
+                (data?.folder && data?.folder.totalDocuments > 0)
+              }
+              icon={
+                <FontAwesomeIcon
+                  icon={faTrash}
+                  size="lg"
+                  style={{ marginRight: 5 }}
+                />
+              }
+              onClick={() => onDeleteFolder(data?.folder.id || '')}
+              type="primary"
+            >
+              {intl.formatMessage({
+                defaultMessage: 'Delete Folder',
+              })}
+            </Button>
+          </Col>
         )}
       </Row>
       {loading ? (
@@ -192,7 +218,15 @@ const ViewFolder = ({
                 >
                   {data?.folder.childFolders.map((node) => (
                     <Col key={node?.id} lg={6} md={12} sm={24}>
-                      <FolderCard data={node} />
+                      <FolderCard
+                        data={node}
+                        onDelete={onDeleteFolder}
+                        showDeleteBtn={
+                          deleteRights &&
+                          node.totalChildFolders === 0 &&
+                          node.totalDocuments === 0
+                        }
+                      />
                     </Col>
                   ))}
                 </Row>

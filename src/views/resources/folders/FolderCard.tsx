@@ -1,11 +1,18 @@
-import { faFile, faFolderTree } from '@fortawesome/pro-light-svg-icons';
+import {
+  faFile,
+  faFolderTree,
+  faTrash,
+} from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, Card, Col, Row, Typography } from 'antd';
+import { Button, Card, Col, Modal, Row, Tooltip, Typography } from 'antd';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 
+import useStyles from './FolderCard.styles';
+
 const { Paragraph, Title } = Typography;
+const { confirm } = Modal;
 
 interface Props {
   data: {
@@ -15,14 +22,54 @@ interface Props {
     totalChildFolders: number;
     totalDocuments: number;
   };
+  onDelete: (value: string) => void;
+  showDeleteBtn: boolean;
 }
 
-const FolderCard = ({ data }: Props) => {
+const FolderCard = ({ data, onDelete, showDeleteBtn }: Props) => {
   const intl = useIntl();
+  const classes = useStyles();
 
   return (
     <Card>
       <div style={{ height: 140, margin: 10 }}>
+        {showDeleteBtn && (
+          <Tooltip
+            placement="top"
+            title={intl.formatMessage({
+              defaultMessage: 'Delete the folder',
+            })}
+          >
+            <Button
+              className={classes.menuButton}
+              disabled={data.totalChildFolders > 0 || data.totalDocuments > 0}
+              icon={
+                <FontAwesomeIcon
+                  icon={faTrash}
+                  size="lg"
+                  style={{ color: 'red' }}
+                />
+              }
+              onClick={() => {
+                confirm({
+                  content: intl.formatMessage({
+                    defaultMessage: 'This action cannot be undone.',
+                  }),
+                  onOk() {
+                    console.log('0k');
+
+                    onDelete(data.id || '');
+                  },
+                  title: intl.formatMessage({
+                    defaultMessage: 'Do you want to delete this folder?',
+                  }),
+                });
+              }}
+              type="text"
+            />
+          </Tooltip>
+        )}
+
         <Title level={4}>{data?.name}</Title>
         <Paragraph ellipsis={{ rows: 3 }}>{data?.description}</Paragraph>
         <Row gutter={16}>

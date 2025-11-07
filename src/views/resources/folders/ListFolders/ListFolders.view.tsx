@@ -36,6 +36,7 @@ const ListFolders = ({
   fetchMoreScroll,
   loading,
   onDelete,
+  onDeleteFolder,
   saving,
   search,
   setSearch,
@@ -46,6 +47,7 @@ const ListFolders = ({
 }: Props) => {
   const intl = useIntl();
   const navigate = useNavigate();
+  console.log('deleteRights', deleteRights);
 
   return (
     <div className="list-view">
@@ -174,7 +176,15 @@ const ListFolders = ({
                 >
                   {data?.folders.edges.map(({ node }) => (
                     <Col key={node?.id} lg={6} md={12} sm={24}>
-                      <FolderCard data={node} />
+                      <FolderCard
+                        data={node}
+                        onDelete={onDeleteFolder}
+                        showDeleteBtn={
+                          deleteRights &&
+                          node.totalChildFolders === 0 &&
+                          node.totalDocuments === 0
+                        }
+                      />
                     </Col>
                   ))}
                 </Row>

@@ -17,6 +17,7 @@ import type {
 } from '../../graphql/queries/__generated__/folder.generated';
 import type { Props as Return } from '../types/ViewFolder';
 
+import { useDeleteFolderMutation } from '../../graphql/mutations/__generated__/delete-folder.generated';
 import {
   FolderDocument,
   useFolderQuery,
@@ -148,6 +149,60 @@ const useViewFolder = (): Return => {
       });
     }
   };
+  const [deleteFolder] = useDeleteFolderMutation({
+    onCompleted: () => {
+      if (
+        data?.folder.totalChildFolders === 0 &&
+        data.folder.totalDocuments === 0
+      )
+        window.history.back();
+      notification.success({
+        description: intl.formatMessage({
+          defaultMessage: 'The folder has been deleted from the folder list!',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Deleted!',
+        }),
+        placement: 'bottomRight',
+      });
+    },
+    onError: () => {
+      errorNotification();
+    },
+    update: (store, { data: res }) => {
+      if (res?.deleteFolder === null || res?.deleteFolder === undefined) return;
+
+      const existingData = store.readQuery<FolderQuery>({
+        query: FolderDocument,
+      });
+
+      if (!existingData?.folder) return;
+
+      store.writeQuery<FolderQuery>({
+        data: {
+          __typename: 'Query',
+          folder: {
+            ...existingData.folder,
+            childFolders: existingData.folder.childFolders.filter(
+              (folder) => folder.id !== res.deleteFolder.id
+            ),
+            totalChildFolders: existingData.folder.totalChildFolders - 1,
+          },
+        },
+        query: FolderDocument,
+        variables,
+      });
+    },
+  });
+
+  const onDeleteFolder = (value: string) => {
+    setSaving(true);
+    void deleteFolder({
+      variables: {
+        id: value || '',
+      },
+    }).finally(() => setSaving(false));
+  };
   const onDelete = (value: string) => {
     setSaving(true);
     void deleteDocument({
@@ -190,6 +245,7 @@ const useViewFolder = (): Return => {
     editRights,
     loading,
     onDelete,
+    onDeleteFolder,
     saving,
     search,
     setSearch,

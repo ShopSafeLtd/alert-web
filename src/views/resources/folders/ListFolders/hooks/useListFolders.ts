@@ -20,6 +20,7 @@ import type {
 } from '../../graphql/queries/__generated__/folders.generated';
 import type { Props as Return } from '../types/folders';
 
+import { useDeleteFolderMutation } from '../../graphql/mutations/__generated__/delete-folder.generated';
 import {
   DocumentsNoFolderDocument,
   useDocumentsNoFolderQuery,
@@ -186,7 +187,56 @@ const useListFolder = (): Return => {
       );
     }
   };
+  const [deleteFolder] = useDeleteFolderMutation({
+    onCompleted: () => {
+      notification.success({
+        description: intl.formatMessage({
+          defaultMessage:
+            'The folder has been deleted from the resources list!',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Deleted!',
+        }),
+        placement: 'bottomRight',
+      });
+    },
+    onError: () => {
+      errorNotification();
+    },
+    update: (store, { data: res }) => {
+      if (res?.deleteFolder === null || res?.deleteFolder === undefined) return;
 
+      const existingData = store.readQuery<FoldersQuery>({
+        query: FoldersDocument,
+      });
+
+      if (!existingData?.folders) return;
+
+      store.writeQuery<FoldersQuery>({
+        data: {
+          __typename: 'Query',
+          folders: {
+            ...existingData.folders,
+            edges: existingData.folders.edges.filter(
+              ({ node }) => node.id !== res.deleteFolder.id
+            ),
+            totalCount: existingData.folders.totalCount - 1,
+          },
+        },
+        query: FoldersDocument,
+        variables: folderVariables,
+      });
+    },
+  });
+
+  const onDeleteFolder = (value: string) => {
+    setSaving(true);
+    void deleteFolder({
+      variables: {
+        id: value || '',
+      },
+    }).finally(() => setSaving(false));
+  };
   const [deleteDocument] = useDeleteDocumentMutation({
     onCompleted: () => {
       notification.success({
@@ -262,6 +312,7 @@ const useListFolder = (): Return => {
     fetchMoreScroll,
     loading,
     onDelete,
+    onDeleteFolder,
     saving,
     search,
     setSearch,
