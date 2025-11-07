@@ -12,7 +12,7 @@ export type ListOffendersSelectQueryVariables = Types.Exact<{
 }>;
 
 
-export type ListOffendersSelectQuery = { __typename?: 'Query', listOffenders: { __typename?: 'ListOffenders', total: number, offenders: Array<{ __typename?: 'Offender', id: string, name?: string | null, reference?: number | null }> } };
+export type ListOffendersSelectQuery = { __typename?: 'Query', listOffenders: { __typename?: 'ListOffenders', total: number, offenders: Array<{ __typename?: 'Offender', id: string, name?: string | null, reference?: number | null, updatedAt: Date, dateOfBirth?: Date | null, age?: Types.Age | null, gender?: Types.Gender | null, hair?: string | null, build?: Types.Build | null, race?: Types.Race | null, peculiarities?: string | null, images: Array<{ __typename?: 'Image', id: string, optimised?: string | null, optimisedPersisted?: string | null }>, incidents: Array<{ __typename?: 'Incident', id: string, date: Date, location?: { __typename?: 'Address', id: string, full: string } | null, createdBy: { __typename?: 'User', id: string, fullName: string, businesses: Array<{ __typename?: 'Business', id: string, name: string }> } }> }> } };
 
 
 export const ListOffendersSelectDocument = gql`
@@ -28,6 +28,35 @@ export const ListOffendersSelectDocument = gql`
       id
       name
       reference
+      updatedAt
+      dateOfBirth
+      age
+      gender
+      hair
+      build
+      race
+      peculiarities
+      images {
+        id
+        optimised
+        optimisedPersisted
+      }
+      incidents {
+        id
+        date
+        location {
+          id
+          full
+        }
+        createdBy {
+          id
+          fullName
+          businesses {
+            id
+            name
+          }
+        }
+      }
     }
     total
   }

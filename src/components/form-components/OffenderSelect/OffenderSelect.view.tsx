@@ -102,8 +102,8 @@ const OffenderSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
     >
       {sortedData.map((offender) => {
         const offenderLabel = formatOffenderLabel(
-          offender.name,
-          offender.reference
+          offender.name ?? null,
+          offender.reference?.toString() ?? null
         );
         return (
           <Select.Option

@@ -16,6 +16,35 @@ query listOffendersSelect(
       id
       name
       reference
+      updatedAt
+      dateOfBirth
+      age
+      gender
+      hair
+      build
+      race
+      peculiarities
+      images {
+        id
+        optimised
+        optimisedPersisted
+      }
+      incidents {
+        id
+        date
+        location {
+          id
+          full
+        }
+        createdBy {
+          id
+          fullName
+          businesses {
+            id
+            name
+          }
+        }
+      }
     }
     total
   }
