@@ -8,9 +8,10 @@ import { useCreateUpdateChecklistMutation } from '#/views/checklist/graphql/muta
 import { useUserListChecklistQuery } from '#/views/checklist/graphql/queries/__generated__/list-users-checklist.generated';
 import { useChecklistQuery } from '#/views/checklist/graphql/queries/__generated__/view-checklist.generated';
 import { useBrandsQuery } from '#/views/settings/brands/graphql/queries/__generated__/brands.generated';
-import { Form } from 'antd';
+import { Form, message } from 'antd';
 import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
+import { useIntl } from 'react-intl';
 import { useNavigate, useParams } from 'react-router';
 
 export interface SelectOption {
@@ -234,6 +235,7 @@ export function useCreateChecklist(): Return {
   const [users, setUsers] = useState<SelectOption[]>([]);
   const [createUpdateChecklist] = useCreateUpdateChecklistMutation();
 
+  const intl = useIntl();
   const schemeId = useAtomValue(currentSchemeIdAtom);
   const { id } = useParams();
   const language = useStoreState((state) => state.theme.locale);
@@ -315,6 +317,15 @@ export function useCreateChecklist(): Return {
 
   const onFinishFailed = (errorInfo: unknown) => {
     console.error('Form validation failed:', errorInfo);
+
+    // Show visible error message to user
+    void message.error(
+      intl.formatMessage({
+        defaultMessage:
+          'Please check the form - some required fields are missing or invalid. Check for empty weight fields on weighted questions.',
+      })
+    );
+
     // Scroll to the first error field
     form.scrollToField(
       (errorInfo as { errorFields: { name: (number | string)[] }[] })

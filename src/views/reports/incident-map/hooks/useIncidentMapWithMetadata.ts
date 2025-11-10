@@ -43,10 +43,12 @@ interface Return {
   loading: boolean;
   multiColour: 'multi' | 'single';
   onChangeBrands: (value: string[]) => void;
+  onChangeCrimeGroups: (value: string[]) => void;
   onChangeDateRange: (value: { endDate: Date; startDate: Date } | null) => void;
   onChangeGroups: (value: string[]) => void;
   onChangeIncidentTypes: (value: string | string[]) => void;
   onChangeIndustries: (value: string[]) => void;
+  onChangeOffenders: (value: string[]) => void;
   onChangePoliceAreas: (value: string | string[]) => void;
   onChangeSchemes: (value: string[]) => void;
   // Save filters
@@ -54,10 +56,11 @@ interface Return {
   saving: boolean;
   schemes: { scheme: { id: string; name: string } }[];
   selectedBrands: string[];
-
+  selectedCrimeGroups: string[];
   selectedGroups: string[];
   selectedIncidentTypes: string[];
   selectedIndustries: string[];
+  selectedOffenders: string[];
   selectedPoliceAreas: string[];
   selectedSchemes: string[];
   setCluster: (value: boolean) => void;
@@ -114,6 +117,8 @@ const useIncidentMapWithMetadata = (): Return => {
     []
   );
   const [selectedPoliceAreas, setSelectedPoliceAreas] = useState<string[]>([]);
+  const [selectedOffenders, setSelectedOffenders] = useState<string[]>([]);
+  const [selectedCrimeGroups, setSelectedCrimeGroups] = useState<string[]>([]);
   const [dateRange, setDateRange] = useState<{
     endDate: Date;
     startDate: Date;
@@ -199,6 +204,37 @@ const useIncidentMapWithMetadata = (): Return => {
             not: null,
           },
         },
+        offenders:
+          selectedOffenders.length > 0 || selectedCrimeGroups.length > 0
+            ? {
+                some: {
+                  OR: [
+                    ...(selectedOffenders.length > 0
+                      ? [
+                          {
+                            id: {
+                              in: selectedOffenders,
+                            },
+                          },
+                        ]
+                      : []),
+                    ...(selectedCrimeGroups.length > 0
+                      ? [
+                          {
+                            crimeGroups: {
+                              some: {
+                                id: {
+                                  in: selectedCrimeGroups,
+                                },
+                              },
+                            },
+                          },
+                        ]
+                      : []),
+                  ],
+                },
+              }
+            : undefined,
         scheme: {
           id: {
             in: selectedSchemes,
@@ -305,12 +341,14 @@ const useIncidentMapWithMetadata = (): Return => {
     loading,
     multiColour,
     onChangeBrands: setBrands,
+    onChangeCrimeGroups: setSelectedCrimeGroups,
     onChangeDateRange: setDateRange,
     onChangeGroups,
     onChangeIncidentTypes: (value: string | string[]) => {
       setSelectedIncidentTypes(Array.isArray(value) ? value : [value]);
     },
     onChangeIndustries: setIndustries,
+    onChangeOffenders: setSelectedOffenders,
     onChangePoliceAreas: (value: string | string[]) => {
       setSelectedPoliceAreas(Array.isArray(value) ? value : [value]);
     },
@@ -320,10 +358,11 @@ const useIncidentMapWithMetadata = (): Return => {
     saving,
     schemes,
     selectedBrands,
-
+    selectedCrimeGroups,
     selectedGroups,
     selectedIncidentTypes,
     selectedIndustries,
+    selectedOffenders,
     selectedPoliceAreas,
     selectedSchemes,
     setCluster,

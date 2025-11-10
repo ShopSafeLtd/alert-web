@@ -678,7 +678,58 @@ const CreateChecklistView: React.FC<Props> = ({
                                                   ]}
                                                   valuePropName="checked"
                                                 >
-                                                  <Checkbox />
+                                                  <Checkbox
+                                                    onChange={(e) => {
+                                                      if (e.target.checked) {
+                                                        // Get the question type to determine which weight fields to set
+                                                        const questionType =
+                                                          form.getFieldValue([
+                                                            'sections',
+                                                            name,
+                                                            'subsections',
+                                                            subsectionField.name,
+                                                            'questions',
+                                                            questionField.name,
+                                                            'type',
+                                                          ]) as string;
+
+                                                        // Set default weight values based on question type
+                                                        form.setFieldValue(
+                                                          [
+                                                            'sections',
+                                                            name,
+                                                            'subsections',
+                                                            subsectionField.name,
+                                                            'questions',
+                                                            questionField.name,
+                                                            'passWeight',
+                                                          ],
+                                                          5
+                                                        );
+
+                                                        // TEXT and MEDIA types don't have failWeight
+                                                        if (
+                                                          questionType !==
+                                                            'TEXT' &&
+                                                          questionType !==
+                                                            'MEDIA'
+                                                        ) {
+                                                          form.setFieldValue(
+                                                            [
+                                                              'sections',
+                                                              name,
+                                                              'subsections',
+                                                              subsectionField.name,
+                                                              'questions',
+                                                              questionField.name,
+                                                              'failWeight',
+                                                            ],
+                                                            0
+                                                          );
+                                                        }
+                                                      }
+                                                    }}
+                                                  />
                                                 </Form.Item>
                                                 <Form.Item
                                                   shouldUpdate={(
