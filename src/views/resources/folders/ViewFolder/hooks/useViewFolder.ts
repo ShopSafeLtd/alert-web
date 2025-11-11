@@ -8,7 +8,7 @@ import { notification } from 'antd';
 import { PermissionMethod, PermissionModel } from 'graphql/types';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 
 import type { UpsertFolderMutation } from '../../graphql/mutations/__generated__/upsert-folder.generated';
 import type {
@@ -27,6 +27,7 @@ const useViewFolder = (): Return => {
   const params = useParams();
   const folderId = params.id || '';
   const intl = useIntl();
+  const navigate = useNavigate();
   const [addDocument, setAddDocument] = useState(false);
   const [addFolder, setAddFolder] = useState(false);
   const [editFolder, setEditFolder] = useState(false);
@@ -49,6 +50,7 @@ const useViewFolder = (): Return => {
   });
 
   const [deleteDocument] = useDeleteDocumentMutation({
+    awaitRefetchQueries: true,
     onCompleted: () => {
       notification.success({
         description: intl.formatMessage({
@@ -64,32 +66,7 @@ const useViewFolder = (): Return => {
     onError: () => {
       errorNotification();
     },
-    update: (store, { data: res }) => {
-      if (res?.deleteDocument === null || res?.deleteDocument === undefined)
-        return;
-
-      const existingData = store.readQuery<FolderQuery>({
-        query: FolderDocument,
-        variables,
-      });
-
-      if (!existingData?.folder) return;
-
-      store.writeQuery<FolderQuery>({
-        data: {
-          __typename: 'Query',
-          folder: {
-            ...existingData.folder,
-            documents: existingData.folder.documents.filter(
-              ({ id }) => id !== res.deleteDocument.id
-            ),
-            totalDocuments: existingData.folder.totalDocuments - 1,
-          },
-        },
-        query: FolderDocument,
-        variables,
-      });
-    },
+    refetchQueries: ['Folder'],
   });
   const updateFolderList: MutationUpdaterFn<UpsertFolderMutation> = (
     store,
@@ -129,6 +106,7 @@ const useViewFolder = (): Return => {
 
     const existingData = store.readQuery<FolderQuery, FolderQueryVariables>({
       query: FolderDocument,
+      variables,
     });
     if (existingData && result.data) {
       const oldData = existingData.folder.documents || [];
@@ -146,16 +124,18 @@ const useViewFolder = (): Return => {
           },
         },
         query: FolderDocument,
+        variables,
       });
     }
   };
   const [deleteFolder] = useDeleteFolderMutation({
-    onCompleted: () => {
-      if (
-        data?.folder.totalChildFolders === 0 &&
-        data.folder.totalDocuments === 0
-      )
-        window.history.back();
+    awaitRefetchQueries: true,
+    onCompleted: (_data, clientOptions) => {
+      // Check if we deleted the current folder or a child folder
+      if (clientOptions?.variables?.id === folderId) {
+        // Deleted the current folder being viewed - navigate away
+        navigate('/app/resources/folders');
+      }
       notification.success({
         description: intl.formatMessage({
           defaultMessage: 'The folder has been deleted from the folder list!',
@@ -169,30 +149,7 @@ const useViewFolder = (): Return => {
     onError: () => {
       errorNotification();
     },
-    update: (store, { data: res }) => {
-      if (res?.deleteFolder === null || res?.deleteFolder === undefined) return;
-
-      const existingData = store.readQuery<FolderQuery>({
-        query: FolderDocument,
-      });
-
-      if (!existingData?.folder) return;
-
-      store.writeQuery<FolderQuery>({
-        data: {
-          __typename: 'Query',
-          folder: {
-            ...existingData.folder,
-            childFolders: existingData.folder.childFolders.filter(
-              (folder) => folder.id !== res.deleteFolder.id
-            ),
-            totalChildFolders: existingData.folder.totalChildFolders - 1,
-          },
-        },
-        query: FolderDocument,
-        variables,
-      });
-    },
+    refetchQueries: ['Folder'],
   });
 
   const onDeleteFolder = (value: string) => {

@@ -12,7 +12,7 @@ export type DocumentsNoFolderQueryVariables = Types.Exact<{
 }>;
 
 
-export type DocumentsNoFolderQuery = { __typename?: 'Query', documentsNoFolder: { __typename?: 'QueryDocumentsNoFolderConnection', totalCount: number, edges: Array<{ __typename?: 'QueryDocumentsNoFolderConnectionEdge', node: { __typename?: 'Document', id: string, name: string, url: string, thumbnailUrl?: string | null, createdAt: Date, tags: Array<{ __typename?: 'Tag', id: string, name: string }> } }>, pageInfo: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage: boolean } } };
+export type DocumentsNoFolderQuery = { __typename?: 'Query', documentsNoFolder: { __typename?: 'QueryDocumentsNoFolderConnection', totalCount: number, edges: Array<{ __typename?: 'QueryDocumentsNoFolderConnectionEdge', node: { __typename?: 'Document', id: string, name: string, url: string, thumbnailUrl?: string | null, createdAt: Date, fileType?: Types.FileType | null, tags: Array<{ __typename?: 'Tag', id: string, name: string }> } }>, pageInfo: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage: boolean } } };
 
 
 export const DocumentsNoFolderDocument = gql`

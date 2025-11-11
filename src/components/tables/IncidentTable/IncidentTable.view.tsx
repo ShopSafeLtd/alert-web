@@ -1,3 +1,5 @@
+import type { ImagePosition } from 'graphql/types';
+
 import {
   currencyAtom,
   currentSchemeAtom,
@@ -92,7 +94,7 @@ interface Props {
           images?: Array<{
             id: string;
             optimised?: null | string;
-            position?: null | number;
+            position?: ImagePosition | null;
             rotation?: null | number;
           }> | null;
           name?: null | string;

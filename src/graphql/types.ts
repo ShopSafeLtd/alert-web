@@ -16,6 +16,12 @@ export type Scalars = {
   Upload: any;
 };
 
+export enum AiEntityType {
+  Business = 'BUSINESS',
+  Incident = 'INCIDENT',
+  Offender = 'OFFENDER'
+}
+
 export type AiSuggestion = {
   __typename?: 'AISuggestion';
   compassMatch?: Maybe<CompassMatch>;
@@ -2338,6 +2344,12 @@ export type ConnectSetHelper = {
   disconnect?: InputMaybe<Array<UniqueId>>;
   set?: InputMaybe<Array<UniqueId>>;
 };
+
+export enum ConnectionStrength {
+  Medium = 'MEDIUM',
+  Strong = 'STRONG',
+  Weak = 'WEAK'
+}
 
 export type Contact = {
   __typename?: 'Contact';
@@ -18835,6 +18847,14 @@ export type ResetPassword = {
   __typename?: 'ResetPassword';
   message: Scalars['String'];
 };
+
+export enum RiskLevel {
+  Critical = 'CRITICAL',
+  High = 'HIGH',
+  Low = 'LOW',
+  Medium = 'MEDIUM',
+  Minimal = 'MINIMAL'
+}
 
 export type RiverIslandColumnMapping = {
   /** Column name for case type */

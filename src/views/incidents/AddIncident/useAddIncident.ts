@@ -508,23 +508,23 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
             existingData?.listIncidents?.incidents &&
             existingData.listIncidents.incidents.length > 0
               ? [
-                // eslint-disable-next-line no-unsafe-optional-chaining
-                ...existingData?.listIncidents?.incidents,
-                {
-                  ...res.createIncident,
-                  incidentItems: [],
-                  // TODO fix this
-                  totalImages: res?.createIncident.images.length || 0,
-                },
-              ]
+                  // eslint-disable-next-line no-unsafe-optional-chaining
+                  ...existingData?.listIncidents?.incidents,
+                  {
+                    ...res.createIncident,
+                    incidentItems: [],
+                    // TODO fix this
+                    totalImages: res?.createIncident.images.length || 0,
+                  },
+                ]
               : [
-                {
-                  ...res.createIncident,
-                  incidentItems: [],
-                  // TODO fix this
-                  totalImages: res?.createIncident.images.length || 0,
-                },
-              ],
+                  {
+                    ...res.createIncident,
+                    incidentItems: [],
+                    // TODO fix this
+                    totalImages: res?.createIncident.images.length || 0,
+                  },
+                ],
         },
       },
       query: ListIncidentsDocument,
@@ -787,19 +787,19 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
               create:
                 newOffenders.length > 0
                   ? newOffenders.map((offender) => ({
-                    address:
-                      offender?.address?.street &&
-                      offender?.address?.townCity &&
-                      offender?.address?.postcode
-                        ? {
-                          alias: offender?.address?.alias,
-                          building: offender?.address?.building,
-                          county: offender?.address?.county,
-                          postcode: offender?.address?.postcode,
-                          street: offender?.address?.street,
-                          townCity: offender?.address?.townCity,
-                        }
-                        : undefined,
+                      address:
+                        offender?.address?.street &&
+                        offender?.address?.townCity &&
+                        offender?.address?.postcode
+                          ? {
+                              alias: offender?.address?.alias,
+                              building: offender?.address?.building,
+                              county: offender?.address?.county,
+                              postcode: offender?.address?.postcode,
+                              street: offender?.address?.street,
+                              townCity: offender?.address?.townCity,
+                            }
+                          : undefined,
                       build: offender.build || null,
                       comment: offender.comment || null,
                       createdBy: { connect: { id: userId } },
@@ -838,9 +838,9 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
                       name: offender.name || 'Unidentified Offender',
                       peculiarities: offender.peculiarities || null,
 
-                    race: offender.race || null,
-                    scheme: { connect: { id: schemeId } },
-                  }))
+                      race: offender.race || null,
+                      scheme: { connect: { id: schemeId } },
+                    }))
                   : undefined,
 
               update: editedOffenders.map((offender) => ({
@@ -865,15 +865,15 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
                   images:
                     offender?.images && offender?.images.length > 0
                       ? {
-                        create: offender.images.map((image) => ({
-                          url: {
-                            filename: image.fileName || '',
-                            id: image.id,
-                            mimetype: image.type || '',
-                            url: image.url || image.optimised || '',
-                          },
-                        })),
-                      }
+                          create: offender.images.map((image) => ({
+                            url: {
+                              filename: image.fileName || '',
+                              id: image.id,
+                              mimetype: image.type || '',
+                              url: image.url || image.optimised || '',
+                            },
+                          })),
+                        }
                       : undefined,
                   infoSource: { set: offender.infoSource || '' },
                   justification: { set: offender.justification || null },
@@ -906,36 +906,36 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
             create:
               newVehicles.length > 0
                 ? newVehicles.map((vehicle) => ({
-                  colour: vehicle.colour,
-                  groups: {
-                    connect:
-                      groups && groups.length === 1
-                        ? groups.map(({ value: id }) => ({ id }))
-                        : data.groups?.map((id) => ({ id })) ?? [],
-                  },
-                  localId: vehicle.id,
-                  make: vehicle.make,
-                  model: vehicle.model,
-                  registration: vehicle.registration,
-                }))
-                : undefined,
-            update:
-              editedVehicles.length > 0
-                ? editedVehicles.map((vehicle) => ({
-                  data: {
-                    colour: { set: vehicle.colour },
+                    colour: vehicle.colour,
                     groups: {
                       connect:
                         groups && groups.length === 1
                           ? groups.map(({ value: id }) => ({ id }))
                           : data.groups?.map((id) => ({ id })) ?? [],
                     },
-                    make: { set: vehicle.make },
-                    model: { set: vehicle.model },
-                    registration: { set: vehicle.registration },
-                  },
-                  where: { id: vehicle.id },
-                }))
+                    localId: vehicle.id,
+                    make: vehicle.make,
+                    model: vehicle.model,
+                    registration: vehicle.registration,
+                  }))
+                : undefined,
+            update:
+              editedVehicles.length > 0
+                ? editedVehicles.map((vehicle) => ({
+                    data: {
+                      colour: { set: vehicle.colour },
+                      groups: {
+                        connect:
+                          groups && groups.length === 1
+                            ? groups.map(({ value: id }) => ({ id }))
+                            : data.groups?.map((id) => ({ id })) ?? [],
+                      },
+                      make: { set: vehicle.make },
+                      model: { set: vehicle.model },
+                      registration: { set: vehicle.registration },
+                    },
+                    where: { id: vehicle.id },
+                  }))
                 : undefined,
           };
         };
@@ -962,37 +962,37 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
           create:
             data.images && data.images.length > 0
               ? data.images
-                .map((item) => {
-                  const offenders = confirmedOffender?.filter((offender) =>
-                    offender.images?.some(({ id }) => id === item.uid)
-                  );
-                  const vehicles = data.vehicles?.filter((vehicle) =>
-                    vehicle.images?.some(({ id }) => id === item.uid)
-                  );
+                  .map((item) => {
+                    const offenders = confirmedOffender?.filter((offender) =>
+                      offender.images?.some(({ id }) => id === item.uid)
+                    );
+                    const vehicles = data.vehicles?.filter((vehicle) =>
+                      vehicle.images?.some(({ id }) => id === item.uid)
+                    );
 
-                  return {
-                    offenders: offenders?.map((offender) => ({
-                      id: offender.id,
-                      new: offender.new || false,
-                    })),
-                    policeImage: item.policeImage,
-                    position: item.position,
-                    primary: item.uid === primaryImage,
-                    rotation: item.rotation || 0,
-                    totalFaces: item.totalFaces || 0,
-                    url: {
-                      filename: item.fileName || '',
-                      mimetype: item.type || '',
-                      url: item.url || '',
-                    },
-                    vehicles: vehicles?.map((offender) => ({
-                      id: offender.id,
-                      new: offender.new || false,
-                    })),
-                  };
-                })
-                .filter((object) => object.url !== undefined)
-                .filter((object) => object.url.url !== undefined)
+                    return {
+                      offenders: offenders?.map((offender) => ({
+                        id: offender.id,
+                        new: offender.new || false,
+                      })),
+                      policeImage: item.policeImage,
+                      position: item.position,
+                      primary: item.uid === primaryImage,
+                      rotation: item.rotation || 0,
+                      totalFaces: item.totalFaces || 0,
+                      url: {
+                        filename: item.fileName || '',
+                        mimetype: item.type || '',
+                        url: item.url || '',
+                      },
+                      vehicles: vehicles?.map((offender) => ({
+                        id: offender.id,
+                        new: offender.new || false,
+                      })),
+                    };
+                  })
+                  .filter((object) => object.url !== undefined)
+                  .filter((object) => object.url.url !== undefined)
               : undefined,
         });
 
@@ -1025,12 +1025,12 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
               })),
               business: data.business?.value
                 ? {
-                  id: data.business?.value,
-                }
+                    id: data.business?.value,
+                  }
                 : businesses[0]
                   ? {
-                    id: businesses[0]?.id,
-                  }
+                      id: businesses[0]?.id,
+                    }
                   : undefined,
               cctvRecords: {
                 create: data.cctv?.map((item) => ({
@@ -1069,8 +1069,8 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
                   description: item.description,
                   goodsType: item.goodsType
                     ? {
-                      id: item.goodsType,
-                    }
+                        id: item.goodsType,
+                      }
                     : undefined,
                   name:
                     item.name ??
@@ -1084,8 +1084,8 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
                   sku: item.sku,
                   stockItem: item.stockItem
                     ? {
-                      id: item.stockItem,
-                    }
+                        id: item.stockItem,
+                      }
                     : undefined,
                   value: item.value || 0,
                 })),
@@ -1093,9 +1093,9 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
               offenders: addOffenderRights
                 ? getOffenders()
                 : {
-                  connect: undefined,
-                  create: undefined,
-                },
+                    connect: undefined,
+                    create: undefined,
+                  },
               policeCCTVEmail: data.policeCCTVEmail,
               policeDay: data.policeDay,
               policeDistanceFromIncident: data.policeDistanceFromIncident,
@@ -1229,24 +1229,24 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
       const goodsWithValue =
         values.goods && values.goods.length > 0
           ? values.goods
-            .filter(
-              (item) =>
-                item.goodsType !== undefined &&
-                item.recoveredValue !== undefined &&
-                item.value !== undefined
-            )
-            .map((item) => item.value)
+              .filter(
+                (item) =>
+                  item.goodsType !== undefined &&
+                  item.recoveredValue !== undefined &&
+                  item.value !== undefined
+              )
+              .map((item) => item.value)
           : [];
       const goodsWithRecoveredValue =
         values.goods && values.goods.length > 0
           ? values.goods
-            .filter(
-              (item) =>
-                item.goodsType !== undefined &&
-                item.recoveredValue !== undefined &&
-                item.value !== undefined
-            )
-            .map((item) => item.value)
+              .filter(
+                (item) =>
+                  item.goodsType !== undefined &&
+                  item.recoveredValue !== undefined &&
+                  item.value !== undefined
+              )
+              .map((item) => item.value)
           : [];
 
       form.setFieldsValue({
@@ -1262,14 +1262,14 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
               recovered:
                 goodsWithRecoveredValue.length > 0
                   ? intl.formatNumber(
-                    goodsWithRecoveredValue.reduce(
-                      (a, b) => (a || 0) + (b || 0)
-                    ) || 0,
-                    {
-                      currency,
-                      style: 'currency',
-                    }
-                  )
+                      goodsWithRecoveredValue.reduce(
+                        (a, b) => (a || 0) + (b || 0)
+                      ) || 0,
+                      {
+                        currency,
+                        style: 'currency',
+                      }
+                    )
                   : '',
               tags: tags
                 .map((tag, index) => `${index > 0 ? ' ' : ''}${tag}`)
@@ -1278,12 +1278,12 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
               totalLoss:
                 goodsWithValue.length > 0
                   ? intl.formatNumber(
-                    goodsWithValue.reduce((a, b) => (a || 0) + (b || 0)) || 0,
-                    {
-                      currency,
-                      style: 'currency',
-                    }
-                  )
+                      goodsWithValue.reduce((a, b) => (a || 0) + (b || 0)) || 0,
+                      {
+                        currency,
+                        style: 'currency',
+                      }
+                    )
                   : '',
             }
           ) + (offenders.length > 0 ? offendersText : ''),

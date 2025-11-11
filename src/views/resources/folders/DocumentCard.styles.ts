@@ -10,10 +10,16 @@ const useStyles = createUseStyles((theme: Theme) => ({
     overflow: 'hidden',
   },
   card: {
+    '&:hover': {
+      borderColor: theme.primary,
+      boxShadow: `0 2px 8px ${theme.colorScheme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'}`,
+      cursor: 'pointer',
+    },
     // backgroundColor: 'white',
     border: `1px solid ${theme.borderColor}`,
     borderRadius: 10,
     overflow: 'hidden',
+    transition: 'all 0.3s ease',
   },
   content: {
     height: 90,
@@ -25,8 +31,19 @@ const useStyles = createUseStyles((theme: Theme) => ({
     top: 128,
     zIndex: 100,
   },
-
+  fileIcon: {
+    color: theme.colorScheme === 'dark' ? '#ffffff' : '#666666',
+    opacity: 0.8,
+  },
   folder: { height: 100 },
+  iconContainer: {
+    alignItems: 'center',
+    backgroundColor: theme.imageBackgroundColor,
+    display: 'flex',
+    height: 150,
+    justifyContent: 'center',
+    width: '100%',
+  },
   image: {
     backgroundPosition: 'center center',
     backgroundRepeat: 'no-repeat',

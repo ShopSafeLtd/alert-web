@@ -1,6 +1,11 @@
+import type { FileType } from '#/graphql/types';
+
+import { getFileTypeIcon } from '#/utils/get-file-type-icon';
+import { getPreviewStrategy, openInNewTab } from '#/utils/preview-document';
 import {
   faArrowDown,
   faArrowsMaximize,
+  faEye,
   faTrash,
 } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -35,6 +40,7 @@ const isImage = (url: string | undefined) => {
 interface Props {
   data: {
     createdAt: Date;
+    fileType?: FileType | null;
     id: string;
     name: string;
     tags: Array<{ id: string; name: string }>;
@@ -43,33 +49,69 @@ interface Props {
   };
 
   onDelete?: () => void;
+  onPreview?: (data: Props['data']) => void;
 }
-const DocumentCard = ({ data, onDelete }: Props) => {
+const DocumentCard = ({ data, onDelete, onPreview }: Props) => {
   const intl = useIntl();
   const classes = useStyles();
   const [lightboxElement, setLightboxElement] = useState<string | undefined>(
     undefined
   );
 
+  // Determine if this document has an image preview
+  const hasImagePreview = !!(data?.thumbnailUrl || isImage(data?.url));
+
+  // Get the appropriate icon for non-image documents
+  const fileIcon = getFileTypeIcon(data?.name || '', data?.fileType);
+
+  // Handle preview action
+  const handlePreview = (event: React.MouseEvent) => {
+    event.stopPropagation();
+
+    const strategy = getPreviewStrategy(data.name, data.url, data.fileType);
+
+    if (strategy.method === 'lightbox') {
+      // Open lightbox for images
+      setLightboxElement(data.url);
+    } else if (strategy.method === 'newTab') {
+      // Open PDFs and unknown types in new tab
+      openInNewTab(data.url);
+    } else if (onPreview) {
+      // Use parent's preview handler for office and media files
+      onPreview(data);
+    }
+  };
+
   return (
-    <div className={classes.card}>
-      <div className={classes.expandBtn}>
-        <FontAwesomeIcon
-          className={classes.imageExpand}
-          icon={faArrowsMaximize}
-          onClick={() =>
-            setLightboxElement(
-              data?.thumbnailUrl || isImage(data?.url) ? data?.url : undefined
-            )
-          }
-          // size="lg"
-        />
-      </div>
-      <div className={classes.image}>
-        <WatermarkImage
-          url={data?.thumbnailUrl || isImage(data?.url) ? data?.url : undefined}
-        />
-      </div>
+    <div
+      className={classes.card}
+      onClick={handlePreview}
+      role="button"
+      tabIndex={0}
+    >
+      {hasImagePreview && (
+        <div className={classes.expandBtn}>
+          <FontAwesomeIcon
+            className={classes.imageExpand}
+            icon={faArrowsMaximize}
+            onClick={() => setLightboxElement(data?.url)}
+            // size="lg"
+          />
+        </div>
+      )}
+      {hasImagePreview ? (
+        <div className={classes.image}>
+          <WatermarkImage url={data?.url} />
+        </div>
+      ) : (
+        <div className={classes.iconContainer}>
+          <FontAwesomeIcon
+            className={classes.fileIcon}
+            icon={fileIcon}
+            size="4x"
+          />
+        </div>
+      )}
 
       <div className={classes.content}>
         <Paragraph className={classes.title} ellipsis={{ rows: 2 }}>
@@ -102,11 +144,27 @@ const DocumentCard = ({ data, onDelete }: Props) => {
           <Tooltip
             placement="top"
             title={intl.formatMessage({
+              defaultMessage: 'Preview Document',
+            })}
+          >
+            <Button onClick={handlePreview} type="text">
+              <FontAwesomeIcon icon={faEye} size="lg" />
+            </Button>
+          </Tooltip>
+        </Col>
+
+        <Divider style={{ height: 25, margin: 8 }} type="vertical" />
+
+        <Col>
+          <Tooltip
+            placement="top"
+            title={intl.formatMessage({
               defaultMessage: 'Download Document',
             })}
           >
             <Button
-              onClick={() => {
+              onClick={(e) => {
+                e.stopPropagation();
                 void (async () => {
                   try {
                     // Fetch the file from Azure Blob Storage
@@ -151,7 +209,8 @@ const DocumentCard = ({ data, onDelete }: Props) => {
                 })}
               >
                 <Button
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.stopPropagation();
                     confirm({
                       content: intl.formatMessage({
                         defaultMessage:

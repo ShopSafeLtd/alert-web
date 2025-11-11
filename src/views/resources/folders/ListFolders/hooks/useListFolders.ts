@@ -162,6 +162,7 @@ const useListFolder = (): Return => {
       DocumentsNoFolderQueryVariables
     >({
       query: DocumentsNoFolderDocument,
+      variables: docVariables,
     });
     if (existingData && result.data) {
       const oldDocuments = existingData.documentsNoFolder.edges || [];
@@ -188,6 +189,7 @@ const useListFolder = (): Return => {
     }
   };
   const [deleteFolder] = useDeleteFolderMutation({
+    awaitRefetchQueries: true,
     onCompleted: () => {
       notification.success({
         description: intl.formatMessage({
@@ -203,30 +205,7 @@ const useListFolder = (): Return => {
     onError: () => {
       errorNotification();
     },
-    update: (store, { data: res }) => {
-      if (res?.deleteFolder === null || res?.deleteFolder === undefined) return;
-
-      const existingData = store.readQuery<FoldersQuery>({
-        query: FoldersDocument,
-      });
-
-      if (!existingData?.folders) return;
-
-      store.writeQuery<FoldersQuery>({
-        data: {
-          __typename: 'Query',
-          folders: {
-            ...existingData.folders,
-            edges: existingData.folders.edges.filter(
-              ({ node }) => node.id !== res.deleteFolder.id
-            ),
-            totalCount: existingData.folders.totalCount - 1,
-          },
-        },
-        query: FoldersDocument,
-        variables: folderVariables,
-      });
-    },
+    refetchQueries: ['Folders'],
   });
 
   const onDeleteFolder = (value: string) => {
@@ -238,6 +217,7 @@ const useListFolder = (): Return => {
     }).finally(() => setSaving(false));
   };
   const [deleteDocument] = useDeleteDocumentMutation({
+    awaitRefetchQueries: true,
     onCompleted: () => {
       notification.success({
         description: intl.formatMessage({
@@ -253,31 +233,7 @@ const useListFolder = (): Return => {
     onError: () => {
       errorNotification();
     },
-    update: (store, { data: res }) => {
-      if (res?.deleteDocument === null || res?.deleteDocument === undefined)
-        return;
-
-      const existingData = store.readQuery<DocumentsNoFolderQuery>({
-        query: DocumentsNoFolderDocument,
-      });
-
-      if (!existingData?.documentsNoFolder) return;
-
-      store.writeQuery<DocumentsNoFolderQuery>({
-        data: {
-          __typename: 'Query',
-          documentsNoFolder: {
-            ...existingData.documentsNoFolder,
-            edges: existingData.documentsNoFolder.edges.filter(
-              ({ node }) => node.id !== res.deleteDocument.id
-            ),
-            totalCount: existingData.documentsNoFolder.totalCount - 1,
-          },
-        },
-        query: DocumentsNoFolderDocument,
-        variables: docVariables,
-      });
-    },
+    refetchQueries: ['DocumentsNoFolder'],
   });
 
   const onDelete = (value: string) => {

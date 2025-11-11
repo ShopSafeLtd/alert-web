@@ -4,6 +4,7 @@ fragment FolderDocuments on Document {
   url
   thumbnailUrl
   createdAt
+  fileType
   tags {
     id
     name
