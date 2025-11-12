@@ -2626,6 +2626,7 @@ export type CreateDocument = {
   investigationId?: InputMaybe<Scalars['String']>;
   name?: InputMaybe<Scalars['String']>;
   newFolder?: InputMaybe<UpsertFolder>;
+  newTags?: InputMaybe<Array<SimpleTagCreate>>;
   offenderId?: InputMaybe<Scalars['String']>;
   origFileName: Scalars['String'];
   schemeId?: InputMaybe<Scalars['String']>;
@@ -2644,6 +2645,7 @@ export type CreateDocuments = {
   incidentId?: InputMaybe<Scalars['String']>;
   investigationId?: InputMaybe<Scalars['String']>;
   newFolder?: InputMaybe<UpsertFolder>;
+  newTags?: InputMaybe<Array<SimpleTagCreate>>;
   offenderId?: InputMaybe<Scalars['String']>;
   schemeId?: InputMaybe<Scalars['String']>;
   tags?: InputMaybe<Array<Scalars['String']>>;
@@ -2704,6 +2706,7 @@ export type CreateIncidentData = {
   dayOrNight?: InputMaybe<Scalars['Boolean']>;
   description: Scalars['String'];
   documents?: InputMaybe<Array<CreateDocument>>;
+  draft?: InputMaybe<Scalars['Boolean']>;
   groups: Array<UniqueId>;
   images: CreateIncidentImages;
   investigationId?: InputMaybe<Scalars['String']>;
@@ -2894,6 +2897,7 @@ export type CreateOffenderData = {
   dateOfBirth?: InputMaybe<Scalars['Date']>;
   dateSource?: InputMaybe<Scalars['String']>;
   documents?: InputMaybe<Array<CreateDocument>>;
+  draft?: InputMaybe<Scalars['Boolean']>;
   gender?: InputMaybe<Gender>;
   groups?: InputMaybe<ConnectOnlyArrayHelper>;
   hair?: InputMaybe<Scalars['String']>;
@@ -6350,6 +6354,7 @@ export type FolderWhereInput = {
   id?: InputMaybe<StringFilter>;
   name?: InputMaybe<StringFilter>;
   parentFolderId?: InputMaybe<StringNullableFilter>;
+  recycled?: InputMaybe<BoolFilter>;
   roles?: InputMaybe<CustomRoleListRelationFilter>;
   scheme?: InputMaybe<SchemeWhereInput>;
   schemeId?: InputMaybe<StringNullableFilter>;
@@ -8561,6 +8566,7 @@ export type IncidentUpdateInput = {
   customerRef?: InputMaybe<SetStringHelper>;
   date?: InputMaybe<SetDateHelper>;
   description?: InputMaybe<SetStringHelper>;
+  draft?: InputMaybe<Scalars['Boolean']>;
   groups?: InputMaybe<GroupsNestedSetConnectDisconnect>;
   images?: InputMaybe<ImageUpdateManyWithoutIncidentNestedInput>;
   incidentItems?: InputMaybe<IncidentItemUpdateManyWithoutIncidentInput>;
@@ -14452,6 +14458,7 @@ export type OffenderUpdateInput = {
   customGalleries?: InputMaybe<NestedCustomGalleryOnOffender>;
   dateOfBirth?: InputMaybe<NullableSetDateHelper>;
   dateSource?: InputMaybe<NullableSetStringHelper>;
+  draft?: InputMaybe<Scalars['Boolean']>;
   gender?: InputMaybe<NullableEnumGenderFieldUpdateOperationsInput>;
   groups?: InputMaybe<GroupsOnOffenderInput>;
   hair?: InputMaybe<NullableSetStringHelper>;

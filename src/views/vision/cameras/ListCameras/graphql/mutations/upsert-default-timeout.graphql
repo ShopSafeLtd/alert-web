@@ -1,0 +1,13 @@
+mutation UpdateDefaultTimeout(
+    $scheme: String!
+    $timeout: String!
+    $updateAllCamerasOnDefault: Boolean!
+) {
+    updateTimeoutDetectionConfig(
+        data: {
+            scheme: $scheme
+            timeout: $timeout
+            updateAllCamerasOnDefault: $updateAllCamerasOnDefault
+        }
+    )
+}

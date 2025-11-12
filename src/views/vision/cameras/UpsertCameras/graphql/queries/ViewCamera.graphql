@@ -1,0 +1,19 @@
+query ViewAiCamera($where: UniqueId!) {
+    aiVisionCamera(where: $where) {
+        id
+        duplicateMatchTimeout
+        model
+        make
+        onDetect {
+            id
+        }
+        groups {
+            id
+        }
+        serialNumber
+        osVersion
+        business {
+            id
+        }
+    }
+}
