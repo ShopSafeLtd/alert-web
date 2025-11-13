@@ -16,6 +16,7 @@ const ListFolders = () => {
     fetchMoreScroll,
     loading,
     onDelete,
+    onDeleteFolder,
     saving,
     search,
     setSearch,
@@ -38,6 +39,7 @@ const ListFolders = () => {
       fetchMoreScroll={fetchMoreScroll}
       loading={loading}
       onDelete={onDelete}
+      onDeleteFolder={onDeleteFolder}
       saving={saving}
       search={search}
       setSearch={setSearch}

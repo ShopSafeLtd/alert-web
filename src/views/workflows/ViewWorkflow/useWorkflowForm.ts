@@ -2,6 +2,7 @@ import type { WorkflowDataQuery } from '#/views/workflows/graphql/queries/__gene
 import type { FormInstance } from 'antd';
 import type { AnswerType, CronSchedule, IncidentPriority } from 'graphql/types';
 
+import { useApolloClient } from '@apollo/client';
 import {
   currencySymbolAtom,
   currentSchemeIdAtom,
@@ -9,15 +10,14 @@ import {
 import useActivityTemplates from '#/views/adminTodo/ActivityTemplates/useActivityTemplates';
 import { useChecklistsQuery } from '#/views/checklist/graphql/queries/__generated__/list-checklists.generated';
 import { useBrandsQuery } from '#/views/settings/brands/graphql/queries/__generated__/brands.generated';
-import { useDivisionsOnSchemeQuery } from '#/views/workflows/ViewWorkflow/graphql/queries/__generated__/divisions.generated';
 import { useCreateOneWorkflowMutation } from '#/views/workflows/graphql/mutations/__generated__/create-workflow.generated';
 import { useUpdateOneWorkflowMutation } from '#/views/workflows/graphql/mutations/__generated__/update-workflow.generated';
 import { useViewWorkflowQuery } from '#/views/workflows/graphql/queries/__generated__/view-workflow.generated';
 import {
-  WorkflowDataDocument,
   useWorkflowDataQuery,
+  WorkflowDataDocument,
 } from '#/views/workflows/graphql/queries/__generated__/workflow-data.generated';
-import { useApolloClient } from '@apollo/client';
+import { useDivisionsOnSchemeQuery } from '#/views/workflows/ViewWorkflow/graphql/queries/__generated__/divisions.generated';
 import { Form, notification } from 'antd';
 import { useListGoodsTypesQuery } from 'graphql/goods-types/queries/__generated__/list-goods-types.generated';
 import {
@@ -456,7 +456,7 @@ const useWorkflowForm = (): Return => {
             brandsCondition: conditions?.brands?.anyAll,
             checklistScore: conditions?.checkListScore?.score || null,
             checklistScoreGreaterThan:
-              conditions?.checkListScore?.greaterThan || null,
+              conditions?.checkListScore?.greaterThan ?? null,
             checklistTemplate: conditions?.checklistTemplate || null,
             // New countries fields
             countries: conditions?.countries?.countries,
@@ -853,6 +853,7 @@ const useWorkflowForm = (): Return => {
       },
     };
 
+    console.log(values.checklistScoreGreaterThan, values.checklistScore);
     const conditionsData: WorkflowConditions = {
       anyAll: values.option,
       // New brands condition

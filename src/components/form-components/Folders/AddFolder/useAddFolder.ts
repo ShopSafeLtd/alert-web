@@ -119,7 +119,7 @@ const useAddFolder = ({
             description: data.description,
             folderId,
             name: data.name,
-            parentId: parentFolderId || data.parentId,
+            parentId: data.parentId || parentFolderId,
             roleIds: data.roles,
           },
         },

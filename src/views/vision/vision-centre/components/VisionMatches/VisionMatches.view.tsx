@@ -1,12 +1,12 @@
+import { faFilter, faRefresh } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AiVisionMatchCard from '#/components/ai-vision/AiVisionMatchCard.view';
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import DebouncedInput from '#/utils/debounced-input';
 import VisionMatchDrawer from '#/views/vision/vision-centre/components/VisionMatchDrawer/VisionMatchDrawer.view';
 import { useAiVisionMatchesQuery } from '#/views/vision/vision-centre/components/VisionMatches/__generated__/VisionMatches.generated';
 import { useDismissAiMatchMutation } from '#/views/vision/vision-centre/components/VisionMatches/graphql/mutations/__generated__/DismissMatch.generated';
-import { faFilter, faRefresh } from '@fortawesome/pro-light-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, Col, Row, Skeleton, Typography } from 'antd';
+import { Button, Card, Col, Row, Skeleton, Typography } from 'antd';
 import { AiVisionMatchConfidence, SortOrder } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
 import React, { useState } from 'react';
@@ -63,43 +63,53 @@ const VisionMatched = ({ initId }: { initId?: string }) => {
 
   return (
     <>
-      <Row align="middle" gutter={8} style={{ marginBottom: 10 }}>
-        <Col flex={1}>
-          <Typography.Title level={3} style={{ marginBottom: 0 }}>
-            <FormattedMessage defaultMessage="Matches Detected" />
-          </Typography.Title>
-        </Col>
-        <Col>
-          {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
-          <Button disabled={loading} onClick={handleRefresh} type="text">
-            <FontAwesomeIcon icon={faRefresh} size="lg" />
-          </Button>
-        </Col>
-        <Col>
-          <Button type="text">
-            <FontAwesomeIcon icon={faFilter} size="lg" />
-          </Button>
-        </Col>
-        <Col>
-          <Link to="/app/vision/all-matches">
-            <Button type="text">
-              <FormattedMessage defaultMessage="View All Matches" />
+      <Card
+        style={{
+          position: 'sticky',
+          top: 0,
+          zIndex: 1000,
+          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
+        }}
+        bordered
+      >
+        <Row align="middle" gutter={8} style={{ marginBottom: 10 }}>
+          <Col flex={1}>
+            <Typography.Title level={3} style={{ marginBottom: 0 }}>
+              <FormattedMessage defaultMessage="Matches Detected" />
+            </Typography.Title>
+          </Col>
+          <Col>
+            {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
+            <Button disabled={loading} onClick={handleRefresh} type="text">
+              <FontAwesomeIcon icon={faRefresh} size="lg" />
             </Button>
-          </Link>
-        </Col>
-      </Row>
+          </Col>
+          <Col>
+            <Button type="text">
+              <FontAwesomeIcon icon={faFilter} size="lg" />
+            </Button>
+          </Col>
+          <Col>
+            <Link to="/app/vision/all-matches">
+              <Button type="text">
+                <FormattedMessage defaultMessage="View All Matches" />
+              </Button>
+            </Link>
+          </Col>
+        </Row>
 
-      <div>
-        <DebouncedInput
-          allowClear
-          onChange={(event) => setSearch(event.target.value)}
-          placeholder={intl.formatMessage({
-            defaultMessage: 'Search suggestions...',
-          })}
-          size="small"
-          // value={search}
-        />
-      </div>
+        <div>
+          <DebouncedInput
+            allowClear
+            onChange={(event) => setSearch(event.target.value)}
+            placeholder={intl.formatMessage({
+              defaultMessage: 'Search suggestions...',
+            })}
+            size="small"
+            // value={search}
+          />
+        </div>
+      </Card>
       <div style={{ marginTop: 20, width: '100%' }}>
         {loading &&
           [0, 1, 2, 3, 4, 5, 6, 7].map((item) => (

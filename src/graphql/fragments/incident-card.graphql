@@ -46,9 +46,11 @@ fragment IncidentCard on Incident {
   }
   dayTime
   business {
+    id
     name
   }
   location {
+    id
     full
   }
   description

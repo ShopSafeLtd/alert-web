@@ -8,7 +8,7 @@ import { notification } from 'antd';
 import { PermissionMethod, PermissionModel } from 'graphql/types';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 
 import type { UpsertFolderMutation } from '../../graphql/mutations/__generated__/upsert-folder.generated';
 import type {
@@ -17,6 +17,7 @@ import type {
 } from '../../graphql/queries/__generated__/folder.generated';
 import type { Props as Return } from '../types/ViewFolder';
 
+import { useDeleteFolderMutation } from '../../graphql/mutations/__generated__/delete-folder.generated';
 import {
   FolderDocument,
   useFolderQuery,
@@ -26,6 +27,7 @@ const useViewFolder = (): Return => {
   const params = useParams();
   const folderId = params.id || '';
   const intl = useIntl();
+  const navigate = useNavigate();
   const [addDocument, setAddDocument] = useState(false);
   const [addFolder, setAddFolder] = useState(false);
   const [editFolder, setEditFolder] = useState(false);
@@ -48,6 +50,7 @@ const useViewFolder = (): Return => {
   });
 
   const [deleteDocument] = useDeleteDocumentMutation({
+    awaitRefetchQueries: true,
     onCompleted: () => {
       notification.success({
         description: intl.formatMessage({
@@ -63,32 +66,7 @@ const useViewFolder = (): Return => {
     onError: () => {
       errorNotification();
     },
-    update: (store, { data: res }) => {
-      if (res?.deleteDocument === null || res?.deleteDocument === undefined)
-        return;
-
-      const existingData = store.readQuery<FolderQuery>({
-        query: FolderDocument,
-        variables,
-      });
-
-      if (!existingData?.folder) return;
-
-      store.writeQuery<FolderQuery>({
-        data: {
-          __typename: 'Query',
-          folder: {
-            ...existingData.folder,
-            documents: existingData.folder.documents.filter(
-              ({ id }) => id !== res.deleteDocument.id
-            ),
-            totalDocuments: existingData.folder.totalDocuments - 1,
-          },
-        },
-        query: FolderDocument,
-        variables,
-      });
-    },
+    refetchQueries: ['Folder'],
   });
   const updateFolderList: MutationUpdaterFn<UpsertFolderMutation> = (
     store,
@@ -128,6 +106,7 @@ const useViewFolder = (): Return => {
 
     const existingData = store.readQuery<FolderQuery, FolderQueryVariables>({
       query: FolderDocument,
+      variables,
     });
     if (existingData && result.data) {
       const oldData = existingData.folder.documents || [];
@@ -145,8 +124,41 @@ const useViewFolder = (): Return => {
           },
         },
         query: FolderDocument,
+        variables,
       });
     }
+  };
+  const [deleteFolder] = useDeleteFolderMutation({
+    awaitRefetchQueries: true,
+    onCompleted: (_data, clientOptions) => {
+      // Check if we deleted the current folder or a child folder
+      if (clientOptions?.variables?.id === folderId) {
+        // Deleted the current folder being viewed - navigate away
+        navigate('/app/resources/folders');
+      }
+      notification.success({
+        description: intl.formatMessage({
+          defaultMessage: 'The folder has been deleted from the folder list!',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Deleted!',
+        }),
+        placement: 'bottomRight',
+      });
+    },
+    onError: () => {
+      errorNotification();
+    },
+    refetchQueries: ['Folder'],
+  });
+
+  const onDeleteFolder = (value: string) => {
+    setSaving(true);
+    void deleteFolder({
+      variables: {
+        id: value || '',
+      },
+    }).finally(() => setSaving(false));
   };
   const onDelete = (value: string) => {
     setSaving(true);
@@ -190,6 +202,7 @@ const useViewFolder = (): Return => {
     editRights,
     loading,
     onDelete,
+    onDeleteFolder,
     saving,
     search,
     setSearch,

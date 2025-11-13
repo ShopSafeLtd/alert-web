@@ -2,7 +2,9 @@ import type { BrandsQuery } from '#/views/settings/brands/graphql/queries/__gene
 import type { SchemeGroupsQuery } from 'graphql/groups/queries/__generated__/scheme-groups.generated';
 import type { IndustriesQuery } from 'graphql/industry/__generated__/industries.generated';
 
+import CrimeGroupSelect from '#/components/form-components/CrimeGroupSelect/CrimeGroupSelect.view';
 import IncidentTypesSelect from '#/components/form-components/IncidentTypesSelect/IncidentTypesSelect.view';
+import OffenderSelect from '#/components/form-components/OffenderSelect/OffenderSelect.view';
 import PoliceAreaSelect from '#/components/form-components/PoliceAreaSelect/PoliceAreaSelect.view';
 import DatePicker from '#/components/util-components/DatePicker';
 import { usePresetDateRanges } from '#/views/data-management/export-activities/useExportActivities';
@@ -40,11 +42,13 @@ interface Props {
   industriesLoading: boolean;
   multiColour: 'multi' | 'single';
   onChangeBrands: (value: string[]) => void;
+  onChangeCrimeGroups: (value: string[]) => void;
   onChangeDateRange: (value: { endDate: Date; startDate: Date } | null) => void;
   onChangeGroups: (value: string[]) => void;
   onChangeHeatmapIntensity: (value: number) => void;
   onChangeIncidentTypes: (value: string | string[]) => void;
   onChangeIndustries: (value: string[]) => void;
+  onChangeOffenders: (value: string[]) => void;
   onChangePoliceAreas: (value: string | string[]) => void;
   onChangeSchemes: (value: string[]) => void;
   // Panel control
@@ -66,10 +70,11 @@ interface Props {
   // Filter data and handlers
   schemes: { scheme: { id: string; name: string } }[];
   selectedBrands: string[];
-
+  selectedCrimeGroups: string[];
   selectedGroups: string[];
   selectedIncidentTypes: string[];
   selectedIndustries: string[];
+  selectedOffenders: string[];
   selectedPoliceAreas: string[];
   selectedSchemes: string[];
   setMultiColour: (value: 'multi' | 'single') => void;
@@ -106,11 +111,13 @@ const FloatingFilterPanel: React.FC<Props> = ({
   industriesLoading,
   multiColour,
   onChangeBrands,
+  onChangeCrimeGroups,
   onChangeDateRange,
   onChangeGroups,
   onChangeHeatmapIntensity,
   onChangeIncidentTypes,
   onChangeIndustries,
+  onChangeOffenders,
   onChangePoliceAreas,
   onChangeSchemes,
   onClose,
@@ -128,9 +135,11 @@ const FloatingFilterPanel: React.FC<Props> = ({
   savingFilters,
   schemes,
   selectedBrands,
+  selectedCrimeGroups,
   selectedGroups,
   selectedIncidentTypes,
   selectedIndustries,
+  selectedOffenders,
   selectedPoliceAreas,
   selectedSchemes,
   setMultiColour,
@@ -307,6 +316,8 @@ const FloatingFilterPanel: React.FC<Props> = ({
     onChangeIndustries([]);
     onChangeIncidentTypes([]);
     onChangePoliceAreas([]);
+    onChangeOffenders([]);
+    onChangeCrimeGroups([]);
     onChangeDateRange(null);
   }, [
     onChangeSchemes,
@@ -315,6 +326,8 @@ const FloatingFilterPanel: React.FC<Props> = ({
     onChangeIndustries,
     onChangeIncidentTypes,
     onChangePoliceAreas,
+    onChangeOffenders,
+    onChangeCrimeGroups,
     onChangeDateRange,
   ]);
 
@@ -326,6 +339,8 @@ const FloatingFilterPanel: React.FC<Props> = ({
     selectedIndustries.length,
     selectedIncidentTypes.length,
     selectedPoliceAreas.length,
+    selectedOffenders.length,
+    selectedCrimeGroups.length,
     dateRange ? 1 : 0,
   ].reduce((sum, count) => sum + (count > 0 ? 1 : 0), 0);
   const ranges = usePresetDateRanges();
@@ -798,6 +813,40 @@ const FloatingFilterPanel: React.FC<Props> = ({
                   size="small"
                   style={{ width: '100%' }}
                   value={selectedPoliceAreas}
+                />
+              </Form.Item>
+
+              <Form.Item
+                label={intl.formatMessage({ defaultMessage: 'Offenders' })}
+                style={{ marginBottom: '12px' }}
+              >
+                <OffenderSelect
+                  maxTagCount={2}
+                  mode="multiple"
+                  onChange={onChangeOffenders}
+                  placeholder={intl.formatMessage({
+                    defaultMessage: 'Select offenders',
+                  })}
+                  size="small"
+                  style={{ width: '100%' }}
+                  value={selectedOffenders}
+                />
+              </Form.Item>
+
+              <Form.Item
+                label={intl.formatMessage({ defaultMessage: 'Crime Groups' })}
+                style={{ marginBottom: '12px' }}
+              >
+                <CrimeGroupSelect
+                  maxTagCount={2}
+                  mode="multiple"
+                  onChange={onChangeCrimeGroups}
+                  placeholder={intl.formatMessage({
+                    defaultMessage: 'Select crime groups',
+                  })}
+                  size="small"
+                  style={{ width: '100%' }}
+                  value={selectedCrimeGroups}
                 />
               </Form.Item>
 

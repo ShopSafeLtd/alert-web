@@ -27,27 +27,9 @@ query SuggestedCrimeGroupMembers(
       totalAssociatedIncidents(associatedCrimeGroup: $associatedCrimeGroup)
       associatedIncidents(associatedCrimeGroup: $associatedCrimeGroup) {
         id
-        dayTime
-        reference
-        business {
-          id
-          fullName
-        }
-        location {
-          full
-          id
-        }
-        crimeTypes(where: $crimeTypesWhere) {
+        crimeTypes {
           id
           name
-        }
-        createdBy {
-          id
-          fullName
-          businesses {
-            id
-            name
-          }
         }
       }
     }

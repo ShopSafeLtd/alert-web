@@ -1,6 +1,6 @@
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { useAiVisionCamerasQuery } from '#/views/vision/vision-centre/components/VisionCameras/__generated__/VisionCameras.generated';
-import { Button, Col, Row, Table, Typography } from 'antd';
+import { Col, Row, Table, Typography } from 'antd';
 import { useAtomValue } from 'jotai/index';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
@@ -50,11 +50,6 @@ const AiTrends = () => {
           >
             <FormattedMessage defaultMessage="Connected Cameras" />
           </Typography.Title>
-        </Col>
-        <Col>
-          <Button type="text">
-            <FormattedMessage defaultMessage="Manage Cameras" />
-          </Button>
         </Col>
       </Row>
 

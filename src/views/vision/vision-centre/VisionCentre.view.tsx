@@ -1,84 +1,68 @@
-import VisionMap from '#/views/vision/vision-centre/components/VisionMap';
+import VisionMap from '#/views/vision/vision-centre/components/VisionMap/VisionMap';
 import { useAiVisionStatsQuery } from '#/views/vision/vision-centre/components/VisionStats/__generated__/VisionStats.generated';
-import { Col, Row } from 'antd';
+import { Button, Col, Row } from 'antd';
 import React from 'react';
+import { useIntl } from 'react-intl';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import VisionCameras from './components/VisionCameras/VisionCameras.view';
-import VisionEvents from './components/VisionEvents/VisionEvents.view';
 import VisionMatches from './components/VisionMatches/VisionMatches.view';
 import VisionStats from './components/VisionStats/VisionStats.view';
-import { useParams } from 'react-router-dom';
-
-function duplicateItems(
-  inputArray: { count: number; geoLat: number; geoLng: number }[]
-): { geoLat: number; geoLng: number }[] {
-  const result: { geoLat: number; geoLng: number }[] = [];
-
-  for (const item of inputArray) {
-    for (let i = 0; i < item.count; i++) {
-      result.push({ ...item });
-    }
-  }
-
-  return result;
-}
 
 const VisionCentre = () => {
   const { data } = useAiVisionStatsQuery({});
   const visionId = useParams().id || '';
 
   return (
-    <div style={{ padding: 20 }}>
+    <div style={{ paddingLeft: 16, paddingRight: 16, marginTop: 16 }}>
       <Row gutter={32}>
         <Col
           span={12}
           style={{
             display: 'flex',
             flexDirection: 'column',
-            height: '100%',
+            height: 'calc(100vh - 16px)',
             overflow: 'scroll',
           }}
         >
           <VisionMatches initId={visionId} />
         </Col>
         <Col span={12}>
+          <VisionConfig />
           <VisionStats data={data} />
-          <VisionMap
-            height={300}
-            markers={duplicateItems([
-              {
-                count: data?.aiVisionStats.at(0)?.count.at(0) ?? 0,
-                geoLat: 51.581_64,
-                geoLng: -0.032_79,
-              },
-              {
-                count: 309,
-                geoLat: 53.551_073,
-                geoLng: -2.199_565,
-              },
-              {
-                count: 252,
-                geoLat: 52.503_21,
-                geoLng: -1.875_09,
-              },
-              {
-                count: 383,
-                geoLat: 53.875_952,
-                geoLng: -1.707_933,
-              },
-              {
-                count: 184,
-                geoLat: -34.688_772,
-                geoLng: 138.669_197,
-              },
-            ])}
-            width="100%"
-          />
+          <VisionMap height={300} width="100%" />
           <VisionCameras />
-          <VisionEvents />
         </Col>
       </Row>
     </div>
+  );
+};
+
+const VisionConfig = () => {
+  const navigate = useNavigate();
+  const intl = useIntl();
+  const onManageCameras = () => navigate('/app/vision/cameras');
+  const onDetectionConfigs = () => navigate('/app/vision/detection-configs');
+
+  return (
+    <Row style={{ marginBottom: 10, justifyContent: 'space-between' }}>
+      <div />
+      <div>
+        <Button
+          onClick={onManageCameras}
+          style={{ marginRight: 8, padding: '6px 12px' }}
+        >
+          {intl.formatMessage({
+            defaultMessage: 'Manage Cameras',
+          })}
+        </Button>
+        <Button onClick={onDetectionConfigs} style={{ padding: '6px 12px' }}>
+          {intl.formatMessage({
+            defaultMessage: 'Detection Configs',
+          })}
+        </Button>
+      </div>
+    </Row>
   );
 };
 

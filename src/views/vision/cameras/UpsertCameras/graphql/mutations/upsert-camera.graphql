@@ -1,0 +1,18 @@
+mutation UpsertAiCamera($data: AIVisionCameraInput!) {
+    upsertCamera(data: $data) {
+        id
+        business {
+            id
+            name
+        }
+        make
+        model
+        serialNumber
+        lastUploaded
+        duplicateMatchTimeout
+        groups {
+            id
+            name
+        }
+    }
+}

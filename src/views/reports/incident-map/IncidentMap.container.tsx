@@ -20,10 +20,12 @@ const IncidentMap = () => {
     loading,
     multiColour,
     onChangeBrands,
+    onChangeCrimeGroups,
     onChangeDateRange,
     onChangeGroups,
     onChangeIncidentTypes,
     onChangeIndustries,
+    onChangeOffenders,
     onChangePoliceAreas,
     onChangeSchemes,
     // Save filters
@@ -31,10 +33,11 @@ const IncidentMap = () => {
     saving,
     schemes,
     selectedBrands,
-
+    selectedCrimeGroups,
     selectedGroups,
     selectedIncidentTypes,
     selectedIndustries,
+    selectedOffenders,
     selectedPoliceAreas,
     selectedSchemes,
     setCluster,
@@ -83,10 +86,12 @@ const IncidentMap = () => {
       loading={loading}
       multiColour={multiColour}
       onChangeBrands={onChangeBrands}
+      onChangeCrimeGroups={onChangeCrimeGroups}
       onChangeDateRange={onChangeDateRange}
       onChangeGroups={onChangeGroups}
       onChangeIncidentTypes={onChangeIncidentTypes}
       onChangeIndustries={onChangeIndustries}
+      onChangeOffenders={onChangeOffenders}
       onChangePoliceAreas={onChangePoliceAreas}
       onChangeSchemes={onChangeSchemes}
       // Save filters
@@ -94,9 +99,11 @@ const IncidentMap = () => {
       saving={saving}
       schemes={schemes}
       selectedBrands={selectedBrands}
+      selectedCrimeGroups={selectedCrimeGroups}
       selectedGroups={selectedGroups}
       selectedIncidentTypes={selectedIncidentTypes}
       selectedIndustries={selectedIndustries}
+      selectedOffenders={selectedOffenders}
       selectedPoliceAreas={selectedPoliceAreas}
       selectedSchemes={selectedSchemes}
       setCluster={setCluster}
