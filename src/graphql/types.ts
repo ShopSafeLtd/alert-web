@@ -16,8 +16,15 @@ export type Scalars = {
   Upload: any;
 };
 
+export enum AiEntityType {
+  Business = 'BUSINESS',
+  Incident = 'INCIDENT',
+  Offender = 'OFFENDER'
+}
+
 export type AiSuggestion = {
   __typename?: 'AISuggestion';
+  compassMatch?: Maybe<CompassMatch>;
   createdAt: Scalars['Date'];
   description?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
@@ -37,6 +44,7 @@ export enum AiSuggestionStatus {
 }
 
 export enum AiSuggestionType {
+  CompassSuggestion = 'COMPASS_SUGGESTION',
   CrimeGroupNew = 'CRIME_GROUP_NEW',
   CrimeGroupOffender = 'CRIME_GROUP_OFFENDER',
   FaceMatch = 'FACE_MATCH',
@@ -61,6 +69,7 @@ export type AiVisionCamera = {
   __typename?: 'AIVisionCamera';
   business: Business;
   createdAt: Scalars['Date'];
+  detectionConfigs: Scalars['Int'];
   duplicateMatchTimeout: Scalars['String'];
   groups: Array<Group>;
   id: Scalars['ID'];
@@ -116,9 +125,14 @@ export type AiVisionMatch = {
   id: Scalars['ID'];
   matchedFace: RekFace;
   matchedOffender: Offender;
+  outcome?: Maybe<AiVisionMatchOutcome>;
+  outcomeNotes?: Maybe<Scalars['String']>;
   priority: AiVisionMatchPriority;
   stillImage: Image;
   updatedAt: Scalars['Date'];
+  verificationMethod?: Maybe<AiVisionMatchVerificationMethod>;
+  verifiedAt?: Maybe<Scalars['Date']>;
+  verifiedBy?: Maybe<User>;
 };
 
 export enum AiVisionMatchConfidence {
@@ -127,11 +141,25 @@ export enum AiVisionMatchConfidence {
   Medium = 'MEDIUM'
 }
 
+export enum AiVisionMatchOutcome {
+  DeterredByStaff = 'DETERRED_BY_STAFF',
+  FalsePositive = 'FALSE_POSITIVE',
+  IncidentOccurred = 'INCIDENT_OCCURRED',
+  LeftWithoutIncident = 'LEFT_WITHOUT_INCIDENT',
+  NoActionNeeded = 'NO_ACTION_NEEDED',
+  Uncertain = 'UNCERTAIN'
+}
+
 export enum AiVisionMatchPriority {
   Critical = 'CRITICAL',
   High = 'HIGH',
   Low = 'LOW',
   Normal = 'NORMAL'
+}
+
+export enum AiVisionMatchVerificationMethod {
+  AutoConfidence = 'AUTO_CONFIDENCE',
+  Manual = 'MANUAL'
 }
 
 export type Action = {
@@ -193,6 +221,7 @@ export enum ActionType {
   ResetPassword = 'RESET_PASSWORD',
   Restore = 'RESTORE',
   SaveDraft = 'SAVE_DRAFT',
+  Send = 'SEND',
   Update = 'UPDATE',
   View = 'VIEW',
   WorkflowCheck = 'WORKFLOW_CHECK'
@@ -692,6 +721,13 @@ export type AiVisionEventWhereInput = {
   search?: InputMaybe<Scalars['String']>;
 };
 
+export type AiVisionMapData = {
+  __typename?: 'AiVisionMapData';
+  count: Scalars['Int'];
+  lat: Scalars['Float'];
+  lon: Scalars['Float'];
+};
+
 export type AiVisionMatchOrderByInput = {
   createdAt?: InputMaybe<SortOrder>;
 };
@@ -702,9 +738,13 @@ export type AiVisionMatchWhereInput = {
   confidenceRating?: InputMaybe<Array<AiVisionMatchConfidence>>;
   groupIds?: InputMaybe<Array<Scalars['String']>>;
   offenderIds?: InputMaybe<Array<Scalars['String']>>;
+  outcome?: InputMaybe<Array<AiVisionMatchOutcome>>;
   priority?: InputMaybe<Array<AiVisionMatchPriority>>;
   schemeIds: Array<Scalars['String']>;
   search?: InputMaybe<Scalars['String']>;
+  verificationMethod?: InputMaybe<Array<AiVisionMatchVerificationMethod>>;
+  verified?: InputMaybe<Scalars['Boolean']>;
+  verifiedByUserIds?: InputMaybe<Array<Scalars['String']>>;
 };
 
 export type Answer = {
@@ -975,6 +1015,7 @@ export type ArticleWhereInput = {
   groups?: InputMaybe<GroupListRelationFilter>;
   id?: InputMaybe<StringFilter>;
   priority?: InputMaybe<EnumArticlePriorityFilter>;
+  roles?: InputMaybe<CustomRoleListRelationFilter>;
   status?: InputMaybe<EnumCompleteStatusFilter>;
   title?: InputMaybe<StringFilter>;
 };
@@ -1201,6 +1242,35 @@ export type BansOnOffenderUpdate = {
   disconnect?: InputMaybe<Array<UniqueId>>;
   update?: InputMaybe<Array<BanNestedUpdate>>;
 };
+
+export type BillingCustomer = {
+  __typename?: 'BillingCustomer';
+  createdAt: Scalars['Date'];
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  schemeCount: Scalars['Int'];
+  schemes: Array<Scheme>;
+};
+
+export type BillingCustomerCreateInput = {
+  name: Scalars['String'];
+  schemes?: InputMaybe<NullableConnectOnlyArrayHelper>;
+};
+
+export type BillingCustomerUpdateInput = {
+  name?: InputMaybe<SetStringHelper>;
+  schemes?: InputMaybe<NullableConnectArrayHelper>;
+};
+
+export type BillingCustomerWhereUniqueInput = {
+  id?: InputMaybe<Scalars['String']>;
+};
+
+export enum BillingMode {
+  FlatRate = 'FLAT_RATE',
+  PerBusiness = 'PER_BUSINESS',
+  PerUser = 'PER_USER'
+}
 
 export type BlurImageInput = {
   id: Scalars['String'];
@@ -2149,6 +2219,77 @@ export type ChecklistWhereUniqueInput = {
   updatedAt?: InputMaybe<DateTimeFilter>;
 };
 
+export type CompassMatch = {
+  __typename?: 'CompassMatch';
+  aiSuggestions: Array<AiSuggestion>;
+  behavioralScore: Scalars['Float'];
+  confidence: CompassMatchConfidence;
+  createdAt: Scalars['Date'];
+  id: Scalars['ID'];
+  matchedOffender: Offender;
+  nameScore: Scalars['Float'];
+  reasons: Array<Scalars['String']>;
+  searchedOffender: Offender;
+  spatialScore: Scalars['Float'];
+  temporalScore: Scalars['Float'];
+  totalScore: Scalars['Float'];
+  updatedAt: Scalars['Date'];
+};
+
+export enum CompassMatchConfidence {
+  High = 'HIGH',
+  Low = 'LOW',
+  Medium = 'MEDIUM'
+}
+
+export type CompassMatchListRelationFilter = {
+  every?: InputMaybe<CompassMatchWhereInput>;
+  none?: InputMaybe<CompassMatchWhereInput>;
+  some?: InputMaybe<CompassMatchWhereInput>;
+};
+
+export type CompassMatchOrderByRelationAggregateInput = {
+  _count?: InputMaybe<SortOrder>;
+};
+
+export type CompassMatchOrderByWithRelationInput = {
+  behavioralScore?: InputMaybe<SortOrder>;
+  confidence?: InputMaybe<SortOrder>;
+  createdAt?: InputMaybe<SortOrder>;
+  id?: InputMaybe<SortOrder>;
+  matchedOffender?: InputMaybe<OffenderOrderByWithRelationInput>;
+  matchedOffenderId?: InputMaybe<SortOrder>;
+  nameScore?: InputMaybe<SortOrder>;
+  searchedOffender?: InputMaybe<OffenderOrderByWithRelationInput>;
+  searchedOffenderId?: InputMaybe<SortOrder>;
+  spatialScore?: InputMaybe<SortOrder>;
+  temporalScore?: InputMaybe<SortOrder>;
+  totalScore?: InputMaybe<SortOrder>;
+  updatedAt?: InputMaybe<SortOrder>;
+};
+
+export type CompassMatchWhereInput = {
+  AND?: InputMaybe<Array<CompassMatchWhereInput>>;
+  NOT?: InputMaybe<Array<CompassMatchWhereInput>>;
+  OR?: InputMaybe<Array<CompassMatchWhereInput>>;
+  behavioralScore?: InputMaybe<FloatFilter>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  id?: InputMaybe<StringFilter>;
+  matchedOffender?: InputMaybe<OffenderWhereInput>;
+  matchedOffenderId?: InputMaybe<StringFilter>;
+  nameScore?: InputMaybe<FloatFilter>;
+  searchedOffender?: InputMaybe<OffenderWhereInput>;
+  searchedOffenderId?: InputMaybe<StringFilter>;
+  spatialScore?: InputMaybe<FloatFilter>;
+  temporalScore?: InputMaybe<FloatFilter>;
+  totalScore?: InputMaybe<FloatFilter>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
+};
+
+export type CompassMatchWhereUniqueInput = {
+  id?: InputMaybe<Scalars['String']>;
+};
+
 export type CompleteActiveChecklistInput = {
   additionalInfo?: InputMaybe<Scalars['String']>;
   answers: Array<ActiveChecklistAnswerInput>;
@@ -2203,6 +2344,12 @@ export type ConnectSetHelper = {
   disconnect?: InputMaybe<Array<UniqueId>>;
   set?: InputMaybe<Array<UniqueId>>;
 };
+
+export enum ConnectionStrength {
+  Medium = 'MEDIUM',
+  Strong = 'STRONG',
+  Weak = 'WEAK'
+}
 
 export type Contact = {
   __typename?: 'Contact';
@@ -2477,8 +2624,9 @@ export type CreateDocument = {
   folderId?: InputMaybe<Scalars['String']>;
   incidentId?: InputMaybe<Scalars['String']>;
   investigationId?: InputMaybe<Scalars['String']>;
-  name: Scalars['String'];
+  name?: InputMaybe<Scalars['String']>;
   newFolder?: InputMaybe<UpsertFolder>;
+  newTags?: InputMaybe<Array<SimpleTagCreate>>;
   offenderId?: InputMaybe<Scalars['String']>;
   origFileName: Scalars['String'];
   schemeId?: InputMaybe<Scalars['String']>;
@@ -2497,6 +2645,7 @@ export type CreateDocuments = {
   incidentId?: InputMaybe<Scalars['String']>;
   investigationId?: InputMaybe<Scalars['String']>;
   newFolder?: InputMaybe<UpsertFolder>;
+  newTags?: InputMaybe<Array<SimpleTagCreate>>;
   offenderId?: InputMaybe<Scalars['String']>;
   schemeId?: InputMaybe<Scalars['String']>;
   tags?: InputMaybe<Array<Scalars['String']>>;
@@ -2557,6 +2706,7 @@ export type CreateIncidentData = {
   dayOrNight?: InputMaybe<Scalars['Boolean']>;
   description: Scalars['String'];
   documents?: InputMaybe<Array<CreateDocument>>;
+  draft?: InputMaybe<Scalars['Boolean']>;
   groups: Array<UniqueId>;
   images: CreateIncidentImages;
   investigationId?: InputMaybe<Scalars['String']>;
@@ -2747,6 +2897,7 @@ export type CreateOffenderData = {
   dateOfBirth?: InputMaybe<Scalars['Date']>;
   dateSource?: InputMaybe<Scalars['String']>;
   documents?: InputMaybe<Array<CreateDocument>>;
+  draft?: InputMaybe<Scalars['Boolean']>;
   gender?: InputMaybe<Gender>;
   groups?: InputMaybe<ConnectOnlyArrayHelper>;
   hair?: InputMaybe<Scalars['String']>;
@@ -4154,6 +4305,8 @@ export type DetectActionConfig = {
 };
 
 export type DetectActionConfigInput = {
+  camerasToAdd?: InputMaybe<Array<Scalars['String']>>;
+  camerasToRemove?: InputMaybe<Array<Scalars['String']>>;
   /** Event configuration data */
   eventData: EventDataInput;
   id?: InputMaybe<Scalars['String']>;
@@ -4734,6 +4887,10 @@ export type EnumBanTypeNullableWithAggregatesFilter = {
   in?: InputMaybe<Array<BanType>>;
   not?: InputMaybe<BanType>;
   notIn?: InputMaybe<Array<BanType>>;
+};
+
+export type EnumBillingModeFieldUpdateOperationsInput = {
+  set?: InputMaybe<BillingMode>;
 };
 
 export type EnumBuildNullableFilter = {
@@ -6197,6 +6354,7 @@ export type FolderWhereInput = {
   id?: InputMaybe<StringFilter>;
   name?: InputMaybe<StringFilter>;
   parentFolderId?: InputMaybe<StringNullableFilter>;
+  recycled?: InputMaybe<BoolFilter>;
   roles?: InputMaybe<CustomRoleListRelationFilter>;
   scheme?: InputMaybe<SchemeWhereInput>;
   schemeId?: InputMaybe<StringNullableFilter>;
@@ -8408,6 +8566,7 @@ export type IncidentUpdateInput = {
   customerRef?: InputMaybe<SetStringHelper>;
   date?: InputMaybe<SetDateHelper>;
   description?: InputMaybe<SetStringHelper>;
+  draft?: InputMaybe<Scalars['Boolean']>;
   groups?: InputMaybe<GroupsNestedSetConnectDisconnect>;
   images?: InputMaybe<ImageUpdateManyWithoutIncidentNestedInput>;
   incidentItems?: InputMaybe<IncidentItemUpdateManyWithoutIncidentInput>;
@@ -8587,6 +8746,21 @@ export type IncidentsByType = {
   types: Array<Scalars['String']>;
 };
 
+export type IndexOffenderImagesInput = {
+  /** The ID of the scheme to process offender images for */
+  schemeId: Scalars['String'];
+};
+
+export type IndexOffenderImagesResult = {
+  __typename?: 'IndexOffenderImagesResult';
+  /** Estimated time for completion */
+  estimatedTime?: Maybe<Scalars['String']>;
+  /** The ID of the queued face indexing job */
+  jobId: Scalars['String'];
+  /** Status message for the user */
+  message: Scalars['String'];
+};
+
 export type Industry = {
   __typename?: 'Industry';
   id: Scalars['ID'];
@@ -8654,6 +8828,39 @@ export type IntWithAggregatesFilter = {
   not?: InputMaybe<NestedIntWithAggregatesFilter>;
   notIn?: InputMaybe<Array<Scalars['Int']>>;
 };
+
+export type IntegrationConfig = {
+  __typename?: 'IntegrationConfig';
+  conditions?: Maybe<Scalars['JSON']>;
+  config: Scalars['JSON'];
+  createdAt: Scalars['Date'];
+  enabled: Scalars['Boolean'];
+  id: Scalars['ID'];
+  lastError?: Maybe<Scalars['String']>;
+  lastErrorAt?: Maybe<Scalars['Date']>;
+  lastSuccess?: Maybe<Scalars['Date']>;
+  name: Scalars['String'];
+  scheme: Scheme;
+  schemeId: Scalars['String'];
+  totalAttempts: Scalars['Int'];
+  totalFailures: Scalars['Int'];
+  totalSuccess: Scalars['Int'];
+  type: IntegrationType;
+  updatedAt: Scalars['Date'];
+};
+
+export type IntegrationTestResult = {
+  __typename?: 'IntegrationTestResult';
+  details?: Maybe<Scalars['JSON']>;
+  message: Scalars['String'];
+  success: Scalars['Boolean'];
+};
+
+export enum IntegrationType {
+  Api = 'API',
+  Sentrysys = 'SENTRYSYS',
+  Webhook = 'WEBHOOK'
+}
 
 export type Intel = {
   __typename?: 'Intel';
@@ -9511,6 +9718,12 @@ export type ListChecklistPerformance = {
   total: Scalars['Int'];
 };
 
+export type ListCompassMatches = {
+  __typename?: 'ListCompassMatches';
+  matches: Array<CompassMatch>;
+  total: Scalars['Int'];
+};
+
 export type ListCrimeGroupPerformance = {
   __typename?: 'ListCrimeGroupPerformance';
   crimeGroupPerformance: Array<CrimeGroupPerformance>;
@@ -10262,6 +10475,22 @@ export type MentionableUser = {
   oldFullName: Scalars['String'];
 };
 
+export type MergeBusinessesInput = {
+  aiImprovements?: InputMaybe<Scalars['JSON']>;
+  aiSummary?: InputMaybe<Scalars['String']>;
+  businessIds: Array<Scalars['String']>;
+  currency?: InputMaybe<Currency>;
+  division?: InputMaybe<Scalars['String']>;
+  mainBusinessId: Scalars['String'];
+  metadata?: InputMaybe<Scalars['JSON']>;
+  name?: InputMaybe<Scalars['String']>;
+  policeArea?: InputMaybe<Array<PoliceForce>>;
+  publicName?: InputMaybe<Scalars['Boolean']>;
+  reference?: InputMaybe<Scalars['Int']>;
+  siteNumber?: InputMaybe<Scalars['String']>;
+  timezone?: InputMaybe<Scalars['String']>;
+};
+
 export type MergeOffendersInput = {
   age?: InputMaybe<Age>;
   build?: InputMaybe<Build>;
@@ -10634,6 +10863,7 @@ export type Mutation = {
   approveOffender: Offender;
   approvePAPStockRemovalRequest: StockRemovalRequest;
   approveStockRemovalRequest: StockRemovalRequestApproval;
+  bulkVerifyAiVisionMatches: Scalars['Int'];
   centralCoopImportData: SystemTask;
   closeInvestigation: Investigation;
   completeAudioStream: CompleteAudioResult;
@@ -10645,6 +10875,7 @@ export type Mutation = {
   createActiveChecklist: ActiveChecklist;
   createActivityCsvZip: Scalars['String'];
   createArticle: Article;
+  createBillingCustomer: BillingCustomer;
   createBlankImage: Image;
   createBlurFaces: Image;
   createBusiness: Business;
@@ -10667,6 +10898,7 @@ export type Mutation = {
   createIncidentForm: IncidentForm;
   createIncidentFromAudioSession: Incident;
   createIncidentStatus: IncidentStatus;
+  createIntegrationConfig: IntegrationConfig;
   createInvestigation: Investigation;
   createInvestigationCsvZip: Scalars['String'];
   /** NOTE: This is triggered without context externally by auth0, no way to know what scheme they are logging into. May have to add a update query one they have logged in  that updates the last login with the scheme they are logging into */
@@ -10704,6 +10936,7 @@ export type Mutation = {
   createVehicle: Vehicle;
   deleteArticle: Article;
   deleteBan: Ban;
+  deleteBillingCustomer: BillingCustomer;
   deleteBrand: Brand;
   deleteBusiness: Business;
   deleteBusinessQuestion: BusinessQuestion;
@@ -10724,6 +10957,7 @@ export type Mutation = {
   deleteGroup: Group;
   deleteIncident: Incident;
   deleteIncidentStatus: IncidentStatus;
+  deleteIntegrationConfig: IntegrationConfig;
   deleteInvestigation: Investigation;
   deleteMessage?: Maybe<Message>;
   deleteOffender: Offender;
@@ -10770,6 +11004,7 @@ export type Mutation = {
   indexExistingImages: SystemTask;
   indexFaces: SystemTask;
   indexImage: Image;
+  indexOffenderImagesForScheme: IndexOffenderImagesResult;
   intelOneImportData: SystemTask;
   inviteExistingUser: User;
   jdSiteImport: SystemTask;
@@ -10781,6 +11016,7 @@ export type Mutation = {
   markStockRemovalRequestAsCollected: StockRemovalRequest;
   markStockRemovalRequestAsPicked: StockRemovalRequest;
   markStockRemovalRequestAsReturned: StockRemovalRequest;
+  mergeBusinesses: Business;
   mergeBusinessesWithSameName: Business;
   mergeOffender: Offender;
   midCountiesImportData: SystemTask;
@@ -10818,6 +11054,7 @@ export type Mutation = {
   setDefaultTemplate?: Maybe<ReportTemplate>;
   setPassword: User;
   setSchemeSharing: Scheme;
+  setupFaceRecognition: RekCollection;
   shareData: SystemTask;
   shareIncident: Incident;
   signTerms: UserTerm;
@@ -10839,6 +11076,7 @@ export type Mutation = {
   syncIncidentSchemes: SystemTask;
   syncNewSchemeTags: SystemTask;
   syncRekImages: SystemTask;
+  testIntegrationConfig: IntegrationTestResult;
   tjxImportData: SystemTask;
   toggleUser: User;
   unsubscribeFromIncident: Incident;
@@ -10846,6 +11084,7 @@ export type Mutation = {
   unsubscribeToCrimeGroup: CrimeGroup;
   unsubscribeToInvestigation: Investigation;
   unsubscribeToVehicle: Vehicle;
+  updateBillingCustomer: BillingCustomer;
   updateBusiness: Business;
   updateBusinessQuestion: BusinessQuestion;
   updateChat: Chat;
@@ -10858,12 +11097,14 @@ export type Mutation = {
   updateDemGroup: DemGroup;
   updateDocument: Document;
   updateFlow: Flow;
+  updateFolder: Folder;
   updateGroup: Group;
   updateIncident: Incident;
   updateIncidentBusiness: Incident;
   updateIncidentBusinesses: SystemTask;
   updateIncidentStatus: Incident;
   updateIncidentStatusData: IncidentStatus;
+  updateIntegrationConfig: IntegrationConfig;
   updateInvestigation: Investigation;
   updateMessage: Message;
   updateOffender: Offender;
@@ -10906,6 +11147,7 @@ export type Mutation = {
   upsertIncidentForm: IncidentForm;
   upsertPermission: CustomRole;
   upsertShoe: Shoe;
+  verifyAiVisionMatch: AiVisionMatch;
 };
 
 
@@ -10989,6 +11231,13 @@ export type MutationApproveStockRemovalRequestArgs = {
 };
 
 
+export type MutationBulkVerifyAiVisionMatchesArgs = {
+  matchIds: Array<Scalars['String']>;
+  outcome: AiVisionMatchOutcome;
+  outcomeNotes?: InputMaybe<Scalars['String']>;
+};
+
+
 export type MutationCentralCoopImportDataArgs = {
   data: CentralCoopImportDataInput;
 };
@@ -11044,6 +11293,11 @@ export type MutationCreateActivityCsvZipArgs = {
 
 export type MutationCreateArticleArgs = {
   data: CreateArticleInput;
+};
+
+
+export type MutationCreateBillingCustomerArgs = {
+  data: BillingCustomerCreateInput;
 };
 
 
@@ -11162,6 +11416,16 @@ export type MutationCreateIncidentFromAudioSessionArgs = {
 
 export type MutationCreateIncidentStatusArgs = {
   data: IncidentStatusCreateInput;
+};
+
+
+export type MutationCreateIntegrationConfigArgs = {
+  conditions?: InputMaybe<Scalars['JSON']>;
+  config: Scalars['JSON'];
+  enabled?: InputMaybe<Scalars['Boolean']>;
+  name: Scalars['String'];
+  schemeId: Scalars['String'];
+  type: IntegrationType;
 };
 
 
@@ -11350,6 +11614,11 @@ export type MutationDeleteBanArgs = {
 };
 
 
+export type MutationDeleteBillingCustomerArgs = {
+  where: UniqueId;
+};
+
+
 export type MutationDeleteBrandArgs = {
   where: BrandWhereUniqueInput;
 };
@@ -11442,6 +11711,11 @@ export type MutationDeleteIncidentArgs = {
 
 export type MutationDeleteIncidentStatusArgs = {
   where: UniqueId;
+};
+
+
+export type MutationDeleteIntegrationConfigArgs = {
+  id: Scalars['String'];
 };
 
 
@@ -11558,6 +11832,7 @@ export type MutationDiscImportDataArgs = {
 
 
 export type MutationDismissAiMatchArgs = {
+  markAsFalsePositive?: InputMaybe<Scalars['Boolean']>;
   where: UniqueId;
 };
 
@@ -11679,6 +11954,11 @@ export type MutationIndexImageArgs = {
 };
 
 
+export type MutationIndexOffenderImagesForSchemeArgs = {
+  data: IndexOffenderImagesInput;
+};
+
+
 export type MutationIntelOneImportDataArgs = {
   data: IntelOneImportDataInput;
 };
@@ -11736,6 +12016,11 @@ export type MutationMarkStockRemovalRequestAsPickedArgs = {
 
 export type MutationMarkStockRemovalRequestAsReturnedArgs = {
   where: UniqueId;
+};
+
+
+export type MutationMergeBusinessesArgs = {
+  data: MergeBusinessesInput;
 };
 
 
@@ -11898,6 +12183,12 @@ export type MutationSetSchemeSharingArgs = {
 };
 
 
+export type MutationSetupFaceRecognitionArgs = {
+  data: SetupFaceRecognitionInput;
+  where: SchemeWhereUniqueInput;
+};
+
+
 export type MutationShareDataArgs = {
   data: ShareDataInput;
 };
@@ -11980,6 +12271,11 @@ export type MutationSyncIncidentLocationsArgs = {
 };
 
 
+export type MutationTestIntegrationConfigArgs = {
+  id: Scalars['String'];
+};
+
+
 export type MutationTjxImportDataArgs = {
   data: TjxImportDataInput;
 };
@@ -11987,6 +12283,7 @@ export type MutationTjxImportDataArgs = {
 
 export type MutationToggleUserArgs = {
   id: Scalars['ID'];
+  schemeId?: InputMaybe<Scalars['ID']>;
 };
 
 
@@ -12011,6 +12308,12 @@ export type MutationUnsubscribeToInvestigationArgs = {
 
 
 export type MutationUnsubscribeToVehicleArgs = {
+  where: UniqueId;
+};
+
+
+export type MutationUpdateBillingCustomerArgs = {
+  data: BillingCustomerUpdateInput;
   where: UniqueId;
 };
 
@@ -12087,6 +12390,12 @@ export type MutationUpdateFlowArgs = {
 };
 
 
+export type MutationUpdateFolderArgs = {
+  data: UpdateFolder;
+  where: UniqueId;
+};
+
+
 export type MutationUpdateGroupArgs = {
   data: GroupUpdateInput;
   where: UniqueId;
@@ -12114,6 +12423,15 @@ export type MutationUpdateIncidentStatusArgs = {
 export type MutationUpdateIncidentStatusDataArgs = {
   data: IncidentStatusUpdateInput;
   where: UniqueId;
+};
+
+
+export type MutationUpdateIntegrationConfigArgs = {
+  conditions?: InputMaybe<Scalars['JSON']>;
+  config?: InputMaybe<Scalars['JSON']>;
+  enabled?: InputMaybe<Scalars['Boolean']>;
+  id: Scalars['String'];
+  name?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -12344,6 +12662,13 @@ export type MutationUpsertPermissionArgs = {
 
 export type MutationUpsertShoeArgs = {
   data: UpsertShoe;
+};
+
+
+export type MutationVerifyAiVisionMatchArgs = {
+  outcome: AiVisionMatchOutcome;
+  outcomeNotes?: InputMaybe<Scalars['String']>;
+  where: UniqueId;
 };
 
 export type MySafetyImportDataInput = {
@@ -14133,6 +14458,7 @@ export type OffenderUpdateInput = {
   customGalleries?: InputMaybe<NestedCustomGalleryOnOffender>;
   dateOfBirth?: InputMaybe<NullableSetDateHelper>;
   dateSource?: InputMaybe<NullableSetStringHelper>;
+  draft?: InputMaybe<Scalars['Boolean']>;
   gender?: InputMaybe<NullableEnumGenderFieldUpdateOperationsInput>;
   groups?: InputMaybe<GroupsOnOffenderInput>;
   hair?: InputMaybe<NullableSetStringHelper>;
@@ -14734,6 +15060,7 @@ export type Query = {
   aiVisionCameras: QueryAiVisionCamerasConnection;
   aiVisionEvent: AiVisionEvent;
   aiVisionEvents: QueryAiVisionEventsConnection;
+  aiVisionMap: Array<AiVisionMapData>;
   aiVisionMatch: AiVisionMatch;
   aiVisionMatches: QueryAiVisionMatchesConnection;
   aiVisionStats: Array<Count>;
@@ -14748,6 +15075,8 @@ export type Query = {
   availableTaskQuestions: Array<Question>;
   ban: Ban;
   bans: Array<Ban>;
+  billingCustomer: BillingCustomer;
+  billingCustomers: QueryBillingCustomersConnection;
   brand: Brand;
   brands: QueryBrandsConnection;
   business: Business;
@@ -14770,6 +15099,8 @@ export type Query = {
   checklists: Array<Checklist>;
   compareAwsToCustom: Scalars['Boolean'];
   compareFaces: SystemTask;
+  compassMatch?: Maybe<CompassMatch>;
+  compassMatches: ListCompassMatches;
   crimeGroup: CrimeGroup;
   crimeGroupPerformance: ListCrimeGroupPerformance;
   crimeGroupReport: CrimeGroupReport;
@@ -14827,6 +15158,8 @@ export type Query = {
   incidentsRelay: QueryIncidentsRelayConnection;
   incidentsTimeOfDay: Array<Graph>;
   industries: Array<Industry>;
+  integrationConfig?: Maybe<IntegrationConfig>;
+  integrationConfigs: Array<IntegrationConfig>;
   investigation: Investigation;
   investigationPerformance: ListInvestigationPerformance;
   investigationRelay: QueryInvestigationRelayConnection;
@@ -15086,6 +15419,11 @@ export type QueryAiVisionEventsArgs = {
 };
 
 
+export type QueryAiVisionMapArgs = {
+  where: AiVisionCameraWhereInput;
+};
+
+
 export type QueryAiVisionMatchArgs = {
   where: UniqueId;
 };
@@ -15154,6 +15492,22 @@ export type QueryBansArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<BanWhereInput>;
+};
+
+
+export type QueryBillingCustomerArgs = {
+  where: BillingCustomerWhereUniqueInput;
+};
+
+
+export type QueryBillingCustomersArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  search?: InputMaybe<Scalars['String']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -15296,6 +15650,18 @@ export type QueryCompareAwsToCustomArgs = {
   awsFaces?: InputMaybe<Array<FaceDetectorComparisonInput>>;
   awsTimeTaken: Scalars['Float'];
   image: Scalars['String'];
+};
+
+
+export type QueryCompassMatchArgs = {
+  where: CompassMatchWhereUniqueInput;
+};
+
+
+export type QueryCompassMatchesArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<CompassMatchWhereInput>;
 };
 
 
@@ -15697,6 +16063,16 @@ export type QueryIncidentsRelayArgs = {
 
 export type QueryIncidentsTimeOfDayArgs = {
   where: DashboardInput;
+};
+
+
+export type QueryIntegrationConfigArgs = {
+  id: Scalars['String'];
+};
+
+
+export type QueryIntegrationConfigsArgs = {
+  schemeId: Scalars['String'];
 };
 
 
@@ -16807,6 +17183,19 @@ export type QueryAiVisionMatchesConnectionEdge = {
   __typename?: 'QueryAiVisionMatchesConnectionEdge';
   cursor: Scalars['String'];
   node: AiVisionMatch;
+};
+
+export type QueryBillingCustomersConnection = {
+  __typename?: 'QueryBillingCustomersConnection';
+  edges: Array<QueryBillingCustomersConnectionEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type QueryBillingCustomersConnectionEdge = {
+  __typename?: 'QueryBillingCustomersConnectionEdge';
+  cursor: Scalars['String'];
+  node: BillingCustomer;
 };
 
 export type QueryBrandsConnection = {
@@ -18466,6 +18855,14 @@ export type ResetPassword = {
   message: Scalars['String'];
 };
 
+export enum RiskLevel {
+  Critical = 'CRITICAL',
+  High = 'HIGH',
+  Low = 'LOW',
+  Medium = 'MEDIUM',
+  Minimal = 'MINIMAL'
+}
+
 export type RiverIslandColumnMapping = {
   /** Column name for case type */
   caseTypeColumn?: InputMaybe<Scalars['String']>;
@@ -18523,6 +18920,9 @@ export type Scheme = {
   autoApproveOffenders: Scalars['Boolean'];
   autoPopulateDescription: Scalars['Boolean'];
   bans: Array<Ban>;
+  billingCustomer?: Maybe<BillingCustomer>;
+  billingMode?: Maybe<BillingMode>;
+  billingRate?: Maybe<Scalars['Float']>;
   businessCount: Scalars['Int'];
   businesses: Array<Business>;
   chats: Array<Chat>;
@@ -18563,6 +18963,8 @@ export type Scheme = {
   duplicateMatchTimeout: Scalars['String'];
   facialDetection: Scalars['Boolean'];
   facialRecognition: Scalars['Boolean'];
+  /** Returns true if facial recognition is enabled and properly configured with an AWS collection */
+  facialRecognitionConfigured: Scalars['Boolean'];
   facialRedaction: Scalars['Boolean'];
   feedItems: Array<FeedItem>;
   goodsMode: GoodsMode;
@@ -18629,6 +19031,7 @@ export type Scheme = {
   skipLocationToAddress: Scalars['Boolean'];
   statementTemplates: Array<StatementTemplate>;
   stockItems: Array<StockItem>;
+  storeFaceDuration: Scalars['String'];
   tagOrders: Array<TagOrder>;
   tags: Array<Tag>;
   taskTimeTracking: Scalars['Boolean'];
@@ -19299,13 +19702,17 @@ export type SchemeTier = {
 export type SchemeUpdateInput = {
   activityAssignToUser?: InputMaybe<SetBooleanHelper>;
   aiDataEnrichment?: InputMaybe<SetBooleanHelper>;
+  aiVisionAutoVerifyThreshold?: InputMaybe<AiVisionMatchConfidence>;
   allowTodoTemplateOverride?: InputMaybe<SetBooleanHelper>;
   approvalDueDays?: InputMaybe<Scalars['Int']>;
   autoApproveIncidents?: InputMaybe<SetBooleanHelper>;
   autoApproveOffenders?: InputMaybe<SetBooleanHelper>;
   autoPopulateDescription?: InputMaybe<SetBooleanHelper>;
+  billingMode?: InputMaybe<EnumBillingModeFieldUpdateOperationsInput>;
+  billingRate?: InputMaybe<SetFloatHelper>;
   checklistFeatureActive?: InputMaybe<Scalars['Boolean']>;
   collectionIds?: InputMaybe<Array<Scalars['String']>>;
+  compassEnabled?: InputMaybe<SetBooleanHelper>;
   customer?: InputMaybe<SetStringHelper>;
   darkLogo?: InputMaybe<ImageUpdateOneWithoutSchemeDarkNestedInput>;
   defaultBulletinEmails?: InputMaybe<SetBooleanHelper>;
@@ -19861,6 +20268,11 @@ export type SetStringArrayHelper = {
 
 export type SetStringHelper = {
   set: Scalars['String'];
+};
+
+export type SetupFaceRecognitionInput = {
+  /** Name for the facial recognition collection */
+  collectionName: Scalars['String'];
 };
 
 export type ShareDataInput = {
@@ -22413,6 +22825,13 @@ export type UpdateFlowNodeData = {
   width: Scalars['Int'];
 };
 
+export type UpdateFolder = {
+  description?: InputMaybe<SetStringHelper>;
+  name?: InputMaybe<SetStringHelper>;
+  parentId?: InputMaybe<Scalars['String']>;
+  roleIds?: InputMaybe<Array<Scalars['String']>>;
+};
+
 export enum UpdateIcon {
   Approved = 'APPROVED',
   Comment = 'COMMENT',
@@ -24041,6 +24460,7 @@ export type UserScheme = {
   bulletinPush: Scalars['Boolean'];
   createdAt: Scalars['Date'];
   dashboard?: Maybe<Dashboard>;
+  disabled: Scalars['Boolean'];
   fullName: Scalars['String'];
   id: Scalars['String'];
   incidentEmail: Scalars['Boolean'];

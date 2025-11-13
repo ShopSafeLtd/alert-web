@@ -937,7 +937,7 @@ const ViewCrimeGroup = ({
                           ...offender,
                           images: offender.images?.map((img) => ({
                             ...img,
-                            position: img.position as unknown as number,
+                            position: img.position,
                           })),
                           reference: offender.reference?.toString(),
                         })),

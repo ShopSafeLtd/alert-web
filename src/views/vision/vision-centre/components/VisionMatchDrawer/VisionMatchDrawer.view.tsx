@@ -1,10 +1,10 @@
 import type { Theme } from '#/configs/ThemeConfig';
 
-import WatermarkImage from '#/components/images/WatermarkImage.view';
-import VisionMap from '#/views/vision/vision-centre/components/VisionMap';
-import { useAiVisionMatchDrawerQuery } from '#/views/vision/vision-centre/components/VisionMatchDrawer/__generated__/VisionMatchDrawer.generated';
 import { faArrowsLeftRight, faCircle } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import WatermarkImage from '#/components/images/WatermarkImage.view';
+import VisionMap from '#/views/vision/vision-centre/components/VisionMap/VisionMap';
+import { useAiVisionMatchDrawerQuery } from '#/views/vision/vision-centre/components/VisionMatchDrawer/__generated__/VisionMatchDrawer.generated';
 import {
   Button,
   Col,
@@ -243,11 +243,7 @@ const VisionMatchDrawer = ({ matchId, onClose, setMatchId }: Props) => {
                 </div>
               </Col>
               <Col span={12}>
-                <VisionMap
-                  height={258}
-                  markers={[{ geoLat: 51.581_64, geoLng: -0.032_79 }]}
-                  width="100%"
-                />
+                <VisionMap height={258} width="100%" />
               </Col>
             </Row>
           </div>

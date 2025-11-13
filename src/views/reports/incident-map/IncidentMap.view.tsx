@@ -85,10 +85,12 @@ interface Props {
   loading: boolean;
   multiColour: 'multi' | 'single';
   onChangeBrands: (value: string[]) => void;
+  onChangeCrimeGroups: (value: string[]) => void;
   onChangeDateRange: (value: { endDate: Date; startDate: Date } | null) => void;
   onChangeGroups: (value: string[]) => void;
   onChangeIncidentTypes: (value: string | string[]) => void;
   onChangeIndustries: (value: string[]) => void;
+  onChangeOffenders: (value: string[]) => void;
   onChangePoliceAreas: (value: string | string[]) => void;
   onChangeSchemes: (value: string[]) => void;
   // Save filters
@@ -96,10 +98,11 @@ interface Props {
   saving: boolean;
   schemes: { scheme: { id: string; name: string } }[];
   selectedBrands: string[];
-
+  selectedCrimeGroups: string[];
   selectedGroups: string[];
   selectedIncidentTypes: string[];
   selectedIndustries: string[];
+  selectedOffenders: string[];
   selectedPoliceAreas: string[];
   selectedSchemes: string[];
   setCluster: (value: boolean) => void;
@@ -147,10 +150,12 @@ const IncidentMap = ({
   loading,
   multiColour,
   onChangeBrands,
+  onChangeCrimeGroups,
   onChangeDateRange,
   onChangeGroups,
   onChangeIncidentTypes,
   onChangeIndustries,
+  onChangeOffenders,
   onChangePoliceAreas,
   onChangeSchemes,
   // Save filters
@@ -158,10 +163,11 @@ const IncidentMap = ({
   saving,
   schemes,
   selectedBrands,
-
+  selectedCrimeGroups,
   selectedGroups,
   selectedIncidentTypes,
   selectedIndustries,
+  selectedOffenders,
   selectedPoliceAreas,
   selectedSchemes,
   setCluster,
@@ -951,11 +957,13 @@ const IncidentMap = ({
               industriesLoading={industriesLoading}
               multiColour={multiColour}
               onChangeBrands={onChangeBrands}
+              onChangeCrimeGroups={onChangeCrimeGroups}
               onChangeDateRange={onChangeDateRange}
               onChangeGroups={onChangeGroups}
               onChangeHeatmapIntensity={setHeatmapIntensity}
               onChangeIncidentTypes={onChangeIncidentTypes}
               onChangeIndustries={onChangeIndustries}
+              onChangeOffenders={onChangeOffenders}
               onChangePoliceAreas={onChangePoliceAreas}
               onChangeSchemes={onChangeSchemes}
               onClose={toggleFilterPanel}
@@ -973,9 +981,11 @@ const IncidentMap = ({
               savingFilters={saving}
               schemes={schemes}
               selectedBrands={selectedBrands}
+              selectedCrimeGroups={selectedCrimeGroups}
               selectedGroups={selectedGroups}
               selectedIncidentTypes={selectedIncidentTypes}
               selectedIndustries={selectedIndustries}
+              selectedOffenders={selectedOffenders}
               selectedPoliceAreas={selectedPoliceAreas}
               selectedSchemes={selectedSchemes}
               setMultiColour={setMultiColour}

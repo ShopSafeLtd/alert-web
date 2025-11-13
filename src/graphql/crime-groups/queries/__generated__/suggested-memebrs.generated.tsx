@@ -10,7 +10,7 @@ export type SuggestedCrimeGroupMembersQueryVariables = Types.Exact<{
 }>;
 
 
-export type SuggestedCrimeGroupMembersQuery = { __typename?: 'Query', crimeGroup: { __typename?: 'CrimeGroup', id: string, suggestedMembers: Array<{ __typename?: 'Offender', id: string, name?: string | null, alias: Array<string>, reference?: number | null, dateOfBirth?: Date | null, age?: Types.Age | null, gender?: Types.Gender | null, build?: Types.Build | null, height?: Types.Height | null, race?: Types.Race | null, hair?: string | null, peculiarities?: string | null, totalAssociatedIncidents: number, images: Array<{ __typename?: 'Image', id: string, optimised?: string | null, position: Types.ImagePosition, rotation: number }>, associatedIncidents: Array<{ __typename?: 'Incident', id: string, dayTime: string, reference?: number | null, business?: { __typename?: 'Business', id: string, fullName: string } | null, location?: { __typename?: 'Address', full: string, id: string } | null, crimeTypes: Array<{ __typename?: 'Tag', id: string, name: string }>, createdBy: { __typename?: 'User', id: string, fullName: string, businesses: Array<{ __typename?: 'Business', id: string, name: string }> } }> }> } };
+export type SuggestedCrimeGroupMembersQuery = { __typename?: 'Query', crimeGroup: { __typename?: 'CrimeGroup', id: string, suggestedMembers: Array<{ __typename?: 'Offender', id: string, name?: string | null, alias: Array<string>, reference?: number | null, dateOfBirth?: Date | null, age?: Types.Age | null, gender?: Types.Gender | null, build?: Types.Build | null, height?: Types.Height | null, race?: Types.Race | null, hair?: string | null, peculiarities?: string | null, totalAssociatedIncidents: number, images: Array<{ __typename?: 'Image', id: string, optimised?: string | null, position: Types.ImagePosition, rotation: number }>, associatedIncidents: Array<{ __typename?: 'Incident', id: string, crimeTypes: Array<{ __typename?: 'Tag', id: string, name: string }> }> }> } };
 
 
 export const SuggestedCrimeGroupMembersDocument = gql`
@@ -39,27 +39,9 @@ export const SuggestedCrimeGroupMembersDocument = gql`
       totalAssociatedIncidents(associatedCrimeGroup: $associatedCrimeGroup)
       associatedIncidents(associatedCrimeGroup: $associatedCrimeGroup) {
         id
-        dayTime
-        reference
-        business {
-          id
-          fullName
-        }
-        location {
-          full
-          id
-        }
-        crimeTypes(where: $crimeTypesWhere) {
+        crimeTypes {
           id
           name
-        }
-        createdBy {
-          id
-          fullName
-          businesses {
-            id
-            name
-          }
         }
       }
     }

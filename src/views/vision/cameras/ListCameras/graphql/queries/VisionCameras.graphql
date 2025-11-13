@@ -1,0 +1,24 @@
+query listVisionCameras($where: AiVisionCameraWhereInput!, $take: Int, $skip: Int) {
+    aiVisionCameras(where: $where, take: $take, skip: $skip) {
+        edges {
+            node {
+                id
+                business {
+                    id
+                    name
+                }
+                make
+                model
+                serialNumber
+                lastUploaded
+                duplicateMatchTimeout
+                groups {
+                    id
+                    name
+                }
+
+            }
+        }
+        totalCount
+    }
+}

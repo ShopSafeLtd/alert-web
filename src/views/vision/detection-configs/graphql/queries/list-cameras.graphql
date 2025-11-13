@@ -1,0 +1,13 @@
+query VisionCamerasSelect($schemeIds: [String!]!) {
+    aiVisionCameras(where: {schemeIds: $schemeIds}) {
+        edges {
+            node {
+                id
+                serialNumber
+                make
+                model
+            }
+        }
+        totalCount
+    }
+}

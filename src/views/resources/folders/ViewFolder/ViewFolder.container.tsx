@@ -14,6 +14,7 @@ const ViewFolderContainer = () => {
     editRights,
     loading,
     onDelete,
+    onDeleteFolder,
     saving,
     search,
     setSearch,
@@ -35,6 +36,7 @@ const ViewFolderContainer = () => {
       editRights={editRights}
       loading={loading}
       onDelete={onDelete}
+      onDeleteFolder={onDeleteFolder}
       saving={saving}
       search={search}
       setSearch={setSearch}

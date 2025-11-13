@@ -1,0 +1,15 @@
+query ListDetectionConfigs($where: DetectionConfigWhere!, $skip: Int, $take: Int,$order: SortOrder ) {
+    detectionConfigs(where: $where, take: $take, skip: $skip, orderByCameras:$order ) {
+        totalCount
+        edges {
+            node {
+                id
+                minimumConfidenceTrigger
+                minimumPriorityTrigger
+                name
+                type
+                cameraCount
+            }
+        }
+    }
+}

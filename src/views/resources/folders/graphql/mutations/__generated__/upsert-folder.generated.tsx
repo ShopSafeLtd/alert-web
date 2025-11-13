@@ -9,7 +9,7 @@ export type UpsertFolderMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpsertFolderMutation = { __typename?: 'Mutation', upsertFolder: { __typename?: 'Folder', id: string, name: string, description?: string | null, totalDocuments: number, totalChildFolders: number, documents: Array<{ __typename?: 'Document', id: string, name: string, url: string, thumbnailUrl?: string | null, createdAt: Date, tags: Array<{ __typename?: 'Tag', id: string, name: string }> }>, childFolders: Array<{ __typename?: 'Folder', id: string, name: string, description?: string | null, totalDocuments: number, totalChildFolders: number, documents: Array<{ __typename?: 'Document', id: string, name: string, url: string, thumbnailUrl?: string | null, createdAt: Date, tags: Array<{ __typename?: 'Tag', id: string, name: string }> }> }> } };
+export type UpsertFolderMutation = { __typename?: 'Mutation', upsertFolder: { __typename?: 'Folder', id: string, name: string, description?: string | null, totalDocuments: number, totalChildFolders: number, documents: Array<{ __typename?: 'Document', id: string, name: string, url: string, thumbnailUrl?: string | null, createdAt: Date, fileType?: Types.FileType | null, tags: Array<{ __typename?: 'Tag', id: string, name: string }> }>, childFolders: Array<{ __typename?: 'Folder', id: string, name: string, description?: string | null, totalDocuments: number, totalChildFolders: number, documents: Array<{ __typename?: 'Document', id: string, name: string, url: string, thumbnailUrl?: string | null, createdAt: Date, fileType?: Types.FileType | null, tags: Array<{ __typename?: 'Tag', id: string, name: string }> }> }> } };
 
 
 export const UpsertFolderDocument = gql`

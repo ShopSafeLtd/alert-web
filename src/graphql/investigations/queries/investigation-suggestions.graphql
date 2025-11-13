@@ -8,121 +8,37 @@ query InvestigationSuggestions(
     suggestedOffenders {
       id
       name
-      alias
       reference
+      alias
       dateOfBirth
       age
       gender
       build
-      height
       race
       hair
       peculiarities
+      totalAssociatedIncidents
+      totalAssociatedCrimeGroups
       images {
         id
         optimised
-        position
         rotation
+        position
       }
-      totalAssociatedIncidents(
-        associatedInvestigation: $associatedInvestigation
-      )
-      totalAssociatedCrimeGroups(
-        associatedInvestigation: $associatedInvestigation
-      )
       associatedIncidents(associatedInvestigation: $associatedInvestigation) {
-        id
-        dayTime
-        reference
-        business {
-          id
-          fullName
-        }
-        location {
-          full
-          id
-        }
-        crimeTypes(where: $crimeTypesWhere) {
-          id
-          name
-        }
-        createdBy {
-          id
-          fullName
-          businesses {
-            id
-            name
-          }
-        }
+        ...IncidentCard
       }
-      associatedCrimeGroups(associatedInvestigation: $associatedInvestigation) {
-        id
-        reference
-        alias
-        totalOffenders
-        totalIncidents
-        totalValue
+      associatedCrimeGroups(
+        associatedInvestigation: $associatedInvestigation
+      ) {
+        ...CrimeGroups
       }
     }
     suggestedVehicles {
-      id
-      reference
-      registration
-      make
-      model
-      images {
-        id
-        optimised
-        position
-        rotation
-      }
-      colour
+      ...Vehicles
     }
     suggestedIncidents {
-      id
-      subject
-      reference
-      description
-      dayTime
-      crimeTypes(where: $crimeTypesWhere) {
-        id
-        name
-      }
-      images {
-        id
-        optimised
-        position
-        rotation
-      }
-      policeRef
-      location {
-        id
-        full
-      }
-      business {
-        id
-        name
-      }
-      offenders {
-        id
-        name
-        reference
-        age
-        gender
-        race
-        build
-        height
-        dateOfBirth
-        hair
-        peculiarities
-        alias
-        images {
-          id
-          position
-          rotation
-          optimised
-        }
-      }
+      ...IncidentCard
     }
   }
 }

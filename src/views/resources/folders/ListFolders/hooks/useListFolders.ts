@@ -20,6 +20,7 @@ import type {
 } from '../../graphql/queries/__generated__/folders.generated';
 import type { Props as Return } from '../types/folders';
 
+import { useDeleteFolderMutation } from '../../graphql/mutations/__generated__/delete-folder.generated';
 import {
   DocumentsNoFolderDocument,
   useDocumentsNoFolderQuery,
@@ -161,6 +162,7 @@ const useListFolder = (): Return => {
       DocumentsNoFolderQueryVariables
     >({
       query: DocumentsNoFolderDocument,
+      variables: docVariables,
     });
     if (existingData && result.data) {
       const oldDocuments = existingData.documentsNoFolder.edges || [];
@@ -186,8 +188,36 @@ const useListFolder = (): Return => {
       );
     }
   };
+  const [deleteFolder] = useDeleteFolderMutation({
+    awaitRefetchQueries: true,
+    onCompleted: () => {
+      notification.success({
+        description: intl.formatMessage({
+          defaultMessage:
+            'The folder has been deleted from the resources list!',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Deleted!',
+        }),
+        placement: 'bottomRight',
+      });
+    },
+    onError: () => {
+      errorNotification();
+    },
+    refetchQueries: ['Folders'],
+  });
 
+  const onDeleteFolder = (value: string) => {
+    setSaving(true);
+    void deleteFolder({
+      variables: {
+        id: value || '',
+      },
+    }).finally(() => setSaving(false));
+  };
   const [deleteDocument] = useDeleteDocumentMutation({
+    awaitRefetchQueries: true,
     onCompleted: () => {
       notification.success({
         description: intl.formatMessage({
@@ -203,31 +233,7 @@ const useListFolder = (): Return => {
     onError: () => {
       errorNotification();
     },
-    update: (store, { data: res }) => {
-      if (res?.deleteDocument === null || res?.deleteDocument === undefined)
-        return;
-
-      const existingData = store.readQuery<DocumentsNoFolderQuery>({
-        query: DocumentsNoFolderDocument,
-      });
-
-      if (!existingData?.documentsNoFolder) return;
-
-      store.writeQuery<DocumentsNoFolderQuery>({
-        data: {
-          __typename: 'Query',
-          documentsNoFolder: {
-            ...existingData.documentsNoFolder,
-            edges: existingData.documentsNoFolder.edges.filter(
-              ({ node }) => node.id !== res.deleteDocument.id
-            ),
-            totalCount: existingData.documentsNoFolder.totalCount - 1,
-          },
-        },
-        query: DocumentsNoFolderDocument,
-        variables: docVariables,
-      });
-    },
+    refetchQueries: ['DocumentsNoFolder'],
   });
 
   const onDelete = (value: string) => {
@@ -262,6 +268,7 @@ const useListFolder = (): Return => {
     fetchMoreScroll,
     loading,
     onDelete,
+    onDeleteFolder,
     saving,
     search,
     setSearch,

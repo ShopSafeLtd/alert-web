@@ -1,6 +1,9 @@
 import type * as Types from '../../../types';
 
 import { gql } from '@apollo/client';
+import { IncidentCardFragmentDoc } from '../../../fragments/__generated__/incident-card.generated';
+import { CrimeGroupsFragmentDoc } from '../../../fragments/__generated__/crime-groups.generated';
+import { VehiclesFragmentDoc } from '../../../fragments/__generated__/vehicles.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
 export type InvestigationSuggestionsQueryVariables = Types.Exact<{
@@ -10,7 +13,7 @@ export type InvestigationSuggestionsQueryVariables = Types.Exact<{
 }>;
 
 
-export type InvestigationSuggestionsQuery = { __typename?: 'Query', investigation: { __typename?: 'Investigation', id: string, suggestedOffenders: Array<{ __typename?: 'Offender', id: string, name?: string | null, alias: Array<string>, reference?: number | null, dateOfBirth?: Date | null, age?: Types.Age | null, gender?: Types.Gender | null, build?: Types.Build | null, height?: Types.Height | null, race?: Types.Race | null, hair?: string | null, peculiarities?: string | null, totalAssociatedIncidents: number, totalAssociatedCrimeGroups: number, images: Array<{ __typename?: 'Image', id: string, optimised?: string | null, position: Types.ImagePosition, rotation: number }>, associatedIncidents: Array<{ __typename?: 'Incident', id: string, dayTime: string, reference?: number | null, business?: { __typename?: 'Business', id: string, fullName: string } | null, location?: { __typename?: 'Address', full: string, id: string } | null, crimeTypes: Array<{ __typename?: 'Tag', id: string, name: string }>, createdBy: { __typename?: 'User', id: string, fullName: string, businesses: Array<{ __typename?: 'Business', id: string, name: string }> } }>, associatedCrimeGroups: Array<{ __typename?: 'CrimeGroup', id: string, reference?: number | null, alias?: string | null, totalOffenders: number, totalIncidents: number, totalValue: number }> }>, suggestedVehicles: Array<{ __typename?: 'Vehicle', id: string, reference?: number | null, registration?: string | null, make?: string | null, model?: string | null, colour?: string | null, images: Array<{ __typename?: 'Image', id: string, optimised?: string | null, position: Types.ImagePosition, rotation: number }> }>, suggestedIncidents: Array<{ __typename?: 'Incident', id: string, subject: string, reference?: number | null, description: string, dayTime: string, policeRef?: string | null, crimeTypes: Array<{ __typename?: 'Tag', id: string, name: string }>, images: Array<{ __typename?: 'Image', id: string, optimised?: string | null, position: Types.ImagePosition, rotation: number }>, location?: { __typename?: 'Address', id: string, full: string } | null, business?: { __typename?: 'Business', id: string, name: string } | null, offenders: Array<{ __typename?: 'Offender', id: string, name?: string | null, reference?: number | null, age?: Types.Age | null, gender?: Types.Gender | null, race?: Types.Race | null, build?: Types.Build | null, height?: Types.Height | null, dateOfBirth?: Date | null, hair?: string | null, peculiarities?: string | null, alias: Array<string>, images: Array<{ __typename?: 'Image', id: string, position: Types.ImagePosition, rotation: number, optimised?: string | null }> }> }> } };
+export type InvestigationSuggestionsQuery = { __typename?: 'Query', investigation: { __typename?: 'Investigation', id: string, suggestedOffenders: Array<{ __typename?: 'Offender', id: string, name?: string | null, reference?: number | null, alias: Array<string>, dateOfBirth?: Date | null, age?: Types.Age | null, gender?: Types.Gender | null, build?: Types.Build | null, race?: Types.Race | null, hair?: string | null, peculiarities?: string | null, totalAssociatedIncidents: number, totalAssociatedCrimeGroups: number, images: Array<{ __typename?: 'Image', id: string, optimised?: string | null, rotation: number, position: Types.ImagePosition }>, associatedIncidents: Array<{ __typename?: 'Incident', approved?: boolean | null, id: string, totalImages: number, priority: Types.IncidentPriority, customerRef?: string | null, newIncident: boolean, subject: string, reference?: number | null, policeRef?: string | null, dayTime: string, description: string, createdByUser: boolean, crimeTypes: Array<{ __typename?: 'Tag', id: string, name: string }>, status?: { __typename?: 'IncidentStatus', id: string, name: string, tooltip?: string | null } | null, assignedUsers: Array<{ __typename?: 'User', id: string, fullName: string }>, images: Array<{ __typename?: 'Image', low?: string | null, optimised?: string | null, id: string, rotation: number, position: Types.ImagePosition, positionX?: number | null, positionY?: number | null, primary?: boolean | null }>, offenders: Array<{ __typename?: 'Offender', name?: string | null, id: string, images: Array<{ __typename?: 'Image', id: string, low?: string | null, optimised?: string | null, rotation: number, position: Types.ImagePosition, positionX?: number | null, positionY?: number | null }> }>, business?: { __typename?: 'Business', id: string, name: string } | null, location?: { __typename?: 'Address', id: string, full: string } | null }>, associatedCrimeGroups: Array<{ __typename?: 'CrimeGroup', id: string, reference?: number | null, alias?: string | null, totalIncidents: number, totalOffenders: number, totalRecoveredValue: number, totalTheftSuccess: number, totalValue: number }> }>, suggestedVehicles: Array<{ __typename?: 'Vehicle', id: string, reference?: number | null, colour?: string | null, model?: string | null, make?: string | null, registration?: string | null }>, suggestedIncidents: Array<{ __typename?: 'Incident', approved?: boolean | null, id: string, totalImages: number, priority: Types.IncidentPriority, customerRef?: string | null, newIncident: boolean, subject: string, reference?: number | null, policeRef?: string | null, dayTime: string, description: string, createdByUser: boolean, crimeTypes: Array<{ __typename?: 'Tag', id: string, name: string }>, status?: { __typename?: 'IncidentStatus', id: string, name: string, tooltip?: string | null } | null, assignedUsers: Array<{ __typename?: 'User', id: string, fullName: string }>, images: Array<{ __typename?: 'Image', low?: string | null, optimised?: string | null, id: string, rotation: number, position: Types.ImagePosition, positionX?: number | null, positionY?: number | null, primary?: boolean | null }>, offenders: Array<{ __typename?: 'Offender', name?: string | null, id: string, images: Array<{ __typename?: 'Image', id: string, low?: string | null, optimised?: string | null, rotation: number, position: Types.ImagePosition, positionX?: number | null, positionY?: number | null }> }>, business?: { __typename?: 'Business', id: string, name: string } | null, location?: { __typename?: 'Address', id: string, full: string } | null }> } };
 
 
 export const InvestigationSuggestionsDocument = gql`
@@ -20,121 +23,41 @@ export const InvestigationSuggestionsDocument = gql`
     suggestedOffenders {
       id
       name
-      alias
       reference
+      alias
       dateOfBirth
       age
       gender
       build
-      height
       race
       hair
       peculiarities
+      totalAssociatedIncidents
+      totalAssociatedCrimeGroups
       images {
         id
         optimised
-        position
         rotation
+        position
       }
-      totalAssociatedIncidents(associatedInvestigation: $associatedInvestigation)
-      totalAssociatedCrimeGroups(associatedInvestigation: $associatedInvestigation)
       associatedIncidents(associatedInvestigation: $associatedInvestigation) {
-        id
-        dayTime
-        reference
-        business {
-          id
-          fullName
-        }
-        location {
-          full
-          id
-        }
-        crimeTypes(where: $crimeTypesWhere) {
-          id
-          name
-        }
-        createdBy {
-          id
-          fullName
-          businesses {
-            id
-            name
-          }
-        }
+        ...IncidentCard
       }
       associatedCrimeGroups(associatedInvestigation: $associatedInvestigation) {
-        id
-        reference
-        alias
-        totalOffenders
-        totalIncidents
-        totalValue
+        ...CrimeGroups
       }
     }
     suggestedVehicles {
-      id
-      reference
-      registration
-      make
-      model
-      images {
-        id
-        optimised
-        position
-        rotation
-      }
-      colour
+      ...Vehicles
     }
     suggestedIncidents {
-      id
-      subject
-      reference
-      description
-      dayTime
-      crimeTypes(where: $crimeTypesWhere) {
-        id
-        name
-      }
-      images {
-        id
-        optimised
-        position
-        rotation
-      }
-      policeRef
-      location {
-        id
-        full
-      }
-      business {
-        id
-        name
-      }
-      offenders {
-        id
-        name
-        reference
-        age
-        gender
-        race
-        build
-        height
-        dateOfBirth
-        hair
-        peculiarities
-        alias
-        images {
-          id
-          position
-          rotation
-          optimised
-        }
-      }
+      ...IncidentCard
     }
   }
 }
-    `;
+    ${IncidentCardFragmentDoc}
+${CrimeGroupsFragmentDoc}
+${VehiclesFragmentDoc}`;
 export function useInvestigationSuggestionsQuery(baseOptions: Apollo.QueryHookOptions<InvestigationSuggestionsQuery, InvestigationSuggestionsQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<InvestigationSuggestionsQuery, InvestigationSuggestionsQueryVariables>(InvestigationSuggestionsDocument, options);

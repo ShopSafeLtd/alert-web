@@ -1,0 +1,41 @@
+query ViewDetectionConfig($id: String!) {
+    detectionConfig(where: {id: $id}) {
+        eventData {
+            sendEmail {
+                title
+                message
+            }
+            sendNotification {
+                message
+                title
+            }
+            sendSMS {
+                message
+            }
+            task {
+                businesses
+                dueDays
+                questionGroupId
+                name
+                questions
+            }
+        }
+        camera {
+            id
+        }
+        id
+        minimumConfidenceTrigger
+        minimumPriorityTrigger
+        name
+        type
+        usersToGet {
+            users
+            roles
+            parentGroupsAdmin
+            parentGroups
+            groups
+            createdBy
+            adminGroups
+        }
+    }
+}

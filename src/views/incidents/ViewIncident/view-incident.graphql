@@ -13,6 +13,7 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
     policeReported
     policeRef
     policeNo
+    draft
     policeInvolved
     actions {
       id

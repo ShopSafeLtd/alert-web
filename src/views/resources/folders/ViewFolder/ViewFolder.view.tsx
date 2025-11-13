@@ -1,19 +1,14 @@
+import type { FileType } from '#/graphql/types';
+
+import MediaViewer from '#/components/documents/MediaViewer/MediaViewer';
+import OfficeViewer from '#/components/documents/OfficeViewer/OfficeViewer';
 import AddFolder from '#/components/form-components/Folders/AddFolder';
 import AddDocuments from '#/components/form-components/documents/AddDocuments';
-import { faPen, faPlus } from '@fortawesome/pro-light-svg-icons';
+import { getPreviewStrategy } from '#/utils/preview-document';
+import { faPen, faPlus, faTrash } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  Button,
-  Col,
-  Collapse,
-  Divider,
-  Drawer,
-  Empty,
-  Input,
-  PageHeader,
-  Row,
-} from 'antd';
-import React from 'react';
+import { Button, Col, Drawer, Empty, Input, PageHeader, Row } from 'antd';
+import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router';
 
@@ -22,6 +17,15 @@ import type { Props } from './types/ViewFolder';
 import DocumentCard from '../DocumentCard';
 import FolderCard from '../FolderCard';
 import SkeletonCard from '../SkeletonCard';
+
+interface DocumentData {
+  createdAt: Date;
+  fileType?: FileType | null;
+  id: string;
+  name: string;
+  tags: Array<{ id: string; name: string }>;
+  url: string;
+}
 
 const ViewFolder = ({
   addDocument,
@@ -33,6 +37,7 @@ const ViewFolder = ({
   editRights,
   loading,
   onDelete,
+  onDeleteFolder,
   saving,
   search,
   setSearch,
@@ -44,6 +49,36 @@ const ViewFolder = ({
 }: Props) => {
   const intl = useIntl();
   const navigate = useNavigate();
+
+  // Preview state
+  const [previewDocument, setPreviewDocument] = useState<
+    DocumentData | undefined
+  >(undefined);
+  const [showOfficeViewer, setShowOfficeViewer] = useState(false);
+  const [showMediaViewer, setShowMediaViewer] = useState(false);
+
+  const handlePreview = (doc: DocumentData) => {
+    const strategy = getPreviewStrategy(doc.name, doc.url, doc.fileType);
+
+    if (strategy.method === 'office') {
+      setPreviewDocument(doc);
+      setShowOfficeViewer(true);
+    } else if (strategy.method === 'media') {
+      setPreviewDocument(doc);
+      setShowMediaViewer(true);
+    }
+    // lightbox and newTab are handled directly in DocumentCard
+  };
+
+  const closeOfficeViewer = () => {
+    setShowOfficeViewer(false);
+    setPreviewDocument(undefined);
+  };
+
+  const closeMediaViewer = () => {
+    setShowMediaViewer(false);
+    setPreviewDocument(undefined);
+  };
 
   return (
     <div className="list-view">
@@ -64,7 +99,7 @@ const ViewFolder = ({
           <Input
             onChange={(e) => setSearch(e.target.value)}
             placeholder={intl.formatMessage({
-              defaultMessage: 'Search Document...',
+              defaultMessage: 'Search...',
             })}
             size="small"
             // style={{ width: 400 }}
@@ -105,7 +140,7 @@ const ViewFolder = ({
                   />
                 }
                 onClick={() => toggleAddFolder()}
-                type="primary"
+                // type="primary"
               >
                 {intl.formatMessage({
                   defaultMessage: 'Add Folder',
@@ -123,7 +158,7 @@ const ViewFolder = ({
                   />
                 }
                 onClick={() => toggleAddDocument()}
-                type="primary"
+                // type="primary"
               >
                 {intl.formatMessage({
                   defaultMessage: 'Add Document',
@@ -132,167 +167,134 @@ const ViewFolder = ({
             </Col>
           </>
         )}
+        {deleteRights && (
+          <Col>
+            <Button
+              disabled={
+                saving ||
+                loading ||
+                (data?.folder && data?.folder.totalChildFolders > 0) ||
+                (data?.folder && data?.folder.totalDocuments > 0)
+              }
+              icon={
+                <FontAwesomeIcon
+                  icon={faTrash}
+                  size="lg"
+                  style={{ marginRight: 5 }}
+                />
+              }
+              onClick={() => onDeleteFolder(data?.folder.id || '')}
+              type="primary"
+            >
+              {intl.formatMessage({
+                defaultMessage: 'Delete Folder',
+              })}
+            </Button>
+          </Col>
+        )}
       </Row>
+      {/* Combined count header */}
+      {!loading && (
+        <div
+          style={{
+            fontSize: 16,
+            fontWeight: 600,
+            padding: '16px 10px',
+          }}
+        >
+          {intl.formatMessage(
+            {
+              defaultMessage:
+                'Items: {total} ({folders} folders, {docs} documents)',
+            },
+            {
+              docs: data?.folder.totalDocuments || 0,
+              folders: data?.folder.totalChildFolders || 0,
+              total:
+                (data?.folder.totalChildFolders || 0) +
+                (data?.folder.totalDocuments || 0),
+            }
+          )}
+        </div>
+      )}
+
       {loading ? (
         <Row
           align="stretch"
-          gutter={[10, 10]}
+          gutter={[16, 16]}
           style={{ alignItems: 'stretch', padding: 10 }}
         >
           {Array.from({ length: 24 }).map((_, index) => (
             // eslint-disable-next-line react/no-array-index-key
-            <Col key={index} lg={8} md={12} sm={24} xl={8} xxl={6}>
+            <Col key={index} lg={6} md={12} sm={24}>
               <SkeletonCard />
             </Col>
           ))}
         </Row>
       ) : (
         <>
-          {/* <PageHeader
-            onBack={() => navigate('/app/resources/folders')}
-            style={{
-              marginBottom: -30,
-              marginLeft: 10,
-            }}
-            title={data?.folder.name}
-          />
-          <Divider /> */}
+          {(data?.folder.totalChildFolders || 0) > 0 ||
+          (data?.folder.totalDocuments || 0) > 0 ? (
+            <Row
+              align="stretch"
+              gutter={[16, 16]}
+              style={{
+                alignItems: 'stretch',
+                overflowX: 'hidden',
+                padding: 10,
+              }}
+            >
+              {/* Render folders first */}
+              {data?.folder.childFolders.map((node) => (
+                <Col key={`folder-${node?.id}`} lg={6} md={12} sm={24}>
+                  <FolderCard
+                    data={node}
+                    onDelete={onDeleteFolder}
+                    showDeleteBtn={
+                      deleteRights &&
+                      node.totalChildFolders === 0 &&
+                      node.totalDocuments === 0
+                    }
+                  />
+                </Col>
+              ))}
 
-          <Collapse
-            bordered={false}
-            collapsible="header"
-            defaultActiveKey={['1', '2']}
-            style={{
-              backgroundColor: 'transparent',
-            }}
-          >
-            <Collapse.Panel
-              header={intl.formatMessage(
-                {
-                  defaultMessage: 'Folders: {value}',
-                },
-                {
-                  value: data?.folder.totalChildFolders || 0,
+              {/* Then render documents */}
+              {data?.folder.documents.map((node) => (
+                <Col key={`doc-${node?.id}`} lg={6} md={12} sm={24}>
+                  <DocumentCard
+                    data={node}
+                    onDelete={
+                      deleteRights ? () => onDelete(node.id) : undefined
+                    }
+                    onPreview={handlePreview}
+                  />
+                </Col>
+              ))}
+            </Row>
+          ) : (
+            <div
+              style={{
+                alignItems: 'center',
+                display: 'flex',
+                justifyContent: 'center',
+                padding: '60px 10px',
+                width: '100%',
+              }}
+            >
+              <Empty
+                description={
+                  search === ''
+                    ? intl.formatMessage({
+                        defaultMessage: 'No items',
+                      })
+                    : intl.formatMessage({
+                        defaultMessage: 'No items match your search criteria',
+                      })
                 }
-              )}
-              key="1"
-              style={{
-                backgroundColor: 'transparent',
-              }}
-            >
-              {data?.folder.totalChildFolders ? (
-                <Row
-                  align="stretch"
-                  gutter={[16, 16]}
-                  style={{
-                    alignItems: 'stretch',
-                    overflowX: 'hidden',
-                    padding: 10,
-                  }}
-                >
-                  {data?.folder.childFolders.map((node) => (
-                    <Col key={node?.id} lg={6} md={12} sm={24}>
-                      <FolderCard data={node} />
-                    </Col>
-                  ))}
-                </Row>
-              ) : (
-                <Row
-                  align="stretch"
-                  gutter={[16, 16]}
-                  style={{ alignItems: 'stretch', padding: 10 }}
-                >
-                  <div
-                    style={{
-                      alignItems: 'center',
-                      display: 'flex',
-                      justifyContent: 'center',
-                      width: '100%',
-                    }}
-                  >
-                    <Empty
-                      description={
-                        search === ''
-                          ? intl.formatMessage({
-                              defaultMessage: 'No Folders',
-                            })
-                          : intl.formatMessage({
-                              defaultMessage:
-                                'No folders match your search criteria',
-                            })
-                      }
-                    />
-                  </div>
-                </Row>
-              )}
-            </Collapse.Panel>
-
-            <Divider />
-
-            <Collapse.Panel
-              header={intl.formatMessage(
-                {
-                  defaultMessage: 'Documents: {value}',
-                },
-                { value: data?.folder.totalDocuments || 0 }
-              )}
-              key="2"
-              style={{
-                backgroundColor: 'transparent',
-              }}
-            >
-              {data?.folder.totalDocuments ? (
-                <Row
-                  align="stretch"
-                  gutter={[8, 16]}
-                  style={{
-                    alignItems: 'stretch',
-                    overflowX: 'hidden',
-                    padding: 10,
-                  }}
-                >
-                  {data?.folder.documents.map((node) => (
-                    <Col key={node?.id} lg={6} md={12} sm={24}>
-                      <DocumentCard
-                        data={node}
-                        onDelete={
-                          deleteRights ? () => onDelete(node.id) : undefined
-                        }
-                      />
-                    </Col>
-                  ))}
-                </Row>
-              ) : (
-                <Row
-                  align="stretch"
-                  gutter={[8, 8]}
-                  style={{ alignItems: 'stretch', padding: 10 }}
-                >
-                  <div
-                    style={{
-                      alignItems: 'center',
-                      display: 'flex',
-                      justifyContent: 'center',
-                      width: '100%',
-                    }}
-                  >
-                    <Empty
-                      description={
-                        search === ''
-                          ? intl.formatMessage({
-                              defaultMessage: 'No Documents',
-                            })
-                          : intl.formatMessage({
-                              defaultMessage:
-                                'No documents match your search criteria',
-                            })
-                      }
-                    />
-                  </div>
-                </Row>
-              )}
-            </Collapse.Panel>
-          </Collapse>
+              />
+            </div>
+          )}
         </>
       )}
 
@@ -353,6 +355,23 @@ const ViewFolder = ({
           <div />
         )}
       </Drawer>
+
+      {/* Preview Modals */}
+      {previewDocument && showOfficeViewer && (
+        <OfficeViewer
+          data={previewDocument}
+          onClose={closeOfficeViewer}
+          visible={showOfficeViewer}
+        />
+      )}
+
+      {previewDocument && showMediaViewer && (
+        <MediaViewer
+          data={previewDocument}
+          onClose={closeMediaViewer}
+          visible={showMediaViewer}
+        />
+      )}
     </div>
   );
 };

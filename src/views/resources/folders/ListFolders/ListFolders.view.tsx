@@ -1,20 +1,16 @@
+import type { FileType } from '#/graphql/types';
+
+import MediaViewer from '#/components/documents/MediaViewer/MediaViewer';
+import OfficeViewer from '#/components/documents/OfficeViewer/OfficeViewer';
 import AddFolder from '#/components/form-components/Folders/AddFolder';
 import AddDocuments from '#/components/form-components/documents/AddDocuments';
 import Loading from '#/components/shared-components/AntD/Loading';
+import { getPreviewStrategy } from '#/utils/preview-document';
 import { faPlus } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  Button,
-  Col,
-  Collapse,
-  Divider,
-  Drawer,
-  Empty,
-  Input,
-  Row,
-} from 'antd';
+import { Button, Col, Drawer, Empty, Input, Row } from 'antd';
 // import AddDocument from 'components/form-components/documents/AddDocument';
-import React from 'react';
+import React, { useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router';
@@ -24,6 +20,15 @@ import type { Props } from './types/folders';
 import DocumentCard from '../DocumentCard';
 import FolderCard from '../FolderCard';
 import SkeletonCard from '../SkeletonCard';
+
+interface DocumentData {
+  createdAt: Date;
+  fileType?: FileType | null;
+  id: string;
+  name: string;
+  tags: Array<{ id: string; name: string }>;
+  url: string;
+}
 
 const ListFolders = ({
   addDocument,
@@ -36,6 +41,7 @@ const ListFolders = ({
   fetchMoreScroll,
   loading,
   onDelete,
+  onDeleteFolder,
   saving,
   search,
   setSearch,
@@ -46,6 +52,37 @@ const ListFolders = ({
 }: Props) => {
   const intl = useIntl();
   const navigate = useNavigate();
+  console.log('deleteRights', deleteRights);
+
+  // Preview state
+  const [previewDocument, setPreviewDocument] = useState<
+    DocumentData | undefined
+  >(undefined);
+  const [showOfficeViewer, setShowOfficeViewer] = useState(false);
+  const [showMediaViewer, setShowMediaViewer] = useState(false);
+
+  const handlePreview = (doc: DocumentData) => {
+    const strategy = getPreviewStrategy(doc.name, doc.url, doc.fileType);
+
+    if (strategy.method === 'office') {
+      setPreviewDocument(doc);
+      setShowOfficeViewer(true);
+    } else if (strategy.method === 'media') {
+      setPreviewDocument(doc);
+      setShowMediaViewer(true);
+    }
+    // lightbox and newTab are handled directly in DocumentCard
+  };
+
+  const closeOfficeViewer = () => {
+    setShowOfficeViewer(false);
+    setPreviewDocument(undefined);
+  };
+
+  const closeMediaViewer = () => {
+    setShowMediaViewer(false);
+    setPreviewDocument(undefined);
+  };
 
   return (
     <div className="list-view">
@@ -121,176 +158,135 @@ const ListFolders = ({
           </>
         )}
       </Row>
+      {/* Combined count header */}
+      {!loading && (
+        <div
+          style={{
+            fontSize: 16,
+            fontWeight: 600,
+            padding: '16px 10px',
+          }}
+        >
+          {intl.formatMessage(
+            {
+              defaultMessage:
+                'Items: {total} ({folders} folders, {docs} documents)',
+            },
+            {
+              docs: documentsData?.documentsNoFolder.totalCount || 0,
+              folders: data?.folders.totalCount || 0,
+              total:
+                (data?.folders.totalCount || 0) +
+                (documentsData?.documentsNoFolder.totalCount || 0),
+            }
+          )}
+        </div>
+      )}
+
       {loading ? (
         <Row
           align="stretch"
-          gutter={[10, 10]}
+          gutter={[16, 16]}
           style={{ alignItems: 'stretch', padding: 10 }}
         >
           {Array.from({ length: 24 }).map((_, index) => (
             // eslint-disable-next-line react/no-array-index-key
-            <Col key={index} lg={8} md={12} sm={24} xl={8} xxl={6}>
+            <Col key={index} lg={6} md={12} sm={24}>
               <SkeletonCard />
             </Col>
           ))}
         </Row>
       ) : (
-        <Collapse
-          bordered={false}
-          collapsible="header"
-          defaultActiveKey={['1', '2']}
-          style={{
-            backgroundColor: 'transparent',
-          }}
-        >
-          <Collapse.Panel
-            header={intl.formatMessage(
-              {
-                defaultMessage: 'Folders: {value}',
-              },
-              { value: data?.folders.totalCount }
-            )}
-            key="1"
-            style={{
-              backgroundColor: 'transparent',
-            }}
-          >
-            {data?.folders.totalCount ? (
-              <InfiniteScroll
-                dataLength={data?.folders.edges.length}
-                hasMore={data?.folders.pageInfo.hasNextPage}
-                loader={<Loading />}
-                next={() => fetchMoreScroll()}
-                style={{ overflowX: 'hidden' }}
-              >
-                <Row
-                  align="stretch"
-                  gutter={[16, 16]}
-                  style={{
-                    alignItems: 'stretch',
-                    overflowX: 'hidden',
-                    padding: 10,
-                  }}
-                >
-                  {data?.folders.edges.map(({ node }) => (
-                    <Col key={node?.id} lg={6} md={12} sm={24}>
-                      <FolderCard data={node} />
-                    </Col>
-                  ))}
-                </Row>
-              </InfiniteScroll>
-            ) : (
+        <>
+          {(data?.folders.totalCount || 0) > 0 ||
+          (documentsData?.documentsNoFolder.totalCount || 0) > 0 ? (
+            <InfiniteScroll
+              dataLength={
+                (data?.folders.edges.length || 0) +
+                (documentsData?.documentsNoFolder.edges.length || 0)
+              }
+              hasMore={
+                !!(
+                  data?.folders.pageInfo.hasNextPage ||
+                  documentsData?.documentsNoFolder.pageInfo.hasNextPage
+                )
+              }
+              loader={<Loading />}
+              next={() => {
+                if (data?.folders.pageInfo.hasNextPage) {
+                  void fetchMoreScroll();
+                }
+                if (
+                  documentsData?.documentsNoFolder.pageInfo.hasNextPage &&
+                  !data?.folders.pageInfo.hasNextPage
+                ) {
+                  void fetchMoreDocScroll();
+                }
+              }}
+              style={{ overflowX: 'hidden' }}
+            >
               <Row
                 align="stretch"
                 gutter={[16, 16]}
-                style={{ alignItems: 'stretch', padding: 10 }}
+                style={{
+                  alignItems: 'stretch',
+                  overflowX: 'hidden',
+                  padding: 10,
+                }}
               >
-                <div
-                  style={{
-                    alignItems: 'center',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    width: '100%',
-                  }}
-                >
-                  <Empty
-                    description={
-                      search === ''
-                        ? intl.formatMessage({
-                            defaultMessage: 'No Folders',
-                          })
-                        : intl.formatMessage({
-                            defaultMessage:
-                              'No folders match your search criteria',
-                          })
-                    }
-                  />
-                </div>
+                {/* Render all folders first */}
+                {data?.folders.edges.map(({ node }) => (
+                  <Col key={`folder-${node?.id}`} lg={6} md={12} sm={24}>
+                    <FolderCard
+                      data={node}
+                      onDelete={onDeleteFolder}
+                      showDeleteBtn={
+                        deleteRights &&
+                        node.totalChildFolders === 0 &&
+                        node.totalDocuments === 0
+                      }
+                    />
+                  </Col>
+                ))}
+
+                {/* Then render all documents */}
+                {documentsData?.documentsNoFolder.edges.map(({ node }) => (
+                  <Col key={`doc-${node?.id}`} lg={6} md={12} sm={24}>
+                    <DocumentCard
+                      data={node}
+                      onDelete={
+                        deleteRights ? () => onDelete(node.id) : undefined
+                      }
+                      onPreview={handlePreview}
+                    />
+                  </Col>
+                ))}
               </Row>
-            )}
-          </Collapse.Panel>
-
-          <Divider />
-
-          <Collapse.Panel
-            header={intl.formatMessage(
-              {
-                defaultMessage: 'Documents: {value}',
-              },
-              { value: documentsData?.documentsNoFolder.totalCount }
-            )}
-            key="2"
-            style={{
-              backgroundColor: 'transparent',
-            }}
-          >
-            {documentsData?.documentsNoFolder.totalCount ? (
-              <InfiniteScroll
-                dataLength={documentsData?.documentsNoFolder.edges.length}
-                endMessage={
-                  <p style={{ textAlign: 'center' }}>
-                    {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
-                    <b>-----------</b>
-                  </p>
+            </InfiniteScroll>
+          ) : (
+            <div
+              style={{
+                alignItems: 'center',
+                display: 'flex',
+                justifyContent: 'center',
+                padding: '60px 10px',
+                width: '100%',
+              }}
+            >
+              <Empty
+                description={
+                  search === ''
+                    ? intl.formatMessage({
+                        defaultMessage: 'No items',
+                      })
+                    : intl.formatMessage({
+                        defaultMessage: 'No items match your search criteria',
+                      })
                 }
-                hasMore={documentsData?.documentsNoFolder.pageInfo.hasNextPage}
-                height="calc(50vh )"
-                loader={<Loading />}
-                next={() => fetchMoreDocScroll()}
-                style={{ overflowX: 'hidden' }}
-              >
-                <Row
-                  align="stretch"
-                  gutter={[8, 16]}
-                  style={{
-                    alignItems: 'stretch',
-                    overflowX: 'hidden',
-                    padding: 10,
-                  }}
-                >
-                  {documentsData?.documentsNoFolder.edges.map(({ node }) => (
-                    <Col key={node?.id} lg={6} md={12} sm={24}>
-                      <DocumentCard
-                        data={node}
-                        onDelete={
-                          deleteRights ? () => onDelete(node.id) : undefined
-                        }
-                      />
-                    </Col>
-                  ))}
-                </Row>
-              </InfiniteScroll>
-            ) : (
-              <Row
-                align="stretch"
-                gutter={[8, 8]}
-                style={{ alignItems: 'stretch', padding: 10 }}
-              >
-                <div
-                  style={{
-                    alignItems: 'center',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    width: '100%',
-                  }}
-                >
-                  <Empty
-                    description={
-                      search === ''
-                        ? intl.formatMessage({
-                            defaultMessage: 'No Documents',
-                          })
-                        : intl.formatMessage({
-                            defaultMessage:
-                              'No documents match your search criteria',
-                          })
-                    }
-                  />
-                </div>
-              </Row>
-            )}
-          </Collapse.Panel>
-        </Collapse>
+              />
+            </div>
+          )}
+        </>
       )}
 
       <Drawer
@@ -326,6 +322,23 @@ const ListFolders = ({
           <div />
         )}
       </Drawer>
+
+      {/* Preview Modals */}
+      {previewDocument && showOfficeViewer && (
+        <OfficeViewer
+          data={previewDocument}
+          onClose={closeOfficeViewer}
+          visible={showOfficeViewer}
+        />
+      )}
+
+      {previewDocument && showMediaViewer && (
+        <MediaViewer
+          data={previewDocument}
+          onClose={closeMediaViewer}
+          visible={showMediaViewer}
+        />
+      )}
     </div>
   );
 };

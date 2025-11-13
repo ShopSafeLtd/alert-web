@@ -1,0 +1,5 @@
+query SchemeDetectTimeout($where: SchemeWhereUniqueInput!) {
+    scheme(where: $where) {
+        duplicateMatchTimeout
+    }
+}
