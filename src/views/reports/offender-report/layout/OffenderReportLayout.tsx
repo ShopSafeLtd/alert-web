@@ -552,9 +552,9 @@ const OffenderReportLayout = ({
               })}
               value={
                 data?.offenderReport?.incidentSummary?.lastIncidentDate
-                  ? new Date(
+                  ? dayjs(
                       data?.offenderReport?.incidentSummary?.lastIncidentDate
-                    ).toLocaleDateString()
+                    ).format('DD/MM/YYYY')
                   : intl.formatMessage({
                       defaultMessage: 'Unknown',
                     })
