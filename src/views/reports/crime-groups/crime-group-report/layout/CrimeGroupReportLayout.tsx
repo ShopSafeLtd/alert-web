@@ -34,6 +34,7 @@ import {
   TargetGoodsColumns,
   TargetedBusinessColumns,
 } from 'components/reports/tableColumns';
+import dayjs from 'dayjs';
 import { useAtomValue } from 'jotai/index';
 import React, { useMemo } from 'react';
 import { useIntl } from 'react-intl';
@@ -446,9 +447,9 @@ const CrimeGroupReport = ({
               })}
               value={
                 data?.crimeGroupReport?.incidentSummary?.lastIncidentDate
-                  ? new Date(
+                  ? dayjs(
                       data?.crimeGroupReport?.incidentSummary?.lastIncidentDate
-                    ).toLocaleDateString()
+                    ).format('DD/MM/YYYY')
                   : intl.formatMessage({
                       defaultMessage: 'Unknown',
                     })
