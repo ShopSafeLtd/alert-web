@@ -23,6 +23,7 @@ import {
   Tag,
   Typography,
 } from 'antd';
+import dayjs from 'dayjs';
 import React, { useState } from 'react';
 import { CSVLink } from 'react-csv';
 import { FormattedMessage, useIntl } from 'react-intl';
@@ -134,8 +135,8 @@ const PerformanceReport = ({
                   defaultMessage: ' User Engagement: {startDate} - {endDate}',
                 },
                 {
-                  endDate: dateRange.endDate.toLocaleDateString(),
-                  startDate: dateRange.startDate.toLocaleDateString(),
+                  endDate: dayjs(dateRange.endDate).format('DD/MM/YYYY'),
+                  startDate: dayjs(dateRange.startDate).format('DD/MM/YYYY'),
                 }
               )}
             </Title>

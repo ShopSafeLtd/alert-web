@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Col, Drawer, Row, Select, Typography } from 'antd';
 import { margin, rowHeight } from 'components/reports/utils/utils';
 import Page from 'components/shared-components/AntD/Page/Page';
+import dayjs from 'dayjs';
 import { PermissionMethod, PermissionModel } from 'graphql/types';
 import React, { useMemo } from 'react';
 import RGL, { WidthProvider } from 'react-grid-layout';
@@ -232,8 +233,12 @@ const PerformanceReport = ({
                 defaultMessage: 'Offender Report: {startDate} - {endDate}',
               },
               {
-                endDate: dateRange?.endDate.toLocaleDateString(),
-                startDate: dateRange?.startDate.toLocaleDateString(),
+                endDate: dateRange?.endDate
+                  ? dayjs(dateRange.endDate).format('DD/MM/YYYY')
+                  : '',
+                startDate: dateRange?.startDate
+                  ? dayjs(dateRange.startDate).format('DD/MM/YYYY')
+                  : '',
               }
             )}
           </Title>
@@ -415,8 +420,12 @@ const PerformanceReport = ({
                     defaultMessage: 'Offender Report: {startDate} - {endDate}',
                   },
                   {
-                    endDate: dateRange?.endDate.toLocaleDateString(),
-                    startDate: dateRange?.startDate.toLocaleDateString(),
+                    endDate: dateRange?.endDate
+                      ? dayjs(dateRange.endDate).format('DD/MM/YYYY')
+                      : '',
+                    startDate: dateRange?.startDate
+                      ? dayjs(dateRange.startDate).format('DD/MM/YYYY')
+                      : '',
                   }
                 )}
               </Title>

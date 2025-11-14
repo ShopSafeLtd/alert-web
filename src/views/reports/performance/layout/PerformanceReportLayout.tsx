@@ -64,6 +64,7 @@ import {
   OffenderColumns,
   TargetGoodsColumns,
 } from 'components/reports/tableColumns';
+import dayjs from 'dayjs';
 import { LanguageCode } from 'graphql/types';
 import { useAtomValue } from 'jotai';
 import React, { useMemo } from 'react';
@@ -454,9 +455,10 @@ const PerformanceReportLayout = ({
                     })}
                     value={
                       data?.performanceReport?.incidentSummary?.lastIncidentDate
-                        ? new Date(
-                            data?.performanceReport?.incidentSummary?.lastIncidentDate
-                          ).toLocaleDateString()
+                        ? dayjs(
+                            data?.performanceReport?.incidentSummary
+                              ?.lastIncidentDate
+                          ).format('DD/MM/YYYY')
                         : 'unknown'
                     }
                   />
