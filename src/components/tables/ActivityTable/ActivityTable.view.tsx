@@ -23,7 +23,7 @@ import FormatCalendar from 'utils/format-calendar-24h';
 
 interface Props {
   saving?: boolean;
-  // setCompleteTodoVisible: (value: null | string) => void;
+  setCompleteTodoVisible: (value: null | string) => void;
   setViewTodoVisible: (value: null | string) => void;
   todos:
     | {
@@ -42,7 +42,7 @@ interface Props {
 
 const ActivityTable = ({
   saving,
-  // setCompleteTodoVisible,
+  setCompleteTodoVisible,
   setViewTodoVisible,
   todos,
 }: Props): JSX.Element => {
@@ -203,7 +203,7 @@ const ActivityTable = ({
                       disabled={saving}
                       onClick={() => {
                         if (value) setViewTodoVisible(item.key);
-                        // if (!value) setCompleteTodoVisible(item.key);
+                        if (!value) setCompleteTodoVisible(item.key);
                       }}
                       size="small"
                       type={value ? 'text' : 'ghost'}
