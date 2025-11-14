@@ -165,7 +165,7 @@ const Activities = ({ data, incidentId, loading, saving }: Props) => {
         {data?.incident?.todos.length && !loading ? (
           <ActivityTable
             saving={saving || loading}
-            // setCompleteTodoVisible={setCompleteTodoVisible}
+            setCompleteTodoVisible={setCompleteTodoVisible}
             setViewTodoVisible={setViewTodoVisible}
             todos={data?.incident?.todos}
           />

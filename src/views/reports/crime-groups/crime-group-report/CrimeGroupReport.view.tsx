@@ -12,6 +12,7 @@ import { faTrash } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Col, Drawer, Row, Select, Typography } from 'antd';
 import { Page } from 'components/shared-components/AntD/Page/Page';
+import dayjs from 'dayjs';
 import React, { useMemo } from 'react';
 import RGL, { WidthProvider } from 'react-grid-layout';
 import { useIntl } from 'react-intl';
@@ -218,8 +219,12 @@ const CrimeGroupReportView = ({
                 alias:
                   data?.crimeGroup?.alias ??
                   `CG-${data?.crimeGroup?.reference || ''}`,
-                endDate: dateRange?.endDate.toLocaleDateString(),
-                startDate: dateRange?.startDate.toLocaleDateString(),
+                endDate: dateRange?.endDate
+                  ? dayjs(dateRange.endDate).format('DD/MM/YYYY')
+                  : '',
+                startDate: dateRange?.startDate
+                  ? dayjs(dateRange.startDate).format('DD/MM/YYYY')
+                  : '',
               }
             )}
           </Title>
@@ -327,8 +332,12 @@ const CrimeGroupReportView = ({
                     alias:
                       data?.crimeGroup?.alias ??
                       `CG-${data?.crimeGroup?.reference || ''}`,
-                    endDate: dateRange?.endDate.toLocaleDateString(),
-                    startDate: dateRange?.startDate.toLocaleDateString(),
+                    endDate: dateRange?.endDate
+                      ? dayjs(dateRange.endDate).format('DD/MM/YYYY')
+                      : '',
+                    startDate: dateRange?.startDate
+                      ? dayjs(dateRange.startDate).format('DD/MM/YYYY')
+                      : '',
                   }
                 )}
               </Title>

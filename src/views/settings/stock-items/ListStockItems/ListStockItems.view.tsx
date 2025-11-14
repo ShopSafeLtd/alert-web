@@ -309,7 +309,7 @@ const ListStockItems = ({
               division: node.division ?? null,
               key: node.id,
               name: node.name || '-',
-              salesPrice: node.salesPriceLocal ?? null,
+              salesPrice: node.salesPriceStandard ?? null,
               sku: node.sku ?? null,
               variant: node.variant ?? null,
             }))}

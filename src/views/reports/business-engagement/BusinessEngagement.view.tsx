@@ -8,6 +8,7 @@ import Page from '#/components/shared-components/AntD/Page/Page';
 import { faFileDownload } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Card, Col, Row, Table, Typography } from 'antd';
+import dayjs from 'dayjs';
 import React, { useState } from 'react';
 import { CSVLink } from 'react-csv';
 import { FormattedMessage, useIntl } from 'react-intl';
@@ -94,8 +95,8 @@ const PerformanceReport = ({
                     ' Business Engagement: {startDate} - {endDate}',
                 },
                 {
-                  endDate: dateRange.endDate.toLocaleDateString(),
-                  startDate: dateRange.startDate.toLocaleDateString(),
+                  endDate: dayjs(dateRange.endDate).format('DD/MM/YYYY'),
+                  startDate: dayjs(dateRange.startDate).format('DD/MM/YYYY'),
                 }
               )}
             </Title>

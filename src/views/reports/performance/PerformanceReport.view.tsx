@@ -15,6 +15,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Badge, Button, Col, Drawer, Form, Row, Typography } from 'antd';
 import { margin, rowHeight } from 'components/reports/utils/utils';
 import { Page } from 'components/shared-components/AntD/Page/Page';
+import dayjs from 'dayjs';
 import React, { useMemo, useState } from 'react';
 import RGL, { WidthProvider } from 'react-grid-layout';
 import 'react-grid-layout/css/styles.css';
@@ -258,8 +259,12 @@ const PerformanceReport = ({
                     defaultMessage: 'Summary Report: {startDate} - {endDate}',
                   },
                   {
-                    endDate: dateRange?.endDate.toLocaleDateString() ?? '',
-                    startDate: dateRange?.startDate.toLocaleDateString() ?? '',
+                    endDate: dateRange?.endDate
+                      ? dayjs(dateRange.endDate).format('DD/MM/YYYY')
+                      : '',
+                    startDate: dateRange?.startDate
+                      ? dayjs(dateRange.startDate).format('DD/MM/YYYY')
+                      : '',
                   }
                 )}
               </Title>
@@ -389,9 +394,12 @@ const PerformanceReport = ({
                           'Summary Report: {startDate} - {endDate}',
                       },
                       {
-                        endDate: dateRange?.endDate.toLocaleDateString() || '',
-                        startDate:
-                          dateRange?.startDate.toLocaleDateString() || '',
+                        endDate: dateRange?.endDate
+                          ? dayjs(dateRange.endDate).format('DD/MM/YYYY')
+                          : '',
+                        startDate: dateRange?.startDate
+                          ? dayjs(dateRange.startDate).format('DD/MM/YYYY')
+                          : '',
                       }
                     )}
                   </Title>
