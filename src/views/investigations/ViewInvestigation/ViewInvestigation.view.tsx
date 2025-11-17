@@ -314,6 +314,9 @@ const ViewInvestigation = ({
       >
         {addOffender ? (
           <AddNewOffenderSimple
+            groupsIds={
+              data?.investigation?.groups.map((group) => group.id) || []
+            }
             images={[]}
             investigationId={data?.investigation.id}
             onClose={toggleAddOffender}
@@ -373,7 +376,13 @@ const ViewInvestigation = ({
         zIndex={999}
       >
         {addVehicle ? (
-          <AddVehicleSimple onClose={toggleAddVehicle} update={onAddVehicle} />
+          <AddVehicleSimple
+            initialGroupIds={
+              data?.investigation?.groups.map((group) => group.id) || []
+            }
+            onClose={toggleAddVehicle}
+            update={onAddVehicle}
+          />
         ) : (
           <div />
         )}
