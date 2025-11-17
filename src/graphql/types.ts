@@ -7879,6 +7879,7 @@ export enum IncidentFormField {
 
 export type IncidentFormFieldsConditionInput = {
   conditionValues?: InputMaybe<Array<Scalars['String']>>;
+  mode?: InputMaybe<Scalars['String']>;
   questionId?: InputMaybe<Scalars['String']>;
   type?: InputMaybe<Scalars['String']>;
 };
@@ -19712,7 +19713,6 @@ export type SchemeUpdateInput = {
   billingRate?: InputMaybe<SetFloatHelper>;
   checklistFeatureActive?: InputMaybe<Scalars['Boolean']>;
   collectionIds?: InputMaybe<Array<Scalars['String']>>;
-  compassEnabled?: InputMaybe<SetBooleanHelper>;
   customer?: InputMaybe<SetStringHelper>;
   darkLogo?: InputMaybe<ImageUpdateOneWithoutSchemeDarkNestedInput>;
   defaultBulletinEmails?: InputMaybe<SetBooleanHelper>;
