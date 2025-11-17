@@ -300,30 +300,50 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
           data: {
             activityEmail: { set: data.activityEmail },
             activityPush: { set: data.activityPush },
-            approverGroups: data.approverGroups
-              ? {
-                  connect: data.approverGroups
+            ...(data.approverGroups
+              ? (() => {
+                  const approverGroupsToConnect = data.approverGroups
                     .filter(
                       (id) =>
                         !userData?.user?.approverGroups
                           .map((item) => item.id)
                           .includes(id)
                     )
-                    .map((id) => ({ id })),
-                  disconnect: userData?.user?.approverGroups
-                    .filter(
-                      ({ id }) =>
-                        !data.approverGroups.map((item) => item).includes(id) ||
-                        disconnectGroupsId?.includes(id)
-                    )
-                    .map(({ id }) => ({ id })),
-                }
-              : undefined,
+                    .map((id) => ({ id }));
+
+                  const approverGroupsToDisconnect =
+                    userData?.user?.approverGroups
+                      ?.filter(
+                        ({ id }) =>
+                          !data.approverGroups
+                            .map((item) => item)
+                            .includes(id) || disconnectGroupsId?.includes(id)
+                      )
+                      .map(({ id }) => ({ id })) ?? [];
+
+                  if (
+                    approverGroupsToConnect.length > 0 ||
+                    approverGroupsToDisconnect.length > 0
+                  ) {
+                    return {
+                      approverGroups: {
+                        ...(approverGroupsToConnect.length > 0 && {
+                          connect: approverGroupsToConnect,
+                        }),
+                        ...(approverGroupsToDisconnect.length > 0 && {
+                          disconnect: approverGroupsToDisconnect,
+                        }),
+                      },
+                    };
+                  }
+                  return {};
+                })()
+              : {}),
             bulletinEmails: { set: data.bulletinEmails },
             bulletinPush: { set: data.bulletinPush },
             businesses: getBusiness(),
-            chats: {
-              create: data.chats
+            ...(() => {
+              const chatsToCreate = data.chats
                 .filter(
                   (chatId) =>
                     !userData?.user?.chats
@@ -337,46 +357,94 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
                     },
                   },
                   newMessages: true,
-                })),
-              delete: userData?.user?.chats
-                .filter((userChat) => !data.chats.includes(userChat.chat.id))
-                .map((userChat) => ({
-                  id: userChat.id,
-                })),
-            },
-            defaultGroups: data.defaultGroups
-              ? {
-                  connect: data.defaultGroups
+                }));
+
+              const chatsToDelete =
+                userData?.user?.chats
+                  ?.filter((userChat) => !data.chats.includes(userChat.chat.id))
+                  .map((userChat) => ({
+                    id: userChat.id,
+                  })) ?? [];
+
+              // Only include chats if there are changes
+              if (chatsToCreate.length > 0 || chatsToDelete.length > 0) {
+                return {
+                  chats: {
+                    ...(chatsToCreate.length > 0 && { create: chatsToCreate }),
+                    ...(chatsToDelete.length > 0 && { delete: chatsToDelete }),
+                  },
+                };
+              }
+              return {};
+            })(),
+            ...(data.defaultGroups
+              ? (() => {
+                  const defaultGroupsToConnect = data.defaultGroups
                     .filter(
                       (id) =>
                         !userData?.user?.defaultGroups
                           .map((item) => item.id)
                           .includes(id)
                     )
-                    .map((id) => ({ id })),
-                  disconnect: userData?.user?.defaultGroups
-                    .filter(
-                      ({ id }) =>
-                        !data.defaultGroups.map((item) => item).includes(id) ||
-                        disconnectGroupsId?.includes(id)
-                    )
-                    .map(({ id }) => ({ id })),
-                }
-              : undefined,
+                    .map((id) => ({ id }));
+
+                  const defaultGroupsToDisconnect =
+                    userData?.user?.defaultGroups
+                      ?.filter(
+                        ({ id }) =>
+                          !data.defaultGroups
+                            .map((item) => item)
+                            .includes(id) || disconnectGroupsId?.includes(id)
+                      )
+                      .map(({ id }) => ({ id })) ?? [];
+
+                  if (
+                    defaultGroupsToConnect.length > 0 ||
+                    defaultGroupsToDisconnect.length > 0
+                  ) {
+                    return {
+                      defaultGroups: {
+                        ...(defaultGroupsToConnect.length > 0 && {
+                          connect: defaultGroupsToConnect,
+                        }),
+                        ...(defaultGroupsToDisconnect.length > 0 && {
+                          disconnect: defaultGroupsToDisconnect,
+                        }),
+                      },
+                    };
+                  }
+                  return {};
+                })()
+              : {}),
             email: data.email ? { set: data.email } : undefined,
             fullName: { set: data.fullName },
-            groups: {
-              connect: data.groups
+            ...(() => {
+              const groupsToConnect = data.groups
                 .filter(
                   (id) =>
                     !userData?.user?.groups.map((item) => item.id).includes(id)
                 )
-                .map((id) => ({ id })),
-              disconnect:
+                .map((id) => ({ id }));
+
+              const groupsToDisconnect =
                 disconnectGroupsId && disconnectGroupsId.length > 0
                   ? disconnectGroupsId?.map((id) => ({ id }))
-                  : undefined,
-            },
+                  : [];
+
+              if (groupsToConnect.length > 0 || groupsToDisconnect.length > 0) {
+                return {
+                  groups: {
+                    ...(groupsToConnect.length > 0 && {
+                      connect: groupsToConnect,
+                    }),
+                    ...(groupsToDisconnect.length > 0 && {
+                      disconnect: groupsToDisconnect,
+                    }),
+                  },
+                };
+              }
+              return {};
+            })(),
             incidentEmail: { set: data.incidentEmail },
             incidentPush: { set: data.incidentPush },
             messagePush: { set: data.messagePush },

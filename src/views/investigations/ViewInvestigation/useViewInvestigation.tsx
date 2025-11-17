@@ -916,6 +916,7 @@ const useViewInvestigation = (investigationId: string): Return => {
         variables: {
           data: {
             colour: value.colour || '',
+            groups: value.groups?.map((id) => ({ id })),
             image:
               value.images && value.images.length > 0
                 ? {

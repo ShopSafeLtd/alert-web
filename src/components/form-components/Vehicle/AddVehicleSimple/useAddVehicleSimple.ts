@@ -19,6 +19,7 @@ export interface AddVehicleData {
 }
 
 interface Props {
+  initialGroupIds?: string[];
   onImagesUploaded?: (values: StateImageData[]) => void;
   update: (value: FormData) => void;
 }
@@ -38,10 +39,15 @@ interface Return {
 }
 
 const useAddVehicleSimple = ({
+  initialGroupIds,
   onImagesUploaded,
   update: updateVehicle,
 }: Props): Return => {
   const [form] = Form.useForm<FormData>();
+
+  if (initialGroupIds && initialGroupIds.length > 0) {
+    form.setFieldsValue({ groupIds: initialGroupIds });
+  }
 
   const onSubmit = (data: FormData) => {
     updateVehicle({

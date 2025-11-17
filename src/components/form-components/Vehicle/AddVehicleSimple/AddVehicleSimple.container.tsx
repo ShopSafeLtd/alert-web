@@ -9,6 +9,7 @@ import useAddVehicleSimple from './useAddVehicleSimple';
 
 interface Props {
   images?: ImageData[] | undefined;
+  initialGroupIds?: string[];
   onClose: () => void;
   onImagesUploaded?: (values: StateImageData[]) => void;
   saving?: boolean;
@@ -17,12 +18,14 @@ interface Props {
 
 const AddVehicle = ({
   images,
+  initialGroupIds,
   onClose,
   onImagesUploaded,
   saving,
   update,
 }: Props): JSX.Element => {
   const { form, onSubmit } = useAddVehicleSimple({
+    initialGroupIds,
     onImagesUploaded,
     update,
   });
