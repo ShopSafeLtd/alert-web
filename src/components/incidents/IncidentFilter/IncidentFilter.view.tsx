@@ -9,6 +9,7 @@ import DatePicker from '#/components/util-components/DatePicker';
 import { formatPoliceForceLabel } from '#/utils/formatPoliceAreas';
 import { Button, Col, Form, Input, Row, Select, Space, Typography } from 'antd';
 import dayjs from 'dayjs';
+import { useListIncidentStatusesQuery } from 'graphql/incidents/queries/__generated__/list-incident-statuses.generated';
 import { PoliceForce } from 'graphql/types';
 import React from 'react';
 import { useIntl } from 'react-intl';
@@ -46,6 +47,8 @@ const IncidentFilter = ({
   const setIncidentsState = useStoreActions(
     (actions) => actions.data.setIncidents
   );
+
+  const { data: statusesData } = useListIncidentStatusesQuery();
 
   const setOrder = (value: IncidentSort) => {
     setIncidentsState({
@@ -142,6 +145,17 @@ const IncidentFilter = ({
     });
   };
 
+  const setStatusesFilter = (values: string[]) => {
+    setIncidentsState({
+      order,
+      pagination,
+      variables: {
+        ...variables,
+        statuses: values,
+      },
+    });
+  };
+
   const {
     businesses: businessesValue,
     createdAt: createdAtFilter,
@@ -152,6 +166,7 @@ const IncidentFilter = ({
     incidentDate: incidentDateFilter,
     peculiarities,
     policeAreas,
+    statuses,
     // priority,
   } = variables;
 
@@ -352,13 +367,19 @@ const IncidentFilter = ({
               allowClear
               className={classes.select}
               mode="multiple"
+              onChange={setStatusesFilter}
               placeholder={intl.formatMessage({
                 defaultMessage: 'Select Status',
               })}
               size="small"
               style={{ width: '100%' }}
+              value={statuses}
             >
-              {/* Status options will be populated when backend provides the data */}
+              {statusesData?.incidentStatuses.map((status) => (
+                <Select.Option key={status.id} value={status.id}>
+                  {status.name}
+                </Select.Option>
+              ))}
             </Select>
           </Col>
         </Row>

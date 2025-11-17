@@ -108,6 +108,7 @@ const useIncidentFeed = (): Return => {
     policeAreas,
     priority,
     search,
+    statuses,
     tableView,
   } = variables;
 
@@ -303,6 +304,12 @@ const useIncidentFeed = (): Return => {
         priority.length > 0
           ? {
               in: priority,
+            }
+          : undefined,
+      statusId:
+        statuses.length > 0
+          ? {
+              in: statuses,
             }
           : undefined,
       subscribedUsers: gallery.includes('FOLLOWING')
@@ -554,6 +561,7 @@ const useIncidentFeed = (): Return => {
         peculiarities: '',
         policeAreas: [],
         search: '',
+        statuses: [],
       },
     });
   };
