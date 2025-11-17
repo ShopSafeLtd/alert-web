@@ -43,6 +43,7 @@ export interface IncidentFilters {
   policeAreas?: PoliceForce[];
   priority: IncidentPriority[];
   search: string;
+  statuses: string[];
   tableView: boolean;
 }
 
@@ -306,6 +307,7 @@ const dataModel: DataModel = {
         IncidentPriority.Normal,
       ],
       search: '',
+      statuses: [],
       tableView: false,
     },
     // gallery: []
