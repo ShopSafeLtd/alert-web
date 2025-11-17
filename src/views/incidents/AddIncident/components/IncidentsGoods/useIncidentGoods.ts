@@ -73,9 +73,9 @@ const useIncidentGoods = ({
   const [division, setDivision] = useState<string | undefined>(undefined);
   const [businessCurrency, setBusinessCurrency] = useState<Currency | null>();
   useEffect(() => {
-    if (businessesData && business) {
+    if (businessesData) {
       const fullBusiness = businessesData.listBusinesses.businesses.find(
-        ({ id }) => id === business.value
+        ({ id }) => id === (business ? business.value : userBusinesses[0]?.id)
       );
       // Always set the values, even if undefined/null to clear previous values
       setDivision(fullBusiness?.division || undefined);
@@ -85,7 +85,7 @@ const useIncidentGoods = ({
       setDivision(undefined);
       setBusinessCurrency(null);
     }
-  }, [business, businessesData]);
+  }, [business, businessesData, userBusinesses]);
   const goods = Form.useWatch('goods', form) || [];
   const onAddItem = (data: StockItemValue) => {
     form.setFieldsValue({
