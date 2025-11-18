@@ -3,7 +3,7 @@ import type { ListIncidentsQuery } from 'graphql/incidents/queries/__generated__
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { notification } from 'antd';
 import { useListIncidentsQuery } from 'graphql/incidents/queries/__generated__/list-incidents.generated';
-import { useUpdateInvestigationMutation } from 'graphql/investigations/mutations/__generated__/update-investigation.generated';
+import { useUpdateInvestigationIncidentsMutation } from 'graphql/investigations/mutations/update/__generated__/update-investigation-incidents.generated';
 import { QueryMode, SortOrder } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
@@ -106,13 +106,13 @@ const useLinkIncident = ({ incidentIds, onClose }: Props): Return => {
       },
     });
   };
-  const [updateInvestigation] = useUpdateInvestigationMutation({
+  const [updateInvestigation] = useUpdateInvestigationIncidentsMutation({
     onCompleted: () => {
       setSaving(false);
       onClose();
       notification.success({
         description: intl.formatMessage({
-          defaultMessage: 'The vehicle has been added to the crime group! ',
+          defaultMessage: 'The incident has been added to the investigation!',
         }),
         message: intl.formatMessage({
           defaultMessage: 'Successfully Updated!',
@@ -124,20 +124,15 @@ const useLinkIncident = ({ incidentIds, onClose }: Props): Return => {
       setSaving(false);
       errorNotification();
     },
+    refetchQueries: ['ViewInvestigation'],
   });
   const onSubmit = () => {
     setSaving(true);
     if (selected) {
       void updateInvestigation({
         variables: {
-          data: {
-            incidentIds: [selected],
-
-            // schemes: schemeId,
-          },
-          where: {
-            id: params.id || '',
-          },
+          id: params.id || '',
+          incidentIds: [selected],
         },
       });
     }
