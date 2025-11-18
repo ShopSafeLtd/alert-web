@@ -46,6 +46,7 @@ interface TableData {
 
 interface Props {
   addVisible: boolean;
+  canDelete: boolean;
   data: BusinessesListQuery | undefined;
   deleteConfirm: (value: string) => void;
   filtersOpen: boolean;
@@ -76,6 +77,7 @@ interface Props {
 
 const ListBusinesses = ({
   addVisible,
+  canDelete,
   data,
   deleteConfirm,
   filtersOpen,
@@ -276,22 +278,23 @@ const ListBusinesses = ({
           {
             dataIndex: 'Options',
             key: 'Options',
-            render: (_, record) => (
-              <Tooltip
-                title={intl.formatMessage({
-                  defaultMessage: 'Remove Business',
-                })}
-              >
-                <Button
-                  disabled={saving}
-                  icon={<FontAwesomeIcon icon={faTrash} />}
-                  onClick={() => {
-                    deleteConfirm(record.key);
-                  }}
-                  size="small"
-                />
-              </Tooltip>
-            ),
+            render: (_, record) =>
+              canDelete ? (
+                <Tooltip
+                  title={intl.formatMessage({
+                    defaultMessage: 'Remove Business',
+                  })}
+                >
+                  <Button
+                    disabled={saving}
+                    icon={<FontAwesomeIcon icon={faTrash} />}
+                    onClick={() => {
+                      deleteConfirm(record.key);
+                    }}
+                    size="small"
+                  />
+                </Tooltip>
+              ) : null,
             width: 60,
           },
         ]}
