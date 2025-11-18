@@ -1045,7 +1045,8 @@ export const IncidentsColumns: ColumnsType<IncidentsTableData> = [
         />
       </Typography.Text>
     ),
-    sorter: (a, b) => a.value.localeCompare(b.value),
+    sorter: (a, b) =>
+      Number.parseInt(a.value || '0', 10) - Number.parseInt(b.value || '0', 10),
     title: <FormattedMessage defaultMessage="Value Lost" />,
   },
   {
@@ -1060,7 +1061,9 @@ export const IncidentsColumns: ColumnsType<IncidentsTableData> = [
         />
       </Typography.Text>
     ),
-    sorter: (a, b) => a.valueRec.localeCompare(b.valueRec),
+    sorter: (a, b) =>
+      Number.parseInt(a.valueRec || '0', 10) -
+      Number.parseInt(b.valueRec || '0', 10),
     title: <FormattedMessage defaultMessage="Value Recovered" />,
   },
   {

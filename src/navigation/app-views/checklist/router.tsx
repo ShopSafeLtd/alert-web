@@ -61,7 +61,7 @@ const Checklist = (): JSX.Element => {
           element={
             <PermissionCheckWrapper
               permission={{
-                method: PermissionMethod.Edit,
+                method: PermissionMethod.Read,
                 model: PermissionModel.Checklist,
               }}
             >
