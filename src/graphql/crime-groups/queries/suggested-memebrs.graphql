@@ -1,6 +1,5 @@
 query SuggestedCrimeGroupMembers(
   $where: CrimeGroupWhereUniqueInput!
-  $crimeTypesWhere: TagWhereInput
   $associatedCrimeGroup: UniqueId
 ) {
   crimeGroup(where: $where) {
