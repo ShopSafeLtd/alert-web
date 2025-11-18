@@ -6,6 +6,7 @@ import useListBusinesses from './useListBusinesses';
 const ListBusinesses = () => {
   const {
     addVisible,
+    canDelete,
     data,
     deleteConfirm,
     filtersOpen,
@@ -37,6 +38,7 @@ const ListBusinesses = () => {
   return (
     <View
       addVisible={addVisible}
+      canDelete={canDelete}
       data={data}
       deleteConfirm={deleteConfirm}
       filtersOpen={filtersOpen}
