@@ -5,7 +5,6 @@ import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
 export type SuggestedCrimeGroupMembersQueryVariables = Types.Exact<{
   where: Types.CrimeGroupWhereUniqueInput;
-  crimeTypesWhere?: Types.InputMaybe<Types.TagWhereInput>;
   associatedCrimeGroup?: Types.InputMaybe<Types.UniqueId>;
 }>;
 
@@ -14,7 +13,7 @@ export type SuggestedCrimeGroupMembersQuery = { __typename?: 'Query', crimeGroup
 
 
 export const SuggestedCrimeGroupMembersDocument = gql`
-    query SuggestedCrimeGroupMembers($where: CrimeGroupWhereUniqueInput!, $crimeTypesWhere: TagWhereInput, $associatedCrimeGroup: UniqueId) {
+    query SuggestedCrimeGroupMembers($where: CrimeGroupWhereUniqueInput!, $associatedCrimeGroup: UniqueId) {
   crimeGroup(where: $where) {
     id
     suggestedMembers {

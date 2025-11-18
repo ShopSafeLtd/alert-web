@@ -39,7 +39,7 @@ import {
 } from 'graphql/crime-groups/queries/__generated__/view-crime-group.generated';
 import { useDeleteUpdateMutation } from 'graphql/mutations/__generated__/delete-update.generated';
 import { useUpdateUpdateMutation } from 'graphql/mutations/__generated__/update-update.generated';
-import { PermissionMethod, PermissionModel, TagType } from 'graphql/types';
+import { PermissionMethod, PermissionModel } from 'graphql/types';
 import update from 'immutability-helper';
 import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
@@ -172,11 +172,6 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
     variables: {
       associatedCrimeGroup: {
         id: crimeGroupId,
-      },
-      crimeTypesWhere: {
-        type: {
-          equals: TagType.IncidentCrimeType,
-        },
       },
       where: {
         id: crimeGroupId,
@@ -660,11 +655,6 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
             associatedCrimeGroup: {
               id: crimeGroupId,
             },
-            crimeTypesWhere: {
-              type: {
-                equals: TagType.IncidentCrimeType,
-              },
-            },
             where: {
               id: crimeGroupId,
             },
@@ -689,11 +679,6 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
             variables: {
               associatedCrimeGroup: {
                 id: crimeGroupId,
-              },
-              crimeTypesWhere: {
-                type: {
-                  equals: TagType.IncidentCrimeType,
-                },
               },
               where: {
                 id: crimeGroupId,

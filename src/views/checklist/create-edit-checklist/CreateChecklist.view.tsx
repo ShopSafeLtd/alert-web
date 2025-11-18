@@ -735,37 +735,43 @@ const CreateChecklistView: React.FC<Props> = ({
                                                   shouldUpdate={(
                                                     prevValues,
                                                     currentValues
-                                                  ) =>
+                                                  ) => {
                                                     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-                                                    prevValues.sections[name]
-                                                      .subsections[
-                                                      subsectionField.name
-                                                    ].questions[
-                                                      questionField.name
-                                                    ].weighted !==
-                                                      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-                                                      currentValues.sections[
+                                                    const prevQuestion =
+                                                      prevValues.sections?.[
                                                         name
-                                                      ].subsections[
+                                                      ]?.subsections?.[
                                                         subsectionField.name
-                                                      ].questions[
+                                                      ]?.questions?.[
                                                         questionField.name
-                                                      ].weighted || // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-                                                    prevValues.sections[name]
-                                                      .subsections[
-                                                      subsectionField.name
-                                                    ].questions[
-                                                      questionField.name
-                                                    ].type !==
-                                                      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-                                                      currentValues.sections[
+                                                      ];
+                                                    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+                                                    const currentQuestion =
+                                                      currentValues.sections?.[
                                                         name
-                                                      ].subsections[
+                                                      ]?.subsections?.[
                                                         subsectionField.name
-                                                      ].questions[
+                                                      ]?.questions?.[
                                                         questionField.name
-                                                      ].type
-                                                  }
+                                                      ];
+
+                                                    // If either doesn't exist, update to be safe (can happen during reordering)
+                                                    if (
+                                                      !prevQuestion ||
+                                                      !currentQuestion
+                                                    ) {
+                                                      return true;
+                                                    }
+
+                                                    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+                                                    return (
+                                                      prevQuestion.weighted !==
+                                                        currentQuestion.weighted ||
+                                                      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+                                                      prevQuestion.type !==
+                                                        currentQuestion.type
+                                                    );
+                                                  }}
                                                 >
                                                   {({ getFieldValue }) => {
                                                     const type = getFieldValue([
