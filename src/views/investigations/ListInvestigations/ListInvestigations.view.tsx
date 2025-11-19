@@ -4,18 +4,9 @@ import type { InvestigationRelayQuery } from 'graphql/investigations/queries/__g
 
 import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
 import { useStoreActions, useStoreState } from '#/state';
+import DebouncedInput from '#/utils/debounced-input';
 import FormatCalendar from '#/utils/format-calendar-24h';
-import {
-  Button,
-  Col,
-  Drawer,
-  Input,
-  Row,
-  Select,
-  Table,
-  Typography,
-} from 'antd';
-import dayjs from 'dayjs';
+import { Button, Col, Drawer, Row, Select, Table, Tag, Tooltip } from 'antd';
 import { InvestigationStatus } from 'graphql/types';
 import React from 'react';
 import { FormattedList, FormattedMessage, useIntl } from 'react-intl';
@@ -35,11 +26,11 @@ interface Props {
   updateInvestigationList: MutationUpdaterFn<CreateInvestigationMutation>;
 }
 
-const getTextStatus = (value: InvestigationStatus) => {
+const getTagColor = (value: InvestigationStatus) => {
   if (value === InvestigationStatus.Open) return 'success';
-  if (value === InvestigationStatus.Closed) return 'danger';
   if (value === InvestigationStatus.Paused) return 'warning';
-  return 'success';
+  if (value === InvestigationStatus.Closed) return 'default';
+  return 'default';
 };
 const ListInvestigations = ({
   addInvestigation,
@@ -74,18 +65,18 @@ const ListInvestigations = ({
   return (
     <div className={classes.page}>
       <Row className={classes.headerRow} gutter={8}>
-        <Col>
-          <Input
+        <Col lg={6} md={8} sm={12} xs={24}>
+          <DebouncedInput
             allowClear
+            defaultValue={search || ''}
             onChange={(e) => setInvestigationSearch(e.target.value)}
             placeholder={intl.formatMessage({
               defaultMessage: 'Search investigations...',
             })}
-            style={{ width: 400 }}
-            value={search}
+            style={{ width: '100%' }}
           />
         </Col>
-        <Col>
+        <Col lg={5} md={8} sm={12} xs={24}>
           <GroupsSelect
             allowClear
             maxTagCount={1}
@@ -94,11 +85,11 @@ const ListInvestigations = ({
             placeholder={intl.formatMessage({
               defaultMessage: 'Select groups...',
             })}
-            style={{ maxWidth: 400, minWidth: 200 }}
+            style={{ width: '100%' }}
             value={groupsFilter}
           />
         </Col>
-        <Col>
+        <Col lg={4} md={6} sm={12} xs={24}>
           <Select
             allowClear
             mode="multiple"
@@ -112,6 +103,12 @@ const ListInvestigations = ({
               },
               {
                 label: intl.formatMessage({
+                  defaultMessage: 'Paused',
+                }),
+                value: InvestigationStatus.Paused,
+              },
+              {
+                label: intl.formatMessage({
                   defaultMessage: 'Closed',
                 }),
                 value: InvestigationStatus.Closed,
@@ -120,7 +117,7 @@ const ListInvestigations = ({
             placeholder={intl.formatMessage({
               defaultMessage: 'Select status...',
             })}
-            style={{ width: 200 }}
+            style={{ width: '100%' }}
             value={statusFilter}
           />
         </Col>
@@ -178,54 +175,98 @@ const ListInvestigations = ({
             render: (value, item) => (
               <Link to={`view/${item.key}`}>{value}</Link>
             ),
+            sorter: (a, b) => a.name.localeCompare(b.name),
             title: <FormattedMessage defaultMessage="Name" />,
+            width: 300,
           },
           {
             dataIndex: 'reference',
             key: 'reference',
+            sorter: (a, b) => (a.reference || 0) - (b.reference || 0),
             title: <FormattedMessage defaultMessage="Alert ID" />,
+            width: 120,
           },
           {
             dataIndex: 'status',
             key: 'status',
             render: (value: InvestigationStatus) => (
-              <Typography.Text type={getTextStatus(value)}>
+              <Tag color={getTagColor(value)}>
                 {GetInvestigationStatusValues[value]}
-              </Typography.Text>
+              </Tag>
             ),
+            sorter: (a, b) => a.status.localeCompare(b.status),
             title: <FormattedMessage defaultMessage="Status" />,
+            width: 100,
           },
           {
             dataIndex: 'createdAt',
             key: 'createdAt',
             render: (value: Date) =>
               FormatCalendar(new Date(value), intl, true),
+            sorter: (a, b) =>
+              new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
             title: <FormattedMessage defaultMessage="Date Opened" />,
+            width: 180,
           },
           {
             dataIndex: 'closedAt',
             key: 'closedAt',
-            // eslint-disable-next-line
             render: (value: string) =>
-              value ? dayjs(value).format('DD/MM/YYYY') : undefined,
+              value ? FormatCalendar(new Date(value), intl, true) : undefined,
+            sorter: (a, b) => {
+              if (!a.closedAt && !b.closedAt) return 0;
+              if (!a.closedAt) return 1;
+              if (!b.closedAt) return -1;
+              return (
+                new Date(a.closedAt).getTime() - new Date(b.closedAt).getTime()
+              );
+            },
             title: <FormattedMessage defaultMessage="Date Closed" />,
+            width: 180,
           },
           {
             dataIndex: 'groups',
+            ellipsis: true,
             key: 'groups',
-            render: (value, item) => (
-              <div>
-                <FormattedList
-                  type="unit"
-                  value={item?.groups?.map((group) => group.name)}
-                />
-              </div>
-            ),
+            render: (value, item) => {
+              const groups = item?.groups || [];
+              const groupNames = groups.map((group) => group.name);
+              const displayGroups = groupNames.slice(0, 3);
+              const remainingCount = groupNames.length - 3;
+
+              return (
+                <Tooltip
+                  title={
+                    groupNames.length > 3 ? (
+                      <FormattedList type="unit" value={groupNames} />
+                    ) : null
+                  }
+                >
+                  <div>
+                    {displayGroups.join(', ')}
+                    {remainingCount > 0 && (
+                      <span style={{ color: '#8c8c8c' }}>
+                        <FormattedMessage
+                          defaultMessage=" +{count} more"
+                          values={{ count: remainingCount }}
+                        />
+                      </span>
+                    )}
+                  </div>
+                </Tooltip>
+              );
+            },
             title: <FormattedMessage defaultMessage="Groups" />,
+            width: 200,
           },
           {
             dataIndex: 'description',
             key: 'description',
+            render: (value: string) => (
+              <Tooltip title={value}>
+                <div className={classes.descriptionCell}>{value}</div>
+              </Tooltip>
+            ),
             title: <FormattedMessage defaultMessage="Description" />,
           },
         ]}
@@ -246,11 +287,12 @@ const ListInvestigations = ({
           onClick: () => navigate(`/app/investigations/view/${record.key}`),
         })}
         pagination={{
-          defaultPageSize: 50,
+          defaultPageSize: 25,
           hideOnSinglePage: true,
           // current: currentPage,
           onChange: onPaginationChange,
           // pageSize: currentPageSize,
+          pageSizeOptions: [10, 25, 50, 100],
           showSizeChanger: true,
           showTotal: (total) => `Total Investigations: ${total}`,
           total: data?.investigationRelay.totalCount ?? 0,

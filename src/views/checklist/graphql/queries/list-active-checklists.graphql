@@ -35,6 +35,10 @@ query ActiveChecklists(
           id
         }
         completedAt
+        completedBy {
+          id
+          fullName
+        }
       }
     }
   }

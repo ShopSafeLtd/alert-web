@@ -20,14 +20,18 @@ export type ActiveChecklistSortOptions =
 export interface FilterModelValues {
   activeStatus?: (ChecklistStatus.Completed | ChecklistStatus.InProgress)[];
   businesses: string[];
-  checklistsTab: string;
+  completedBy: string[];
   ownUser: boolean;
+  searchValue: string;
+  templates: string[];
 }
 export interface SetChecklistFilterModel {
   activeStatus?: (ChecklistStatus.Completed | ChecklistStatus.InProgress)[];
   businesses?: string[];
-  checklistsTab?: string;
+  completedBy?: string[];
   ownUser?: boolean;
+  searchValue?: string;
+  templates?: string[];
 }
 
 export interface FilterModel {
@@ -62,8 +66,10 @@ const filterModel: FilterModel = {
   checklistFilter: {
     activeStatus: [ChecklistStatus.InProgress, ChecklistStatus.Completed],
     businesses: [],
-    checklistsTab: 'Checklists',
+    completedBy: [],
     ownUser: false,
+    searchValue: '',
+    templates: [],
   },
   checklistSort: {
     field: 'createdAt',
@@ -74,8 +80,10 @@ const filterModel: FilterModel = {
     state.checklistFilter = {
       activeStatus: [ChecklistStatus.InProgress, ChecklistStatus.Completed],
       businesses: [],
-      checklistsTab: 'Checklists',
+      completedBy: [],
       ownUser: false,
+      searchValue: '',
+      templates: [],
     };
     state.activeChecklistSort = {
       field: 'createdAt',

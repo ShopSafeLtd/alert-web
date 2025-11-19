@@ -7,7 +7,10 @@ import type { ChecklistsQuery } from '#/views/checklist/graphql/queries/__genera
 import type { FetchResult } from '@apollo/client';
 
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
-import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
+import {
+  currentSchemeGroups,
+  currentUserAtom,
+} from '#/providers/UserProvider/UserProvider';
 import errorNotification from '#/types/mutation_notifications/error_notification';
 import { useCreateActiveChecklistMutation } from '#/views/checklist/graphql/mutations/__generated__/create-active-checklist.generated';
 import { useRecycleChecklistMutation } from '#/views/checklist/graphql/mutations/__generated__/recycle-checklist.generated';
@@ -20,6 +23,7 @@ import { notification } from 'antd';
 import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
+import { useNavigate } from 'react-router';
 
 import type {
   ActiveChecklistSortOptions,
@@ -39,7 +43,6 @@ interface Return {
   };
   activeChecklistsData: ActiveChecklistsQuery | undefined;
   activeChecklistsLoading: boolean;
-  activeTab: string;
   checklistFilter: FilterModelValues;
   checklistSort: {
     field: ChecklistSortOptions;
@@ -77,6 +80,7 @@ interface Return {
 
 const useChecklists = (): Return => {
   const intl = useIntl();
+  const navigate = useNavigate();
 
   const { activeChecklistSort, checklistFilter, checklistSort } = useStoreState(
     (state) => state.filter
@@ -85,6 +89,8 @@ const useChecklists = (): Return => {
     useStoreActions((state) => state.filter);
   const schemeId = useAtomValue(currentSchemeIdAtom);
   const userId = useAtomValue(currentUserAtom)?.id ?? '';
+  const userGroups = useAtomValue(currentSchemeGroups);
+  const userGroupIds = userGroups?.map((g) => g.id) || [];
   const [saving, setSaving] = useState(false);
 
   const { data, loading } = useChecklistsQuery({
@@ -96,16 +102,29 @@ const useChecklists = (): Return => {
       where: {
         OR: [
           {
+            groups: {
+              none: {},
+            },
+            // Templates with no roles AND no groups (public templates)
             roles: {
               none: {},
             },
           },
           {
+            // Templates where user has the assigned role
             roles: {
               some: {
                 users: {
                   some: { userId: { equals: userId } },
                 },
+              },
+            },
+          },
+          {
+            // Templates where user is in one of the assigned groups
+            groups: {
+              some: {
+                id: { in: userGroupIds },
               },
             },
           },
@@ -131,8 +150,40 @@ const useChecklists = (): Return => {
       OR: [
         {
           checklist: {
+            OR: [
+              {
+                groups: {
+                  none: {},
+                },
+                // Templates with no roles AND no groups (public templates)
+                roles: {
+                  none: {},
+                },
+              },
+              {
+                // Templates where user has the assigned role
+                roles: {
+                  some: {
+                    users: {
+                      some: { userId: { equals: userId } },
+                    },
+                  },
+                },
+              },
+              {
+                // Templates where user is in one of the assigned groups
+                groups: {
+                  some: {
+                    id: { in: userGroupIds },
+                  },
+                },
+              },
+            ],
             business: checklistFilter.businesses?.length
               ? { some: { id: { in: checklistFilter.businesses } } }
+              : undefined,
+            id: checklistFilter.templates?.length
+              ? { in: checklistFilter.templates }
               : undefined,
             schemes: {
               some: { id: { equals: schemeId } },
@@ -144,6 +195,38 @@ const useChecklists = (): Return => {
             ? { id: { in: checklistFilter.businesses } }
             : undefined,
           checklist: {
+            OR: [
+              {
+                groups: {
+                  none: {},
+                },
+                // Templates with no roles AND no groups (public templates)
+                roles: {
+                  none: {},
+                },
+              },
+              {
+                // Templates where user has the assigned role
+                roles: {
+                  some: {
+                    users: {
+                      some: { userId: { equals: userId } },
+                    },
+                  },
+                },
+              },
+              {
+                // Templates where user is in one of the assigned groups
+                groups: {
+                  some: {
+                    id: { in: userGroupIds },
+                  },
+                },
+              },
+            ],
+            id: checklistFilter.templates?.length
+              ? { in: checklistFilter.templates }
+              : undefined,
             schemes: {
               some: { id: { equals: schemeId } },
             },
@@ -151,9 +234,14 @@ const useChecklists = (): Return => {
 
           completedBy: checklistFilter.ownUser
             ? { id: { equals: userId } }
-            : undefined,
+            : checklistFilter.completedBy?.length
+              ? { id: { in: checklistFilter.completedBy } }
+              : undefined,
         },
       ],
+      completedBy: checklistFilter.completedBy?.length
+        ? { id: { in: checklistFilter.completedBy } }
+        : undefined,
       deleted: { equals: false },
       status: {
         in: checklistFilter.activeStatus,
@@ -199,9 +287,10 @@ const useChecklists = (): Return => {
     title: string;
   }) =>
     createActiveChecklist({
-      onCompleted: () => {
+      onCompleted: (data) => {
         void refetch();
         setSelectedChecklist(null);
+        navigate(`/app/checklists/active/${data.createActiveChecklist.id}`);
       },
       variables: {
         data: {
@@ -298,7 +387,6 @@ const useChecklists = (): Return => {
     activeChecklistSort,
     activeChecklistsData,
     activeChecklistsLoading,
-    activeTab: checklistFilter.checklistsTab,
     checklistFilter,
     checklistSort,
     createActive,

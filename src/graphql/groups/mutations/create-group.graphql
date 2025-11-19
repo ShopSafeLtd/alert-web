@@ -3,10 +3,8 @@ mutation createGroup($data: GroupCreateInput!) {
     id
     name
     description
-    users {
-      id
-      fullName
-    }
+    usersCount
+    businessesCount
     approver {
       id
       fullName

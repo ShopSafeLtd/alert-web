@@ -8,7 +8,7 @@ export type CreateGroupMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateGroupMutation = { __typename?: 'Mutation', createGroup: { __typename?: 'Group', id: string, name: string, description?: string | null, users: Array<{ __typename?: 'User', id: string, fullName: string }>, approver: Array<{ __typename?: 'User', id: string, fullName: string }>, scheme: { __typename?: 'Scheme', id: string, name: string } } };
+export type CreateGroupMutation = { __typename?: 'Mutation', createGroup: { __typename?: 'Group', id: string, name: string, description?: string | null, usersCount: number, businessesCount: number, approver: Array<{ __typename?: 'User', id: string, fullName: string }>, scheme: { __typename?: 'Scheme', id: string, name: string } } };
 
 
 export const CreateGroupDocument = gql`
@@ -17,10 +17,8 @@ export const CreateGroupDocument = gql`
     id
     name
     description
-    users {
-      id
-      fullName
-    }
+    usersCount
+    businessesCount
     approver {
       id
       fullName
