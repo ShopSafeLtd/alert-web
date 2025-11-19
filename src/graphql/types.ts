@@ -253,7 +253,18 @@ export type ActiveChecklist = {
   percentageScore: Scalars['String'];
   signature?: Maybe<Scalars['String']>;
   status: ChecklistStatus;
+  todos: Array<Todo>;
   updatedAt: Scalars['Date'];
+};
+
+
+export type ActiveChecklistTodosArgs = {
+  cursor?: InputMaybe<TodoWhereUniqueInput>;
+  distinct?: InputMaybe<Array<TodoScalarFieldEnum>>;
+  orderBy?: InputMaybe<Array<TodoOrderByWithRelationInput>>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<TodoWhereInput>;
 };
 
 export type ActiveChecklistAnswerInput = {
