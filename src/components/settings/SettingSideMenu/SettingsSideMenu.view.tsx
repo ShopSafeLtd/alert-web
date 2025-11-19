@@ -213,6 +213,17 @@ const SettingsSideMenu = ({
           to: '/app/scheme-settings/statement-templates',
         },
         {
+          icon: <CheckCircleOutlined />,
+          permissions: {
+            method: PermissionMethod.Edit,
+            model: PermissionModel.Checklist,
+          },
+          title: intl.formatMessage({
+            defaultMessage: 'Checklist Templates',
+          }),
+          to: '/app/scheme-settings/checklist-templates',
+        },
+        {
           icon: <CalendarOutlined />,
           permissions: {
             method: PermissionMethod.Read,

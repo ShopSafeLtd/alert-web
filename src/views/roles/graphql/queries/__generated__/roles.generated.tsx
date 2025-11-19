@@ -9,6 +9,7 @@ export type RolesQueryVariables = Types.Exact<{
   take?: Types.InputMaybe<Types.Scalars['Int']>;
   after?: Types.InputMaybe<Types.Scalars['String']>;
   first?: Types.InputMaybe<Types.Scalars['Int']>;
+  orderBy?: Types.InputMaybe<Types.CustomRoleOrderByWithRelationInput>;
 }>;
 
 
@@ -16,13 +17,14 @@ export type RolesQuery = { __typename?: 'Query', roles: { __typename?: 'QueryRol
 
 
 export const RolesDocument = gql`
-    query Roles($schemeId: String!, $skip: Int, $take: Int, $after: String, $first: Int) {
+    query Roles($schemeId: String!, $skip: Int, $take: Int, $after: String, $first: Int, $orderBy: CustomRoleOrderByWithRelationInput) {
   roles(
     schemeId: $schemeId
     skip: $skip
     take: $take
     after: $after
     first: $first
+    orderBy: $orderBy
   ) {
     totalCount
     edges {

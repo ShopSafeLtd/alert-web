@@ -5,21 +5,17 @@ import useChecklists from './useChecklists';
 
 const Checklists = (): JSX.Element => {
   const {
-    // checklistSort,
     activeChecklistSort,
     activeChecklistsData,
     activeChecklistsLoading,
-    activeTab,
     checklistFilter,
     createActive,
     createChecklistOpen,
     data,
     deleteChecklist,
-    deleteTemplate,
     loading,
     saving,
     selectedChecklist,
-    // setChecklistSort,
     setActiveChecklistSort,
     setChecklistFilters,
     toggleCreateChecklistDrawer,
@@ -27,21 +23,17 @@ const Checklists = (): JSX.Element => {
 
   return (
     <View
-      // checklistSort={checklistSort}
       activeChecklistSort={activeChecklistSort}
       activeChecklistsData={activeChecklistsData}
       activeChecklistsLoading={activeChecklistsLoading}
-      activeTab={activeTab}
       checklistFilter={checklistFilter}
       createActive={createActive}
       createChecklistOpen={createChecklistOpen}
       data={data}
       deleteChecklist={deleteChecklist}
-      deleteTemplate={deleteTemplate}
       loading={loading}
       saving={saving}
       selectedChecklist={selectedChecklist}
-      // setChecklistSort={setChecklistSort}
       setActiveChecklistSort={setActiveChecklistSort}
       setChecklistFilters={setChecklistFilters}
       toggleCreateChecklistDrawer={toggleCreateChecklistDrawer}

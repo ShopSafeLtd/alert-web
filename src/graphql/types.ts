@@ -2202,6 +2202,7 @@ export type ChecklistWhereInput = {
   business?: InputMaybe<BusinessListRelationFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
   deleted?: InputMaybe<BoolFilter>;
+  groups?: InputMaybe<GroupListRelationFilter>;
   id?: InputMaybe<StringFilter>;
   roles?: InputMaybe<CustomRoleListRelationFilter>;
   schemes?: InputMaybe<SchemeListRelationFilter>;
@@ -3784,6 +3785,21 @@ export type CustomRoleListRelationFilter = {
   every?: InputMaybe<CustomRoleWhereInput>;
   none?: InputMaybe<CustomRoleWhereInput>;
   some?: InputMaybe<CustomRoleWhereInput>;
+};
+
+export type CustomRoleOrderBy = {
+  name?: InputMaybe<SortOrder>;
+};
+
+export type CustomRoleOrderByRelationAggregateInput = {
+  _count?: InputMaybe<SortOrder>;
+};
+
+export type CustomRoleOrderByWithRelationInput = {
+  createdAt?: InputMaybe<SortOrder>;
+  name?: InputMaybe<SortOrder>;
+  type?: InputMaybe<SortOrder>;
+  users?: InputMaybe<UserSchemeOrderByRelationAggregateInput>;
 };
 
 export type CustomRoleWhereInput = {
@@ -6693,6 +6709,7 @@ export enum GraphType {
 export type Group = {
   __typename?: 'Group';
   approver: Array<User>;
+  businessesCount: Scalars['Int'];
   description?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   name: Scalars['String'];
@@ -6702,6 +6719,7 @@ export type Group = {
   updatedAt: Scalars['Date'];
   uploaded: Scalars['Boolean'];
   users: Array<User>;
+  usersCount: Scalars['Int'];
 };
 
 
@@ -16697,6 +16715,7 @@ export type QueryRolesArgs = {
   before?: InputMaybe<Scalars['String']>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<CustomRoleOrderByWithRelationInput>;
   roleId?: InputMaybe<Scalars['String']>;
   schemeId: Scalars['String'];
   skip?: InputMaybe<Scalars['Int']>;

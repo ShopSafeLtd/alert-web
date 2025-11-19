@@ -147,6 +147,12 @@ const ListStockItems = lazy(
 const ListIncidentStatuses = lazy(
   () => import('../../../views/settings/incident-statuses/ListIncidentStatuses')
 );
+const ChecklistTemplates = lazy(
+  () =>
+    import(
+      '../../../views/scheme-settings/checklist-templates/ChecklistTemplates.container'
+    )
+);
 
 const SchemeSettings = (): JSX.Element => {
   const [collapsed, setCollapsed] = useState(false);
@@ -914,6 +920,19 @@ const SchemeSettings = (): JSX.Element => {
                 </PermissionCheckWrapper>
               }
               path="stock-items"
+            />
+            <Route
+              element={
+                <PermissionCheckWrapper
+                  permission={{
+                    method: PermissionMethod.Edit,
+                    model: PermissionModel.Checklist,
+                  }}
+                >
+                  <ChecklistTemplates />
+                </PermissionCheckWrapper>
+              }
+              path="checklist-templates"
             />
           </Routes>
         </Suspense>
