@@ -4,6 +4,7 @@ query Roles(
   $take: Int
   $after: String
   $first: Int
+  $orderBy: CustomRoleOrderByWithRelationInput
 ) {
   roles(
     schemeId: $schemeId
@@ -11,6 +12,7 @@ query Roles(
     take: $take
     after: $after
     first: $first
+    orderBy: $orderBy
   ) {
     totalCount
     edges {

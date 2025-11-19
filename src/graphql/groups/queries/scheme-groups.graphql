@@ -1,11 +1,15 @@
 query schemeGroups(
   $where: GroupWhereInput
   $orderBy: [GroupOrderByWithRelationInput!]
+  $skip: Int
+  $take: Int
 ) {
-  groups(where: $where, orderBy: $orderBy) {
+  groups(where: $where, orderBy: $orderBy, skip: $skip, take: $take) {
     id
     name
     description
+    usersCount
+    businessesCount
     scheme {
       id
       name
