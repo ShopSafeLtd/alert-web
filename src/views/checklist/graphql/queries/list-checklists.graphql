@@ -8,5 +8,17 @@ query Checklists(
     id
     titleLocaled
     descriptionLocaled
+    roles {
+      id
+    }
+    groups {
+      id
+    }
+    users {
+      id
+    }
+    business {
+      id
+    }
   }
 }
