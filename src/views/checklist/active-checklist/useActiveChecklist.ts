@@ -10,7 +10,8 @@ import {
 import { Form, type FormInstance } from 'antd';
 import { useAtomValue } from 'jotai/index';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
+import { useSearchParams } from 'react-router-dom';
 
 import FONT_FAMILIES from '../../../components/onboarding/Onboarding/SchemeTerms/utils/Fonts';
 
@@ -124,6 +125,9 @@ const generateDefaultSign = (name: string) =>
 
 const useActiveChecklist = (): Return => {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const isEditMode = searchParams.get('edit') === 'true';
   const [form] = Form.useForm<FormData>();
   const [sections, setSections] = useState<ActiveChecklistSection[]>([]);
   const name = useAtomValue(currentUserAtom)?.fullName ?? '';
@@ -146,6 +150,8 @@ const useActiveChecklist = (): Return => {
 
   const autoSaveTimerRef = useRef<NodeJS.Timeout | null>(null);
   const saveStatusTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const originalSignatureRef = useRef<null | string>(null);
+  const originalCompletionDateRef = useRef<null | string>(null);
 
   const update = (value: string) => {
     setSign(value);
@@ -235,6 +241,11 @@ const useActiveChecklist = (): Return => {
 
   // Debounced auto-save function
   const debouncedSave = useCallback(() => {
+    // Don't auto-save when editing a completed checklist
+    if (isEditMode) {
+      return;
+    }
+
     if (autoSaveTimerRef.current) {
       clearTimeout(autoSaveTimerRef.current);
     }
@@ -243,7 +254,7 @@ const useActiveChecklist = (): Return => {
       setSaveStatus('saving');
       saveChecklist(true);
     }, 10_000); // 10 seconds
-  }, []);
+  }, [isEditMode]);
 
   // Watch form changes for completion tracking and auto-save
   const formValues = Form.useWatch([], form);
@@ -369,6 +380,16 @@ const useActiveChecklist = (): Return => {
         if (initData?.activeChecklist?.signature) {
           setSign(initData.activeChecklist.signature);
         }
+
+        // Store original signature and completion date if editing a completed checklist
+        if (isEditMode && initData?.activeChecklist?.status === 'COMPLETED') {
+          originalSignatureRef.current =
+            initData.activeChecklist.signature || '';
+          originalCompletionDateRef.current = initData.activeChecklist
+            .completedAt
+            ? String(initData.activeChecklist.completedAt)
+            : '';
+        }
       } catch (error) {
         console.log(error);
       }
@@ -390,6 +411,10 @@ const useActiveChecklist = (): Return => {
       }
       saveStatusTimerRef.current = setTimeout(() => {
         setSaveStatus('idle');
+        // If in edit mode, navigate back to completed view
+        if (isEditMode) {
+          navigate(`/app/checklists/active/${id || ''}`);
+        }
       }, 3000);
     },
     onError: () => {
@@ -579,6 +604,11 @@ const useActiveChecklist = (): Return => {
       )
       .flat();
 
+    // When editing a completed checklist (isEditMode=true), the backend should preserve:
+    // - completedBy (original user who completed it)
+    // - completedAt (original completion date)
+    // These fields are not part of CompleteActiveChecklistInput and are managed by the backend.
+    // By passing the original signature, the backend should recognize this as an edit operation.
     void completeChecklist({
       variables: {
         data: {
@@ -594,7 +624,11 @@ const useActiveChecklist = (): Return => {
           })),
           draft,
           max: maxTotal,
-          signature: sign,
+          // Use original signature if editing a completed checklist, otherwise use current signature
+          signature:
+            isEditMode && originalSignatureRef.current
+              ? originalSignatureRef.current
+              : sign,
           total,
         },
         where: id || '',
