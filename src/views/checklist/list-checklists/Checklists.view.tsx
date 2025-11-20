@@ -8,7 +8,7 @@ import BusinessesSelect from '#/components/form-components/BusinessesSelect/Busi
 import UsersSelect from '#/components/form-components/UsersSelect/UsersSelect.view';
 import DebouncedInput from '#/utils/debounced-input';
 import { DownOutlined, SettingOutlined } from '@ant-design/icons';
-import { faDownload, faTrash } from '@fortawesome/pro-light-svg-icons';
+import { faDownload, faEdit, faTrash } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
@@ -343,6 +343,31 @@ const ChecklistsView: React.FC<ChecklistsViewProps> = ({
                           />
                         </Tooltip>
                       )}
+                    {record.status === ChecklistStatus.Completed && (
+                      <PermissionCheckWrapper
+                        permission={{
+                          method: PermissionMethod.Edit,
+                          model: PermissionModel.Checklist,
+                        }}
+                        unauthorizedElement={<div />}
+                      >
+                        <Tooltip
+                          title={intl.formatMessage({
+                            defaultMessage: 'Edit Checklist',
+                          })}
+                        >
+                          <Button
+                            icon={<FontAwesomeIcon icon={faEdit} />}
+                            onClick={() =>
+                              navigate(
+                                `/app/checklists/active/${record.key}?edit=true`
+                              )
+                            }
+                            size="small"
+                          />
+                        </Tooltip>
+                      </PermissionCheckWrapper>
+                    )}
                     <PermissionCheckWrapper
                       permission={{
                         method: PermissionMethod.Delete,

@@ -29,6 +29,7 @@ import {
   Select,
   Space,
   Tabs,
+  Typography,
   Upload,
 } from 'antd';
 import FONT_FAMILIES from 'components/onboarding/Onboarding/SchemeTerms/utils/Fonts';
@@ -37,6 +38,7 @@ import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router';
+import { useSearchParams } from 'react-router-dom';
 
 import SignatureInput from '../../../components/SignBox';
 import SigSeal from '../../../components/onboarding/Onboarding/SchemeTerms/SigSeal';
@@ -122,6 +124,8 @@ const ActiveChecklistView = ({
   const navigate = useNavigate();
   const classes = useStyles();
   const theme = useStoreState((state) => state.theme.currentTheme);
+  const [searchParams] = useSearchParams();
+  const isEditMode = searchParams.get('edit') === 'true';
 
   const watching = Form.useWatch('sections', form);
 
@@ -172,10 +176,15 @@ const ActiveChecklistView = ({
       title: data?.activeChecklist.name || '',
     })
   );
-  if (data && data?.activeChecklist.status === ChecklistStatus.Completed) {
+  if (
+    data &&
+    data?.activeChecklist.status === ChecklistStatus.Completed &&
+    !isEditMode
+  ) {
     return (
       <CompletedChecklistView
         additionalInfo={data?.activeChecklist.comments || ''}
+        checklistId={id}
         checklistSections={sections}
         completedAt={
           data.activeChecklist?.completedAt
@@ -204,6 +213,26 @@ const ActiveChecklistView = ({
           })
         }
       />
+      {/* Edit Mode Indicator */}
+      {isEditMode &&
+        data?.activeChecklist.status === ChecklistStatus.Completed && (
+          <div
+            style={{
+              backgroundColor: '#fff7e6',
+              border: '1px solid #ffd591',
+              borderRadius: 4,
+              marginBottom: 16,
+              padding: 12,
+            }}
+          >
+            <Typography.Text strong style={{ color: '#fa8c16' }}>
+              {intl.formatMessage({
+                defaultMessage:
+                  'Editing Completed Checklist - Changes will preserve original signature and completion date',
+              })}
+            </Typography.Text>
+          </div>
+        )}
 
       {/* Save Status Indicator */}
       {renderSaveStatus()}
@@ -662,9 +691,14 @@ const ActiveChecklistView = ({
         )}
         <Card className={classes.signatureSection} loading={loading}>
           <h3 className={classes.signatureHeader}>
-            {intl.formatMessage({
-              defaultMessage: 'Additional Information & Signature',
-            })}
+            {isEditMode &&
+            data?.activeChecklist.status === ChecklistStatus.Completed
+              ? intl.formatMessage({
+                  defaultMessage: 'Additional Information',
+                })
+              : intl.formatMessage({
+                  defaultMessage: 'Additional Information & Signature',
+                })}
           </h3>
           <Col span={24}>
             <Col span={13}>
@@ -684,90 +718,71 @@ const ActiveChecklistView = ({
               </Form.Item>
             </Col>
           </Col>
-          <Col span={24}>
-            <Form.Item
-              label={intl.formatMessage({
-                defaultMessage: 'Sign here',
-              })}
-              rules={[
-                () => ({
-                  validator() {
-                    if (tab === 'generate') {
-                      if (selectedFont) {
-                        return Promise.resolve();
+          {/* Hide signature section when editing a completed checklist */}
+          {!(
+            isEditMode &&
+            data?.activeChecklist.status === ChecklistStatus.Completed
+          ) && (
+            <Col span={24}>
+              <Form.Item
+                label={intl.formatMessage({
+                  defaultMessage: 'Sign here',
+                })}
+                rules={[
+                  () => ({
+                    validator() {
+                      if (tab === 'generate') {
+                        if (selectedFont) {
+                          return Promise.resolve();
+                        }
+                        return Promise.reject(
+                          new Error('Please select a signature!')
+                        );
+                      }
+                      if (tab === 'upload') {
+                        if (file) {
+                          return Promise.resolve();
+                        }
+                        return Promise.reject(
+                          new Error('Please upload a signature!')
+                        );
+                      }
+                      if (tab === 'draw') {
+                        if (sign) {
+                          return Promise.resolve();
+                        }
+                        return Promise.reject(new Error('Please sign!'));
                       }
                       return Promise.reject(
-                        new Error('Please select a signature!')
+                        new Error('Please select/enter a signature!')
                       );
-                    }
-                    if (tab === 'upload') {
-                      if (file) {
-                        return Promise.resolve();
-                      }
-                      return Promise.reject(
-                        new Error('Please upload a signature!')
-                      );
-                    }
-                    if (tab === 'draw') {
-                      if (sign) {
-                        return Promise.resolve();
-                      }
-                      return Promise.reject(new Error('Please sign!'));
-                    }
-                    return Promise.reject(
-                      new Error('Please select/enter a signature!')
-                    );
-                  },
-                }),
-              ]}
-            >
-              <div style={{ display: 'flex', width: '100%' }}>
-                <Tabs
-                  activeKey={tab}
-                  destroyInactiveTabPane
-                  onChange={(tabKey) => {
-                    setTab(tabKey);
-                    if (tabKey === 'upload' && file?.file) {
-                      setSign('');
+                    },
+                  }),
+                ]}
+              >
+                <div style={{ display: 'flex', width: '100%' }}>
+                  <Tabs
+                    activeKey={tab}
+                    destroyInactiveTabPane
+                    onChange={(tabKey) => {
+                      setTab(tabKey);
+                      if (tabKey === 'upload' && file?.file) {
+                        setSign('');
 
-                      update(
-                        ReactDOMServer.renderToString(
-                          <img
-                            // eslint-disable-next-line formatjs/no-literal-string-in-jsx
-                            alt="file"
-                            height={100}
-                            src={`data:application/pdf;base64,${file?.file}`}
-                            width={300}
-                          />
-                        )
-                      );
-                    }
-                    if (tabKey === 'generate') {
-                      setSign('');
-                      update(
-                        ReactDOMServer.renderToString(
-                          <SigSeal
-                            font={selectedFont}
-                            height={100}
-                            key={selectedFont}
-                            name={userName}
-                            width={300}
-                          />
-                        )
-                      );
-                    }
-                    if (tabKey === 'draw') {
-                      update('');
-                    }
-                  }}
-                  style={{ height: 250, width: 500 }}
-                  type="card"
-                >
-                  <Tabs.TabPane key="generate" tab="Generate">
-                    <Select
-                      defaultValue={selectedFont}
-                      onChange={(value) => {
-                        setSelectedFont(value);
+                        update(
+                          ReactDOMServer.renderToString(
+                            <img
+                              // eslint-disable-next-line formatjs/no-literal-string-in-jsx
+                              alt="file"
+                              height={100}
+                              src={`data:application/pdf;base64,${file?.file}`}
+                              width={300}
+                            />
+                          )
+                        );
+                      }
+                      if (tabKey === 'generate') {
+                        setSign('');
                         update(
                           ReactDOMServer.renderToString(
                             <SigSeal
@@ -779,103 +794,128 @@ const ActiveChecklistView = ({
                             />
                           )
                         );
-                      }}
-                      style={{
-                        fontFamily: selectedFont,
-                        marginBottom: 20,
-                      }}
-                    >
-                      {FONT_FAMILIES.map((font) => (
-                        <Select.Option
-                          key={font}
-                          style={{
-                            fontFamily: font,
-                          }}
-                          value={font}
-                        >
-                          {userName}
-                        </Select.Option>
-                      ))}
-                    </Select>
-                    <SigSeal
-                      font={selectedFont}
-                      height={100}
-                      key={selectedFont}
-                      name={userName}
-                      width={300}
-                    />
-                  </Tabs.TabPane>
-                  <Tabs.TabPane key="upload" tab="Upload">
-                    <>
-                      <Upload
-                        beforeUpload={(f) => {
-                          const reader = new FileReader();
-                          reader.addEventListener('load', (e) => {
-                            if (e.target) {
-                              const base64File = e.target.result;
-                              if (typeof base64File === 'string') {
-                                const base64result = base64File.split(',')[1];
-
-                                setFile({
-                                  file: base64result,
-                                  name: f.name,
-                                });
-                                update(
-                                  ReactDOMServer.renderToString(
-                                    <img
-                                      // eslint-disable-next-line formatjs/no-literal-string-in-jsx
-                                      alt="file"
-                                      height={100}
-                                      src={base64File}
-                                      width={300}
-                                    />
-                                  )
-                                );
-                              }
-                            }
-                          });
-                          reader.readAsDataURL(f);
-                          // Prevent upload
-                          return false;
+                      }
+                      if (tabKey === 'draw') {
+                        update('');
+                      }
+                    }}
+                    style={{ height: 250, width: 500 }}
+                    type="card"
+                  >
+                    <Tabs.TabPane key="generate" tab="Generate">
+                      <Select
+                        defaultValue={selectedFont}
+                        onChange={(value) => {
+                          setSelectedFont(value);
+                          update(
+                            ReactDOMServer.renderToString(
+                              <SigSeal
+                                font={selectedFont}
+                                height={100}
+                                key={selectedFont}
+                                name={userName}
+                                width={300}
+                              />
+                            )
+                          );
                         }}
-                        showUploadList={false}
+                        style={{
+                          fontFamily: selectedFont,
+                          marginBottom: 20,
+                        }}
                       >
-                        <Button key="uploadButton" type="primary">
-                          <FontAwesomeIcon
-                            icon={faFileUpload}
-                            style={{ fontSize: 16, marginRight: '10px' }}
-                          />
-                          {intl.formatMessage({
-                            defaultMessage: 'Upload',
-                          })}
-                        </Button>
-                      </Upload>
-                      {file && (
-                        <div style={{ paddingLeft: 10, paddingTop: 10 }}>
-                          <img
-                            // eslint-disable-next-line formatjs/no-literal-string-in-jsx
-                            alt="file"
-                            height={100}
-                            src={`data:application/pdf;base64,${file.file}`}
-                            width={300}
-                          />
-                        </div>
-                      )}
-                    </>
-                  </Tabs.TabPane>
-                  <Tabs.TabPane key="draw" tab="Draw">
-                    <SignatureInput
-                      hidden={false}
-                      onChange={(val: string) => {
-                        update(val);
-                        setSign(val);
-                      }}
-                    />
-                  </Tabs.TabPane>
-                </Tabs>
-              </div>
-            </Form.Item>
-          </Col>
+                        {FONT_FAMILIES.map((font) => (
+                          <Select.Option
+                            key={font}
+                            style={{
+                              fontFamily: font,
+                            }}
+                            value={font}
+                          >
+                            {userName}
+                          </Select.Option>
+                        ))}
+                      </Select>
+                      <SigSeal
+                        font={selectedFont}
+                        height={100}
+                        key={selectedFont}
+                        name={userName}
+                        width={300}
+                      />
+                    </Tabs.TabPane>
+                    <Tabs.TabPane key="upload" tab="Upload">
+                      <>
+                        <Upload
+                          beforeUpload={(f) => {
+                            const reader = new FileReader();
+                            reader.addEventListener('load', (e) => {
+                              if (e.target) {
+                                const base64File = e.target.result;
+                                if (typeof base64File === 'string') {
+                                  const base64result = base64File.split(',')[1];
+
+                                  setFile({
+                                    file: base64result,
+                                    name: f.name,
+                                  });
+                                  update(
+                                    ReactDOMServer.renderToString(
+                                      <img
+                                        // eslint-disable-next-line formatjs/no-literal-string-in-jsx
+                                        alt="file"
+                                        height={100}
+                                        src={base64File}
+                                        width={300}
+                                      />
+                                    )
+                                  );
+                                }
+                              }
+                            });
+                            reader.readAsDataURL(f);
+                            // Prevent upload
+                            return false;
+                          }}
+                          showUploadList={false}
+                        >
+                          <Button key="uploadButton" type="primary">
+                            <FontAwesomeIcon
+                              icon={faFileUpload}
+                              style={{ fontSize: 16, marginRight: '10px' }}
+                            />
+                            {intl.formatMessage({
+                              defaultMessage: 'Upload',
+                            })}
+                          </Button>
+                        </Upload>
+                        {file && (
+                          <div style={{ paddingLeft: 10, paddingTop: 10 }}>
+                            <img
+                              // eslint-disable-next-line formatjs/no-literal-string-in-jsx
+                              alt="file"
+                              height={100}
+                              src={`data:application/pdf;base64,${file.file}`}
+                              width={300}
+                            />
+                          </div>
+                        )}
+                      </>
+                    </Tabs.TabPane>
+                    <Tabs.TabPane key="draw" tab="Draw">
+                      <SignatureInput
+                        hidden={false}
+                        onChange={(val: string) => {
+                          update(val);
+                          setSign(val);
+                        }}
+                      />
+                    </Tabs.TabPane>
+                  </Tabs>
+                </div>
+              </Form.Item>
+            </Col>
+          )}
         </Card>
 
         <Row>

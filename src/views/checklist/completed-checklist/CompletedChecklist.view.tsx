@@ -1,4 +1,7 @@
 /* eslint-disable formatjs/no-literal-string-in-jsx */
+import PermissionCheckWrapper from '#/components/PermissionCheck/PermissionCheckWrapper';
+import { faEdit } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
   Card,
@@ -9,7 +12,10 @@ import {
   Space,
   Typography,
 } from 'antd';
+import { PermissionMethod, PermissionModel } from 'graphql/types';
 import React, { useEffect, useRef, useState } from 'react';
+import { useIntl } from 'react-intl';
+import { useNavigate } from 'react-router';
 import { useReactToPrint } from 'react-to-print';
 
 import type { ActiveChecklistSection } from '../active-checklist/useActiveChecklist';
@@ -37,6 +43,7 @@ const indexToLetter = (num: number) => (num + 10).toString(36).toUpperCase();
 
 const CompletedChecklistView = ({
   additionalInfo,
+  checklistId,
   checklistSections,
   completedAt,
   completedByUser,
@@ -47,6 +54,7 @@ const CompletedChecklistView = ({
   title,
 }: {
   additionalInfo: string;
+  checklistId?: string;
   checklistSections: ActiveChecklistSection[];
   completedAt: string;
   completedByUser: string;
@@ -56,6 +64,8 @@ const CompletedChecklistView = ({
   theme?: 'dark' | 'light';
   title: string;
 }) => {
+  const intl = useIntl();
+  const navigate = useNavigate();
   const questions: QuestionWeight[] = [];
   const images: {
     name: string;
@@ -674,14 +684,41 @@ const CompletedChecklistView = ({
           extra={[
             <>
               <Col flex={1} />
+              {checklistId && (
+                <PermissionCheckWrapper
+                  permission={{
+                    method: PermissionMethod.Edit,
+                    model: PermissionModel.Checklist,
+                  }}
+                  unauthorizedElement={<div />}
+                >
+                  <Button
+                    icon={<FontAwesomeIcon icon={faEdit} />}
+                    onClick={() =>
+                      navigate(
+                        `/app/checklists/active/${checklistId}?edit=true`
+                      )
+                    }
+                    style={{ marginRight: 8 }}
+                  >
+                    {intl.formatMessage({
+                      defaultMessage: 'Edit',
+                    })}
+                  </Button>
+                </PermissionCheckWrapper>
+              )}
               <Button onClick={() => handlePrint()} type="primary">
-                Print
+                {intl.formatMessage({
+                  defaultMessage: 'Print',
+                })}
               </Button>
             </>,
           ]}
           onBack={onBack}
           style={{ paddingLeft: 0, paddingRight: 0, width: '100%' }}
-          title="Checklists"
+          title={intl.formatMessage({
+            defaultMessage: 'Checklists',
+          })}
         />
       </Row>
 
