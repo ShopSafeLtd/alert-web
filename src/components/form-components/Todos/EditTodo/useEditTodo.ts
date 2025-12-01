@@ -107,6 +107,7 @@ const useEditTodo = ({ initData, onClose, todoId }: Props): Return => {
   const schemeId = useAtomValue(currentSchemeIdAtom);
   const currentScheme = useAtomValue(currentSchemeAtom);
   const activityAssignToUser = currentScheme?.activityAssignToUser;
+  const activityAllowAllGroups = currentScheme?.activityAllowAllGroups;
   const taskTimeTracking = currentScheme?.taskTimeTracking;
   const userId = useAtomValue(userIdAtom);
   const [saving, setSaving] = useState(false);
@@ -235,32 +236,34 @@ const useEditTodo = ({ initData, onClose, todoId }: Props): Return => {
         fullName: SortOrder.Asc,
       },
       where: {
-        OR: [
-          {
-            businesses: todoData?.todo?.business?.id
-              ? {
+        OR: activityAllowAllGroups
+          ? undefined
+          : [
+              {
+                businesses: todoData?.todo?.business?.id
+                  ? {
+                      some: {
+                        id: {
+                          equals: todoData?.todo?.business?.id,
+                        },
+                      },
+                    }
+                  : undefined,
+              },
+              {
+                groups: {
                   some: {
-                    id: {
-                      equals: todoData?.todo?.business?.id,
-                    },
-                  },
-                }
-              : undefined,
-          },
-          {
-            groups: {
-              some: {
-                users: {
-                  some: {
-                    id: {
-                      equals: userId,
+                    users: {
+                      some: {
+                        id: {
+                          equals: userId,
+                        },
+                      },
                     },
                   },
                 },
               },
-            },
-          },
-        ],
+            ],
         schemes: {
           some: {
             AND: [

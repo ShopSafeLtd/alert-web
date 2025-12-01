@@ -1254,6 +1254,42 @@ export type BansOnOffenderUpdate = {
   update?: InputMaybe<Array<BanNestedUpdate>>;
 };
 
+export type BillingCalculationSummary = {
+  __typename?: 'BillingCalculationSummary';
+  /** Grand total of all billing costs */
+  grandTotal: Scalars['Float'];
+  /** Number of tenants in this calculation */
+  tenantCount: Scalars['Int'];
+  /** Total cost from per-business billing */
+  totalBusinessCost: Scalars['Float'];
+  /** Total cost from flat rate billing */
+  totalFlatRateCost: Scalars['Float'];
+  /** Total number of unique users across all tenants */
+  totalUniqueUsers: Scalars['Int'];
+  /** Total cost from per-user billing */
+  totalUserCost: Scalars['Float'];
+};
+
+export type BillingCalculationTenant = {
+  __typename?: 'BillingCalculationTenant';
+  /** Billing mode for this tenant */
+  billingMode: BillingMode;
+  /** Billing rate for this tenant */
+  billingRate: Scalars['Float'];
+  /** Whether this tenant is the primary user charge tenant */
+  isPrimaryUserChargeTenant: Scalars['Boolean'];
+  /** Optional notes for this tenant billing */
+  notes?: Maybe<Scalars['String']>;
+  /** Quantity being billed (users or businesses) */
+  quantity: Scalars['Int'];
+  /** Calculated subtotal for this tenant */
+  subtotal: Scalars['Float'];
+  /** ID of the tenant (scheme) */
+  tenantId: Scalars['String'];
+  /** Name of the tenant (scheme) */
+  tenantName: Scalars['String'];
+};
+
 export type BillingCustomer = {
   __typename?: 'BillingCustomer';
   createdAt: Scalars['Date'];
@@ -1261,6 +1297,20 @@ export type BillingCustomer = {
   name: Scalars['String'];
   schemeCount: Scalars['Int'];
   schemes: Array<Scheme>;
+};
+
+export type BillingCustomerCalculation = {
+  __typename?: 'BillingCustomerCalculation';
+  /** ID of the billing customer */
+  billingCustomerId: Scalars['String'];
+  /** Name of the billing customer */
+  billingCustomerName: Scalars['String'];
+  /** Timestamp when this calculation was performed */
+  calculatedAt: Scalars['Date'];
+  /** Summary of all billing calculations */
+  summary: BillingCalculationSummary;
+  /** List of tenants and their billing calculations */
+  tenants: Array<BillingCalculationTenant>;
 };
 
 export type BillingCustomerCreateInput = {
@@ -15299,6 +15349,8 @@ export type Query = {
   ban: Ban;
   bans: Array<Ban>;
   billingCustomer: BillingCustomer;
+  /** Calculate billing totals for a billing customer and their tenants */
+  billingCustomerCalculation: BillingCustomerCalculation;
   billingCustomers: QueryBillingCustomersConnection;
   brand: Brand;
   brands: QueryBrandsConnection;
@@ -15496,6 +15548,8 @@ export type Query = {
   totalLoss: Scalars['Float'];
   totalUserSessionsGraph: Array<Graph>;
   trainingVideo: TrainingVideo;
+  /** Get audit information showing which users have watched a training video */
+  trainingVideoAudit: TrainingVideoAudit;
   trainingVideos: Array<TrainingVideo>;
   translateText: Array<TranslatedText>;
   updates: Array<Update>;
@@ -15722,6 +15776,11 @@ export type QueryBansArgs = {
 
 export type QueryBillingCustomerArgs = {
   where: BillingCustomerWhereUniqueInput;
+};
+
+
+export type QueryBillingCustomerCalculationArgs = {
+  billingCustomerId: Scalars['String'];
 };
 
 
@@ -17155,6 +17214,11 @@ export type QueryTotalUserSessionsGraphArgs = {
 
 export type QueryTrainingVideoArgs = {
   id: Scalars['String'];
+};
+
+
+export type QueryTrainingVideoAuditArgs = {
+  trainingVideoId: Scalars['String'];
 };
 
 
@@ -19162,6 +19226,7 @@ export type Scheme = {
   actions: Array<Action>;
   actionsInScheme: Array<Action>;
   activeChecklists: Array<ActiveChecklist>;
+  activityAllowAllGroups: Scalars['Boolean'];
   activityAssignToUser: Scalars['Boolean'];
   allowTodoTemplateOverride: Scalars['Boolean'];
   approvalDueDays?: Maybe<Scalars['Int']>;
@@ -19951,6 +20016,7 @@ export type SchemeTier = {
 };
 
 export type SchemeUpdateInput = {
+  activityAllowAllGroups?: InputMaybe<SetBooleanHelper>;
   activityAssignToUser?: InputMaybe<SetBooleanHelper>;
   aiDataEnrichment?: InputMaybe<SetBooleanHelper>;
   aiVisionAutoVerifyThreshold?: InputMaybe<AiVisionMatchConfidence>;
@@ -22802,10 +22868,12 @@ export type TrainingVideo = {
   __typename?: 'TrainingVideo';
   completions: Array<TrainingVideoCompletion>;
   createdAt: Scalars['Date'];
+  currentUserCompletion?: Maybe<TrainingVideoCompletion>;
   description?: Maybe<Scalars['String']>;
   duration?: Maybe<Scalars['Int']>;
   groups: Array<Group>;
   id: Scalars['ID'];
+  isCompletedByCurrentUser: Scalars['Boolean'];
   scheme: Scheme;
   schemeId: Scalars['String'];
   tags: Array<Tag>;
@@ -22817,6 +22885,17 @@ export type TrainingVideo = {
   uploadedById: Scalars['String'];
   videoUrl: Scalars['String'];
   viewCount: Scalars['Int'];
+};
+
+export type TrainingVideoAudit = {
+  __typename?: 'TrainingVideoAudit';
+  completedCount: Scalars['Int'];
+  completionRate: Scalars['Float'];
+  notCompletedCount: Scalars['Int'];
+  totalUsers: Scalars['Int'];
+  trainingVideoId: Scalars['String'];
+  trainingVideoTitle: Scalars['String'];
+  users: Array<TrainingVideoUserCompletion>;
 };
 
 export type TrainingVideoCompletion = {
@@ -22836,6 +22915,15 @@ export type TrainingVideoOrderByInput = {
   title?: InputMaybe<SortOrder>;
   updatedAt?: InputMaybe<SortOrder>;
   viewCount?: InputMaybe<SortOrder>;
+};
+
+export type TrainingVideoUserCompletion = {
+  __typename?: 'TrainingVideoUserCompletion';
+  completedAt?: Maybe<Scalars['Date']>;
+  hasCompleted: Scalars['Boolean'];
+  userEmail?: Maybe<Scalars['String']>;
+  userFullName: Scalars['String'];
+  userId: Scalars['String'];
 };
 
 export type TrainingVideoWhereInput = {

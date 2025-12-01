@@ -131,6 +131,7 @@ const useAddTodo = ({
   const schemeId = useAtomValue(currentSchemeIdAtom);
   const currentScheme = useAtomValue(currentSchemeAtom);
   const activityAssignToUser = currentScheme?.activityAssignToUser;
+  const activityAllowAllGroups = currentScheme?.activityAllowAllGroups;
   const taskTimeTracking = currentScheme?.taskTimeTracking;
 
   const userId = useAtomValue(userIdAtom);
@@ -261,17 +262,19 @@ const useAddTodo = ({
             }
           : undefined,
 
-        groups: {
-          some: {
-            users: {
+        groups: activityAllowAllGroups
+          ? undefined
+          : {
               some: {
-                id: {
-                  equals: userId,
+                users: {
+                  some: {
+                    id: {
+                      equals: userId,
+                    },
+                  },
                 },
               },
             },
-          },
-        },
         schemes: {
           some: {
             AND: [

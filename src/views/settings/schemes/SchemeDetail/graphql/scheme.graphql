@@ -28,6 +28,7 @@ query schemeDetails($where: SchemeWhereUniqueInput!) {
     incidentCustomQuestionRadio
     incidentTypeTooltip
     activityAssignToUser
+    activityAllowAllGroups
     requireActivityAuthorised
     useBusinessGroupsOnIncident
     imagesRequiredOnOffenders

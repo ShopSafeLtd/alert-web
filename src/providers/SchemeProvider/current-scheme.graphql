@@ -36,6 +36,7 @@ query CurrentSchemeProvider($where: UserSchemeWhereUniqueInput!) {
       dontAutoSetTimeDate
       dontPrefillOffenderName
       activityAssignToUser
+      activityAllowAllGroups
       autoPopulateDescription
       defaultPublicOffenderDOB
       disableGalleryOnNative

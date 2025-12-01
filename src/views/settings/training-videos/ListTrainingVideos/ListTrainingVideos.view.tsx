@@ -1,4 +1,5 @@
 import {
+  faChartBar,
   faEdit,
   faEye,
   faPlus,
@@ -9,6 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Card, Col, Empty, Row, Spin, Typography } from 'antd';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
+import { useNavigate } from 'react-router-dom';
 
 import type { TrainingVideo } from '../types';
 
@@ -54,6 +56,7 @@ const ListTrainingVideosView: React.FC<ListTrainingVideosViewProps> = ({
 }) => {
   const classes = useStyles();
   const intl = useIntl();
+  const navigate = useNavigate();
 
   const formatDate = (dateString: string): string => {
     const date = new Date(dateString);
@@ -162,6 +165,18 @@ const ListTrainingVideosView: React.FC<ListTrainingVideosViewProps> = ({
                       size="small"
                     >
                       <FormattedMessage defaultMessage="Edit" />
+                    </Button>
+                    <Button
+                      icon={<FontAwesomeIcon icon={faChartBar} />}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        navigate(
+                          `/app/scheme-settings/training-videos/${video.id}/audit`
+                        );
+                      }}
+                      size="small"
+                    >
+                      <FormattedMessage defaultMessage="Audit" />
                     </Button>
                     <Button
                       danger

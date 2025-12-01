@@ -156,6 +156,9 @@ const ChecklistTemplates = lazy(
 const TrainingVideos = lazy(
   () => import('../../../views/settings/training-videos/ListTrainingVideos')
 );
+const ViewTrainingVideoAudit = lazy(
+  () => import('../../../views/settings/training-videos/ViewTrainingVideoAudit')
+);
 
 const SchemeSettings = (): JSX.Element => {
   const [collapsed, setCollapsed] = useState(false);
@@ -936,6 +939,19 @@ const SchemeSettings = (): JSX.Element => {
                 </PermissionCheckWrapper>
               }
               path="checklist-templates"
+            />
+            <Route
+              element={
+                <PermissionCheckWrapper
+                  permission={{
+                    method: PermissionMethod.Read,
+                    model: PermissionModel.Documents,
+                  }}
+                >
+                  <ViewTrainingVideoAudit />
+                </PermissionCheckWrapper>
+              }
+              path="training-videos/:videoId/audit"
             />
             <Route
               element={

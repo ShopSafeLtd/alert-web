@@ -26,6 +26,7 @@ mutation updateScheme($where: UniqueId!, $data: SchemeUpdateInput!) {
     incidentCustomQuestionRadio
     incidentTypeTooltip
     activityAssignToUser
+    activityAllowAllGroups
     requireActivityAuthorised
     useBusinessGroupsOnIncident
     imagesRequiredOnOffenders

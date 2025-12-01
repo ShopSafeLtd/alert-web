@@ -85,6 +85,7 @@ const useTodo = ({
   const [form] = useForm();
   const currentScheme = useAtomValue(currentSchemeAtom);
   const activityAssignToUser = currentScheme?.activityAssignToUser;
+  const activityAllowAllGroups = currentScheme?.activityAllowAllGroups;
   const schemeRequireAuthorised = currentScheme?.requireActivityAuthorised;
   const taskTimeTracking = currentScheme?.taskTimeTracking;
   // const currentUser = useAtomValue(currentUserAtom);
@@ -257,17 +258,19 @@ const useTodo = ({
         //       },
         //     }
         //   : undefined,
-        groups: {
-          some: {
-            users: {
+        groups: activityAllowAllGroups
+          ? undefined
+          : {
               some: {
-                id: {
-                  equals: currentUser,
+                users: {
+                  some: {
+                    id: {
+                      equals: currentUser,
+                    },
+                  },
                 },
               },
             },
-          },
-        },
         schemes: {
           some: {
             AND: [

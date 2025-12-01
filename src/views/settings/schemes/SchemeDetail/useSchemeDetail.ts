@@ -175,6 +175,7 @@ const useSchemeDetail = (): Return => {
     void updateScheme({
       variables: {
         data: {
+          activityAllowAllGroups: { set: data.activityAllowAllGroups },
           activityAssignToUser: { set: data.activityAssignToUser },
           autoApproveIncidents: { set: data.autoApproveIncidents },
           autoApproveOffenders: { set: data.autoApproveOffenders },
