@@ -1,0 +1,8 @@
+mutation MarkTrainingVideoComplete($trainingVideoId: String!) {
+  markTrainingVideoComplete(trainingVideoId: $trainingVideoId) {
+    id
+    trainingVideoId
+    userId
+    completedAt
+  }
+}
