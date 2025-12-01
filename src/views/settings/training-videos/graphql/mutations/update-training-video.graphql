@@ -1,0 +1,21 @@
+mutation UpdateTrainingVideo($input: UpdateTrainingVideoInput!) {
+  updateTrainingVideo(input: $input) {
+    id
+    title
+    description
+    videoUrl
+    thumbnailUrl
+    thumbnailStatus
+    viewCount
+    tags {
+      id
+      name
+    }
+    groups {
+      id
+      name
+    }
+    createdAt
+    updatedAt
+  }
+}

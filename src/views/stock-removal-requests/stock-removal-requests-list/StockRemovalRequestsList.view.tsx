@@ -60,6 +60,7 @@ interface StockRemovalRequestTableData {
   }[];
   businessId: string | undefined;
   createdAt: Date;
+  createdById: string;
   key: string;
   reference: null | number | undefined;
   requiresMyApproval: boolean;
@@ -120,6 +121,11 @@ const StockRemovalRequestsList = () => {
       }),
     [permissions]
   );
+
+  // Helper function to check if user can edit a request
+  const canEditRequest = (createdById: string) =>
+    // User can edit if they created the request OR have delete permission
+    currentUser?.id === createdById || hasDeletePermission;
 
   // Check if current user is in PAP group
   const isUserInPAPGroup = useMemo(
@@ -443,6 +449,7 @@ const StockRemovalRequestsList = () => {
             render: (
               _,
               {
+                createdById,
                 key,
                 requiresMyApproval,
                 requiresPicking,
@@ -454,6 +461,7 @@ const StockRemovalRequestsList = () => {
               const viewIcon = requiresMyApproval
                 ? faEye
                 : faUpRightAndDownLeftFromCenter;
+              const canEdit = canEditRequest(createdById);
 
               return (
                 <Row>
@@ -495,30 +503,32 @@ const StockRemovalRequestsList = () => {
                       </Tooltip>
                     </Col>
                   )}
-                  <Col>
-                    <Tooltip
-                      title={intl.formatMessage({
-                        defaultMessage: 'Edit Request',
-                      })}
-                    >
-                      <Button
-                        onClick={() => {
-                          setEditOpen(key);
-                        }}
-                        size="small"
-                        style={
-                          hasDeletePermission
-                            ? { borderRadius: 0 }
-                            : {
-                                borderBottomLeftRadius: 0,
-                                borderTopLeftRadius: 0,
-                              }
-                        }
+                  {canEdit && (
+                    <Col>
+                      <Tooltip
+                        title={intl.formatMessage({
+                          defaultMessage: 'Edit Request',
+                        })}
                       >
-                        <FontAwesomeIcon icon={faEdit} />
-                      </Button>
-                    </Tooltip>
-                  </Col>
+                        <Button
+                          onClick={() => {
+                            setEditOpen(key);
+                          }}
+                          size="small"
+                          style={
+                            hasDeletePermission
+                              ? { borderRadius: 0 }
+                              : {
+                                  borderBottomLeftRadius: 0,
+                                  borderTopLeftRadius: 0,
+                                }
+                          }
+                        >
+                          <FontAwesomeIcon icon={faEdit} />
+                        </Button>
+                      </Tooltip>
+                    </Col>
+                  )}
                   {hasDeletePermission && (
                     <Col>
                       <Tooltip
@@ -580,6 +590,7 @@ const StockRemovalRequestsList = () => {
             })),
             businessId: node.business?.id,
             createdAt: node.createdAt,
+            createdById: node.createdBy.id,
             key: node.id,
             reference: node.reference,
             requiresMyApproval,

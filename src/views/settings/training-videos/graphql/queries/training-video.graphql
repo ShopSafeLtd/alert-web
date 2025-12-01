@@ -1,0 +1,21 @@
+query TrainingVideo($id: String!) {
+  trainingVideo(id: $id) {
+    id
+    title
+    description
+    videoUrl
+    thumbnailUrl
+    thumbnailStatus
+    viewCount
+    tags {
+      id
+      name
+    }
+    groups {
+      id
+      name
+    }
+    createdAt
+    updatedAt
+  }
+}

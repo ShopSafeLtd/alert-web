@@ -1,0 +1,31 @@
+query TrainingVideos(
+  $schemeId: String!
+  $where: TrainingVideoWhereInput
+  $take: Int
+  $skip: Int
+) {
+  trainingVideos(
+    schemeId: $schemeId
+    where: $where
+    take: $take
+    skip: $skip
+  ) {
+    id
+    title
+    description
+    videoUrl
+    thumbnailUrl
+    thumbnailStatus
+    viewCount
+    tags {
+      id
+      name
+    }
+    groups {
+      id
+      name
+    }
+    createdAt
+    updatedAt
+  }
+}
