@@ -4,15 +4,20 @@ import type {
 } from '#/views/stock-removal-requests/stock-removal-requests-list/graphql/__generated__/stock-removal-requests.generated';
 
 import UsersSelect from '#/components/form-components/UsersSelect/UsersSelect.view';
-import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import {
+  currentPermissionsAtom,
+  currentSchemeIdAtom,
+} from '#/providers/SchemeProvider/SchemeProvider';
 import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
+import hasPermission from '#/utils/has-permission';
 import { useUpdateStockRemovalRequestRestrictedMutation } from '#/views/stock-removal-requests/components/RestrictedEditStockRemovalRequest/graphql/__generated__/update-stock-removal-request-restricted.generated';
+import ViewStockRemovalRequest from '#/views/stock-removal-requests/components/ViewStockRemovalRequest/ViewStockRemovalRequest.view';
 import { useStockRemovalRequestQuery } from '#/views/stock-removal-requests/components/ViewStockRemovalRequest/graphql/__generated__/stock-removal-request.generated';
 import { StockRemovalRequestsDocument } from '#/views/stock-removal-requests/stock-removal-requests-list/graphql/__generated__/stock-removal-requests.generated';
 import { Button, Col, Form, Input, Row, Skeleton, notification } from 'antd';
-import { SortOrder } from 'graphql/types';
+import { PermissionMethod, PermissionModel, SortOrder } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 interface Props {
@@ -26,14 +31,18 @@ export interface FormData {
 }
 
 const APPROVER_GROUP_ID = 'cmg9nfl260017ityalcaluw9r';
+const DC_GROUP_ID = 'cmgfd4l4r0000it3n4u2eckmf';
 
 const RestrictedEditStockRemovalRequest = ({ onClose, requestId }: Props) => {
   const intl = useIntl();
   const [form] = Form.useForm<FormData>();
   const currentScheme = useAtomValue(currentSchemeIdAtom);
-  const currentUserId = useAtomValue(currentUserAtom)?.id;
+  const currentUser = useAtomValue(currentUserAtom);
+  const currentUserId = currentUser?.id;
+  const permissions = useAtomValue(currentPermissionsAtom);
 
   const [saving, setSaving] = useState(false);
+  const [unauthorizedAccess, setUnauthorizedAccess] = useState(false);
 
   const { data: requestData, loading } = useStockRemovalRequestQuery({
     variables: {
@@ -42,6 +51,52 @@ const RestrictedEditStockRemovalRequest = ({ onClose, requestId }: Props) => {
       },
     },
   });
+
+  const hasDeletePermission = useMemo(
+    () =>
+      hasPermission({
+        permission: {
+          method: PermissionMethod.Delete,
+          model: PermissionModel.StockRemovalRequests,
+        },
+        permissions,
+      }),
+    [permissions]
+  );
+
+  // Check if user can edit this request
+  const canEditRequest = useMemo(() => {
+    if (!requestData?.stockRemovalRequest || !currentUserId) return false;
+    const isCreator =
+      requestData.stockRemovalRequest.createdBy.id === currentUserId;
+    return isCreator || hasDeletePermission;
+  }, [requestData, currentUserId, hasDeletePermission]);
+
+  // Check if current user is in DC group
+  const isUserInDCGroup = useMemo(
+    () =>
+      currentUser?.groups?.some(
+        (group: { id: string }) => group.id === DC_GROUP_ID
+      ) ?? false,
+    [currentUser]
+  );
+
+  // Check authorization when data loads
+  useEffect(() => {
+    if (requestData?.stockRemovalRequest && !canEditRequest) {
+      setUnauthorizedAccess(true);
+      notification.info({
+        description: intl.formatMessage({
+          defaultMessage:
+            'You do not have permission to edit this request. Showing view-only mode.',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Access Restricted',
+        }),
+        placement: 'bottomRight',
+      });
+    }
+  }, [requestData, canEditRequest, intl]);
 
   useEffect(() => {
     if (requestData?.stockRemovalRequest) {
@@ -165,52 +220,59 @@ const RestrictedEditStockRemovalRequest = ({ onClose, requestId }: Props) => {
     return <Skeleton active />;
   }
 
+  // If user doesn't have permission to edit, show view-only mode
+  if (unauthorizedAccess) {
+    return <ViewStockRemovalRequest requestId={requestId} />;
+  }
+
   return (
     <Form<FormData> form={form} layout="vertical" onFinish={onFinish}>
-      <Row gutter={16}>
-        <Col span={24}>
-          <Form.Item
-            label={intl.formatMessage({ defaultMessage: 'Select Approvers' })}
-            name="approvers"
-            rules={[
-              {
-                message: intl.formatMessage({
-                  defaultMessage: 'Please select at least one approver.',
-                }),
-                required: true,
-              },
-            ]}
-          >
-            <UsersSelect
-              allowClear
-              mode="multiple"
-              queryVars={{
-                where: {
-                  AND: [
-                    {
-                      groups: {
-                        some: {
-                          id: {
-                            equals: APPROVER_GROUP_ID,
+      {!isUserInDCGroup && (
+        <Row gutter={16}>
+          <Col span={24}>
+            <Form.Item
+              label={intl.formatMessage({ defaultMessage: 'Select Approvers' })}
+              name="approvers"
+              rules={[
+                {
+                  message: intl.formatMessage({
+                    defaultMessage: 'Please select at least one approver.',
+                  }),
+                  required: true,
+                },
+              ]}
+            >
+              <UsersSelect
+                allowClear
+                mode="multiple"
+                queryVars={{
+                  where: {
+                    AND: [
+                      {
+                        groups: {
+                          some: {
+                            id: {
+                              equals: APPROVER_GROUP_ID,
+                            },
                           },
                         },
                       },
-                    },
-                    {
-                      id: {
-                        not: {
-                          equals: currentUserId ?? '',
+                      {
+                        id: {
+                          not: {
+                            equals: currentUserId ?? '',
+                          },
                         },
                       },
-                    },
-                  ],
-                },
-              }}
-              showSearch
-            />
-          </Form.Item>
-        </Col>
-      </Row>
+                    ],
+                  },
+                }}
+                showSearch
+              />
+            </Form.Item>
+          </Col>
+        </Row>
+      )}
       <Row>
         <Col span={24}>
           <Form.Item

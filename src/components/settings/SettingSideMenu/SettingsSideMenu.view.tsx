@@ -28,6 +28,7 @@ import {
 import {
   faCloudDownload,
   faCloudUpload,
+  faVideo,
 } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Tooltip, Typography } from 'antd';
@@ -233,6 +234,17 @@ const SettingsSideMenu = ({
             defaultMessage: 'Activity Settings',
           }),
           to: '/app/scheme-settings/activity-settings',
+        },
+        {
+          icon: <FontAwesomeIcon icon={faVideo} />,
+          permissions: {
+            method: PermissionMethod.Read,
+            model: PermissionModel.Documents,
+          },
+          title: intl.formatMessage({
+            defaultMessage: 'Training Videos',
+          }),
+          to: '/app/scheme-settings/training-videos',
         },
       ],
     },

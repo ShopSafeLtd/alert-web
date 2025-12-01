@@ -7,7 +7,7 @@ import { Route, Routes } from 'react-router';
 import PermissionCheckWrapper from '../../../components/PermissionCheck/PermissionCheckWrapper';
 import ListDocuments from '../../../views/resources/folders/ListFolders/ListFolders.container';
 import ViewFolder from '../../../views/resources/folders/ViewFolder/ViewFolder.container';
-import ListVideos from '../../../views/resources/training/ListVideos/ListVideos.view';
+import ListVideos from '../../../views/resources/training/ListVideos';
 
 const Documents = (): JSX.Element => {
   const intl = useIntl();

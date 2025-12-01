@@ -2231,6 +2231,110 @@ export type ChecklistWhereUniqueInput = {
   updatedAt?: InputMaybe<DateTimeFilter>;
 };
 
+export enum CityEnum {
+  Aberdeen = 'aberdeen',
+  Armagh = 'armagh',
+  Ayr = 'ayr',
+  Barnsley = 'barnsley',
+  Barry = 'barry',
+  Basingstoke = 'basingstoke',
+  Bath = 'bath',
+  Belfast = 'belfast',
+  Birmingham = 'birmingham',
+  Blackburn = 'blackburn',
+  Blackpool = 'blackpool',
+  Bolton = 'bolton',
+  Bournemouth = 'bournemouth',
+  Bradford = 'bradford',
+  Brighton = 'brighton',
+  Bristol = 'bristol',
+  Cambridge = 'cambridge',
+  Canterbury = 'canterbury',
+  Cardiff = 'cardiff',
+  Carlisle = 'carlisle',
+  Chatham = 'chatham',
+  Chelmsford = 'chelmsford',
+  Cheltenham = 'cheltenham',
+  Chester = 'chester',
+  Colchester = 'colchester',
+  Coventry = 'coventry',
+  Crewe = 'crewe',
+  Darlington = 'darlington',
+  Derby = 'derby',
+  Derry = 'derry',
+  Doncaster = 'doncaster',
+  Dumfries = 'dumfries',
+  Dundee = 'dundee',
+  Durham = 'durham',
+  EastKilbride = 'east_kilbride',
+  Eastbourne = 'eastbourne',
+  Edinburgh = 'edinburgh',
+  Exeter = 'exeter',
+  Glasgow = 'glasgow',
+  Gloucester = 'gloucester',
+  Guildford = 'guildford',
+  Harrogate = 'harrogate',
+  Hartlepool = 'hartlepool',
+  Hastings = 'hastings',
+  Hereford = 'hereford',
+  Huddersfield = 'huddersfield',
+  Hull = 'hull',
+  Inverness = 'inverness',
+  Ipswich = 'ipswich',
+  Kilmarnock = 'kilmarnock',
+  Lancaster = 'lancaster',
+  Leeds = 'leeds',
+  Leicester = 'leicester',
+  Lincoln = 'lincoln',
+  Lisburn = 'lisburn',
+  Liverpool = 'liverpool',
+  Livingston = 'livingston',
+  London = 'london',
+  Luton = 'luton',
+  Maidstone = 'maidstone',
+  Manchester = 'manchester',
+  Middlesbrough = 'middlesbrough',
+  MiltonKeynes = 'milton_keynes',
+  Newcastle = 'newcastle',
+  Newport = 'newport',
+  Newry = 'newry',
+  Northampton = 'northampton',
+  Norwich = 'norwich',
+  Nottingham = 'nottingham',
+  Oxford = 'oxford',
+  Paisley = 'paisley',
+  Perth = 'perth',
+  Peterborough = 'peterborough',
+  Plymouth = 'plymouth',
+  Poole = 'poole',
+  Portsmouth = 'portsmouth',
+  Preston = 'preston',
+  Reading = 'reading',
+  Rotherham = 'rotherham',
+  Scarborough = 'scarborough',
+  Sheffield = 'sheffield',
+  Shrewsbury = 'shrewsbury',
+  Slough = 'slough',
+  Southampton = 'southampton',
+  Stirling = 'stirling',
+  Stoke = 'stoke',
+  Sunderland = 'sunderland',
+  Swansea = 'swansea',
+  Swindon = 'swindon',
+  Taunton = 'taunton',
+  Telford = 'telford',
+  Torquay = 'torquay',
+  Wakefield = 'wakefield',
+  Warrington = 'warrington',
+  Watford = 'watford',
+  Wigan = 'wigan',
+  Wolverhampton = 'wolverhampton',
+  Worcester = 'worcester',
+  Worthing = 'worthing',
+  Wrexham = 'wrexham',
+  York = 'york'
+}
+
 export type CompassMatch = {
   __typename?: 'CompassMatch';
   aiSuggestions: Array<AiSuggestion>;
@@ -2469,6 +2573,11 @@ export type ContactWhereUniqueInput = {
   schemes?: InputMaybe<SchemeListRelationFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
   user?: InputMaybe<UserWhereInput>;
+};
+
+export type CoordinatesInput = {
+  latitude: Scalars['Float'];
+  longitude: Scalars['Float'];
 };
 
 export type CopyEvidenceInput = {
@@ -3010,6 +3119,15 @@ export type CreateStockRemovalRequestInput = {
 export type CreateTermsInput = {
   content: Scalars['String'];
   schemeId: Scalars['String'];
+};
+
+export type CreateTrainingVideoInput = {
+  description?: InputMaybe<Scalars['String']>;
+  groupIds?: InputMaybe<Array<Scalars['String']>>;
+  schemeId: Scalars['String'];
+  tags?: InputMaybe<Array<Scalars['String']>>;
+  title: Scalars['String'];
+  videoUrl: Scalars['String'];
 };
 
 export type CreateUpdateData = {
@@ -4045,6 +4163,14 @@ export enum DatePeriod {
 export type DateRangeInput = {
   endDate: Scalars['Date'];
   startDate: Scalars['Date'];
+};
+
+export type DateRangeOutput = {
+  __typename?: 'DateRangeOutput';
+  avgPerDay?: Maybe<Scalars['Float']>;
+  earliest?: Maybe<Scalars['Date']>;
+  latest?: Maybe<Scalars['Date']>;
+  spanDays?: Maybe<Scalars['Int']>;
 };
 
 export type DateTimeFieldUpdateOperationsInput = {
@@ -8433,6 +8559,24 @@ export type IncidentQuestions = {
   tooltip?: Maybe<Scalars['String']>;
 };
 
+export type IncidentRadiusInput = {
+  city?: InputMaybe<CityEnum>;
+  coordinates?: InputMaybe<CoordinatesInput>;
+  dateRange?: InputMaybe<DateRangeInput>;
+  excludeSchemeIds?: InputMaybe<Array<Scalars['String']>>;
+  radiusMiles: Scalars['Float'];
+};
+
+export type IncidentRadiusStats = {
+  __typename?: 'IncidentRadiusStats';
+  byScheme: Array<KeyValuePair>;
+  byStatus: Array<KeyValuePair>;
+  byType: Array<KeyValuePair>;
+  byYear: Array<KeyValuePair>;
+  dateRange?: Maybe<DateRangeOutput>;
+  totalCount: Scalars['Int'];
+};
+
 export type IncidentRelaySimpleInput = {
   approved?: InputMaybe<Scalars['Boolean']>;
   businessIds?: InputMaybe<Array<Scalars['String']>>;
@@ -9556,6 +9700,12 @@ export type JsonWithAggregatesFilter = {
   string_contains?: InputMaybe<Scalars['String']>;
   string_ends_with?: InputMaybe<Scalars['String']>;
   string_starts_with?: InputMaybe<Scalars['String']>;
+};
+
+export type KeyValuePair = {
+  __typename?: 'KeyValuePair';
+  key: Scalars['String'];
+  value: Scalars['Int'];
 };
 
 export type Language = {
@@ -10888,6 +11038,7 @@ export type Mutation = {
   addUploadedImageToIncident: Incident;
   addUsersToBusiness: Business;
   aiIncidentImport: SystemTask;
+  analyzeIncidentsByRadius: IncidentRadiusStats;
   approveAiSuggestion: AiSuggestion;
   approveIncident: Incident;
   approveOffender: Offender;
@@ -10953,6 +11104,7 @@ export type Mutation = {
   createTermsAndConditions: TermsAndCondition;
   createTimes: Array<Incident>;
   createTodo: Todo;
+  createTrainingVideo: TrainingVideo;
   createUnlinkedImage: UnlinkedImage;
   createUpdateChecklist: Checklist;
   createUpdateOnCrimeGroup: Update;
@@ -11005,6 +11157,7 @@ export type Mutation = {
   deleteStockRemovalRequestApproval: StockRemovalRequestApproval;
   deleteTag: Tag;
   deleteTodo: Todo;
+  deleteTrainingVideo: Scalars['Boolean'];
   deleteUpdate: Update;
   deleteUser: User;
   deleteUserFromScheme?: Maybe<User>;
@@ -11027,6 +11180,7 @@ export type Mutation = {
   generateFeedItems: SystemTask;
   generateIncidentTypeDescription: Scalars['String'];
   generateStatementBody: GeneratedStatementBody;
+  generateTrainingVideoUploadUrl: Scalars['String'];
   icelandImportData: SystemTask;
   importStockItemCsv: Scalars['Boolean'];
   incidentImport: IncidentImportValidationResult;
@@ -11046,6 +11200,7 @@ export type Mutation = {
   markStockRemovalRequestAsCollected: StockRemovalRequest;
   markStockRemovalRequestAsPicked: StockRemovalRequest;
   markStockRemovalRequestAsReturned: StockRemovalRequest;
+  markTrainingVideoComplete: TrainingVideoCompletion;
   mergeBusinesses: Business;
   mergeBusinessesWithSameName: Business;
   mergeOffender: Offender;
@@ -11054,6 +11209,7 @@ export type Mutation = {
   nextImportData: SystemTask;
   oneStopImportData: SystemTask;
   queueIncidentCsvExport: QueuedIncidentExportResult;
+  queueStockRemovalCsvExport: QueuedStockRemovalExportResult;
   recycleActiveChecklist: ActiveChecklist;
   recycleChecklist: Checklist;
   recycleDemEvidence?: Maybe<Scalars['String']>;
@@ -11159,6 +11315,7 @@ export type Mutation = {
   updateTimeoutDetectionConfig: Scalars['String'];
   updateTodo: Todo;
   updateTodoMention: Array<Todo>;
+  updateTrainingVideo: TrainingVideo;
   updateUpdate: Update;
   updateUser: User;
   updateUserNotifications: Array<UserNotification>;
@@ -11231,6 +11388,11 @@ export type MutationAddUsersToBusinessArgs = {
 
 export type MutationAiIncidentImportArgs = {
   data: AiIncidentImportInput;
+};
+
+
+export type MutationAnalyzeIncidentsByRadiusArgs = {
+  input: IncidentRadiusInput;
 };
 
 
@@ -11575,6 +11737,11 @@ export type MutationCreateTodoArgs = {
 };
 
 
+export type MutationCreateTrainingVideoArgs = {
+  input: CreateTrainingVideoInput;
+};
+
+
 export type MutationCreateUnlinkedImageArgs = {
   file: Scalars['Upload'];
   localId: Scalars['String'];
@@ -11834,6 +12001,11 @@ export type MutationDeleteTodoArgs = {
 };
 
 
+export type MutationDeleteTrainingVideoArgs = {
+  id: Scalars['String'];
+};
+
+
 export type MutationDeleteUpdateArgs = {
   where: UpdateWhereUnique;
 };
@@ -11954,6 +12126,12 @@ export type MutationGenerateStatementBodyArgs = {
 };
 
 
+export type MutationGenerateTrainingVideoUploadUrlArgs = {
+  filename: Scalars['String'];
+  schemeId: Scalars['String'];
+};
+
+
 export type MutationIcelandImportDataArgs = {
   data: IcelandImportDataInput;
 };
@@ -12049,6 +12227,11 @@ export type MutationMarkStockRemovalRequestAsReturnedArgs = {
 };
 
 
+export type MutationMarkTrainingVideoCompleteArgs = {
+  trainingVideoId: Scalars['String'];
+};
+
+
 export type MutationMergeBusinessesArgs = {
   data: MergeBusinessesInput;
 };
@@ -12086,6 +12269,11 @@ export type MutationOneStopImportDataArgs = {
 
 export type MutationQueueIncidentCsvExportArgs = {
   where: IncidentExportInput;
+};
+
+
+export type MutationQueueStockRemovalCsvExportArgs = {
+  where: StockRemovalCsvExportInput;
 };
 
 
@@ -12594,6 +12782,11 @@ export type MutationUpdateTodoArgs = {
 
 export type MutationUpdateTodoMentionArgs = {
   where: UpdateTodoMention;
+};
+
+
+export type MutationUpdateTrainingVideoArgs = {
+  input: UpdateTrainingVideoInput;
 };
 
 
@@ -15302,6 +15495,8 @@ export type Query = {
   todos: Array<Todo>;
   totalLoss: Scalars['Float'];
   totalUserSessionsGraph: Array<Graph>;
+  trainingVideo: TrainingVideo;
+  trainingVideos: Array<TrainingVideo>;
   translateText: Array<TranslatedText>;
   updates: Array<Update>;
   user: User;
@@ -16958,6 +17153,20 @@ export type QueryTotalUserSessionsGraphArgs = {
 };
 
 
+export type QueryTrainingVideoArgs = {
+  id: Scalars['String'];
+};
+
+
+export type QueryTrainingVideosArgs = {
+  orderBy?: InputMaybe<Array<TrainingVideoOrderByInput>>;
+  schemeId: Scalars['String'];
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<TrainingVideoWhereInput>;
+};
+
+
 export type QueryTranslateTextArgs = {
   data: TranslateTextInput;
 };
@@ -17921,6 +18130,16 @@ export type QuestionsListWhere = {
 
 export type QueuedIncidentExportResult = {
   __typename?: 'QueuedIncidentExportResult';
+  /** Estimated time for completion */
+  estimatedTime?: Maybe<Scalars['String']>;
+  /** The ID of the queued export job */
+  jobId: Scalars['String'];
+  /** Status message for the user */
+  message: Scalars['String'];
+};
+
+export type QueuedStockRemovalExportResult = {
+  __typename?: 'QueuedStockRemovalExportResult';
   /** Estimated time for completion */
   estimatedTime?: Maybe<Scalars['String']>;
   /** The ID of the queued export job */
@@ -18984,6 +19203,7 @@ export type Scheme = {
   defaultPublicOffenderDOB: Scalars['Boolean'];
   defaultSubscribedIncidentOnly: Scalars['Boolean'];
   defaultSubscribedOffenderOnly: Scalars['Boolean'];
+  disableCreationNotifications: Scalars['Boolean'];
   disableGalleryOnNative: Scalars['Boolean'];
   disablePassword: Scalars['Boolean'];
   divisions: Array<Scalars['String']>;
@@ -19758,6 +19978,7 @@ export type SchemeUpdateInput = {
   defaultSubscribedIncidentOnly?: InputMaybe<SetBooleanHelper>;
   defaultSubscribedOffenderOnly?: InputMaybe<SetBooleanHelper>;
   demCompanyId?: InputMaybe<SetStringHelper>;
+  disableCreationNotifications?: InputMaybe<SetBooleanHelper>;
   disableGalleryOnNative?: InputMaybe<Scalars['Boolean']>;
   disablePassword?: InputMaybe<SetBooleanHelper>;
   dontAutoSetTimeDate?: InputMaybe<SetBooleanHelper>;
@@ -20872,6 +21093,11 @@ export type StockItemsWhereInput = {
   schemeId?: InputMaybe<StringNullableFilter>;
   sku?: InputMaybe<StringNullableFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
+};
+
+export type StockRemovalCsvExportInput = {
+  dateRange: DateRangeInput;
+  schemeId: Scalars['String'];
 };
 
 export type StockRemovalItem = {
@@ -22024,6 +22250,13 @@ export type TermsAndConditionWhereUniqueInput = {
   version?: InputMaybe<IntFilter>;
 };
 
+export enum ThumbnailStatus {
+  Completed = 'COMPLETED',
+  Failed = 'FAILED',
+  Pending = 'PENDING',
+  Processing = 'PROCESSING'
+}
+
 export type Tier = {
   __typename?: 'Tier';
   description?: Maybe<Scalars['String']>;
@@ -22563,6 +22796,66 @@ export type TopContributors = {
   messagesSent: Scalars['Int'];
   offendersCreated: Scalars['Int'];
   updatesCreated: Scalars['Int'];
+};
+
+export type TrainingVideo = {
+  __typename?: 'TrainingVideo';
+  completions: Array<TrainingVideoCompletion>;
+  createdAt: Scalars['Date'];
+  description?: Maybe<Scalars['String']>;
+  duration?: Maybe<Scalars['Int']>;
+  groups: Array<Group>;
+  id: Scalars['ID'];
+  scheme: Scheme;
+  schemeId: Scalars['String'];
+  tags: Array<Tag>;
+  thumbnailStatus: ThumbnailStatus;
+  thumbnailUrl?: Maybe<Scalars['String']>;
+  title: Scalars['String'];
+  updatedAt: Scalars['Date'];
+  uploadedBy: User;
+  uploadedById: Scalars['String'];
+  videoUrl: Scalars['String'];
+  viewCount: Scalars['Int'];
+};
+
+export type TrainingVideoCompletion = {
+  __typename?: 'TrainingVideoCompletion';
+  completedAt: Scalars['Date'];
+  createdAt: Scalars['Date'];
+  id: Scalars['ID'];
+  trainingVideo: TrainingVideo;
+  trainingVideoId: Scalars['String'];
+  updatedAt: Scalars['Date'];
+  user: User;
+  userId: Scalars['String'];
+};
+
+export type TrainingVideoOrderByInput = {
+  createdAt?: InputMaybe<SortOrder>;
+  title?: InputMaybe<SortOrder>;
+  updatedAt?: InputMaybe<SortOrder>;
+  viewCount?: InputMaybe<SortOrder>;
+};
+
+export type TrainingVideoWhereInput = {
+  AND?: InputMaybe<Array<TrainingVideoWhereInput>>;
+  NOT?: InputMaybe<Array<TrainingVideoWhereInput>>;
+  OR?: InputMaybe<Array<TrainingVideoWhereInput>>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  description?: InputMaybe<StringNullableFilter>;
+  id?: InputMaybe<StringFilter>;
+  scheme?: InputMaybe<SchemeWhereInput>;
+  schemeId?: InputMaybe<StringFilter>;
+  title?: InputMaybe<StringFilter>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
+  uploadedBy?: InputMaybe<UserWhereInput>;
+  uploadedById?: InputMaybe<StringFilter>;
+  viewCount?: InputMaybe<IntFilter>;
+};
+
+export type TrainingVideoWhereUniqueInput = {
+  id?: InputMaybe<Scalars['String']>;
 };
 
 export type TranscriptionCorrection = {
@@ -23123,6 +23416,14 @@ export type UpdateTodoMention = {
   type?: InputMaybe<TodoType>;
   userId: Scalars['String'];
   vehicleId?: InputMaybe<Scalars['String']>;
+};
+
+export type UpdateTrainingVideoInput = {
+  description?: InputMaybe<Scalars['String']>;
+  groupIds?: InputMaybe<Array<Scalars['String']>>;
+  id: Scalars['String'];
+  tags?: InputMaybe<Array<Scalars['String']>>;
+  title?: InputMaybe<Scalars['String']>;
 };
 
 export enum UpdateType {
