@@ -2,7 +2,6 @@ import type { WorkflowDataQuery } from '#/views/workflows/graphql/queries/__gene
 import type { FormInstance } from 'antd';
 import type { AnswerType, CronSchedule, IncidentPriority } from 'graphql/types';
 
-import { useApolloClient } from '@apollo/client';
 import {
   currencySymbolAtom,
   currentSchemeIdAtom,
@@ -10,14 +9,15 @@ import {
 import useActivityTemplates from '#/views/adminTodo/ActivityTemplates/useActivityTemplates';
 import { useChecklistsQuery } from '#/views/checklist/graphql/queries/__generated__/list-checklists.generated';
 import { useBrandsQuery } from '#/views/settings/brands/graphql/queries/__generated__/brands.generated';
+import { useDivisionsOnSchemeQuery } from '#/views/workflows/ViewWorkflow/graphql/queries/__generated__/divisions.generated';
 import { useCreateOneWorkflowMutation } from '#/views/workflows/graphql/mutations/__generated__/create-workflow.generated';
 import { useUpdateOneWorkflowMutation } from '#/views/workflows/graphql/mutations/__generated__/update-workflow.generated';
 import { useViewWorkflowQuery } from '#/views/workflows/graphql/queries/__generated__/view-workflow.generated';
 import {
-  useWorkflowDataQuery,
   WorkflowDataDocument,
+  useWorkflowDataQuery,
 } from '#/views/workflows/graphql/queries/__generated__/workflow-data.generated';
-import { useDivisionsOnSchemeQuery } from '#/views/workflows/ViewWorkflow/graphql/queries/__generated__/divisions.generated';
+import { useApolloClient } from '@apollo/client';
 import { Form, notification } from 'antd';
 import { useListGoodsTypesQuery } from 'graphql/goods-types/queries/__generated__/list-goods-types.generated';
 import {
@@ -70,6 +70,7 @@ interface WorkflowData {
   };
   usersToGetFrom?: {
     adminGroups?: string[];
+    businessUsers?: boolean;
     createdBy?: boolean;
     groups?: string[];
     parentGroups?: boolean;
@@ -218,6 +219,7 @@ export interface FormData {
   taskOutcome: boolean;
   taskQuestions: string[];
   updateIncident: boolean;
+  useBusinessUsers?: boolean;
   useChecklistScore?: boolean;
   useCreatedBy?: boolean;
   useDynamicAdminGroups?: boolean;
@@ -540,6 +542,7 @@ const useWorkflowForm = (): Return => {
             taskName: action?.task?.name,
             taskOutcome: !!action?.task?.name,
             taskQuestions: action?.task?.questions,
+            useBusinessUsers: !!action?.usersToGetFrom?.businessUsers,
             useChecklistScore: !!conditions?.checkListScore,
             useCreatedBy: !!action?.usersToGetFrom?.createdBy,
             useDynamicAdminGroups: !!action?.usersToGetFrom?.parentGroupsAdmin,
@@ -844,6 +847,7 @@ const useWorkflowForm = (): Return => {
         : undefined,
       usersToGetFrom: {
         adminGroups: values.userManagementAdminGroups,
+        businessUsers: values.useBusinessUsers,
         createdBy: values.useCreatedBy,
         groups: values.userManagementGroups,
         parentGroups: values.useDynamicGroups,

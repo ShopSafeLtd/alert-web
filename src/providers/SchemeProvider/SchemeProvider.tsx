@@ -117,6 +117,7 @@ export const defaultCurrentUserSchemeAtom: UserSchemeState = {
   permissions: [],
   role: Role.User,
   scheme: {
+    activityAllowAllGroups: false,
     activityAssignToUser: false,
     allowTodoTemplateOverride: true,
     autoPopulateDescription: false,

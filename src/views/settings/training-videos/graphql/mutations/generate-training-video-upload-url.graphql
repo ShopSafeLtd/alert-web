@@ -1,0 +1,3 @@
+mutation GenerateTrainingVideoUploadUrl($schemeId: String!, $filename: String!) {
+  generateTrainingVideoUploadUrl(schemeId: $schemeId, filename: $filename)
+}

@@ -99,6 +99,16 @@ const UserManagement: React.FC<UserManagementProps> = ({
               <Switch />
             </Form.Item>
           )}
+          <Form.Item
+            label={<FormattedMessage defaultMessage="Use Business Users" />}
+            name="useBusinessUsers"
+            tooltip={
+              <FormattedMessage defaultMessage="Include only business users in the selection" />
+            }
+            valuePropName="checked"
+          >
+            <Switch />
+          </Form.Item>
           <Row gutter={[32, 16]}>
             {typeWatch !== 'scheduled' &&
               workflowTypeWatch &&

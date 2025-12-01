@@ -1,0 +1,17 @@
+query TrainingVideoAudit($trainingVideoId: String!) {
+  trainingVideoAudit(trainingVideoId: $trainingVideoId) {
+    trainingVideoId
+    trainingVideoTitle
+    totalUsers
+    completedCount
+    notCompletedCount
+    completionRate
+    users {
+      userId
+      userFullName
+      userEmail
+      completedAt
+      hasCompleted
+    }
+  }
+}

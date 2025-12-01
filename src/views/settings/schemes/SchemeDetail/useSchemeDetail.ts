@@ -18,6 +18,7 @@ import { useState } from 'react';
 import { useIntl } from 'react-intl';
 
 export interface FormData {
+  activityAllowAllGroups: boolean;
   activityAssignToUser: boolean;
   autoApproveIncidents: boolean;
   autoApproveOffenders: boolean;
@@ -175,6 +176,7 @@ const useSchemeDetail = (): Return => {
     void updateScheme({
       variables: {
         data: {
+          activityAllowAllGroups: { set: data.activityAllowAllGroups },
           activityAssignToUser: { set: data.activityAssignToUser },
           autoApproveIncidents: { set: data.autoApproveIncidents },
           autoApproveOffenders: { set: data.autoApproveOffenders },
