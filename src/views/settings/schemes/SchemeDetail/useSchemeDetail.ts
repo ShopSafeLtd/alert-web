@@ -18,6 +18,7 @@ import { useState } from 'react';
 import { useIntl } from 'react-intl';
 
 export interface FormData {
+  activityAllowAllGroups: boolean;
   activityAssignToUser: boolean;
   autoApproveIncidents: boolean;
   autoApproveOffenders: boolean;
