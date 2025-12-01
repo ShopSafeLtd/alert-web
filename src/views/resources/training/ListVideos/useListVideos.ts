@@ -53,7 +53,7 @@ export interface TrainingVideo {
   viewCount: number;
 }
 
-type SortOption = 'az' | 'mostViewed' | 'newest' | 'za';
+export type SortOption = 'az' | 'mostViewed' | 'newest' | 'za';
 
 interface UseListVideosReturn {
   availableTags: Tag[];

@@ -11,7 +11,7 @@ const useStyles = createUseStyles((theme: Theme) => ({
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     '&:hover': {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      borderColor: theme.primaryColor,
+      borderColor: theme.primary,
       boxShadow:
         '0 12px 28px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.08)',
       transform: 'translateY(-6px)',

@@ -14,7 +14,7 @@ import {
 import React, { useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
-import type { TrainingVideo } from './useListVideos';
+import type { SortOption, TrainingVideo } from './useListVideos';
 
 import VideoPlayerModal from '../components/VideoPlayerModal';
 import useStyles from './ListVideos.styles';
@@ -28,14 +28,14 @@ interface ListVideosViewProps {
   handleClosePlayer: () => void;
   handleOpenPlayer: (video: TrainingVideo) => void;
   handleSearch: (value: string) => void;
-  handleSort: (option: string) => void;
+  handleSort: (option: SortOption) => void;
   handleTagFilter: (tags: string[]) => void;
   loading: boolean;
   playerModalOpen: boolean;
   searchTerm: string;
   selectedTags: string[];
   selectedVideo: TrainingVideo | null;
-  sortBy: string;
+  sortBy: SortOption;
   videos: TrainingVideo[];
 }
 
