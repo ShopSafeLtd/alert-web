@@ -5,6 +5,7 @@ mutation updateScheme($where: UniqueId!, $data: SchemeUpdateInput!) {
     restrictIncidentAccess
     reportOnly
     showBlankActivity
+    autoApproveActivities
     autoApproveIncidents
     autoApproveOffenders
     defaultPublicOffenderDOB

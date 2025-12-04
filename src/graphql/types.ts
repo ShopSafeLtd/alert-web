@@ -1419,6 +1419,39 @@ export enum Build {
   Unknown = 'UNKNOWN'
 }
 
+export type BulletinEngagement = {
+  __typename?: 'BulletinEngagement';
+  averageViewsPerUser: Scalars['Float'];
+  bulletinId: Scalars['String'];
+  bulletinTitle: Scalars['String'];
+  notViewedCount: Scalars['Int'];
+  totalUsers: Scalars['Int'];
+  totalViews: Scalars['Int'];
+  users: Array<BulletinUserEngagement>;
+  viewRate: Scalars['Float'];
+  viewedCount: Scalars['Int'];
+};
+
+export type BulletinUserEngagement = {
+  __typename?: 'BulletinUserEngagement';
+  firstViewedAt?: Maybe<Scalars['Date']>;
+  hasViewed: Scalars['Boolean'];
+  lastViewedAt?: Maybe<Scalars['Date']>;
+  userEmail?: Maybe<Scalars['String']>;
+  userFullName: Scalars['String'];
+  userId: Scalars['String'];
+  viewCount?: Maybe<Scalars['Int']>;
+};
+
+export type BulletinView = {
+  __typename?: 'BulletinView';
+  bulletinId: Scalars['String'];
+  bulletinTitle: Scalars['String'];
+  firstViewedAt: Scalars['Date'];
+  lastViewedAt: Scalars['Date'];
+  viewCount: Scalars['Int'];
+};
+
 export type Business = {
   __typename?: 'Business';
   actions: Array<Action>;
@@ -3174,6 +3207,8 @@ export type CreateTermsInput = {
 export type CreateTrainingVideoInput = {
   description?: InputMaybe<Scalars['String']>;
   groupIds?: InputMaybe<Array<Scalars['String']>>;
+  loginPrompt?: InputMaybe<Scalars['Boolean']>;
+  mandatory?: InputMaybe<Scalars['Boolean']>;
   schemeId: Scalars['String'];
   tags?: InputMaybe<Array<Scalars['String']>>;
   title: Scalars['String'];
@@ -4740,6 +4775,19 @@ export type DocumentTagsArgs = {
   where?: InputMaybe<TagWhereInput>;
 };
 
+export type DocumentEngagement = {
+  __typename?: 'DocumentEngagement';
+  averageViewsPerUser: Scalars['Float'];
+  documentId: Scalars['String'];
+  documentName: Scalars['String'];
+  notViewedCount: Scalars['Int'];
+  totalUsers: Scalars['Int'];
+  totalViews: Scalars['Int'];
+  users: Array<DocumentUserEngagement>;
+  viewRate: Scalars['Float'];
+  viewedCount: Scalars['Int'];
+};
+
 export type DocumentIncidentCreate = {
   fileType: Scalars['String'];
   name: Scalars['String'];
@@ -4803,6 +4851,26 @@ export enum DocumentType {
   Document = 'DOCUMENT',
   Evidence = 'EVIDENCE'
 }
+
+export type DocumentUserEngagement = {
+  __typename?: 'DocumentUserEngagement';
+  firstViewedAt?: Maybe<Scalars['Date']>;
+  hasViewed: Scalars['Boolean'];
+  lastViewedAt?: Maybe<Scalars['Date']>;
+  userEmail?: Maybe<Scalars['String']>;
+  userFullName: Scalars['String'];
+  userId: Scalars['String'];
+  viewCount?: Maybe<Scalars['Int']>;
+};
+
+export type DocumentView = {
+  __typename?: 'DocumentView';
+  documentId: Scalars['String'];
+  documentName: Scalars['String'];
+  firstViewedAt: Scalars['Date'];
+  lastViewedAt: Scalars['Date'];
+  viewCount: Scalars['Int'];
+};
 
 export type DocumentWhereInput = {
   AND?: InputMaybe<Array<DocumentWhereInput>>;
@@ -7511,11 +7579,15 @@ export type Impression = {
   __typename?: 'Impression';
   article?: Maybe<Article>;
   createdAt: Scalars['Date'];
+  document?: Maybe<Document>;
+  firstViewedAt: Scalars['Date'];
   id: Scalars['ID'];
   incident?: Maybe<Incident>;
+  lastViewedAt: Scalars['Date'];
   offender?: Maybe<Offender>;
   updatedAt: Scalars['Date'];
   user: User;
+  viewCount: Scalars['Int'];
 };
 
 export type ImpressionListRelationFilter = {
@@ -11216,6 +11288,7 @@ export type Mutation = {
   dismissAiMatch: AiVisionMatch;
   dismissAiSuggestion: AiSuggestion;
   dismissMatch: RekMatch;
+  dismissTrainingVideoPrompt: Scalars['Boolean'];
   dunelmImportData: SystemTask;
   editArticle: Article;
   enableSchemeRekognition: RekCollection;
@@ -11247,6 +11320,9 @@ export type Mutation = {
   linkUserToDem: User;
   mapAudioIncidentFaces: Scalars['Boolean'];
   markAsReadMessages: UserChat;
+  markBulletinViewed: Impression;
+  markDocumentViewed: Impression;
+  markOffenderViewed: Impression;
   markStockRemovalRequestAsCollected: StockRemovalRequest;
   markStockRemovalRequestAsPicked: StockRemovalRequest;
   markStockRemovalRequestAsReturned: StockRemovalRequest;
@@ -12099,6 +12175,11 @@ export type MutationDismissMatchArgs = {
 };
 
 
+export type MutationDismissTrainingVideoPromptArgs = {
+  trainingVideoId: Scalars['String'];
+};
+
+
 export type MutationDunelmImportDataArgs = {
   data: DunelmImportDataInput;
 };
@@ -12259,6 +12340,21 @@ export type MutationMapAudioIncidentFacesArgs = {
 
 export type MutationMarkAsReadMessagesArgs = {
   userChatId: Scalars['String'];
+};
+
+
+export type MutationMarkBulletinViewedArgs = {
+  articleId: Scalars['String'];
+};
+
+
+export type MutationMarkDocumentViewedArgs = {
+  documentId: Scalars['String'];
+};
+
+
+export type MutationMarkOffenderViewedArgs = {
+  offenderId: Scalars['String'];
 };
 
 
@@ -14365,6 +14461,19 @@ export type OffenderCreateWithoutIncidentsInput = {
   sourceDetails?: InputMaybe<Scalars['String']>;
 };
 
+export type OffenderEngagement = {
+  __typename?: 'OffenderEngagement';
+  averageViewsPerUser: Scalars['Float'];
+  notViewedCount: Scalars['Int'];
+  offenderId: Scalars['String'];
+  offenderName: Scalars['String'];
+  totalUsers: Scalars['Int'];
+  totalViews: Scalars['Int'];
+  users: Array<OffenderUserEngagement>;
+  viewRate: Scalars['Float'];
+  viewedCount: Scalars['Int'];
+};
+
 export type OffenderLinkEdge = {
   __typename?: 'OffenderLinkEdge';
   count: Scalars['Int'];
@@ -14791,6 +14900,26 @@ export type OffenderUpdatealiasInput = {
   set?: InputMaybe<Array<Scalars['String']>>;
 };
 
+export type OffenderUserEngagement = {
+  __typename?: 'OffenderUserEngagement';
+  firstViewedAt?: Maybe<Scalars['Date']>;
+  hasViewed: Scalars['Boolean'];
+  lastViewedAt?: Maybe<Scalars['Date']>;
+  userEmail?: Maybe<Scalars['String']>;
+  userFullName: Scalars['String'];
+  userId: Scalars['String'];
+  viewCount?: Maybe<Scalars['Int']>;
+};
+
+export type OffenderView = {
+  __typename?: 'OffenderView';
+  firstViewedAt: Scalars['Date'];
+  lastViewedAt: Scalars['Date'];
+  offenderId: Scalars['String'];
+  offenderName: Scalars['String'];
+  viewCount: Scalars['Int'];
+};
+
 export type OffenderWhereInput = {
   AND?: InputMaybe<Array<OffenderWhereInput>>;
   NOT?: InputMaybe<Array<OffenderWhereInput>>;
@@ -15107,6 +15236,7 @@ export enum PermissionMethod {
   Approve = 'APPROVE',
   Delete = 'DELETE',
   Edit = 'EDIT',
+  HideComplete = 'HIDE_COMPLETE',
   Read = 'READ',
   ReadAll = 'READ_ALL',
   Write = 'WRITE'
@@ -15354,6 +15484,8 @@ export type Query = {
   billingCustomers: QueryBillingCustomersConnection;
   brand: Brand;
   brands: QueryBrandsConnection;
+  /** Get engagement analytics showing which users have viewed a bulletin */
+  bulletinEngagement: BulletinEngagement;
   business: Business;
   businessContribution: ListBusinessContribution;
   businessCrimeTypeGraph: Array<RadialValueGraph>;
@@ -15397,6 +15529,8 @@ export type Query = {
   demGroups: QueryDemGroupsConnection;
   detectionConfig: DetectActionConfig;
   detectionConfigs: QueryDetectionConfigsConnection;
+  /** Get engagement analytics showing which users have viewed a document */
+  documentEngagement: DocumentEngagement;
   documents: QueryDocumentsConnection;
   documentsNoFolder: QueryDocumentsNoFolderConnection;
   featureAdoptionRate: Array<FeatureAdoptionRate>;
@@ -15492,12 +15626,15 @@ export type Query = {
   notificationRelay: QueryNotificationRelayConnection;
   offender: Offender;
   offenderByName: ListOffenders;
+  /** Get engagement analytics showing which users have viewed an offender */
+  offenderEngagement: OffenderEngagement;
   offenderFeed: Array<Offender>;
   offenderLinkMap: OffenderLinkMap;
   offenderReport: OffenderReport;
   offenderTableReport: ListOffenderPerformance;
   offenders: Array<Offender>;
   offendersPerformance: ListOffenderPerformance;
+  pendingLoginPromptVideos: Array<TrainingVideo>;
   performanceReport: PerformanceReport;
   platformFeatureUsage: Array<PlatformFeatureUsage>;
   platformUsageBreakdown: Array<PlatformUsageBreakdown>;
@@ -15560,6 +15697,8 @@ export type Query = {
   userChats: Array<UserChat>;
   userContact?: Maybe<Contact>;
   userContributions: ListUserContribution;
+  /** Get a comprehensive view of all bulletins, documents, and offenders a user has viewed */
+  userEngagementActivity: UserEngagementActivity;
   userEngagementDepth: Array<UserEngagementDepth>;
   userGroupRelay: QueryUserGroupRelayConnection;
   userIncidentCountGraph: Array<Graph>;
@@ -15810,6 +15949,11 @@ export type QueryBrandsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<BrandWhereInput>;
+};
+
+
+export type QueryBulletinEngagementArgs = {
+  articleId: Scalars['String'];
 };
 
 
@@ -16087,6 +16231,11 @@ export type QueryDetectionConfigsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where: DetectionConfigWhere;
+};
+
+
+export type QueryDocumentEngagementArgs = {
+  documentId: Scalars['String'];
 };
 
 
@@ -16792,6 +16941,11 @@ export type QueryOffenderByNameArgs = {
 };
 
 
+export type QueryOffenderEngagementArgs = {
+  offenderId: Scalars['String'];
+};
+
+
 export type QueryOffenderFeedArgs = {
   active?: InputMaybe<Scalars['Boolean']>;
   after?: InputMaybe<Scalars['String']>;
@@ -16836,6 +16990,11 @@ export type QueryOffendersArgs = {
 
 export type QueryOffendersPerformanceArgs = {
   where: UserContributionWhereInput;
+};
+
+
+export type QueryPendingLoginPromptVideosArgs = {
+  schemeId: Scalars['String'];
 };
 
 
@@ -17275,6 +17434,11 @@ export type QueryUserChatsArgs = {
 
 export type QueryUserContributionsArgs = {
   where: UserContributionWhereInput;
+};
+
+
+export type QueryUserEngagementActivityArgs = {
+  userId?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -19231,6 +19395,7 @@ export type Scheme = {
   allowTodoTemplateOverride: Scalars['Boolean'];
   approvalDueDays?: Maybe<Scalars['Int']>;
   articles: Array<Article>;
+  autoApproveActivities: Scalars['Boolean'];
   autoApproveIncidents: Scalars['Boolean'];
   autoApproveOffenders: Scalars['Boolean'];
   autoPopulateDescription: Scalars['Boolean'];
@@ -19955,6 +20120,7 @@ export type SchemeRekognotionCollectionsInput = {
 export enum SchemeScalarFieldEnum {
   ActivityAssignToUser = 'activityAssignToUser',
   ApprovalDueDays = 'approvalDueDays',
+  AutoApproveActivities = 'autoApproveActivities',
   AutoApproveIncidents = 'autoApproveIncidents',
   AutoApproveOffenders = 'autoApproveOffenders',
   AutoPopulateDescription = 'autoPopulateDescription',
@@ -20022,6 +20188,7 @@ export type SchemeUpdateInput = {
   aiVisionAutoVerifyThreshold?: InputMaybe<AiVisionMatchConfidence>;
   allowTodoTemplateOverride?: InputMaybe<SetBooleanHelper>;
   approvalDueDays?: InputMaybe<Scalars['Int']>;
+  autoApproveActivities?: InputMaybe<SetBooleanHelper>;
   autoApproveIncidents?: InputMaybe<SetBooleanHelper>;
   autoApproveOffenders?: InputMaybe<SetBooleanHelper>;
   autoPopulateDescription?: InputMaybe<SetBooleanHelper>;
@@ -22874,6 +23041,9 @@ export type TrainingVideo = {
   groups: Array<Group>;
   id: Scalars['ID'];
   isCompletedByCurrentUser: Scalars['Boolean'];
+  loginPrompt: Scalars['Boolean'];
+  mandatory: Scalars['Boolean'];
+  prompts: Array<TrainingVideoPrompt>;
   scheme: Scheme;
   schemeId: Scalars['String'];
   tags: Array<Tag>;
@@ -22915,6 +23085,18 @@ export type TrainingVideoOrderByInput = {
   title?: InputMaybe<SortOrder>;
   updatedAt?: InputMaybe<SortOrder>;
   viewCount?: InputMaybe<SortOrder>;
+};
+
+export type TrainingVideoPrompt = {
+  __typename?: 'TrainingVideoPrompt';
+  createdAt: Scalars['Date'];
+  dismissedAt?: Maybe<Scalars['Date']>;
+  id: Scalars['ID'];
+  trainingVideo: TrainingVideo;
+  trainingVideoId: Scalars['String'];
+  updatedAt: Scalars['Date'];
+  user: User;
+  userId: Scalars['String'];
 };
 
 export type TrainingVideoUserCompletion = {
@@ -23510,6 +23692,8 @@ export type UpdateTrainingVideoInput = {
   description?: InputMaybe<Scalars['String']>;
   groupIds?: InputMaybe<Array<Scalars['String']>>;
   id: Scalars['String'];
+  loginPrompt?: InputMaybe<Scalars['Boolean']>;
+  mandatory?: InputMaybe<Scalars['Boolean']>;
   tags?: InputMaybe<Array<Scalars['String']>>;
   title?: InputMaybe<Scalars['String']>;
 };
@@ -24555,6 +24739,19 @@ export type UserContributionWhereInput = {
   rolesIds?: InputMaybe<Array<Scalars['String']>>;
   schemeIds: Array<Scalars['String']>;
   search?: InputMaybe<Scalars['String']>;
+};
+
+export type UserEngagementActivity = {
+  __typename?: 'UserEngagementActivity';
+  bulletins: Array<BulletinView>;
+  documents: Array<DocumentView>;
+  offenders: Array<OffenderView>;
+  totalBulletinsViewed: Scalars['Int'];
+  totalDocumentsViewed: Scalars['Int'];
+  totalOffendersViewed: Scalars['Int'];
+  totalViews: Scalars['Int'];
+  userFullName: Scalars['String'];
+  userId: Scalars['String'];
 };
 
 export type UserEngagementDepth = {

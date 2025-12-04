@@ -120,6 +120,7 @@ export const defaultCurrentUserSchemeAtom: UserSchemeState = {
     activityAllowAllGroups: false,
     activityAssignToUser: false,
     allowTodoTemplateOverride: true,
+    autoApproveActivities: false,
     autoPopulateDescription: false,
     connectedToSchemes: [],
     currency: Currency.Gbp,

@@ -62,7 +62,7 @@ query CurrentSchemeProvider($where: UserSchemeWhereUniqueInput!) {
       incidentTypeTooltip
       requireActivityAuthorised
       showBlankActivity
-
+      autoApproveActivities
       requireBusinessOnIncident
       optionalBusinessOnUsers
       incidentStatusEnabled
