@@ -1,0 +1,9 @@
+mutation MarkBulletinViewed($articleId: String!) {
+  markBulletinViewed(articleId: $articleId) {
+    id
+    viewCount
+    firstViewedAt
+    lastViewedAt
+    createdAt
+  }
+}

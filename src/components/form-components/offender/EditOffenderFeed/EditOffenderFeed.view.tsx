@@ -2,6 +2,7 @@ import type { EditOffenderQuery } from '#/components/form-components/offender/Ed
 import type { OffenderSettingsType } from '#/types/DataType';
 
 import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
+import IncidentTypesSelect from '#/components/form-components/IncidentTypesSelect/IncidentTypesSelect.view';
 import OffenderFormDetails from '#/components/form-components/offender/OffenderForm/OffenderFormDetails.view';
 import { Button, Col, Form, Input, Row, Select, Skeleton } from 'antd';
 import dayjs from 'dayjs';
@@ -204,30 +205,29 @@ const EditOffender = ({
               </Col>
             </Row>
           )}
-          {data?.offender.knownFor && data?.offender.knownFor.length > 0 && (
-            <Row>
-              <Col span={24}>
-                <Form.Item
-                  label={intl.formatMessage({
-                    defaultMessage: 'Incident Types',
+          <Row>
+            <Col span={24}>
+              <Form.Item
+                label={intl.formatMessage({
+                  defaultMessage: 'Incident Types',
+                })}
+                name="knownFor"
+                tooltip={intl.formatMessage({
+                  defaultMessage:
+                    'Select the relevant incident types for this offender, these help to categorize the offender.',
+                })}
+              >
+                <IncidentTypesSelect
+                  disabled={saving}
+                  maxTagCount={3}
+                  placeholder={intl.formatMessage({
+                    defaultMessage: 'Search for incident types...',
                   })}
-                  name="knownFor"
-                  tooltip={intl.formatMessage({
-                    defaultMessage:
-                      'Select the relevant incident types for this offender, these help to categorize the offender.',
-                  })}
-                >
-                  <Select disabled={saving} maxTagCount={3} mode="multiple">
-                    {data?.offender.knownFor.map((el) => (
-                      <Select.Option key={el} value={el}>
-                        {el}
-                      </Select.Option>
-                    ))}
-                  </Select>
-                </Form.Item>
-              </Col>
-            </Row>
-          )}
+                  treeCheckable
+                />
+              </Form.Item>
+            </Col>
+          </Row>
           {data?.offender.targetedGoods &&
             data?.offender.targetedGoods.length > 0 && (
               <Row>

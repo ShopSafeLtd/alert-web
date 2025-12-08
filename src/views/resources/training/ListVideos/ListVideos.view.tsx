@@ -18,6 +18,7 @@ import type { SortOption, TrainingVideo } from './useListVideos';
 
 import VideoPlayerModal from '../components/VideoPlayerModal';
 import useStyles from './ListVideos.styles';
+import { ThumbnailStatus } from 'graphql/types';
 
 const { Text, Title } = Typography;
 const { Search } = Input;
@@ -58,7 +59,15 @@ const ListVideosView: React.FC<ListVideosViewProps> = ({
   const intl = useIntl();
   const [loomModalOpen, setLoomModalOpen] = useState<null | string>(null);
 
-  const formatDate = (dateString: string): string => {
+  const formatDate = (dateString: string | Date): string => {
+    if (dateString instanceof Date) {
+      dateString = dateString.toLocaleDateString(intl.locale, {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+      });
+    }
+
     const date = new Date(dateString);
     return date.toLocaleDateString(intl.locale, {
       day: 'numeric',
@@ -150,7 +159,8 @@ const ListVideosView: React.FC<ListVideosViewProps> = ({
                 onClick={() => handleOpenPlayer(video)}
               >
                 <div className={classes.thumbnailContainer}>
-                  {video.thumbnailUrl && video.thumbnailStatus !== 'pending' ? (
+                  {video.thumbnailUrl &&
+                  video.thumbnailStatus !== ThumbnailStatus.Pending ? (
                     <img
                       alt={video.title}
                       className={classes.thumbnail}

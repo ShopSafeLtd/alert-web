@@ -145,6 +145,24 @@ const StockRemovalRequestsList = () => {
     [currentUser]
   );
 
+  // Reset status filter if DC user has it set to a non-approved status
+  useEffect(() => {
+    if (isUserInDCGroup) {
+      const approvedStatuses = [
+        'ALL',
+        StockRemovalRequestStatus.Picking,
+        StockRemovalRequestStatus.Picked,
+        StockRemovalRequestStatus.Collected,
+        StockRemovalRequestStatus.AwaitingReturn,
+        StockRemovalRequestStatus.Returned,
+        StockRemovalRequestStatus.Closed,
+      ];
+      if (!approvedStatuses.includes(statusFilter)) {
+        setStatusFilter('ALL');
+      }
+    }
+  }, [isUserInDCGroup, statusFilter]);
+
   // Check if current user is a store user (has businesses, not in PAP or DC groups)
   const isStoreUser = useMemo(() => {
     const hasBusinesses = (currentUser?.businesses?.length ?? 0) > 0;
@@ -225,6 +243,16 @@ const StockRemovalRequestsList = () => {
     // Filter by status
     if (statusFilter !== 'ALL') {
       where.status = [statusFilter as StockRemovalRequestStatus];
+    } else if (isUserInDCGroup) {
+      // DC users should only see approved statuses
+      where.status = [
+        StockRemovalRequestStatus.Picking,
+        StockRemovalRequestStatus.Picked,
+        StockRemovalRequestStatus.Collected,
+        StockRemovalRequestStatus.AwaitingReturn,
+        StockRemovalRequestStatus.Returned,
+        StockRemovalRequestStatus.Closed,
+      ];
     }
 
     // Search filter
@@ -233,7 +261,7 @@ const StockRemovalRequestsList = () => {
     }
 
     return where;
-  }, [schemeId, statusFilter, searchQuery]);
+  }, [schemeId, statusFilter, searchQuery, isUserInDCGroup]);
 
   const { data } = useStockRemovalRequestsQuery({
     fetchPolicy: 'cache-and-network',
@@ -257,36 +285,51 @@ const StockRemovalRequestsList = () => {
     },
   });
 
-  // Filter data on frontend for "My Requests"
+  // Filter data on frontend for "My Requests" and DC users
   const filteredData = useMemo(() => {
     if (!data?.stockRemovalRequests.edges) return undefined;
+
+    let filteredEdges = data.stockRemovalRequests.edges;
+
+    // DC users should ONLY see DC-type requests in approved statuses
+    if (isUserInDCGroup) {
+      const approvedStatuses = new Set([
+        StockRemovalRequestStatus.Picking,
+        StockRemovalRequestStatus.Picked,
+        StockRemovalRequestStatus.Collected,
+        StockRemovalRequestStatus.AwaitingReturn,
+        StockRemovalRequestStatus.Returned,
+        StockRemovalRequestStatus.Closed,
+      ]);
+
+      filteredEdges = filteredEdges.filter(({ node }) => {
+        const isDCType = node.storeOrDC === 'DC';
+        const isApprovedStatus = approvedStatuses.has(node.status);
+        return isDCType && isApprovedStatus;
+      });
+    }
 
     // If "My Requests" filter is active, filter to only show:
     // 1. Requests created by the current user
     // 2. Requests where the current user is an approver
     if (creatorFilter === 'MINE' && currentUser?.id) {
-      const filteredEdges = data.stockRemovalRequests.edges.filter(
-        ({ node }) => {
-          const isCreator = node.createdBy.id === currentUser.id;
-          const isApprover = node.approvers.some(
-            (approver) => approver.user.id === currentUser.id
-          );
-          return isCreator || isApprover;
-        }
-      );
-
-      return {
-        stockRemovalRequests: {
-          ...data.stockRemovalRequests,
-          edges: filteredEdges,
-          totalCount: filteredEdges.length,
-        },
-      };
+      filteredEdges = filteredEdges.filter(({ node }) => {
+        const isCreator = node.createdBy.id === currentUser.id;
+        const isApprover = node.approvers.some(
+          (approver) => approver.user.id === currentUser.id
+        );
+        return isCreator || isApprover;
+      });
     }
 
-    // Otherwise return all data
-    return data;
-  }, [data, creatorFilter, currentUser]);
+    return {
+      stockRemovalRequests: {
+        ...data.stockRemovalRequests,
+        edges: filteredEdges,
+        totalCount: filteredEdges.length,
+      },
+    };
+  }, [data, creatorFilter, currentUser, isUserInDCGroup]);
 
   return (
     <div style={{ padding: '20px' }}>
@@ -327,16 +370,22 @@ const StockRemovalRequestsList = () => {
                 defaultMessage: 'All',
               })}
             </Radio.Button>
-            <Radio.Button value={StockRemovalRequestStatus.PendingApproval}>
-              {intl.formatMessage({
-                defaultMessage: 'Pending',
-              })}
-            </Radio.Button>
-            <Radio.Button value={StockRemovalRequestStatus.AwaitingPapApproval}>
-              {intl.formatMessage({
-                defaultMessage: 'PAP',
-              })}
-            </Radio.Button>
+            {!isUserInDCGroup && (
+              <>
+                <Radio.Button value={StockRemovalRequestStatus.PendingApproval}>
+                  {intl.formatMessage({
+                    defaultMessage: 'Pending',
+                  })}
+                </Radio.Button>
+                <Radio.Button
+                  value={StockRemovalRequestStatus.AwaitingPapApproval}
+                >
+                  {intl.formatMessage({
+                    defaultMessage: 'PAP',
+                  })}
+                </Radio.Button>
+              </>
+            )}
             <Radio.Button value={StockRemovalRequestStatus.Picking}>
               {intl.formatMessage({
                 defaultMessage: 'Picking',
@@ -572,11 +621,11 @@ const StockRemovalRequestsList = () => {
               isUserInPAPGroup);
 
           // Check if this request requires picking
-          // - DC users can pick any request with status "Picking"
+          // - DC users can pick DC-type requests with status "Picking"
           // - Store users can pick requests for their assigned businesses with status "Picking"
           const requiresPicking = Boolean(
             node.status === StockRemovalRequestStatus.Picking &&
-              (isUserInDCGroup ||
+              ((isUserInDCGroup && node.storeOrDC === 'DC') ||
                 (isStoreUser &&
                   node.business &&
                   userBusinessIds.includes(node.business.id)))

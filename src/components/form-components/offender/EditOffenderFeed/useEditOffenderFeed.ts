@@ -13,10 +13,11 @@ import {
 import { notification } from 'antd';
 import { useBusinessOffenderSettingsQuery } from 'graphql/businesses/queries/__generated__/business-offender-settings.generated';
 import { useListCustomGalleriesQuery } from 'graphql/customGallery/queries/__generated__/list_custom_galleries.generated';
+import { useUpdateOffenderMutation } from 'graphql/offenders/mutations/__generated__/update-offender.generated';
 import { useTagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
 import { Model } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
 import errorNotification from 'types/mutation_notifications/error_notification';
 
@@ -72,6 +73,7 @@ const useEditOffender = ({ offenderId, onClose }: Props): Return => {
   const businessId = useAtomValue(currentSchemeBusinessesAtom)?.at(0)?.id;
 
   const [saving, setSaving] = useState(false);
+  const formDataRef = useRef<FormData | null>(null);
 
   const { data: offenderData, loading } = useEditOffenderQuery({
     // TODO remove and update cache - tmp fix for quick fix
@@ -127,7 +129,7 @@ const useEditOffender = ({ offenderId, onClose }: Props): Return => {
     },
   });
 
-  const [updateOffender] = useUpdateOffenderDetailsMutation({
+  const [updateOffenderAdditionalFields] = useUpdateOffenderMutation({
     onCompleted: () => {
       setSaving(false);
       notification.success({
@@ -147,37 +149,82 @@ const useEditOffender = ({ offenderId, onClose }: Props): Return => {
     },
   });
 
-  const onSubmit = (data: FormData) => {
-    setSaving(true);
+  const [updateOffenderDetails] = useUpdateOffenderDetailsMutation({
+    onCompleted: () => {
+      // After updating basic details, update knownFor and targetedGoods separately
+      const formData = formDataRef.current;
+      if (formData && (formData.knownFor || formData.targetedGoods)) {
+        void updateOffenderAdditionalFields({
+          variables: {
+            data: {
+              knownFor: formData.knownFor
+                ? { set: formData.knownFor }
+                : undefined,
+              targetedGoods: formData.targetedGoods
+                ? { set: formData.targetedGoods }
+                : undefined,
+            },
+            where: { id: offenderId },
+          },
+        });
+      } else {
+        // If no additional fields to update, just finish
+        setSaving(false);
+        notification.success({
+          description: intl.formatMessage({
+            defaultMessage: 'The offender has been updated!',
+          }),
+          message: intl.formatMessage({
+            defaultMessage: 'Successfully Updated',
+          }),
+          placement: 'bottomRight',
+        });
+        onClose();
+      }
+    },
+    onError: () => {
+      setSaving(false);
+      errorNotification();
+    },
+  });
 
-    void updateOffender({
+  const onSubmit = (formData: FormData) => {
+    setSaving(true);
+    // Store form data in ref so it can be accessed in onCompleted
+    formDataRef.current = formData;
+
+    void updateOffenderDetails({
       variables: {
         data: {
-          age: data.age,
-          alias: data.alias,
-          build: data.build,
-          comment: data.comment,
-          customGalleryIds: data.customGalleries,
-          dateOfBirth: data.dateOfBirth,
-          dateSource: data.dateSource,
-          gender: data.gender,
+          age: formData.age,
+          alias: formData.alias,
+          build: formData.build,
+          comment: formData.comment,
+          customGalleryIds: formData.customGalleries,
+          dateOfBirth: formData.dateOfBirth,
+          dateSource: formData.dateSource,
+          gender: formData.gender,
           groupIds:
-            groups.length > 1 ? data.groups : groups.map(({ value: id }) => id),
+            groups.length > 1
+              ? formData.groups
+              : groups.map(({ value: id }) => id),
           hair:
-            data.hair ??
+            formData.hair ??
             intl.formatMessage({
               defaultMessage: 'Unknown',
             }),
-          height: data.height,
-          idSource: data.idSource,
-          idVerified: data.idVerified,
-          infoSource: data.infoSource,
-          justification: data.justification,
-          name: data.name,
-          peculiarities: data.peculiarities,
-          race: data.race,
-          sourceDetails: data.sourceDetails,
-          tagIds: data.tags,
+          height: formData.height,
+          idSource: formData.idSource,
+          idVerified: formData.idVerified,
+          infoSource: formData.infoSource,
+          justification: formData.justification,
+          name: formData.name,
+          peculiarities: formData.peculiarities,
+          race: formData.race,
+          sourceDetails: formData.sourceDetails,
+          tagIds: formData.tags,
+          // NOTE: knownFor and targetedGoods are updated separately
+          // via the updateOffenderAdditionalFields mutation after this completes
         },
         where: offenderId,
       },

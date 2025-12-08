@@ -4,16 +4,32 @@ import dateFnsGenerateConfig from 'rc-picker/lib/generate/dateFns';
 import generatePicker from 'antd/es/date-picker/generatePicker';
 import { ConfigProvider } from 'antd';
 import enUSAntd from 'antd/es/locale/en_US';
+import { isValid } from 'date-fns';
 
 const InternalDatePicker = generatePicker<Date>(dateFnsGenerateConfig);
 
 function wrapInEnglish<P>(PickerComponent: React.ComponentType<P>) {
-  return (props: P) => (
-    <ConfigProvider locale={enUSAntd}>
-      {/* @ts-ignore */}
-      <PickerComponent {...props} />
-    </ConfigProvider>
-  );
+  return (props: P & { onChange?: (value: Date | null) => void }) => {
+    const { onChange, ...restProps } = props;
+
+    const handleChange = (value: Date | null) => {
+      // If value exists but is not a valid date, clear it
+      if (value !== null && value !== undefined && !isValid(value)) {
+        onChange?.(null);
+        return;
+      }
+
+      // If value is a valid date, pass it through
+      onChange?.(value);
+    };
+
+    return (
+      <ConfigProvider locale={enUSAntd}>
+        {/* @ts-ignore */}
+        <PickerComponent {...restProps} onChange={handleChange} />
+      </ConfigProvider>
+    );
+  };
 }
 
 // @ts-ignore

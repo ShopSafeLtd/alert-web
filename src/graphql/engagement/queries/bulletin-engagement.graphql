@@ -1,0 +1,21 @@
+query BulletinEngagement($articleId: String!) {
+  bulletinEngagement(articleId: $articleId) {
+    bulletinId
+    bulletinTitle
+    totalViews
+    totalUsers
+    viewedCount
+    notViewedCount
+    viewRate
+    averageViewsPerUser
+    users {
+      userId
+      userFullName
+      userEmail
+      hasViewed
+      firstViewedAt
+      lastViewedAt
+      viewCount
+    }
+  }
+}

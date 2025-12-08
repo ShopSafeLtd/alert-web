@@ -1,4 +1,6 @@
 // Types for Training Videos (manual until yarn generate can run)
+import { ResourceTrainingVideosQuery } from '#/views/resources/training/graphql/queries/__generated__/training-videos.generated';
+
 export interface Tag {
   id: string;
   name: string;
@@ -9,19 +11,8 @@ export interface Group {
   name: string;
 }
 
-export interface TrainingVideo {
-  createdAt: string;
-  description?: string;
-  groups: Group[];
-  id: string;
-  tags: Tag[];
-  thumbnailStatus?: string;
-  thumbnailUrl?: string;
-  title: string;
-  updatedAt: string;
-  videoUrl: string;
-  viewCount: number;
-}
+export type TrainingVideo =
+  ResourceTrainingVideosQuery['trainingVideos'][number];
 
 export interface CreateTrainingVideoInput {
   description?: string;

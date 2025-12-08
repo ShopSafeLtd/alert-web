@@ -14,11 +14,13 @@ import {
   Row,
   Select,
   Table,
+  Tooltip,
   Typography,
   notification,
 } from 'antd';
 import dayjs from 'dayjs';
 import { useUpdateIncidentMutation } from 'graphql/incidents/mutations/__generated__/update-incident.generated';
+import { useListIncidentTagsQuery } from 'graphql/tags/queries/__generated__/list-incident-tags.generated';
 import { AnswerType } from 'graphql/types';
 import React, { useEffect, useMemo, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
@@ -51,6 +53,16 @@ const Answers = ({
 
   const [updateIncident] = useUpdateIncidentMutation();
 
+  // Fetch custom questions for the current incident types
+  const { data: incidentTagsData } = useListIncidentTagsQuery({
+    skip: !data?.incident?.scheme?.id,
+    variables: {
+      where: {
+        schemeId: data?.incident?.scheme?.id || '',
+      },
+    },
+  });
+
   useEffect(() => {
     setPageSize((p) => (isPrinting ? 10_000 : p === 10 ? 10_000 : 10));
   }, [isPrinting]);
@@ -82,20 +94,53 @@ const Answers = ({
   const handleSave = async () => {
     setSaving(true);
     try {
-      // Only update answers that have actually changed
-      const changedAnswers = Object.entries(editedAnswers)
-        .filter(([id, newAnswer]) => {
-          const originalAnswer = data?.incident.answers.find(
-            (a) => a.id === id
-          );
-          return originalAnswer && originalAnswer.answer !== newAnswer;
-        })
-        .map(([id, answer]) => ({
-          data: { answer },
-          where: { id },
-        }));
+      if (!dataSource) {
+        return;
+      }
 
-      if (changedAnswers.length === 0) {
+      // Separate updates and creates
+      const updates: Array<{
+        data: { answer: string };
+        where: { id: string };
+      }> = [];
+      const creates: Array<{
+        answer: string;
+        tagQuestionId: string;
+        type: AnswerType;
+      }> = [];
+
+      for (const question of dataSource) {
+        // Skip disabled questions
+        if (question.isDisabled) {
+          continue;
+        }
+
+        const newAnswer = editedAnswers[question.id] ?? question.answer;
+
+        if (question.isUnanswered) {
+          // New answer - create it if there's a value
+          if (newAnswer && newAnswer.trim() !== '' && question.tagQuestionId) {
+            creates.push({
+              answer: newAnswer,
+              tagQuestionId: question.tagQuestionId,
+              type: question.type,
+            });
+          }
+        } else {
+          // Existing answer - update if changed
+          const originalAnswer = data?.incident.answers.find(
+            (a) => a.id === question.id
+          );
+          if (originalAnswer && originalAnswer.answer !== newAnswer) {
+            updates.push({
+              data: { answer: newAnswer },
+              where: { id: question.id },
+            });
+          }
+        }
+      }
+
+      if (updates.length === 0 && creates.length === 0) {
         notification.info({
           description: intl.formatMessage({
             defaultMessage: 'No changes to save.',
@@ -111,7 +156,8 @@ const Answers = ({
       const mutationVariables: UpdateIncidentMutationVariables = {
         data: {
           answers: {
-            update: changedAnswers,
+            ...(creates.length > 0 && { create: creates }),
+            ...(updates.length > 0 && { update: updates }),
           },
         },
         where: { id: incidentId },
@@ -160,8 +206,11 @@ const Answers = ({
 
   interface AnswerData {
     answer: string;
+    disabledReason?: string;
     formattedAnswer: React.ReactNode;
     id: string;
+    isDisabled?: boolean;
+    isUnanswered?: boolean;
     key: string;
     question: string;
     tagQuestion?: {
@@ -171,220 +220,348 @@ const Answers = ({
         question?: string;
       };
     };
+    tagQuestionId?: string;
     type: AnswerType;
   }
 
   const renderEditableInput = (answer: AnswerData) => {
     const value = editedAnswers[answer.id] ?? answer.answer;
+    const isDisabled = saving || answer.isDisabled;
 
-    switch (answer.type) {
-      case AnswerType.Boolean: {
-        return (
-          <Radio.Group
-            disabled={saving}
-            onChange={(e) =>
-              handleAnswerChange(answer.id, String(e.target.value))
-            }
-            value={value}
-          >
-            <Radio value="true">
-              <FormattedMessage defaultMessage="Yes" />
-            </Radio>
-            <Radio value="false">
-              <FormattedMessage defaultMessage="No" />
-            </Radio>
-          </Radio.Group>
-        );
-      }
+    const input = (() => {
+      switch (answer.type) {
+        case AnswerType.Boolean: {
+          return (
+            <Radio.Group
+              disabled={isDisabled}
+              onChange={(e) =>
+                handleAnswerChange(answer.id, String(e.target.value))
+              }
+              value={value}
+            >
+              <Radio value="true">
+                <FormattedMessage defaultMessage="Yes" />
+              </Radio>
+              <Radio value="false">
+                <FormattedMessage defaultMessage="No" />
+              </Radio>
+            </Radio.Group>
+          );
+        }
 
-      case AnswerType.Date: {
-        return (
-          <DatePicker
-            disabled={saving}
-            format="DD/MM/YYYY"
-            onChange={(date) =>
-              handleAnswerChange(
-                answer.id,
-                date ? dayjs(date).format('YYYY-MM-DD') : ''
-              )
-            }
-            style={{ width: '100%' }}
-            value={value ? new Date(value) : undefined}
-          />
-        );
-      }
+        case AnswerType.Date: {
+          return (
+            <DatePicker
+              disabled={isDisabled}
+              format="DD/MM/YYYY"
+              onChange={(date) =>
+                handleAnswerChange(
+                  answer.id,
+                  date ? dayjs(date).format('YYYY-MM-DD') : ''
+                )
+              }
+              style={{ width: '100%' }}
+              value={value ? new Date(value) : undefined}
+            />
+          );
+        }
 
-      case AnswerType.Number: {
-        return (
-          <InputNumber
-            disabled={saving}
-            onChange={(val) =>
-              handleAnswerChange(answer.id, val?.toString() || '')
-            }
-            style={{ width: '100%' }}
-            value={value ? Number(value) : undefined}
-          />
-        );
-      }
+        case AnswerType.Number: {
+          return (
+            <InputNumber
+              disabled={isDisabled}
+              onChange={(val) =>
+                handleAnswerChange(answer.id, val?.toString() || '')
+              }
+              style={{ width: '100%' }}
+              value={value ? Number(value) : undefined}
+            />
+          );
+        }
 
-      case AnswerType.Select:
-      case AnswerType.SelectSingle: {
-        // Try to get formatted options first, fall back to raw options
-        const formattedOptions =
-          answer.tagQuestion?.question?.optionsFormatted || [];
-        const rawOptions = answer.tagQuestion?.question?.options || [];
+        case AnswerType.Select:
+        case AnswerType.SelectSingle: {
+          // Try to get formatted options first, fall back to raw options
+          const formattedOptions =
+            answer.tagQuestion?.question?.optionsFormatted || [];
+          const rawOptions = answer.tagQuestion?.question?.options || [];
 
-        // Use formatted options if available, otherwise try to parse raw options
-        let options: Array<{ label: string; value: string }> = [];
+          // Use formatted options if available, otherwise try to parse raw options
+          let options: Array<{ label: string; value: string }> = [];
 
-        if (formattedOptions.length > 0) {
-          // Use the formatted options - these should be an array of strings
-          options = formattedOptions.map((opt: string) => ({
-            label: opt,
-            value: opt,
-          }));
-        } else if (Array.isArray(rawOptions) && rawOptions.length > 0) {
-          // Fall back to parsing raw options
-          const [firstElement] = rawOptions;
-          if (firstElement && typeof firstElement === 'object') {
-            // Get the first value from the object
-            const values = Object.values(firstElement);
-            if (values.length > 0 && typeof values[0] === 'string') {
-              // Split the comma-separated string into individual options
-              options = values[0].split(',').map((opt: string) => {
+          if (formattedOptions.length > 0) {
+            // Use the formatted options - these should be an array of strings
+            options = formattedOptions.map((opt: string) => ({
+              label: opt,
+              value: opt,
+            }));
+          } else if (Array.isArray(rawOptions) && rawOptions.length > 0) {
+            // Fall back to parsing raw options
+            const [firstElement] = rawOptions;
+            if (firstElement && typeof firstElement === 'object') {
+              // Get the first value from the object
+              const values = Object.values(firstElement);
+              if (values.length > 0 && typeof values[0] === 'string') {
+                // Split the comma-separated string into individual options
+                options = values[0].split(',').map((opt: string) => {
+                  const trimmed = opt.trim();
+                  return { label: trimmed, value: trimmed };
+                });
+              }
+            } else if (typeof firstElement === 'string') {
+              // Direct string value
+              options = firstElement.split(',').map((opt: string) => {
                 const trimmed = opt.trim();
                 return { label: trimmed, value: trimmed };
               });
             }
-          } else if (typeof firstElement === 'string') {
-            // Direct string value
-            options = firstElement.split(',').map((opt: string) => {
-              const trimmed = opt.trim();
-              return { label: trimmed, value: trimmed };
-            });
           }
+
+          const isMultiple = answer.type === AnswerType.Select;
+          const currentValue = (() => {
+            if (!value || value === '') {
+              return isMultiple ? [] : undefined;
+            }
+            return isMultiple ? value.split(',').filter(Boolean) : value;
+          })();
+
+          return (
+            <Select
+              disabled={isDisabled}
+              mode={isMultiple ? 'multiple' : undefined}
+              onChange={(val) =>
+                handleAnswerChange(
+                  answer.id,
+                  Array.isArray(val) ? val.filter(Boolean).join(',') : val || ''
+                )
+              }
+              placeholder={intl.formatMessage({
+                defaultMessage: 'Select an option',
+              })}
+              style={{ width: '100%' }}
+              value={currentValue}
+            >
+              {options.map((option) => (
+                <Select.Option key={option.value} value={option.value}>
+                  {option.label}
+                </Select.Option>
+              ))}
+            </Select>
+          );
         }
 
-        const isMultiple = answer.type === AnswerType.Select;
-        const currentValue = (() => {
-          if (!value || value === '') {
-            return isMultiple ? [] : undefined;
-          }
-          return isMultiple ? value.split(',').filter(Boolean) : value;
-        })();
+        case AnswerType.Time: {
+          return (
+            <Input
+              disabled={isDisabled}
+              onChange={(e) => handleAnswerChange(answer.id, e.target.value)}
+              placeholder={intl.formatMessage({ defaultMessage: 'HH:mm' })}
+              value={value}
+            />
+          );
+        }
 
-        return (
-          <Select
-            disabled={saving}
-            mode={isMultiple ? 'multiple' : undefined}
-            onChange={(val) =>
-              handleAnswerChange(
-                answer.id,
-                Array.isArray(val) ? val.filter(Boolean).join(',') : val || ''
-              )
-            }
-            placeholder={intl.formatMessage({
-              defaultMessage: 'Select an option',
-            })}
-            style={{ width: '100%' }}
-            value={currentValue}
-          >
-            {options.map((option) => (
-              <Select.Option key={option.value} value={option.value}>
-                {option.label}
-              </Select.Option>
-            ))}
-          </Select>
-        );
+        default: {
+          return (
+            <Input
+              disabled={isDisabled}
+              onChange={(e) => handleAnswerChange(answer.id, e.target.value)}
+              value={value}
+            />
+          );
+        }
       }
+    })();
 
-      case AnswerType.Time: {
-        return (
-          <Input
-            disabled={saving}
-            onChange={(e) => handleAnswerChange(answer.id, e.target.value)}
-            placeholder={intl.formatMessage({ defaultMessage: 'HH:mm' })}
-            value={value}
-          />
-        );
-      }
-
-      default: {
-        return (
-          <Input
-            disabled={saving}
-            onChange={(e) => handleAnswerChange(answer.id, e.target.value)}
-            value={value}
-          />
-        );
-      }
+    // Wrap in tooltip if disabled due to missing tag
+    if (answer.isDisabled && answer.disabledReason) {
+      return <Tooltip title={answer.disabledReason}>{input}</Tooltip>;
     }
+
+    return input;
   };
 
-  const dataSource = useMemo(
-    () =>
-      data?.incident.answers
-        .map((answer) => ({
-          ...answer,
-          dependentQuestions: answer.tagQuestion?.dependentQuestions,
-        }))
-        .filter((answer) => {
-          if (
-            answer.dependentQuestions &&
-            answer.dependentQuestions.length > 0
-          ) {
-            const parent = data.incident.answers.find(
-              (item) =>
-                answer.dependentQuestions &&
-                item.tagQuestion?.id ===
-                  answer.dependentQuestions[0]?.tagQuestionId
-            );
+  const dataSource = useMemo(() => {
+    if (!data?.incident || !incidentTagsData?.listIncidentTags) {
+      return undefined;
+    }
 
-            if (!parent) {
-              return false;
-            }
+    interface MergedQuestion {
+      answer: string;
+      answerRecordId?: string;
+      dependentMode: null | string;
+      dependentOnAnswerValue: null | string;
+      dependentOnAnswerValueArray: string[];
+      dependentOnBrandIds: string[];
+      dependentOnQuestionId: null | string;
+      dependentOnTagIds: string[];
+      disabledReason?: string;
+      isDisabled?: boolean;
+      isUnanswered: boolean;
+      options: Array<{
+        __typename?: 'AnswerOption';
+        label: string;
+        value: string;
+      }>;
+      priority: number;
+      question: string;
+      tagQuestion: (typeof data.incident.answers)[0]['tagQuestion'];
+      tagQuestionId: string;
+      type: AnswerType;
+    }
 
-            const dependentQuestion = answer.dependentQuestions[0] as {
-              answer?: string;
-              dependentMatchMode?: string;
-              tagQuestionId?: string;
+    const { incident } = data;
+    const businessId = incident.business?.id;
+    const involvedTagIds = incident.involvedTags?.map((tag) => tag.id) || [];
+    const crimeTypeIds = incident.crimeTypes?.map((ct) => ct.id) || [];
+
+    // Get all questions from the current incident types
+    const allQuestionsFromTypes = incidentTagsData.listIncidentTags
+      .filter((tag) => crimeTypeIds.includes(tag.value))
+      .flatMap((tag) => tag.questions || []);
+
+    // Create a map of existing answers by tagQuestionId
+    const existingAnswersMap = new Map(
+      incident.answers.map((answer) => [answer.tagQuestion?.id || '', answer])
+    );
+
+    // Merge questions with existing answers
+    const mergedQuestions: MergedQuestion[] = allQuestionsFromTypes.map(
+      (question) => {
+        const existingAnswer = existingAnswersMap.get(question.tagQuestionId);
+        return {
+          answer: existingAnswer?.answer || '',
+          answerRecordId: existingAnswer?.id,
+          dependentMode: question.dependentMode || null,
+          dependentOnAnswerValue: question.dependentOnAnswerValue || null,
+          dependentOnAnswerValueArray:
+            question.dependentOnAnswerValueArray || [],
+          // Store question metadata for filtering
+          dependentOnBrandIds: question.dependentOnBrandIds || [],
+          dependentOnQuestionId: question.dependentOnQuestionId || null,
+          dependentOnTagIds: question.dependentOnTagIds || [],
+          isUnanswered: !existingAnswer,
+          options: question.options || [],
+          priority: question.priority,
+          question: question.label,
+          tagQuestion: existingAnswer?.tagQuestion,
+          tagQuestionId: question.tagQuestionId,
+          type: question.answerType,
+        };
+      }
+    );
+
+    // Filter by brand dependencies
+    const filteredByBrand = mergedQuestions.filter((q) => {
+      if (q.dependentOnBrandIds.length > 0) {
+        // If question depends on brands, check if incident business matches
+        return q.dependentOnBrandIds.includes(businessId || '');
+      }
+      return true;
+    });
+
+    // Filter by tag dependencies and mark as disabled if missing
+    const filteredByTagsWithDisabled: MergedQuestion[] = filteredByBrand.map(
+      (q) => {
+        if (q.dependentOnTagIds.length > 0) {
+          const hasRequiredTag = q.dependentOnTagIds.some((tagId) =>
+            involvedTagIds.includes(tagId)
+          );
+
+          if (!hasRequiredTag) {
+            // Find the tag name for the disabled reason
+            const requiredTagNames = q.dependentOnTagIds
+              .map((tagId) => {
+                const tag = incident.involvedTags?.find((t) => t.id === tagId);
+                return tag?.name;
+              })
+              .filter(Boolean);
+
+            return {
+              ...q,
+              disabledReason: `Requires tag: ${requiredTagNames.join(' or ')}`,
+              isDisabled: true,
             };
-            const expectedAnswer = dependentQuestion?.answer;
-            if (!expectedAnswer) {
-              return true; // If no expected answer specified, show the field
-            }
+          }
+        }
+        return q;
+      }
+    );
 
-            const parentAnswerLower = parent.answer.toLowerCase();
+    // Filter by question dependencies (question-to-question)
+    const filteredByQuestions = filteredByTagsWithDisabled.filter((q) => {
+      if (q.dependentOnQuestionId) {
+        // Find the parent question in our merged list
+        const parentQuestion = filteredByTagsWithDisabled.find(
+          (pq) => pq.tagQuestionId === q.dependentOnQuestionId
+        );
 
-            // Handle multiple acceptable answers separated by '|||'
-            if (
-              typeof expectedAnswer === 'string' &&
-              expectedAnswer.includes('|||')
-            ) {
-              const acceptableAnswers = expectedAnswer
-                .split('|||')
-                .map((a) => a.toLowerCase());
-              return acceptableAnswers.includes(parentAnswerLower);
-            }
+        if (!parentQuestion || !parentQuestion.answer) {
+          return false; // Hide if parent doesn't exist or has no answer
+        }
 
-            return parentAnswerLower === String(expectedAnswer).toLowerCase();
+        // Check if parent answer matches expected value
+        const expectedAnswer = q.dependentOnAnswerValue;
+        const expectedAnswers = q.dependentOnAnswerValueArray;
+
+        if (expectedAnswer || expectedAnswers.length > 0) {
+          const parentAnswerLower = parentQuestion.answer.toLowerCase();
+
+          // Handle multiple acceptable answers
+          if (expectedAnswers.length > 0) {
+            const acceptableAnswers = expectedAnswers.map((a) =>
+              a.toLowerCase()
+            );
+            return acceptableAnswers.includes(parentAnswerLower);
           }
 
-          return true;
-        })
-        .map((answer) => ({
-          answer: answer.answer,
-          formattedAnswer: formatAnswer(answer.answer, answer.type),
-          id: answer.id,
-          key: answer.id,
-          question: answer.tagQuestion?.question?.question || '',
-          tagQuestion: answer.tagQuestion,
-          type: answer.type,
-        })),
-    [data]
-  ) as AnswerData[] | undefined;
+          // Handle '|||' separated answers
+          if (expectedAnswer && expectedAnswer.includes('|||')) {
+            const acceptableAnswers = expectedAnswer
+              .split('|||')
+              .map((a) => a.toLowerCase());
+            return acceptableAnswers.includes(parentAnswerLower);
+          }
 
-  return data?.incident && data.incident.answers.length > 0 ? (
+          // Single expected answer
+          if (expectedAnswer) {
+            return parentAnswerLower === expectedAnswer.toLowerCase();
+          }
+        }
+      }
+      return true;
+    });
+
+    // Sort by priority (descending, like the original query)
+    const sorted = [...filteredByQuestions].sort((a, b) => {
+      const aPriority = a.priority || 0;
+      const bPriority = b.priority || 0;
+      return bPriority - aPriority;
+    });
+
+    // Map to AnswerData format
+    return sorted.map((q) => ({
+      answer: q.answer,
+      disabledReason: q.disabledReason,
+      formattedAnswer: formatAnswer(q.answer, q.type),
+      id: q.answerRecordId || `temp-${q.tagQuestionId}`,
+      isDisabled: q.isDisabled,
+      isUnanswered: q.isUnanswered,
+      key: q.answerRecordId || `temp-${q.tagQuestionId}`,
+      question: q.question,
+      tagQuestion: {
+        question: {
+          options: q.options,
+          optionsFormatted: q.options.map((opt) => opt.label),
+          question: q.question,
+        },
+      },
+      tagQuestionId: q.tagQuestionId,
+      type: q.type,
+    })) as AnswerData[];
+  }, [data, incidentTagsData]);
+
+  return data?.incident && dataSource && dataSource.length > 0 ? (
     <Card loading={loading}>
       <Row align="middle" justify="space-between" style={{ marginBottom: 16 }}>
         <Col>
@@ -417,6 +594,16 @@ const Answers = ({
             })),
             key: 'question',
             onFilter: (value, record) => record.question === value,
+            render: (text: string, record) => {
+              if (record.isDisabled) {
+                return (
+                  <Tooltip title={record.disabledReason}>
+                    <span style={{ color: '#999' }}>{text}</span>
+                  </Tooltip>
+                );
+              }
+              return text;
+            },
             title: intl.formatMessage({ defaultMessage: 'Question' }),
           },
           {
@@ -425,6 +612,14 @@ const Answers = ({
             render: (_, record) => {
               if (editMode) {
                 return renderEditableInput(record);
+              }
+              if (record.isDisabled) {
+                const emDash = '\u2014'; // Em dash character
+                return (
+                  <span style={{ color: '#999', fontStyle: 'italic' }}>
+                    {record.formattedAnswer || emDash}
+                  </span>
+                );
               }
               return record.formattedAnswer;
             },
@@ -438,6 +633,9 @@ const Answers = ({
             display: 'none',
           },
         }}
+        rowClassName={(record) =>
+          record.isDisabled ? 'disabled-question-row' : ''
+        }
         size="small"
       />
       {editMode ? (

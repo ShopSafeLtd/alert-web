@@ -1,0 +1,31 @@
+query UserEngagementActivity($userId: String) {
+  userEngagementActivity(userId: $userId) {
+    userId
+    userFullName
+    totalViews
+    totalBulletinsViewed
+    totalDocumentsViewed
+    totalOffendersViewed
+    bulletins {
+      bulletinId
+      bulletinTitle
+      viewCount
+      firstViewedAt
+      lastViewedAt
+    }
+    documents {
+      documentId
+      documentName
+      viewCount
+      firstViewedAt
+      lastViewedAt
+    }
+    offenders {
+      offenderId
+      offenderName
+      viewCount
+      firstViewedAt
+      lastViewedAt
+    }
+  }
+}

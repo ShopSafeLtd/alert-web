@@ -1,5 +1,7 @@
 import type { WorkflowProps } from '#/views/workflows/ViewWorkflow/Workflow.view';
 
+import RolesSelect from '#/components/form-components/RolesSelect/RolesSelect.view';
+import UsersSelect from '#/components/form-components/UsersSelect/UsersSelect.view';
 import {
   Button,
   Col,
@@ -21,7 +23,12 @@ import type { OverUnder } from '../useWorkflowForm';
 
 type PickedBase = Pick<
   WorkflowProps,
+  | 'activityClosedSelected'
+  | 'activityCompletedBySelected'
+  | 'activityOverdueSelected'
+  | 'activityRaisedBySelected'
   | 'availableQuestions'
+  | 'form'
   | 'questionsSelected'
   | 'selectedQuestions'
   | 'setAvailableQuestions'
@@ -34,8 +41,13 @@ type TodoConditionsProps = {
 } & PickedBase;
 
 const TodoConditions: React.FC<TodoConditionsProps> = ({
+  activityClosedSelected,
+  activityCompletedBySelected,
+  activityOverdueSelected,
+  activityRaisedBySelected,
   availableQuestions,
   classes,
+  form,
   questionsSelected,
   selectedQuestions,
   setAvailableQuestions,
@@ -46,6 +58,290 @@ const TodoConditions: React.FC<TodoConditionsProps> = ({
 
   return (
     <>
+      {/* Activity Closed Condition */}
+      <Divider style={{ marginBottom: 0, marginTop: 0 }} />
+      <div>
+        <Row style={{ padding: 20 }} wrap={false}>
+          <Col flex={1}>
+            <Typography.Title level={4}>
+              <FormattedMessage defaultMessage="Activity Closed" />
+            </Typography.Title>
+            <Typography.Text type="secondary">
+              <FormattedMessage defaultMessage="Trigger workflow when the activity has been closed." />
+            </Typography.Text>
+          </Col>
+          <Col span={2}>
+            <Form.Item name="activityClosedCheck" valuePropName="checked">
+              <Switch />
+            </Form.Item>
+          </Col>
+        </Row>
+        {activityClosedSelected && (
+          <div className={classes.cardBody}>
+            <Form.Item name="activityClosed" valuePropName="checked">
+              <Switch
+                checkedChildren={intl.formatMessage({
+                  defaultMessage: 'Closed',
+                })}
+                unCheckedChildren={intl.formatMessage({
+                  defaultMessage: 'Not Closed',
+                })}
+              />
+            </Form.Item>
+          </div>
+        )}
+      </div>
+
+      {/* Activity Raised By Condition */}
+      <Divider style={{ marginBottom: 0, marginTop: 0 }} />
+      <div>
+        <Row style={{ padding: 20 }} wrap={false}>
+          <Col flex={1}>
+            <Typography.Title level={4}>
+              <FormattedMessage defaultMessage="Activity Raised By" />
+            </Typography.Title>
+            <Typography.Text type="secondary">
+              <FormattedMessage defaultMessage="Trigger workflow when activity is raised by specific users or roles." />
+            </Typography.Text>
+          </Col>
+          <Col span={2}>
+            <Form.Item name="activityRaisedByCheck" valuePropName="checked">
+              <Switch />
+            </Form.Item>
+          </Col>
+        </Row>
+        {activityRaisedBySelected && (
+          <div className={classes.cardBody}>
+            <Form.Item
+              label={
+                <FormattedMessage defaultMessage="If any or all selected users/roles" />
+              }
+              name="activityRaisedByCondition"
+              rules={[
+                {
+                  message: intl.formatMessage({
+                    defaultMessage: 'Please select an option',
+                  }),
+                  required: true,
+                },
+              ]}
+            >
+              <Radio.Group
+                optionType="button"
+                options={[
+                  {
+                    label: intl.formatMessage({ defaultMessage: 'Any' }),
+                    value: 'any',
+                  },
+                  {
+                    label: intl.formatMessage({ defaultMessage: 'All' }),
+                    value: 'all',
+                  },
+                ]}
+              />
+            </Form.Item>
+            <Form.Item
+              label={<FormattedMessage defaultMessage="Users" />}
+              name="activityRaisedByUsers"
+            >
+              <UsersSelect
+                mode="multiple"
+                placeholder={intl.formatMessage({
+                  defaultMessage: 'Select users',
+                })}
+              />
+            </Form.Item>
+            <Form.Item
+              label={<FormattedMessage defaultMessage="Roles" />}
+              name="activityRaisedByRoles"
+              rules={[
+                {
+                  message: intl.formatMessage({
+                    defaultMessage: 'Please select at least one user or role',
+                  }),
+                  validator: (_: unknown, value: string[]) => {
+                    const users = form.getFieldValue(
+                      'activityRaisedByUsers'
+                    ) as string[];
+                    if (
+                      (!users || users.length === 0) &&
+                      (!value || value.length === 0)
+                    ) {
+                      return Promise.reject();
+                    }
+                    return Promise.resolve();
+                  },
+                },
+              ]}
+            >
+              <RolesSelect
+                mode="multiple"
+                placeholder={intl.formatMessage({
+                  defaultMessage: 'Select roles',
+                })}
+              />
+            </Form.Item>
+          </div>
+        )}
+      </div>
+
+      {/* Activity Completed By Condition */}
+      <Divider style={{ marginBottom: 0, marginTop: 0 }} />
+      <div>
+        <Row style={{ padding: 20 }} wrap={false}>
+          <Col flex={1}>
+            <Typography.Title level={4}>
+              <FormattedMessage defaultMessage="Activity Completed By" />
+            </Typography.Title>
+            <Typography.Text type="secondary">
+              <FormattedMessage defaultMessage="Trigger workflow when activity is completed by specific users or roles." />
+            </Typography.Text>
+          </Col>
+          <Col span={2}>
+            <Form.Item name="activityCompletedByCheck" valuePropName="checked">
+              <Switch />
+            </Form.Item>
+          </Col>
+        </Row>
+        {activityCompletedBySelected && (
+          <div className={classes.cardBody}>
+            <Form.Item
+              label={
+                <FormattedMessage defaultMessage="If any or all selected users/roles" />
+              }
+              name="activityCompletedByCondition"
+              rules={[
+                {
+                  message: intl.formatMessage({
+                    defaultMessage: 'Please select an option',
+                  }),
+                  required: true,
+                },
+              ]}
+            >
+              <Radio.Group
+                optionType="button"
+                options={[
+                  {
+                    label: intl.formatMessage({ defaultMessage: 'Any' }),
+                    value: 'any',
+                  },
+                  {
+                    label: intl.formatMessage({ defaultMessage: 'All' }),
+                    value: 'all',
+                  },
+                ]}
+              />
+            </Form.Item>
+            <Form.Item
+              label={<FormattedMessage defaultMessage="Users" />}
+              name="activityCompletedByUsers"
+            >
+              <UsersSelect
+                mode="multiple"
+                placeholder={intl.formatMessage({
+                  defaultMessage: 'Select users',
+                })}
+              />
+            </Form.Item>
+            <Form.Item
+              label={<FormattedMessage defaultMessage="Roles" />}
+              name="activityCompletedByRoles"
+              rules={[
+                {
+                  message: intl.formatMessage({
+                    defaultMessage: 'Please select at least one user or role',
+                  }),
+                  validator: (_: unknown, value: string[]) => {
+                    const users = form.getFieldValue(
+                      'activityCompletedByUsers'
+                    ) as string[];
+                    if (
+                      (!users || users.length === 0) &&
+                      (!value || value.length === 0)
+                    ) {
+                      return Promise.reject();
+                    }
+                    return Promise.resolve();
+                  },
+                },
+              ]}
+            >
+              <RolesSelect
+                mode="multiple"
+                placeholder={intl.formatMessage({
+                  defaultMessage: 'Select roles',
+                })}
+              />
+            </Form.Item>
+          </div>
+        )}
+      </div>
+
+      {/* Activity Overdue Condition */}
+      <Divider style={{ marginBottom: 0, marginTop: 0 }} />
+      <div>
+        <Row style={{ padding: 20 }} wrap={false}>
+          <Col flex={1}>
+            <Typography.Title level={4}>
+              <FormattedMessage defaultMessage="Activity Overdue" />
+            </Typography.Title>
+            <Typography.Text type="secondary">
+              <FormattedMessage defaultMessage="Trigger workflow when the activity is overdue." />
+            </Typography.Text>
+          </Col>
+          <Col span={2}>
+            <Form.Item name="activityOverdueCheck" valuePropName="checked">
+              <Switch />
+            </Form.Item>
+          </Col>
+        </Row>
+        {activityOverdueSelected && (
+          <div className={classes.cardBody}>
+            <Form.Item
+              initialValue={true}
+              label={
+                <FormattedMessage defaultMessage="Match activities that are:" />
+              }
+              name="activityOverdue"
+              rules={[
+                {
+                  message: intl.formatMessage({
+                    defaultMessage: 'Please select an option',
+                  }),
+                  required: true,
+                },
+              ]}
+            >
+              <Radio.Group
+                optionType="button"
+                options={[
+                  {
+                    label: intl.formatMessage({
+                      defaultMessage: 'Overdue',
+                    }),
+                    value: true,
+                  },
+                  {
+                    label: intl.formatMessage({
+                      defaultMessage: 'Not Overdue',
+                    }),
+                    value: false,
+                  },
+                ]}
+              />
+            </Form.Item>
+            <Typography.Text
+              style={{ display: 'block', marginTop: -16 }}
+              type="secondary"
+            >
+              <FormattedMessage defaultMessage="Overdue: Activities past their due date. Not Overdue: Activities on time or with no due date." />
+            </Typography.Text>
+          </div>
+        )}
+      </div>
+
+      {/* Existing Question Answers Condition */}
       <Divider style={{ marginBottom: 0, marginTop: 0 }} />
       <div>
         <Row style={{ padding: 20 }} wrap={false}>

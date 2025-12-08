@@ -8,7 +8,7 @@ export type UpdateTrainingVideoMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateTrainingVideoMutation = { __typename?: 'Mutation', updateTrainingVideo: { __typename?: 'TrainingVideo', id: string, title: string, description?: string | null, videoUrl: string, thumbnailUrl?: string | null, thumbnailStatus: Types.ThumbnailStatus, viewCount: number, createdAt: Date, updatedAt: Date, tags: Array<{ __typename?: 'Tag', id: string, name: string }>, groups: Array<{ __typename?: 'Group', id: string, name: string }> } };
+export type UpdateTrainingVideoMutation = { __typename?: 'Mutation', updateTrainingVideo: { __typename?: 'TrainingVideo', id: string, title: string, description?: string | null, videoUrl: string, thumbnailUrl?: string | null, thumbnailStatus: Types.ThumbnailStatus, viewCount: number, loginPrompt: boolean, mandatory: boolean, createdAt: Date, updatedAt: Date, tags: Array<{ __typename?: 'Tag', id: string, name: string }>, groups: Array<{ __typename?: 'Group', id: string, name: string }> } };
 
 
 export const UpdateTrainingVideoDocument = gql`
@@ -21,6 +21,8 @@ export const UpdateTrainingVideoDocument = gql`
     thumbnailUrl
     thumbnailStatus
     viewCount
+    loginPrompt
+    mandatory
     tags {
       id
       name

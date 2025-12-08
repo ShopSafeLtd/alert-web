@@ -101,7 +101,7 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
   const { data: userData, loading } = useUserQuery({
     fetchPolicy: 'cache-and-network',
     onCompleted: ({ user }) => {
-      setSelectedRole(user?.schemes[0].role);
+      setSelectedRole(user?.schemes[0]?.role);
       setSelectedGroups(user?.groups.map(({ id }) => id));
     },
     variables: {

@@ -27,6 +27,8 @@ query ResourceTrainingVideos(
       id
       name
     }
+    loginPrompt
+    mandatory
     createdAt
     updatedAt
   }

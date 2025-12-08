@@ -7,6 +7,7 @@ import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { createUseStyles } from 'react-jss';
 
+import BanConditions from './BanConditions';
 import ChecklistConditions from './ChecklistConditions';
 import IncidentConditions from './IncidentConditions';
 import OffenderConditions from './OffenderConditions';
@@ -22,13 +23,19 @@ const useStyles = createUseStyles((theme: Theme) => ({
 
 type PickedProps = Pick<
   WorkflowProps,
+  | 'activityClosedSelected'
+  | 'activityCompletedBySelected'
+  | 'activityOverdueSelected'
+  | 'activityRaisedBySelected'
   | 'availableQuestions'
+  | 'banTypeSelected'
   | 'brands'
   | 'brandsLoading'
   | 'brandsSelected'
   | 'checklistOption'
   | 'countries'
   | 'countriesSelected'
+  | 'daysUntilExpirySelected'
   | 'descriptionCheck'
   | 'divisions'
   | 'divisionsLoading'
@@ -163,10 +170,26 @@ const WorkflowConditions: React.FC<PickedProps> = ({
         />
       )}
 
+      {modelSelected === Model.Ban && (
+        <BanConditions
+          banTypeSelected={props.banTypeSelected}
+          classes={classes}
+          daysUntilExpirySelected={props.daysUntilExpirySelected}
+          form={props.form}
+          groups={props.groups}
+          groupsSelected={props.groupsSelected}
+        />
+      )}
+
       {modelSelected === Model.Todo && (
         <TodoConditions
+          activityClosedSelected={props.activityClosedSelected}
+          activityCompletedBySelected={props.activityCompletedBySelected}
+          activityOverdueSelected={props.activityOverdueSelected}
+          activityRaisedBySelected={props.activityRaisedBySelected}
           availableQuestions={props.availableQuestions}
           classes={classes}
+          form={props.form}
           questionsSelected={props.questionsSelected}
           selectedQuestions={props.selectedQuestions}
           setAvailableQuestions={props.setAvailableQuestions}
