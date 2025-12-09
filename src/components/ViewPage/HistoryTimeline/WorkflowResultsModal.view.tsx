@@ -107,10 +107,13 @@ interface WorkflowCondition {
   priorityOnIncident?: string;
   questionsOnCondition?: Array<QuestionEntity | string>;
   questionsOnIncident?: Array<QuestionEntity | string>;
+  rolesMatched?: Array<NamedEntity | string>;
   score?: number;
   tagsOnCondition?: Array<NamedEntity | string>;
   tagsOnIncident?: Array<NamedEntity | string>;
   threshold?: number;
+  typesMatched?: string[];
+  usersMatched?: Array<NamedEntity | string>;
   wordsInDescription?: string[];
 }
 
@@ -125,8 +128,14 @@ interface WorkflowActionsTriggered {
 interface WorkflowEvaluation {
   actionsTriggered?: WorkflowActionsTriggered;
   conditions: {
+    activityClosed?: WorkflowCondition;
+    activityCompletedBy?: WorkflowCondition;
+    activityOverdue?: WorkflowCondition;
+    activityRaisedBy?: WorkflowCondition;
+    banType?: WorkflowCondition;
     brands?: WorkflowCondition;
     countries?: WorkflowCondition;
+    daysUntilExpiry?: WorkflowCondition;
     description?: WorkflowCondition;
     division?: WorkflowCondition;
     goodsType?: WorkflowCondition;
@@ -198,8 +207,22 @@ const WorkflowResultsModal: React.FC<Props> = ({
     condition: WorkflowCondition
   ) => {
     const conditionLabels: Record<string, string> = {
+      activityClosed: intl.formatMessage({ defaultMessage: 'Activity Closed' }),
+      activityCompletedBy: intl.formatMessage({
+        defaultMessage: 'Activity Completed By',
+      }),
+      activityOverdue: intl.formatMessage({
+        defaultMessage: 'Activity Overdue',
+      }),
+      activityRaisedBy: intl.formatMessage({
+        defaultMessage: 'Activity Raised By',
+      }),
+      banType: intl.formatMessage({ defaultMessage: 'Ban Type' }),
       brands: intl.formatMessage({ defaultMessage: 'Brands' }),
       countries: intl.formatMessage({ defaultMessage: 'Countries' }),
+      daysUntilExpiry: intl.formatMessage({
+        defaultMessage: 'Days Until Expiry',
+      }),
       description: intl.formatMessage({ defaultMessage: 'Description' }),
       division: intl.formatMessage({ defaultMessage: 'Division' }),
       goodsType: intl.formatMessage({ defaultMessage: 'Goods Type' }),
@@ -394,6 +417,116 @@ const WorkflowResultsModal: React.FC<Props> = ({
             <Tag key={word}>{word}</Tag>
           ))}
         </Space>
+      );
+    }
+
+    // Activity Closed condition
+    if (conditionName === 'activityClosed') {
+      return intl.formatMessage(
+        {
+          defaultMessage: 'Expected: {expected}, Actual: {actual}',
+        },
+        {
+          actual: condition.actual ? 'Closed' : 'Not Closed',
+          expected: condition.expected ? 'Closed' : 'Not Closed',
+        }
+      );
+    }
+
+    // Activity Raised By condition
+    if (conditionName === 'activityRaisedBy') {
+      return (
+        <Space direction="vertical" size="small">
+          {condition.usersMatched && (
+            <Space wrap>
+              <Text strong style={{ opacity: 0.85 }}>
+                {intl.formatMessage({ defaultMessage: 'Users:' })}
+              </Text>
+              {condition.usersMatched.map((user: NamedEntity | string) => (
+                <Tag key={getEntityKey(user)}>{getEntityName(user)}</Tag>
+              ))}
+            </Space>
+          )}
+          {condition.rolesMatched && (
+            <Space wrap>
+              <Text strong style={{ opacity: 0.85 }}>
+                {intl.formatMessage({ defaultMessage: 'Roles:' })}
+              </Text>
+              {condition.rolesMatched.map((role: NamedEntity | string) => (
+                <Tag key={getEntityKey(role)}>{getEntityName(role)}</Tag>
+              ))}
+            </Space>
+          )}
+        </Space>
+      );
+    }
+
+    // Activity Completed By condition
+    if (conditionName === 'activityCompletedBy') {
+      return (
+        <Space direction="vertical" size="small">
+          {condition.usersMatched && (
+            <Space wrap>
+              <Text strong style={{ opacity: 0.85 }}>
+                {intl.formatMessage({ defaultMessage: 'Users:' })}
+              </Text>
+              {condition.usersMatched.map((user: NamedEntity | string) => (
+                <Tag key={getEntityKey(user)}>{getEntityName(user)}</Tag>
+              ))}
+            </Space>
+          )}
+          {condition.rolesMatched && (
+            <Space wrap>
+              <Text strong style={{ opacity: 0.85 }}>
+                {intl.formatMessage({ defaultMessage: 'Roles:' })}
+              </Text>
+              {condition.rolesMatched.map((role: NamedEntity | string) => (
+                <Tag key={getEntityKey(role)}>{getEntityName(role)}</Tag>
+              ))}
+            </Space>
+          )}
+        </Space>
+      );
+    }
+
+    // Activity Overdue condition
+    if (conditionName === 'activityOverdue') {
+      return intl.formatMessage(
+        {
+          defaultMessage: 'Expected: {expected}, Actual: {actual}',
+        },
+        {
+          actual: condition.actual ? 'Overdue' : 'Not Overdue',
+          expected: condition.expected ? 'Overdue' : 'Not Overdue',
+        }
+      );
+    }
+
+    // Ban Type condition
+    if (conditionName === 'banType' && condition.typesMatched) {
+      return (
+        <Space wrap>
+          <Text strong style={{ opacity: 0.85 }}>
+            {intl.formatMessage({ defaultMessage: 'Ban types:' })}
+          </Text>
+          {condition.typesMatched.map((type: string) => (
+            <Tag key={type}>{type}</Tag>
+          ))}
+        </Space>
+      );
+    }
+
+    // Days Until Expiry condition
+    if (conditionName === 'daysUntilExpiry') {
+      return intl.formatMessage(
+        {
+          defaultMessage:
+            'Expected: within {expected} days, Actual: {actual} days',
+        },
+        {
+          actual: condition.actual,
+          expected: condition.expected,
+        }
       );
     }
 

@@ -205,31 +205,47 @@ const ViewBusiness = ({
               </PermissionCheckWrapper>
             </Col>
             <Col>
-              <Button onClick={toggleEdit} type="ghost">
-                <FontAwesomeIcon
-                  icon={faEdit}
-                  size="1x"
-                  style={{ marginRight: 8 }}
-                />
-                {intl.formatMessage({
-                  defaultMessage: 'Edit Business',
-                })}
-              </Button>
+              <PermissionCheckWrapper
+                permission={{
+                  method: PermissionMethod.Edit,
+                  model: PermissionModel.Businesses,
+                }}
+                unauthorizedElement={<div />}
+              >
+                <Button onClick={toggleEdit} type="ghost">
+                  <FontAwesomeIcon
+                    icon={faEdit}
+                    size="1x"
+                    style={{ marginRight: 8 }}
+                  />
+                  {intl.formatMessage({
+                    defaultMessage: 'Edit Business',
+                  })}
+                </Button>
+              </PermissionCheckWrapper>
             </Col>
             <Col>
-              <Button
-                onClick={() => deleteConfirm(data?.business?.id || '')}
-                type="ghost"
+              <PermissionCheckWrapper
+                permission={{
+                  method: PermissionMethod.Delete,
+                  model: PermissionModel.Businesses,
+                }}
+                unauthorizedElement={<div />}
               >
-                <FontAwesomeIcon
-                  icon={faTrash}
-                  size="1x"
-                  style={{ marginRight: 8 }}
-                />
-                {intl.formatMessage({
-                  defaultMessage: 'Delete',
-                })}
-              </Button>
+                <Button
+                  onClick={() => deleteConfirm(data?.business?.id || '')}
+                  type="ghost"
+                >
+                  <FontAwesomeIcon
+                    icon={faTrash}
+                    size="1x"
+                    style={{ marginRight: 8 }}
+                  />
+                  {intl.formatMessage({
+                    defaultMessage: 'Delete',
+                  })}
+                </Button>
+              </PermissionCheckWrapper>
             </Col>
           </Row>
           <div className={classes.details}>

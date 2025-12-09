@@ -5,7 +5,7 @@ import type { RcFile } from 'rc-upload/lib/interface';
 import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
 import { faCloudUploadAlt } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, Form, Input, Modal, Progress, Upload } from 'antd';
+import { Button, Checkbox, Form, Input, Modal, Progress, Upload } from 'antd';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
@@ -16,6 +16,8 @@ interface FormData {
   description?: string;
   file?: UploadFile;
   groups: string[];
+  loginPrompt?: boolean;
+  mandatory?: boolean;
   tags?: string[];
   title: string;
 }
@@ -44,6 +46,7 @@ const UploadVideoModalView: React.FC<UploadVideoModalViewProps> = ({
   visible,
 }) => {
   const intl = useIntl();
+  const loginPrompt = Form.useWatch('loginPrompt', form);
 
   return (
     <Modal
@@ -183,6 +186,32 @@ const UploadVideoModalView: React.FC<UploadVideoModalViewProps> = ({
               defaultMessage: 'Select groups...',
             })}
           />
+        </Form.Item>
+
+        <Form.Item
+          name="loginPrompt"
+          tooltip={intl.formatMessage({
+            defaultMessage:
+              'Show this video to users when they log in or load the app',
+          })}
+          valuePropName="checked"
+        >
+          <Checkbox disabled={uploading}>
+            <FormattedMessage defaultMessage="Show on Login" />
+          </Checkbox>
+        </Form.Item>
+
+        <Form.Item
+          name="mandatory"
+          tooltip={intl.formatMessage({
+            defaultMessage:
+              'Users must watch to 90% completion before they can proceed',
+          })}
+          valuePropName="checked"
+        >
+          <Checkbox disabled={uploading || !loginPrompt}>
+            <FormattedMessage defaultMessage="Mandatory Viewing" />
+          </Checkbox>
         </Form.Item>
       </Form>
     </Modal>

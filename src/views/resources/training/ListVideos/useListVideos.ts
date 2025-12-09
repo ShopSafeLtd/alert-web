@@ -1,33 +1,14 @@
 import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
-import { gql, useQuery } from '@apollo/client';
+import { notification } from 'antd';
 import { useAtomValue } from 'jotai/index';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
-// GraphQL Documents
-const TRAINING_VIDEOS_QUERY = gql`
-  query ResourceTrainingVideos($schemeId: String!) {
-    trainingVideos(schemeId: $schemeId) {
-      id
-      title
-      description
-      videoUrl
-      thumbnailUrl
-      thumbnailStatus
-      viewCount
-      tags {
-        id
-        name
-      }
-      groups {
-        id
-        name
-      }
-      createdAt
-      updatedAt
-    }
-  }
-`;
+import {
+  useResourceTrainingVideosQuery,
+  ResourceTrainingVideosQuery,
+} from '../graphql/queries/__generated__/training-videos.generated';
 
 export interface Tag {
   id: string;
@@ -39,20 +20,8 @@ export interface Group {
   name: string;
 }
 
-export interface TrainingVideo {
-  createdAt: string;
-  description?: string;
-  groups: Group[];
-  id: string;
-  tags: Tag[];
-  thumbnailStatus?: string;
-  thumbnailUrl?: string;
-  title: string;
-  updatedAt: string;
-  videoUrl: string;
-  viewCount: number;
-}
-
+export type TrainingVideo =
+  ResourceTrainingVideosQuery['trainingVideos'][number];
 export type SortOption = 'az' | 'mostViewed' | 'newest' | 'za';
 
 interface UseListVideosReturn {
@@ -74,6 +43,7 @@ interface UseListVideosReturn {
 const useListVideos = (): UseListVideosReturn => {
   const currentScheme = useAtomValue(currentSchemeAtom);
   const currentUser = useAtomValue(currentUserAtom);
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
@@ -89,13 +59,11 @@ const useListVideos = (): UseListVideosReturn => {
     [currentUser]
   );
 
-  const { data, loading } = useQuery<{
-    trainingVideos: TrainingVideo[];
-  }>(TRAINING_VIDEOS_QUERY, {
+  const { data, loading } = useResourceTrainingVideosQuery({
     fetchPolicy: 'cache-and-network',
     skip: !currentScheme?.id,
     variables: {
-      schemeId: currentScheme?.id,
+      schemeId: currentScheme?.id || '',
     },
   });
 
@@ -110,9 +78,9 @@ const useListVideos = (): UseListVideosReturn => {
 
     // Filter videos where user is in at least one of the video's groups
     return videos.filter((video) => {
-      // If video has no groups, don't show it (since user has groups)
+      // If video has no groups, show it to all users (no restrictions)
       if (!video.groups || video.groups.length === 0) {
-        return false;
+        return true;
       }
 
       // Check if user is in any of the video's groups
@@ -185,6 +153,28 @@ const useListVideos = (): UseListVideosReturn => {
 
     return sorted;
   }, [groupFilteredVideos, searchTerm, selectedTags, sortBy]);
+
+  // Handle direct video linking via URL parameter
+  useEffect(() => {
+    const videoId = searchParams.get('videoId');
+    if (videoId && !loading && filteredAndSortedVideos.length > 0) {
+      const video = filteredAndSortedVideos.find((v) => v.id === videoId);
+      if (video) {
+        setSelectedVideo(video);
+        setPlayerModalOpen(true);
+        // Clean up URL parameter after opening
+        setSearchParams({});
+      } else {
+        notification.error({
+          description:
+            'The requested video could not be found or you do not have access to it.',
+          message: 'Video not found',
+          placement: 'bottomRight',
+        });
+        setSearchParams({});
+      }
+    }
+  }, [searchParams, loading, filteredAndSortedVideos, setSearchParams]);
 
   const handleSearch = (value: string): void => {
     setSearchTerm(value);

@@ -12,6 +12,7 @@ import {
   currentSchemeBusinessesAtom,
   currentSchemeIdAtom,
   currentUserSchemeAtom,
+  pendingLoginVideosAtom,
   settingSchemeAtom,
 } from '#/providers/SchemeProvider/SchemeProvider';
 import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
@@ -23,11 +24,12 @@ import MobileNav, {
   mobileNavOpenAtom,
 } from 'components/layout-components/AntD/navigation/MobileNav';
 import SideNav from 'components/layout-components/AntD/navigation/SideNav';
+import MandatoryVideoModal from 'components/training/MandatoryVideoModal';
 import navigationConfig from 'configs/NavigationConfig';
 import { useAtomValue, useSetAtom } from 'jotai/index';
 import AppViews from 'navigation/app-views/router';
 import { usePostHog } from 'posthog-js/react';
-import React, { Suspense, useEffect } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import { useThemeSwitcher } from 'react-css-theme-switcher/src';
 import { createUseStyles } from 'react-jss';
 import { useLocation } from 'react-router-dom';
@@ -93,10 +95,25 @@ const AppLayout = (): JSX.Element => {
 
   const currentScheme = useAtomValue(currentSchemeIdAtom);
   const setMobileNavOpen = useSetAtom(mobileNavOpenAtom);
+  const pendingVideos = useAtomValue(pendingLoginVideosAtom);
+  const setPendingVideos = useSetAtom(pendingLoginVideosAtom);
+  const [showVideoModal, setShowVideoModal] = useState(false);
 
   const onMobileNavToggle = () => {
     setMobileNavOpen(true);
   };
+
+  const handleVideosComplete = () => {
+    setPendingVideos([]);
+    setShowVideoModal(false);
+  };
+
+  // Show modal when pending videos are loaded
+  useEffect(() => {
+    if (pendingVideos.length > 0) {
+      setShowVideoModal(true);
+    }
+  }, [pendingVideos]);
 
   const { status } = useThemeSwitcher();
 
@@ -173,6 +190,11 @@ const AppLayout = (): JSX.Element => {
               <FontAwesomeIcon color="#FFF" icon={faBars} size="xl" />
             </div>
           )}
+          <MandatoryVideoModal
+            onComplete={handleVideosComplete}
+            videos={pendingVideos}
+            visible={showVideoModal}
+          />
         </Layout>
       </GroupsProvider>
     </Suspense>

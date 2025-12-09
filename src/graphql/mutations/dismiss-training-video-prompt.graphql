@@ -1,0 +1,3 @@
+mutation DismissTrainingVideoPrompt($trainingVideoId: String!) {
+  dismissTrainingVideoPrompt(trainingVideoId: $trainingVideoId)
+}

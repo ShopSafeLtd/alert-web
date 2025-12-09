@@ -10,6 +10,7 @@ query StockRemovalRequests($where: StockRemovalRequestsWhere!, $orderBy: [StockR
                 title
                 status
                 reference
+                storeOrDC
                 business {
                     id
                     name

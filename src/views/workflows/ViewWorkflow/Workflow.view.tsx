@@ -35,8 +35,13 @@ interface ListData {
 }
 
 export interface WorkflowProps {
+  activityClosedSelected: boolean;
+  activityCompletedBySelected: boolean;
+  activityOverdueSelected: boolean;
+  activityRaisedBySelected: boolean;
   activityTemplateForm: boolean;
   availableQuestions: Question[];
+  banTypeSelected: boolean;
   // new
   brands: LabelValue[];
   brandsLoading: boolean;
@@ -45,6 +50,7 @@ export interface WorkflowProps {
   countries: LabelValue[];
   countriesSelected: boolean;
   createNewQuestion: (id: string, question: string) => void;
+  daysUntilExpirySelected: boolean;
   descriptionCheck: boolean;
   divisions: LabelValue[];
   divisionsLoading: boolean;
@@ -94,8 +100,13 @@ export interface WorkflowProps {
 }
 
 const WorkflowView: React.FC<WorkflowProps> = ({
+  activityClosedSelected,
+  activityCompletedBySelected,
+  activityOverdueSelected,
+  activityRaisedBySelected,
   activityTemplateForm,
   availableQuestions,
+  banTypeSelected,
   brands,
   brandsLoading,
   brandsSelected,
@@ -103,6 +114,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
   countries,
   countriesSelected,
   createNewQuestion,
+  daysUntilExpirySelected,
   descriptionCheck,
   divisions,
   divisionsLoading,
@@ -193,13 +205,19 @@ const WorkflowView: React.FC<WorkflowProps> = ({
 
               {modelSelected && (
                 <WorkflowConditions
+                  activityClosedSelected={activityClosedSelected}
+                  activityCompletedBySelected={activityCompletedBySelected}
+                  activityOverdueSelected={activityOverdueSelected}
+                  activityRaisedBySelected={activityRaisedBySelected}
                   availableQuestions={availableQuestions}
+                  banTypeSelected={banTypeSelected}
                   brands={brands}
                   brandsLoading={brandsLoading}
                   brandsSelected={brandsSelected}
                   checklistOption={checklistOption}
                   countries={countries}
                   countriesSelected={countriesSelected}
+                  daysUntilExpirySelected={daysUntilExpirySelected}
                   descriptionCheck={descriptionCheck}
                   divisions={divisions}
                   divisionsLoading={divisionsLoading}

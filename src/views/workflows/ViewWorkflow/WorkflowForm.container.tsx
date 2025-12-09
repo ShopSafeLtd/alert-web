@@ -5,8 +5,13 @@ import useWorkflowForm from './useWorkflowForm';
 
 const WorkflowFormContainer = () => {
   const {
+    activityClosedSelected,
+    activityCompletedBySelected,
+    activityOverdueSelected,
+    activityRaisedBySelected,
     activityTemplateForm,
     availableQuestions,
+    banTypeSelected,
     brands,
     brandsLoading,
     brandsSelected,
@@ -14,6 +19,7 @@ const WorkflowFormContainer = () => {
     countries,
     countriesSelected,
     createNewQuestion,
+    daysUntilExpirySelected,
     descriptionCheck,
     divisions,
     divisionsLoading,
@@ -60,8 +66,13 @@ const WorkflowFormContainer = () => {
 
   return (
     <View
+      activityClosedSelected={activityClosedSelected}
+      activityCompletedBySelected={activityCompletedBySelected}
+      activityOverdueSelected={activityOverdueSelected}
+      activityRaisedBySelected={activityRaisedBySelected}
       activityTemplateForm={activityTemplateForm}
       availableQuestions={availableQuestions}
+      banTypeSelected={banTypeSelected}
       brands={brands}
       brandsLoading={brandsLoading}
       brandsSelected={brandsSelected}
@@ -69,6 +80,7 @@ const WorkflowFormContainer = () => {
       countries={countries}
       countriesSelected={countriesSelected}
       createNewQuestion={createNewQuestion}
+      daysUntilExpirySelected={daysUntilExpirySelected}
       descriptionCheck={descriptionCheck}
       divisions={divisions}
       divisionsLoading={divisionsLoading}

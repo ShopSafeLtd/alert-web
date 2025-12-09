@@ -18,6 +18,9 @@ import BusinessSearch from 'views/reports/business/Search';
 import BusinessEngagement from 'views/reports/business-engagement';
 import CrimeGroupReport from 'views/reports/crime-groups/crime-group-report';
 import CrimeGroupList from 'views/reports/crime-groups/list-crime-groups';
+import BulletinEngagementDetail from 'views/reports/engagement/BulletinEngagementDetail';
+import DocumentEngagementDetail from 'views/reports/engagement/DocumentEngagementDetail';
+import OffenderEngagementDetail from 'views/reports/engagement/OffenderEngagementDetail';
 import IncidentMap from 'views/reports/incident-map';
 import OffenderProfileSearch from 'views/reports/offender-profile/Search';
 import OffenderEngagement from 'views/reports/offender-report';
@@ -267,6 +270,45 @@ const Reports = (): JSX.Element => {
             </PermissionCheckWrapper>
           }
           path="checklist-table/:reportId"
+        />
+        <Route
+          element={
+            <PermissionCheckWrapper
+              permission={{
+                method: PermissionMethod.Read,
+                model: PermissionModel.Reports,
+              }}
+            >
+              <BulletinEngagementDetail />
+            </PermissionCheckWrapper>
+          }
+          path="bulletin-engagement/:bulletinId"
+        />
+        <Route
+          element={
+            <PermissionCheckWrapper
+              permission={{
+                method: PermissionMethod.Read,
+                model: PermissionModel.Reports,
+              }}
+            >
+              <DocumentEngagementDetail />
+            </PermissionCheckWrapper>
+          }
+          path="document-engagement/:documentId"
+        />
+        <Route
+          element={
+            <PermissionCheckWrapper
+              permission={{
+                method: PermissionMethod.Read,
+                model: PermissionModel.Reports,
+              }}
+            >
+              <OffenderEngagementDetail />
+            </PermissionCheckWrapper>
+          }
+          path="offender-engagement/:offenderId"
         />
         {/*
 

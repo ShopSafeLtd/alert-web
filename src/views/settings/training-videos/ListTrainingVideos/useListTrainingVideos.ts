@@ -1,5 +1,4 @@
 import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
-import { gql, useLazyQuery, useMutation } from '@apollo/client';
 import { Modal, notification } from 'antd';
 import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
@@ -7,46 +6,8 @@ import { useIntl } from 'react-intl';
 
 import type { TrainingVideo } from '../types';
 
-// GraphQL Documents
-const TRAINING_VIDEOS_QUERY = gql`
-  query TrainingVideos(
-    $schemeId: String!
-    $where: TrainingVideoWhereInput
-    $take: Int
-    $skip: Int
-  ) {
-    trainingVideos(
-      schemeId: $schemeId
-      where: $where
-      take: $take
-      skip: $skip
-    ) {
-      id
-      title
-      description
-      videoUrl
-      thumbnailUrl
-      thumbnailStatus
-      viewCount
-      tags {
-        id
-        name
-      }
-      groups {
-        id
-        name
-      }
-      createdAt
-      updatedAt
-    }
-  }
-`;
-
-const DELETE_TRAINING_VIDEO_MUTATION = gql`
-  mutation DeleteTrainingVideo($id: String!) {
-    deleteTrainingVideo(id: $id)
-  }
-`;
+import { useTrainingVideosLazyQuery } from '../graphql/queries/__generated__/training-videos.generated';
+import { useDeleteTrainingVideoMutation } from '#/views/settings/training-videos/graphql/mutations/__generated__/delete-training-video.generated';
 
 interface UseListTrainingVideosReturn {
   editModalOpen: boolean;
@@ -75,13 +36,12 @@ const useListTrainingVideos = (): UseListTrainingVideosReturn => {
     null
   );
 
-  const [fetchVideos, { data, loading, refetch: refetchQuery }] = useLazyQuery<{
-    trainingVideos: TrainingVideo[];
-  }>(TRAINING_VIDEOS_QUERY, {
-    fetchPolicy: 'network-only',
-  });
+  const [fetchVideos, { data, loading, refetch: refetchQuery }] =
+    useTrainingVideosLazyQuery({
+      fetchPolicy: 'network-only',
+    });
 
-  const [deleteVideo] = useMutation(DELETE_TRAINING_VIDEO_MUTATION, {
+  const [deleteVideo] = useDeleteTrainingVideoMutation({
     onCompleted: () => {
       notification.success({
         description: intl.formatMessage({

@@ -11,11 +11,13 @@ import { ListArticlesDocument } from 'graphql/article/queries/__generated__/list
 import { useArticleQuery } from 'graphql/article/queries/__generated__/view-article.generated';
 import { QueryMode, SortOrder } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router';
 
 import type { Props, ReturnProps } from '../types/ViewArticle';
+
+import { useMarkBulletinViewedMutation } from '../../../../graphql/engagement/mutations/__generated__/mark-bulletin-viewed.generated';
 
 const useViewArticle = ({ id }: Props): ReturnProps => {
   const { componentRef, handlePrint, isPrinting } = useReportPrint();
@@ -23,6 +25,8 @@ const useViewArticle = ({ id }: Props): ReturnProps => {
   const intl = useIntl();
   const navigation = useNavigate();
   const schemeId = useAtomValue(currentSchemeIdAtom);
+  const hasTrackedView = useRef(false);
+
   const editArticle = () => {
     navigation(`/app/article/edit/${id}`);
   };
@@ -38,6 +42,24 @@ const useViewArticle = ({ id }: Props): ReturnProps => {
       where: { id },
     },
   });
+
+  // Track bulletin view silently
+  const [markBulletinViewed] = useMarkBulletinViewedMutation({
+    onError: () => {
+      // Silent failure - don't block UI if tracking fails
+    },
+  });
+
+  useEffect(() => {
+    if (id && !hasTrackedView.current && !loading && data?.article) {
+      hasTrackedView.current = true;
+      void markBulletinViewed({
+        variables: {
+          articleId: id,
+        },
+      });
+    }
+  }, [id, loading, data, markBulletinViewed]);
 
   const listArticlesVars = {
     order: { updatedAt: SortOrder.Desc },

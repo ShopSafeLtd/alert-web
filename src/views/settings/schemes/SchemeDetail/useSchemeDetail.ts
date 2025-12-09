@@ -20,6 +20,7 @@ import { useIntl } from 'react-intl';
 export interface FormData {
   activityAllowAllGroups: boolean;
   activityAssignToUser: boolean;
+  autoApproveActivities: boolean;
   autoApproveIncidents: boolean;
   autoApproveOffenders: boolean;
   autoPopulateDescription: boolean;
@@ -178,6 +179,7 @@ const useSchemeDetail = (): Return => {
         data: {
           activityAllowAllGroups: { set: data.activityAllowAllGroups },
           activityAssignToUser: { set: data.activityAssignToUser },
+          autoApproveActivities: { set: data.autoApproveActivities },
           autoApproveIncidents: { set: data.autoApproveIncidents },
           autoApproveOffenders: { set: data.autoApproveOffenders },
           autoPopulateDescription: { set: data.autoPopulateDescription },
@@ -253,6 +255,7 @@ const useSchemeDetail = (): Return => {
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           restrictIncidentAccess: { set: data.restrictIncidentAccess },
           showBlankActivity: { set: data.showBlankActivity },
+
           // ???
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           useBusinessGroupsOnIncident: {

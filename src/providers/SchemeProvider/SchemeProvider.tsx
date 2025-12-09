@@ -7,10 +7,13 @@ import { useStoreActions } from '#/state';
 import { defaultAdminLayout, defaultUserLayout } from '#/state/dashboard-model';
 import { LocalStorageKeys } from '#/types';
 import { notification } from 'antd';
+import { usePendingLoginPromptVideosLazyQuery } from 'graphql/queries/__generated__/pending-login-prompt-videos.generated';
 import { Currency, GoodsMode, Role } from 'graphql/types';
 import { atom, useAtomValue, useSetAtom } from 'jotai/index';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
+import type { PendingVideo } from '../../components/training/MandatoryVideoModal/types';
 
 type UserSchemeState = CurrentSchemeProviderQuery['userScheme'];
 
@@ -120,6 +123,7 @@ export const defaultCurrentUserSchemeAtom: UserSchemeState = {
     activityAllowAllGroups: false,
     activityAssignToUser: false,
     allowTodoTemplateOverride: true,
+    autoApproveActivities: false,
     autoPopulateDescription: false,
     connectedToSchemes: [],
     currency: Currency.Gbp,
@@ -198,6 +202,8 @@ export const userNotificationsAtom = atom(
   () => {}
 );
 
+export const pendingLoginVideosAtom = atom<PendingVideo[]>([]);
+
 export const useSchemeProvider = () => {
   const setStateScheme = useSetAtom(currentUserSchemeIdAtom);
 
@@ -218,14 +224,40 @@ const SchemeProvider = ({ children }: Props) => {
   const setStateIsSet = useSetAtom(stateIsSetAtom);
   const setSettingScheme = useSetAtom(settingSchemeAtom);
   const setCurrentSchemeId = useSetAtom(currentUserSchemeIdAtom);
+  const setPendingLoginVideos = useSetAtom(pendingLoginVideosAtom);
+  const [shouldCheckVideos, setShouldCheckVideos] = useState(false);
 
   const setDashboard = useStoreActions(
     (actions) => actions.dashboard.setSchemeLayouts
   );
 
+  // Query for pending login prompt videos
+  const [fetchPendingVideos] = usePendingLoginPromptVideosLazyQuery({
+    fetchPolicy: 'network-only',
+    onCompleted: (data) => {
+      setPendingLoginVideos(data.pendingLoginPromptVideos);
+    },
+    onError: () => {
+      // Silently fail - don't block app if this fails
+      setPendingLoginVideos([]);
+    },
+  });
+
   useEffect(() => {
     setSettingScheme(true);
   }, [currentUserSchemeId]);
+
+  // Fetch pending videos when scheme is loaded
+  useEffect(() => {
+    if (shouldCheckVideos && currentUserSchemeId) {
+      void fetchPendingVideos({
+        variables: {
+          schemeId: currentUserSchemeId,
+        },
+      });
+      setShouldCheckVideos(false);
+    }
+  }, [shouldCheckVideos, currentUserSchemeId, fetchPendingVideos]);
 
   void useCurrentSchemeProviderQuery({
     onCompleted: (data) => {
@@ -270,6 +302,9 @@ const SchemeProvider = ({ children }: Props) => {
                 : defaultUserLayout.marquee),
           },
         });
+
+      // Check for pending login prompt videos
+      setShouldCheckVideos(true);
     },
     onError: (error) => {
       // Handle disabled scheme error

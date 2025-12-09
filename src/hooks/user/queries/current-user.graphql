@@ -48,6 +48,7 @@ query currentUser(
         restrictIncidentAccess
         reportOnly
         showBlankActivity
+        autoApproveActivities
         facialRecognition
         facialDetection
         facialRedaction

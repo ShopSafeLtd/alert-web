@@ -25,6 +25,8 @@ const UPDATE_TRAINING_VIDEO_MUTATION = gql`
         id
         name
       }
+      loginPrompt
+      mandatory
       createdAt
       updatedAt
     }
@@ -34,6 +36,8 @@ const UPDATE_TRAINING_VIDEO_MUTATION = gql`
 interface FormData {
   description?: string;
   groups: string[];
+  loginPrompt?: boolean;
+  mandatory?: boolean;
   tags?: string[];
   title: string;
 }
@@ -92,8 +96,10 @@ const useEditVideoModal = ({
 
   useEffect(() => {
     form.setFieldsValue({
-      description: video.description,
+      description: video.description || undefined,
       groups: video.groups?.map((group) => group.id) || [],
+      loginPrompt: video.loginPrompt || false,
+      mandatory: video.mandatory || false,
       tags: video.tags?.map((tag) => tag.name),
       title: video.title,
     });
@@ -107,6 +113,8 @@ const useEditVideoModal = ({
           description: values.description,
           groupIds: values.groups,
           id: video.id,
+          loginPrompt: values.loginPrompt || false,
+          mandatory: values.mandatory || false,
           tags: values.tags,
           title: values.title,
         },

@@ -2,6 +2,7 @@ import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view'
 
 import {
   faBuilding,
+  faChartBar,
   faClock,
   faEdit,
   faEllipsisV,
@@ -30,7 +31,7 @@ import type { Theme } from 'configs/ThemeConfig';
 import hasRolePermission from '#/utils/has-role-permission';
 import { PermissionMethod, PermissionModel } from 'graphql/types';
 import { createUseStyles } from 'react-jss';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import type { ReturnProps as Props } from './types/ViewArticle';
 
@@ -117,7 +118,7 @@ const ViewArticleView = ({
   openLightbox,
 }: Props) => {
   const classes = useStyles();
-
+  const navigate = useNavigate();
   const intl = useIntl();
 
   // Image click handling is now managed by InlineWatermarkProcessor
@@ -131,6 +132,17 @@ const ViewArticleView = ({
       permission: {
         method: PermissionMethod.Edit,
         model: PermissionModel.Articles,
+      },
+    },
+    {
+      icon: <FontAwesomeIcon icon={faChartBar} />,
+      key: 'analytics',
+      label: intl.formatMessage({ defaultMessage: 'View Analytics' }),
+      onClick: () =>
+        navigate(`/app/reports/bulletin-engagement/${data?.article?.id || ''}`),
+      permission: {
+        method: PermissionMethod.Read,
+        model: PermissionModel.Reports,
       },
     },
     {

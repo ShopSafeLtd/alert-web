@@ -1,0 +1,21 @@
+query DocumentEngagement($documentId: String!) {
+  documentEngagement(documentId: $documentId) {
+    documentId
+    documentName
+    totalViews
+    totalUsers
+    viewedCount
+    notViewedCount
+    viewRate
+    averageViewsPerUser
+    users {
+      userId
+      userFullName
+      userEmail
+      hasViewed
+      firstViewedAt
+      lastViewedAt
+      viewCount
+    }
+  }
+}

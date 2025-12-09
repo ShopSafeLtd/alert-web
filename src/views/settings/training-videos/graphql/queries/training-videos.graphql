@@ -25,6 +25,8 @@ query TrainingVideos(
       id
       name
     }
+    loginPrompt
+    mandatory
     createdAt
     updatedAt
   }

@@ -175,6 +175,8 @@ const AddTodo = ({
               <Select
                 allowClear
                 disabled={saving}
+                dropdownStyle={{ maxHeight: '40vh' }}
+                listHeight={256}
                 loading={templatesLoading}
                 options={templatesData?.scheme?.questionGroups.map(
                   (template) => ({

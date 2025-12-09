@@ -1,3 +1,4 @@
+export { default as BanConditions } from './BanConditions';
 export { default as ChecklistConditions } from './ChecklistConditions';
 export { default as IncidentConditions } from './IncidentConditions';
 export { default as OffenderConditions } from './OffenderConditions';
