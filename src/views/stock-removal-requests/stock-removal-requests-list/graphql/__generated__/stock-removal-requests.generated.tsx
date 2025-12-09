@@ -11,7 +11,7 @@ export type StockRemovalRequestsQueryVariables = Types.Exact<{
 }>;
 
 
-export type StockRemovalRequestsQuery = { __typename?: 'Query', stockRemovalRequests: { __typename?: 'QueryStockRemovalRequestsConnection', totalCount: number, edges: Array<{ __typename?: 'QueryStockRemovalRequestsConnectionEdge', node: { __typename?: 'StockRemovalRequest', id: string, createdAt: Date, title: string, status: Types.StockRemovalRequestStatus, reference?: number | null, createdBy: { __typename?: 'User', id: string }, business?: { __typename?: 'Business', id: string, name: string } | null, approvers: Array<{ __typename?: 'StockRemovalRequestApproval', status: Types.StockRemovalRequestApprovalStatus, user: { __typename?: 'User', id: string, fullName: string } }> } }> } };
+export type StockRemovalRequestsQuery = { __typename?: 'Query', stockRemovalRequests: { __typename?: 'QueryStockRemovalRequestsConnection', totalCount: number, edges: Array<{ __typename?: 'QueryStockRemovalRequestsConnectionEdge', node: { __typename?: 'StockRemovalRequest', id: string, createdAt: Date, title: string, status: Types.StockRemovalRequestStatus, reference?: number | null, storeOrDC?: string | null, createdBy: { __typename?: 'User', id: string }, business?: { __typename?: 'Business', id: string, name: string } | null, approvers: Array<{ __typename?: 'StockRemovalRequestApproval', status: Types.StockRemovalRequestApprovalStatus, user: { __typename?: 'User', id: string, fullName: string } }> } }> } };
 
 
 export const StockRemovalRequestsDocument = gql`
@@ -27,6 +27,7 @@ export const StockRemovalRequestsDocument = gql`
         title
         status
         reference
+        storeOrDC
         business {
           id
           name

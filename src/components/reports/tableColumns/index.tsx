@@ -306,6 +306,9 @@ export const IncidentColumns: ColumnsType<IncidentTableData> = [
   {
     dataIndex: 'alertId',
     key: 'alertId',
+    render: (alertId: string, item: IncidentTableData) => (
+      <Link to={`/app/incidents/view/${item.id}`}>{alertId}</Link>
+    ),
     title: 'Alert ID',
   },
   {

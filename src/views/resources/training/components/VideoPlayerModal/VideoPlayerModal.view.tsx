@@ -1,6 +1,9 @@
 import { CheckCircleOutlined } from '@ant-design/icons';
-import { Modal, Space, Tag, Typography } from 'antd';
+import { faLink } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Modal, Space, Tag, Tooltip, Typography, message } from 'antd';
 import React from 'react';
+import CopyToClipboard from 'react-copy-to-clipboard';
 import { FormattedMessage, useIntl } from 'react-intl';
 import ReactPlayer from 'react-player';
 
@@ -26,15 +29,30 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
 
   if (!video) return null;
 
-  const formatDate = (dateString: string): string => {
+  const formatDate = (dateString: string | Date): string => {
+    if (dateString instanceof Date) {
+      dateString = dateString.toLocaleDateString(intl.locale, {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+      });
+    }
+
     const date = new Date(dateString);
     return date.toLocaleDateString(intl.locale, {
       day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      month: 'long',
+      month: 'short',
       year: 'numeric',
     });
+  };
+
+  const generateShareLink = (): string =>
+    `${window.location.origin}/app/resources/training?videoId=${video.id}`;
+
+  const handleCopyLink = (): void => {
+    void message.success(
+      intl.formatMessage({ defaultMessage: 'Link copied to clipboard!' })
+    );
   };
 
   return (
@@ -50,6 +68,17 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
               <FormattedMessage defaultMessage="Completed" />
             </Tag>
           )}
+          <CopyToClipboard onCopy={handleCopyLink} text={generateShareLink()}>
+            <Tooltip
+              title={intl.formatMessage({ defaultMessage: 'Copy link' })}
+            >
+              <Button
+                icon={<FontAwesomeIcon icon={faLink} />}
+                size="small"
+                type="text"
+              />
+            </Tooltip>
+          </CopyToClipboard>
         </Space>
       }
       width="80%"

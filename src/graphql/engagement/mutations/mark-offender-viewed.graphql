@@ -1,0 +1,9 @@
+mutation MarkOffenderViewed($offenderId: String!) {
+  markOffenderViewed(offenderId: $offenderId) {
+    id
+    viewCount
+    firstViewedAt
+    lastViewedAt
+    createdAt
+  }
+}

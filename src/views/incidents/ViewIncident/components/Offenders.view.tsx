@@ -368,7 +368,11 @@ const Offenders = ({
         {addOffender ? (
           <AddNewOffenderSimple
             groupsIds={data?.incident.groups.map(({ id }) => id)}
-            images={data?.incident?.images.map((el) => ({ ...el, uid: el.id }))}
+            images={data?.incident?.images.map((el) => ({
+              ...el,
+              new: false,
+              uid: el.id,
+            }))}
             incidentBusinessId={data?.incident.business?.id}
             incidentId={data?.incident.id}
             onClose={toggleAddOffender}

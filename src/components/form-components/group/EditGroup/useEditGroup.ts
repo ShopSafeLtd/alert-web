@@ -168,7 +168,7 @@ const useEditGroup = ({ groupId, onClose }: Props): Return => {
 
   return {
     adminUsersData: usersData?.users
-      .filter((user) => user.schemes[0].role === Role.SchemeAdmin)
+      .filter((user) => user.schemes[0]?.role === Role.SchemeAdmin)
       .map((user) => ({
         label: user.fullName,
         value: user.id,

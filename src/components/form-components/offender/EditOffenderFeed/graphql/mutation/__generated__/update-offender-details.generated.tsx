@@ -9,7 +9,7 @@ export type UpdateOffenderDetailsMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateOffenderDetailsMutation = { __typename?: 'Mutation', updateOffenderDetails: { __typename?: 'Offender', age?: Types.Age | null, alias: Array<string>, build?: Types.Build | null, comment?: string | null, dateOfBirth?: Date | null, dateSource?: string | null, gender?: Types.Gender | null, hair?: string | null, height?: Types.Height | null, idSource?: Types.IdSource | null, idVerified: boolean, infoSource?: string | null, justification?: string | null, name?: string | null, peculiarities?: string | null, race?: Types.Race | null, customGalleries: Array<{ __typename?: 'CustomGallery', id: string, name: string }>, groups: Array<{ __typename?: 'Group', id: string, name: string }>, tags: Array<{ __typename?: 'Tag', id: string, name: string }> } };
+export type UpdateOffenderDetailsMutation = { __typename?: 'Mutation', updateOffenderDetails: { __typename?: 'Offender', age?: Types.Age | null, alias: Array<string>, build?: Types.Build | null, comment?: string | null, dateOfBirth?: Date | null, dateSource?: string | null, gender?: Types.Gender | null, hair?: string | null, height?: Types.Height | null, idSource?: Types.IdSource | null, idVerified: boolean, infoSource?: string | null, justification?: string | null, knownFor: Array<string>, name?: string | null, peculiarities?: string | null, race?: Types.Race | null, targetedGoods: Array<string>, customGalleries: Array<{ __typename?: 'CustomGallery', id: string, name: string }>, groups: Array<{ __typename?: 'Group', id: string, name: string }>, tags: Array<{ __typename?: 'Tag', id: string, name: string }> } };
 
 
 export const UpdateOffenderDetailsDocument = gql`
@@ -36,6 +36,7 @@ export const UpdateOffenderDetailsDocument = gql`
     idVerified
     infoSource
     justification
+    knownFor
     name
     peculiarities
     race
@@ -43,6 +44,7 @@ export const UpdateOffenderDetailsDocument = gql`
       id
       name
     }
+    targetedGoods
   }
 }
     `;

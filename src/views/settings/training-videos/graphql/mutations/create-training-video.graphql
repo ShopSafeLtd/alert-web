@@ -7,6 +7,8 @@ mutation CreateTrainingVideo($input: CreateTrainingVideoInput!) {
     thumbnailUrl
     thumbnailStatus
     viewCount
+    loginPrompt
+    mandatory
     tags {
       id
       name

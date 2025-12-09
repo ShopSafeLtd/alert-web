@@ -135,6 +135,12 @@ const WorkflowTriggerConfig: React.FC<WorkflowTriggerConfigProps> = ({
                   },
                   {
                     label: intl.formatMessage({
+                      defaultMessage: 'Ban',
+                    }),
+                    value: Model.Ban,
+                  },
+                  {
+                    label: intl.formatMessage({
                       defaultMessage: 'Checklist',
                     }),
                     value: Model.Checklist,
@@ -176,6 +182,44 @@ const WorkflowTriggerConfig: React.FC<WorkflowTriggerConfigProps> = ({
                       defaultMessage: 'Approved',
                     }),
                     value: WorkflowTrigger.Approved,
+                  },
+                ]}
+              />
+            </Form.Item>
+          )}
+          {modelSelected && modelSelected === Model.Ban && (
+            <Form.Item
+              initialValue={WorkflowTrigger.Created}
+              label={<FormattedMessage defaultMessage="Trigger Action" />}
+              name="workflowTrigger"
+              rules={[
+                {
+                  message: intl.formatMessage({
+                    defaultMessage: 'Please select a trigger action',
+                  }),
+                  required: true,
+                },
+              ]}
+              tooltip={intl.formatMessage({
+                defaultMessage:
+                  'Created triggers when a ban is created. Expiring Soon runs daily at midnight to check for bans nearing expiry.',
+              })}
+            >
+              <Radio.Group
+                disabled={editId !== undefined}
+                optionType="button"
+                options={[
+                  {
+                    label: intl.formatMessage({
+                      defaultMessage: 'Created',
+                    }),
+                    value: WorkflowTrigger.Created,
+                  },
+                  {
+                    label: intl.formatMessage({
+                      defaultMessage: 'Expiring Soon',
+                    }),
+                    value: WorkflowTrigger.Cron,
                   },
                 ]}
               />

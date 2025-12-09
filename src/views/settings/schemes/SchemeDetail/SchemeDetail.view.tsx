@@ -92,6 +92,7 @@ const SchemeDetail = ({
           initialValues={{
             activityAllowAllGroups: data?.scheme?.activityAllowAllGroups,
             activityAssignToUser: data?.scheme?.activityAssignToUser,
+            autoApproveActivities: data?.scheme?.autoApproveActivities,
             autoApproveIncidents: data?.scheme?.autoApproveIncidents,
             autoApproveOffenders: data?.scheme?.autoApproveOffenders,
             autoPopulateDescription: data?.scheme?.autoPopulateDescription,
@@ -662,6 +663,21 @@ const SchemeDetail = ({
                 defaultMessage: 'Show blank activity',
               })}
               name="showBlankActivity"
+              style={{ marginBottom: 0 }}
+              valuePropName="checked"
+            >
+              <Switch
+                className="scheme-detail-switch"
+                disabled={saving}
+                style={{ marginLeft: 5 }}
+              />
+            </Form.Item>
+            <Form.Item
+              label={intl.formatMessage({
+                defaultMessage:
+                  'Automatic creation of activities for approving incidents or offenders.',
+              })}
+              name="autoApproveActivities"
               style={{ marginBottom: 0 }}
               valuePropName="checked"
             >

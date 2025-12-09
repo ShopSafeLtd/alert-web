@@ -8,7 +8,7 @@ export type ResourceTrainingVideoQueryVariables = Types.Exact<{
 }>;
 
 
-export type ResourceTrainingVideoQuery = { __typename?: 'Query', trainingVideo: { __typename?: 'TrainingVideo', id: string, title: string, description?: string | null, videoUrl: string, thumbnailUrl?: string | null, thumbnailStatus: Types.ThumbnailStatus, viewCount: number, createdAt: Date, updatedAt: Date, tags: Array<{ __typename?: 'Tag', id: string, name: string }>, groups: Array<{ __typename?: 'Group', id: string, name: string }> } };
+export type ResourceTrainingVideoQuery = { __typename?: 'Query', trainingVideo: { __typename?: 'TrainingVideo', id: string, title: string, description?: string | null, videoUrl: string, thumbnailUrl?: string | null, thumbnailStatus: Types.ThumbnailStatus, viewCount: number, loginPrompt: boolean, mandatory: boolean, createdAt: Date, updatedAt: Date, tags: Array<{ __typename?: 'Tag', id: string, name: string }>, groups: Array<{ __typename?: 'Group', id: string, name: string }> } };
 
 
 export const ResourceTrainingVideoDocument = gql`
@@ -29,6 +29,8 @@ export const ResourceTrainingVideoDocument = gql`
       id
       name
     }
+    loginPrompt
+    mandatory
     createdAt
     updatedAt
   }

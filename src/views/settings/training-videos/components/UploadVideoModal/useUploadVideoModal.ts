@@ -38,6 +38,12 @@ const CREATE_TRAINING_VIDEO_MUTATION = gql`
         id
         name
       }
+      groups {
+        id
+        name
+      }
+      loginPrompt
+      mandatory
       createdAt
       updatedAt
     }
@@ -47,6 +53,8 @@ const CREATE_TRAINING_VIDEO_MUTATION = gql`
 interface FormData {
   description?: string;
   groups: string[];
+  loginPrompt?: boolean;
+  mandatory?: boolean;
   tags?: string[];
   title: string;
 }
@@ -76,6 +84,12 @@ const useUploadVideoModal = ({
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [fileList, setFileList] = useState<UploadFile[]>([]);
+
+  // Set initial form values
+  form.setFieldsValue({
+    loginPrompt: false,
+    mandatory: false,
+  });
 
   const [generateUploadUrl] = useMutation<{
     generateTrainingVideoUploadUrl: string;
@@ -210,6 +224,8 @@ const useUploadVideoModal = ({
           input: {
             description: values.description,
             groupIds: values.groups,
+            loginPrompt: values.loginPrompt || false,
+            mandatory: values.mandatory || false,
             schemeId: currentScheme.id,
             tags: values.tags,
             title: values.title,

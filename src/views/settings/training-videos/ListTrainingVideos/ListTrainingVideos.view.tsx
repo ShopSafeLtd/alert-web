@@ -18,6 +18,7 @@ import EditVideoModal from '../components/EditVideoModal';
 import UploadVideoModal from '../components/UploadVideoModal';
 import VideoPreviewModal from '../components/VideoPreviewModal';
 import useStyles from './ListTrainingVideos.styles';
+import { ThumbnailStatus } from 'graphql/types';
 
 const { Title } = Typography;
 
@@ -58,7 +59,15 @@ const ListTrainingVideosView: React.FC<ListTrainingVideosViewProps> = ({
   const intl = useIntl();
   const navigate = useNavigate();
 
-  const formatDate = (dateString: string): string => {
+  const formatDate = (dateString: string | Date): string => {
+    if (dateString instanceof Date) {
+      dateString = dateString.toLocaleDateString(intl.locale, {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+      });
+    }
+
     const date = new Date(dateString);
     return date.toLocaleDateString(intl.locale, {
       day: 'numeric',
@@ -116,7 +125,8 @@ const ListTrainingVideosView: React.FC<ListTrainingVideosViewProps> = ({
                 onClick={() => handleOpenPreviewModal(video)}
               >
                 <div className={classes.thumbnailContainer}>
-                  {video.thumbnailUrl && video.thumbnailStatus !== 'pending' ? (
+                  {video.thumbnailUrl &&
+                  video.thumbnailStatus !== ThumbnailStatus.Pending ? (
                     <img
                       alt={video.title}
                       className={classes.thumbnail}

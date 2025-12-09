@@ -34,7 +34,12 @@ import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import hasRolePermission from '#/utils/has-role-permission';
 import publicOffenderDob from '#/utils/public-offender-dob';
 import { useOffenderIncidentsQuery } from '#/views/profiles/offenders/ViewOffender/__graphql__/queries/__generated__/list-incidents.generated';
-import { faEdit, faPeople, faTrash } from '@fortawesome/pro-light-svg-icons';
+import {
+  faChartBar,
+  faEdit,
+  faPeople,
+  faTrash,
+} from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Modal, notification } from 'antd';
 import { useAddImagesToIncidentMutation } from 'graphql/incidents/mutations/__generated__/add-images-to-incident.generated';
@@ -66,11 +71,13 @@ import { useCreateSimpleVehicleMutation } from 'graphql/vehicles/mutations/__gen
 import { useUpdateSimpleVehicleMutation } from 'graphql/vehicles/mutations/__generated__/update-simple-vehicle.generated';
 import update from 'immutability-helper';
 import { useAtomValue } from 'jotai/index';
-import React, { useEffect, useReducer, useState } from 'react';
+import React, { useEffect, useReducer, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router';
 import { useStoreState } from 'state';
 import errorNotification from 'types/mutation_notifications/error_notification';
+
+import { useMarkOffenderViewedMutation } from '../../../../graphql/engagement/mutations/__generated__/mark-offender-viewed.generated';
 
 const { confirm } = Modal;
 
@@ -269,6 +276,7 @@ const useViewOffender = (offenderId: string): Return => {
   const [shareOpen, setShareOpen] = useState(false);
   const [saving, setSaving] = useState(false);
   const [paginationState, dispatch] = usePagination();
+  const hasTrackedView = useRef(false);
   const { currentPage: incidentPage, pageSize: incidentPageSize } =
     paginationState;
   const [viewMatches, toggleViewMatches] = useState<null | string>(null);
@@ -377,6 +385,24 @@ const useViewOffender = (offenderId: string): Return => {
     },
     variables,
   });
+
+  // Track offender view silently
+  const [markOffenderViewed] = useMarkOffenderViewedMutation({
+    onError: () => {
+      // Silent failure - don't block UI if tracking fails
+    },
+  });
+
+  useEffect(() => {
+    if (offenderId && !hasTrackedView.current && !loading && data?.offender) {
+      hasTrackedView.current = true;
+      void markOffenderViewed({
+        variables: {
+          offenderId,
+        },
+      });
+    }
+  }, [offenderId, loading, data, markOffenderViewed]);
 
   const {
     data: incidentsData,
@@ -1838,8 +1864,20 @@ const useViewOffender = (offenderId: string): Return => {
       },
     },
     {
-      icon: <FontAwesomeIcon icon={faEdit} size="3x" />,
+      icon: <FontAwesomeIcon icon={faChartBar} size="3x" />,
       key: '1',
+      label: intl.formatMessage({
+        defaultMessage: 'View Analytics',
+      }),
+      onClick: () => navigate(`/app/reports/offender-engagement/${offenderId}`),
+      permission: {
+        method: PermissionMethod.Read,
+        model: PermissionModel.Reports,
+      },
+    },
+    {
+      icon: <FontAwesomeIcon icon={faEdit} size="3x" />,
+      key: '2',
       label: intl.formatMessage({
         defaultMessage: 'Edit',
       }),
@@ -1851,7 +1889,7 @@ const useViewOffender = (offenderId: string): Return => {
     },
     {
       icon: <FontAwesomeIcon icon={faTrash} />,
-      key: '2',
+      key: '3',
       label: intl.formatMessage({
         defaultMessage: 'Delete',
       }),

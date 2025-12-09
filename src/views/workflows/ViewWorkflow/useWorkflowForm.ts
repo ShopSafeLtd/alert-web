@@ -83,7 +83,25 @@ type AnyAll = 'all' | 'any';
 export type OverUnder = 'over' | 'under';
 
 interface WorkflowConditions {
+  // Activity (Todo) conditions
+  activityClosed?: boolean;
+  activityCompletedBy?: {
+    anyAll: AnyAll;
+    roles: string[] | undefined;
+    users: string[] | undefined;
+  };
+  activityOverdue?: boolean;
+  activityRaisedBy?: {
+    anyAll: AnyAll;
+    roles: string[] | undefined;
+    users: string[] | undefined;
+  };
   anyAll: AnyAll;
+  // Ban conditions
+  banType?: {
+    anyAll: AnyAll;
+    types: string[] | undefined;
+  };
   // new
   brands?: {
     anyAll: AnyAll;
@@ -99,6 +117,7 @@ interface WorkflowConditions {
     anyAll: AnyAll;
     countries: string[] | undefined;
   };
+  daysUntilExpiry?: number;
   descriptionWords?: {
     anyAll: AnyAll;
     words: string[] | undefined;
@@ -153,8 +172,33 @@ export interface Question {
 }
 
 export interface FormData {
+  // Activity (Todo) condition fields
+  activityClosed?: boolean;
+  activityClosedCheck: boolean;
+  activityCompletedBy?: {
+    roles: string[];
+    users: string[];
+  };
+  activityCompletedByCheck: boolean;
+  activityCompletedByCondition?: AnyAll;
+  activityCompletedByRoles?: string[];
+  activityCompletedByUsers?: string[];
+  activityOverdue?: boolean;
+  activityOverdueCheck: boolean;
+  activityRaisedBy?: {
+    roles: string[];
+    users: string[];
+  };
+  activityRaisedByCheck: boolean;
+  activityRaisedByCondition?: AnyAll;
+  activityRaisedByRoles?: string[];
+  activityRaisedByUsers?: string[];
   autoApprove: boolean;
   autoApproveCheck: boolean;
+  // Ban condition fields
+  banType?: string[];
+  banTypeCheck: boolean;
+  banTypeCondition?: AnyAll;
   // new
   brands?: string[];
   brandsCheck: boolean;
@@ -168,6 +212,8 @@ export interface FormData {
   countriesCondition?: AnyAll;
   cronDate?: Date;
   cronStart?: Date;
+  daysUntilExpiry?: number;
+  daysUntilExpiryCheck: boolean;
   descriptionCheck: boolean;
   descriptionCondition: AnyAll;
   descriptionWords: string[];
@@ -237,8 +283,13 @@ export interface FormData {
 
 export type LabelValue = { label: string; value: string };
 interface Return {
+  activityClosedSelected: boolean;
+  activityCompletedBySelected: boolean;
+  activityOverdueSelected: boolean;
+  activityRaisedBySelected: boolean;
   activityTemplateForm: boolean;
   availableQuestions: Question[];
+  banTypeSelected: boolean;
   brands: LabelValue[];
   brandsLoading: boolean;
   brandsSelected: boolean;
@@ -246,6 +297,7 @@ interface Return {
   countries: LabelValue[];
   countriesSelected: boolean;
   createNewQuestion: (id: string, question: string) => void;
+  daysUntilExpirySelected: boolean;
   descriptionCheck: boolean;
   divisions: LabelValue[];
   divisionsLoading: boolean;
@@ -421,6 +473,17 @@ const useWorkflowForm = (): Return => {
   const divisionsSelected = Form.useWatch('divisionsCheck', form);
   const prioritySelected = Form.useWatch('priorityCheck', form);
   const lossValueSelected = Form.useWatch('lossValueCheck', form);
+  // Activity (Todo) condition watches
+  const activityClosedSelected = Form.useWatch('activityClosedCheck', form);
+  const activityRaisedBySelected = Form.useWatch('activityRaisedByCheck', form);
+  const activityCompletedBySelected = Form.useWatch(
+    'activityCompletedByCheck',
+    form
+  );
+  const activityOverdueSelected = Form.useWatch('activityOverdueCheck', form);
+  // Ban condition watches
+  const banTypeSelected = Form.useWatch('banTypeCheck', form);
+  const daysUntilExpirySelected = Form.useWatch('daysUntilExpiryCheck', form);
 
   const { data: editWorkflowData, loading: editWorkflowLoading } =
     useViewWorkflowQuery({
@@ -450,8 +513,30 @@ const useWorkflowForm = (): Return => {
             ],
           };
           form.setFieldsValue({
+            // Activity (Todo) condition fields
+            activityClosed: conditions?.activityClosed,
+            activityClosedCheck: conditions?.activityClosed !== undefined,
+            activityCompletedByCheck:
+              !!conditions?.activityCompletedBy?.users?.length ||
+              !!conditions?.activityCompletedBy?.roles?.length,
+            activityCompletedByCondition:
+              conditions?.activityCompletedBy?.anyAll,
+            activityCompletedByRoles: conditions?.activityCompletedBy?.roles,
+            activityCompletedByUsers: conditions?.activityCompletedBy?.users,
+            activityOverdue: conditions?.activityOverdue,
+            activityOverdueCheck: conditions?.activityOverdue !== undefined,
+            activityRaisedByCheck:
+              !!conditions?.activityRaisedBy?.users?.length ||
+              !!conditions?.activityRaisedBy?.roles?.length,
+            activityRaisedByCondition: conditions?.activityRaisedBy?.anyAll,
+            activityRaisedByRoles: conditions?.activityRaisedBy?.roles,
+            activityRaisedByUsers: conditions?.activityRaisedBy?.users,
             autoApprove: action?.autoApprove,
             autoApproveCheck: action?.autoApprove !== undefined,
+            // Ban condition fields
+            banType: conditions?.banType?.types,
+            banTypeCheck: !!conditions?.banType?.types?.length,
+            banTypeCondition: conditions?.banType?.anyAll,
             // New brands fields
             brands: conditions?.brands?.brands,
             brandsCheck: !!conditions?.brands?.brands?.length,
@@ -467,6 +552,8 @@ const useWorkflowForm = (): Return => {
             cronDate: workflow.cronDate
               ? new Date(workflow.cronDate)
               : undefined,
+            daysUntilExpiry: conditions?.daysUntilExpiry,
+            daysUntilExpiryCheck: !!conditions?.daysUntilExpiry,
             descriptionCheck:
               conditions?.descriptionWords?.words &&
               conditions.descriptionWords.words?.length > 0,
@@ -859,7 +946,35 @@ const useWorkflowForm = (): Return => {
 
     console.log(values.checklistScoreGreaterThan, values.checklistScore);
     const conditionsData: WorkflowConditions = {
+      // Activity (Todo) conditions
+      activityClosed: values.activityClosedCheck
+        ? values.activityClosed
+        : undefined,
+      activityCompletedBy: values.activityCompletedByCheck
+        ? {
+            anyAll: values.activityCompletedByCondition || 'any',
+            roles: values.activityCompletedByRoles,
+            users: values.activityCompletedByUsers,
+          }
+        : undefined,
+      activityOverdue: values.activityOverdueCheck
+        ? values.activityOverdue
+        : undefined,
+      activityRaisedBy: values.activityRaisedByCheck
+        ? {
+            anyAll: values.activityRaisedByCondition || 'any',
+            roles: values.activityRaisedByRoles,
+            users: values.activityRaisedByUsers,
+          }
+        : undefined,
       anyAll: values.option,
+      // Ban conditions
+      banType: values.banTypeCheck
+        ? {
+            anyAll: values.banTypeCondition || 'any',
+            types: values.banType,
+          }
+        : undefined,
       // New brands condition
       brands: values.brandsCheck
         ? {
@@ -884,6 +999,9 @@ const useWorkflowForm = (): Return => {
             anyAll: values.countriesCondition || 'any',
             countries: values.countries,
           }
+        : undefined,
+      daysUntilExpiry: values.daysUntilExpiryCheck
+        ? values.daysUntilExpiry
         : undefined,
       descriptionWords: values.descriptionCheck
         ? {
@@ -1067,8 +1185,13 @@ const useWorkflowForm = (): Return => {
     })) || [];
 
   return {
+    activityClosedSelected,
+    activityCompletedBySelected,
+    activityOverdueSelected,
+    activityRaisedBySelected,
     activityTemplateForm,
     availableQuestions,
+    banTypeSelected,
     brands: brandsData,
     brandsLoading,
     brandsSelected,
@@ -1076,6 +1199,7 @@ const useWorkflowForm = (): Return => {
     countries: countriesOptions,
     countriesSelected,
     createNewQuestion,
+    daysUntilExpirySelected,
     descriptionCheck,
     divisions: divisionsData,
     divisionsLoading,

@@ -1,0 +1,21 @@
+query OffenderEngagement($offenderId: String!) {
+  offenderEngagement(offenderId: $offenderId) {
+    offenderId
+    offenderName
+    totalViews
+    totalUsers
+    viewedCount
+    notViewedCount
+    viewRate
+    averageViewsPerUser
+    users {
+      userId
+      userFullName
+      userEmail
+      hasViewed
+      firstViewedAt
+      lastViewedAt
+      viewCount
+    }
+  }
+}

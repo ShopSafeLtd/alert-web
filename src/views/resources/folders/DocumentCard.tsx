@@ -20,11 +20,12 @@ import {
   Typography,
 } from 'antd';
 import WatermarkImage from 'components/images/WatermarkImage.view';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
 import Lightbox from 'yet-another-react-lightbox';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 
+import { useMarkDocumentViewedMutation } from '../../../graphql/engagement/mutations/__generated__/mark-document-viewed.generated';
 import useStyles from './DocumentCard.styles';
 const { Paragraph } = Typography;
 const { confirm } = Modal;
@@ -57,6 +58,15 @@ const DocumentCard = ({ data, onDelete, onPreview }: Props) => {
   const [lightboxElement, setLightboxElement] = useState<string | undefined>(
     undefined
   );
+  const hasTrackedPreview = useRef(false);
+  const hasTrackedDownload = useRef(false);
+
+  // Track document view silently
+  const [markDocumentViewed] = useMarkDocumentViewedMutation({
+    onError: () => {
+      // Silent failure - don't block UI if tracking fails
+    },
+  });
 
   // Determine if this document has an image preview
   const hasImagePreview = !!(data?.thumbnailUrl || isImage(data?.url));
@@ -67,6 +77,16 @@ const DocumentCard = ({ data, onDelete, onPreview }: Props) => {
   // Handle preview action
   const handlePreview = (event: React.MouseEvent) => {
     event.stopPropagation();
+
+    // Track preview view
+    if (data.id && !hasTrackedPreview.current) {
+      hasTrackedPreview.current = true;
+      void markDocumentViewed({
+        variables: {
+          documentId: data.id,
+        },
+      });
+    }
 
     const strategy = getPreviewStrategy(data.name, data.url, data.fileType);
 
@@ -165,6 +185,17 @@ const DocumentCard = ({ data, onDelete, onPreview }: Props) => {
             <Button
               onClick={(e) => {
                 e.stopPropagation();
+
+                // Track download view
+                if (data.id && !hasTrackedDownload.current) {
+                  hasTrackedDownload.current = true;
+                  void markDocumentViewed({
+                    variables: {
+                      documentId: data.id,
+                    },
+                  });
+                }
+
                 void (async () => {
                   try {
                     // Fetch the file from Azure Blob Storage

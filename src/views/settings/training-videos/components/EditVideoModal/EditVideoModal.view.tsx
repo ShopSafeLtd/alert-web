@@ -1,7 +1,7 @@
 import type { FormInstance } from 'antd';
 
 import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
-import { Button, Form, Input, Modal } from 'antd';
+import { Button, Checkbox, Form, Input, Modal } from 'antd';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
@@ -10,6 +10,8 @@ const { TextArea } = Input;
 interface FormData {
   description?: string;
   groups: string[];
+  loginPrompt?: boolean;
+  mandatory?: boolean;
   tags?: string[];
   title: string;
 }
@@ -30,6 +32,7 @@ const EditVideoModalView: React.FC<EditVideoModalViewProps> = ({
   visible,
 }) => {
   const intl = useIntl();
+  const loginPrompt = Form.useWatch('loginPrompt', form);
 
   return (
     <Modal
@@ -113,6 +116,32 @@ const EditVideoModalView: React.FC<EditVideoModalViewProps> = ({
               defaultMessage: 'Select groups...',
             })}
           />
+        </Form.Item>
+
+        <Form.Item
+          name="loginPrompt"
+          tooltip={intl.formatMessage({
+            defaultMessage:
+              'Show this video to users when they log in or load the app',
+          })}
+          valuePropName="checked"
+        >
+          <Checkbox disabled={saving}>
+            <FormattedMessage defaultMessage="Show on Login" />
+          </Checkbox>
+        </Form.Item>
+
+        <Form.Item
+          name="mandatory"
+          tooltip={intl.formatMessage({
+            defaultMessage:
+              'Users must watch to 90% completion before they can proceed',
+          })}
+          valuePropName="checked"
+        >
+          <Checkbox disabled={saving || !loginPrompt}>
+            <FormattedMessage defaultMessage="Mandatory Viewing" />
+          </Checkbox>
         </Form.Item>
       </Form>
     </Modal>

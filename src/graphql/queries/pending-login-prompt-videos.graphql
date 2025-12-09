@@ -1,0 +1,12 @@
+query PendingLoginPromptVideos($schemeId: String!) {
+  pendingLoginPromptVideos(schemeId: $schemeId) {
+    id
+    title
+    description
+    videoUrl
+    thumbnailUrl
+    duration
+    mandatory
+    loginPrompt
+  }
+}
