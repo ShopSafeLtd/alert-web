@@ -55,6 +55,7 @@ const useStyles = createUseStyles((theme: Theme) => ({
   textOverlay: {
     bottom: 0,
     left: 0,
+    pointerEvents: 'none',
     position: 'absolute',
     right: 0,
     top: 0,
