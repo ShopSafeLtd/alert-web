@@ -654,6 +654,7 @@ const FloatingFilterPanel: React.FC<Props> = ({
                 style={{ marginBottom: '12px' }}
               >
                 <Select
+                  dropdownStyle={{ maxHeight: 300, overflow: 'auto' }}
                   filterOption={(input, option) =>
                     (option?.children as unknown as string)
                       ?.toLowerCase()
@@ -669,6 +670,7 @@ const FloatingFilterPanel: React.FC<Props> = ({
                   size="small"
                   style={{ width: '100%' }}
                   value={selectedSchemes}
+                  virtual
                 >
                   {[...schemes]
                     .sort((a, b) => a.scheme.name.localeCompare(b.scheme.name))
@@ -688,6 +690,7 @@ const FloatingFilterPanel: React.FC<Props> = ({
                 style={{ marginBottom: '12px' }}
               >
                 <Select
+                  dropdownStyle={{ maxHeight: 300, overflow: 'auto' }}
                   filterOption={(input, option) =>
                     (option?.children as unknown as string)
                       ?.toLowerCase()
@@ -704,6 +707,7 @@ const FloatingFilterPanel: React.FC<Props> = ({
                   size="small"
                   style={{ width: '100%' }}
                   value={selectedGroups}
+                  virtual
                 >
                   {groupsData?.groups
                     .slice()
@@ -721,6 +725,7 @@ const FloatingFilterPanel: React.FC<Props> = ({
                 style={{ marginBottom: '12px' }}
               >
                 <Select
+                  dropdownStyle={{ maxHeight: 300, overflow: 'auto' }}
                   filterOption={(input, option) =>
                     (option?.children as unknown as string)
                       ?.toLowerCase()
@@ -737,6 +742,7 @@ const FloatingFilterPanel: React.FC<Props> = ({
                   size="small"
                   style={{ width: '100%' }}
                   value={selectedBrands}
+                  virtual
                 >
                   {brandsData?.brands.edges
                     .slice()
@@ -754,6 +760,7 @@ const FloatingFilterPanel: React.FC<Props> = ({
                 style={{ marginBottom: '12px' }}
               >
                 <Select
+                  dropdownStyle={{ maxHeight: 300, overflow: 'auto' }}
                   filterOption={(input, option) =>
                     (option?.children as unknown as string)
                       ?.toLowerCase()
@@ -770,6 +777,7 @@ const FloatingFilterPanel: React.FC<Props> = ({
                   size="small"
                   style={{ width: '100%' }}
                   value={selectedIndustries}
+                  virtual
                 >
                   {industriesData?.industries
                     .slice()

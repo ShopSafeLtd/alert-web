@@ -28,6 +28,7 @@ const useStyles = createUseStyles({
     justifyContent: 'center',
     left: 0,
     opacity: 0.2,
+    pointerEvents: 'none',
     position: 'absolute',
     right: 0,
     top: 0,
@@ -38,6 +39,7 @@ const useStyles = createUseStyles({
   textOverlay: {
     bottom: 0,
     left: 0,
+    pointerEvents: 'none',
     position: 'absolute',
     right: 0,
     top: 0,
