@@ -283,7 +283,7 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
       const foundRole = rolesData?.roles.edges.find(
         ({ node: role }) => role.id === data.role
       )?.node;
-      if (!foundRole) {
+      if (!foundRole || !findScheme) {
         return;
       }
       void updateUser({
@@ -485,9 +485,7 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
                     },
                   },
                   where: {
-                    // ???
-                    // id: userData?.user?.schemes[0].id,
-                    id: findScheme?.id,
+                    id: findScheme.id,
                   },
                 },
               ],

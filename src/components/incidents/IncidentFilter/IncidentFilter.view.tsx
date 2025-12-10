@@ -8,7 +8,6 @@ import GoodsSelect from '#/components/form-components/goodsSelect/GoodsSelect.vi
 import DatePicker from '#/components/util-components/DatePicker';
 import { formatPoliceForceLabel } from '#/utils/formatPoliceAreas';
 import { Button, Col, Form, Input, Row, Select, Space, Typography } from 'antd';
-import dayjs from 'dayjs';
 import { useListIncidentStatusesQuery } from 'graphql/incidents/queries/__generated__/list-incident-statuses.generated';
 import { PoliceForce } from 'graphql/types';
 import React from 'react';
@@ -175,13 +174,10 @@ const IncidentFilter = ({
       form={form}
       initialValues={{
         createdAt: createdAtFilter
-          ? [dayjs(createdAtFilter?.startDate), dayjs(createdAtFilter?.endDate)]
+          ? [createdAtFilter.startDate, createdAtFilter.endDate]
           : undefined,
         date: incidentDateFilter
-          ? [
-              dayjs(incidentDateFilter?.startDate),
-              dayjs(incidentDateFilter?.endDate),
-            ]
+          ? [incidentDateFilter.startDate, incidentDateFilter.endDate]
           : undefined,
       }}
     >
@@ -244,10 +240,16 @@ const IncidentFilter = ({
                 onChange={(value) => {
                   if (value && value[0] && value[1])
                     setCreatedAtFilter({
-                      endDate: new Date(value[1].valueOf()),
-                      startDate: new Date(value[0].valueOf()),
+                      endDate: value[1],
+                      startDate: value[0],
                     });
+                  else setCreatedAtFilter(undefined);
                 }}
+                value={
+                  createdAtFilter
+                    ? [createdAtFilter.startDate, createdAtFilter.endDate]
+                    : undefined
+                }
               />
             </Form.Item>
           </Col>
@@ -266,10 +268,16 @@ const IncidentFilter = ({
                 onChange={(value) => {
                   if (value && value[0] && value[1])
                     setIncidentDateFilter({
-                      endDate: new Date(value[1].valueOf()),
-                      startDate: new Date(value[0].valueOf()),
+                      endDate: value[1],
+                      startDate: value[0],
                     });
+                  else setIncidentDateFilter(undefined);
                 }}
+                value={
+                  incidentDateFilter
+                    ? [incidentDateFilter.startDate, incidentDateFilter.endDate]
+                    : undefined
+                }
               />
             </Form.Item>
           </Col>

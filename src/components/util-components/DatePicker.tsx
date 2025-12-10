@@ -9,10 +9,20 @@ import { isValid } from 'date-fns';
 const InternalDatePicker = generatePicker<Date>(dateFnsGenerateConfig);
 
 function wrapInEnglish<P>(PickerComponent: React.ComponentType<P>) {
-  return (props: P & { onChange?: (value: Date | null) => void }) => {
+  return (
+    props: P & {
+      onChange?: (value: Date | null | [Date | null, Date | null]) => void;
+    }
+  ) => {
     const { onChange, ...restProps } = props;
 
-    const handleChange = (value: Date | null) => {
+    const handleChange = (value: Date | null | [Date | null, Date | null]) => {
+      // Handle RangePicker (array of dates)
+      if (Array.isArray(value)) {
+        onChange?.(value);
+        return;
+      }
+
       // If value exists but is not a valid date, clear it
       if (value !== null && value !== undefined && !isValid(value)) {
         onChange?.(null);
