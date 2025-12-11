@@ -213,16 +213,18 @@ const ExportActivitiesView = ({ dispatch, getZip, loading, state }: Props) => {
               >
                 <DatePicker.RangePicker
                   onChange={(value) => {
-                    dispatch({
-                      payload: value
-                        ? {
-                            endDate: formatEndDate(value[1]) || defaultEndDate,
-                            startDate:
-                              formatStartDate(value[0]) || defaultStartDate,
-                          }
-                        : null,
-                      type: 'UPDATE_CREATED_AT',
-                    });
+                    if (!value) {
+                      dispatch({ payload: null, type: 'UPDATE_CREATED_AT' });
+                      return;
+                    }
+                    const startDate = formatStartDate(value[0]);
+                    const endDate = formatEndDate(value[1]);
+                    if (startDate && endDate) {
+                      dispatch({
+                        payload: { endDate, startDate },
+                        type: 'UPDATE_CREATED_AT',
+                      });
+                    }
                   }}
                   ranges={ranges}
                   style={{ width: '100%' }}
@@ -281,17 +283,21 @@ const ExportActivitiesView = ({ dispatch, getZip, loading, state }: Props) => {
                 {state.completedAt && (
                   <DatePicker.RangePicker
                     onChange={(value) => {
-                      dispatch({
-                        payload: value
-                          ? {
-                              endDate:
-                                formatEndDate(value[1]) || defaultEndDate,
-                              startDate:
-                                formatStartDate(value[0]) || defaultStartDate,
-                            }
-                          : null,
-                        type: 'UPDATE_COMPLETED_AT',
-                      });
+                      if (!value) {
+                        dispatch({
+                          payload: null,
+                          type: 'UPDATE_COMPLETED_AT',
+                        });
+                        return;
+                      }
+                      const startDate = formatStartDate(value[0]);
+                      const endDate = formatEndDate(value[1]);
+                      if (startDate && endDate) {
+                        dispatch({
+                          payload: { endDate, startDate },
+                          type: 'UPDATE_COMPLETED_AT',
+                        });
+                      }
                     }}
                     ranges={ranges}
                     style={{ width: '100%' }}
@@ -347,17 +353,18 @@ const ExportActivitiesView = ({ dispatch, getZip, loading, state }: Props) => {
                 {state.dueDate && (
                   <DatePicker.RangePicker
                     onChange={(value) => {
-                      dispatch({
-                        payload: value
-                          ? {
-                              endDate:
-                                formatEndDate(value[1]) || defaultEndDate,
-                              startDate:
-                                formatStartDate(value[0]) || defaultStartDate,
-                            }
-                          : null,
-                        type: 'UPDATE_DUE_DATE',
-                      });
+                      if (!value) {
+                        dispatch({ payload: null, type: 'UPDATE_DUE_DATE' });
+                        return;
+                      }
+                      const startDate = formatStartDate(value[0]);
+                      const endDate = formatEndDate(value[1]);
+                      if (startDate && endDate) {
+                        dispatch({
+                          payload: { endDate, startDate },
+                          type: 'UPDATE_DUE_DATE',
+                        });
+                      }
                     }}
                     ranges={ranges}
                     style={{ width: '100%' }}
