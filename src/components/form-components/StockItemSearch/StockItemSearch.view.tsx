@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { SelectProps } from 'antd';
 import type { Theme } from 'configs/ThemeConfig';
 import type {
@@ -6,8 +5,8 @@ import type {
   ListStockItemsQueryVariables,
 } from 'graphql/stock-item/__generated__/stock-items-import.generated';
 
-import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { useApolloClient } from '@apollo/client';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { Col, Row, Select, Spin, Typography } from 'antd';
 import { ListStockItemsDocument } from 'graphql/stock-item/__generated__/stock-items-import.generated';
 import { QueryMode } from 'graphql/types';
@@ -41,6 +40,7 @@ export interface StockItemValue {
   salesPriceLocal?: null | number;
   sku?: null | string;
   variant?: string;
+  styleCode?: null | string;
 }
 
 // @deprecated
@@ -145,7 +145,7 @@ const StockItemSearch = ({
       optionLabelProp="label"
       value={null}
       // options={options}
-      // eslint-disable-next-line react/jsx-props-no-spreading
+
       {...props}
     >
       {options.map((option) => (
@@ -177,7 +177,7 @@ const StockItemSearch = ({
                     </Typography.Text>
                   </Col>
                   <Col>
-                    {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
+                    {}
                     <Typography.Text>
                       <FormattedNumber
                         currency={'GBP'}
@@ -198,7 +198,7 @@ const StockItemSearch = ({
                     </Typography.Text>
                   </Col>
                   <Col>
-                    {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
+                    {}
                     <Typography.Text>
                       <FormattedNumber
                         currency={'GBP'}
@@ -248,6 +248,20 @@ const StockItemSearch = ({
                   </Col>
                   <Col>
                     <Typography.Text>{option.barcode}</Typography.Text>
+                  </Col>
+                </Row>
+              </Col>
+            )}
+            {option.styleCode && (
+              <Col>
+                <Row gutter={4}>
+                  <Col>
+                    <Typography.Text strong type="secondary">
+                      <FormattedMessage defaultMessage="Style Code:" />
+                    </Typography.Text>
+                  </Col>
+                  <Col>
+                    <Typography.Text>{option.styleCode}</Typography.Text>
                   </Col>
                 </Row>
               </Col>

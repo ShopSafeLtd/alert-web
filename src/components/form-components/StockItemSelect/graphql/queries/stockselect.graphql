@@ -1,28 +1,29 @@
 query StockItemsSearch(
-  $where: stockItemRelayWhereInput!
-  $take: Int!
-  $after: String
-  $orderBy: stockItemRelayOrderInput
+    $where: stockItemRelayWhereInput!
+    $take: Int!
+    $after: String
+    $orderBy: stockItemRelayOrderInput
 ) {
-  stockItemsSearch(
-    where: $where
-    take: $take
-    after: $after
-    orderBy: $orderBy
-  ) {
-    hasMore
-    stock {
-      id
-      barcode
-      brand
-      costPriceLocal
-      costPriceStandard
-      division
-      name
-      salesPriceLocal
-      salesPriceStandard
-      sku
-      variant
+    stockItemsSearch(
+        where: $where
+        take: $take
+        after: $after
+        orderBy: $orderBy
+    ) {
+        hasMore
+        stock {
+            id
+            barcode
+            brand
+            costPriceLocal
+            costPriceStandard
+            division
+            name
+            salesPriceLocal
+            salesPriceStandard
+            sku
+            variant
+            styleCode
+        }
     }
-  }
 }
