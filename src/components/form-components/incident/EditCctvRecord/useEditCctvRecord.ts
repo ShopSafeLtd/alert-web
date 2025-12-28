@@ -13,6 +13,7 @@ const useEditCctvRecord = ({ data, update }: Props): Return => {
   const onSubmit = (value: CctvRecordData) => {
     update({
       ...data,
+      cameraNumber: value.cameraNumber,
       description: value.description,
       endTime: value.endTime,
       showFace: value.showFace,

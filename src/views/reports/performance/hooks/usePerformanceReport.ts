@@ -51,6 +51,7 @@ const usePerformanceReport = (): Return => {
     saving,
     selectTemplate,
     selectedBrands,
+    selectedBusiness,
     selectedGroups,
     selectedIndustries,
     selectedRoles,
@@ -67,6 +68,7 @@ const usePerformanceReport = (): Return => {
     setRedactOnPrint,
     setSaveAsDrawer,
     setSelectedBrands,
+    setSelectedBusiness,
     setSelectedGroups,
     setSelectedIndustries,
     setSelectedRoles,
@@ -95,6 +97,7 @@ const usePerformanceReport = (): Return => {
             dateRangeMode,
             incidentTypeIds,
             selectedBrands,
+            selectedBusiness,
             selectedGroups,
             selectedIndustries,
             selectedRoles,
@@ -108,6 +111,7 @@ const usePerformanceReport = (): Return => {
     selectedGroups,
     selectedIndustries,
     selectedBrands,
+    selectedBusiness,
     selectedRoles,
     dateRangeMode,
     incidentTypeIds,
@@ -215,6 +219,8 @@ const usePerformanceReport = (): Return => {
     variables: {
       where: {
         brandsIds: selectedBrands.length > 0 ? selectedBrands : undefined,
+        businessesIds:
+          selectedBusiness.length > 0 ? selectedBusiness : undefined,
         dateRange: {
           endDate: dateRange.endDate,
           startDate: dateRange.startDate,
@@ -394,6 +400,7 @@ const usePerformanceReport = (): Return => {
     schemeId: currentScheme,
     selectTemplate,
     selectedBrands,
+    selectedBusiness,
     selectedGroups,
     selectedIndustries,
     selectedRoles,
@@ -408,6 +415,7 @@ const usePerformanceReport = (): Return => {
     setRedactOnPrint,
     setSaveAsDrawer,
     setSelectedBrands,
+    setSelectedBusiness,
     setSelectedGroups,
     setSelectedIndustries,
     setSelectedRoles,
