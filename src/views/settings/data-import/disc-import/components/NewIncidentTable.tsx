@@ -19,7 +19,9 @@ import {
   Row,
   Select,
   Skeleton,
+  Space,
 } from 'antd';
+import dayjs from 'dayjs';
 import { TagType } from 'graphql/types';
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
@@ -125,20 +127,56 @@ const NewOffenderRow = React.memo(
                 <Row gutter={8}>
                   <Col className={classes.cell} span={12}>
                     <Form.Item
+                      getValueProps={(value: unknown) => {
+                        const dayjsValue = value as
+                          | { toDate?: () => Date }
+                          | Date
+                          | undefined;
+                        return {
+                          value:
+                            dayjsValue &&
+                            typeof dayjsValue === 'object' &&
+                            'toDate' in dayjsValue
+                              ? dayjsValue.toDate()
+                              : dayjsValue,
+                        };
+                      }}
                       label={intl.formatMessage({
                         defaultMessage: 'Date',
                       })}
                       name="date"
+                      normalize={(value: unknown) => {
+                        if (!value) return value;
+                        return value instanceof Date ? dayjs(value) : value;
+                      }}
                     >
                       <DatePicker format="DD/MM/YYYY" onBlur={onBlur} />
                     </Form.Item>
                   </Col>
                   <Col className={classes.cell} span={12}>
                     <Form.Item
+                      getValueProps={(value: unknown) => {
+                        const dayjsValue = value as
+                          | { toDate?: () => Date }
+                          | Date
+                          | undefined;
+                        return {
+                          value:
+                            dayjsValue &&
+                            typeof dayjsValue === 'object' &&
+                            'toDate' in dayjsValue
+                              ? dayjsValue.toDate()
+                              : dayjsValue,
+                        };
+                      }}
                       label={intl.formatMessage({
                         defaultMessage: 'Time',
                       })}
                       name="time"
+                      normalize={(value: unknown) => {
+                        if (!value) return value;
+                        return value instanceof Date ? dayjs(value) : value;
+                      }}
                     >
                       <DatePicker format="HH:mm" onBlur={onBlur} />
                     </Form.Item>
@@ -443,6 +481,7 @@ interface Props {
   newUsers: NewUser[];
   onAdd: () => void;
   onUpdateIncident: (data: NewIncident) => void;
+  rematchIncidentOffenders: () => void;
   tagsData: TagsQuery | undefined;
 }
 
@@ -454,6 +493,7 @@ const NewIncidentTable = ({
   newUsers = [],
   onAdd,
   onUpdateIncident,
+  rematchIncidentOffenders,
   tagsData,
 }: Props) => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -470,9 +510,17 @@ const NewIncidentTable = ({
   return (
     <Card
       extra={
-        <Button onClick={onAdd} style={{ marginBottom: 16 }} type="primary">
-          <FormattedMessage defaultMessage="Add Incident" />
-        </Button>
+        <Space>
+          <Button
+            onClick={rematchIncidentOffenders}
+            style={{ marginBottom: 16 }}
+          >
+            <FormattedMessage defaultMessage="Rematch Offenders" />
+          </Button>
+          <Button onClick={onAdd} style={{ marginBottom: 16 }} type="primary">
+            <FormattedMessage defaultMessage="Add Incident" />
+          </Button>
+        </Space>
       }
       title={intl.formatMessage(
         {

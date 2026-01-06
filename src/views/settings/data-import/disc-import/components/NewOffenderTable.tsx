@@ -16,6 +16,7 @@ import {
   Row,
   Select,
   Skeleton,
+  Space,
 } from 'antd';
 import { Age, Build, Gender, Height, Race } from 'graphql/types';
 import React, { useEffect, useState } from 'react';
@@ -411,6 +412,7 @@ interface Props {
   newOffenders: NewOffender[];
   onAdd: () => void;
   onUpdateOffender: (data: NewOffender) => void;
+  rematchOffenderImages: () => void;
 }
 
 const NewOffenderTable = ({
@@ -418,6 +420,7 @@ const NewOffenderTable = ({
   newOffenders,
   onAdd,
   onUpdateOffender,
+  rematchOffenderImages,
 }: Props) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [activeOffenders, setActiveOffenders] = useState<NewOffender[]>(
@@ -434,9 +437,14 @@ const NewOffenderTable = ({
   return (
     <Card
       extra={
-        <Button onClick={onAdd} style={{ marginBottom: 16 }} type="primary">
-          <FormattedMessage defaultMessage="Add Offender" />
-        </Button>
+        <Space>
+          <Button onClick={rematchOffenderImages} style={{ marginBottom: 16 }}>
+            <FormattedMessage defaultMessage="Rematch Images" />
+          </Button>
+          <Button onClick={onAdd} style={{ marginBottom: 16 }} type="primary">
+            <FormattedMessage defaultMessage="Add Offender" />
+          </Button>
+        </Space>
       }
       title={intl.formatMessage(
         {
