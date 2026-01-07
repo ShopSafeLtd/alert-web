@@ -136,7 +136,8 @@ const NewOffenderRow = React.memo(
                           value:
                             dayjsValue &&
                             typeof dayjsValue === 'object' &&
-                            'toDate' in dayjsValue
+                            'toDate' in dayjsValue &&
+                            dayjsValue.toDate
                               ? dayjsValue.toDate()
                               : dayjsValue,
                         };
@@ -164,7 +165,8 @@ const NewOffenderRow = React.memo(
                           value:
                             dayjsValue &&
                             typeof dayjsValue === 'object' &&
-                            'toDate' in dayjsValue
+                            'toDate' in dayjsValue &&
+                            dayjsValue.toDate
                               ? dayjsValue.toDate()
                               : dayjsValue,
                         };
