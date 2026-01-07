@@ -133,10 +133,20 @@ const ExportActivitiesView = ({
           </Row>
           {state.jobSubmitted && (
             <Alert
-              description={intl.formatMessage({
-                defaultMessage:
-                  'Your activity export request has been submitted. You will receive an email notification when the export is complete.',
-              })}
+              description={
+                state.estimatedTime
+                  ? intl.formatMessage(
+                      {
+                        defaultMessage:
+                          'Your activity export request has been submitted. {estimatedTime}. You will receive an email notification when the export is complete.',
+                      },
+                      { estimatedTime: state.estimatedTime }
+                    )
+                  : intl.formatMessage({
+                      defaultMessage:
+                        'Your activity export request has been submitted. You will receive an email notification when the export is complete.',
+                    })
+              }
               message={intl.formatMessage({
                 defaultMessage: 'Export Request Submitted',
               })}

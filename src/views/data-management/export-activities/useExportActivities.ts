@@ -2,7 +2,7 @@ import type { TodoExportPreviewQuery } from '#/views/data-management/export-acti
 import type { Dispatch } from 'react';
 
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
-import { useCreateActivityCsvZipMutation } from '#/views/data-management/export-activities/graphql/mutations/__generated__/create-zip.generated';
+import { useQueueActivityCsvExportMutation } from '#/views/data-management/export-activities/graphql/mutations/__generated__/create-zip.generated';
 import { useTodoExportPreviewQuery } from '#/views/data-management/export-activities/graphql/queries/__generated__/todo-export-preview.generated';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -391,13 +391,13 @@ const useExportActivities = (): Return => {
   });
 
   const [queueExport, { loading: mutationLoading }] =
-    useCreateActivityCsvZipMutation({
+    useQueueActivityCsvExportMutation({
       onCompleted: (d) => {
-        if (d?.createActivityCsvZip) {
+        if (d?.queueActivityCsvExport) {
           dispatch({
             payload: {
-              estimatedTime: null,
-              jobId: d.createActivityCsvZip,
+              estimatedTime: d.queueActivityCsvExport.estimatedTime,
+              jobId: d.queueActivityCsvExport.jobId,
               jobSubmitted: true,
             },
             type: 'SET_JOB_SUBMITTED',
