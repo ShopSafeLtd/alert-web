@@ -1,14 +1,12 @@
+import type { UserSelectOption } from '#/components/form-components/UsersSelect/UsersSelectFetchMore.view';
 import type { GroupQuery } from 'graphql/group/queries/__generated__/group.generated';
 import type { SelectOptions } from 'types/DataType';
 
-import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { notification } from 'antd';
 import { useUpdateGroupMutation } from 'graphql/group/mutation/__generated__/update_group.generated';
 import { useGroupQuery } from 'graphql/group/queries/__generated__/group.generated';
-import { Role, SortOrder } from 'graphql/types';
-import { useListSchemeUsersQuery } from 'graphql/users/queries/__generated__/list-scheme-users.generated';
-import { useAtomValue } from 'jotai/index';
-import { useState } from 'react';
+import { Role } from 'graphql/types';
+import { useCallback, useState } from 'react';
 import { useIntl } from 'react-intl';
 import errorNotification from 'types/mutation_notifications/error_notification';
 
@@ -41,21 +39,20 @@ interface Return {
   data: GroupQuery | undefined;
   loading: boolean;
   onSubmit: (value: FormData) => void;
+  onUsersOptionsChange: (options: UserSelectOption[]) => void;
   saving: boolean;
   selectedUsers: string[] | undefined;
   setSelectedUsers: (value: string[]) => void;
   setShowOffenderSettings: (value: boolean) => void;
   showOffenderSettings: boolean;
-  usersData: SelectOptions[] | undefined;
-  usersLoading: boolean;
 }
 
 const useEditGroup = ({ groupId, onClose }: Props): Return => {
   const intl = useIntl();
-  const schemeId = useAtomValue(currentSchemeIdAtom);
   const [saving, setSaving] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState<string[]>();
   const [showOffenderSettings, setShowOffenderSettings] = useState(false);
+  const [usersWithRoles, setUsersWithRoles] = useState<UserSelectOption[]>([]);
 
   const { data: groupData, loading } = useGroupQuery({
     onCompleted: ({ group }) =>
@@ -67,39 +64,9 @@ const useEditGroup = ({ groupId, onClose }: Props): Return => {
     },
   });
 
-  const { data: usersData, loading: usersLoading } = useListSchemeUsersQuery({
-    fetchPolicy: 'cache-and-network',
-    variables: {
-      groupWhere: {
-        scheme: {
-          id: {
-            equals: schemeId,
-          },
-        },
-      },
-      orderBy: {
-        fullName: SortOrder.Asc,
-      },
-      schemesWhere: {
-        scheme: {
-          id: {
-            equals: schemeId,
-          },
-        },
-      },
-      where: {
-        schemes: {
-          some: {
-            scheme: {
-              id: {
-                equals: schemeId,
-              },
-            },
-          },
-        },
-      },
-    },
-  });
+  const onUsersOptionsChange = useCallback((options: UserSelectOption[]) => {
+    setUsersWithRoles(options);
+  }, []);
 
   const [updateGroup] = useUpdateGroupMutation({
     onCompleted: () => {
@@ -167,25 +134,21 @@ const useEditGroup = ({ groupId, onClose }: Props): Return => {
   };
 
   return {
-    adminUsersData: usersData?.users
-      .filter((user) => user.schemes[0]?.role === Role.SchemeAdmin)
+    adminUsersData: usersWithRoles
+      .filter((user) => user.role === Role.SchemeAdmin)
       .map((user) => ({
-        label: user.fullName,
-        value: user.id,
+        label: user.label,
+        value: user.value,
       })),
     data: groupData,
     loading,
     onSubmit,
+    onUsersOptionsChange,
     saving,
     selectedUsers,
     setSelectedUsers,
     setShowOffenderSettings,
     showOffenderSettings,
-    usersData: usersData?.users.map((user) => ({
-      label: user.fullName,
-      value: user.id,
-    })),
-    usersLoading,
   };
 };
 

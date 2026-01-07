@@ -1,6 +1,7 @@
 import type { UsersSelectQueryVariables } from '#/components/form-components/UsersSelect/__generated__/users-select-query.generated';
 import type { SizeType } from 'antd/lib/config-provider/SizeContext';
 import type { LabeledValue, SelectProps } from 'antd/lib/select';
+import type { Role } from 'graphql/types';
 
 import {
   useUsersSelectLazyQuery,
@@ -13,6 +14,13 @@ import { useAtomValue } from 'jotai/index';
 import { debounce } from 'lodash-es';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
+
+export interface UserSelectOption {
+  key: string;
+  label: string;
+  role?: Role;
+  value: string;
+}
 
 export type ValueType =
   | LabeledValue
@@ -28,6 +36,7 @@ interface Props {
   maxTagCount?: 'responsive' | number;
   mode?: 'multiple' | 'tags';
   onChange?: (value: string[]) => void;
+  onOptionsChange?: (options: UserSelectOption[]) => void;
   placeholder?: string;
   queryVars?: UsersSelectQueryVariables;
   size?: SizeType;
@@ -90,6 +99,7 @@ const UsersManySelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
   maxTagCount,
   mode,
   onChange,
+  onOptionsChange,
   placeholder,
   queryVars,
   size,
@@ -118,6 +128,11 @@ const UsersManySelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
       orderBy: {
         fullName: SortOrder.Asc,
       },
+      schemesWhere: {
+        schemeId: {
+          equals: currentSchemeId,
+        },
+      },
       take,
       where: {
         schemes: {
@@ -139,6 +154,7 @@ const UsersManySelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
           extraData.listUsers.users.map((option) => ({
             key: option.id,
             label: option.fullName,
+            role: option.schemes[0]?.role,
             value: option.id,
           }))
         );
@@ -156,6 +172,11 @@ const UsersManySelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
           variables: {
             orderBy: {
               fullName: SortOrder.Asc,
+            },
+            schemesWhere: {
+              schemeId: {
+                equals: currentSchemeId,
+              },
             },
             take: 50,
             where: {
@@ -190,6 +211,11 @@ const UsersManySelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
       },
       variables: {
         orderBy: { fullName: SortOrder.Asc },
+        schemesWhere: {
+          schemeId: {
+            equals: currentSchemeId,
+          },
+        },
         skip: data?.listUsers.users.length,
         take: 30,
         where: {
@@ -244,12 +270,16 @@ const UsersManySelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
       },
       variables: {
         orderBy: { fullName: SortOrder.Asc },
-
+        schemesWhere: {
+          schemeId: {
+            equals: currentSchemeId,
+          },
+        },
         take: 50,
         where: {
           ...queryVars?.where,
           fullName: {
-            contains: searchTerm,
+            contains: searchValueInput,
             mode: QueryMode.Insensitive,
           },
           schemes: {
@@ -298,13 +328,23 @@ const UsersManySelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
 
   const sortedData = [...(data?.listUsers?.users || [])];
 
-  const options: SelectProps['options'] = sortedData.map((option) => ({
+  const options: UserSelectOption[] = sortedData.map((option) => ({
     key: option.id,
     label: option.fullName,
+    role: option.schemes[0]?.role,
     value: option.id,
   }));
 
-  const merged = [...(selectedMissingUsers || []), ...options];
+  const merged: UserSelectOption[] = [
+    ...((selectedMissingUsers as UserSelectOption[]) || []),
+    ...options,
+  ];
+
+  useEffect(() => {
+    if (onOptionsChange) {
+      onOptionsChange(merged);
+    }
+  }, [merged.length, onOptionsChange]);
 
   // {/* {sortedData.map(({ node: option }) => ( */}
   // {/*   <Select.Option key={option.id} value={option.id} label={option.name}> */}
