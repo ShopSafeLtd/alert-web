@@ -5,17 +5,19 @@ import { Page } from '#/components/shared-components/AntD/Page/Page';
 import { ActivityStatusButton } from '#/views/data-management/export-activities/components/activity-status-button';
 import { CloseOutlined } from '@ant-design/icons';
 import {
+  Alert,
   Button,
   Card,
   Col,
-  Progress,
   Row,
   Space,
   Table,
+  Tag,
   Tooltip,
   Typography,
 } from 'antd';
 import dayjs from 'dayjs';
+import { TodoStatusInput } from 'graphql/types';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
@@ -28,6 +30,7 @@ interface Props {
   dispatch: React.Dispatch<Action>;
   getZip: () => void;
   loading: boolean;
+  mutationLoading: boolean;
   selectedGroups: string[];
   state: ExportActivitiesState;
 }
@@ -42,18 +45,45 @@ const formatEndDate = (date: Date | null) => {
   return dayjs(date).endOf('day').toDate();
 };
 
-const ExportActivitiesView = ({ dispatch, getZip, loading, state }: Props) => {
+const ExportActivitiesView = ({
+  dispatch,
+  getZip,
+  loading,
+  mutationLoading,
+  state,
+}: Props) => {
   const intl = useIntl();
   const ranges = usePresetDateRanges();
 
   const defaultStartDate = dayjs().subtract(1, 'month').startOf('day').toDate();
   const defaultEndDate = dayjs().endOf('day').toDate();
+
+  const activeFilterCount = [
+    state.businessIds.length > 0 ? 1 : 0,
+    state.groupIds.length > 0 ? 1 : 0,
+    state.assignedUsers.length > 0 ? 1 : 0,
+    state.status === TodoStatusInput.All ? 0 : 1,
+    state.completedAt ? 1 : 0,
+    state.dueDate ? 1 : 0,
+  ].reduce((sum, count) => sum + count, 0);
+
   return (
     <div style={{ marginLeft: 15 }}>
       <Page>
         <Space direction="vertical" style={{ width: '100%' }}>
           <Typography.Title level={3}>
             <FormattedMessage defaultMessage="Export Activities" />
+            {activeFilterCount > 0 && (
+              <Tag
+                color="blue"
+                style={{ marginLeft: 8, verticalAlign: 'middle' }}
+              >
+                <FormattedMessage
+                  defaultMessage="{count, plural, one {# filter} other {# filters}}"
+                  values={{ count: activeFilterCount }}
+                />
+              </Tag>
+            )}
           </Typography.Title>
           <Row gutter={[10, 10]} style={{ marginBottom: 10 }}>
             <Col>
@@ -65,6 +95,19 @@ const ExportActivitiesView = ({ dispatch, getZip, loading, state }: Props) => {
                 }}
               />
             </Col>
+            {activeFilterCount > 0 && (
+              <Col>
+                <Button
+                  danger
+                  onClick={() =>
+                    dispatch({ payload: null, type: 'RESET_FILTERS' })
+                  }
+                  type="text"
+                >
+                  {intl.formatMessage({ defaultMessage: 'Clear All Filters' })}
+                </Button>
+              </Col>
+            )}
             <Col flex={1} />
             <Col span={6}>
               <Col
@@ -74,37 +117,34 @@ const ExportActivitiesView = ({ dispatch, getZip, loading, state }: Props) => {
                 }}
               >
                 <Button
-                  disabled={loading || state.data.length === 0}
+                  disabled={
+                    loading || state.data.length === 0 || mutationLoading
+                  }
+                  loading={mutationLoading}
                   onClick={getZip}
                   type="primary"
                 >
                   {intl.formatMessage({
-                    defaultMessage: 'Generate Zip',
+                    defaultMessage: 'Export Data',
                   })}
                 </Button>
               </Col>
-              <Col flex={1}>
-                {state.progress > 0 && (
-                  <Progress
-                    percent={state.progress}
-                    size="small"
-                    style={{
-                      marginTop: 10,
-                    }}
-                  />
-                )}
-              </Col>
-              <Col>
-                {state.zipFile && (
-                  <a download href={state.zipFile}>
-                    {intl.formatMessage({
-                      defaultMessage: 'Download Zip',
-                    })}
-                  </a>
-                )}
-              </Col>
             </Col>
           </Row>
+          {state.jobSubmitted && (
+            <Alert
+              description={intl.formatMessage({
+                defaultMessage:
+                  'Your activity export request has been submitted. You will receive an email notification when the export is complete.',
+              })}
+              message={intl.formatMessage({
+                defaultMessage: 'Export Request Submitted',
+              })}
+              showIcon
+              style={{ marginBottom: 16, marginTop: 16 }}
+              type="success"
+            />
+          )}
           <Row gutter={[10, 10]} style={{ marginBottom: 10 }}>
             <Col span={8}>
               <Card

@@ -8189,6 +8189,7 @@ export type IncidentFormFieldsMetadataInput = {
   draftDescription?: InputMaybe<Scalars['String']>;
   draftTitle?: InputMaybe<Scalars['String']>;
   mode?: InputMaybe<Scalars['String']>;
+  showDamagedQuantity?: InputMaybe<Scalars['Boolean']>;
   titles?: InputMaybe<Scalars['JSON']>;
 };
 
@@ -8330,6 +8331,7 @@ export type IncidentImportValidationResult = {
 export type IncidentItem = {
   __typename?: 'IncidentItem';
   createdAt: Scalars['Date'];
+  damagedQuantity?: Maybe<Scalars['Int']>;
   goodsType?: Maybe<GoodsType>;
   id: Scalars['ID'];
   incident: Incident;
@@ -8344,6 +8346,7 @@ export type IncidentItem = {
 };
 
 export type IncidentItemCreateWithoutIncident = {
+  damagedQuantity?: InputMaybe<Scalars['Float']>;
   goodsType?: InputMaybe<ConnectHelper>;
   name?: InputMaybe<Scalars['String']>;
   quantity?: InputMaybe<Scalars['Float']>;
@@ -8453,6 +8456,7 @@ export type IncidentItemUpdateWithWhereUniqueWithoutIncident = {
 };
 
 export type IncidentItemUpdateWithoutIncident = {
+  damagedQuantity?: InputMaybe<SetFloatHelper>;
   goodsType?: InputMaybe<ConnectHelper>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   name?: InputMaybe<NullableSetStringHelper>;
@@ -11355,7 +11359,6 @@ export type Mutation = {
   mySafetyImportData: SystemTask;
   nextImportData: SystemTask;
   oneStopImportData: SystemTask;
-  queueActivityCsvExport: QueuedIncidentExportResult;
   queueIncidentCsvExport: QueuedIncidentExportResult;
   queueStockRemovalCsvExport: QueuedStockRemovalExportResult;
   recordPatrolScan: PatrolEvent;
@@ -12468,11 +12471,6 @@ export type MutationNextImportDataArgs = {
 
 export type MutationOneStopImportDataArgs = {
   data: OneStopImportDataInput;
-};
-
-
-export type MutationQueueActivityCsvExportArgs = {
-  where: ActivityExportWhere;
 };
 
 
@@ -19867,6 +19865,7 @@ export type Scheme = {
   mg11Available: Scalars['Boolean'];
   name: Scalars['String'];
   needJustification: Scalars['Boolean'];
+  noActvitiesForInactiveUsers: Scalars['Boolean'];
   notifications: Array<Notification>;
   offenderRetention?: Maybe<Scalars['Int']>;
   offenders: Array<Offender>;
@@ -19898,6 +19897,7 @@ export type Scheme = {
   skipLocationToAddress: Scalars['Boolean'];
   statementTemplates: Array<StatementTemplate>;
   stockItems: Array<StockItem>;
+  stopApprovalActivities: Scalars['Boolean'];
   storeFaceDuration: Scalars['String'];
   tagOrders: Array<TagOrder>;
   tags: Array<Tag>;
@@ -20553,6 +20553,7 @@ export enum SchemeScalarFieldEnum {
   RequireSiteNumberForUsers = 'requireSiteNumberForUsers',
   RestrictIncidentAccess = 'restrictIncidentAccess',
   ShowBlankActivity = 'showBlankActivity',
+  StopApprovalActivities = 'stopApprovalActivities',
   TaskTimeTracking = 'taskTimeTracking',
   UpdatedAt = 'updatedAt',
   UploadOffenderImagesOnMobile = 'uploadOffenderImagesOnMobile',
@@ -20627,6 +20628,7 @@ export type SchemeUpdateInput = {
   mg11Available?: InputMaybe<Scalars['Boolean']>;
   name?: InputMaybe<SetStringHelper>;
   needJustification?: InputMaybe<SetBooleanHelper>;
+  noActvitiesForInactiveUsers?: InputMaybe<SetBooleanHelper>;
   offenderRetention?: InputMaybe<SetIntHelper>;
   oneSelectedIncidentTypeOnly?: InputMaybe<SetBooleanHelper>;
   optionalBusinessOnUsers?: InputMaybe<SetBooleanHelper>;
@@ -20646,6 +20648,7 @@ export type SchemeUpdateInput = {
   showBlankActivity?: InputMaybe<SetBooleanHelper>;
   skipLocationToAddress?: InputMaybe<SetBooleanHelper>;
   smartApprove?: InputMaybe<SetBooleanHelper>;
+  stopApprovalActivities?: InputMaybe<SetBooleanHelper>;
   taskTimeTracking?: InputMaybe<Scalars['Boolean']>;
   uploadOffenderImagesOnMobile?: InputMaybe<SetBooleanHelper>;
   usDateFormat?: InputMaybe<SetBooleanHelper>;
@@ -21519,6 +21522,7 @@ export type StockItem = {
   salesPriceLocal?: Maybe<Scalars['Float']>;
   salesPriceStandard?: Maybe<Scalars['Float']>;
   sku?: Maybe<Scalars['String']>;
+  styleCode?: Maybe<Scalars['String']>;
   updatedAt: Scalars['Date'];
   variant?: Maybe<Scalars['String']>;
 };
