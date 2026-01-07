@@ -7,10 +7,8 @@ import { MemoryRouter } from 'react-router-dom';
 
 import useEditGroup from '../useEditGroup';
 
-import { SortOrder } from 'graphql/types';
 import { UpdateGroupDocument } from 'graphql/group/mutation/__generated__/update_group.generated';
 import { GroupDocument } from 'graphql/group/queries/__generated__/group.generated';
-import { ListSchemeUsersDocument } from 'graphql/users/queries/__generated__/list-scheme-users.generated';
 
 const mocks = [
   {
@@ -72,53 +70,10 @@ const mocks = [
       },
     },
   },
-  {
-    request: {
-      query: ListSchemeUsersDocument,
-      variables: {
-        where: {
-          schemes: {
-            some: {
-              scheme: {
-                id: {
-                  equals: 'schemeId',
-                },
-              },
-            },
-          },
-        },
-        groupWhere: {
-          scheme: {
-            id: {
-              equals: 'schemeId',
-            },
-          },
-        },
-        orderBy: {
-          fullName: SortOrder.Asc,
-        },
-      },
-    },
-    result: {
-      data: {
-        users: [
-          {
-            id: 'userId',
-            fullName: 'testUser',
-            firstLetter: 't',
-            email: 'user email',
-            businesses: [{ name: 'user business', id: '' }],
-            status: 'enabled',
-            groups: [{ id: 'groupId', name: 'test group' }],
-          },
-        ],
-      },
-    },
-  },
 ];
 
 const UseEditGroupTest = () => {
-  const { data, loading, usersData, usersLoading, onSubmit } = useEditGroup({
+  const { data, loading, onSubmit } = useEditGroup({
     onClose: jest.fn(),
     groupId: 'groupId',
   });
@@ -131,20 +86,10 @@ const UseEditGroupTest = () => {
         <span>{el.businesses[0]?.name}</span>
       </div>
     ));
-  const Users =
-    usersData &&
-    usersData.map((el) => (
-      <div key={el.label}>
-        <span>{el.value}</span>
-        <span>{el.label}</span>
-      </div>
-    ));
   return (
     <div>
       {Group}
       <span>{loading ? 'true' : 'false'}</span>
-      {Users}
-      <span>{usersLoading ? 'true' : 'false'}</span>
       <button
         type="button"
         onClick={() =>
@@ -186,7 +131,7 @@ describe('useDetailGroups - hook', () => {
   });
 
   it('returns the expected values', async () => {
-    const { findByText, getAllByText, getByText, container } = render(
+    const { findByText, getByText, container } = render(
       <StoreProvider store={store}>
         <MemoryRouter>
           <MockedProvider mocks={mocks} addTypename={false}>
@@ -197,8 +142,7 @@ describe('useDetailGroups - hook', () => {
     );
 
     expect(await findByText('test user')).toBeInTheDocument();
-    expect(await findByText('testUser')).toBeInTheDocument();
-    expect(getAllByText('false')).toHaveLength(2);
+    expect(await findByText('false')).toBeInTheDocument();
     fireEvent.click(getByText('submit'));
     expect(container).toBeInTheDocument();
     expect(await findByText('Successfully Updated!')).toBeInTheDocument();
