@@ -5,6 +5,7 @@ query QuestionGroupOnScheme($where: SchemeWhereUniqueInput!, $questionGroupsWher
       name
       description
       defaultDueDate
+      requiredQuestionIds
       questions {
         questionFormatted
         id

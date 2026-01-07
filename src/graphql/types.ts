@@ -18551,6 +18551,7 @@ export type QuestionGroup = {
   id: Scalars['ID'];
   name: Scalars['String'];
   questions: Array<Question>;
+  requiredQuestionIds: Array<Scalars['String']>;
   schemes: Array<Scheme>;
 };
 
@@ -18562,6 +18563,7 @@ export type QuestionGroupCreateInput = {
   id?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
   questions?: InputMaybe<ConnectOnlyArrayHelper>;
+  requiredQuestionIds?: InputMaybe<Array<Scalars['String']>>;
   schemes?: InputMaybe<ConnectOnlyArrayHelper>;
   updatedAt?: InputMaybe<Scalars['Date']>;
 };
@@ -18603,6 +18605,7 @@ export type QuestionGroupUpdateInput = {
   description?: InputMaybe<NullableSetStringHelper>;
   name?: InputMaybe<SetStringHelper>;
   questions?: InputMaybe<SetArrayHelper>;
+  requiredQuestionIds?: InputMaybe<SetStringArrayHelper>;
 };
 
 export type QuestionGroupWhereInput = {
@@ -22693,6 +22696,11 @@ export type TaskQuestionListRelationFilter = {
   some?: InputMaybe<TaskQuestionWhereInput>;
 };
 
+export type TaskQuestionOnQInput = {
+  id: Scalars['String'];
+  req: Scalars['Boolean'];
+};
+
 export type TaskQuestionOrderByRelationAggregateInput = {
   _count?: InputMaybe<SortOrder>;
 };
@@ -23945,6 +23953,7 @@ export type UpdateQuestionOnActivityInput = {
   origOptions?: InputMaybe<Array<Scalars['String']>>;
   origQuestion: Scalars['String'];
   questionId: Scalars['String'];
+  taskQuestion?: InputMaybe<TaskQuestionOnQInput>;
   type?: InputMaybe<AnswerType>;
 };
 

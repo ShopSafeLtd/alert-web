@@ -3,7 +3,16 @@ import type { FormInstance } from 'antd';
 import UpdateQuestionContainer from '#/components/form-components/update-question-on-activity/UpdateQuestion.container';
 import { faEdit, faTrash } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, Col, Drawer, Form, Input, InputNumber, Row } from 'antd';
+import {
+  Button,
+  Checkbox,
+  Col,
+  Drawer,
+  Form,
+  Input,
+  InputNumber,
+  Row,
+} from 'antd';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
@@ -17,11 +26,13 @@ interface Props {
   form: FormInstance<FormData>;
   onClose: () => void;
   onSubmit: (value: FormData) => void;
+  requiredQuestionIds: string[];
   saving: boolean;
   selectedIds?: string[];
   selectedQuestions: { id: string; question: string }[];
   setAddQuestion: (value: boolean) => void;
   setEditQuestion: (value: null | string) => void;
+  setRequiredQuestionIds: (value: string[]) => void;
   setSelectedIds: (value: string[]) => void;
   setSelectedQuestions: (value: { id: string; question: string }[]) => void;
   update: (id: string, question: string) => void;
@@ -33,11 +44,13 @@ const AddTodo = ({
   form,
   onClose,
   onSubmit,
+  requiredQuestionIds,
   saving,
   selectedIds,
   selectedQuestions,
   setAddQuestion,
   setEditQuestion,
+  setRequiredQuestionIds,
   setSelectedIds,
   setSelectedQuestions,
   update,
@@ -110,9 +123,30 @@ const AddTodo = ({
               name="questions"
             >
               {selectedQuestions.map((question) => (
-                <Row gutter={8}>
+                <Row align="middle" gutter={8} key={question.id}>
+                  <Col>
+                    <Checkbox
+                      checked={requiredQuestionIds.includes(question.id)}
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          setRequiredQuestionIds([
+                            ...requiredQuestionIds,
+                            question.id,
+                          ]);
+                        } else {
+                          setRequiredQuestionIds(
+                            requiredQuestionIds.filter(
+                              (id) => id !== question.id
+                            )
+                          );
+                        }
+                      }}
+                    >
+                      {intl.formatMessage({ defaultMessage: 'Required' })}
+                    </Checkbox>
+                  </Col>
                   <Col flex={1}>
-                    <p>{question.question}</p>
+                    <p style={{ margin: 0 }}>{question.question}</p>
                   </Col>
                   <Col>
                     <Button
@@ -132,6 +166,9 @@ const AddTodo = ({
                         );
                         setSelectedIds(
                           selectedIds?.filter((id) => id !== question.id) || []
+                        );
+                        setRequiredQuestionIds(
+                          requiredQuestionIds.filter((id) => id !== question.id)
                         );
                       }}
                       size="small"
