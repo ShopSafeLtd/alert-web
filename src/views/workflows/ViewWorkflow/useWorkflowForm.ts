@@ -43,6 +43,7 @@ interface ListData {
     id: string;
     question: string;
   }[];
+  requiredQuestionIds: string[];
 }
 
 interface WorkflowData {
@@ -734,12 +735,20 @@ const useWorkflowForm = (): Return => {
   const questionGroups: QuestionGroupData[] = useMemo(() => {
     if (tableData) {
       return tableData.map(
-        ({ defaultDueDays, description, id, name, questions: qs }) => ({
+        ({
           defaultDueDays,
           description,
           id,
           name,
           questions: qs,
+          requiredQuestionIds,
+        }) => ({
+          defaultDueDays,
+          description,
+          id,
+          name,
+          questions: qs,
+          requiredQuestionIds,
         })
       );
     }
