@@ -16,13 +16,12 @@ const EditGroup = ({ onClose }: Props): JSX.Element => {
     data,
     loading,
     onSubmit,
+    onUsersOptionsChange,
     saving,
     selectedUsers,
     setSelectedUsers,
     setShowOffenderSettings,
     showOffenderSettings,
-    usersData,
-    usersLoading,
   } = useEditGroup({
     groupId,
     onClose,
@@ -35,13 +34,12 @@ const EditGroup = ({ onClose }: Props): JSX.Element => {
       loading={loading}
       onClose={onClose}
       onSubmit={onSubmit}
+      onUsersOptionsChange={onUsersOptionsChange}
       saving={saving}
       selectedUsers={selectedUsers}
       setSelectedUsers={setSelectedUsers}
       setShowOffenderSettings={setShowOffenderSettings}
       showOffenderSettings={showOffenderSettings}
-      usersData={usersData}
-      usersLoading={usersLoading}
     />
   );
 };
