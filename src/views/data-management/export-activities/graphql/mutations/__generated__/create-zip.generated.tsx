@@ -3,24 +3,28 @@ import type * as Types from '../../../../../../graphql/types';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
-export type CreateActivityCsvZipMutationVariables = Types.Exact<{
+export type QueueActivityCsvExportMutationVariables = Types.Exact<{
   where: Types.ActivityExportWhere;
 }>;
 
 
-export type CreateActivityCsvZipMutation = { __typename?: 'Mutation', createActivityCsvZip: string };
+export type QueueActivityCsvExportMutation = { __typename?: 'Mutation', queueActivityCsvExport: { __typename?: 'QueuedIncidentExportResult', jobId: string, message: string, estimatedTime?: string | null } };
 
 
-export const CreateActivityCsvZipDocument = gql`
-    mutation CreateActivityCsvZip($where: ActivityExportWhere!) {
-  createActivityCsvZip(where: $where)
+export const QueueActivityCsvExportDocument = gql`
+    mutation QueueActivityCsvExport($where: ActivityExportWhere!) {
+  queueActivityCsvExport(where: $where) {
+    jobId
+    message
+    estimatedTime
+  }
 }
     `;
-export type CreateActivityCsvZipMutationFn = Apollo.MutationFunction<CreateActivityCsvZipMutation, CreateActivityCsvZipMutationVariables>;
-export function useCreateActivityCsvZipMutation(baseOptions?: Apollo.MutationHookOptions<CreateActivityCsvZipMutation, CreateActivityCsvZipMutationVariables>) {
+export type QueueActivityCsvExportMutationFn = Apollo.MutationFunction<QueueActivityCsvExportMutation, QueueActivityCsvExportMutationVariables>;
+export function useQueueActivityCsvExportMutation(baseOptions?: Apollo.MutationHookOptions<QueueActivityCsvExportMutation, QueueActivityCsvExportMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateActivityCsvZipMutation, CreateActivityCsvZipMutationVariables>(CreateActivityCsvZipDocument, options);
+        return Apollo.useMutation<QueueActivityCsvExportMutation, QueueActivityCsvExportMutationVariables>(QueueActivityCsvExportDocument, options);
       }
-export type CreateActivityCsvZipMutationHookResult = ReturnType<typeof useCreateActivityCsvZipMutation>;
-export type CreateActivityCsvZipMutationResult = Apollo.MutationResult<CreateActivityCsvZipMutation>;
-export type CreateActivityCsvZipMutationOptions = Apollo.BaseMutationOptions<CreateActivityCsvZipMutation, CreateActivityCsvZipMutationVariables>;
+export type QueueActivityCsvExportMutationHookResult = ReturnType<typeof useQueueActivityCsvExportMutation>;
+export type QueueActivityCsvExportMutationResult = Apollo.MutationResult<QueueActivityCsvExportMutation>;
+export type QueueActivityCsvExportMutationOptions = Apollo.BaseMutationOptions<QueueActivityCsvExportMutation, QueueActivityCsvExportMutationVariables>;

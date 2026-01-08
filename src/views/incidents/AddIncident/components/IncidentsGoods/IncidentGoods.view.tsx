@@ -41,6 +41,7 @@ interface Props {
   dontKnowGoods: () => void;
   goods: {
     barcode?: string;
+    damagedQuantity?: number;
     goodsType?: string;
     name?: string;
     quantity?: number;
@@ -55,6 +56,7 @@ interface Props {
   goodsVisible: boolean;
   knowGoods: () => void;
   onAddItem: (data: StockItemValue) => void;
+  showDamagedQuantity?: boolean;
 }
 
 const IncidentGoods = ({
@@ -67,6 +69,7 @@ const IncidentGoods = ({
   goodsVisible,
   knowGoods,
   onAddItem,
+  showDamagedQuantity,
 }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
@@ -534,6 +537,31 @@ const IncidentGoods = ({
                           />
                         </Form.Item>
                       </Col>
+                      {showDamagedQuantity && (
+                        <Col lg={3} md={3} span={12}>
+                          <Form.Item
+                            {...restField}
+                            label={
+                              index
+                                ? ''
+                                : intl.formatMessage({
+                                    defaultMessage: 'Qty Damaged',
+                                  })
+                            }
+                            name={[name, 'damagedQuantity']}
+                            tooltip={intl.formatMessage({
+                              defaultMessage:
+                                'The quantity of the goods that were damaged.',
+                            })}
+                          >
+                            <InputNumber
+                              min={0}
+                              precision={0}
+                              style={{ width: '100%' }}
+                            />
+                          </Form.Item>
+                        </Col>
+                      )}
                     </>
                   )}
 

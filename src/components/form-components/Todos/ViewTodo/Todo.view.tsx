@@ -132,7 +132,7 @@ const TodoView = ({
   const classes = useStyles();
   const navigate = useNavigate();
 
-  const questions = todo?.todo?.questions.map(({ id, question }) => {
+  const questions = todo?.todo?.questions.map(({ id, question, req }) => {
     form.setFieldValue(
       question.id,
       todo?.todo?.answers?.find((answer) => answer?.taskQuestion?.id === id)
@@ -144,7 +144,7 @@ const TodoView = ({
       label: question.questionFormatted,
       options: question.optionsFormFormatted || [],
       questionId: question.id,
-      required: false,
+      required: req,
       tagQuestionId: id,
       value: todo?.todo?.answers?.find(
         (answer) => answer?.taskQuestion?.id === id

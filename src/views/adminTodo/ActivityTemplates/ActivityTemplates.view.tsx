@@ -30,6 +30,7 @@ interface ListData {
     id: string;
     question: string;
   }[];
+  requiredQuestionIds: string[];
 }
 
 interface Props {

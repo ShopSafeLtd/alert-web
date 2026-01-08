@@ -91,6 +91,8 @@ interface Props {
   onUpdateIncident: (data: NewIncident) => void;
   onUpdateOffender: (data: NewOffender) => void;
   onUpdateUser: (data: NewUser) => void;
+  rematchIncidentOffenders: () => void;
+  rematchOffenderImages: () => void;
   tagData: TagsQuery | undefined;
   toggleIdSoughtModal: () => void;
   toggleImageModal: () => void;
@@ -134,6 +136,8 @@ const DiscImport = ({
   onUpdateIncident,
   onUpdateOffender,
   onUpdateUser,
+  rematchIncidentOffenders,
+  rematchOffenderImages,
   tagData,
   toggleIdSoughtModal,
   toggleImageModal,
@@ -296,8 +300,8 @@ const DiscImport = ({
         <Form
           form={mappingForm}
           initialValues={{
-            excludeIncidentDate: dayjs().add(-1, 'year'),
-            excludeUserDate: dayjs().add(-3, 'month'),
+            excludeIncidentDate: dayjs().subtract(1, 'year').toDate(),
+            excludeUserDate: dayjs().subtract(3, 'months').toDate(),
           }}
           onFinish={onGenerateData}
         >
@@ -1081,16 +1085,49 @@ const DiscImport = ({
           </Row>
 
           {areas.length === 0 && (
-            <Form.Item label="Default User Group" name="defaultUserGroup">
-              <Select
-                mode="multiple"
-                options={groupsData?.groups.map((group) => ({
-                  label: group.name,
-                  value: group.id,
-                }))}
-                style={{ width: 200 }}
-              />
-            </Form.Item>
+            <Row gutter={8}>
+              <Col>
+                <Form.Item label="Default User Group" name="defaultUserGroup">
+                  <Select
+                    mode="multiple"
+                    options={groupsData?.groups.map((group) => ({
+                      label: group.name,
+                      value: group.id,
+                    }))}
+                    style={{ width: 200 }}
+                  />
+                </Form.Item>
+              </Col>
+              <Col>
+                <Form.Item label="Default User Role" name="defaultRole">
+                  <Select
+                    options={[
+                      {
+                        label: 'User',
+                        value: 'USER',
+                      },
+                      {
+                        label: 'Content Admin',
+                        value: 'CONTENT_ADMIN',
+                      },
+                      {
+                        label: 'Group Admin',
+                        value: 'GROUP_ADMIN',
+                      },
+                      {
+                        label: 'Scheme Admin',
+                        value: 'SCHEME_ADMIN',
+                      },
+                      {
+                        label: 'Shopsafe Admin',
+                        value: 'SHOPSAFE_ADMIN',
+                      },
+                    ]}
+                    style={{ width: 200 }}
+                  />
+                </Form.Item>
+              </Col>
+            </Row>
           )}
           {areas.length > 0 && (
             <>
@@ -1236,6 +1273,7 @@ const DiscImport = ({
         newOffenders={newOffenders}
         onAdd={() => {}}
         onUpdateOffender={onUpdateOffender}
+        rematchOffenderImages={rematchOffenderImages}
       />
     )}
 
@@ -1248,6 +1286,7 @@ const DiscImport = ({
         newUsers={newUsers}
         onAdd={() => {}}
         onUpdateIncident={onUpdateIncident}
+        rematchIncidentOffenders={rematchIncidentOffenders}
         tagsData={tagData}
       />
     )}

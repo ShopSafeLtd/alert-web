@@ -43,6 +43,7 @@ query Todo($where: TodoWhereUniqueInput!) {
     }
     questions {
       id
+      req
       question {
         id
         optionsFormatted

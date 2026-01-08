@@ -8,18 +8,23 @@ export type UsersSelectQueryVariables = Types.Exact<{
   orderBy?: Types.InputMaybe<Array<Types.UserOrderByWithRelationInput> | Types.UserOrderByWithRelationInput>;
   take?: Types.InputMaybe<Types.Scalars['Int']>;
   skip?: Types.InputMaybe<Types.Scalars['Int']>;
+  schemesWhere?: Types.InputMaybe<Types.UserSchemeWhereInput>;
 }>;
 
 
-export type UsersSelectQuery = { __typename?: 'Query', listUsers: { __typename?: 'ListUsers', total: number, users: Array<{ __typename?: 'User', id: string, fullName: string }> } };
+export type UsersSelectQuery = { __typename?: 'Query', listUsers: { __typename?: 'ListUsers', total: number, users: Array<{ __typename?: 'User', id: string, fullName: string, schemes: Array<{ __typename?: 'UserScheme', id: string, role: Types.Role }> }> } };
 
 
 export const UsersSelectDocument = gql`
-    query usersSelect($where: UserWhereInput, $orderBy: [UserOrderByWithRelationInput!], $take: Int, $skip: Int) {
+    query usersSelect($where: UserWhereInput, $orderBy: [UserOrderByWithRelationInput!], $take: Int, $skip: Int, $schemesWhere: UserSchemeWhereInput) {
   listUsers(where: $where, orderBy: $orderBy, take: $take, skip: $skip) {
     users {
       id
       fullName
+      schemes(where: $schemesWhere) {
+        id
+        role
+      }
     }
     total
   }

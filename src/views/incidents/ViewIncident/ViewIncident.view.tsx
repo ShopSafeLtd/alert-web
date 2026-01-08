@@ -363,7 +363,15 @@ const ViewIncident = ({
                             />
                           </PermissionCheckWrapper>
 
-                          <CctvRecords data={data} loading={loading} />
+                          <CctvRecords
+                            data={data}
+                            deleteRights={deleteRights}
+                            editRights={editRights}
+                            incidentId={incidentId}
+                            loading={loading}
+                            saving={saving}
+                            setSaving={setSaving}
+                          />
                           <PermissionCheckWrapper
                             permission={{
                               method: PermissionMethod.Read,

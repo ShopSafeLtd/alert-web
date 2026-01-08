@@ -1956,6 +1956,16 @@ export type ChangePositionAndReqInput = {
   tags: Array<UpdateTagQuestionInput>;
 };
 
+export type ChangeSchemeTierInput = {
+  adminLimit: Scalars['Int'];
+  businessLimit: Scalars['Int'];
+  licenceType: LicenceType;
+  schemeId: Scalars['String'];
+  startTrial?: InputMaybe<Scalars['Boolean']>;
+  tierId: Scalars['String'];
+  userLimit: Scalars['Int'];
+};
+
 export type Chat = {
   __typename?: 'Chat';
   createdAt: Scalars['Date'];
@@ -5306,6 +5316,10 @@ export type EnumDocumentTypeFilter = {
   notIn?: InputMaybe<Array<DocumentType>>;
 };
 
+export type EnumFeaturesListUpdateOperationsInput = {
+  set?: InputMaybe<Array<Features>>;
+};
+
 export type EnumFeedItemTypeFieldUpdateOperationsInput = {
   set?: InputMaybe<FeedItemType>;
 };
@@ -6097,6 +6111,7 @@ export enum Features {
   LinkSuggestions = 'LINK_SUGGESTIONS',
   Offenders = 'OFFENDERS',
   OffenderAddresses = 'OFFENDER_ADDRESSES',
+  Patrol = 'PATROL',
   Rebranding = 'REBRANDING',
   Reports = 'REPORTS',
   SingleShoe = 'SINGLE_SHOE',
@@ -8174,6 +8189,7 @@ export type IncidentFormFieldsMetadataInput = {
   draftDescription?: InputMaybe<Scalars['String']>;
   draftTitle?: InputMaybe<Scalars['String']>;
   mode?: InputMaybe<Scalars['String']>;
+  showDamagedQuantity?: InputMaybe<Scalars['Boolean']>;
   titles?: InputMaybe<Scalars['JSON']>;
 };
 
@@ -8315,6 +8331,7 @@ export type IncidentImportValidationResult = {
 export type IncidentItem = {
   __typename?: 'IncidentItem';
   createdAt: Scalars['Date'];
+  damagedQuantity?: Maybe<Scalars['Int']>;
   goodsType?: Maybe<GoodsType>;
   id: Scalars['ID'];
   incident: Incident;
@@ -8329,6 +8346,7 @@ export type IncidentItem = {
 };
 
 export type IncidentItemCreateWithoutIncident = {
+  damagedQuantity?: InputMaybe<Scalars['Float']>;
   goodsType?: InputMaybe<ConnectHelper>;
   name?: InputMaybe<Scalars['String']>;
   quantity?: InputMaybe<Scalars['Float']>;
@@ -8438,6 +8456,7 @@ export type IncidentItemUpdateWithWhereUniqueWithoutIncident = {
 };
 
 export type IncidentItemUpdateWithoutIncident = {
+  damagedQuantity?: InputMaybe<SetFloatHelper>;
   goodsType?: InputMaybe<ConnectHelper>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   name?: InputMaybe<NullableSetStringHelper>;
@@ -11151,6 +11170,7 @@ export enum Model {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  abortPatrolRun: PatrolRun;
   addAudioIncidentGoods: Scalars['Boolean'];
   addImageIntel: Intel;
   addImagesToIncident: Incident;
@@ -11168,6 +11188,7 @@ export type Mutation = {
   approveStockRemovalRequest: StockRemovalRequestApproval;
   bulkVerifyAiVisionMatches: Scalars['Int'];
   centralCoopImportData: SystemTask;
+  changeSchemeTier: SchemeTier;
   closeInvestigation: Investigation;
   completeAudioStream: CompleteAudioResult;
   completeChecklist: ActiveChecklist;
@@ -11214,6 +11235,7 @@ export type Mutation = {
   createOneCsvImport: CsvImport;
   createOneQuestionGroup: QuestionGroup;
   createOneStatementTemplate: StatementTemplate;
+  createOneTier: Tier;
   createOneWorkflow: Workflow;
   createReportGroup: ReportGroup;
   createReportTemplate: ReportTemplate;
@@ -11267,6 +11289,7 @@ export type Mutation = {
   deleteOffender: Offender;
   deleteOneQuestionGroup?: Maybe<QuestionGroup>;
   deleteOneStatementTemplate?: Maybe<StatementTemplate>;
+  deleteOneTier?: Maybe<Tier>;
   deleteOneWorkflow?: Maybe<Workflow>;
   deleteQuestion: Question;
   deleteRecycleTag: Tag;
@@ -11296,12 +11319,14 @@ export type Mutation = {
   extendIncident: Incident;
   extendOffender: Offender;
   finalizeAudioSession: Scalars['Boolean'];
+  finishPatrolRun: PatrolRun;
   forcedPasswordSet?: Maybe<Scalars['String']>;
   generateComprehensiveDemoData: Scalars['String'];
   generateDemoBusinesses: Scalars['String'];
   generateDemoStockItems: Scalars['Int'];
   generateFeedItems: SystemTask;
   generateIncidentTypeDescription: Scalars['String'];
+  generatePatrolTokenBatch: Array<PatrolCheckpointToken>;
   generateStatementBody: GeneratedStatementBody;
   generateTrainingVideoUploadUrl: Scalars['String'];
   icelandImportData: SystemTask;
@@ -11336,6 +11361,7 @@ export type Mutation = {
   oneStopImportData: SystemTask;
   queueIncidentCsvExport: QueuedIncidentExportResult;
   queueStockRemovalCsvExport: QueuedStockRemovalExportResult;
+  recordPatrolScan: PatrolEvent;
   recycleActiveChecklist: ActiveChecklist;
   recycleChecklist: Checklist;
   recycleDemEvidence?: Maybe<Scalars['String']>;
@@ -11371,6 +11397,7 @@ export type Mutation = {
   shareIncident: Incident;
   signTerms: UserTerm;
   startEnhancedAudioStream: EnhancedAudioSession;
+  startPatrolRun: PatrolRun;
   stockItemImport: SystemTask;
   streamAudioChunk: AudioProcessingResult;
   submitBusinessAnswers: SubmitBusinessAnswersResult;
@@ -11424,6 +11451,7 @@ export type Mutation = {
   updateOneMG11: Mg11;
   updateOneQuestionGroup: QuestionGroup;
   updateOneStatementTemplate: StatementTemplate;
+  updateOneTier: Tier;
   updateOneWorkflow: Workflow;
   updatePassword: User;
   updateQuestionOnActivity: Question;
@@ -11458,9 +11486,17 @@ export type Mutation = {
   upsertFolder: Folder;
   upsertIncident: Incident;
   upsertIncidentForm: IncidentForm;
+  upsertPatrolCheckpoint: PatrolCheckpoint;
+  upsertPatrolRoute: PatrolRoute;
   upsertPermission: CustomRole;
   upsertShoe: Shoe;
   verifyAiVisionMatch: AiVisionMatch;
+};
+
+
+export type MutationAbortPatrolRunArgs = {
+  reason?: InputMaybe<Scalars['String']>;
+  runId: Scalars['ID'];
 };
 
 
@@ -11558,6 +11594,11 @@ export type MutationBulkVerifyAiVisionMatchesArgs = {
 
 export type MutationCentralCoopImportDataArgs = {
   data: CentralCoopImportDataInput;
+};
+
+
+export type MutationChangeSchemeTierArgs = {
+  data: ChangeSchemeTierInput;
 };
 
 
@@ -11800,6 +11841,11 @@ export type MutationCreateOneQuestionGroupArgs = {
 
 export type MutationCreateOneStatementTemplateArgs = {
   data: StatementTemplateCreateInput;
+};
+
+
+export type MutationCreateOneTierArgs = {
+  data: TierCreateInput;
 };
 
 
@@ -12067,6 +12113,11 @@ export type MutationDeleteOneStatementTemplateArgs = {
 };
 
 
+export type MutationDeleteOneTierArgs = {
+  where: UniqueId;
+};
+
+
 export type MutationDeleteOneWorkflowArgs = {
   where: WorkflowWhereUniqueInput;
 };
@@ -12221,6 +12272,11 @@ export type MutationFinalizeAudioSessionArgs = {
 };
 
 
+export type MutationFinishPatrolRunArgs = {
+  runId: Scalars['ID'];
+};
+
+
 export type MutationGenerateComprehensiveDemoDataArgs = {
   businessContext: Scalars['String'];
   incidentsPerMonth?: InputMaybe<Scalars['Int']>;
@@ -12249,6 +12305,11 @@ export type MutationGenerateFeedItemsArgs = {
 export type MutationGenerateIncidentTypeDescriptionArgs = {
   incidentTypeName: Scalars['String'];
   userDescription?: InputMaybe<Scalars['String']>;
+};
+
+
+export type MutationGeneratePatrolTokenBatchArgs = {
+  count: Scalars['Int'];
 };
 
 
@@ -12423,6 +12484,11 @@ export type MutationQueueStockRemovalCsvExportArgs = {
 };
 
 
+export type MutationRecordPatrolScanArgs = {
+  data: PatrolScanInput;
+};
+
+
 export type MutationRecycleActiveChecklistArgs = {
   id: Scalars['String'];
 };
@@ -12571,6 +12637,11 @@ export type MutationSignTermsArgs = {
 export type MutationStartEnhancedAudioStreamArgs = {
   incidentTypeId: Scalars['String'];
   sessionId: Scalars['String'];
+};
+
+
+export type MutationStartPatrolRunArgs = {
+  data: PatrolRunStartInput;
 };
 
 
@@ -12841,6 +12912,12 @@ export type MutationUpdateOneStatementTemplateArgs = {
 };
 
 
+export type MutationUpdateOneTierArgs = {
+  data: TierUpdateInput;
+  where: UniqueId;
+};
+
+
 export type MutationUpdateOneWorkflowArgs = {
   data: WorkflowUpdateInput;
   where: WorkflowWhereUniqueInput;
@@ -13021,6 +13098,16 @@ export type MutationUpsertIncidentArgs = {
 
 export type MutationUpsertIncidentFormArgs = {
   data: UpsertIncidentFormInput;
+};
+
+
+export type MutationUpsertPatrolCheckpointArgs = {
+  data: PatrolCheckpointInput;
+};
+
+
+export type MutationUpsertPatrolRouteArgs = {
+  data: PatrolRouteInput;
 };
 
 
@@ -15195,6 +15282,221 @@ export type PageInfoRelay = {
   startCursor: Scalars['String'];
 };
 
+export type PatrolCheckpoint = {
+  __typename?: 'PatrolCheckpoint';
+  active: Scalars['Boolean'];
+  bleIds: Array<Scalars['String']>;
+  business?: Maybe<Business>;
+  businessId?: Maybe<Scalars['String']>;
+  createdAt: Scalars['Date'];
+  geoLat?: Maybe<Scalars['Float']>;
+  geoLng?: Maybe<Scalars['Float']>;
+  geoRadiusMeters?: Maybe<Scalars['Int']>;
+  id: Scalars['ID'];
+  label: Scalars['String'];
+  metadata?: Maybe<Scalars['JSON']>;
+  nfcUids: Array<Scalars['String']>;
+  patrolEvents: Array<PatrolEvent>;
+  payloadHash?: Maybe<Scalars['String']>;
+  qrToken?: Maybe<Scalars['String']>;
+  routeCheckpoints: Array<PatrolRouteCheckpoint>;
+  scheme?: Maybe<Scheme>;
+  schemeId?: Maybe<Scalars['String']>;
+  tokens: Array<PatrolCheckpointToken>;
+  type: PatrolCheckpointType;
+  updatedAt: Scalars['Date'];
+};
+
+export type PatrolCheckpointInput = {
+  active?: InputMaybe<Scalars['Boolean']>;
+  bleIds?: InputMaybe<Array<Scalars['String']>>;
+  businessId?: InputMaybe<Scalars['String']>;
+  geoLat?: InputMaybe<Scalars['Float']>;
+  geoLng?: InputMaybe<Scalars['Float']>;
+  geoRadiusMeters?: InputMaybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['ID']>;
+  label: Scalars['String'];
+  metadata?: InputMaybe<Scalars['JSON']>;
+  nfcUids?: InputMaybe<Array<Scalars['String']>>;
+  schemeId?: InputMaybe<Scalars['String']>;
+  tokenHash?: InputMaybe<Scalars['String']>;
+  type: PatrolCheckpointType;
+};
+
+export type PatrolCheckpointToken = {
+  __typename?: 'PatrolCheckpointToken';
+  batchId?: Maybe<Scalars['String']>;
+  checkpoint?: Maybe<PatrolCheckpoint>;
+  checkpointId?: Maybe<Scalars['String']>;
+  createdAt: Scalars['Date'];
+  expiresAt?: Maybe<Scalars['Date']>;
+  id: Scalars['ID'];
+  tokenHash: Scalars['String'];
+};
+
+export enum PatrolCheckpointType {
+  Ble = 'BLE',
+  Gps = 'GPS',
+  Nfc = 'NFC',
+  Qr = 'QR'
+}
+
+export type PatrolEvent = {
+  __typename?: 'PatrolEvent';
+  checkpoint?: Maybe<PatrolCheckpoint>;
+  checkpointId?: Maybe<Scalars['String']>;
+  createdAt: Scalars['Date'];
+  deviceInfo?: Maybe<Scalars['JSON']>;
+  geoAccuracyMeters?: Maybe<Scalars['Int']>;
+  geoLat?: Maybe<Scalars['Float']>;
+  geoLng?: Maybe<Scalars['Float']>;
+  guard?: Maybe<User>;
+  guardId?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  location?: Maybe<Scalars['JSON']>;
+  method: PatrolScanMethod;
+  notes?: Maybe<Scalars['String']>;
+  result: PatrolScanResult;
+  run: PatrolRun;
+  runId: Scalars['String'];
+  scannedAt: Scalars['Date'];
+  scope: PatrolScanScope;
+};
+
+export type PatrolRoute = {
+  __typename?: 'PatrolRoute';
+  active: Scalars['Boolean'];
+  business?: Maybe<Business>;
+  businessId?: Maybe<Scalars['String']>;
+  checkpoints: Array<PatrolRouteCheckpoint>;
+  createdAt: Scalars['Date'];
+  description?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  mode: PatrolRouteMode;
+  name: Scalars['String'];
+  runs: Array<PatrolRun>;
+  scheme?: Maybe<Scheme>;
+  schemeId?: Maybe<Scalars['String']>;
+  updatedAt: Scalars['Date'];
+};
+
+export type PatrolRouteCheckpoint = {
+  __typename?: 'PatrolRouteCheckpoint';
+  checkpoint: PatrolCheckpoint;
+  checkpointId: Scalars['String'];
+  createdAt: Scalars['Date'];
+  id: Scalars['ID'];
+  minDwellSeconds: Scalars['Int'];
+  required: Scalars['Boolean'];
+  route: PatrolRoute;
+  routeId: Scalars['String'];
+  seq: Scalars['Int'];
+  toleranceMeters?: Maybe<Scalars['Int']>;
+  updatedAt: Scalars['Date'];
+};
+
+export type PatrolRouteCheckpointInput = {
+  checkpointId: Scalars['ID'];
+  minDwellSeconds?: InputMaybe<Scalars['Int']>;
+  required?: InputMaybe<Scalars['Boolean']>;
+  seq?: InputMaybe<Scalars['Int']>;
+  toleranceMeters?: InputMaybe<Scalars['Int']>;
+};
+
+export type PatrolRouteInput = {
+  active?: InputMaybe<Scalars['Boolean']>;
+  businessId?: InputMaybe<Scalars['String']>;
+  checkpoints?: InputMaybe<Array<PatrolRouteCheckpointInput>>;
+  description?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['ID']>;
+  mode?: InputMaybe<PatrolRouteMode>;
+  name: Scalars['String'];
+  schemeId?: InputMaybe<Scalars['String']>;
+};
+
+export enum PatrolRouteMode {
+  Flexible = 'FLEXIBLE',
+  Ordered = 'ORDERED'
+}
+
+export type PatrolRun = {
+  __typename?: 'PatrolRun';
+  abortReason?: Maybe<Scalars['String']>;
+  business?: Maybe<Business>;
+  businessId?: Maybe<Scalars['String']>;
+  createdAt: Scalars['Date'];
+  deviceInfo?: Maybe<Scalars['JSON']>;
+  endedAt?: Maybe<Scalars['Date']>;
+  guard?: Maybe<User>;
+  guardId?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  origin?: Maybe<PatrolRunOrigin>;
+  patrolEvents: Array<PatrolEvent>;
+  route?: Maybe<PatrolRoute>;
+  routeId?: Maybe<Scalars['String']>;
+  scanScope: PatrolScanScope;
+  scheme?: Maybe<Scheme>;
+  schemeId?: Maybe<Scalars['String']>;
+  startedAt: Scalars['Date'];
+  status: PatrolRunStatus;
+  updatedAt: Scalars['Date'];
+};
+
+export enum PatrolRunOrigin {
+  Mobile = 'MOBILE',
+  Web = 'WEB'
+}
+
+export type PatrolRunStartInput = {
+  businessId?: InputMaybe<Scalars['String']>;
+  deviceInfo?: InputMaybe<DeviceInfo>;
+  origin?: InputMaybe<PatrolRunOrigin>;
+  routeId?: InputMaybe<Scalars['ID']>;
+  scanScope?: InputMaybe<PatrolScanScope>;
+  schemeId?: InputMaybe<Scalars['String']>;
+};
+
+export enum PatrolRunStatus {
+  Aborted = 'ABORTED',
+  Completed = 'COMPLETED',
+  InProgress = 'IN_PROGRESS',
+  MissedCheckpoints = 'MISSED_CHECKPOINTS'
+}
+
+export type PatrolScanInput = {
+  checkpointId?: InputMaybe<Scalars['ID']>;
+  deviceInfo?: InputMaybe<DeviceInfo>;
+  geoAccuracyMeters?: InputMaybe<Scalars['Int']>;
+  geoLat?: InputMaybe<Scalars['Float']>;
+  geoLng?: InputMaybe<Scalars['Float']>;
+  location?: InputMaybe<Scalars['JSON']>;
+  method: PatrolScanMethod;
+  notes?: InputMaybe<Scalars['String']>;
+  payload?: InputMaybe<Scalars['String']>;
+  runId: Scalars['ID'];
+};
+
+export enum PatrolScanMethod {
+  Ble = 'BLE',
+  Gps = 'GPS',
+  Manual = 'MANUAL',
+  Nfc = 'NFC',
+  Qr = 'QR'
+}
+
+export enum PatrolScanResult {
+  Duplicate = 'DUPLICATE',
+  Invalid = 'INVALID',
+  Late = 'LATE',
+  Ok = 'OK',
+  OutOfOrder = 'OUT_OF_ORDER'
+}
+
+export enum PatrolScanScope {
+  Adhoc = 'ADHOC',
+  Route = 'ROUTE'
+}
+
 export type PerformanceReport = {
   __typename?: 'PerformanceReport';
   createdDataCounts: CreatedDataCounts;
@@ -15268,6 +15570,8 @@ export enum PermissionModel {
   Offenders = 'OFFENDERS',
   OffenderGalleries = 'OFFENDER_GALLERIES',
   OffenderWarnings = 'OFFENDER_WARNINGS',
+  Patrol = 'PATROL',
+  PatrolSettings = 'PATROL_SETTINGS',
   RecycleBin = 'RECYCLE_BIN',
   Reports = 'REPORTS',
   Roles = 'ROLES',
@@ -15474,6 +15778,7 @@ export type Query = {
   audioIncidentRequirements: AudioIncidentRequirements;
   audioIncidentTypes: Array<AudioIncidentType>;
   audioSessionAnalytics: AudioSessionMetrics;
+  availablePatrolTokens: Array<PatrolCheckpointToken>;
   availableQuestions: Array<Question>;
   availableTaskQuestions: Array<Question>;
   ban: Ban;
@@ -15634,6 +15939,11 @@ export type Query = {
   offenderTableReport: ListOffenderPerformance;
   offenders: Array<Offender>;
   offendersPerformance: ListOffenderPerformance;
+  patrolCheckpoint?: Maybe<PatrolCheckpoint>;
+  patrolCheckpoints: Array<PatrolCheckpoint>;
+  patrolRoutes: Array<PatrolRoute>;
+  patrolRun?: Maybe<PatrolRun>;
+  patrolRuns: Array<PatrolRun>;
   pendingLoginPromptVideos: Array<TrainingVideo>;
   performanceReport: PerformanceReport;
   platformFeatureUsage: Array<PlatformFeatureUsage>;
@@ -15678,6 +15988,8 @@ export type Query = {
   targetedGoods: ListTargetedGoods;
   targetedGoodsDashboard: Array<Graph>;
   term: TermsAndCondition;
+  tier: Tier;
+  tiers: QueryTiersConnection;
   todo: Todo;
   todoExportRelay: QueryTodoExportRelayConnection;
   todoRelay: QueryTodoRelayConnection;
@@ -15885,6 +16197,12 @@ export type QueryAudioDailyMetricsArgs = {
 
 export type QueryAudioSessionAnalyticsArgs = {
   sessionId: Scalars['String'];
+};
+
+
+export type QueryAvailablePatrolTokensArgs = {
+  batchId?: InputMaybe<Scalars['String']>;
+  limit?: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -16993,6 +17311,37 @@ export type QueryOffendersPerformanceArgs = {
 };
 
 
+export type QueryPatrolCheckpointArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type QueryPatrolCheckpointsArgs = {
+  active?: InputMaybe<Scalars['Boolean']>;
+  businessId?: InputMaybe<Scalars['String']>;
+  schemeId?: InputMaybe<Scalars['String']>;
+  type?: InputMaybe<PatrolCheckpointType>;
+};
+
+
+export type QueryPatrolRoutesArgs = {
+  active?: InputMaybe<Scalars['Boolean']>;
+  businessId?: InputMaybe<Scalars['String']>;
+  schemeId?: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryPatrolRunArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type QueryPatrolRunsArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  status?: InputMaybe<PatrolRunStatus>;
+};
+
+
 export type QueryPendingLoginPromptVideosArgs = {
   schemeId: Scalars['String'];
 };
@@ -17318,6 +17667,24 @@ export type QueryTargetedGoodsDashboardArgs = {
 
 export type QueryTermArgs = {
   where: UniqueId;
+};
+
+
+export type QueryTierArgs = {
+  where: TierWhereUniqueInput;
+};
+
+
+export type QueryTiersArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  cursor?: InputMaybe<TierWhereUniqueInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<TierOrderByWithRelationInput>>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<TierWhereInput>;
 };
 
 
@@ -18069,6 +18436,19 @@ export type QueryStockRemovalRequestsConnectionEdge = {
   node: StockRemovalRequest;
 };
 
+export type QueryTiersConnection = {
+  __typename?: 'QueryTiersConnection';
+  edges: Array<QueryTiersConnectionEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type QueryTiersConnectionEdge = {
+  __typename?: 'QueryTiersConnectionEdge';
+  cursor: Scalars['String'];
+  node: Tier;
+};
+
 export type QueryTodoExportRelayConnection = {
   __typename?: 'QueryTodoExportRelayConnection';
   edges: Array<QueryTodoExportRelayConnectionEdge>;
@@ -18171,6 +18551,7 @@ export type QuestionGroup = {
   id: Scalars['ID'];
   name: Scalars['String'];
   questions: Array<Question>;
+  requiredQuestionIds: Array<Scalars['String']>;
   schemes: Array<Scheme>;
 };
 
@@ -18182,6 +18563,7 @@ export type QuestionGroupCreateInput = {
   id?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
   questions?: InputMaybe<ConnectOnlyArrayHelper>;
+  requiredQuestionIds?: InputMaybe<Array<Scalars['String']>>;
   schemes?: InputMaybe<ConnectOnlyArrayHelper>;
   updatedAt?: InputMaybe<Scalars['Date']>;
 };
@@ -18223,6 +18605,7 @@ export type QuestionGroupUpdateInput = {
   description?: InputMaybe<NullableSetStringHelper>;
   name?: InputMaybe<SetStringHelper>;
   questions?: InputMaybe<SetArrayHelper>;
+  requiredQuestionIds?: InputMaybe<SetStringArrayHelper>;
 };
 
 export type QuestionGroupWhereInput = {
@@ -19399,6 +19782,8 @@ export type Scheme = {
   autoApproveIncidents: Scalars['Boolean'];
   autoApproveOffenders: Scalars['Boolean'];
   autoPopulateDescription: Scalars['Boolean'];
+  /** Features available to this scheme based on its tier */
+  availableFeatures: Array<Features>;
   bans: Array<Ban>;
   billingCustomer?: Maybe<BillingCustomer>;
   billingMode?: Maybe<BillingMode>;
@@ -19451,6 +19836,8 @@ export type Scheme = {
   goodsMode: GoodsMode;
   groups: Array<Group>;
   groupsCount: Scalars['Int'];
+  /** Check if scheme has access to a specific feature */
+  hasFeature: Scalars['Boolean'];
   id: Scalars['ID'];
   images: Array<Image>;
   imagesRequiredOnOffenders: Scalars['Boolean'];
@@ -19481,6 +19868,7 @@ export type Scheme = {
   mg11Available: Scalars['Boolean'];
   name: Scalars['String'];
   needJustification: Scalars['Boolean'];
+  noActvitiesForInactiveUsers: Scalars['Boolean'];
   notifications: Array<Notification>;
   offenderRetention?: Maybe<Scalars['Int']>;
   offenders: Array<Offender>;
@@ -19512,12 +19900,15 @@ export type Scheme = {
   skipLocationToAddress: Scalars['Boolean'];
   statementTemplates: Array<StatementTemplate>;
   stockItems: Array<StockItem>;
+  stopApprovalActivities: Scalars['Boolean'];
   storeFaceDuration: Scalars['String'];
   tagOrders: Array<TagOrder>;
   tags: Array<Tag>;
   taskTimeTracking: Scalars['Boolean'];
   terms: Array<TermsAndCondition>;
   termsInScheme: Array<TermsAndCondition>;
+  /** The SchemeTier linking this scheme to its tier and feature set */
+  tier?: Maybe<SchemeTier>;
   todos: Array<Todo>;
   topContributors: Array<TopContributors>;
   updatedAt: Scalars['Date'];
@@ -19668,6 +20059,11 @@ export type SchemeGroupsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<GroupWhereInput>;
+};
+
+
+export type SchemeHasFeatureArgs = {
+  feature: Features;
 };
 
 
@@ -20160,6 +20556,7 @@ export enum SchemeScalarFieldEnum {
   RequireSiteNumberForUsers = 'requireSiteNumberForUsers',
   RestrictIncidentAccess = 'restrictIncidentAccess',
   ShowBlankActivity = 'showBlankActivity',
+  StopApprovalActivities = 'stopApprovalActivities',
   TaskTimeTracking = 'taskTimeTracking',
   UpdatedAt = 'updatedAt',
   UploadOffenderImagesOnMobile = 'uploadOffenderImagesOnMobile',
@@ -20234,6 +20631,7 @@ export type SchemeUpdateInput = {
   mg11Available?: InputMaybe<Scalars['Boolean']>;
   name?: InputMaybe<SetStringHelper>;
   needJustification?: InputMaybe<SetBooleanHelper>;
+  noActvitiesForInactiveUsers?: InputMaybe<SetBooleanHelper>;
   offenderRetention?: InputMaybe<SetIntHelper>;
   oneSelectedIncidentTypeOnly?: InputMaybe<SetBooleanHelper>;
   optionalBusinessOnUsers?: InputMaybe<SetBooleanHelper>;
@@ -20253,6 +20651,7 @@ export type SchemeUpdateInput = {
   showBlankActivity?: InputMaybe<SetBooleanHelper>;
   skipLocationToAddress?: InputMaybe<SetBooleanHelper>;
   smartApprove?: InputMaybe<SetBooleanHelper>;
+  stopApprovalActivities?: InputMaybe<SetBooleanHelper>;
   taskTimeTracking?: InputMaybe<Scalars['Boolean']>;
   uploadOffenderImagesOnMobile?: InputMaybe<SetBooleanHelper>;
   usDateFormat?: InputMaybe<SetBooleanHelper>;
@@ -21126,6 +21525,7 @@ export type StockItem = {
   salesPriceLocal?: Maybe<Scalars['Float']>;
   salesPriceStandard?: Maybe<Scalars['Float']>;
   sku?: Maybe<Scalars['String']>;
+  styleCode?: Maybe<Scalars['String']>;
   updatedAt: Scalars['Date'];
   variant?: Maybe<Scalars['String']>;
 };
@@ -22296,6 +22696,11 @@ export type TaskQuestionListRelationFilter = {
   some?: InputMaybe<TaskQuestionWhereInput>;
 };
 
+export type TaskQuestionOnQInput = {
+  id: Scalars['String'];
+  req: Scalars['Boolean'];
+};
+
 export type TaskQuestionOrderByRelationAggregateInput = {
   _count?: InputMaybe<SortOrder>;
 };
@@ -22497,6 +22902,37 @@ export type Tier = {
   id: Scalars['String'];
   name: Scalars['String'];
   schemes: Array<SchemeTier>;
+};
+
+export type TierCreateInput = {
+  description?: InputMaybe<Scalars['String']>;
+  features: Array<Features>;
+  id?: InputMaybe<Scalars['String']>;
+  name: Scalars['String'];
+};
+
+export type TierOrderByWithRelationInput = {
+  description?: InputMaybe<SortOrder>;
+  id?: InputMaybe<SortOrder>;
+  name?: InputMaybe<SortOrder>;
+};
+
+export type TierUpdateInput = {
+  description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  features?: InputMaybe<EnumFeaturesListUpdateOperationsInput>;
+  name?: InputMaybe<StringFieldUpdateOperationsInput>;
+};
+
+export type TierWhereInput = {
+  AND?: InputMaybe<Array<TierWhereInput>>;
+  NOT?: InputMaybe<Array<TierWhereInput>>;
+  OR?: InputMaybe<Array<TierWhereInput>>;
+  id?: InputMaybe<StringFilter>;
+  name?: InputMaybe<StringFilter>;
+};
+
+export type TierWhereUniqueInput = {
+  id?: InputMaybe<Scalars['String']>;
 };
 
 export type TimeHeatMap = {
@@ -23517,6 +23953,7 @@ export type UpdateQuestionOnActivityInput = {
   origOptions?: InputMaybe<Array<Scalars['String']>>;
   origQuestion: Scalars['String'];
   questionId: Scalars['String'];
+  taskQuestion?: InputMaybe<TaskQuestionOnQInput>;
   type?: InputMaybe<AnswerType>;
 };
 

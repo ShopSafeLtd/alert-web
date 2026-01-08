@@ -7,8 +7,8 @@ import type {
 import type { Currency } from 'graphql/types';
 
 import {
-  CurrencyCodeMap,
   currencyAtom,
+  CurrencyCodeMap,
   currentSchemeIdAtom,
 } from '#/providers/SchemeProvider/SchemeProvider';
 import { Col, Row, Select, Typography } from 'antd';
@@ -37,6 +37,7 @@ export interface StockItemValue {
   salesPriceLocal?: null | number;
   sku?: null | string;
   variant?: string;
+  styleCode?: null | string;
 }
 
 interface Props {
@@ -65,6 +66,7 @@ const OptionLabel = ({
     salesPriceLocal?: null | number;
     sku?: null | string;
     variant?: null | string;
+    styleCode?: null | string;
   };
 }) => (
   <>
@@ -90,7 +92,7 @@ const OptionLabel = ({
               </Typography.Text>
             </Col>
             <Col>
-              {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
+              {}
               <Typography.Text>
                 <FormattedNumber
                   currency={option.currency}
@@ -112,7 +114,7 @@ const OptionLabel = ({
               </Typography.Text>
             </Col>
             <Col>
-              {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
+              {}
               <Typography.Text>
                 <FormattedNumber
                   currency={option.currency}
@@ -177,6 +179,20 @@ const OptionLabel = ({
             </Col>
             <Col>
               <Typography.Text>{option.barcode}</Typography.Text>
+            </Col>
+          </Row>
+        </Col>
+      )}
+      {option.styleCode && (
+        <Col>
+          <Row gutter={4}>
+            <Col>
+              <Typography.Text strong type="secondary">
+                <FormattedMessage defaultMessage="Style Code:" />
+              </Typography.Text>
+            </Col>
+            <Col>
+              <Typography.Text>{option.styleCode}</Typography.Text>
             </Col>
           </Row>
         </Col>
@@ -342,12 +358,11 @@ const StockItemSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
         fallbackCurrency ||
         'GBP';
 
-      console.log(fixedCurrency);
       return {
         key: option.id,
         label: (
           <OptionLabel
-            filterValue={`${option.sku} ${option.barcode} ${option.brand} ${option.name}`}
+            filterValue={`${option.sku} ${option.barcode} ${option.brand} ${option.name} ${option.variant} ${option.styleCode}`}
             option={{
               ...option,
               currency: fixedCurrency,
@@ -374,6 +389,7 @@ const StockItemSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
           salesPriceLocal: item.salesPriceLocal,
           sku: item.sku,
           variant: item.variant ?? undefined,
+          styleCode: item.styleCode,
         });
     }
   };

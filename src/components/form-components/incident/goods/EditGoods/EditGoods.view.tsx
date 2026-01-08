@@ -44,6 +44,7 @@ const EditGoods = ({
   return (
     <Form<GoodsData>
       initialValues={{
+        damagedQuantity: data.damagedQuantity || 0,
         goodsTypeId: data.goodsType?.id,
         // goodsTypeId: data.goodsTypeId,
         name: data.name,
@@ -256,6 +257,24 @@ const EditGoods = ({
               <InputNumber
                 disabled={saving}
                 max={quantity ?? undefined}
+                min={0}
+                precision={0}
+                style={{ width: '100%' }}
+              />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item
+              label={intl.formatMessage({
+                defaultMessage: 'Quantity Damaged',
+              })}
+              name="damagedQuantity"
+              tooltip={intl.formatMessage({
+                defaultMessage: 'The quantity of the goods that were damaged.',
+              })}
+            >
+              <InputNumber
+                disabled={saving}
                 min={0}
                 precision={0}
                 style={{ width: '100%' }}

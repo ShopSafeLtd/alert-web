@@ -20,6 +20,7 @@ interface ListData {
     id: string;
     question: string;
   }[];
+  requiredQuestionIds: string[];
 }
 
 export interface FormData {
@@ -42,6 +43,7 @@ interface Props {
       id: string;
       question: string;
     }[];
+    requiredQuestionIds?: string[];
   };
   onClose: () => void;
   update: (item: ListData, type: 'create' | 'delete' | 'update') => void;
@@ -52,11 +54,13 @@ interface Return {
   editQuestion: null | string;
   form: FormInstance<FormData>;
   onSubmit: (value: FormData) => void;
+  requiredQuestionIds: string[];
   saving: boolean;
   selectedIds?: string[];
   selectedQuestions: { id: string; question: string }[];
   setAddQuestion: (value: boolean) => void;
   setEditQuestion: (value: null | string) => void;
+  setRequiredQuestionIds: (value: string[]) => void;
   setSelectedIds: (value: string[]) => void;
   setSelectedQuestions: (value: { id: string; question: string }[]) => void;
   updateQs: (id: string, question: string) => void;
@@ -79,10 +83,17 @@ const useCreateActivityTemplate = ({
   const [selectedQuestions, setSelectedQuestions] = useState<
     { id: string; question: string }[]
   >([]);
+  const [requiredQuestionIds, setRequiredQuestionIds] = useState<string[]>([]);
 
   useEffect(() => {
     if (initData) {
-      const { defaultDueDays, description, name, questions } = initData;
+      const {
+        defaultDueDays,
+        description,
+        name,
+        questions,
+        requiredQuestionIds: reqIds,
+      } = initData;
       setSelectedIds(questions.map((question) => question.id));
       setSelectedQuestions(
         questions.map((question) => ({
@@ -90,6 +101,7 @@ const useCreateActivityTemplate = ({
           question: question.question,
         }))
       );
+      setRequiredQuestionIds(reqIds || []);
 
       form.setFieldsValue({
         defaultDueDate: defaultDueDays,
@@ -109,6 +121,7 @@ const useCreateActivityTemplate = ({
             id: createOneQuestionGroup.id,
             name: createOneQuestionGroup.name,
             questions: selectedQuestions,
+            requiredQuestionIds,
           },
           'create'
         );
@@ -171,6 +184,9 @@ const useCreateActivityTemplate = ({
                 id: question.id,
               })),
             },
+            requiredQuestionIds: {
+              set: requiredQuestionIds,
+            },
           },
           where: {
             id,
@@ -184,6 +200,7 @@ const useCreateActivityTemplate = ({
           id,
           name: data.name,
           questions: selectedQuestions,
+          requiredQuestionIds,
         },
         'update'
       );
@@ -199,6 +216,7 @@ const useCreateActivityTemplate = ({
                 id: question.id,
               })),
             },
+            requiredQuestionIds,
             schemes: {
               connect: [
                 {
@@ -222,11 +240,13 @@ const useCreateActivityTemplate = ({
     editQuestion,
     form,
     onSubmit,
+    requiredQuestionIds,
     saving,
     selectedIds,
     selectedQuestions,
     setAddQuestion,
     setEditQuestion,
+    setRequiredQuestionIds,
     setSelectedIds,
     setSelectedQuestions,
     updateQs,

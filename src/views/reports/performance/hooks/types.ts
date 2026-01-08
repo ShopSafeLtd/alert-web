@@ -51,6 +51,7 @@ export interface Props {
   schemeId: string;
   selectTemplate: (arg0: string) => void;
   selectedBrands: string[];
+  selectedBusiness: string[];
   selectedGroups: string[];
   selectedIndustries: string[];
   selectedRoles: string[];
@@ -68,6 +69,7 @@ export interface Props {
   setRedactOnPrint: (arg0: boolean) => void;
   setSaveAsDrawer: (arg0: boolean) => void;
   setSelectedBrands: (brands: string[]) => void;
+  setSelectedBusiness: (businesses: string[]) => void;
   setSelectedGroups: (groups: string[]) => void;
   setSelectedIndustries: (brands: string[]) => void;
   setSelectedRoles: (roles: string[]) => void;

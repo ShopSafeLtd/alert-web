@@ -12,6 +12,7 @@ interface ListData {
     id: string;
     question: string;
   }[];
+  requiredQuestionIds: string[];
 }
 
 interface Props {
@@ -24,6 +25,7 @@ interface Props {
       id: string;
       question: string;
     }[];
+    requiredQuestionIds?: string[];
   };
   onClose: () => void;
   update: (item: ListData, type: 'create' | 'delete' | 'update') => void;
@@ -40,11 +42,13 @@ const ActivityTemplateForm = ({
     editQuestion,
     form,
     onSubmit,
+    requiredQuestionIds,
     saving,
     selectedIds,
     selectedQuestions,
     setAddQuestion,
     setEditQuestion,
+    setRequiredQuestionIds,
     setSelectedIds,
     setSelectedQuestions,
     updateQs,
@@ -62,11 +66,13 @@ const ActivityTemplateForm = ({
       form={form}
       onClose={onClose}
       onSubmit={onSubmit}
+      requiredQuestionIds={requiredQuestionIds}
       saving={saving}
       selectedIds={selectedIds}
       selectedQuestions={selectedQuestions}
       setAddQuestion={setAddQuestion}
       setEditQuestion={setEditQuestion}
+      setRequiredQuestionIds={setRequiredQuestionIds}
       setSelectedIds={setSelectedIds}
       setSelectedQuestions={setSelectedQuestions}
       update={updateQs}
