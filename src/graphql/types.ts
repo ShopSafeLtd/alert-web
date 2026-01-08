@@ -8189,6 +8189,7 @@ export type IncidentFormFieldsMetadataInput = {
   draftDescription?: InputMaybe<Scalars['String']>;
   draftTitle?: InputMaybe<Scalars['String']>;
   mode?: InputMaybe<Scalars['String']>;
+  showDamagedQuantity?: InputMaybe<Scalars['Boolean']>;
   titles?: InputMaybe<Scalars['JSON']>;
 };
 
@@ -8330,6 +8331,7 @@ export type IncidentImportValidationResult = {
 export type IncidentItem = {
   __typename?: 'IncidentItem';
   createdAt: Scalars['Date'];
+  damagedQuantity?: Maybe<Scalars['Int']>;
   goodsType?: Maybe<GoodsType>;
   id: Scalars['ID'];
   incident: Incident;
@@ -8344,6 +8346,7 @@ export type IncidentItem = {
 };
 
 export type IncidentItemCreateWithoutIncident = {
+  damagedQuantity?: InputMaybe<Scalars['Float']>;
   goodsType?: InputMaybe<ConnectHelper>;
   name?: InputMaybe<Scalars['String']>;
   quantity?: InputMaybe<Scalars['Float']>;
@@ -8453,6 +8456,7 @@ export type IncidentItemUpdateWithWhereUniqueWithoutIncident = {
 };
 
 export type IncidentItemUpdateWithoutIncident = {
+  damagedQuantity?: InputMaybe<SetFloatHelper>;
   goodsType?: InputMaybe<ConnectHelper>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   name?: InputMaybe<NullableSetStringHelper>;
@@ -18547,6 +18551,7 @@ export type QuestionGroup = {
   id: Scalars['ID'];
   name: Scalars['String'];
   questions: Array<Question>;
+  requiredQuestionIds: Array<Scalars['String']>;
   schemes: Array<Scheme>;
 };
 
@@ -18558,6 +18563,7 @@ export type QuestionGroupCreateInput = {
   id?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
   questions?: InputMaybe<ConnectOnlyArrayHelper>;
+  requiredQuestionIds?: InputMaybe<Array<Scalars['String']>>;
   schemes?: InputMaybe<ConnectOnlyArrayHelper>;
   updatedAt?: InputMaybe<Scalars['Date']>;
 };
@@ -18599,6 +18605,7 @@ export type QuestionGroupUpdateInput = {
   description?: InputMaybe<NullableSetStringHelper>;
   name?: InputMaybe<SetStringHelper>;
   questions?: InputMaybe<SetArrayHelper>;
+  requiredQuestionIds?: InputMaybe<SetStringArrayHelper>;
 };
 
 export type QuestionGroupWhereInput = {
@@ -19861,6 +19868,7 @@ export type Scheme = {
   mg11Available: Scalars['Boolean'];
   name: Scalars['String'];
   needJustification: Scalars['Boolean'];
+  noActvitiesForInactiveUsers: Scalars['Boolean'];
   notifications: Array<Notification>;
   offenderRetention?: Maybe<Scalars['Int']>;
   offenders: Array<Offender>;
@@ -19892,6 +19900,7 @@ export type Scheme = {
   skipLocationToAddress: Scalars['Boolean'];
   statementTemplates: Array<StatementTemplate>;
   stockItems: Array<StockItem>;
+  stopApprovalActivities: Scalars['Boolean'];
   storeFaceDuration: Scalars['String'];
   tagOrders: Array<TagOrder>;
   tags: Array<Tag>;
@@ -20547,6 +20556,7 @@ export enum SchemeScalarFieldEnum {
   RequireSiteNumberForUsers = 'requireSiteNumberForUsers',
   RestrictIncidentAccess = 'restrictIncidentAccess',
   ShowBlankActivity = 'showBlankActivity',
+  StopApprovalActivities = 'stopApprovalActivities',
   TaskTimeTracking = 'taskTimeTracking',
   UpdatedAt = 'updatedAt',
   UploadOffenderImagesOnMobile = 'uploadOffenderImagesOnMobile',
@@ -20621,6 +20631,7 @@ export type SchemeUpdateInput = {
   mg11Available?: InputMaybe<Scalars['Boolean']>;
   name?: InputMaybe<SetStringHelper>;
   needJustification?: InputMaybe<SetBooleanHelper>;
+  noActvitiesForInactiveUsers?: InputMaybe<SetBooleanHelper>;
   offenderRetention?: InputMaybe<SetIntHelper>;
   oneSelectedIncidentTypeOnly?: InputMaybe<SetBooleanHelper>;
   optionalBusinessOnUsers?: InputMaybe<SetBooleanHelper>;
@@ -20640,6 +20651,7 @@ export type SchemeUpdateInput = {
   showBlankActivity?: InputMaybe<SetBooleanHelper>;
   skipLocationToAddress?: InputMaybe<SetBooleanHelper>;
   smartApprove?: InputMaybe<SetBooleanHelper>;
+  stopApprovalActivities?: InputMaybe<SetBooleanHelper>;
   taskTimeTracking?: InputMaybe<Scalars['Boolean']>;
   uploadOffenderImagesOnMobile?: InputMaybe<SetBooleanHelper>;
   usDateFormat?: InputMaybe<SetBooleanHelper>;
@@ -22684,6 +22696,11 @@ export type TaskQuestionListRelationFilter = {
   some?: InputMaybe<TaskQuestionWhereInput>;
 };
 
+export type TaskQuestionOnQInput = {
+  id: Scalars['String'];
+  req: Scalars['Boolean'];
+};
+
 export type TaskQuestionOrderByRelationAggregateInput = {
   _count?: InputMaybe<SortOrder>;
 };
@@ -23936,6 +23953,7 @@ export type UpdateQuestionOnActivityInput = {
   origOptions?: InputMaybe<Array<Scalars['String']>>;
   origQuestion: Scalars['String'];
   questionId: Scalars['String'];
+  taskQuestion?: InputMaybe<TaskQuestionOnQInput>;
   type?: InputMaybe<AnswerType>;
 };
 

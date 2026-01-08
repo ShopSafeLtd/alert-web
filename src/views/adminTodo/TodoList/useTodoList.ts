@@ -48,6 +48,7 @@ export interface ListData {
     id: string;
     question: string;
   }[];
+  requiredQuestionIds: string[];
 }
 
 interface Return {
@@ -147,6 +148,7 @@ const useAdminTodos = ({
           id,
           question: questionFormatted || '',
         })),
+        requiredQuestionIds: qGroup.requiredQuestionIds || [],
       }));
     }
     return [];

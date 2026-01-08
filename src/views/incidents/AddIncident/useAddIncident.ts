@@ -1066,6 +1066,7 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
                     item.goodsType !== undefined || item.sku !== undefined
                 )
                 .map((item) => ({
+                  damagedQuantity: item.damagedQuantity,
                   description: item.description,
                   goodsType: item.goodsType
                     ? {

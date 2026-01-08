@@ -57,6 +57,7 @@ const useActivityTemplates = (): Return => {
           id,
           question: questionFormatted || '',
         })),
+        requiredQuestionIds: qGroup.requiredQuestionIds || [],
       }));
     }
     return [];

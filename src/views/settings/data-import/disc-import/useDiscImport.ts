@@ -122,6 +122,8 @@ interface Return {
   onUpdateIncident: (data: NewIncident) => void;
   onUpdateOffender: (data: NewOffender) => void;
   onUpdateUser: (data: NewUser) => void;
+  rematchIncidentOffenders: () => void;
+  rematchOffenderImages: () => void;
   tagData: TagsQuery | undefined;
   toggleIdSoughtModal: () => void;
   toggleImageModal: () => void;
@@ -253,8 +255,25 @@ const useDiscImport = (): Return => {
         name: SortOrder.Desc,
       },
       where: {
+        OR: [
+          {
+            parentTagId: {
+              equals: null,
+            },
+          },
+          {
+            parentTag: {
+              recycled: {
+                equals: false,
+              },
+            },
+          },
+        ],
         dataType: {
           equals: Model.Incident,
+        },
+        recycled: {
+          equals: false,
         },
         schemes: {
           some: {
@@ -341,16 +360,16 @@ const useDiscImport = (): Return => {
 
   const onMembersFileLoaded = (data: CSVData) => {
     const importedMembers = data.map((item) => ({
-      areas: item[8],
-      categories: item[7],
-      email: item[3],
-      firstName: item[1],
+      areas: item[10],
+      categories: item[10],
+      email: item[4],
+      firstName: item[2],
       id: item[0],
-      lastName: item[2],
-      lastSignedIn: dayjs(item[9]),
-      organisation: item[4],
-      placeOfWork: item[5],
-      premises: item[6],
+      lastName: item[3],
+      lastSignedIn: dayjs(item[13]),
+      organisation: item[5],
+      placeOfWork: item[6],
+      premises: item[9],
     }));
     const filteredMembers = importedMembers
       .filter((item) => !item.email?.includes('littoralis'))
@@ -421,129 +440,112 @@ const useDiscImport = (): Return => {
   const onIncidentFileLoaded = (data: CSVData) => {
     const incidentsValue = data
       .map((item) => ({
-        address: item[26],
-        assaultViolenceAffray: item[34],
-        attemptedTheft: item[63],
-        begging: item[36],
-        beggingPersistent: item[35],
-        beingOnPremisesWhilstBanned: item[50],
-        breachOfBan: item[60],
-        breachOfSection35Order: item[51],
-        breachPoliceBail: item[67],
-        covidRelated: item[74],
-        crimeReportStatus: item[8],
-        criminalDamageGraffitiVandalism: item[37],
+        address: item[28],
+        assaultViolenceAffray: item[36],
+        attemptedTheft: item[65],
+        begging: item[38],
+        beggingPersistent: item[37],
+        beingOnPremisesWhilstBanned: item[52],
+        breachOfBan: item[62],
+        breachOfSection35Order: item[53],
+        breachPoliceBail: item[69],
+        covidRelated: item[76],
+        crimeReportStatus: item[9],
+        criminalDamageGraffitiVandalism: item[39],
         date: item[2],
-        dateTime: item[3],
-        dealingInvolved: item[17],
-        description: item[5],
-        drinkInvolved: item[15],
-        drugsInvolved: item[16],
-        drunkenDisorderlyBehaviour: item[61],
-        fareEvasion: item[73],
-        fraudInvolved: item[12],
-        goingEquippedToSteal: item[57],
-        groupInvolved: item[19],
-        harassmentThreateningBehaviour: item[39],
-        hateCrime: item[58],
+        dateTime: item[4],
+        dealingInvolved: item[18],
+        description: item[6],
+        drinkInvolved: item[16],
+        drugsInvolved: item[17],
+        drunkenDisorderlyBehaviour: item[63],
+        fareEvasion: item[75],
+        fraudInvolved: item[13],
+        goingEquippedToSteal: item[59],
+        groupInvolved: item[20],
+        harassmentThreateningBehaviour: item[41],
+        hateCrime: item[60],
         id: item[1],
-        illegalGambling: item[64],
-        inappropriateSexualContact: item[43],
-        incidentNotes: item[124],
-        internalReference: item[9],
-        joyRiding: item[40],
-        kerbCrawling: item[41],
-        locationName: item[31],
-        lossRecovered: item[23],
-        lossRecoveredAtTime: item[25],
-        lossValue: item[22],
-        memberEmail: item[30],
-        memberId: item[28],
-        memberName: item[29],
-        misuseOfID: item[55],
-        noiseNuisance: item[42],
-        other: item[52],
-        otherAlcoholDrugRelated: item[68],
-        otherAntiSocialBehaviour: item[69],
-        otherBreachBan: item[72],
-        otherOutcome: item[14],
-        otherTheftFraud: item[70],
-        otherViolentOffensiveBehaviour: item[71],
-        outcome: item[13],
-        policeContacted: item[6],
-        policeReference: item[24],
-        possessionOfAnOffensiveWeapon: item[62],
-        possessionOfDrugs: item[47],
-        possessionWithIntentToSupplyDrugs: item[38],
-        postcode: item[27],
-        premises: item[32],
-        racialAbuse: item[44],
-        robbery: item[65],
-        roughSleeping: item[59],
-        section35Issued: item[66],
-        sentToEmails: item[7],
-        smokingUnderageOrInProhibitedArea: item[45],
-        streetDrinking: item[46],
-        subjectDOB: item[78],
-        subjectDOB1: item[85],
-        subjectDOB2: item[92],
-        subjectDOB4: item[106],
-        subjectDOB5: item[112],
-        subjectDOB6: item[120],
-        subjectDeletionDate: item[81],
-        subjectDeletionDate1: item[88],
-        subjectDeletionDate2: item[95],
-        subjectDeletionDate3: item[102],
-        subjectDeletionDate4: item[109],
-        subjectDeletionDate5: item[116],
-        subjectDeletionDate6: item[123],
-        subjectFirstName: item[76],
-        subjectFirstName1: item[83],
-        subjectFirstName2: item[90],
-        subjectFirstName3: item[97],
-        subjectFirstName4: item[104],
-        subjectFirstName5: item[111],
-        subjectFirstName6: item[118],
-        subjectGender: item[79],
-        subjectGender1: item[86],
-        subjectGender2: item[93],
-        subjectGender3: item[100],
-        subjectGender4: item[107],
-        subjectGender5: item[114],
-        subjectGender6: item[121],
-        subjectID: item[75],
-        subjectID1: item[82],
-        subjectID2: item[89],
-        subjectID3: item[96],
-        subjectID4: item[103],
-        subjectID5: item[110],
-        subjectID6: item[117],
-        subjectLastName: item[77],
-        subjectLastName1: item[84],
-        subjectLastName2: item[91],
-        subjectLastName3: item[98],
-        subjectLastName4: item[105],
-        subjectLastName5: item[112],
-        subjectLastName6: item[119],
-        subjectProhibitions: item[80],
-        subjectProhibitions1: item[87],
-        subjectProhibitions2: item[94],
-        subjectProhibitions3: item[101],
-        subjectProhibitions4: item[108],
-        subjectProhibitions5: item[115],
-        subjectProhibitions6: item[122],
-        summary: item[4],
-        theft: item[48],
-        typeOfOffence: item[33],
-        underageIntoxication: item[56],
-        unlicensedStreetTrading: item[54],
-        unlicensedTaxiCab: item[53],
-        vehicleDescriptions: item[10],
-        vehicleRegistrations: item[11],
-        verbalAbuse: item[49],
-        verbalAbuseInvolved: item[21],
-        violenceInvolved: item[20],
-        weaponInvolved: item[18],
+        illegalGambling: item[66],
+        inappropriateSexualContact: item[45],
+        incidentNotes: item[118],
+        internalReference: item[10],
+        joyRiding: item[42],
+        kerbCrawling: item[43],
+        locationName: item[33],
+        lossRecovered: item[24],
+        lossRecoveredAtTime: item[26],
+        lossValue: item[23],
+        memberEmail: item[32],
+        memberId: item[30],
+        memberName: item[31],
+        misuseOfID: item[57],
+        noiseNuisance: item[44],
+        other: item[54],
+        otherAlcoholDrugRelated: item[70],
+        otherAntiSocialBehaviour: item[71],
+        otherBreachBan: item[74],
+        otherOutcome: item[15],
+        otherTheftFraud: item[72],
+        otherViolentOffensiveBehaviour: item[73],
+        outcome: item[14],
+        policeContacted: item[7],
+        policeReference: item[25],
+        possessionOfAnOffensiveWeapon: item[64],
+        possessionOfDrugs: item[49],
+        possessionWithIntentToSupplyDrugs: item[40],
+        postcode: item[29],
+        premises: item[34],
+        racialAbuse: item[46],
+        robbery: item[67],
+        roughSleeping: item[61],
+        section35Issued: item[68],
+        sentToEmails: item[8],
+        smokingUnderageOrInProhibitedArea: item[47],
+        streetDrinking: item[48],
+        subjectDOB: item[88],
+        subjectDOB1: item[94],
+        subjectDOB2: item[100],
+        subjectDOB3: item[106],
+        subjectDOB4: item[112],
+        subjectDeletionDate: item[91],
+        subjectDeletionDate1: item[97],
+        subjectDeletionDate2: item[103],
+        subjectDeletionDate3: item[109],
+        subjectDeletionDate4: item[115],
+        subjectGender: item[89],
+        subjectGender1: item[95],
+        subjectGender2: item[101],
+        subjectGender3: item[107],
+        subjectGender4: item[113],
+        subjectID: item[86],
+        subjectID1: item[92],
+        subjectID2: item[98],
+        subjectID3: item[104],
+        subjectID4: item[110],
+        subjectName: item[87],
+        subjectName1: item[93],
+        subjectName2: item[99],
+        subjectName3: item[105],
+        subjectName4: item[111],
+        subjectProhibitions: item[90],
+        subjectProhibitions1: item[96],
+        subjectProhibitions2: item[102],
+        subjectProhibitions3: item[108],
+        subjectProhibitions4: item[114],
+        summary: item[5],
+        theft: item[50],
+        typeOfOffence: item[35],
+        typeOfPropertyGoods: item[27],
+        underageIntoxication: item[58],
+        unlicensedStreetTrading: item[56],
+        unlicensedTaxiCab: item[55],
+        vehicleDescriptions: item[11],
+        vehicleRegistrations: item[12],
+        verbalAbuse: item[51],
+        verbalAbuseInvolved: item[22],
+        violenceInvolved: item[21],
+        weaponInvolved: item[19],
         workspaceName: item[0],
       }))
       .filter((item) => item.workspaceName !== 'Workspace Name')
@@ -740,7 +742,7 @@ const useDiscImport = (): Return => {
           groups: getUserGroups(user),
           id: uuidv4(),
           lastLogin: user.lastSignedIn,
-          role: undefined,
+          role: values.defaultRole,
         });
       });
 
@@ -774,14 +776,15 @@ const useDiscImport = (): Return => {
             .filter((item) => item !== ''),
           height: calcHeight(offender.height),
           id: uuidv4(),
-          images: images.filter((image) =>
-            image.fileName?.includes(offender.id)
+          images: images.filter(
+            (image) =>
+              image.fileName?.includes(offender.id) ||
+              image.originalName?.includes(offender.id)
           ),
           name:
-            // eslint-disable-next-line sonarjs/no-nested-template-literals
-            `${offender.firstName}${
-              offender.lastName ? ` ${offender.lastName}` : ''
-            }` || 'Unidentified Offender',
+            offender.firstName && offender.lastName
+              ? `${offender.firstName} ${offender.lastName}`
+              : offender.firstName || 'Unidentified Offender',
           peculiarities: offender.distinguishingFeatures,
           postcode: offender.postcode,
           race: calcRace(offender.icCodes),
@@ -821,6 +824,57 @@ const useDiscImport = (): Return => {
 
     const generateIncident = (incident: Incident) =>
       new Promise<NewIncident>((resolve) => {
+        // Debug logging for incident-offender matching
+        if (
+          incident.subjectID ||
+          incident.subjectID1 ||
+          incident.subjectID2 ||
+          incident.subjectID3 ||
+          incident.subjectID4
+        ) {
+          console.log(`\n=== Incident ${incident.id} Subject IDs ===`);
+          console.log(
+            'subjectID:',
+            `"${incident.subjectID}" (length: ${incident.subjectID?.length || 0})`
+          );
+          console.log(
+            'subjectID1:',
+            `"${incident.subjectID1}" (length: ${incident.subjectID1?.length || 0})`
+          );
+          console.log(
+            'subjectID2:',
+            `"${incident.subjectID2}" (length: ${incident.subjectID2?.length || 0})`
+          );
+          console.log(
+            'subjectID3:',
+            `"${incident.subjectID3}" (length: ${incident.subjectID3?.length || 0})`
+          );
+          console.log(
+            'subjectID4:',
+            `"${incident.subjectID4}" (length: ${incident.subjectID4?.length || 0})`
+          );
+
+          // Check what offenders we have
+          console.log('\nAvailable offender discIds (first 10):');
+          for (const o of newOffenderData.slice(0, 10)) {
+            console.log(
+              `  - "${o.discId}" (length: ${o.discId?.length || 0}) -> ${o.name}`
+            );
+          }
+
+          // Try trimmed comparison for debugging
+          console.log('\nTrying trimmed comparison for first Subject ID:');
+          if (incident.subjectID) {
+            const trimmedSubjectID = incident.subjectID.trim();
+            const match = newOffenderData.find(
+              (o) => o.discId?.trim() === trimmedSubjectID
+            );
+            console.log(`  Trimmed subjectID: "${trimmedSubjectID}"`);
+            const matchResult = match ? `YES - ${match.name}` : 'NO';
+            console.log(`  Found match after trimming? ${matchResult}`);
+          }
+        }
+
         const offenders = [
           incident.subjectID
             ? newOffenderData?.find(
@@ -847,17 +901,11 @@ const useDiscImport = (): Return => {
                 (offender) => offender.discId === incident.subjectID4
               ) || null
             : null,
-          incident.subjectID5
-            ? newOffenderData?.find(
-                (offender) => offender.discId === incident.subjectID5
-              ) || null
-            : null,
-          incident.subjectID6
-            ? newOffenderData?.find(
-                (offender) => offender.discId === incident.subjectID6
-              ) || null
-            : null,
         ].filter((item) => item !== null) as NewOffender[];
+
+        console.log(
+          `Matched ${offenders.length} offenders for incident ${incident.id}`
+        );
         // eslint-disable-next-line
         const offendersIds = [
           ...new Set(offenders.map((offender) => offender.id)),
@@ -958,7 +1006,12 @@ const useDiscImport = (): Return => {
                 )
             ),
           ],
-          date: dayjs(incident.dateTime),
+          date:
+            incident.date && dayjs(incident.date).isValid()
+              ? dayjs(incident.date)
+              : incident.dateTime && dayjs(incident.dateTime).isValid()
+                ? dayjs(incident.dateTime)
+                : dayjs(),
           description: incident.description
             ?.replace(/(<([^>]+)>)/gi, '')
             .replace('&nbsp;', ''),
@@ -966,7 +1019,15 @@ const useDiscImport = (): Return => {
           groups: getIncidentGroups(incident, offendersIds, createdBy || ''),
           id: uuidv4(),
           images: images.filter((image) =>
-            image.fileName?.includes(incident.subjectID)
+            [
+              incident.subjectID,
+              incident.subjectID1,
+              incident.subjectID2,
+              incident.subjectID3,
+              incident.subjectID4,
+            ]
+              .filter(Boolean) // Remove empty/null IDs
+              .some((subjectId) => image.fileName?.includes(subjectId))
           ),
           impactTypes: [
             ...new Set(
@@ -1147,7 +1208,10 @@ const useDiscImport = (): Return => {
           recoveredValue: Number(incident.lossRecovered),
           street: incident.address.replace(values.townCity, '') || 'London',
           subject: '',
-          time: dayjs(incident.dateTime),
+          time:
+            incident.dateTime && dayjs(incident.dateTime).isValid()
+              ? dayjs(incident.dateTime)
+              : dayjs(),
           townCity: values.townCity,
         });
       });
@@ -1247,7 +1311,12 @@ const useDiscImport = (): Return => {
                 )
             ),
           ],
-          date: dayjs(incident.dateTime),
+          date:
+            incident.date && dayjs(incident.date).isValid()
+              ? dayjs(incident.date)
+              : incident.dateTime && dayjs(incident.dateTime).isValid()
+                ? dayjs(incident.dateTime)
+                : dayjs(),
           description: incident.description,
           discId: incident.id,
           groups: getIncidentGroups(incident, [], createdBy || ''),
@@ -1430,7 +1499,10 @@ const useDiscImport = (): Return => {
           recoveredValue: Number(incident.lossRecovered),
           street: incident.address || 'London',
           subject: '',
-          time: dayjs(incident.dateTime),
+          time:
+            incident.dateTime && dayjs(incident.dateTime).isValid()
+              ? dayjs(incident.dateTime)
+              : dayjs(),
         });
       });
 
@@ -1487,16 +1559,57 @@ const useDiscImport = (): Return => {
   };
 
   const handleFileListChange: UploadProps['onChange'] = (info) => {
-    console.log(images.length);
+    console.log('=== FILE UPLOAD DEBUG ===');
+    console.log('File status:', info.file.status);
+    console.log('Current images count:', images.length);
+
     if (info.file.response && info.file.status === 'done') {
+      console.log('File uploaded successfully!');
+      console.log('Response from server:', info.file.response);
+
+      const responseArray = info.file.response as Image[];
+      console.log('Number of images in response:', responseArray.length);
+
+      // Log first few images from response
+      if (responseArray.length > 0) {
+        console.log('Sample of first 10 images from upload response:');
+        for (const [idx, item] of responseArray.slice(0, 10).entries()) {
+          console.log(
+            `  [${idx}] fileName: "${item.fileName}", originalName: "${item.originalName}"`
+          );
+        }
+
+        // Check specifically for the 708320 image
+        const test708320 = responseArray.find(
+          (item) =>
+            item.fileName?.includes('708320') ||
+            item.originalName?.includes('708320')
+        );
+        if (test708320) {
+          console.log('✓ FOUND image with 708320 in response:', test708320);
+        } else {
+          console.log('✗ NO image with 708320 found in server response');
+          console.log('  Checking all originalNames for "708320"...');
+          const all708320 = responseArray.filter((item) =>
+            item.originalName?.includes('708320')
+          );
+          console.log(
+            `  Found ${all708320.length} images with "708320" in originalName`
+          );
+        }
+      }
+
       setImages([
         ...images,
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
-        ...info.file.response.map((item: Image) => ({ ...item, id: uuidv4() })),
+        ...responseArray.map((item) => ({ ...item, id: uuidv4() })),
       ]);
+      console.log(
+        'Images after adding upload:',
+        images.length + responseArray.length
+      );
     }
     setFileList(info.fileList);
-    console.log(images.length);
+    console.log('=== END FILE UPLOAD DEBUG ===');
   };
 
   const onUpdateOffender = (data: NewOffender) => {
@@ -1515,8 +1628,7 @@ const useDiscImport = (): Return => {
       (incident) => incident.id === data.id
     );
     if (data.groups.length > (existingData?.groups.length || 0)) {
-      // eslint-disable-next-line unicorn/no-array-for-each
-      data.offenders.forEach((offenderId) => {
+      for (const offenderId of data.offenders) {
         const index = newOffenders.map(({ id }) => id).indexOf(offenderId);
         const offender = newOffenders.find(({ id }) => id === offenderId);
         if (offender) {
@@ -1532,7 +1644,7 @@ const useDiscImport = (): Return => {
             })
           );
         }
-      });
+      }
     }
 
     const index = newIncidents.map(({ id }) => id).indexOf(data.id);
@@ -1565,6 +1677,160 @@ const useDiscImport = (): Return => {
         },
       })
     );
+  };
+
+  const rematchOffenderImages = () => {
+    console.log('=== REMATCH OFFENDERS DEBUG ===');
+    console.log('Total images available:', images.length);
+    console.log('Total offenders:', newOffenders.length);
+
+    // Log ALL images
+    console.log('ALL IMAGES:');
+    for (const [idx, img] of images.entries()) {
+      console.log(`  [${idx}] originalName: "${img.originalName}"`);
+    }
+
+    // Check for specific offender
+    const testOffender = newOffenders.find((o) => o.discId === '708320');
+    if (testOffender) {
+      console.log(`\nTesting specific offender PERRY (708320):`);
+      const testMatch = images.find(
+        (img) =>
+          img.fileName?.includes('708320') ||
+          img.originalName?.includes('708320')
+      );
+      console.log(`  Found matching image?`, testMatch ? 'YES' : 'NO');
+      if (testMatch) {
+        console.log(`  Image:`, testMatch);
+      }
+      // Check if there's ANY image with 708320 in it
+      const anyMatch = images.filter((img) =>
+        img.originalName?.includes('708320')
+      );
+      console.log(
+        `  Total images with "708320" in originalName:`,
+        anyMatch.length
+      );
+    }
+
+    const updatedOffenders = newOffenders.map((offender) => {
+      const matchedImages = images.filter(
+        (image) =>
+          image.fileName?.includes(offender.discId) ||
+          image.originalName?.includes(offender.discId)
+      );
+
+      console.log(`Offender: ${offender.name} (discId: "${offender.discId}")`);
+      console.log(`  - Matched ${matchedImages.length} images`);
+      if (matchedImages.length > 0) {
+        console.log(
+          `  - Image filenames:`,
+          matchedImages.map((img) => img.fileName || img.originalName)
+        );
+      }
+
+      return {
+        ...offender,
+        images: matchedImages,
+      };
+    });
+
+    console.log('=== END REMATCH DEBUG ===');
+    setNewOffenders(updatedOffenders);
+  };
+
+  const rematchIncidentOffenders = () => {
+    console.log('=== REMATCH INCIDENT OFFENDERS ===');
+    console.log('Total incidents:', newIncidents.length);
+    console.log('Total offenders:', newOffenders.length);
+    console.log('Total original CSV incidents:', incidents.length);
+
+    // Debug: Show sample discIds from newIncidents and ids from incidents
+    console.log('\nSample newIncident discIds (first 3):');
+    for (const inc of newIncidents.slice(0, 3)) {
+      console.log(`  newIncident.discId: "${inc.discId}"`);
+    }
+
+    console.log('\nSample original incident ids (first 3):');
+    for (const inc of incidents.slice(0, 3)) {
+      console.log(`  incident.id: "${inc.id}"`);
+    }
+
+    const updatedIncidents = newIncidents.map((incident) => {
+      // Find original incident data to get subjectIDs
+      const originalIncident = incidents.find((i) => i.id === incident.discId);
+
+      if (!originalIncident) {
+        console.log(
+          `No original incident found for discId: "${incident.discId}"`
+        );
+        return incident;
+      }
+
+      // Debug: Show what subjectIDs the original incident has
+      const hasSubjects =
+        originalIncident.subjectID ||
+        originalIncident.subjectID1 ||
+        originalIncident.subjectID2 ||
+        originalIncident.subjectID3 ||
+        originalIncident.subjectID4;
+      if (!hasSubjects) {
+        console.log(
+          `Original incident ${originalIncident.id} has NO subject IDs`
+        );
+      }
+
+      // Match offenders based on subjectID fields
+      const offenders = [
+        originalIncident.subjectID
+          ? newOffenders?.find(
+              (offender) => offender.discId === originalIncident.subjectID
+            ) || null
+          : null,
+        originalIncident.subjectID1
+          ? newOffenders?.find(
+              (offender) => offender.discId === originalIncident.subjectID1
+            ) || null
+          : null,
+        originalIncident.subjectID2
+          ? newOffenders?.find(
+              (offender) => offender.discId === originalIncident.subjectID2
+            ) || null
+          : null,
+        originalIncident.subjectID3
+          ? newOffenders?.find(
+              (offender) => offender.discId === originalIncident.subjectID3
+            ) || null
+          : null,
+        originalIncident.subjectID4
+          ? newOffenders?.find(
+              (offender) => offender.discId === originalIncident.subjectID4
+            ) || null
+          : null,
+      ].filter((item) => item !== null) as NewOffender[];
+
+      const offendersIds = [
+        ...new Set(offenders.map((offender) => offender.id)),
+      ];
+
+      console.log(
+        `Incident ${incident.id}: Matched ${offenders.length} offenders`
+      );
+      if (offenders.length > 0) {
+        console.log(
+          `  - Offenders:`,
+          offenders.map((o) => `${o.name} (${o.discId})`)
+        );
+      }
+
+      return {
+        ...incident,
+        offenders: offendersIds,
+      };
+    });
+
+    console.log('=== END REMATCH INCIDENT OFFENDERS ===');
+    setNewIncidents(updatedIncidents);
   };
 
   const onSubmit = () => {
@@ -1867,6 +2133,8 @@ const useDiscImport = (): Return => {
     onUpdateIncident,
     onUpdateOffender,
     onUpdateUser,
+    rematchIncidentOffenders,
+    rematchOffenderImages,
     tagData,
     toggleIdSoughtModal,
     toggleImageModal,

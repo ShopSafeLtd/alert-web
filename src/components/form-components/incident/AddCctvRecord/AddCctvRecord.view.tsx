@@ -6,29 +6,19 @@ import React from 'react';
 import { useIntl } from 'react-intl';
 
 interface Props {
-  data: CctvRecordData;
   onClose: () => void;
-  onSubmit: (value: CctvRecordData) => void;
+  onSubmit: (value: Omit<CctvRecordData, 'id'>) => void;
   saving: boolean;
 }
 
-const EditCctvRecord = ({
-  data,
-  onClose,
-  onSubmit,
-  saving,
-}: Props): JSX.Element => {
+const AddCctvRecord = ({ onClose, onSubmit, saving }: Props): JSX.Element => {
   const intl = useIntl();
 
   return (
-    <Form<CctvRecordData>
+    <Form<Omit<CctvRecordData, 'id'>>
       initialValues={{
-        cameraNumber: data.cameraNumber,
-        description: data.description,
-        endTime: dayjs(data.endTime),
-        showFace: data.showFace,
-        showIncident: data.showIncident,
-        startTime: dayjs(data.startTime),
+        showFace: false,
+        showIncident: false,
       }}
       layout="vertical"
       onFinish={onSubmit}
@@ -183,7 +173,7 @@ const EditCctvRecord = ({
             })}
             name="description"
           >
-            <Input.TextArea />
+            <Input.TextArea disabled={saving} />
           </Form.Item>
         </Col>
       </Row>
@@ -211,4 +201,4 @@ const EditCctvRecord = ({
   );
 };
 
-export default EditCctvRecord;
+export default AddCctvRecord;

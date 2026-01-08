@@ -19,6 +19,7 @@ interface Return {
   division: string | undefined;
   goods: {
     barcode?: string;
+    damagedQuantity?: number;
     goodsType?: string;
     name?: string;
     quantity?: number;
@@ -93,6 +94,7 @@ const useIncidentGoods = ({
         ...goods,
         {
           barcode: data.barcode || '',
+          damagedQuantity: 0,
           name: data.name || '',
           quantity: undefined,
           recoveredQuantity: 0,

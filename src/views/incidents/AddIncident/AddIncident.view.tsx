@@ -225,6 +225,7 @@ const AddIncident = ({
                   form={form}
                   goodsMode={goodsMode}
                   goodsVisible={goodsVisible}
+                  incidentForm={incidentForm}
                   knowGoods={knowGoods}
                 />
               );

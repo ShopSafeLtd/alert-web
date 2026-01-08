@@ -37,6 +37,7 @@ const PerformanceReport = (): JSX.Element => {
     schemeId,
     selectTemplate,
     selectedBrands,
+    selectedBusiness,
     selectedGroups,
     selectedIndustries,
     selectedRoles,
@@ -51,6 +52,7 @@ const PerformanceReport = (): JSX.Element => {
     setRedactOnPrint,
     setSaveAsDrawer,
     setSelectedBrands,
+    setSelectedBusiness,
     setSelectedGroups,
     setSelectedIndustries,
     setSelectedRoles,
@@ -94,6 +96,7 @@ const PerformanceReport = (): JSX.Element => {
       schemeId={schemeId}
       selectTemplate={selectTemplate}
       selectedBrands={selectedBrands}
+      selectedBusiness={selectedBusiness}
       selectedGroups={selectedGroups}
       selectedIndustries={selectedIndustries}
       selectedRoles={selectedRoles}
@@ -108,6 +111,7 @@ const PerformanceReport = (): JSX.Element => {
       setRedactOnPrint={setRedactOnPrint}
       setSaveAsDrawer={setSaveAsDrawer}
       setSelectedBrands={setSelectedBrands}
+      setSelectedBusiness={setSelectedBusiness}
       setSelectedGroups={setSelectedGroups}
       setSelectedIndustries={setSelectedIndustries}
       setSelectedRoles={setSelectedRoles}

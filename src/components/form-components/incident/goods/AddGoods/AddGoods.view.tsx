@@ -33,6 +33,7 @@ const AddGoods = ({
 
   const onAddItem = (data: StockItemValue) => {
     form.setFieldsValue({
+      damagedQuantity: 0,
       name: data.name || '',
       quantity: undefined,
       recoveredQuantity: 0,
@@ -277,6 +278,24 @@ const AddGoods = ({
               tooltip={intl.formatMessage({
                 defaultMessage:
                   'The quantity of the goods that were recovered.',
+              })}
+            >
+              <InputNumber
+                disabled={stockItem === undefined}
+                min={0}
+                precision={0}
+                style={{ width: 150 }}
+              />
+            </Form.Item>
+          </Col>
+          <Col>
+            <Form.Item
+              label={intl.formatMessage({
+                defaultMessage: 'Damaged Quantity',
+              })}
+              name="damagedQuantity"
+              tooltip={intl.formatMessage({
+                defaultMessage: 'The quantity of the goods that were damaged.',
               })}
             >
               <InputNumber

@@ -30,6 +30,7 @@ export interface FormData {
   fellingTags?: string[];
   goods?: {
     barcode?: string;
+    damagedQuantity?: number;
     description?: string;
     goodsType?: string;
     name?: string;
