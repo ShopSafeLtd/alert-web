@@ -6,6 +6,7 @@ fragment IncidentItems on IncidentItem {
   sku
   quantity
   recoveredQuantity
+  damagedQuantity
   goodsType {
     id
   }

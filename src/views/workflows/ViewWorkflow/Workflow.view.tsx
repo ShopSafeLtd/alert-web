@@ -32,6 +32,7 @@ interface ListData {
     id: string;
     question: string;
   }[];
+  requiredQuestionIds: string[];
 }
 
 export interface WorkflowProps {

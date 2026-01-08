@@ -214,31 +214,26 @@ const useOffenderFeed = (): Return => {
     first: compactView ? 48 : 12,
     policeAreas,
     where: {
-      AND: search
+      OR: search
         ? [
             {
-              OR: [
-                {
-                  name: {
-                    contains: search,
-                    mode: QueryMode.Insensitive,
-                  },
-                },
-                {
-                  alias: {
-                    hasSome: [search],
-                  },
-                },
-                {
-                  referenceStr: {
-                    contains: search,
-                  },
-                },
-              ],
+              name: {
+                contains: search,
+                mode: QueryMode.Insensitive,
+              },
+            },
+            {
+              alias: {
+                hasSome: [search],
+              },
+            },
+            {
+              referenceStr: {
+                contains: search,
+              },
             },
           ]
         : undefined,
-
       active: gallery.includes('ACTIVE')
         ? {
             equals: true,

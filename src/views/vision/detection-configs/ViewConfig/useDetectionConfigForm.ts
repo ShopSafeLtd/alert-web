@@ -1,5 +1,5 @@
-import type { WorkflowDataQuery } from '#/views/workflows/graphql/queries/__generated__/workflow-data.generated';
 import type { OverUnder } from '#/views/workflows/ViewWorkflow/useWorkflowForm';
+import type { WorkflowDataQuery } from '#/views/workflows/graphql/queries/__generated__/workflow-data.generated';
 import type { FormInstance } from 'antd';
 import type {
   AiVisionMatchConfidence,
@@ -7,13 +7,13 @@ import type {
   AnswerType,
 } from 'graphql/types';
 
-import { useApolloClient } from '@apollo/client';
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import useActivityTemplates from '#/views/adminTodo/ActivityTemplates/useActivityTemplates';
 import {
-  useWorkflowDataQuery,
   WorkflowDataDocument,
+  useWorkflowDataQuery,
 } from '#/views/workflows/graphql/queries/__generated__/workflow-data.generated';
+import { useApolloClient } from '@apollo/client';
 import { Form, notification } from 'antd';
 import { DetectActionType, QuestionModel, SortOrder } from 'graphql/types';
 import { useAtomValue } from 'jotai';
@@ -33,6 +33,7 @@ interface ListData {
     id: string;
     question: string;
   }[];
+  requiredQuestionIds: string[];
 }
 
 interface DetectionConfigData {
@@ -41,13 +42,13 @@ interface DetectionConfigData {
     title: string;
     users?: string[];
   };
-  sendSMS?: {
-    message: string;
-  };
   sendNotification?: {
     message: string;
     title: string;
     users?: string[];
+  };
+  sendSMS?: {
+    message: string;
   };
   task?: {
     businesses?: string[];
@@ -78,14 +79,19 @@ export interface Question {
 }
 
 export interface FormData {
+  minimumConfidenceTrigger: AiVisionMatchConfidence;
+  minimumPriorityTrigger: AiVisionMatchPriority;
   name: string;
-  outcomeType?: 'activity' | 'notification' | 'email' | 'sms';
+  outcomeType?: 'activity' | 'email' | 'notification' | 'sms';
+  selectedCameras: string[];
   sendEmailMessage: string;
   sendEmailTitle: string;
   sendEmailUsers: string[];
   sendNotificationMessage: string;
   sendNotificationTitle: string;
   sendNotificationUsers: string[];
+  sendSMSMessage: string;
+  taskBusiness?: string[];
   taskDescription: string;
   taskDueDays: number;
   taskName: string;
@@ -96,11 +102,6 @@ export interface FormData {
   userManagementGroups: string[];
   userManagementRoles: string[];
   userManagementUsers: string[];
-  minimumConfidenceTrigger: AiVisionMatchConfidence;
-  minimumPriorityTrigger: AiVisionMatchPriority;
-  sendSMSMessage: string;
-  selectedCameras: string[];
-  taskBusiness?: string[];
 }
 
 export type LabelValue = { label: string; value: string };
@@ -214,8 +215,8 @@ const useDetectionConfigForm = (): Return => {
           // Determine the outcome type based on what's defined
           let outcomeType:
             | 'activity'
-            | 'notification'
             | 'email'
+            | 'notification'
             | 'sms'
             | undefined;
           if (action?.task?.name) {
@@ -229,18 +230,25 @@ const useDetectionConfigForm = (): Return => {
           }
 
           form.setFieldsValue({
+            minimumConfidenceTrigger: detectionConfig.minimumConfidenceTrigger,
+            minimumPriorityTrigger: detectionConfig.minimumPriorityTrigger,
             name: detectionConfig.name,
             outcomeType,
+            selectedCameras:
+              detectionConfig.camera.length > 0
+                ? detectionConfig.camera.map((cam) => cam.id)
+                : [],
             sendEmailMessage: action?.sendEmail?.message || '',
             sendEmailTitle: action?.sendEmail?.title || '',
             sendEmailUsers: action?.sendEmail?.users || [],
             sendNotificationMessage: action?.sendNotification?.message || '',
             sendNotificationTitle: action?.sendNotification?.title || '',
             sendNotificationUsers: action?.sendNotification?.users || [],
+            sendSMSMessage: action?.sendSMS?.message || '',
+            taskBusiness: action?.task?.businesses,
             taskDueDays: action?.task?.dueDays,
             taskName: action?.task?.name,
             taskQuestions: action?.task?.questions,
-            taskBusiness: action?.task?.businesses,
             useDynamicAdminGroups: !!action?.usersToGetFrom?.parentGroupsAdmin,
             useDynamicGroups: !!action?.usersToGetFrom?.parentGroups,
             userManagementAdminGroups:
@@ -248,13 +256,6 @@ const useDetectionConfigForm = (): Return => {
             userManagementGroups: newCombined.groups,
             userManagementRoles: action?.usersToGetFrom?.roles || [],
             userManagementUsers: newCombined.users,
-            minimumPriorityTrigger: detectionConfig.minimumPriorityTrigger,
-            minimumConfidenceTrigger: detectionConfig.minimumConfidenceTrigger,
-            sendSMSMessage: action?.sendSMS?.message || '',
-            selectedCameras:
-              detectionConfig.camera.length > 0
-                ? detectionConfig.camera.map((cam) => cam.id)
-                : [],
           });
         }
       },
@@ -308,12 +309,20 @@ const useDetectionConfigForm = (): Return => {
   const questionGroups: QuestionGroupData[] = useMemo(() => {
     if (tableData) {
       return tableData.map(
-        ({ defaultDueDays, description, id, name, questions: qs }) => ({
+        ({
           defaultDueDays,
           description,
           id,
           name,
           questions: qs,
+          requiredQuestionIds,
+        }) => ({
+          defaultDueDays,
+          description,
+          id,
+          name,
+          questions: qs,
+          requiredQuestionIds,
         })
       );
     }
@@ -412,7 +421,7 @@ const useDetectionConfigForm = (): Return => {
 
     // Map outcomeType to DetectActionType enum
     const typeMap: Record<
-      'activity' | 'notification' | 'email' | 'sms',
+      'activity' | 'email' | 'notification' | 'sms',
       DetectActionType
     > = {
       activity: DetectActionType.Activity,

@@ -1,4 +1,5 @@
 import type { FormData } from '#/views/incidents/AddIncident/types/formData';
+import type { IncidentFormState } from '#/views/incidents/AddIncident/useAddIncident';
 import type { FormInstance } from 'antd';
 
 import React from 'react';
@@ -11,6 +12,7 @@ interface Props {
   form: FormInstance<FormData>;
   goodsMode: string;
   goodsVisible: boolean;
+  incidentForm?: IncidentFormState;
   knowGoods: () => void;
 }
 
@@ -19,12 +21,19 @@ const IncidentGoods = ({
   form,
   goodsMode,
   goodsVisible,
+  incidentForm,
   knowGoods,
 }: Props) => {
   const { businessCurrency, division, goods, goodsTypesData, onAddItem } =
     useIncidentGoods({
       form,
     });
+
+  // Extract showDamagedQuantity from GOODS field metadata
+  const goodsFormField = incidentForm?.find((f) => f.type === 'GOODS');
+  const showDamagedQuantity =
+    goodsFormField?.metadata?.[0]?.showDamagedQuantity === 'true';
+
   return (
     <View
       businessCurrency={businessCurrency}
@@ -36,6 +45,7 @@ const IncidentGoods = ({
       goodsVisible={goodsVisible}
       knowGoods={knowGoods}
       onAddItem={onAddItem}
+      showDamagedQuantity={showDamagedQuantity}
     />
   );
 };

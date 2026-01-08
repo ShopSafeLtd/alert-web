@@ -203,8 +203,25 @@ const useSentrysysImport = (): Return => {
         name: SortOrder.Asc,
       },
       where: {
+        OR: [
+          {
+            parentTagId: {
+              equals: null,
+            },
+          },
+          {
+            parentTag: {
+              recycled: {
+                equals: false,
+              },
+            },
+          },
+        ],
         dataType: {
           equals: Model.Incident,
+        },
+        recycled: {
+          equals: false,
         },
         schemes: {
           some: {

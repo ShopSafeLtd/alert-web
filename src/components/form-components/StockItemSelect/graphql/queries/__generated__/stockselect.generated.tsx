@@ -11,7 +11,7 @@ export type StockItemsSearchQueryVariables = Types.Exact<{
 }>;
 
 
-export type StockItemsSearchQuery = { __typename?: 'Query', stockItemsSearch: { __typename?: 'StockItemSearchResult', hasMore?: string | null, stock: Array<{ __typename?: 'StockItem', id: string, barcode?: string | null, brand?: string | null, costPriceLocal?: number | null, costPriceStandard?: number | null, division?: string | null, name?: string | null, salesPriceLocal?: number | null, salesPriceStandard?: number | null, sku?: string | null, variant?: string | null }> } };
+export type StockItemsSearchQuery = { __typename?: 'Query', stockItemsSearch: { __typename?: 'StockItemSearchResult', hasMore?: string | null, stock: Array<{ __typename?: 'StockItem', id: string, barcode?: string | null, brand?: string | null, costPriceLocal?: number | null, costPriceStandard?: number | null, division?: string | null, name?: string | null, salesPriceLocal?: number | null, salesPriceStandard?: number | null, sku?: string | null, variant?: string | null, styleCode?: string | null }> } };
 
 
 export const StockItemsSearchDocument = gql`
@@ -30,6 +30,7 @@ export const StockItemsSearchDocument = gql`
       salesPriceStandard
       sku
       variant
+      styleCode
     }
   }
 }

@@ -95,6 +95,7 @@ export type FilterProps = Pick<
   | 'dateRange'
   | 'schemeId'
   | 'selectedBrands'
+  | 'selectedBusiness'
   | 'selectedGroups'
   | 'selectedIndustries'
   | 'selectedRoles'
@@ -2414,6 +2415,7 @@ const PerformanceReportLayout = ({
                 take: 10,
                 where: {
                   brandIds: filters.selectedBrands,
+                  businessIds: filters.selectedBusiness,
                   dateRange: filters.dateRange,
                   groupIds: filters.selectedGroups,
                   industryIds: filters.selectedIndustries,

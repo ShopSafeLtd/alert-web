@@ -129,6 +129,7 @@ const Items = ({
           incidentItems: {
             create: [
               {
+                damagedQuantity: value.damagedQuantity,
                 goodsType: value.goodsTypeId
                   ? {
                       connect: {
@@ -177,6 +178,7 @@ const Items = ({
             update: [
               {
                 data: {
+                  damagedQuantity: { set: value.damagedQuantity || 0 },
                   goodsType: value.goodsTypeId
                     ? {
                         connect: {
@@ -469,6 +471,13 @@ const Items = ({
                       }),
                     },
                     {
+                      dataIndex: 'damagedQuantity',
+                      key: 'damagedQuantity',
+                      title: intl.formatMessage({
+                        defaultMessage: 'Damaged',
+                      }),
+                    },
+                    {
                       dataIndex: 'itemTotal',
                       key: 'itemTotal',
                       render: (value: number) =>
@@ -550,6 +559,7 @@ const Items = ({
             }
             dataSource={data?.incident?.incidentItems.map((item) => ({
               barcode: item.stockItem?.barcode ?? '',
+              damagedQuantity: item.damagedQuantity ?? 0,
               item,
               itemTotal:
                 goodsMode === GoodsMode.Generic

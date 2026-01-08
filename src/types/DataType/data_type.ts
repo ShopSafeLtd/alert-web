@@ -453,6 +453,7 @@ export interface CustomQuestion {
 }
 
 export interface GoodsData {
+  damagedQuantity?: null | number | undefined;
   goodsType?:
     | {
         id: string;

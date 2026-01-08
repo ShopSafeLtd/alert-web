@@ -1,6 +1,8 @@
+import type { UserSelectOption } from '#/components/form-components/UsersSelect/UsersSelectFetchMore.view';
 import type { GroupQuery } from 'graphql/group/queries/__generated__/group.generated';
 import type { SelectOptions } from 'types/DataType';
 
+import UsersSelectFetchMore from '#/components/form-components/UsersSelect/UsersSelectFetchMore.view';
 import {
   Button,
   Col,
@@ -23,13 +25,12 @@ interface Props {
   loading: boolean;
   onClose: () => void;
   onSubmit: (value: FormData) => void;
+  onUsersOptionsChange: (options: UserSelectOption[]) => void;
   saving: boolean;
   selectedUsers: string[] | undefined;
   setSelectedUsers: (value: string[]) => void;
   setShowOffenderSettings: (value: boolean) => void;
   showOffenderSettings: boolean;
-  usersData: SelectOptions[] | undefined;
-  usersLoading: boolean;
 }
 
 const EditGroup = ({
@@ -38,13 +39,12 @@ const EditGroup = ({
   loading,
   onClose,
   onSubmit,
+  onUsersOptionsChange,
   saving,
   selectedUsers,
   setSelectedUsers,
   setShowOffenderSettings,
   showOffenderSettings,
-  usersData,
-  usersLoading,
 }: Props): JSX.Element => {
   const intl = useIntl();
 
@@ -140,16 +140,13 @@ const EditGroup = ({
               },
             ]}
           >
-            <Select
+            <UsersSelectFetchMore
               disabled={saving}
-              filterOption
-              loading={usersLoading}
               maxTagCount={3}
               mode="multiple"
-              // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-              onChange={(value) => setSelectedUsers(value)}
-              optionFilterProp="label"
-              options={usersData}
+              onChange={setSelectedUsers}
+              onOptionsChange={onUsersOptionsChange}
+              value={selectedUsers}
             />
           </Form.Item>
         </Col>
@@ -165,7 +162,6 @@ const EditGroup = ({
             >
               <Select
                 disabled={saving}
-                loading={usersLoading}
                 maxTagCount={3}
                 mode="multiple"
                 optionFilterProp="label"

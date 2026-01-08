@@ -1,6 +1,7 @@
 import type { IntlShape } from 'react-intl';
 
 import BrandsSelect from '#/components/form-components/BrandsSelect/BrandsSelect.view';
+import BusinessesSelect from '#/components/form-components/BusinessesSelect/BusinessesSelect.view';
 import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
 import IncidentTypesSelect from '#/components/form-components/IncidentTypesSelect/IncidentTypesSelect.view';
 import RolesSelect from '#/components/form-components/RolesSelect/RolesSelect.view';
@@ -128,6 +129,7 @@ const PerformanceReport = ({
   saving,
   schemeId,
   selectedBrands,
+  selectedBusiness,
   selectedGroups,
   selectedIndustries,
   selectedRoles,
@@ -141,6 +143,7 @@ const PerformanceReport = ({
   setRedactOnPrint,
   setSaveAsDrawer,
   setSelectedBrands,
+  setSelectedBusiness,
   setSelectedGroups,
   setSelectedIndustries,
   setSelectedRoles,
@@ -294,6 +297,7 @@ const PerformanceReport = ({
                         dateRange,
                         schemeId,
                         selectedBrands,
+                        selectedBusiness,
                         selectedGroups,
                         selectedIndustries,
                         selectedRoles,
@@ -331,6 +335,7 @@ const PerformanceReport = ({
                     dateRange,
                     schemeId,
                     selectedBrands,
+                    selectedBusiness,
                     selectedGroups,
                     selectedIndustries,
                     selectedRoles,
@@ -557,6 +562,24 @@ const PerformanceReport = ({
                   }}
                   style={{ width: '100%' }}
                   value={selectedIndustries}
+                />
+              </Form.Item>
+              <Form.Item
+                label={intl.formatMessage({
+                  defaultMessage: 'Businesses',
+                })}
+              >
+                <BusinessesSelect
+                  maxTagCount="responsive"
+                  mode="multiple"
+                  onChange={(value) => {
+                    setSelectedBusiness(value || []);
+                  }}
+                  placeholder={intl.formatMessage({
+                    defaultMessage: 'Select Businesses',
+                  })}
+                  style={{ width: '100%' }}
+                  value={selectedBusiness}
                 />
               </Form.Item>
               <Form.Item

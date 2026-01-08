@@ -40,6 +40,8 @@ const DiscImport = () => {
     onUpdateIncident,
     onUpdateOffender,
     onUpdateUser,
+    rematchIncidentOffenders,
+    rematchOffenderImages,
     tagData,
     toggleIdSoughtModal,
     toggleImageModal,
@@ -85,6 +87,8 @@ const DiscImport = () => {
       onUpdateIncident={onUpdateIncident}
       onUpdateOffender={onUpdateOffender}
       onUpdateUser={onUpdateUser}
+      rematchIncidentOffenders={rematchIncidentOffenders}
+      rematchOffenderImages={rematchOffenderImages}
       tagData={tagData}
       toggleIdSoughtModal={toggleIdSoughtModal}
       toggleImageModal={toggleImageModal}
