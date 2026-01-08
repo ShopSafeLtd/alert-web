@@ -27,12 +27,13 @@ interface ListData {
     id: string;
     question: string;
   }[];
+  requiredQuestionIds: string[];
 }
 
 export interface DetectionConfigProps {
   activityTemplateForm: boolean;
-  createNewQuestion: (id: string, question: string) => void;
   availableQuestions: Question[];
+  createNewQuestion: (id: string, question: string) => void;
   editId?: string;
   form: FormInstance<FormData>;
   loading: boolean;
@@ -59,8 +60,8 @@ const DetectionConfigView: React.FC<DetectionConfigProps> = ({
   activityTemplateForm,
   createNewQuestion,
   editId,
-  loading,
   form,
+  loading,
   newQuestion,
   onClose,
   onFinish,
