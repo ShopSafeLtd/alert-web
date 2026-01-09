@@ -598,6 +598,10 @@ const Items = ({
                 .map((item) => item.itemTotal || 0)
                 .reduce((a, b) => a + b, 0);
 
+              const totalDamagedQnty = tableData
+                .map((item) => item.damagedQuantity || 0)
+                .reduce((a, b) => a + b, 0);
+
               return goodsMode === GoodsMode.Generic ? (
                 <Table.Summary.Row>
                   <Table.Summary.Cell index={2}>
@@ -634,17 +638,21 @@ const Items = ({
                       defaultMessage: 'Total: ',
                     })}
                   </Table.Summary.Cell>
-                  <Table.Summary.Cell index={3}>{totalQnty}</Table.Summary.Cell>
-                  <Table.Summary.Cell index={4}>
+                  <Table.Summary.Cell index={3} />
+                  <Table.Summary.Cell index={4}>{totalQnty}</Table.Summary.Cell>
+                  <Table.Summary.Cell index={5}>
                     {totalRecoveredQnty}
                   </Table.Summary.Cell>
-                  <Table.Summary.Cell index={5}>
+                  <Table.Summary.Cell index={6}>
+                    {totalDamagedQnty}
+                  </Table.Summary.Cell>
+                  <Table.Summary.Cell index={7}>
                     {intl.formatNumber(totalValue, {
                       currency,
                       style: 'currency',
                     })}
                   </Table.Summary.Cell>
-                  <Table.Summary.Cell index={6} />
+                  <Table.Summary.Cell index={8} />
                 </Table.Summary.Row>
               );
             }}
