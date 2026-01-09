@@ -89,6 +89,8 @@ interface Return {
   setQuestionsLayout: (value: ExtendedLayout[]) => void;
   setSelectedModule: (field: IncidentFormField | null) => void;
   setSelectedQuestion: (value: null | string) => void;
+  setShowDamagedQuantity: (value: boolean) => void;
+  showDamagedQuantity: boolean;
   showDraft: boolean;
   toggleAddQuestion: () => void;
   toggleField: (field: IncidentFormField) => void;
@@ -320,6 +322,7 @@ const useViewTag = (): Return => {
   });
 
   const [fieldTitles, setFieldTitles] = useState<Record<string, string>>({});
+  const [showDamagedQuantity, setShowDamagedQuantity] = useState(false);
   const { data, loading, refetch } = useViewTagQuery({
     variables: {
       listWhere: {
@@ -523,6 +526,15 @@ const useViewTag = (): Return => {
       } else {
         setFieldTitles({});
       }
+    }
+
+    // Load showDamagedQuantity from Goods field metadata
+    const goodsField = data?.tag?.incidentForm?.fields?.find(
+      (field) => field.type === IncidentFormField.Goods
+    );
+    if (goodsField?.metadata?.showDamagedQuantity !== undefined) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      setShowDamagedQuantity(goodsField.metadata.showDamagedQuantity === true);
     }
   }, [data]);
 
@@ -885,6 +897,12 @@ const useViewTag = (): Return => {
                   mode: 'SINGLE_SELECT',
                 };
 
+              if (t.type === IncidentFormField.Goods) {
+                return {
+                  showDamagedQuantity,
+                };
+              }
+
               if (existing?.metadata) return existing.metadata;
 
               return undefined;
@@ -1052,6 +1070,8 @@ const useViewTag = (): Return => {
     setQuestionsLayout,
     setSelectedModule,
     setSelectedQuestion,
+    setShowDamagedQuantity,
+    showDamagedQuantity,
     showDraft,
     toggleAddQuestion,
     toggleField,

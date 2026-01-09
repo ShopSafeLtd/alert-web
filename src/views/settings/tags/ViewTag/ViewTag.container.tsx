@@ -40,6 +40,8 @@ const AddCrimeType = (): JSX.Element => {
     setQuestionsLayout,
     setSelectedModule,
     setSelectedQuestion,
+    setShowDamagedQuantity,
+    showDamagedQuantity,
     showDraft,
     toggleAddQuestion,
     toggleField,
@@ -85,6 +87,8 @@ const AddCrimeType = (): JSX.Element => {
       setQuestionsLayout={setQuestionsLayout}
       setSelectedModule={setSelectedModule}
       setSelectedQuestion={setSelectedQuestion}
+      setShowDamagedQuantity={setShowDamagedQuantity}
+      showDamagedQuantity={showDamagedQuantity}
       showDraft={showDraft}
       toggleAddQuestion={toggleAddQuestion}
       toggleField={toggleField}
