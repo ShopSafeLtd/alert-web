@@ -122,6 +122,8 @@ interface Props {
   setQuestionsLayout: (value: ExtendedLayout[]) => void;
   setSelectedModule: (field: IncidentFormField | null) => void;
   setSelectedQuestion: (value: null | string) => void;
+  setShowDamagedQuantity: (value: boolean) => void;
+  showDamagedQuantity: boolean;
   showDraft: boolean;
   toggleAddQuestion: () => void;
   toggleField: (field: IncidentFormField) => void;
@@ -174,6 +176,8 @@ const ViewTag = ({
   setQuestionsLayout,
   setSelectedModule,
   setSelectedQuestion,
+  setShowDamagedQuantity,
+  showDamagedQuantity,
   showDraft,
   toggleAddQuestion,
   toggleField,
@@ -563,6 +567,25 @@ const ViewTag = ({
                   toggleField(IncidentFormField.Goods);
                 }}
                 unCheckedChildren="Off"
+              />
+            </Col>
+          </Row>
+          <Row style={{ marginTop: 8 }}>
+            <Col span={1} />
+            <Col flex={1}>
+              <Typography.Text>Show Damaged Quantity</Typography.Text>
+            </Col>
+            <Col>
+              <Switch
+                checked={showDamagedQuantity}
+                disabled={!incidentFormFields.GOODS}
+                onChange={(checked) => {
+                  setShowDamagedQuantity(checked);
+                  if (!incidentFormLayoutChanged) {
+                    setIncidentFormLayoutChanged(true);
+                  }
+                }}
+                size="small"
               />
             </Col>
           </Row>
@@ -1160,6 +1183,7 @@ const ViewTag = ({
       involvedMode,
       fieldTitles,
       draftState,
+      showDamagedQuantity,
     ]
   );
 

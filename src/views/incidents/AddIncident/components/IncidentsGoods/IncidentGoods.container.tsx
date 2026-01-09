@@ -32,7 +32,7 @@ const IncidentGoods = ({
   // Extract showDamagedQuantity from GOODS field metadata
   const goodsFormField = incidentForm?.find((f) => f.type === 'GOODS');
   const showDamagedQuantity =
-    goodsFormField?.metadata?.[0]?.showDamagedQuantity === 'true';
+    goodsFormField?.metadata?.[0]?.showDamagedQuantity === true;
 
   return (
     <View
