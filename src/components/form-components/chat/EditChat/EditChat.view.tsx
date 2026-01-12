@@ -72,6 +72,15 @@ const EditChat = ({
               defaultMessage: 'Description',
             })}
             name="description"
+            rules={[
+              {
+                message: intl.formatMessage({
+                  defaultMessage:
+                    'Please enter a description for the chat group.',
+                }),
+                required: true,
+              },
+            ]}
           >
             <Input.TextArea disabled={saving} />
           </Form.Item>

@@ -354,7 +354,7 @@ const IncidentGoods = ({
                   {/* eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison */}
                   {goodsMode === GoodsMode.Specific && (
                     <>
-                      <Col lg={6} span={24}>
+                      <Col lg={6} span={24} xl={5}>
                         <Form.Item
                           {...restField}
                           label={
@@ -380,7 +380,7 @@ const IncidentGoods = ({
                           <Input readOnly style={{ width: '100%' }} />
                         </Form.Item>
                       </Col>
-                      <Col lg={3} md={6} sm={12} span={24}>
+                      <Col lg={3} md={6} sm={12} span={24} xl={2}>
                         <Form.Item
                           {...restField}
                           label={
@@ -398,7 +398,7 @@ const IncidentGoods = ({
                           <Input readOnly style={{ width: '100%' }} />
                         </Form.Item>
                       </Col>
-                      <Col lg={3} md={6} sm={12} span={24}>
+                      <Col lg={3} md={6} sm={12} span={24} xl={2}>
                         <Form.Item
                           {...restField}
                           label={
@@ -416,7 +416,7 @@ const IncidentGoods = ({
                           <Input readOnly style={{ width: '100%' }} />
                         </Form.Item>
                       </Col>
-                      <Col lg={3} md={6} sm={12} span={24}>
+                      <Col lg={3} md={6} sm={12} span={24} xl={2}>
                         <Form.Item
                           {...restField}
                           label={
@@ -504,7 +504,7 @@ const IncidentGoods = ({
                           />
                         </Form.Item>
                       </Col>
-                      <Col lg={3} md={3} span={12}>
+                      <Col lg={3} md={3} span={12} xl={3}>
                         <Form.Item
                           {...restField}
                           label={
@@ -538,7 +538,7 @@ const IncidentGoods = ({
                         </Form.Item>
                       </Col>
                       {showDamagedQuantity && (
-                        <Col lg={3} md={3} span={12}>
+                        <Col lg={3} md={3} span={12} xl={3}>
                           <Form.Item
                             {...restField}
                             label={

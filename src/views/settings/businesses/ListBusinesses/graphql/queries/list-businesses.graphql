@@ -32,6 +32,8 @@ query BusinessesList(
           name
         }
         totalUsers
+        currency
+        division
       }
     }
   }
