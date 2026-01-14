@@ -251,8 +251,10 @@ export type ActiveChecklist = {
   name?: Maybe<Scalars['String']>;
   percentComplete: Scalars['Int'];
   percentageScore: Scalars['String'];
+  scheme?: Maybe<Scheme>;
   signature?: Maybe<Scalars['String']>;
   status: ChecklistStatus;
+  timeTaken?: Maybe<Scalars['String']>;
   todos: Array<Todo>;
   updatedAt: Scalars['Date'];
 };
@@ -1721,6 +1723,7 @@ export enum BusinessScalarFieldEnum {
 
 export type BusinessUpdateInput = {
   brands?: InputMaybe<BusinessBrandsInput>;
+  currency?: InputMaybe<NullableEnumCurrencyFieldUpdateOperationsInput>;
   groups?: InputMaybe<GroupsSet>;
   locations?: InputMaybe<LocationUpdateInputField>;
   name?: InputMaybe<SetStringHelper>;
@@ -1736,6 +1739,8 @@ export type BusinessWhereInput = {
   NOT?: InputMaybe<Array<BusinessWhereInput>>;
   OR?: InputMaybe<Array<BusinessWhereInput>>;
   brands?: InputMaybe<BrandListRelationFilter>;
+  currency?: InputMaybe<EnumCurrencyNullableFilter>;
+  division?: InputMaybe<StringNullableFilter>;
   groups?: InputMaybe<GroupListRelationFilter>;
   id?: InputMaybe<StringFilter>;
   locations?: InputMaybe<AddressListRelationFilter>;
@@ -2977,6 +2982,7 @@ export type CreateIncidentImages = {
 };
 
 export type CreateIncidentItemInput = {
+  damagedQuantity?: InputMaybe<Scalars['Int']>;
   description?: InputMaybe<Scalars['String']>;
   goodsType?: InputMaybe<UniqueId>;
   name?: InputMaybe<Scalars['String']>;
@@ -5307,6 +5313,13 @@ export type EnumCsvTypeWithAggregatesFilter = {
   in?: InputMaybe<Array<CsvType>>;
   not?: InputMaybe<CsvType>;
   notIn?: InputMaybe<Array<CsvType>>;
+};
+
+export type EnumCurrencyNullableFilter = {
+  equals?: InputMaybe<Currency>;
+  in?: InputMaybe<Array<Currency>>;
+  not?: InputMaybe<NestedEnumCurrencyNullableFilter>;
+  notIn?: InputMaybe<Array<Currency>>;
 };
 
 export type EnumDocumentTypeFilter = {
@@ -11359,6 +11372,7 @@ export type Mutation = {
   mySafetyImportData: SystemTask;
   nextImportData: SystemTask;
   oneStopImportData: SystemTask;
+  queueActivityCsvExport: QueuedIncidentExportResult;
   queueIncidentCsvExport: QueuedIncidentExportResult;
   queueStockRemovalCsvExport: QueuedStockRemovalExportResult;
   recordPatrolScan: PatrolEvent;
@@ -12474,6 +12488,11 @@ export type MutationOneStopImportDataArgs = {
 };
 
 
+export type MutationQueueActivityCsvExportArgs = {
+  where: ActivityExportWhere;
+};
+
+
 export type MutationQueueIncidentCsvExportArgs = {
   where: IncidentExportInput;
 };
@@ -13307,6 +13326,13 @@ export type NestedEnumCsvTypeFilter = {
   notIn?: InputMaybe<Array<CsvType>>;
 };
 
+export type NestedEnumCurrencyNullableFilter = {
+  equals?: InputMaybe<Currency>;
+  in?: InputMaybe<Array<Currency>>;
+  not?: InputMaybe<Currency>;
+  notIn?: InputMaybe<Array<Currency>>;
+};
+
 export type NestedEnumFeedItemTypeFilter = {
   equals?: InputMaybe<FeedItemType>;
   in?: InputMaybe<Array<FeedItemType>>;
@@ -14007,6 +14033,10 @@ export type NullableEnumCrimeTypeFieldUpdateOperationsInput = {
 
 export type NullableEnumCronScheduleFieldUpdateOperationsInput = {
   set?: InputMaybe<CronSchedule>;
+};
+
+export type NullableEnumCurrencyFieldUpdateOperationsInput = {
+  set?: InputMaybe<Currency>;
 };
 
 export type NullableEnumFileTypeFieldUpdateOperationsInput = {
@@ -15800,6 +15830,7 @@ export type Query = {
   businessQuestion: BusinessQuestion;
   businessQuestionRelay: QueryBusinessQuestionRelayConnection;
   businessRelay: QueryBusinessRelayConnection;
+  businessRelayAdmin: QueryBusinessRelayAdminConnection;
   businessReport: BusinessReport;
   chat: Chat;
   chatMessages: Array<MessageItem>;
@@ -16326,6 +16357,19 @@ export type QueryBusinessQuestionRelayArgs = {
 
 
 export type QueryBusinessRelayArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  hasChildrenOnly?: InputMaybe<Scalars['Boolean']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<BusinessOrderBy>>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<BusinessWhereInput>;
+};
+
+
+export type QueryBusinessRelayAdminArgs = {
   after?: InputMaybe<Scalars['String']>;
   before?: InputMaybe<Scalars['String']>;
   first?: InputMaybe<Scalars['Int']>;
@@ -18057,6 +18101,19 @@ export type QueryBusinessQuestionRelayConnectionEdge = {
   __typename?: 'QueryBusinessQuestionRelayConnectionEdge';
   cursor: Scalars['String'];
   node: BusinessQuestion;
+};
+
+export type QueryBusinessRelayAdminConnection = {
+  __typename?: 'QueryBusinessRelayAdminConnection';
+  edges: Array<QueryBusinessRelayAdminConnectionEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type QueryBusinessRelayAdminConnectionEdge = {
+  __typename?: 'QueryBusinessRelayAdminConnectionEdge';
+  cursor: Scalars['String'];
+  node: Business;
 };
 
 export type QueryBusinessRelayConnection = {
@@ -19792,6 +19849,7 @@ export type Scheme = {
   businesses: Array<Business>;
   chats: Array<Chat>;
   checklistFeatureActive: Scalars['Boolean'];
+  checklistRequired: Scalars['Boolean'];
   checklists: Array<Checklist>;
   connectedToSchemes: Array<Scheme>;
   contacts: Array<Contact>;
@@ -22688,6 +22746,7 @@ export type TaskQuestionCreateNestedManyWithoutTaskInput = {
 export type TaskQuestionCreateWithoutTaskInput = {
   answers?: InputMaybe<TaskQuestionCreateAnswerWithoutTaskInput>;
   question: ConnectHelper;
+  req?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type TaskQuestionListRelationFilter = {

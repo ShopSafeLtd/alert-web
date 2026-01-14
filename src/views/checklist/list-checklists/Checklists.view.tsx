@@ -1,15 +1,15 @@
+import type { FetchResult } from '@apollo/client';
 import type { CreateActiveChecklistMutation } from '#/views/checklist/graphql/mutations/__generated__/create-active-checklist.generated';
 import type { ActiveChecklistsQuery } from '#/views/checklist/graphql/queries/__generated__/list-active-checklists.generated';
 import type { ChecklistsQuery } from '#/views/checklist/graphql/queries/__generated__/list-checklists.generated';
-import type { FetchResult } from '@apollo/client';
 
-import PermissionCheckWrapper from '#/components/PermissionCheck/PermissionCheckWrapper';
-import BusinessesSelect from '#/components/form-components/BusinessesSelect/BusinessesSelect.view';
-import UsersSelect from '#/components/form-components/UsersSelect/UsersSelect.view';
-import DebouncedInput from '#/utils/debounced-input';
 import { DownOutlined, SettingOutlined } from '@ant-design/icons';
 import { faDownload, faEdit, faTrash } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import BusinessesSelect from '#/components/form-components/BusinessesSelect/BusinessesSelect.view';
+import UsersSelect from '#/components/form-components/UsersSelect/UsersSelect.view';
+import PermissionCheckWrapper from '#/components/PermissionCheck/PermissionCheckWrapper';
+import DebouncedInput from '#/utils/debounced-input';
 import {
   Button,
   Card,
@@ -40,8 +40,8 @@ import type {
   SetChecklistFilterModel,
 } from '../../../state/filter-model';
 
-import useStyles from './ListChcklists.styles';
 import CreateActiveChecklist from './drawer/create-active-checklist';
+import useStyles from './ListChcklists.styles';
 
 interface ChecklistsViewProps {
   activeChecklistSort: {
@@ -305,9 +305,21 @@ const ChecklistsView: React.FC<ChecklistsViewProps> = ({
                 width: 150,
               },
               {
+                dataIndex: 'timeTaken',
+                key: 'timeTaken',
+                title: <FormattedMessage defaultMessage="Time Taken" />,
+                width: 120,
+              },
+              {
                 dataIndex: 'completedByName',
                 key: 'completedByName',
                 title: <FormattedMessage defaultMessage="Completed By" />,
+                width: 150,
+              },
+              {
+                dataIndex: 'storeName',
+                key: 'storeName',
+                title: <FormattedMessage defaultMessage="Store" />,
                 width: 150,
               },
 
@@ -325,24 +337,38 @@ const ChecklistsView: React.FC<ChecklistsViewProps> = ({
                 ) => (
                   <Space>
                     {record.status === ChecklistStatus.Completed &&
-                      record.documentLink && (
+                      (record.documentLink ? (
                         <Tooltip
                           title={intl.formatMessage({
                             defaultMessage: 'Download Pdf',
                           })}
                         >
                           <Button
-                            icon={
-                              <FontAwesomeIcon
-                                icon={faDownload}
-                                onClick={() => window.open(record.documentLink)}
-                              />
-                            }
+                            icon={<FontAwesomeIcon icon={faDownload} />}
+                            onClick={() => window.open(record.documentLink)}
                             size="small"
                             style={{ zIndex: 1000 }}
                           />
                         </Tooltip>
-                      )}
+                      ) : (
+                        <Tooltip
+                          title={intl.formatMessage({
+                            defaultMessage: 'View Checklist',
+                          })}
+                        >
+                          <Button
+                            onClick={() =>
+                              window.open(
+                                `/app/checklists/active/${record.key}`,
+                                '_blank'
+                              )
+                            }
+                            size="small"
+                          >
+                            <FormattedMessage defaultMessage="View" />
+                          </Button>
+                        </Tooltip>
+                      ))}
                     {record.status === ChecklistStatus.Completed && (
                       <PermissionCheckWrapper
                         permission={{
@@ -422,6 +448,8 @@ const ChecklistsView: React.FC<ChecklistsViewProps> = ({
                 percentComplete: `${checklist.percentComplete || 0}%`,
                 score: checklist.percentageScore,
                 status: checklist.status,
+                storeName: checklist.business?.name || '',
+                timeTaken: checklist.timeTaken || '',
               })
             )}
             loading={activeChecklistsLoading}

@@ -16,7 +16,7 @@ interface Props {
   incidentTagsData: ListIncidentTagsQuery | undefined;
   incidentTagsLoading: boolean;
   incidentTypeTooltip?: null | string;
-  involvedMetadata?: { [key: string]: string }[];
+  involvedMetadata?: Record<string, unknown>[];
   oneSelectedIncidentTypeOnly: boolean;
   tags: { label: string; tooltip: string; type: TagType; value: string }[];
   tagsLoading: boolean;
