@@ -251,8 +251,10 @@ export type ActiveChecklist = {
   name?: Maybe<Scalars['String']>;
   percentComplete: Scalars['Int'];
   percentageScore: Scalars['String'];
+  scheme?: Maybe<Scheme>;
   signature?: Maybe<Scalars['String']>;
   status: ChecklistStatus;
+  timeTaken?: Maybe<Scalars['String']>;
   todos: Array<Todo>;
   updatedAt: Scalars['Date'];
 };
@@ -19847,6 +19849,7 @@ export type Scheme = {
   businesses: Array<Business>;
   chats: Array<Chat>;
   checklistFeatureActive: Scalars['Boolean'];
+  checklistRequired: Scalars['Boolean'];
   checklists: Array<Checklist>;
   connectedToSchemes: Array<Scheme>;
   contacts: Array<Contact>;
