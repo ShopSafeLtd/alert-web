@@ -11,6 +11,8 @@ interface Data {
   completedByUser: string;
   signature: string;
   title: string;
+  logo?: string;
+  storeName?: string;
 }
 
 const generateMg11 = () => {
@@ -28,6 +30,8 @@ const generateMg11 = () => {
       signature={data.signature}
       theme="light"
       title={data.title}
+      logo={data.logo}
+      storeName={data.storeName}
     />
   );
 };

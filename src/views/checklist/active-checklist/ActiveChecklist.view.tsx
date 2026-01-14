@@ -1,10 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-argument,no-restricted-syntax */
 import type { ActiveChecklistQuery } from '#/views/checklist/graphql/queries/__generated__/view-active-checklist.generated';
 import type { FormInstance } from 'antd';
 
-import FormattedMessageFixed from '#/components/util-components/FormattedMessageFixed';
-import { getCustomUrls } from '#/providers/GetCustomUrls';
-import MediaUrlUploader from '#/views/checklist/active-checklist/media-component';
 import {
   CheckCircleOutlined,
   ClockCircleOutlined,
@@ -14,6 +10,9 @@ import {
 } from '@ant-design/icons';
 import { faFileUpload } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import FormattedMessageFixed from '#/components/util-components/FormattedMessageFixed';
+import { getCustomUrls } from '#/providers/GetCustomUrls';
+import MediaUrlUploader from '#/views/checklist/active-checklist/media-component';
 import {
   Badge,
   Button,
@@ -40,8 +39,8 @@ import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router';
 import { useSearchParams } from 'react-router-dom';
 
-import SignatureInput from '../../../components/SignBox';
 import SigSeal from '../../../components/onboarding/Onboarding/SchemeTerms/SigSeal';
+import SignatureInput from '../../../components/SignBox';
 import { useStoreState } from '../../../state';
 import CompletedChecklistView from '../completed-checklist/CompletedChecklist.view';
 import useStyles from './ActiveChecklist.styles';
@@ -92,7 +91,7 @@ const normFile = (e: { fileList: never | never[] }) => {
   if (Array.isArray(e)) {
     return e;
   }
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+
   return e && e.fileList;
 };
 
@@ -126,7 +125,7 @@ const ActiveChecklistView = ({
   const theme = useStoreState((state) => state.theme.currentTheme);
   const [searchParams] = useSearchParams();
   const isEditMode = searchParams.get('edit') === 'true';
-
+  const schemeRequired = !!data?.activeChecklist.scheme?.checklistRequired;
   const watching = Form.useWatch('sections', form);
 
   // Render save status indicator
@@ -174,6 +173,8 @@ const ActiveChecklistView = ({
       completedByUser: data?.activeChecklist.completedBy?.origName || '',
       signature: data?.activeChecklist.signature || '',
       title: data?.activeChecklist.name || '',
+      logo: data?.activeChecklist.scheme?.logo?.urlPersisted || '',
+      storeName: data?.activeChecklist.business?.name || '',
     })
   );
   if (
@@ -198,6 +199,8 @@ const ActiveChecklistView = ({
         signature={data?.activeChecklist.signature || ''}
         theme={theme}
         title={data?.activeChecklist.name || ''}
+        logo={data?.activeChecklist.scheme?.logo?.urlPersisted || ''}
+        storeName={data?.activeChecklist.business?.name || ''}
       />
     );
   }
@@ -280,38 +283,46 @@ const ActiveChecklistView = ({
         ) : (
           <Form.List name="sections">
             {(fields) => {
+              const isSectionVisible = (sectionIndex: number): boolean => {
+                const section = sections[sectionIndex];
+                if (!section) return false;
+
+                const depends = section.dependsOnWeight;
+                if (!depends) return true;
+
+                const dependencyIndex = Number(depends.dependsOn) - 1;
+                const threshold = Number(depends.weight);
+
+                if (!isSectionVisible(dependencyIndex)) return false;
+
+                const dependSection = form.getFieldValue([
+                  'sections',
+                  dependencyIndex,
+                ]) as ActiveChecklistSection | undefined;
+
+                if (!dependSection) return false;
+
+                const totalWeight = dependSection.subsections
+                  .flatMap((sub) =>
+                    sub.questions.map((q) =>
+                      q.answer === 'N/A'
+                        ? 0
+                        : q.weights.find((w) => w.answer === q.answer)
+                            ?.weight || 0
+                    )
+                  )
+                  .reduce((a, b) => a + b, 0);
+
+                return totalWeight <= threshold;
+              };
+
               // Filter sections and map with field info
               const collapseItems = fields
                 .map(({ name }, fieldIndex) => {
                   const section = sections[fieldIndex];
                   if (!section) return null;
 
-                  const depends = section?.dependsOnWeight;
-
-                  // Check section dependency
-                  if (depends) {
-                    const dependencyIndex = Number(depends.dependsOn) - 1;
-                    const threshold = Number(depends.weight);
-                    const dependSection = form.getFieldValue([
-                      'sections',
-                      dependencyIndex,
-                    ]) as ActiveChecklistSection | undefined;
-
-                    if (!dependSection) return null;
-
-                    const totalWeight = dependSection.subsections
-                      .flatMap((sub) =>
-                        sub.questions.map((q) =>
-                          q.answer === 'N/A'
-                            ? 0
-                            : q.weights.find((w) => w.answer === q.answer)
-                                ?.weight || 0
-                        )
-                      )
-                      .reduce((a, b) => a + b, 0);
-
-                    if (totalWeight > threshold) return null;
-                  }
+                  if (!isSectionVisible(fieldIndex)) return null;
 
                   // Get section completion status
                   const sectionStats = completionStats.sectionCompletion.get(
@@ -485,6 +496,26 @@ const ActiveChecklistView = ({
                                                           questionName,
                                                           'answer',
                                                         ]}
+                                                        required={
+                                                          schemeRequired
+                                                        }
+                                                        rules={
+                                                          schemeRequired
+                                                            ? [
+                                                                {
+                                                                  required:
+                                                                    true,
+                                                                  message:
+                                                                    intl.formatMessage(
+                                                                      {
+                                                                        defaultMessage:
+                                                                          'This question is required',
+                                                                      }
+                                                                    ),
+                                                                },
+                                                              ]
+                                                            : []
+                                                        }
                                                       >
                                                         {question?.type ===
                                                         'TEXT' ? (
