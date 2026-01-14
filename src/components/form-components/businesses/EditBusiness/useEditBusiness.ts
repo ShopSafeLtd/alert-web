@@ -2,33 +2,35 @@ import type {
   BusinessesSideListQuery,
   BusinessesSideListQueryVariables,
 } from '#/components/businesses/BusinessSideList/graphql/queries/__generated__/sidelist.generated';
-import { BusinessesSideListDocument } from '#/components/businesses/BusinessSideList/graphql/queries/__generated__/sidelist.generated';
 import type { FormInstance } from 'antd';
-import { Form, notification } from 'antd';
 import type {
   SearchBusinessesQuery,
   SearchBusinessesQueryVariables,
 } from 'graphql/businesses/queries/__generated__/search-businesses.generated';
-import { SearchBusinessesDocument } from 'graphql/businesses/queries/__generated__/search-businesses.generated';
-import type { BusinessUpdateInput } from 'graphql/types';
-import { Model, QueryMode, SortOrder } from 'graphql/types';
+import type { BusinessUpdateInput, Currency } from 'graphql/types';
 import type { LocationData, TagData } from 'types/DataType';
+
+import { BusinessesSideListDocument } from '#/components/businesses/BusinessSideList/graphql/queries/__generated__/sidelist.generated';
+import { useSchemeGroupsSelectFilterQuery } from '#/components/form-components/businesses/EditBusiness/graphql/queries/__generated__/scheme-groups.generated';
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { useBrandsQuery } from '#/views/settings/brands/graphql/queries/__generated__/brands.generated';
 import { useApolloClient } from '@apollo/client';
+import { Form, notification } from 'antd';
 import { useUpdateBusinessMutation } from 'graphql/businesses/mutations/__generated__/update-business.generated';
 import { useEditBusinessQuery } from 'graphql/businesses/queries/__generated__/edit-business.generated';
+import { SearchBusinessesDocument } from 'graphql/businesses/queries/__generated__/search-businesses.generated';
 import { useTagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
+import { Model, QueryMode, SortOrder } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
 import errorNotification from 'types/mutation_notifications/error_notification';
-import { useSchemeGroupsSelectFilterQuery } from '#/components/form-components/businesses/EditBusiness/graphql/queries/__generated__/scheme-groups.generated';
 
 export interface OnSubmitValues {
   brands?: string[];
   building: string;
   county: string;
+  currency?: Currency | null;
   groups: string[];
   name: string;
   parent: {
@@ -52,6 +54,7 @@ interface Return {
   addTag: boolean;
   brands: { label: string; value: string }[];
   brandsLoading: boolean;
+  currency: Currency | null | undefined;
   form: FormInstance<OnSubmitValues>;
   groups: { label: string; value: string }[];
   groupsLoading: boolean;
@@ -89,6 +92,7 @@ const useEditBusiness = ({ businessId, onClose }: Props): Return => {
         brands: res.business?.brands,
         building: res.business?.locations[0]?.building || '',
         county: res.business?.locations[0]?.county || '',
+        currency: res.business?.currency || null,
         groups: res.business?.groups.map(({ id }) => id),
         name: res.business?.name || '',
         parent: res.business
@@ -387,6 +391,10 @@ const useEditBusiness = ({ businessId, onClose }: Props): Return => {
           brands: {
             set: values.brands?.map((id: string) => ({ id })) || [],
           },
+          currency:
+            values.currency === undefined
+              ? undefined
+              : { set: values.currency },
           groups: {
             set: values.groups?.map((id: string) => ({ id })) || [],
           },
@@ -524,6 +532,7 @@ const useEditBusiness = ({ businessId, onClose }: Props): Return => {
         value: group.id,
       })) || [],
     brandsLoading,
+    currency: data?.business?.currency,
     form,
     groups,
     groupsLoading,

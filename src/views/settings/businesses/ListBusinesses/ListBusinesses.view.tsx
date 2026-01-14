@@ -2,6 +2,7 @@ import type { BusinessesListQuery } from '#/views/settings/businesses/ListBusine
 import type { FilterLabels } from '#/views/settings/businesses/ListBusinesses/useListBusinesses';
 import type { BusinessData } from 'types/DataType';
 
+import { CurrencyCodeMap } from '#/providers/SchemeProvider/SchemeProvider';
 import DebouncedInput from '#/utils/debounced-input';
 import {
   formatPoliceAreas,
@@ -28,7 +29,7 @@ import {
 } from 'antd';
 import AddBusiness from 'components/form-components/businesses/AddBusiness';
 import LinkBusiness from 'components/form-components/businesses/LinkBusiness';
-import { PoliceForce } from 'graphql/types';
+import { Currency, PoliceForce } from 'graphql/types';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
@@ -47,8 +48,10 @@ interface TableData {
 interface Props {
   addVisible: boolean;
   canDelete: boolean;
+  currencyFilter: Currency[];
   data: BusinessesListQuery | undefined;
   deleteConfirm: (value: string) => void;
+  divisionFilter: string[];
   filtersOpen: boolean;
   groupData: FilterLabels[];
   groupFilter: string[];
@@ -63,6 +66,8 @@ interface Props {
   policeAreaFilter: PoliceForce[];
   saving: boolean;
   searchValue: string;
+  setCurrencyFilter: (value: Currency[]) => void;
+  setDivisionFilter: (value: string[]) => void;
   setGroupFilter: (value: string[]) => void;
   setPagination: (value: { page: number; pageSize: number }) => void;
   setParentFilter: (value: string[]) => void;
@@ -78,8 +83,10 @@ interface Props {
 const ListBusinesses = ({
   addVisible,
   canDelete,
+  currencyFilter,
   data,
   deleteConfirm,
+  divisionFilter,
   filtersOpen,
   groupData,
   groupFilter,
@@ -94,6 +101,8 @@ const ListBusinesses = ({
   policeAreaFilter,
   saving,
   searchValue,
+  setCurrencyFilter,
+  setDivisionFilter,
   setGroupFilter,
   setPagination,
   setParentFilter,
@@ -429,6 +438,51 @@ const ListBusinesses = ({
                   })}
                   style={{ width: '100%' }}
                   value={tagFilter}
+                />
+              </Form.Item>
+            </Col>
+            <Col span={24}>
+              <Form.Item
+                label={intl.formatMessage({ defaultMessage: 'Division' })}
+              >
+                <Select
+                  allowClear
+                  maxTagCount={4}
+                  mode="tags"
+                  onChange={(value: string[]) => {
+                    resetPage();
+                    setDivisionFilter(value);
+                  }}
+                  placeholder={intl.formatMessage({
+                    defaultMessage: 'Enter Division',
+                  })}
+                  style={{ width: '100%' }}
+                  value={divisionFilter}
+                />
+              </Form.Item>
+            </Col>
+            <Col span={24}>
+              <Form.Item
+                label={intl.formatMessage({ defaultMessage: 'Currency' })}
+              >
+                <Select
+                  allowClear
+                  maxTagCount={4}
+                  mode="multiple"
+                  onChange={(value: Currency[]) => {
+                    resetPage();
+                    setCurrencyFilter(value);
+                  }}
+                  optionFilterProp="label"
+                  options={Object.values(Currency).map((curr) => ({
+                    label: CurrencyCodeMap[curr],
+                    value: curr,
+                  }))}
+                  placeholder={intl.formatMessage({
+                    defaultMessage: 'Select Currency',
+                  })}
+                  style={{ width: '100%' }}
+                  value={currencyFilter}
                 />
               </Form.Item>
             </Col>

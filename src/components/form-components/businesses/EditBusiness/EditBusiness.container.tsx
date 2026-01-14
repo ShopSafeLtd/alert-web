@@ -13,6 +13,7 @@ const EditBusiness = ({ businessId, onClose }: Props) => {
     addTag,
     brands,
     brandsLoading,
+    currency,
     form,
     groups,
     groupsLoading,
@@ -33,6 +34,7 @@ const EditBusiness = ({ businessId, onClose }: Props) => {
       addTag={addTag}
       brands={brands}
       brandsLoading={brandsLoading}
+      currency={currency}
       form={form}
       groups={groups}
       groupsLoading={groupsLoading}

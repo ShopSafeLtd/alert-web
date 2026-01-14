@@ -1,6 +1,7 @@
 import type { FormInstance } from 'antd';
 import type { LocationData, TagData } from 'types/DataType';
 
+import { CurrencyCodeMap } from '#/providers/SchemeProvider/SchemeProvider';
 import { faPlus } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -18,6 +19,7 @@ import {
 import DebounceSelect from 'components/form-components/DebounceSelect';
 import AddTag from 'components/form-components/tags/AddTag';
 import LocatingCard from 'components/map/LocatingCard';
+import { Currency } from 'graphql/types';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
@@ -27,6 +29,7 @@ interface Props {
   addTag: boolean;
   brands: { label: string; value: string }[];
   brandsLoading: boolean;
+  currency: Currency | null | undefined;
   form: FormInstance<OnSubmitValues>;
   groups: { label: string; value: string }[];
   groupsLoading: boolean;
@@ -49,6 +52,7 @@ const EditBusiness = ({
   addTag,
   brands,
   brandsLoading,
+  currency: _currency,
   form,
   groups,
   groupsLoading,
@@ -157,6 +161,36 @@ const EditBusiness = ({
               {brands.map((el) => (
                 <Select.Option label={el.label} value={el.value}>
                   {el.label}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+        </Col>
+      </Row>
+      <Row gutter={16}>
+        <Col span={18}>
+          <Form.Item
+            label={intl.formatMessage({
+              defaultMessage: 'Currency',
+            })}
+            name="currency"
+          >
+            <Select
+              allowClear
+              disabled={saving}
+              optionFilterProp="label"
+              placeholder={intl.formatMessage({
+                defaultMessage: 'Select Currency',
+              })}
+              showSearch
+            >
+              {Object.values(Currency).map((curr) => (
+                <Select.Option
+                  key={curr}
+                  label={CurrencyCodeMap[curr]}
+                  value={curr}
+                >
+                  {CurrencyCodeMap[curr]}
                 </Select.Option>
               ))}
             </Select>

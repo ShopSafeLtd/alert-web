@@ -2,7 +2,7 @@ import type {
   BusinessesListQuery,
   BusinessesListQueryVariables,
 } from '#/views/settings/businesses/ListBusinesses/graphql/queries/__generated__/list-businesses.generated';
-import type { PoliceForce } from 'graphql/types';
+import type { Currency, PoliceForce } from 'graphql/types';
 import type { BusinessData } from 'types/DataType';
 
 import { useLinkBusinessToSchemeMutation } from '#/graphql/businesses/mutations/__generated__/link-business-to-scheme.generated';
@@ -36,8 +36,10 @@ export interface FilterLabels {
 interface Return {
   addVisible: boolean;
   canDelete: boolean;
+  currencyFilter: Currency[];
   data: BusinessesListQuery | undefined;
   deleteConfirm: (value: string) => void;
+  divisionFilter: string[];
   filtersOpen: boolean;
   groupData: FilterLabels[];
   groupFilter: string[];
@@ -52,6 +54,8 @@ interface Return {
   policeAreaFilter: PoliceForce[];
   saving: boolean;
   searchValue: string;
+  setCurrencyFilter: (value: Currency[]) => void;
+  setDivisionFilter: (value: string[]) => void;
   setGroupFilter: (value: string[]) => void;
   setPagination: (value: { page: number; pageSize: number }) => void;
   setParentFilter: (value: string[]) => void;
@@ -78,6 +82,8 @@ const useListBusinesses = (): Return => {
   const [groupFilter, setGroupFilter] = useState<string[]>([]);
   const [tagFilter, setTagFilter] = useState<string[]>([]);
   const [policeAreaFilter, setPoliceAreaFilter] = useState<PoliceForce[]>([]);
+  const [currencyFilter, setCurrencyFilter] = useState<Currency[]>([]);
+  const [divisionFilter, setDivisionFilter] = useState<string[]>([]);
   const variables: BusinessesListQueryVariables = {
     orderBy: {
       name: SortOrder.Asc,
@@ -85,16 +91,22 @@ const useListBusinesses = (): Return => {
     skip: (pagination.page - 1) * pagination.pageSize,
     take: pagination.pageSize,
     where: {
-      groups:
-        groupFilter.length > 0
-          ? { some: { id: { in: groupFilter } } }
-          : undefined,
+      ...(groupFilter.length > 0 && {
+        groups: { some: { id: { in: groupFilter } } },
+      }),
       name: {
         contains: searchValue,
         mode: QueryMode.Insensitive,
       },
-      policeArea:
-        policeAreaFilter.length > 0 ? { hasSome: policeAreaFilter } : undefined,
+      ...(policeAreaFilter.length > 0 && {
+        policeArea: { hasSome: policeAreaFilter },
+      }),
+      ...(currencyFilter.length > 0 && {
+        currency: { in: currencyFilter },
+      }),
+      ...(divisionFilter.length > 0 && {
+        division: { in: divisionFilter },
+      }),
       schemes: {
         some: {
           id: {
@@ -105,7 +117,8 @@ const useListBusinesses = (): Return => {
     },
   };
   const { data } = useBusinessesListQuery({
-    nextFetchPolicy: 'cache-first',
+    fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: 'cache-and-network',
     variables,
   });
 
@@ -417,8 +430,10 @@ const useListBusinesses = (): Return => {
   return {
     addVisible,
     canDelete,
+    currencyFilter,
     data,
     deleteConfirm,
+    divisionFilter,
     filtersOpen,
     groupData,
     groupFilter,
@@ -433,6 +448,8 @@ const useListBusinesses = (): Return => {
     policeAreaFilter,
     saving,
     searchValue,
+    setCurrencyFilter,
+    setDivisionFilter,
     setGroupFilter,
     setPagination,
     setParentFilter,
