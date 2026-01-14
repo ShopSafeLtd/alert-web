@@ -35,5 +35,6 @@ mutation UpdateBusiness(
       name
     }
     totalUsers
+    currency
   }
 }

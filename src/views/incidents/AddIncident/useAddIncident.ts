@@ -72,7 +72,7 @@ interface Props {
 }
 
 export type IncidentFormState = {
-  metadata?: { [key: string]: string }[];
+  metadata?: Record<string, unknown>[];
   type: IncidentFormField;
 }[];
 

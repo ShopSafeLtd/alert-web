@@ -239,168 +239,6 @@ const useActiveChecklist = (): Return => {
     []
   );
 
-  // Debounced auto-save function
-  const debouncedSave = useCallback(() => {
-    // Don't auto-save when editing a completed checklist
-    if (isEditMode) {
-      return;
-    }
-
-    if (autoSaveTimerRef.current) {
-      clearTimeout(autoSaveTimerRef.current);
-    }
-
-    autoSaveTimerRef.current = setTimeout(() => {
-      setSaveStatus('saving');
-      saveChecklist(true);
-    }, 10_000); // 10 seconds
-  }, [isEditMode]);
-
-  // Watch form changes for completion tracking and auto-save
-  const formValues = Form.useWatch([], form);
-
-  useEffect(() => {
-    if (formValues && sections.length > 0) {
-      const stats = calculateCompletion(formValues);
-      setCompletionStats(stats);
-
-      // Trigger auto-save
-      debouncedSave();
-    }
-  }, [formValues, sections, calculateCompletion, debouncedSave]);
-
-  // Cleanup timers on unmount
-  useEffect(
-    () => () => {
-      if (autoSaveTimerRef.current) {
-        clearTimeout(autoSaveTimerRef.current);
-      }
-      if (saveStatusTimerRef.current) {
-        clearTimeout(saveStatusTimerRef.current);
-      }
-    },
-    []
-  );
-
-  const { data, loading } = useActiveChecklistQuery({
-    onCompleted: (initData) => {
-      try {
-        const sectionsData =
-          initData.activeChecklist?.checklistSection
-            .filter((section) => !section.sub)
-            .sort((a, b) => a.section - b.section) || [];
-
-        const subsections = initData.activeChecklist?.checklistSection.filter(
-          (section) => section.sub
-        );
-
-        const questionsMap = new Map<
-          number,
-          Map<number, ActiveChecklistQuery['activeChecklist']['fields']>
-        >();
-
-        // eslint-disable-next-line no-restricted-syntax,no-unsafe-optional-chaining
-        for (const field of initData.activeChecklist?.fields) {
-          const { section, subsection } = field;
-
-          if (!questionsMap.has(section)) {
-            questionsMap.set(section, new Map());
-          }
-          if (!questionsMap.get(section)?.has(subsection)) {
-            questionsMap.get(section)?.set(subsection, []);
-          }
-          questionsMap.get(section)?.get(subsection)?.push(field);
-        }
-
-        const sectionsAndSubsections = sectionsData.map((section) => {
-          const subsectionsForSection =
-            subsections
-              ?.filter((subsection) => subsection.section === section.section)
-              .sort((a, b) => (a.subsection || 0) - (b.subsection || 0)) || [];
-
-          return {
-            ...section,
-            subsections:
-              subsectionsForSection.map((subsection) => {
-                const questionsForSection =
-                  questionsMap
-                    .get(section.section)
-                    ?.get(subsection.subsection || 1)
-                    ?.sort((a, b) => a.order - b.order)
-                    .filter(
-                      (ques) =>
-                        !(
-                          initData.activeChecklist.status === 'COMPLETED' &&
-                          ques.dependent &&
-                          !ques.answer?.answer
-                        )
-                    ) || [];
-                return {
-                  ...subsection,
-                  questions: questionsForSection.map((question) => ({
-                    ...question,
-                    additionalComments:
-                      question?.answer?.additionalComments || '',
-                    answer: question?.answer?.answer || '',
-                    availableAnswers: (question?.availableAnswers ||
-                      []) as AvailableAnswer[],
-                    images:
-                      question?.answer?.images?.map((image, index) => ({
-                        name: `image-${index + 1}`,
-                        status: 'done',
-                        uid: `-${index + 1}`,
-                        url: image,
-                      })) || [],
-                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-                    ogName: question.question.og || '',
-                    weights:
-                      question.availableAnswers?.map((weight) => ({
-                        answer: (weight.answer as string) || '',
-                        weight: (weight.weight as number) || 0,
-                      })) || [],
-                  })),
-                };
-              }) || [],
-          };
-        });
-
-        form.setFieldsValue({
-          additionalInfo: initData?.activeChecklist?.comments || '',
-          // @ts-expect-error type error with generics
-          sections: sectionsAndSubsections,
-        });
-        setSections(sectionsAndSubsections as ActiveChecklistSection[]);
-
-        // Set all sections open by default
-        const allSectionKeys = sectionsAndSubsections.map((_, index) =>
-          index.toString()
-        );
-        setActiveKeys(allSectionKeys);
-
-        if (initData?.activeChecklist?.signature) {
-          setSign(initData.activeChecklist.signature);
-        }
-
-        // Store original signature and completion date if editing a completed checklist
-        if (isEditMode && initData?.activeChecklist?.status === 'COMPLETED') {
-          originalSignatureRef.current =
-            initData.activeChecklist.signature || '';
-          originalCompletionDateRef.current = initData.activeChecklist
-            .completedAt
-            ? String(initData.activeChecklist.completedAt)
-            : '';
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    variables: {
-      where: {
-        id: id || '',
-      },
-    },
-  });
-
   const [completeChecklist] = useCompleteChecklistMutation({
     onCompleted: () => {
       setSubmitting(false);
@@ -635,6 +473,170 @@ const useActiveChecklist = (): Return => {
       },
     });
   };
+
+  // Debounced auto-save function
+
+  const debouncedSave = useCallback(() => {
+    // Don't auto-save when editing a completed checklist
+    if (isEditMode) {
+      return;
+    }
+
+    if (autoSaveTimerRef.current) {
+      clearTimeout(autoSaveTimerRef.current);
+    }
+
+    autoSaveTimerRef.current = setTimeout(() => {
+      setSaveStatus('saving');
+      saveChecklist(true);
+    }, 10_000); // 10 seconds
+  }, [isEditMode]);
+
+  // Watch form changes for completion tracking and auto-save
+  const formValues = Form.useWatch([], form);
+
+  useEffect(() => {
+    if (formValues && sections.length > 0) {
+      const stats = calculateCompletion(formValues);
+      setCompletionStats(stats);
+
+      // Trigger auto-save
+      debouncedSave();
+    }
+  }, [formValues, sections, calculateCompletion, debouncedSave]);
+
+  // Cleanup timers on unmount
+  useEffect(
+    () => () => {
+      if (autoSaveTimerRef.current) {
+        clearTimeout(autoSaveTimerRef.current);
+      }
+      if (saveStatusTimerRef.current) {
+        clearTimeout(saveStatusTimerRef.current);
+      }
+    },
+    []
+  );
+
+  const { data, loading } = useActiveChecklistQuery({
+    onCompleted: (initData) => {
+      try {
+        const sectionsData =
+          initData.activeChecklist?.checklistSection
+            .filter((section) => !section.sub)
+            .sort((a, b) => a.section - b.section) || [];
+
+        const subsections = initData.activeChecklist?.checklistSection.filter(
+          (section) => section.sub
+        );
+
+        const questionsMap = new Map<
+          number,
+          Map<number, ActiveChecklistQuery['activeChecklist']['fields']>
+        >();
+
+        // eslint-disable-next-line no-unsafe-optional-chaining
+        for (const field of initData.activeChecklist?.fields) {
+          const { section, subsection } = field;
+
+          if (!questionsMap.has(section)) {
+            questionsMap.set(section, new Map());
+          }
+          if (!questionsMap.get(section)?.has(subsection)) {
+            questionsMap.get(section)?.set(subsection, []);
+          }
+          questionsMap.get(section)?.get(subsection)?.push(field);
+        }
+
+        const sectionsAndSubsections = sectionsData.map((section) => {
+          const subsectionsForSection =
+            subsections
+              ?.filter((subsection) => subsection.section === section.section)
+              .sort((a, b) => (a.subsection || 0) - (b.subsection || 0)) || [];
+
+          return {
+            ...section,
+            subsections:
+              subsectionsForSection.map((subsection) => {
+                const questionsForSection =
+                  questionsMap
+                    .get(section.section)
+                    ?.get(subsection.subsection || 1)
+                    ?.sort((a, b) => a.order - b.order)
+                    .filter(
+                      (ques) =>
+                        !(
+                          initData.activeChecklist.status === 'COMPLETED' &&
+                          ques.dependent &&
+                          !ques.answer?.answer
+                        )
+                    ) || [];
+                return {
+                  ...subsection,
+                  questions: questionsForSection.map((question) => ({
+                    ...question,
+                    additionalComments:
+                      question?.answer?.additionalComments || '',
+                    answer: question?.answer?.answer || '',
+                    availableAnswers: (question?.availableAnswers ||
+                      []) as AvailableAnswer[],
+                    images:
+                      question?.answer?.images?.map((image, index) => ({
+                        name: `image-${index + 1}`,
+                        status: 'done',
+                        uid: `-${index + 1}`,
+                        url: image,
+                      })) || [],
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                    ogName: question.question.og || '',
+                    weights:
+                      question.availableAnswers?.map((weight) => ({
+                        answer: (weight.answer as string) || '',
+                        weight: (weight.weight as number) || 0,
+                      })) || [],
+                  })),
+                };
+              }) || [],
+          };
+        });
+
+        form.setFieldsValue({
+          additionalInfo: initData?.activeChecklist?.comments || '',
+          // @ts-expect-error type error with generics
+          sections: sectionsAndSubsections,
+        });
+        setSections(sectionsAndSubsections as ActiveChecklistSection[]);
+
+        // Set all sections open by default
+        const allSectionKeys = sectionsAndSubsections.map((_, index) =>
+          index.toString()
+        );
+        setActiveKeys(allSectionKeys);
+
+        if (initData?.activeChecklist?.signature) {
+          setSign(initData.activeChecklist.signature);
+        }
+
+        // Store original signature and completion date if editing a completed checklist
+        if (isEditMode && initData?.activeChecklist?.status === 'COMPLETED') {
+          originalSignatureRef.current =
+            initData.activeChecklist.signature || '';
+          originalCompletionDateRef.current = initData.activeChecklist
+            .completedAt
+            ? String(initData.activeChecklist.completedAt)
+            : '';
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    variables: {
+      where: {
+        id: id || '',
+      },
+    },
+  });
+
   const onFinish = (values: FormData) => {
     saveChecklist(false, values);
   };
@@ -644,7 +646,6 @@ const useActiveChecklist = (): Return => {
   };
 
   console.log(sections);
-
   return {
     activeKeys,
     completionStats,

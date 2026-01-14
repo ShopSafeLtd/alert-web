@@ -1,7 +1,7 @@
 /* eslint-disable formatjs/no-literal-string-in-jsx */
-import PermissionCheckWrapper from '#/components/PermissionCheck/PermissionCheckWrapper';
 import { faEdit } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import PermissionCheckWrapper from '#/components/PermissionCheck/PermissionCheckWrapper';
 import {
   Button,
   Card,
@@ -52,6 +52,8 @@ const CompletedChecklistView = ({
   signature,
   theme = 'dark',
   title,
+  logo,
+  storeName,
 }: {
   additionalInfo: string;
   checklistId?: string;
@@ -63,6 +65,8 @@ const CompletedChecklistView = ({
   signature: string;
   theme?: 'dark' | 'light';
   title: string;
+  logo?: string;
+  storeName?: string;
 }) => {
   const intl = useIntl();
   const navigate = useNavigate();
@@ -239,6 +243,41 @@ const CompletedChecklistView = ({
   if (generating)
     return (
       <div className="page" ref={componentRef}>
+        {(logo || storeName) && (
+          <Row style={{ marginBottom: 20, alignItems: 'center' }}>
+            {logo && (
+              <Col>
+                <img
+                  alt="Logo"
+                  src={logo}
+                  style={{ maxHeight: 80, maxWidth: 200, objectFit: 'contain' }}
+                />
+              </Col>
+            )}
+            <Col flex={1} />
+            <Col>
+              <div
+                style={{
+                  border: '1px solid #d9d9d9',
+                  padding: 12,
+                  borderRadius: 4,
+                }}
+              >
+                {storeName && (
+                  <Typography.Text strong style={{ display: 'block' }}>
+                    {storeName}
+                  </Typography.Text>
+                )}
+                <Typography.Text type="secondary" style={{ display: 'block' }}>
+                  {completedAt}
+                </Typography.Text>
+                <Typography.Text type="secondary" style={{ display: 'block' }}>
+                  {completedByUser}
+                </Typography.Text>
+              </div>
+            </Col>
+          </Row>
+        )}
         <Typography.Title level={2}>{title}</Typography.Title>
         <Row
           style={{
@@ -724,6 +763,51 @@ const CompletedChecklistView = ({
 
       <Card>
         <div ref={componentRef}>
+          {(logo || storeName) && (
+            <Row style={{ marginBottom: 20, alignItems: 'center' }}>
+              {logo && (
+                <Col>
+                  <img
+                    alt="Logo"
+                    src={logo}
+                    style={{
+                      maxHeight: 80,
+                      maxWidth: 200,
+                      objectFit: 'contain',
+                    }}
+                  />
+                </Col>
+              )}
+              <Col flex={1} />
+              <Col>
+                <div
+                  style={{
+                    border: '1px solid #d9d9d9',
+                    padding: 12,
+                    borderRadius: 4,
+                  }}
+                >
+                  {storeName && (
+                    <Typography.Text strong style={{ display: 'block' }}>
+                      {storeName}
+                    </Typography.Text>
+                  )}
+                  <Typography.Text
+                    type="secondary"
+                    style={{ display: 'block' }}
+                  >
+                    {completedAt}
+                  </Typography.Text>
+                  <Typography.Text
+                    type="secondary"
+                    style={{ display: 'block' }}
+                  >
+                    {completedByUser}
+                  </Typography.Text>
+                </div>
+              </Col>
+            </Row>
+          )}
           <Typography.Title level={2}>{title}</Typography.Title>
           <Row
             style={{

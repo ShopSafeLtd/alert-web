@@ -9,7 +9,7 @@ export type UpdateBusinessMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateBusinessMutation = { __typename?: 'Mutation', updateBusiness: { __typename?: 'Business', id: string, name: string, siteNumber?: string | null, fullName: string, publicName: boolean, demId?: string | null, totalUsers: number, parent?: { __typename?: 'Business', id: string, name: string, fullName: string, publicName: boolean } | null, locations: Array<{ __typename?: 'Address', id: string, building?: string | null, street?: string | null, townCity?: string | null, county?: string | null, postcode?: string | null, geoLng?: number | null, geoLat?: number | null, full: string }>, groups: Array<{ __typename?: 'Group', id: string, name: string }>, tags: Array<{ __typename?: 'Tag', id: string, name: string }> } };
+export type UpdateBusinessMutation = { __typename?: 'Mutation', updateBusiness: { __typename?: 'Business', id: string, name: string, siteNumber?: string | null, fullName: string, publicName: boolean, demId?: string | null, totalUsers: number, currency?: Types.Currency | null, parent?: { __typename?: 'Business', id: string, name: string, fullName: string, publicName: boolean } | null, locations: Array<{ __typename?: 'Address', id: string, building?: string | null, street?: string | null, townCity?: string | null, county?: string | null, postcode?: string | null, geoLng?: number | null, geoLat?: number | null, full: string }>, groups: Array<{ __typename?: 'Group', id: string, name: string }>, tags: Array<{ __typename?: 'Tag', id: string, name: string }> } };
 
 
 export const UpdateBusinessDocument = gql`
@@ -47,6 +47,7 @@ export const UpdateBusinessDocument = gql`
       name
     }
     totalUsers
+    currency
   }
 }
     `;

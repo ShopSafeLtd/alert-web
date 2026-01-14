@@ -11,7 +11,7 @@ export type BusinessesListQueryVariables = Types.Exact<{
 }>;
 
 
-export type BusinessesListQuery = { __typename?: 'Query', businessRelay: { __typename?: 'QueryBusinessRelayConnection', totalCount: number, edges: Array<{ __typename?: 'QueryBusinessRelayConnectionEdge', node: { __typename?: 'Business', id: string, name: string, siteNumber?: string | null, fullName: string, publicName: boolean, policeArea: Array<Types.PoliceForce>, demId?: string | null, totalUsers: number, parent?: { __typename?: 'Business', id: string, name: string } | null, locations: Array<{ __typename?: 'Address', id: string, full: string }>, groups: Array<{ __typename?: 'Group', id: string, name: string }>, tags: Array<{ __typename?: 'Tag', id: string, name: string }> } }> } };
+export type BusinessesListQuery = { __typename?: 'Query', businessRelay: { __typename?: 'QueryBusinessRelayConnection', totalCount: number, edges: Array<{ __typename?: 'QueryBusinessRelayConnectionEdge', node: { __typename?: 'Business', id: string, name: string, siteNumber?: string | null, fullName: string, publicName: boolean, policeArea: Array<Types.PoliceForce>, demId?: string | null, totalUsers: number, currency?: Types.Currency | null, division?: string | null, parent?: { __typename?: 'Business', id: string, name: string } | null, locations: Array<{ __typename?: 'Address', id: string, full: string }>, groups: Array<{ __typename?: 'Group', id: string, name: string }>, tags: Array<{ __typename?: 'Tag', id: string, name: string }> } }> } };
 
 
 export const BusinessesListDocument = gql`
@@ -44,6 +44,8 @@ export const BusinessesListDocument = gql`
           name
         }
         totalUsers
+        currency
+        division
       }
     }
   }

@@ -7,8 +7,10 @@ const ListBusinesses = () => {
   const {
     addVisible,
     canDelete,
+    currencyFilter,
     data,
     deleteConfirm,
+    divisionFilter,
     filtersOpen,
     groupData,
     groupFilter,
@@ -23,6 +25,8 @@ const ListBusinesses = () => {
     policeAreaFilter,
     saving,
     searchValue,
+    setCurrencyFilter,
+    setDivisionFilter,
     setGroupFilter,
     setPagination,
     setParentFilter,
@@ -39,8 +43,10 @@ const ListBusinesses = () => {
     <View
       addVisible={addVisible}
       canDelete={canDelete}
+      currencyFilter={currencyFilter}
       data={data}
       deleteConfirm={deleteConfirm}
+      divisionFilter={divisionFilter}
       filtersOpen={filtersOpen}
       groupData={groupData}
       groupFilter={groupFilter}
@@ -55,6 +61,8 @@ const ListBusinesses = () => {
       policeAreaFilter={policeAreaFilter}
       saving={saving}
       searchValue={searchValue}
+      setCurrencyFilter={setCurrencyFilter}
+      setDivisionFilter={setDivisionFilter}
       setGroupFilter={setGroupFilter}
       setPagination={setPagination}
       setParentFilter={setParentFilter}

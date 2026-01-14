@@ -15,7 +15,7 @@ interface Props {
   incidentTagsData: ListIncidentTagsQuery | undefined;
   incidentTagsLoading: boolean;
 
-  involvedMetadata?: { [key: string]: string }[];
+  involvedMetadata?: Record<string, unknown>[];
   setPoliceReporting: (value: boolean) => void;
   tagsData: TagsQuery | undefined;
 }
