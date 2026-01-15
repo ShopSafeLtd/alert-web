@@ -250,7 +250,11 @@ const CompletedChecklistView = ({
                 <img
                   alt="Logo"
                   src={logo}
-                  style={{ maxHeight: 80, maxWidth: 200, objectFit: 'contain' }}
+                  style={{
+                    maxHeight: 200,
+                    maxWidth: 500,
+                    objectFit: 'contain',
+                  }}
                 />
               </Col>
             )}
@@ -265,14 +269,14 @@ const CompletedChecklistView = ({
               >
                 {storeName && (
                   <Typography.Text strong style={{ display: 'block' }}>
-                    {storeName}
+                    Store: {storeName}
                   </Typography.Text>
                 )}
                 <Typography.Text type="secondary" style={{ display: 'block' }}>
-                  {completedAt}
+                  Completed: {completedAt}
                 </Typography.Text>
                 <Typography.Text type="secondary" style={{ display: 'block' }}>
-                  {completedByUser}
+                  By: {completedByUser}
                 </Typography.Text>
               </div>
             </Col>
@@ -771,8 +775,8 @@ const CompletedChecklistView = ({
                     alt="Logo"
                     src={logo}
                     style={{
-                      maxHeight: 80,
-                      maxWidth: 200,
+                      maxHeight: 200,
+                      maxWidth: 500,
                       objectFit: 'contain',
                     }}
                   />
@@ -789,20 +793,20 @@ const CompletedChecklistView = ({
                 >
                   {storeName && (
                     <Typography.Text strong style={{ display: 'block' }}>
-                      {storeName}
+                      Store: {storeName}
                     </Typography.Text>
                   )}
                   <Typography.Text
                     type="secondary"
                     style={{ display: 'block' }}
                   >
-                    {completedAt}
+                    Completed: {completedAt}
                   </Typography.Text>
                   <Typography.Text
                     type="secondary"
                     style={{ display: 'block' }}
                   >
-                    {completedByUser}
+                    By: {completedByUser}
                   </Typography.Text>
                 </div>
               </Col>
