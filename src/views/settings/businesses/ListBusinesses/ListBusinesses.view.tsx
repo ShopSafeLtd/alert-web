@@ -9,6 +9,7 @@ import {
   formatPoliceForceLabel,
 } from '#/utils/formatPoliceAreas';
 import {
+  faCodeMerge,
   faFilter,
   faLink,
   faPlus,
@@ -35,6 +36,7 @@ import { useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 
 import useStyles from './ListBusinesses.styles';
+import MergeBusinessesModal from './components/MergeBusinessesModal';
 
 interface TableData {
   key: string;
@@ -48,15 +50,25 @@ interface TableData {
 interface Props {
   addVisible: boolean;
   canDelete: boolean;
+  canMerge: boolean;
   currencyFilter: Currency[];
   data: BusinessesListQuery | undefined;
   deleteConfirm: (value: string) => void;
   divisionFilter: string[];
   filtersOpen: boolean;
+  getSelectedBusinesses: () => {
+    id: string;
+    name: string;
+    totalUsers: number;
+  }[];
   groupData: FilterLabels[];
   groupFilter: string[];
+  handleMergeConfirm: (mainBusinessId: string) => void;
+  handleRowSelectionChange: (selectedRowKeys: React.Key[]) => void;
   linkVisible: boolean;
   loading: boolean;
+  mergeModalVisible: boolean;
+  merging: boolean;
   onSearchChange: (value: string) => void;
   onSubmit: (value: BusinessData) => void;
   onUpdateLinkBusiness: (value: string) => void;
@@ -66,6 +78,7 @@ interface Props {
   policeAreaFilter: PoliceForce[];
   saving: boolean;
   searchValue: string;
+  selectedBusinessIds: string[];
   setCurrencyFilter: (value: Currency[]) => void;
   setDivisionFilter: (value: string[]) => void;
   setGroupFilter: (value: string[]) => void;
@@ -78,20 +91,27 @@ interface Props {
   toggleAddVisible: () => void;
   toggleFiltersOpen: () => void;
   toggleLinkVisible: () => void;
+  toggleMergeModal: () => void;
 }
 
 const ListBusinesses = ({
   addVisible,
   canDelete,
+  canMerge,
   currencyFilter,
   data,
   deleteConfirm,
   divisionFilter,
   filtersOpen,
+  getSelectedBusinesses,
   groupData,
   groupFilter,
+  handleMergeConfirm,
+  handleRowSelectionChange,
   linkVisible,
   loading,
+  mergeModalVisible,
+  merging,
   onSearchChange,
   onSubmit,
   onUpdateLinkBusiness,
@@ -101,6 +121,7 @@ const ListBusinesses = ({
   policeAreaFilter,
   saving,
   searchValue,
+  selectedBusinessIds,
   setCurrencyFilter,
   setDivisionFilter,
   setGroupFilter,
@@ -113,6 +134,7 @@ const ListBusinesses = ({
   toggleAddVisible,
   toggleFiltersOpen,
   toggleLinkVisible,
+  toggleMergeModal,
 }: Props) => {
   const classNames = useStyles();
   const intl = useIntl();
@@ -185,6 +207,47 @@ const ListBusinesses = ({
             />
           </Tooltip>
         </Col>
+        {canMerge && selectedBusinessIds.length >= 2 && (
+          <Col
+            style={{
+              alignItems: 'center',
+              display: 'flex',
+              marginBottom: 5,
+            }}
+          >
+            <Tooltip
+              title={intl.formatMessage({
+                defaultMessage: 'Merge Selected Businesses',
+              })}
+            >
+              <Button
+                icon={
+                  <FontAwesomeIcon
+                    icon={faCodeMerge}
+                    size="lg"
+                    style={{ marginRight: 5 }}
+                  />
+                }
+                onClick={toggleMergeModal}
+                style={{
+                  borderBottomLeftRadius: 0,
+                  borderBottomRightRadius: 0,
+                  borderLeftWidth: 0,
+                  borderTopLeftRadius: 0,
+                  borderTopRightRadius: 0,
+                }}
+                type="primary"
+              >
+                {intl.formatMessage(
+                  {
+                    defaultMessage: 'Merge ({count})',
+                  },
+                  { count: selectedBusinessIds.length }
+                )}
+              </Button>
+            </Tooltip>
+          </Col>
+        )}
         <Col>
           <Tooltip
             title={intl.formatMessage({
@@ -327,6 +390,15 @@ const ListBusinesses = ({
           pageSize: pagination.pageSize,
           total: data?.businessRelay.totalCount,
         }}
+        rowSelection={
+          canMerge
+            ? {
+                onChange: handleRowSelectionChange,
+                selectedRowKeys: selectedBusinessIds,
+                type: 'checkbox',
+              }
+            : undefined
+        }
         size="small"
       />
 
@@ -517,6 +589,14 @@ const ListBusinesses = ({
           </Row>
         </Form>
       </Drawer>
+
+      <MergeBusinessesModal
+        businesses={getSelectedBusinesses()}
+        loading={merging}
+        onCancel={toggleMergeModal}
+        onConfirm={handleMergeConfirm}
+        visible={mergeModalVisible}
+      />
     </div>
   );
 };

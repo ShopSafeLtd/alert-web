@@ -21,6 +21,7 @@ import { useParentBusinessesListQuery } from '#/views/settings/businesses/ListBu
 import { Modal, notification } from 'antd';
 import { useCreateBusinessMutation } from 'graphql/businesses/mutations/__generated__/create-business.generated';
 import { useDeleteBusinessMutation } from 'graphql/businesses/mutations/__generated__/delete-business.generated';
+import { useMergeBusinessesMutation } from 'graphql/businesses/mutations/__generated__/merge-businesses.generated';
 import { Model, QueryMode, SortOrder } from 'graphql/types';
 import { PermissionMethod, PermissionModel } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
@@ -36,15 +37,25 @@ export interface FilterLabels {
 interface Return {
   addVisible: boolean;
   canDelete: boolean;
+  canMerge: boolean;
   currencyFilter: Currency[];
   data: BusinessesListQuery | undefined;
   deleteConfirm: (value: string) => void;
   divisionFilter: string[];
   filtersOpen: boolean;
+  getSelectedBusinesses: () => {
+    id: string;
+    name: string;
+    totalUsers: number;
+  }[];
   groupData: FilterLabels[];
   groupFilter: string[];
+  handleMergeConfirm: (mainBusinessId: string) => void;
+  handleRowSelectionChange: (selectedRowKeys: React.Key[]) => void;
   linkVisible: boolean;
   loading: boolean;
+  mergeModalVisible: boolean;
+  merging: boolean;
   onSearchChange: (value: string) => void;
   onSubmit: (value: BusinessData) => void;
   onUpdateLinkBusiness: (value: string) => void;
@@ -54,6 +65,7 @@ interface Return {
   policeAreaFilter: PoliceForce[];
   saving: boolean;
   searchValue: string;
+  selectedBusinessIds: string[];
   setCurrencyFilter: (value: Currency[]) => void;
   setDivisionFilter: (value: string[]) => void;
   setGroupFilter: (value: string[]) => void;
@@ -66,6 +78,7 @@ interface Return {
   toggleAddVisible: () => void;
   toggleFiltersOpen: () => void;
   toggleLinkVisible: () => void;
+  toggleMergeModal: () => void;
 }
 
 const useListBusinesses = (): Return => {
@@ -84,6 +97,9 @@ const useListBusinesses = (): Return => {
   const [policeAreaFilter, setPoliceAreaFilter] = useState<PoliceForce[]>([]);
   const [currencyFilter, setCurrencyFilter] = useState<Currency[]>([]);
   const [divisionFilter, setDivisionFilter] = useState<string[]>([]);
+  const [selectedBusinessIds, setSelectedBusinessIds] = useState<string[]>([]);
+  const [mergeModalVisible, setMergeModalVisible] = useState(false);
+  const [merging, setMerging] = useState(false);
   const variables: BusinessesListQueryVariables = {
     orderBy: {
       name: SortOrder.Asc,
@@ -425,20 +441,126 @@ const useListBusinesses = (): Return => {
     permissions,
   });
 
+  const canMerge = hasPermission({
+    permission: {
+      method: PermissionMethod.Edit,
+      model: PermissionModel.Businesses,
+    },
+    permissions,
+  });
+
   const toggleFiltersOpen = () => setFiltersOpen(!filtersOpen);
+
+  const [mergeBusinesses] = useMergeBusinessesMutation({
+    onCompleted: () => {
+      setMerging(false);
+      setMergeModalVisible(false);
+      setSelectedBusinessIds([]);
+      notification.success({
+        description: intl.formatMessage({
+          defaultMessage:
+            'The selected businesses have been merged successfully.',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Businesses Merged',
+        }),
+        placement: 'bottomRight',
+      });
+    },
+    onError: () => {
+      setMerging(false);
+      errorNotification();
+    },
+    update: (store, result) => {
+      if (!result.data) return;
+
+      const existingData = store.readQuery<
+        BusinessesListQuery,
+        BusinessesListQueryVariables
+      >({
+        query: BusinessesListDocument,
+        variables,
+      });
+
+      if (!existingData) return;
+
+      const mergedBusiness = result.data.mergeBusinesses;
+      const businessIdsToRemove = selectedBusinessIds.filter(
+        (id) => id !== mergedBusiness.id
+      );
+
+      store.writeQuery<BusinessesListQuery, BusinessesListQueryVariables>({
+        data: {
+          __typename: 'Query',
+          businessRelay: {
+            ...existingData.businessRelay,
+            edges: existingData.businessRelay.edges
+              .filter(({ node }) => !businessIdsToRemove.includes(node.id))
+              .map((edge) =>
+                edge.node.id === mergedBusiness.id
+                  ? { ...edge, node: mergedBusiness }
+                  : edge
+              ),
+            totalCount:
+              existingData.businessRelay.totalCount -
+              businessIdsToRemove.length,
+          },
+        },
+        query: BusinessesListDocument,
+        variables,
+      });
+    },
+  });
+
+  const handleRowSelectionChange = (selectedRowKeys: React.Key[]) => {
+    setSelectedBusinessIds(selectedRowKeys as string[]);
+  };
+
+  const toggleMergeModal = () => {
+    setMergeModalVisible(!mergeModalVisible);
+  };
+
+  const getSelectedBusinesses = () => {
+    if (!data) return [];
+    return data.businessRelay.edges
+      .filter(({ node }) => selectedBusinessIds.includes(node.id))
+      .map(({ node }) => ({
+        id: node.id,
+        name: node.name,
+        totalUsers: node.totalUsers,
+      }));
+  };
+
+  const handleMergeConfirm = (mainBusinessId: string) => {
+    setMerging(true);
+    void mergeBusinesses({
+      variables: {
+        data: {
+          businessIds: selectedBusinessIds,
+          mainBusinessId,
+        },
+      },
+    });
+  };
 
   return {
     addVisible,
     canDelete,
+    canMerge,
     currencyFilter,
     data,
     deleteConfirm,
     divisionFilter,
     filtersOpen,
+    getSelectedBusinesses,
     groupData,
     groupFilter,
+    handleMergeConfirm,
+    handleRowSelectionChange,
     linkVisible,
     loading: !data,
+    mergeModalVisible,
+    merging,
     onSearchChange,
     onSubmit,
     onUpdateLinkBusiness,
@@ -448,6 +570,7 @@ const useListBusinesses = (): Return => {
     policeAreaFilter,
     saving,
     searchValue,
+    selectedBusinessIds,
     setCurrencyFilter,
     setDivisionFilter,
     setGroupFilter,
@@ -460,6 +583,7 @@ const useListBusinesses = (): Return => {
     toggleAddVisible,
     toggleFiltersOpen,
     toggleLinkVisible,
+    toggleMergeModal,
   };
 };
 
