@@ -48,6 +48,7 @@ type PickedProps = Pick<
   | 'incidentTimeCountCheck'
   | 'lessThanSelected'
   | 'loading'
+  | 'lossValueBetweenSelected'
   | 'lossValueSelected'
   | 'modelSelected'
   | 'prefix'
@@ -149,6 +150,7 @@ const WorkflowConditions: React.FC<PickedProps> = ({
           goodsTypeCheck={props.goodsTypeCheck}
           groupsSelected={props.groupsSelected}
           lessThanSelected={props.lessThanSelected}
+          lossValueBetweenSelected={props.lossValueBetweenSelected}
           lossValueSelected={props.lossValueSelected}
           prefix={props.prefix}
           prioritySelected={props.prioritySelected}
