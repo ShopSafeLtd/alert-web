@@ -36,6 +36,7 @@ type PickedBase = Pick<
   | 'goodsTypeCheck'
   | 'groupsSelected'
   | 'lessThanSelected'
+  | 'lossValueBetweenSelected'
   | 'lossValueSelected'
   | 'prefix'
   | 'prioritySelected'
@@ -69,6 +70,7 @@ const IncidentConditions: React.FC<IncidentConditionsProps> = ({
   goodsTypeCheck,
   groupsSelected,
   lessThanSelected,
+  lossValueBetweenSelected,
   lossValueSelected,
   prefix,
   prioritySelected,
@@ -536,6 +538,127 @@ const IncidentConditions: React.FC<IncidentConditionsProps> = ({
             >
               <InputNumber min={0} prefix={prefix} style={{ width: '100%' }} />
             </Form.Item>
+          </div>
+        )}
+      </div>
+
+      {/* Total Loss Value Between Section */}
+      <Divider style={{ marginBottom: 0, marginTop: 0 }} />
+      <div>
+        <Row style={{ padding: 20 }} wrap={false}>
+          <Col flex={1}>
+            <Typography.Title
+              level={4}
+              style={{
+                alignItems: 'center',
+                display: 'flex',
+                paddingTop: 8,
+              }}
+            >
+              <FormattedMessage defaultMessage="Total Loss Value Between" />
+            </Typography.Title>
+            <Typography.Text type="secondary">
+              <FormattedMessage defaultMessage="Only trigger the workflow if the incident total loss value (total loss - recovered) falls within a specified range." />
+            </Typography.Text>
+          </Col>
+          <Col span={2}>
+            <Form.Item name="lossValueBetweenCheck" valuePropName="checked">
+              <Switch />
+            </Form.Item>
+          </Col>
+        </Row>
+        {lossValueBetweenSelected && (
+          <div className={classes.cardBody}>
+            <Row gutter={16}>
+              <Col span={12}>
+                <Form.Item
+                  label={
+                    <FormattedMessage defaultMessage="Minimum loss value" />
+                  }
+                  name="lossValueBetweenMin"
+                  rules={[
+                    {
+                      message: 'Please enter a minimum value',
+                      required: true,
+                    },
+                    {
+                      message: 'Minimum value must be 0 or greater',
+                      min: 0,
+                      type: 'number',
+                    },
+                    ({ getFieldValue }) => ({
+                      validator(_, value) {
+                        const maxValue = getFieldValue(
+                          'lossValueBetweenMax'
+                        ) as number | undefined;
+                        if (
+                          value !== undefined &&
+                          maxValue !== undefined &&
+                          value > maxValue
+                        ) {
+                          return Promise.reject(
+                            new Error(
+                              'Minimum must be less than or equal to maximum'
+                            )
+                          );
+                        }
+                        return Promise.resolve();
+                      },
+                    }),
+                  ]}
+                >
+                  <InputNumber
+                    min={0}
+                    prefix={prefix}
+                    style={{ width: '100%' }}
+                  />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item
+                  label={
+                    <FormattedMessage defaultMessage="Maximum loss value" />
+                  }
+                  name="lossValueBetweenMax"
+                  rules={[
+                    {
+                      message: 'Please enter a maximum value',
+                      required: true,
+                    },
+                    {
+                      message: 'Maximum value must be 0 or greater',
+                      min: 0,
+                      type: 'number',
+                    },
+                    ({ getFieldValue }) => ({
+                      validator(_, value) {
+                        const minValue = getFieldValue(
+                          'lossValueBetweenMin'
+                        ) as number | undefined;
+                        if (
+                          value !== undefined &&
+                          minValue !== undefined &&
+                          value < minValue
+                        ) {
+                          return Promise.reject(
+                            new Error(
+                              'Maximum must be greater than or equal to minimum'
+                            )
+                          );
+                        }
+                        return Promise.resolve();
+                      },
+                    }),
+                  ]}
+                >
+                  <InputNumber
+                    min={0}
+                    prefix={prefix}
+                    style={{ width: '100%' }}
+                  />
+                </Form.Item>
+              </Col>
+            </Row>
           </div>
         )}
       </div>
