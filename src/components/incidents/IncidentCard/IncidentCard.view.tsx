@@ -329,6 +329,23 @@ const IncidentCard = ({
                       {incident?.subject}
                     </Title>
                   </Col>
+                  {incident?.draft && (
+                    <Col style={{ marginTop: 2 }}>
+                      <Tooltip
+                        title={intl.formatMessage({
+                          defaultMessage:
+                            'This incident is a live draft awaiting completion',
+                        })}
+                      >
+                        <Tag
+                          color="orange"
+                          style={{ fontSize: 10, padding: '0 4px' }}
+                        >
+                          <FormattedMessage defaultMessage="LIVE" />
+                        </Tag>
+                      </Tooltip>
+                    </Col>
+                  )}
                   {currentScheme.incidentStatusEnabled &&
                     incident?.newIncident && (
                       <Col style={{ marginTop: 2 }}>
@@ -584,6 +601,20 @@ const IncidentCard = ({
                     {incident?.subject}
                   </Title>
                 </Col>
+                {incident?.draft && (
+                  <Col>
+                    <Tooltip
+                      title={intl.formatMessage({
+                        defaultMessage:
+                          'This incident is a live draft awaiting completion',
+                      })}
+                    >
+                      <Tag color="orange">
+                        <FormattedMessage defaultMessage="LIVE" />
+                      </Tag>
+                    </Tooltip>
+                  </Col>
+                )}
                 {currentScheme.incidentStatusEnabled &&
                   incident?.newIncident && (
                     <Col>
