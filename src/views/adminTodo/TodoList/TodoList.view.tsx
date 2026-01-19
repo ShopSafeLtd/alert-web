@@ -118,7 +118,7 @@ const getLinkedItemId = (todo: TodoListQuery['todoRelay']['edges'][0]) => {
             <div style={{ marginTop: 4 }}>
               <Space size={[0, 4]} wrap>
                 {todo.node.incident.crimeTypes.map((type) => (
-                  <Tag color="red" key={type.id} size="small">
+                  <Tag color="red" key={type.id}>
                     {type.name}
                   </Tag>
                 ))}
