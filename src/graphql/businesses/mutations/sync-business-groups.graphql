@@ -1,0 +1,21 @@
+mutation SyncBusinessGroups(
+  $schemeId: String!
+  $strategy: GroupSyncStrategy!
+  $businessIds: [String!]
+) {
+  syncBusinessGroups(
+    data: {
+      schemeId: $schemeId
+      strategy: $strategy
+      businessIds: $businessIds
+    }
+  ) {
+    success
+    message
+    businessesProcessed
+    totalIncidentsUpdated
+    totalOffendersUpdated
+    totalVehiclesUpdated
+    totalErrors
+  }
+}

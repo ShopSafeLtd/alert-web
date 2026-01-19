@@ -13,6 +13,7 @@ const EditBusiness = ({ businessId, onClose }: Props) => {
     addTag,
     brands,
     brandsLoading,
+    businessName,
     currency,
     form,
     groups,
@@ -21,8 +22,11 @@ const EditBusiness = ({ businessId, onClose }: Props) => {
     location,
     onSearchBusiness,
     onSubmit,
+    onSyncCancel,
+    onSyncConfirm,
     saving,
     setLocation,
+    showSyncModal,
     tags,
     tagsLoading,
     toggleAddTag,
@@ -34,6 +38,7 @@ const EditBusiness = ({ businessId, onClose }: Props) => {
       addTag={addTag}
       brands={brands}
       brandsLoading={brandsLoading}
+      businessName={businessName}
       currency={currency}
       form={form}
       groups={groups}
@@ -43,8 +48,11 @@ const EditBusiness = ({ businessId, onClose }: Props) => {
       onClose={onClose}
       onSearchBusiness={onSearchBusiness}
       onSubmit={onSubmit}
+      onSyncCancel={onSyncCancel}
+      onSyncConfirm={onSyncConfirm}
       saving={saving}
       setLocation={setLocation}
+      showSyncModal={showSyncModal}
       tags={tags}
       tagsLoading={tagsLoading}
       toggleAddTag={toggleAddTag}

@@ -1721,6 +1721,16 @@ export enum BusinessScalarFieldEnum {
   UpdatedAt = 'updatedAt'
 }
 
+export type BusinessSyncResult = {
+  __typename?: 'BusinessSyncResult';
+  businessId: Scalars['String'];
+  businessName: Scalars['String'];
+  groupCount: Scalars['Int'];
+  incidents: EntitySyncStats;
+  offenders: EntitySyncStats;
+  vehicles: EntitySyncStats;
+};
+
 export type BusinessUpdateInput = {
   brands?: InputMaybe<BusinessBrandsInput>;
   currency?: InputMaybe<NullableEnumCurrencyFieldUpdateOperationsInput>;
@@ -5037,6 +5047,13 @@ export type EnhancedTranscription = {
   suggestedCorrections: Array<TranscriptionCorrection>;
 };
 
+export type EntitySyncStats = {
+  __typename?: 'EntitySyncStats';
+  errors: Scalars['Int'];
+  found: Scalars['Int'];
+  updated: Scalars['Int'];
+};
+
 export type EnumAiSuggestionStatusNullableFilter = {
   equals?: InputMaybe<AiSuggestionStatus>;
   in?: InputMaybe<Array<AiSuggestionStatus>>;
@@ -7102,6 +7119,11 @@ export type GroupSummary = {
   name: Scalars['String'];
   totalIncidents: Scalars['Int'];
 };
+
+export enum GroupSyncStrategy {
+  Merge = 'MERGE',
+  Replace = 'REPLACE'
+}
 
 export type GroupUpdateInput = {
   approver?: InputMaybe<SetArrayHelper>;
@@ -11420,6 +11442,7 @@ export type Mutation = {
   subscribeToInvestigation: Investigation;
   subscribeToOffender: Offender;
   subscribeToVehicle: Vehicle;
+  syncBusinessGroups: SyncBusinessGroupsResult;
   /** Syncs police force data for all businesses in a scheme based on their postcodes. Only processes businesses that do not already have police force data assigned. */
   syncBusinessPoliceForces: SyncPoliceForceResult;
   syncFeedItems: SystemTask;
@@ -12702,6 +12725,11 @@ export type MutationSubscribeToOffenderArgs = {
 
 export type MutationSubscribeToVehicleArgs = {
   where: UniqueId;
+};
+
+
+export type MutationSyncBusinessGroupsArgs = {
+  data: SyncBusinessGroupsInput;
 };
 
 
@@ -22083,6 +22111,24 @@ export type SuggestedQuestion = {
   question: Scalars['String'];
   questionType?: Maybe<Scalars['String']>;
   required: Scalars['Boolean'];
+};
+
+export type SyncBusinessGroupsInput = {
+  businessIds?: InputMaybe<Array<Scalars['String']>>;
+  schemeId: Scalars['String'];
+  strategy?: InputMaybe<GroupSyncStrategy>;
+};
+
+export type SyncBusinessGroupsResult = {
+  __typename?: 'SyncBusinessGroupsResult';
+  businessResults: Array<BusinessSyncResult>;
+  businessesProcessed: Scalars['Int'];
+  message: Scalars['String'];
+  success: Scalars['Boolean'];
+  totalErrors: Scalars['Int'];
+  totalIncidentsUpdated: Scalars['Int'];
+  totalOffendersUpdated: Scalars['Int'];
+  totalVehiclesUpdated: Scalars['Int'];
 };
 
 /** Result of syncing police forces for businesses based on their postcodes */
