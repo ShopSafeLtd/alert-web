@@ -11,6 +11,7 @@ import type {
   BanData,
   EditFeedImage,
   ImageCardData,
+  InvestigationData,
   LocationData,
   VehicleData,
 } from 'types/DataType';
@@ -23,6 +24,7 @@ import { currencyAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import useReportPrint from '#/utils/reportPrint/usePrintReports';
 import AiDetailsView from '#/views/profiles/offenders/ViewOffender/components/AiDetails.view';
 import OffenderAiDrawer from '#/views/profiles/offenders/ViewOffender/components/AiDrawer/AiDrawer.view';
+import OffenderSidebar from '#/views/profiles/offenders/ViewOffender/components/OffenderSidebar';
 import OffenderVision from '#/views/profiles/offenders/ViewOffender/components/OffenderVision/OffenderVision.view';
 import {
   faBell,
@@ -34,8 +36,10 @@ import {
   faEarth,
   faEdit,
   faFileDownload,
+  faFolderOpen,
   faHeadSide,
   faImage,
+  faLink,
   faMagnifyingGlass,
   faMarsAndVenus,
   faMemoCircleInfo,
@@ -74,10 +78,9 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
-import UpdateBar from 'components/MessageInput/UpdateBar';
 import ImagesList from 'components/ViewPage/ImagesList';
-import IntelSection from 'components/ViewPage/IntelSection';
 import AddInvestigation from 'components/form-components/Investigation/AddInvestigation';
+import LinkInvestigation from 'components/form-components/Investigation/LinkInvestigation';
 import AddVehicleSimple from 'components/form-components/Vehicle/AddVehicleSimple';
 import EditVehicleSimple from 'components/form-components/Vehicle/EditVehicleSimple';
 import AddLocation from 'components/form-components/addresses/AddLocation';
@@ -103,7 +106,12 @@ import EvidenceTable from 'components/tables/EvidenceTable';
 import InvestigationTable from 'components/tables/InvestigationTable';
 import VehicleTable from 'components/tables/VehicleTable';
 import dayjs from 'dayjs';
-import { BanType, PermissionMethod, PermissionModel } from 'graphql/types';
+import {
+  BanType,
+  PermissionMethod,
+  PermissionModel,
+  SortOrder,
+} from 'graphql/types';
 import { useAtomValue } from 'jotai';
 import React, { type Dispatch } from 'react';
 import { useIntl } from 'react-intl';
@@ -165,16 +173,25 @@ interface Props {
   deleteRights: boolean;
   editAddressData: LocationData | null;
   editBanData: BanData | null;
-
   editImageData: EditFeedImage | null;
   editImages: boolean;
   editOffender: boolean;
   editRights: boolean;
   editUpdate: { id: string; text: string } | null;
+
   editUpdateInput: string;
   editVehicleData: VehicleData | null;
+  handleCreateInvestigation: (investigationId: string) => Promise<void>;
   handleEditUpdate: () => void;
+  handleIncidentSort: (
+    field: 'date' | 'totalValue',
+    order: 'ascend' | 'descend'
+  ) => void;
+  handleLinkInvestigation: (investigation: InvestigationData) => Promise<void>;
+  handleUnlinkInvestigation: (investigationId: string) => Promise<void>;
   hasConnectedSchemes: boolean;
+  incidentSortField: 'date' | 'totalValue';
+  incidentSortOrder: SortOrder;
   incidents: OffenderIncidentsQuery['offender']['incidents'] | null;
   incidentsLoading: boolean;
   incidentsPagination: PaginationState;
@@ -185,6 +202,8 @@ interface Props {
     open: boolean;
   };
   linkIncident: boolean;
+  linkInvestigation: boolean;
+  linkingInvestigation: boolean;
   loadMore: boolean;
   loading: boolean;
   offenderId: string;
@@ -258,6 +277,7 @@ interface Props {
   toggleEditOffender: () => void;
   toggleKnowOffender: () => void;
   toggleLinkIncident: () => void;
+  toggleLinkInvestigation: () => void;
   toggleSelectImages: (id: string) => void;
   toggleShareOpen: () => void;
   toggleShowIncidentOptions: () => void;
@@ -302,14 +322,21 @@ const ViewOffender = ({
   editUpdateInput,
   editVehicleData,
   handleEditUpdate,
+  handleIncidentSort,
+  handleLinkInvestigation,
+  handleUnlinkInvestigation,
   hasConnectedSchemes,
+  incidentSortField,
+  incidentSortOrder,
   incidents,
-  // incidentsLoading,
-  // incidentsPagination,
+  incidentsLoading,
   // incidentsPaginationDispatch,
   knowOffender,
   lightBoxOpen,
+  // incidentsPagination,
   linkIncident,
+  linkInvestigation,
+  linkingInvestigation,
   loadMore,
   loading,
   offenderId,
@@ -368,6 +395,7 @@ const ViewOffender = ({
   toggleEditOffender,
   toggleKnowOffender,
   toggleLinkIncident,
+  toggleLinkInvestigation,
   toggleSelectImages,
   toggleShareOpen,
   toggleShowIncidentOptions,
@@ -1657,31 +1685,35 @@ const ViewOffender = ({
                                   defaultMessage: 'Incidents',
                                 })}
                               </Title>
-                              {data?.offender?.incidents.length && !loading ? (
+                              {incidents?.length || incidentsLoading ? (
                                 <IncidentTable
                                   hasNavigation
                                   incidents={
-                                    data?.offender?.incidents?.map(
-                                      (incident) => ({
-                                        ...incident,
-                                        dayTime: incident.dayTime,
-                                        offenders:
-                                          incident.offenders?.map(
-                                            (offender) => ({
-                                              ...offender,
-                                              images:
-                                                offender.images?.map((img) => ({
-                                                  id: img.id,
-                                                  optimised: img.optimised,
-                                                  position: null,
-                                                  rotation: img.rotation,
-                                                })) || null,
-                                              reference:
-                                                offender.reference?.toString(),
-                                            })
-                                          ) || [],
-                                      })
-                                    ) || []
+                                    incidents?.map((incident) => ({
+                                      ...incident,
+                                      dayTime: incident.dayTime,
+                                      offenders:
+                                        incident.offenders?.map((offender) => ({
+                                          ...offender,
+                                          images:
+                                            offender.images?.map((img) => ({
+                                              id: img.id,
+                                              optimised: img.optimised,
+                                              position: null,
+                                              rotation: img.rotation,
+                                            })) || null,
+                                          reference:
+                                            offender.reference?.toString(),
+                                        })) || [],
+                                    })) || []
+                                  }
+                                  loading={incidentsLoading}
+                                  onSortChange={handleIncidentSort}
+                                  sortField={incidentSortField}
+                                  sortOrder={
+                                    incidentSortOrder === SortOrder.Asc
+                                      ? 'ascend'
+                                      : 'descend'
                                   }
                                 />
                               ) : (
@@ -2127,20 +2159,48 @@ const ViewOffender = ({
                                   unauthorizedElement={<div />}
                                 >
                                   <Col className="no-print">
-                                    <Button
-                                      icon={
-                                        <FontAwesomeIcon
-                                          icon={faPlus}
-                                          style={{ marginRight: 5 }}
-                                        />
-                                      }
-                                      onClick={toggleAddInvestigation}
-                                      size="small"
+                                    <Dropdown
+                                      menu={{
+                                        items: [
+                                          {
+                                            icon: (
+                                              <FontAwesomeIcon icon={faPlus} />
+                                            ),
+                                            key: 'create',
+                                            label: intl.formatMessage({
+                                              defaultMessage:
+                                                'Create New Investigation',
+                                            }),
+                                            onClick: toggleAddInvestigation,
+                                          },
+                                          {
+                                            icon: (
+                                              <FontAwesomeIcon icon={faLink} />
+                                            ),
+                                            key: 'link',
+                                            label: intl.formatMessage({
+                                              defaultMessage:
+                                                'Link to Existing Investigation',
+                                            }),
+                                            onClick: toggleLinkInvestigation,
+                                          },
+                                        ],
+                                      }}
                                     >
-                                      {intl.formatMessage({
-                                        defaultMessage: 'Add Investigation',
-                                      })}
-                                    </Button>
+                                      <Button
+                                        icon={
+                                          <FontAwesomeIcon
+                                            icon={faFolderOpen}
+                                            style={{ marginRight: 5 }}
+                                          />
+                                        }
+                                        size="small"
+                                      >
+                                        {intl.formatMessage({
+                                          defaultMessage: 'Investigations',
+                                        })}
+                                      </Button>
+                                    </Dropdown>
                                   </Col>
                                 </PermissionCheckWrapper>
                               </Row>
@@ -2150,6 +2210,12 @@ const ViewOffender = ({
                                   investigations={
                                     data?.offender?.investigations
                                   }
+                                  onUnlink={(id) => {
+                                    handleUnlinkInvestigation(id).catch(() => {
+                                      // Error already handled in mutation
+                                    });
+                                  }}
+                                  unlinking={linkingInvestigation}
                                 />
                               ) : (
                                 <Empty
@@ -2169,367 +2235,22 @@ const ViewOffender = ({
                 </div>
               </Col>
               <Col className="no-print" span={8}>
-                <div className={classes.updatesContainer}>
-                  <IntelSection
-                    confirmDeleteUpdate={confirmDeleteUpdate}
-                    editRights={editRights}
-                    loadMore={loadMore}
-                    onAddToIncident={
-                      incidents && incidents.length > 0
-                        ? (value) => onAddUpdateImages(value, true)
-                        : undefined
-                    }
-                    onAddToOffender={(value) => onAddUpdateImages(value)}
-                    optionRowShow={optionRowShow}
-                    saving={saving}
-                    scrolledToTop={scrolledToTop}
-                    setEditUpdate={setEditUpdate}
-                    setReplyTo={setReplyTo}
-                    updates={data?.offender?.updates}
-                    userId={userId}
-                  />
-                  {/* <InfiniteScroll
-                    height={
-                      optionRowShow
-                        ? 'calc(100vh - 279px)'
-                        : 'calc(100vh - 169px)'
-                    }
-                    className="update-scroll"
-                    initialScrollY={0}
-                    dataLength={data?.offender?.updates?.length || 0}
-                    next={scrolledToTop}
-                    hasMore={loadMore}
-                    inverse
-                    style={{
-                      justifyContent: 'end',
-                      // display: 'flex',
-                      flexDirection: 'column',
-                    }}
-                    loader={
-                      <div className="message-date">
-                        <div className="date-line" />
-                        <div className="date">
-                          {intl.formatMessage({
-                            defaultMessage: 'Loading...',
-                            id: 'gjBiyj',
-                          })}
-                        </div>
-                        <div className="date-line" />
-                      </div>
-                    }
-                  >
-                    {data?.offender?.updates.map((update) => (
-                      <div key={update.id} className="update-wrapper">
-                        {editRights && update.type !== UpdateType.System ? (
-                          <Popover
-                            trigger="click"
-                            placement={
-                              update.createdBy.id === userId ? 'left' : 'right'
-                            }
-                            overlayClassName="message-popover"
-                            content={
-                              <div
-                                style={{
-                                  display: 'flex',
-                                  flexDirection: 'column',
-                                }}
-                              >
-                                <Button
-                                  type="text"
-                                  disabled={saving}
-                                  icon={
-                                    <FontAwesomeIcon
-                                      style={{ marginRight: 5 }}
-                                      icon={faEdit}
-                                      size="lg"
-                                    />
-                                  }
-                                  onClick={() => {
-                                    setEditUpdate({
-                                      id: update.id,
-                                      text: update.text || '',
-                                    });
-                                  }}
-                                  size="small"
-                                >
-                                  {intl.formatMessage({
-                                    defaultMessage: 'Edit Update',
-                                    id: 'pCzvx3',
-                                  })}
-                                </Button>
-                                <Button
-                                  type="text"
-                                  disabled={saving}
-                                  icon={
-                                    <FontAwesomeIcon
-                                      style={{ marginRight: 5 }}
-                                      icon={faTrash}
-                                      size="lg"
-                                    />
-                                  }
-                                  onClick={() => {
-                                    confirmDeleteUpdate(update.id);
-                                  }}
-                                  size="small"
-                                >
-                                  {intl.formatMessage({
-                                    defaultMessage: 'Delete Update',
-                                    id: 'ef1dfd',
-                                  })}
-                                </Button>
-                              </div>
-                            }
-                          >
-                            <div>
-                              <UpdateContent
-                                userId={userId}
-                                content={update.text}
-                                from={update.createdBy}
-                                id={update.id}
-                                images={update.images}
-                                incidents={update.linkedIncidents}
-                                offenders={update.linkedOffenders}
-                                vehicles={update.linkedVehicles}
-                                crimeGroups={update.linkedCrimeGroups}
-                                showDate
-                                showUser
-                              />
-                            </div>
-                          </Popover>
-                        ) : (
-                          <UpdateContent
-                            userId={userId}
-                            content={update.text}
-                            from={update.createdBy}
-                            id={update.id}
-                            images={update.images}
-                            incidents={update.linkedIncidents}
-                            offenders={update.linkedOffenders}
-                            vehicles={update.linkedVehicles}
-                            crimeGroups={update.linkedCrimeGroups}
-                            showDate
-                            showUser
-                          />
-                        )}
-                        {update.replies.map((reply) => (
-                          <div className="update-reply">
-                            {editRights ? (
-                              <Popover
-                                trigger="click"
-                                placement={
-                                  reply.createdBy.id === userId
-                                    ? 'left'
-                                    : 'right'
-                                }
-                                overlayClassName="message-popover"
-                                content={
-                                  <div
-                                    style={{
-                                      display: 'flex',
-                                      flexDirection: 'column',
-                                    }}
-                                  >
-                                    <Button
-                                      type="text"
-                                      disabled={saving}
-                                      icon={
-                                        <FontAwesomeIcon
-                                          style={{ marginRight: 5 }}
-                                          icon={faEdit}
-                                          size="lg"
-                                        />
-                                      }
-                                      onClick={() => {
-                                        setEditUpdate({
-                                          id: reply.id,
-                                          text: reply.text || '',
-                                        });
-                                      }}
-                                      size="small"
-                                    >
-                                      {intl.formatMessage({
-                                        defaultMessage: 'Edit Update',
-                                        id: 'pCzvx3',
-                                      })}
-                                    </Button>
-                                    <Button
-                                      type="text"
-                                      disabled={saving}
-                                      icon={
-                                        <FontAwesomeIcon
-                                          style={{ marginRight: 5 }}
-                                          icon={faTrash}
-                                          size="lg"
-                                        />
-                                      }
-                                      onClick={() => {
-                                        confirmDeleteUpdate(reply.id);
-                                      }}
-                                      size="small"
-                                    >
-                                      {intl.formatMessage({
-                                        defaultMessage: 'Delete Update',
-                                        id: 'ef1dfd',
-                                      })}
-                                    </Button>
-                                  </div>
-                                }
-                              >
-                                <div>
-                                  <UpdateContent
-                                    userId={userId}
-                                    content={reply.text}
-                                    from={reply.createdBy}
-                                    id={reply.id}
-                                    images={reply.images}
-                                    incidents={reply.linkedIncidents}
-                                    offenders={reply.linkedOffenders}
-                                    vehicles={update.linkedVehicles}
-                                    crimeGroups={update.linkedCrimeGroups}
-                                    showDate
-                                    showUser
-                                  />
-                                </div>
-                              </Popover>
-                            ) : (
-                              <UpdateContent
-                                userId={userId}
-                                content={reply.text}
-                                from={reply.createdBy}
-                                id={reply.id}
-                                images={reply.images}
-                                incidents={reply.linkedIncidents}
-                                offenders={reply.linkedOffenders}
-                                vehicles={update.linkedVehicles}
-                                crimeGroups={update.linkedCrimeGroups}
-                                showDate
-                                showUser
-                              />
-                            )}
-                          </div>
-                        ))}
-                        <Row>
-                          {update.type !== UpdateType.System && (
-                            <Col>
-                              <Button
-                                style={{
-                                  marginLeft:
-                                    update.replies.length > 0 ? 48 : 0,
-                                }}
-                                type="text"
-                                danger
-                                size="small"
-                                onClick={() =>
-                                  setReplyTo({
-                                    createdAt: update.createdAt.toString(),
-                                    createdBy:
-                                      userId === update.createdBy.id
-                                        ? intl.formatMessage({
-                                            defaultMessage: 'You',
-                                            id: 'kJ5W29',
-                                          })
-                                        : `${update.createdBy.fullName} - ${update.createdBy.businesses[0]?.name}`,
-                                    id: update.id,
-                                    text: update.text || '',
-                                  })
-                                }
-                              >
-                                {intl.formatMessage({
-                                  defaultMessage: 'Reply',
-                                  id: '9HU8vw',
-                                })}
-                              </Button>
-                            </Col>
-                          )}
-                          {update.type === UpdateType.Image && editRights && (
-                            <Col>
-                              <Dropdown
-                                overlay={
-                                  <Menu
-                                    items={[
-                                      {
-                                        key: 0,
-                                        label: intl.formatMessage({
-                                          defaultMessage:
-                                            'Add Image to Incident',
-                                          id: 'VN9g7W',
-                                        }),
-                                        onClick: () => {
-                                          onAddUpdateImages(
-                                            update.images.map(
-                                              ({ id, optimised }) => ({
-                                                id,
-                                                url: optimised || '',
-                                              })
-                                            ),
-                                            true
-                                          );
-                                        },
-                                        icon: <FontAwesomeIcon icon={faEdit} />,
-                                      },
-                                      {
-                                        key: 1,
-                                        label: intl.formatMessage({
-                                          defaultMessage:
-                                            'Add Image to Offender',
-                                          id: 'dy/65U',
-                                        }),
-                                        onClick: () =>
-                                          onAddUpdateImages(
-                                            update.images.map(
-                                              ({ id, optimised }) => ({
-                                                id,
-                                                url: optimised || '',
-                                              })
-                                            )
-                                          ),
-                                        icon: <FontAwesomeIcon icon={faEdit} />,
-                                      },
-                                    ]}
-                                  />
-                                }
-                                placement="bottomRight"
-                                arrow={{ pointAtCenter: true }}
-                              >
-                                <Button
-                                  style={{
-                                    marginLeft:
-                                      update.replies.length > 0 ? 48 : 0,
-                                  }}
-                                  type="text"
-                                  danger
-                                  size="small"
-                                  onClick={() =>
-                                    onAddUpdateImages(
-                                      update.images.map(
-                                        ({ id, optimised }) => ({
-                                          id,
-                                          url: optimised || '',
-                                        })
-                                      )
-                                    )
-                                  }
-                                >
-                                  {intl.formatMessage({
-                                    defaultMessage: 'Add Image',
-                                    id: 'u1ETNe',
-                                  })}
-                                </Button>
-                              </Dropdown>
-                            </Col>
-                          )}
-                        </Row>
-                      </div>
-                    ))}
-                  </InfiniteScroll> */}
-                  <UpdateBar
-                    offenderId={offenderId}
-                    replyTo={replyTo}
-                    setOptionRowShow={setOptionRowShow}
-                    setReplyTo={setReplyTo}
-                    subscribed={data?.offender?.subscribed || false}
-                  />
-                </div>
+                <OffenderSidebar
+                  confirmDeleteUpdate={confirmDeleteUpdate}
+                  data={data}
+                  editRights={editRights}
+                  loadMore={loadMore}
+                  offenderId={offenderId}
+                  onAddUpdateImages={onAddUpdateImages}
+                  optionRowShow={optionRowShow}
+                  replyTo={replyTo}
+                  saving={saving}
+                  scrolledToTop={scrolledToTop}
+                  setEditUpdate={setEditUpdate}
+                  setOptionRowShow={setOptionRowShow}
+                  setReplyTo={setReplyTo}
+                  userId={userId}
+                />
               </Col>
             </Row>
           </div>
@@ -3021,6 +2742,32 @@ const ViewOffender = ({
             offenderId={data?.offender?.id || ''}
             onClose={toggleAddInvestigation}
             update={updateInvestigationList}
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+
+      {/* link investigation */}
+      <Drawer
+        onClose={toggleLinkInvestigation}
+        open={linkInvestigation}
+        title={intl.formatMessage({
+          defaultMessage: 'Link to Existing Investigation',
+        })}
+        width={1000}
+      >
+        {linkInvestigation ? (
+          <LinkInvestigation
+            investigationIds={
+              data?.offender?.investigations?.map((i) => i.id) || []
+            }
+            onClose={toggleLinkInvestigation}
+            update={(inv) => {
+              handleLinkInvestigation(inv).catch(() => {
+                // Error already handled in mutation
+              });
+            }}
           />
         ) : (
           <div />

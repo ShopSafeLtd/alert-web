@@ -664,17 +664,12 @@ const OffenderGrid = ({
   return (
     <div>
       <Row gutter={[24, 24]} ref={rowRef}>
-        {/* Always render ALL offenders, but hide extras with CSS when not showing all */}
-        {offenders &&
-          offenders.map((item, index) => (
+        {offendersData &&
+          offendersData.map((item, index) => (
             <Col
               className={`offender-col offender-col-${index}`}
               key={item.id}
               span={columns}
-              style={{
-                display:
-                  !showAll && index >= offendersData.length ? 'none' : 'block',
-              }}
             >
               <OffenderCard
                 canDisconnect={canDisconnect}

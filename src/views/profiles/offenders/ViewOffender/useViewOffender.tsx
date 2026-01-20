@@ -21,6 +21,7 @@ import type {
   BanData,
   EditFeedImage,
   ImageCardData,
+  InvestigationData,
   LocationData,
   VehicleData,
 } from 'types/DataType';
@@ -71,13 +72,20 @@ import { useCreateSimpleVehicleMutation } from 'graphql/vehicles/mutations/__gen
 import { useUpdateSimpleVehicleMutation } from 'graphql/vehicles/mutations/__generated__/update-simple-vehicle.generated';
 import update from 'immutability-helper';
 import { useAtomValue } from 'jotai/index';
-import React, { useEffect, useReducer, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useReducer,
+  useRef,
+  useState,
+} from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router';
 import { useStoreState } from 'state';
 import errorNotification from 'types/mutation_notifications/error_notification';
 
 import { useMarkOffenderViewedMutation } from '../../../../graphql/engagement/mutations/__generated__/mark-offender-viewed.generated';
+import { useInvestigationActions } from './useInvestigationActions';
 
 const { confirm } = Modal;
 
@@ -123,8 +131,17 @@ interface Return {
   editUpdate: { id: string; text: string } | null;
   editUpdateInput: string;
   editVehicleData: VehicleData | null;
+  handleCreateInvestigation: (investigationId: string) => Promise<void>;
   handleEditUpdate: () => void;
+  handleIncidentSort: (
+    field: 'date' | 'totalValue',
+    order: 'ascend' | 'descend'
+  ) => void;
+  handleLinkInvestigation: (investigation: InvestigationData) => Promise<void>;
+  handleUnlinkInvestigation: (investigationId: string) => Promise<void>;
   hasConnectedSchemes: boolean;
+  incidentSortField: 'date' | 'totalValue';
+  incidentSortOrder: SortOrder;
   incidents: OffenderIncidentsQuery['offender']['incidents'] | null;
   incidentsLoading: boolean;
   incidentsPagination: PaginationState;
@@ -140,6 +157,8 @@ interface Return {
     src: string;
   }[];
   linkIncident: boolean;
+  linkInvestigation: boolean;
+  linkingInvestigation: boolean;
   loadMore: boolean;
   loading: boolean;
   onAddAddress: (value: LocationData) => void;
@@ -211,6 +230,7 @@ interface Return {
   toggleEditOffender: () => void;
   toggleKnowOffender: () => void;
   toggleLinkIncident: () => void;
+  toggleLinkInvestigation: () => void;
   toggleSelectImages: (id: string) => void;
   toggleShareOpen: () => void;
   toggleShowIncidentOptions: () => void;
@@ -279,6 +299,12 @@ const useViewOffender = (offenderId: string): Return => {
   const hasTrackedView = useRef(false);
   const { currentPage: incidentPage, pageSize: incidentPageSize } =
     paginationState;
+  const [incidentSortField, setIncidentSortField] = useState<
+    'date' | 'totalValue'
+  >('date');
+  const [incidentSortOrder, setIncidentSortOrder] = useState<SortOrder>(
+    SortOrder.Desc
+  );
   const [viewMatches, toggleViewMatches] = useState<null | string>(null);
   const [optionRowShow, setOptionRowShow] = useState(false);
   const [linkIncident, setLinkIncident] = useState(false);
@@ -320,6 +346,7 @@ const useViewOffender = (offenderId: string): Return => {
   const [addBan, setAddBan] = useState(false);
   const [editBanData, setEditBanData] = useState<BanData | null>(null);
   const [addInvestigation, setAddInvestigation] = useState(false);
+  const [linkInvestigation, setLinkInvestigation] = useState(false);
   const [showIncidentOptions, setShowIncidentOptions] = useState(false);
   const [addImageToIncidents, setAddImageToIncidents] = useState(false);
   const [selectedIncidentId, setSelectedIncidentId] = useState<string>('');
@@ -386,6 +413,13 @@ const useViewOffender = (offenderId: string): Return => {
     variables,
   });
 
+  const {
+    handleCreateInvestigation,
+    handleLinkInvestigation,
+    handleUnlinkInvestigation,
+    linking: linkingInvestigation,
+  } = useInvestigationActions({ offenderId });
+
   // Track offender view silently
   const [markOffenderViewed] = useMarkOffenderViewedMutation({
     onError: () => {
@@ -411,7 +445,7 @@ const useViewOffender = (offenderId: string): Return => {
   } = useOffenderIncidentsQuery({
     variables: {
       orderBy: {
-        date: SortOrder.Desc,
+        [incidentSortField]: incidentSortOrder,
       },
       skip: (incidentPage - 1) * incidentPageSize,
       take: incidentPageSize,
@@ -613,6 +647,15 @@ const useViewOffender = (offenderId: string): Return => {
 
   const onEditImage = (value: EditFeedImage) => {
     setSaving(true);
+
+    // 🐛 DEBUG: Log incoming values
+    console.log('onEditImage received:', {
+      id: value.id,
+      position: value.position,
+      positionX: value.positionX,
+      positionY: value.positionY,
+    });
+
     if (value) {
       const findPrimaryId = data?.offender?.images.find(
         ({ primary }) => primary
@@ -631,6 +674,38 @@ const useViewOffender = (offenderId: string): Return => {
           ]
         : [];
 
+      const mutationVariables = {
+        id: offenderId,
+        images: {
+          update: [
+            {
+              data: {
+                policeImage: { set: value.policeImage || false },
+                position: { set: value.position },
+                positionX: {
+                  set: value.positionX ?? 50,
+                },
+                positionY: {
+                  set: value.positionY ?? 50,
+                },
+                primary: { set: value.primary || false },
+                rotation: { set: value.rotation || 0 },
+              },
+              where: {
+                id: value.id,
+              },
+            },
+            ...primaryImage,
+          ],
+        },
+      };
+
+      // 🐛 DEBUG: Log mutation variables being sent
+      console.log(
+        'Mutation variables:',
+        JSON.stringify(mutationVariables, null, 2)
+      );
+
       void updateOffenderImages({
         onCompleted: () => {
           notification.success({
@@ -643,33 +718,7 @@ const useViewOffender = (offenderId: string): Return => {
             placement: 'bottomRight',
           });
         },
-        variables: {
-          id: offenderId,
-          images: {
-            update: [
-              {
-                data: {
-                  policeImage: { set: value.policeImage || false },
-                  position: { set: value.position },
-                  positionX:
-                    value.positionX === undefined
-                      ? undefined
-                      : { set: value.positionX },
-                  positionY:
-                    value.positionY === undefined
-                      ? undefined
-                      : { set: value.positionY },
-                  primary: { set: value.primary || false },
-                  rotation: { set: value.rotation || 0 },
-                },
-                where: {
-                  id: value.id,
-                },
-              },
-              ...primaryImage,
-            ],
-          },
-        },
+        variables: mutationVariables,
         // update: updateImageList,
       }).finally(() => {
         setEditImageData(null);
@@ -1947,6 +1996,9 @@ const useViewOffender = (offenderId: string): Return => {
   const toggleAddInvestigation = () => {
     setAddInvestigation(() => !addInvestigation);
   };
+  const toggleLinkInvestigation = () => {
+    setLinkInvestigation(() => !linkInvestigation);
+  };
   const toggleShowIncidentOptions = () => {
     setShowIncidentOptions(!showIncidentOptions);
   };
@@ -1980,6 +2032,15 @@ const useViewOffender = (offenderId: string): Return => {
         ''
     );
   };
+
+  const handleIncidentSort = useCallback(
+    (field: 'date' | 'totalValue', order: 'ascend' | 'descend') => {
+      setIncidentSortField(field);
+      setIncidentSortOrder(order === 'ascend' ? SortOrder.Asc : SortOrder.Desc);
+      dispatch({ payload: 1, type: 'changePage' }); // Reset to first page when sorting changes
+    },
+    []
+  );
 
   const toggleShareOpen = () => {
     setShareOpen(!shareOpen);
@@ -2025,8 +2086,14 @@ const useViewOffender = (offenderId: string): Return => {
     editUpdate,
     editUpdateInput,
     editVehicleData,
+    handleCreateInvestigation,
     handleEditUpdate,
+    handleIncidentSort,
+    handleLinkInvestigation,
+    handleUnlinkInvestigation,
     hasConnectedSchemes: connectedToSchemes && connectedToSchemes.length > 0,
+    incidentSortField,
+    incidentSortOrder,
     incidents:
       incidentsData?.offender.incidents ||
       previousData?.offender.incidents ||
@@ -2040,6 +2107,8 @@ const useViewOffender = (offenderId: string): Return => {
     lightBoxOpen,
     lightboxElements,
     linkIncident,
+    linkInvestigation,
+    linkingInvestigation,
     loadMore,
     loading: data?.offender ? false : loading,
     onAddAddress,
@@ -2096,6 +2165,7 @@ const useViewOffender = (offenderId: string): Return => {
     toggleEditOffender,
     toggleKnowOffender,
     toggleLinkIncident,
+    toggleLinkInvestigation,
     toggleSelectImages,
     toggleShareOpen,
     toggleShowIncidentOptions,

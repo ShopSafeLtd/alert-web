@@ -24,7 +24,6 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
-import dayjs from 'dayjs';
 import { PermissionMethod, PermissionModel } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
 import React, { useMemo, useState } from 'react';
@@ -116,9 +115,15 @@ interface Props {
   onDelete?: (id: string) => void;
   onPageChange?: (page: number) => void;
   onPageSizeChange?: (pageSize: number) => void;
+  onSortChange?: (
+    field: 'date' | 'totalValue',
+    order: 'ascend' | 'descend'
+  ) => void;
   page?: number;
   pageSize?: number;
   setEditData?: (id: string) => void;
+  sortField?: 'date' | 'totalValue';
+  sortOrder?: 'ascend' | 'descend';
   title?: React.ReactNode;
   total?: number;
 }
@@ -131,9 +136,12 @@ const IncidentTable = ({
   onDelete,
   onPageChange,
   onPageSizeChange,
+  onSortChange,
   page,
   pageSize,
   setEditData,
+  sortField,
+  sortOrder,
   title,
   total,
 }: Props): JSX.Element => {
@@ -152,9 +160,8 @@ const IncidentTable = ({
     });
   const currency = useAtomValue(currencyAtom);
 
-  // State for offender filter and sorting
+  // State for offender filter
   const [selectedOffenderIds, setSelectedOffenderIds] = useState<string[]>([]);
-  const [sortOrder, setSortOrder] = useState<'ascend' | 'descend'>('descend');
 
   // Get unique offenders from all incidents
   const allOffenders = useMemo(() => {
@@ -195,8 +202,8 @@ const IncidentTable = ({
     });
   }, [incidents]);
 
-  // Filter and sort incidents
-  const filteredAndSortedIncidents = useMemo(() => {
+  // Filter incidents - sorting is handled server-side
+  const filteredIncidents = useMemo(() => {
     let result = incidents;
 
     // Filter by selected offenders
@@ -208,19 +215,8 @@ const IncidentTable = ({
       );
     }
 
-    // Sort by date
-    if (result) {
-      result = [...result].sort((a, b) => {
-        const dateA = a.dayTime ? dayjs(a.dayTime) : dayjs(0);
-        const dateB = b.dayTime ? dayjs(b.dayTime) : dayjs(0);
-        return sortOrder === 'ascend'
-          ? dateA.unix() - dateB.unix()
-          : dateB.unix() - dateA.unix();
-      });
-    }
-
     return result;
-  }, [incidents, selectedOffenderIds, sortOrder]);
+  }, [incidents, selectedOffenderIds]);
 
   return (
     <Table
@@ -267,6 +263,9 @@ const IncidentTable = ({
             if (!date) return '-';
             return date;
           },
+          sortDirections: ['descend', 'ascend', 'descend'],
+          sortOrder: sortField === 'date' ? sortOrder : null,
+          sorter: true,
           title: intl.formatMessage({
             defaultMessage: 'Date',
           }),
@@ -279,6 +278,9 @@ const IncidentTable = ({
               currency,
               style: 'currency',
             }),
+          sortDirections: ['descend', 'ascend', 'descend'],
+          sortOrder: sortField === 'totalValue' ? sortOrder : null,
+          sorter: true,
           title: intl.formatMessage({
             defaultMessage: 'Loss',
           }),
@@ -473,7 +475,7 @@ const IncidentTable = ({
         },
       ].filter((item) => item?.key !== 'Options' || deleteRights)}
       dataSource={
-        filteredAndSortedIncidents?.map((incident) => ({
+        filteredIncidents?.map((incident) => ({
           date: incident?.dayTime,
           key: incident?.id,
           location: incident?.business?.name || incident?.location?.full,
@@ -486,6 +488,17 @@ const IncidentTable = ({
         })) || []
       }
       loading={loading}
+      onChange={(pagination, filters, sorter) => {
+        if (
+          !Array.isArray(sorter) &&
+          sorter.columnKey &&
+          sorter.order &&
+          onSortChange
+        ) {
+          const field = sorter.columnKey === 'loss' ? 'totalValue' : 'date';
+          onSortChange(field, sorter.order);
+        }
+      }}
       pagination={{
         defaultPageSize: pageSize || 5,
         hideOnSinglePage: !!(pageSize && pageSize < 100) || true,
@@ -502,7 +515,7 @@ const IncidentTable = ({
             : undefined,
         pageSizeOptions: [5, 10, 20, 50, 100],
         showSizeChanger: true,
-        total: total || filteredAndSortedIncidents?.length || 0,
+        total: total || filteredIncidents?.length || 0,
       }}
       rowClassName={classes.row}
       size="small"
@@ -519,25 +532,6 @@ const IncidentTable = ({
           >
             <div>{title}</div>
             <div style={{ alignItems: 'center', display: 'flex', gap: 12 }}>
-              <Select
-                onChange={setSortOrder}
-                options={[
-                  {
-                    label: intl.formatMessage({
-                      defaultMessage: 'Newest first',
-                    }),
-                    value: 'descend',
-                  },
-                  {
-                    label: intl.formatMessage({
-                      defaultMessage: 'Oldest first',
-                    }),
-                    value: 'ascend',
-                  },
-                ]}
-                style={{ width: 150 }}
-                value={sortOrder}
-              />
               <Select
                 allowClear
                 dropdownStyle={{
@@ -608,7 +602,7 @@ const IncidentTable = ({
                   <Typography.Text style={{ fontSize: 13 }} type="secondary">
                     {intl.formatMessage(
                       { defaultMessage: '{count} filtered' },
-                      { count: filteredAndSortedIncidents?.length || 0 }
+                      { count: filteredIncidents?.length || 0 }
                     )}
                   </Typography.Text>
                   <Button

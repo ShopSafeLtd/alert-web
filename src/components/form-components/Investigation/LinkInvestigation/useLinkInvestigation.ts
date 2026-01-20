@@ -16,7 +16,7 @@ import { useLinkInvestigationsQuery } from './graphql/__generated__/list-investi
 interface Props {
   investigationIds?: string[];
   onClose: () => void;
-  update: (value: InvestigationData) => void;
+  update: (value: InvestigationData) => Promise<void> | void;
 }
 
 interface Return {
@@ -27,7 +27,7 @@ interface Return {
   loading: boolean;
   onPaginationChange: (pageValue: number, sizeValue: number) => void;
   onSelect: (item: { key: string }) => void;
-  onSubmit: () => void;
+  onSubmit: () => Promise<void> | void;
   saving: boolean;
 }
 
@@ -71,14 +71,14 @@ const useLinkInvestigation = ({
     variables,
   });
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     setSaving(true);
     const selectedData = data?.investigationRelay?.edges.find(
       ({ node: { id } }) => id === selected
     )?.node;
 
     if (selectedData) {
-      update(selectedData);
+      await update(selectedData);
     }
     setSaving(false);
     onClose();

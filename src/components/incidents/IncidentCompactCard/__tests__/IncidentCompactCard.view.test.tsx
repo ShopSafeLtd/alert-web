@@ -31,6 +31,7 @@ describe('Detail Officer View', () => {
     offenders: [],
     newIncident: false,
     assignedUsers: [],
+    draft: false,
   };
   it('renders the page', () => {
     const { getByText } = render(

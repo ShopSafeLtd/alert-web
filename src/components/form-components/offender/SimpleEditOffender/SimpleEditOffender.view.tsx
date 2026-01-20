@@ -129,6 +129,7 @@ const EditOffender = ({
                 <IncidentTypesSelect
                   disabled={saving}
                   maxTagCount={3}
+                  multiple={true}
                   placeholder={intl.formatMessage({
                     defaultMessage: 'Search for incident types...',
                   })}

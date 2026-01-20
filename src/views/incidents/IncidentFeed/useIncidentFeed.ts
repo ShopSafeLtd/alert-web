@@ -60,6 +60,7 @@ interface Return {
   setGallery: (values: string[]) => void;
   setGoodsFilter: (value: string[]) => void;
   setGroupsFilter: (value: string[]) => void;
+  setImpactTagsFilter: (value: string[]) => void;
   setIncidentDateFilter: (
     value:
       | {
@@ -68,6 +69,7 @@ interface Return {
         }
       | undefined
   ) => void;
+  setInvolvedTagsFilter: (value: string[]) => void;
   setOrder: (value: IncidentSort) => void;
   setPeculiarities: (value: string) => void;
   setSearch: (value: string) => void;
@@ -103,7 +105,9 @@ const useIncidentFeed = (): Return => {
     gallery,
     goods,
     groups,
+    impactTags,
     incidentDate,
+    involvedTags,
     peculiarities,
     policeAreas,
     priority,
@@ -247,11 +251,13 @@ const useIncidentFeed = (): Return => {
             }
           : undefined,
       crimeTypes:
-        crimeTypes.length > 0
+        crimeTypes.length > 0 ||
+        impactTags.length > 0 ||
+        involvedTags.length > 0
           ? {
               some: {
                 id: {
-                  in: crimeTypes,
+                  in: [...crimeTypes, ...impactTags, ...involvedTags],
                 },
               },
             }
@@ -448,6 +454,26 @@ const useIncidentFeed = (): Return => {
       },
     });
   };
+  const setImpactTagsFilter = (values: string[]) => {
+    setIncidentsState({
+      order,
+      pagination,
+      variables: {
+        ...variables,
+        impactTags: values,
+      },
+    });
+  };
+  const setInvolvedTagsFilter = (values: string[]) => {
+    setIncidentsState({
+      order,
+      pagination,
+      variables: {
+        ...variables,
+        involvedTags: values,
+      },
+    });
+  };
   const setIncidentDateFilter = (values: DateType | undefined) => {
     setIncidentsState({
       order,
@@ -557,7 +583,9 @@ const useIncidentFeed = (): Return => {
         gallery: [],
         goods: [],
         groups: [],
+        impactTags: [],
         incidentDate: undefined,
+        involvedTags: [],
         peculiarities: '',
         policeAreas: [],
         search: '',
@@ -587,7 +615,9 @@ const useIncidentFeed = (): Return => {
     setGoodsFilter,
 
     setGroupsFilter,
+    setImpactTagsFilter,
     setIncidentDateFilter,
+    setInvolvedTagsFilter,
     setOrder,
     setPeculiarities,
     setSearch,

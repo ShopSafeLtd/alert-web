@@ -34,8 +34,14 @@ const ViewOffender = (): JSX.Element => {
     editUpdate,
     editUpdateInput,
     editVehicleData,
+    handleCreateInvestigation,
     handleEditUpdate,
+    handleIncidentSort,
+    handleLinkInvestigation,
+    handleUnlinkInvestigation,
     hasConnectedSchemes,
+    incidentSortField,
+    incidentSortOrder,
     incidents,
     incidentsLoading,
     incidentsPagination,
@@ -43,6 +49,8 @@ const ViewOffender = (): JSX.Element => {
     knowOffender,
     lightBoxOpen,
     linkIncident,
+    linkInvestigation,
+    linkingInvestigation,
     loadMore,
     loading,
     onAddAddress,
@@ -98,6 +106,7 @@ const ViewOffender = (): JSX.Element => {
     toggleEditOffender,
     toggleKnowOffender,
     toggleLinkIncident,
+    toggleLinkInvestigation,
     toggleSelectImages,
     toggleShareOpen,
     toggleShowIncidentOptions,
@@ -143,8 +152,14 @@ const ViewOffender = (): JSX.Element => {
       editUpdate={editUpdate}
       editUpdateInput={editUpdateInput}
       editVehicleData={editVehicleData}
+      handleCreateInvestigation={handleCreateInvestigation}
       handleEditUpdate={handleEditUpdate}
+      handleIncidentSort={handleIncidentSort}
+      handleLinkInvestigation={handleLinkInvestigation}
+      handleUnlinkInvestigation={handleUnlinkInvestigation}
       hasConnectedSchemes={hasConnectedSchemes}
+      incidentSortField={incidentSortField}
+      incidentSortOrder={incidentSortOrder}
       incidents={incidents}
       incidentsLoading={incidentsLoading}
       incidentsPagination={incidentsPagination}
@@ -152,6 +167,8 @@ const ViewOffender = (): JSX.Element => {
       knowOffender={knowOffender}
       lightBoxOpen={lightBoxOpen}
       linkIncident={linkIncident}
+      linkInvestigation={linkInvestigation}
+      linkingInvestigation={linkingInvestigation}
       loadMore={loadMore}
       loading={loading}
       offenderId={offenderId}
@@ -210,6 +227,7 @@ const ViewOffender = (): JSX.Element => {
       toggleEditOffender={toggleEditOffender}
       toggleKnowOffender={toggleKnowOffender}
       toggleLinkIncident={toggleLinkIncident}
+      toggleLinkInvestigation={toggleLinkInvestigation}
       toggleSelectImages={toggleSelectImages}
       toggleShareOpen={toggleShareOpen}
       toggleShowIncidentOptions={toggleShowIncidentOptions}

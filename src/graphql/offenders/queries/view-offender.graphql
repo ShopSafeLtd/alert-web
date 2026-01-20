@@ -112,6 +112,27 @@ query ViewOffender(
         updates(orderBy: { createdAt: desc }) {
             ...Updates
         }
+        actions {
+            id
+            createdAt
+            dataType
+            description
+            reason
+            type
+            reference
+            workflowResults
+            byUser {
+                id
+                fullName
+                businesses {
+                    id
+                    name
+                }
+            }
+        }
+        todos {
+            ...Todos
+        }
         searchedMatches {
             id
         }
