@@ -1,7 +1,7 @@
 /* eslint-disable formatjs/no-literal-string-in-jsx */
+import PermissionCheckWrapper from '#/components/PermissionCheck/PermissionCheckWrapper';
 import { faEdit } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import PermissionCheckWrapper from '#/components/PermissionCheck/PermissionCheckWrapper';
 import {
   Button,
   Card,
@@ -48,12 +48,12 @@ const CompletedChecklistView = ({
   completedAt,
   completedByUser,
   generating = false,
+  logo,
   onBack = () => {},
   signature,
+  storeName,
   theme = 'dark',
   title,
-  logo,
-  storeName,
 }: {
   additionalInfo: string;
   checklistId?: string;
@@ -61,12 +61,12 @@ const CompletedChecklistView = ({
   completedAt: string;
   completedByUser: string;
   generating?: boolean;
+  logo?: string;
   onBack?: () => void;
   signature: string;
+  storeName?: string;
   theme?: 'dark' | 'light';
   title: string;
-  logo?: string;
-  storeName?: string;
 }) => {
   const intl = useIntl();
   const navigate = useNavigate();
@@ -244,7 +244,7 @@ const CompletedChecklistView = ({
     return (
       <div className="page" ref={componentRef}>
         {(logo || storeName) && (
-          <Row style={{ marginBottom: 20, alignItems: 'center' }}>
+          <Row style={{ alignItems: 'center', marginBottom: 20 }}>
             {logo && (
               <Col>
                 <img
@@ -263,8 +263,8 @@ const CompletedChecklistView = ({
               <div
                 style={{
                   border: '1px solid #d9d9d9',
-                  padding: 12,
                   borderRadius: 4,
+                  padding: 12,
                 }}
               >
                 {storeName && (
@@ -272,10 +272,10 @@ const CompletedChecklistView = ({
                     Store: {storeName}
                   </Typography.Text>
                 )}
-                <Typography.Text type="secondary" style={{ display: 'block' }}>
+                <Typography.Text style={{ display: 'block' }} type="secondary">
                   Completed: {completedAt}
                 </Typography.Text>
-                <Typography.Text type="secondary" style={{ display: 'block' }}>
+                <Typography.Text style={{ display: 'block' }} type="secondary">
                   By: {completedByUser}
                 </Typography.Text>
               </div>
@@ -768,7 +768,7 @@ const CompletedChecklistView = ({
       <Card>
         <div ref={componentRef}>
           {(logo || storeName) && (
-            <Row style={{ marginBottom: 20, alignItems: 'center' }}>
+            <Row style={{ alignItems: 'center', marginBottom: 20 }}>
               {logo && (
                 <Col>
                   <img
@@ -787,8 +787,8 @@ const CompletedChecklistView = ({
                 <div
                   style={{
                     border: '1px solid #d9d9d9',
-                    padding: 12,
                     borderRadius: 4,
+                    padding: 12,
                   }}
                 >
                   {storeName && (
@@ -797,14 +797,14 @@ const CompletedChecklistView = ({
                     </Typography.Text>
                   )}
                   <Typography.Text
-                    type="secondary"
                     style={{ display: 'block' }}
+                    type="secondary"
                   >
                     Completed: {completedAt}
                   </Typography.Text>
                   <Typography.Text
-                    type="secondary"
                     style={{ display: 'block' }}
+                    type="secondary"
                   >
                     By: {completedByUser}
                   </Typography.Text>

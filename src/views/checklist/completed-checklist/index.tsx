@@ -9,10 +9,10 @@ interface Data {
   checklistSections: ActiveChecklistSection[];
   completedAt: string;
   completedByUser: string;
-  signature: string;
-  title: string;
   logo?: string;
+  signature: string;
   storeName?: string;
+  title: string;
 }
 
 const generateMg11 = () => {
@@ -27,11 +27,11 @@ const generateMg11 = () => {
       completedAt={data.completedAt}
       completedByUser={data.completedByUser}
       generating
+      logo={data.logo}
       signature={data.signature}
+      storeName={data.storeName}
       theme="light"
       title={data.title}
-      logo={data.logo}
-      storeName={data.storeName}
     />
   );
 };

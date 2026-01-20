@@ -1,8 +1,8 @@
 import type { ColumnsType } from 'antd/es/table/interface';
 
+import PermissionCheckWrapper from '#/components/PermissionCheck/PermissionCheckWrapper';
 import { faPenToSquare } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import PermissionCheckWrapper from '#/components/PermissionCheck/PermissionCheckWrapper';
 import { Button, Col, Row, Tag, Tooltip } from 'antd';
 import {
   AiVisionMatchConfidence,
@@ -19,70 +19,89 @@ import { useNavigate } from 'react-router';
 import type { FilterState } from './useListDetectionConfigs';
 
 interface DetectionConfigItem {
-  key: string;
+  cameraCount: number;
   id: string;
-  name: string;
-  type: DetectActionType;
+  key: string;
   minimumConfidenceTrigger: AiVisionMatchConfidence;
   minimumPriorityTrigger: AiVisionMatchPriority;
-  cameraCount: number;
+  name: string;
+  type: DetectActionType;
 }
 
 const getActionTypeLabel = (type: DetectActionType) => {
   switch (type) {
-    case DetectActionType.Activity:
+    case DetectActionType.Activity: {
       return 'Activity';
-    case DetectActionType.Email:
+    }
+    case DetectActionType.Email: {
       return 'Email';
-    case DetectActionType.PushNotification:
+    }
+    case DetectActionType.PushNotification: {
       return 'Push Notification';
-    case DetectActionType.Sms:
+    }
+    case DetectActionType.Sms: {
       return 'SMS';
-    default:
+    }
+    default: {
       return type;
+    }
   }
 };
 
 const getConfidenceLabel = (confidence: AiVisionMatchConfidence) => {
   switch (confidence) {
-    case AiVisionMatchConfidence.High:
+    case AiVisionMatchConfidence.High: {
       return 'High';
-    case AiVisionMatchConfidence.Medium:
+    }
+    case AiVisionMatchConfidence.Medium: {
       return 'Medium';
-    case AiVisionMatchConfidence.Low:
+    }
+    case AiVisionMatchConfidence.Low: {
       return 'Low';
-    default:
+    }
+    default: {
       return confidence;
+    }
   }
 };
 
 const getPriorityLabel = (priority: AiVisionMatchPriority) => {
   switch (priority) {
-    case AiVisionMatchPriority.Critical:
+    case AiVisionMatchPriority.Critical: {
       return 'Critical';
-    case AiVisionMatchPriority.High:
+    }
+    case AiVisionMatchPriority.High: {
       return 'High';
-    case AiVisionMatchPriority.Normal:
+    }
+    case AiVisionMatchPriority.Normal: {
       return 'Normal';
-    case AiVisionMatchPriority.Low:
+    }
+    case AiVisionMatchPriority.Low: {
       return 'Low';
-    default:
+    }
+    default: {
       return priority;
+    }
   }
 };
 
 const getPriorityColor = (priority: AiVisionMatchPriority) => {
   switch (priority) {
-    case AiVisionMatchPriority.Critical:
+    case AiVisionMatchPriority.Critical: {
       return 'red';
-    case AiVisionMatchPriority.High:
+    }
+    case AiVisionMatchPriority.High: {
       return 'orange';
-    case AiVisionMatchPriority.Normal:
+    }
+    case AiVisionMatchPriority.Normal: {
       return 'blue';
-    case AiVisionMatchPriority.Low:
+    }
+    case AiVisionMatchPriority.Low: {
       return 'green';
-    default:
+    }
+    default: {
       return 'default';
+    }
   }
 };
 
@@ -101,9 +120,7 @@ const useCreateColumns = ({ filterState }: UseCreateColumnsProps) => {
     },
     {
       dataIndex: 'type',
-      key: 'type',
-      title: <FormattedMessage defaultMessage="Type" />,
-      render: (type: DetectActionType) => <Tag>{getActionTypeLabel(type)}</Tag>,
+      filteredValue: filterState.type.length > 0 ? filterState.type : null,
       filters: [
         {
           text: 'Activity',
@@ -122,12 +139,13 @@ const useCreateColumns = ({ filterState }: UseCreateColumnsProps) => {
           value: DetectActionType.Sms,
         },
       ],
-      filteredValue: filterState.type.length > 0 ? filterState.type : null,
+      key: 'type',
+      render: (type: DetectActionType) => <Tag>{getActionTypeLabel(type)}</Tag>,
+      title: <FormattedMessage defaultMessage="Type" />,
     },
     {
       dataIndex: 'minimumConfidenceTrigger',
       key: 'minimumConfidenceTrigger',
-      title: <FormattedMessage defaultMessage="Min Confidence" />,
       render: (confidence: AiVisionMatchConfidence) => (
         <Tag
           color={
@@ -141,27 +159,28 @@ const useCreateColumns = ({ filterState }: UseCreateColumnsProps) => {
           {getConfidenceLabel(confidence)}
         </Tag>
       ),
+      title: <FormattedMessage defaultMessage="Min Confidence" />,
     },
     {
       dataIndex: 'minimumPriorityTrigger',
       key: 'minimumPriorityTrigger',
-      title: <FormattedMessage defaultMessage="Min Priority" />,
       render: (priority: AiVisionMatchPriority) => (
         <Tag color={getPriorityColor(priority)}>
           {getPriorityLabel(priority)}
         </Tag>
       ),
+      title: <FormattedMessage defaultMessage="Min Priority" />,
     },
     {
       dataIndex: 'cameraCount',
       key: 'cameraCount',
-      title: <FormattedMessage defaultMessage="Cameras" />,
-      sorter: true,
       sortOrder: filterState.cameraSort
         ? filterState.cameraSort === SortOrder.Asc
           ? 'ascend'
           : 'descend'
         : null,
+      sorter: true,
+      title: <FormattedMessage defaultMessage="Cameras" />,
     },
     {
       dataIndex: 'action',

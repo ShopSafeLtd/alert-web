@@ -1,47 +1,48 @@
 import ListCamerasView from '#/views/vision/cameras/ListCameras/ListCameras.view';
 import useListCameras from '#/views/vision/cameras/ListCameras/useListCameras';
+import React from 'react';
 
 const ListCamerasContainer = () => {
   const {
     data,
+    defaultTimeout,
+    drawerVisible,
+    form,
+    handleDrawerClose,
+    handleEditClick,
+    handleFormSubmit,
     loading,
-    search,
-    setSearch,
+    loadingDefault,
+    onPageChange,
+    onUpdateDefaultTimeout,
     page,
     pageSize,
-    total,
-    onPageChange,
-    defaultTimeout,
-    loadingDefault,
-    onUpdateDefaultTimeout,
-    drawerVisible,
+    search,
     setDrawerVisible,
-    form,
+    setSearch,
     submitting,
-    handleEditClick,
-    handleDrawerClose,
-    handleFormSubmit,
+    total,
   } = useListCameras();
   return (
     <ListCamerasView
       data={data}
+      defaultTimeout={defaultTimeout}
+      drawerVisible={drawerVisible}
+      form={form}
+      handleDrawerClose={handleDrawerClose}
+      handleEditClick={handleEditClick}
+      handleFormSubmit={handleFormSubmit}
       loading={loading}
-      search={search}
-      setSearch={setSearch}
+      loadingDefault={loadingDefault}
+      onPageChange={onPageChange}
+      onUpdateDefaultTimeout={onUpdateDefaultTimeout}
       page={page}
       pageSize={pageSize}
-      total={total}
-      onPageChange={onPageChange}
-      defaultTimeout={defaultTimeout}
-      loadingDefault={loadingDefault}
-      onUpdateDefaultTimeout={onUpdateDefaultTimeout}
-      drawerVisible={drawerVisible}
+      search={search}
       setDrawerVisible={setDrawerVisible}
-      form={form}
+      setSearch={setSearch}
       submitting={submitting}
-      handleEditClick={handleEditClick}
-      handleDrawerClose={handleDrawerClose}
-      handleFormSubmit={handleFormSubmit}
+      total={total}
     />
   );
 };

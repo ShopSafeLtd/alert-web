@@ -7,6 +7,7 @@ import { useStoreActions } from '#/state';
 import { defaultAdminLayout, defaultUserLayout } from '#/state/dashboard-model';
 import { LocalStorageKeys } from '#/types';
 import { notification } from 'antd';
+import { usePendingCriticalBulletinsLazyQuery } from 'graphql/article/queries/__generated__/pending-critical-bulletins.generated';
 import { usePendingLoginPromptVideosLazyQuery } from 'graphql/queries/__generated__/pending-login-prompt-videos.generated';
 import { Currency, GoodsMode, Role } from 'graphql/types';
 import { atom, useAtomValue, useSetAtom } from 'jotai/index';
@@ -204,6 +205,22 @@ export const userNotificationsAtom = atom(
 
 export const pendingLoginVideosAtom = atom<PendingVideo[]>([]);
 
+export type PendingCriticalBulletin = {
+  createdAt: string;
+  createdBy: {
+    fullName: string;
+    id: string;
+  };
+  criticalExpiry?: null | string;
+  id: string;
+  previewImage?: null | string;
+  previewText?: null | string;
+  priority: string;
+  title: string;
+};
+
+export const pendingCriticalBulletinsAtom = atom<PendingCriticalBulletin[]>([]);
+
 export const useSchemeProvider = () => {
   const setStateScheme = useSetAtom(currentUserSchemeIdAtom);
 
@@ -225,7 +242,9 @@ const SchemeProvider = ({ children }: Props) => {
   const setSettingScheme = useSetAtom(settingSchemeAtom);
   const setCurrentSchemeId = useSetAtom(currentUserSchemeIdAtom);
   const setPendingLoginVideos = useSetAtom(pendingLoginVideosAtom);
+  const setPendingCriticalBulletins = useSetAtom(pendingCriticalBulletinsAtom);
   const [shouldCheckVideos, setShouldCheckVideos] = useState(false);
+  const [shouldCheckBulletins, setShouldCheckBulletins] = useState(false);
 
   const setDashboard = useStoreActions(
     (actions) => actions.dashboard.setSchemeLayouts
@@ -240,6 +259,20 @@ const SchemeProvider = ({ children }: Props) => {
     onError: () => {
       // Silently fail - don't block app if this fails
       setPendingLoginVideos([]);
+    },
+  });
+
+  // Query for pending critical bulletins
+  const [fetchPendingBulletins] = usePendingCriticalBulletinsLazyQuery({
+    fetchPolicy: 'network-only',
+    onCompleted: (data) => {
+      setPendingCriticalBulletins(
+        data.pendingCriticalBulletins as PendingCriticalBulletin[]
+      );
+    },
+    onError: () => {
+      // Silently fail - don't block app if this fails
+      setPendingCriticalBulletins([]);
     },
   });
 
@@ -258,6 +291,18 @@ const SchemeProvider = ({ children }: Props) => {
       setShouldCheckVideos(false);
     }
   }, [shouldCheckVideos, currentUserSchemeId, fetchPendingVideos]);
+
+  // Fetch pending critical bulletins when scheme is loaded
+  useEffect(() => {
+    if (shouldCheckBulletins && currentUserSchemeId) {
+      void fetchPendingBulletins({
+        variables: {
+          schemeId: currentUserSchemeId,
+        },
+      });
+      setShouldCheckBulletins(false);
+    }
+  }, [shouldCheckBulletins, currentUserSchemeId, fetchPendingBulletins]);
 
   void useCurrentSchemeProviderQuery({
     onCompleted: (data) => {
@@ -305,6 +350,8 @@ const SchemeProvider = ({ children }: Props) => {
 
       // Check for pending login prompt videos
       setShouldCheckVideos(true);
+      // Check for pending critical bulletins
+      setShouldCheckBulletins(true);
     },
     onError: (error) => {
       // Handle disabled scheme error

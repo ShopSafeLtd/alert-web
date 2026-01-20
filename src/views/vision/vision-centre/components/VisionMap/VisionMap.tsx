@@ -1,10 +1,10 @@
 import type { MapRef } from 'react-map-gl';
 
-import { faArrowsMaximize } from '@fortawesome/pro-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { useStoreState } from '#/state';
 import { useAiVisionMapQuery } from '#/views/vision/vision-centre/components/VisionMap/graphql/queries/__generated__/vision-map.generated';
+import { faArrowsMaximize } from '@fortawesome/pro-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Card, Col, Form, Modal, Row, Spin, Switch, Typography } from 'antd';
 import { useAtomValue } from 'jotai';
 import mapboxgl from 'mapbox-gl';
@@ -126,12 +126,12 @@ const UnClusteredCountLayer = (
     filter={['!', ['has', 'point_count']]}
     id="unclustered-count"
     layout={{
+      'text-allow-overlap': true,
+      'text-anchor': 'center',
       'text-field': ['to-string', ['coalesce', ['get', 'count'], 1]],
       'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-      'text-size': 11,
-      'text-anchor': 'center',
-      'text-allow-overlap': true,
       'text-offset': [0, 0],
+      'text-size': 11,
     }}
     paint={{
       'text-color': '#000000',
@@ -189,9 +189,9 @@ const VisionMap = ({ height, isPrinting, width }: Props) => {
           ? (raw as number[]).reduce((a, b) => a + (Number(b) || 0), 0)
           : Number(raw ?? 1) || 1;
         return {
+          count: numericCount,
           geoLat: item?.lat ?? null,
           geoLng: item?.lon ?? null,
-          count: numericCount,
         };
       }),
     [data]
@@ -200,7 +200,7 @@ const VisionMap = ({ height, isPrinting, width }: Props) => {
   const isDark = currentTheme === 'dark' && !isPrinting;
 
   // sensible fallback centre (London) if there are no markers
-  const defaultCenter = { geoLat: 51.509865, geoLng: -0.118092 };
+  const defaultCenter = { geoLat: 51.509_865, geoLng: -0.118_092 };
   const center = markers.length > 0 ? markers[0] : defaultCenter;
 
   const toggleLargeOpen = () => setLargeOpen(!largeOpen);
@@ -324,11 +324,11 @@ const VisionMap = ({ height, isPrinting, width }: Props) => {
               (loading ? (
                 <div
                   style={{
-                    height: '80vh',
-                    width: '85vw',
-                    display: 'flex',
                     alignItems: 'center',
+                    display: 'flex',
+                    height: '80vh',
                     justifyContent: 'center',
+                    width: '85vw',
                   }}
                 >
                   <Spin size="large" />
@@ -353,11 +353,11 @@ const VisionMap = ({ height, isPrinting, width }: Props) => {
                 >
                   <Source
                     cluster
+                    clusterMaxZoom={14}
                     clusterProperties={{
                       // aggregated sum of child feature "count" values
                       sum: ['+', ['accumulated'], ['get', 'count']],
                     }}
-                    clusterMaxZoom={14}
                     clusterRadius={50}
                     data={{
                       features: markers.map((marker) => ({

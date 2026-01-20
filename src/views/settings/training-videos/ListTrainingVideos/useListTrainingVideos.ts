@@ -1,4 +1,5 @@
 import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import { useDeleteTrainingVideoMutation } from '#/views/settings/training-videos/graphql/mutations/__generated__/delete-training-video.generated';
 import { Modal, notification } from 'antd';
 import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
@@ -7,7 +8,6 @@ import { useIntl } from 'react-intl';
 import type { TrainingVideo } from '../types';
 
 import { useTrainingVideosLazyQuery } from '../graphql/queries/__generated__/training-videos.generated';
-import { useDeleteTrainingVideoMutation } from '#/views/settings/training-videos/graphql/mutations/__generated__/delete-training-video.generated';
 
 interface UseListTrainingVideosReturn {
   editModalOpen: boolean;

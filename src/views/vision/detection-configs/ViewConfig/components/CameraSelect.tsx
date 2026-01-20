@@ -26,9 +26,9 @@ export const CameraSelect: React.FC<{
     const description =
       node.serialNumber || `${node.make || ''} ${node.model || ''}`.trim();
     return {
+      description,
       key: node.id,
       title,
-      description,
     };
   });
 
@@ -55,17 +55,13 @@ export const CameraSelect: React.FC<{
 
           return (
             <Form.Item
-              name="selectedCameras"
               label={intl.formatMessage({ defaultMessage: 'Select Cameras' })}
+              name="selectedCameras"
             >
               <Transfer
                 dataSource={dataSource}
-                titles={[
-                  intl.formatMessage({ defaultMessage: 'Available Cameras' }),
-                  intl.formatMessage({ defaultMessage: 'Selected Cameras' }),
-                ]}
-                targetKeys={targetKeys}
-                selectedKeys={selectedKeys}
+                disabled={loading}
+                listStyle={{ height: 300, width: 400 }}
                 onChange={(next) => handleChange(next)}
                 onSelectChange={(sourceSelectedKeys, targetSelectedKeys) => {
                   setSelectedKeys([
@@ -74,9 +70,13 @@ export const CameraSelect: React.FC<{
                   ]);
                 }}
                 render={(item) => item.title}
-                listStyle={{ width: 400, height: 300 }}
-                disabled={loading}
                 rowKey={(record) => record.key}
+                selectedKeys={selectedKeys}
+                targetKeys={targetKeys}
+                titles={[
+                  intl.formatMessage({ defaultMessage: 'Available Cameras' }),
+                  intl.formatMessage({ defaultMessage: 'Selected Cameras' }),
+                ]}
               />
             </Form.Item>
           );

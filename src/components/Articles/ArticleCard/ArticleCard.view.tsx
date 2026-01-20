@@ -17,6 +17,7 @@ import {
 } from '@fortawesome/pro-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
+  Badge,
   Button,
   Carousel,
   Col,
@@ -29,6 +30,7 @@ import {
 } from 'antd';
 import SkeletonImage from 'components/images/SkeletonImage.view';
 import WatermarkImage from 'components/images/WatermarkImage.view';
+import { formatDistanceToNow } from 'date-fns';
 import {
   ArticlePriority,
   CompleteStatus,
@@ -68,6 +70,7 @@ const ArticleCard = ({
   const classes = useStyles();
   const {
     createdBy,
+    criticalExpiry,
     id,
     images,
     previewText,
@@ -247,6 +250,44 @@ const ArticleCard = ({
       )} */}
         <div className={classes.content}>
           <div className={classes.details}>
+            {priority === ArticlePriority.Critical && (
+              <div style={{ marginBottom: 8 }}>
+                <Badge
+                  count={intl.formatMessage({ defaultMessage: 'CRITICAL' })}
+                  style={{
+                    backgroundColor: '#ff4d4f',
+                    fontSize: 11,
+                    fontWeight: 'bold',
+                  }}
+                />
+                {criticalExpiry && (
+                  <Text
+                    style={{
+                      color: '#ff4d4f',
+                      display: 'block',
+                      fontSize: 11,
+                      marginTop: 4,
+                    }}
+                  >
+                    <FontAwesomeIcon
+                      icon={faClock}
+                      style={{ marginRight: 4 }}
+                    />
+                    {intl.formatMessage(
+                      { defaultMessage: 'Expires {time}' },
+                      {
+                        time: formatDistanceToNow(
+                          new Date(criticalExpiry as string),
+                          {
+                            addSuffix: true,
+                          }
+                        ),
+                      }
+                    )}
+                  </Text>
+                )}
+              </div>
+            )}
             <Title
               ellipsis={{
                 rows: 2,

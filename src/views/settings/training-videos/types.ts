@@ -1,5 +1,5 @@
 // Types for Training Videos (manual until yarn generate can run)
-import { ResourceTrainingVideosQuery } from '#/views/resources/training/graphql/queries/__generated__/training-videos.generated';
+import type { ResourceTrainingVideosQuery } from '#/views/resources/training/graphql/queries/__generated__/training-videos.generated';
 
 export interface Tag {
   id: string;

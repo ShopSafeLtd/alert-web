@@ -11,6 +11,7 @@ import {
   Card,
   Checkbox,
   Col,
+  DatePicker,
   Drawer,
   Form,
   Input,
@@ -332,6 +333,45 @@ const CreateEditArticleView = ({
                 </Form.Item>
               </Col>
             </Row>
+            <Form.Item
+              noStyle
+              shouldUpdate={(prevValues: FormData, currentValues: FormData) =>
+                prevValues.importance !== currentValues.importance
+              }
+            >
+              {({ getFieldValue }) =>
+                getFieldValue('importance') === ArticlePriority.Critical ? (
+                  <Row gutter={16} style={{ marginTop: 16 }}>
+                    <Col span={12}>
+                      <Form.Item
+                        label={intl.formatMessage({
+                          defaultMessage: 'Critical Expiry Date',
+                        })}
+                        name="criticalExpiry"
+                        rules={[
+                          {
+                            message: intl.formatMessage({
+                              defaultMessage:
+                                'Please select expiry date for critical bulletin!',
+                            }),
+                            required: true,
+                          },
+                        ]}
+                      >
+                        <DatePicker
+                          format="YYYY-MM-DD HH:mm"
+                          placeholder={intl.formatMessage({
+                            defaultMessage: 'Select expiry date',
+                          })}
+                          showTime
+                          style={{ width: '100%' }}
+                        />
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                ) : null
+              }
+            </Form.Item>
             <div style={{ margin: 25 }}>
               <Editor
                 init={{

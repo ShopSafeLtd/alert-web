@@ -1,0 +1,3 @@
+mutation AcknowledgeCriticalBulletin($articleId: String!) {
+  acknowledgeCriticalBulletin(articleId: $articleId)
+}

@@ -1,5 +1,4 @@
 import type { FormInstance } from 'antd';
-import { Form } from 'antd';
 
 import {
   currentUserAtom,
@@ -7,11 +6,12 @@ import {
 } from '#/providers/UserProvider/UserProvider';
 import { useStoreActions } from '#/state';
 import { useUser } from '@clerk/clerk-react';
+import { Form } from 'antd';
+import { useSetAtom } from 'jotai';
 import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 
 import { useForcedPasswordSetMutation } from './graphql/mutations/__generated__/password-set.generated';
-import { useSetAtom } from 'jotai';
 
 export interface FormData {
   confirm: string;

@@ -6,24 +6,24 @@ import useListDetectionConfigs from './useListDetectionConfigs';
 const ListDetectionConfigsContainer = () => {
   const {
     data,
-    loading,
-    search,
-    setSearch,
-    totalCount,
     filterState,
     handleTableChange,
+    loading,
+    search,
     setPage,
+    setSearch,
+    totalCount,
   } = useListDetectionConfigs();
 
   return (
     <ListDetectionConfigsView
       data={data}
-      setPage={setPage}
       filterState={filterState}
       loading={loading}
       onSearchChange={setSearch}
       onTableChange={handleTableChange}
       search={search}
+      setPage={setPage}
       totalCount={totalCount}
     />
   );

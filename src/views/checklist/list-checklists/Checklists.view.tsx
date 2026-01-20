@@ -1,15 +1,15 @@
-import type { FetchResult } from '@apollo/client';
 import type { CreateActiveChecklistMutation } from '#/views/checklist/graphql/mutations/__generated__/create-active-checklist.generated';
 import type { ActiveChecklistsQuery } from '#/views/checklist/graphql/queries/__generated__/list-active-checklists.generated';
 import type { ChecklistsQuery } from '#/views/checklist/graphql/queries/__generated__/list-checklists.generated';
+import type { FetchResult } from '@apollo/client';
 
+import PermissionCheckWrapper from '#/components/PermissionCheck/PermissionCheckWrapper';
+import BusinessesSelect from '#/components/form-components/BusinessesSelect/BusinessesSelect.view';
+import UsersSelect from '#/components/form-components/UsersSelect/UsersSelect.view';
+import DebouncedInput from '#/utils/debounced-input';
 import { DownOutlined, SettingOutlined } from '@ant-design/icons';
 import { faDownload, faEdit, faTrash } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import BusinessesSelect from '#/components/form-components/BusinessesSelect/BusinessesSelect.view';
-import UsersSelect from '#/components/form-components/UsersSelect/UsersSelect.view';
-import PermissionCheckWrapper from '#/components/PermissionCheck/PermissionCheckWrapper';
-import DebouncedInput from '#/utils/debounced-input';
 import {
   Button,
   Card,
@@ -40,8 +40,8 @@ import type {
   SetChecklistFilterModel,
 } from '../../../state/filter-model';
 
-import CreateActiveChecklist from './drawer/create-active-checklist';
 import useStyles from './ListChcklists.styles';
+import CreateActiveChecklist from './drawer/create-active-checklist';
 
 interface ChecklistsViewProps {
   activeChecklistSort: {

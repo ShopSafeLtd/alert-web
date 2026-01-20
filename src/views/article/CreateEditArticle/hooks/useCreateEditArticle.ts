@@ -12,6 +12,7 @@ import {
   userSchemesAtom,
 } from '#/providers/UserProvider/UserProvider';
 import { Form } from 'antd';
+import dayjs from 'dayjs';
 import { useCreateArticleMutation } from 'graphql/article/mutations/__generated__/create-article.generated';
 import { useEditArticleMutation } from 'graphql/article/mutations/__generated__/edit-article.generated';
 import { useArticleQuery } from 'graphql/article/queries/__generated__/view-article.generated';
@@ -33,6 +34,7 @@ interface FormData {
   business: string[];
   categories: SelectProps['options'];
   content: string;
+  criticalExpiry?: string;
   groups: string[];
   importance: ArticlePriority;
   roles: string[];
@@ -129,6 +131,7 @@ const useCreateEditArticle = (): Props => {
             value: tag.name || '',
           })) || [],
         content: result?.article?.rows[0].columns[0].text || '',
+        criticalExpiry: result?.article?.criticalExpiry || undefined,
         groups: result?.article?.groups.map((group) => group.id || '') || [],
         importance: result?.article?.priority || ArticlePriority.Normal,
         roles: result?.article?.roles.map(({ id }) => id || '') || [],
@@ -228,6 +231,9 @@ const useCreateEditArticle = (): Props => {
             value: tag.name || '',
           })) || [],
         content: result?.article?.rows[0].columns[0].text || '',
+        criticalExpiry: result?.article?.criticalExpiry
+          ? dayjs(result?.article?.criticalExpiry)
+          : undefined,
         groups: result?.article?.groups.map((group) => group.id || '') || [],
         importance: result?.article?.priority || ArticlePriority.Normal,
         roles: result?.article?.roles.map(({ id }) => id || '') || [],
@@ -384,6 +390,15 @@ const useCreateEditArticle = (): Props => {
       );
     }
   }, [categories, res]);
+
+  // Clear criticalExpiry when importance changes away from CRITICAL
+  useEffect(() => {
+    const currentImportance = form.getFieldValue('importance');
+    if (currentImportance !== ArticlePriority.Critical) {
+      form.setFieldValue('criticalExpiry', undefined);
+    }
+  }, [form]);
+
   // "filename": "",
   //   "mimetype": "",
   //   "url"
@@ -714,6 +729,7 @@ const useCreateEditArticle = (): Props => {
       data: {
         business: form.getFieldValue('business')[0],
         categories: selectedCategoryIds,
+        criticalExpiry: form.getFieldValue('criticalExpiry')?.toISOString(),
         documents:
           fileList.map((file) => ({
             fileType: file.type || '',

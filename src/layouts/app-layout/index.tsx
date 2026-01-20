@@ -12,6 +12,7 @@ import {
   currentSchemeBusinessesAtom,
   currentSchemeIdAtom,
   currentUserSchemeAtom,
+  pendingCriticalBulletinsAtom,
   pendingLoginVideosAtom,
   settingSchemeAtom,
 } from '#/providers/SchemeProvider/SchemeProvider';
@@ -20,6 +21,7 @@ import { useAuth as useAuthClerk } from '@clerk/clerk-react';
 import { faBars } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Grid, Layout } from 'antd';
+import MandatoryCriticalBulletinModal from 'components/bulletins/MandatoryCriticalBulletinModal';
 import MobileNav, {
   mobileNavOpenAtom,
 } from 'components/layout-components/AntD/navigation/MobileNav';
@@ -97,10 +99,18 @@ const AppLayout = (): JSX.Element => {
   const setMobileNavOpen = useSetAtom(mobileNavOpenAtom);
   const pendingVideos = useAtomValue(pendingLoginVideosAtom);
   const setPendingVideos = useSetAtom(pendingLoginVideosAtom);
+  const pendingBulletins = useAtomValue(pendingCriticalBulletinsAtom);
+  const setPendingBulletins = useSetAtom(pendingCriticalBulletinsAtom);
   const [showVideoModal, setShowVideoModal] = useState(false);
+  const [showBulletinModal, setShowBulletinModal] = useState(false);
 
   const onMobileNavToggle = () => {
     setMobileNavOpen(true);
+  };
+
+  const handleBulletinsComplete = () => {
+    setPendingBulletins([]);
+    setShowBulletinModal(false);
   };
 
   const handleVideosComplete = () => {
@@ -108,12 +118,19 @@ const AppLayout = (): JSX.Element => {
     setShowVideoModal(false);
   };
 
-  // Show modal when pending videos are loaded
+  // Show bulletin modal when pending critical bulletins are loaded
   useEffect(() => {
-    if (pendingVideos.length > 0) {
+    if (pendingBulletins.length > 0) {
+      setShowBulletinModal(true);
+    }
+  }, [pendingBulletins]);
+
+  // Show video modal when pending videos are loaded (only if no bulletins)
+  useEffect(() => {
+    if (pendingVideos.length > 0 && pendingBulletins.length === 0) {
       setShowVideoModal(true);
     }
-  }, [pendingVideos]);
+  }, [pendingVideos, pendingBulletins]);
 
   const { status } = useThemeSwitcher();
 
@@ -190,6 +207,11 @@ const AppLayout = (): JSX.Element => {
               <FontAwesomeIcon color="#FFF" icon={faBars} size="xl" />
             </div>
           )}
+          <MandatoryCriticalBulletinModal
+            bulletins={pendingBulletins}
+            onComplete={handleBulletinsComplete}
+            visible={showBulletinModal}
+          />
           <MandatoryVideoModal
             onComplete={handleVideosComplete}
             videos={pendingVideos}

@@ -1,6 +1,9 @@
 import type { ActiveChecklistQuery } from '#/views/checklist/graphql/queries/__generated__/view-active-checklist.generated';
 import type { FormInstance } from 'antd';
 
+import FormattedMessageFixed from '#/components/util-components/FormattedMessageFixed';
+import { getCustomUrls } from '#/providers/GetCustomUrls';
+import MediaUrlUploader from '#/views/checklist/active-checklist/media-component';
 import {
   CheckCircleOutlined,
   ClockCircleOutlined,
@@ -10,9 +13,6 @@ import {
 } from '@ant-design/icons';
 import { faFileUpload } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import FormattedMessageFixed from '#/components/util-components/FormattedMessageFixed';
-import { getCustomUrls } from '#/providers/GetCustomUrls';
-import MediaUrlUploader from '#/views/checklist/active-checklist/media-component';
 import {
   Badge,
   Button,
@@ -39,8 +39,8 @@ import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router';
 import { useSearchParams } from 'react-router-dom';
 
-import SigSeal from '../../../components/onboarding/Onboarding/SchemeTerms/SigSeal';
 import SignatureInput from '../../../components/SignBox';
+import SigSeal from '../../../components/onboarding/Onboarding/SchemeTerms/SigSeal';
 import { useStoreState } from '../../../state';
 import CompletedChecklistView from '../completed-checklist/CompletedChecklist.view';
 import useStyles from './ActiveChecklist.styles';
@@ -171,10 +171,10 @@ const ActiveChecklistView = ({
           )
         : '',
       completedByUser: data?.activeChecklist.completedBy?.origName || '',
-      signature: data?.activeChecklist.signature || '',
-      title: data?.activeChecklist.name || '',
       logo: data?.activeChecklist.scheme?.logo?.urlPersisted || '',
+      signature: data?.activeChecklist.signature || '',
       storeName: data?.activeChecklist.business?.name || '',
+      title: data?.activeChecklist.name || '',
     })
   );
   if (
@@ -195,12 +195,12 @@ const ActiveChecklistView = ({
             : ''
         }
         completedByUser={data?.activeChecklist?.completedBy?.origName || ''}
+        logo={data?.activeChecklist.scheme?.logo?.urlPersisted || ''}
         onBack={() => navigate('/app/checklists')}
         signature={data?.activeChecklist.signature || ''}
+        storeName={data?.activeChecklist.business?.name || ''}
         theme={theme}
         title={data?.activeChecklist.name || ''}
-        logo={data?.activeChecklist.scheme?.logo?.urlPersisted || ''}
-        storeName={data?.activeChecklist.business?.name || ''}
       />
     );
   }
@@ -503,8 +503,6 @@ const ActiveChecklistView = ({
                                                           schemeRequired
                                                             ? [
                                                                 {
-                                                                  required:
-                                                                    true,
                                                                   message:
                                                                     intl.formatMessage(
                                                                       {
@@ -512,6 +510,8 @@ const ActiveChecklistView = ({
                                                                           'This question is required',
                                                                       }
                                                                     ),
+                                                                  required:
+                                                                    true,
                                                                 },
                                                               ]
                                                             : []
