@@ -362,8 +362,10 @@ const ViewPoliceOffender = ({
 
         markers.push({
           ...incident,
+          date: incident.date ? incident.date.toISOString() : null,
           geoLat: incident.location.geoLat,
           geoLng: incident.location.geoLng,
+          subject: incident.subject ?? undefined,
         });
       }
     }
@@ -435,12 +437,13 @@ const ViewPoliceOffender = ({
                               defaultMessage: 'Unidentified Offender',
                             })}
                         </Title>
-                        {sharedOffender.policePriorityScore !== null && (
-                          <PriorityBadge
-                            intl={intl}
-                            score={sharedOffender.policePriorityScore}
-                          />
-                        )}
+                        {sharedOffender.policePriorityScore !== null &&
+                          sharedOffender.policePriorityScore !== undefined && (
+                            <PriorityBadge
+                              intl={intl}
+                              score={sharedOffender.policePriorityScore}
+                            />
+                          )}
                       </Space>
                     </Col>
                     <Col>

@@ -45,16 +45,7 @@ const PriorityOffendersCards: React.FC<PriorityOffendersCardsProps> = ({
       >
         <Row gutter={[16, 16]}>
           {Array.from({ length: maxOffenders }).map((_, index) => (
-            <Col
-              key={index}
-              lg={24}
-              md={24}
-              sm={24}
-              wrap
-              xl={12}
-              xs={24}
-              xxl={8}
-            >
+            <Col key={index} lg={24} md={24} sm={24} xl={12} xs={24} xxl={8}>
               <CompactSkeletonCard />
             </Col>
           ))}

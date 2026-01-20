@@ -89,14 +89,14 @@ export const GeographicalAreaListView: React.FC<
           const circle: CircleGeometry =
             typeof record.circle === 'string'
               ? (JSON.parse(record.circle) as CircleGeometry)
-              : record.circle;
+              : (record.circle as CircleGeometry);
           return formatRadius(circle.radiusMeters);
         }
         if (record.areaType === 'POLYGON' && record.polygon) {
           const polygon: PolygonGeometry =
             typeof record.polygon === 'string'
               ? (JSON.parse(record.polygon) as PolygonGeometry)
-              : record.polygon;
+              : (record.polygon as PolygonGeometry);
           const pointCount = polygon.coordinates?.length - 1 || 0;
           return intl.formatMessage(
             { defaultMessage: '{count} points' },
@@ -145,17 +145,21 @@ export const GeographicalAreaListView: React.FC<
           </Button>
           <Popconfirm
             cancelText={intl.formatMessage({ defaultMessage: 'Cancel' })}
-            description={
-              <FormattedMessage
-                defaultMessage='Are you sure you want to delete "{name}"?'
-                values={{ name: record.name }}
-              />
-            }
             okText={intl.formatMessage({ defaultMessage: 'Delete' })}
             okType="danger"
             onConfirm={() => onDelete(record.id)}
             title={
-              <FormattedMessage defaultMessage="Delete geographical area?" />
+              <div>
+                <div>
+                  <FormattedMessage defaultMessage="Delete geographical area?" />
+                </div>
+                <div>
+                  <FormattedMessage
+                    defaultMessage='Are you sure you want to delete "{name}"?'
+                    values={{ name: record.name }}
+                  />
+                </div>
+              </div>
             }
           >
             <Button

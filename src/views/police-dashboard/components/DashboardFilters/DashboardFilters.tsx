@@ -88,7 +88,9 @@ const DashboardFilters: React.FC<Props> = ({
     }
   };
 
-  const handleCustomDateChange = (dates: [Moment, Moment] | null) => {
+  const handleCustomDateChange = (
+    dates: [Moment | null, Moment | null] | null
+  ) => {
     if (dates && dates.length === 2) {
       const [startMoment, endMoment] = dates;
       if (startMoment && endMoment) {

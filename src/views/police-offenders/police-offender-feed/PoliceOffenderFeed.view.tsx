@@ -17,8 +17,8 @@ import {
 import CompactSkeletonCard from 'components/offenders/OffenderCard/OffenderSkeletonCard.view';
 import PoliceOffenderCard from 'components/police-offenders/PoliceOffenderCard';
 import LoadingOverlay from 'components/shared-components/LoadingOverlay/LoadingOverlay';
-import dayjs from 'dayjs';
 import { useAtomValue } from 'jotai';
+import moment from 'moment';
 import React from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useIntl } from 'react-intl';
@@ -193,8 +193,8 @@ const PoliceOffenderFeed = ({
                           value={
                             customDateRange.startDate && customDateRange.endDate
                               ? [
-                                  dayjs(customDateRange.startDate),
-                                  dayjs(customDateRange.endDate),
+                                  moment(customDateRange.startDate),
+                                  moment(customDateRange.endDate),
                                 ]
                               : null
                           }

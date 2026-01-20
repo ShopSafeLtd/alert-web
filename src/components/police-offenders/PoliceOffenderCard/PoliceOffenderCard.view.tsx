@@ -24,13 +24,6 @@ import usePoliceOffenderCard from './usePoliceOffenderCard';
 
 const { Title } = Typography;
 
-type ImagePosition =
-  | 'BOTTOM_LEFT'
-  | 'BOTTOM_RIGHT'
-  | 'CENTER'
-  | 'TOP_LEFT'
-  | 'TOP_RIGHT';
-
 const getLevel = (value: number): 'high' | 'low' | 'medium' => {
   if (value >= 70) return 'high';
   if (value >= 40) return 'medium';
@@ -254,10 +247,14 @@ const SourceSchemes = ({ sources }: SourceSchemesProps): JSX.Element | null => {
 };
 
 interface Props {
+  openLightbox: (elements: { src: string }[], index: number) => void;
   sharedOffender: PoliceOffenderCardFragment;
 }
 
-const PoliceOffenderCard = ({ sharedOffender }: Props): JSX.Element => {
+const PoliceOffenderCard = ({
+  openLightbox: _openLightbox,
+  sharedOffender,
+}: Props): JSX.Element => {
   const intl = useIntl();
   const classes = useStyles();
   const { prefix: currency } = useAtomValue(currencySymbolAtom);
@@ -292,7 +289,7 @@ const PoliceOffenderCard = ({ sharedOffender }: Props): JSX.Element => {
           <div className={classes.imageContainer}>
             {mappedData.images.length > 0 ? (
               <WatermarkImage
-                position={mappedData.images[0].position as ImagePosition}
+                position={mappedData.images[0].position}
                 positionX={mappedData.images[0].positionX}
                 positionY={mappedData.images[0].positionY}
                 rotation={mappedData.images[0].rotation}

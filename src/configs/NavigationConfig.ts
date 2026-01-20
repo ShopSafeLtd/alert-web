@@ -483,6 +483,7 @@ const navigationConfig: NavItem[] = [
       },
     ],
     intl: defineMessage({
+      id: 'police-dashboard',
       defaultMessage: 'Dashboard',
     }),
   },
@@ -500,6 +501,7 @@ const navigationConfig: NavItem[] = [
       },
     ],
     intl: defineMessage({
+      id: 'police-heatmap',
       defaultMessage: 'Heatmap',
     }),
   },
@@ -511,6 +513,7 @@ const navigationConfig: NavItem[] = [
     breadcrumb: true,
     submenu: [],
     intl: defineMessage({
+      id: 'police-offenders',
       defaultMessage: 'Offenders',
     }),
     permission: [
@@ -528,6 +531,7 @@ const navigationConfig: NavItem[] = [
     breadcrumb: true,
     submenu: [],
     intl: defineMessage({
+      id: 'police-crime-groups',
       defaultMessage: 'Crime Groups',
     }),
     permission: [
@@ -545,6 +549,7 @@ const navigationConfig: NavItem[] = [
     breadcrumb: true,
     submenu: [],
     intl: defineMessage({
+      id: 'police-incidents',
       defaultMessage: 'Incidents',
     }),
     permission: [
@@ -562,6 +567,7 @@ const navigationConfig: NavItem[] = [
     breadcrumb: true,
     submenu: [],
     intl: defineMessage({
+      id: 'police-vehicles',
       defaultMessage: 'Vehicles',
     }),
     permission: [
@@ -586,6 +592,7 @@ const navigationConfig: NavItem[] = [
         breadcrumb: true,
         submenu: [],
         intl: defineMessage({
+          id: 'police-settings-users',
           defaultMessage: 'Users',
         }),
         permission: [
@@ -607,6 +614,7 @@ const navigationConfig: NavItem[] = [
         breadcrumb: true,
         submenu: [],
         intl: defineMessage({
+          id: 'police-settings-roles',
           defaultMessage: 'Roles',
         }),
         permission: [
@@ -628,6 +636,7 @@ const navigationConfig: NavItem[] = [
         breadcrumb: true,
         submenu: [],
         intl: defineMessage({
+          id: 'police-settings-reporting-areas',
           defaultMessage: 'Reporting Areas',
         }),
         permission: [
@@ -639,6 +648,7 @@ const navigationConfig: NavItem[] = [
       },
     ],
     intl: defineMessage({
+      id: 'police-settings',
       defaultMessage: 'Settings',
     }),
     permission: [

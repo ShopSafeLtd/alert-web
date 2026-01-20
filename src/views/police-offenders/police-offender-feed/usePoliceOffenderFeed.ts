@@ -89,29 +89,34 @@ const usePoliceOffenderFeed = (): Return => {
     const now = dayjs();
     switch (dateFilter) {
       case 'all': {
-        return { lastIncidentAfter: now.subtract(12, 'months').toISOString() };
+        return {
+          lastIncidentAfter: now.subtract(12, 'months').toDate(),
+        };
       }
       case '6months': {
-        return { lastIncidentAfter: now.subtract(6, 'months').toISOString() };
+        return {
+          lastIncidentAfter: now.subtract(6, 'months').toDate(),
+        };
       }
       case '3months': {
-        return { lastIncidentAfter: now.subtract(3, 'months').toISOString() };
+        return {
+          lastIncidentAfter: now.subtract(3, 'months').toDate(),
+        };
       }
       case '30days': {
-        return { lastIncidentAfter: now.subtract(30, 'days').toISOString() };
+        return {
+          lastIncidentAfter: now.subtract(30, 'days').toDate(),
+        };
       }
       case 'custom': {
         return {
           ...(customDateRange.startDate && {
-            lastIncidentAfter: customDateRange.startDate,
+            lastIncidentAfter: new Date(customDateRange.startDate),
           }),
           ...(customDateRange.endDate && {
-            lastIncidentBefore: customDateRange.endDate,
+            lastIncidentBefore: new Date(customDateRange.endDate),
           }),
         };
-      }
-      default: {
-        return { lastIncidentAfter: now.subtract(12, 'months').toISOString() };
       }
     }
   }, [dateFilter, customDateRange.startDate, customDateRange.endDate]);

@@ -18,7 +18,7 @@ const PoliceIncidentFeedContainer = (): JSX.Element => {
     setGeographicalFilter,
     setSearch,
     setTableView,
-    tableView,
+    tableView: _tableView,
   } = usePoliceIncidentFeed();
 
   return (
@@ -36,7 +36,6 @@ const PoliceIncidentFeedContainer = (): JSX.Element => {
       setGeographicalFilter={setGeographicalFilter}
       setSearch={setSearch}
       setTableView={setTableView}
-      tableView={tableView}
     />
   );
 };

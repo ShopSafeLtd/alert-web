@@ -192,18 +192,31 @@ export const GeographicalFilterControl: React.FC<
       >
         {areas.map((area) => {
           // Parse circle/polygon data if it's JSON string
-          const circle =
+          const circle:
+            | { latitude: number; longitude: number; radiusMeters: number }
+            | null
+            | undefined =
             area.circle && typeof area.circle === 'string'
               ? (JSON.parse(area.circle) as {
                   latitude: number;
                   longitude: number;
                   radiusMeters: number;
                 } | null)
-              : area.circle;
-          const polygon =
+              : (area.circle as
+                  | {
+                      latitude: number;
+                      longitude: number;
+                      radiusMeters: number;
+                    }
+                  | null
+                  | undefined);
+          const polygon: { coordinates: number[][] } | null | undefined =
             area.polygon && typeof area.polygon === 'string'
               ? (JSON.parse(area.polygon) as { coordinates: number[][] } | null)
-              : area.polygon;
+              : (area.polygon as
+                  | { coordinates: number[][] }
+                  | null
+                  | undefined);
 
           const description = formatAreaDescription(
             area.areaType,

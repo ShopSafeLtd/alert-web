@@ -18,7 +18,7 @@ const PoliceVehicleFeedContainer = (): JSX.Element => {
     setGeographicalFilter,
     setSearch,
     setTableView,
-    tableView,
+    tableView: _tableView,
   } = usePoliceVehicleFeed();
 
   return (
@@ -36,7 +36,6 @@ const PoliceVehicleFeedContainer = (): JSX.Element => {
       setGeographicalFilter={setGeographicalFilter}
       setSearch={setSearch}
       setTableView={setTableView}
-      tableView={tableView}
     />
   );
 };

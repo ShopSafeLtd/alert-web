@@ -56,21 +56,12 @@ export const SavedAreaSelector: React.FC<SavedAreaSelectorProps> = ({
         )
       }
       onChange={handleChange}
-      optionRender={(option) => {
-        const label = (option as { label?: unknown }).label;
-        const data = (option as { data?: unknown }).data;
-        const title = (data as { title?: string } | undefined)?.title;
-        return (
-          <div>
-            <FontAwesomeIcon icon={faMapMarkerAlt} style={{ marginRight: 8 }} />
-            <strong>{typeof label === 'string' ? label : ''}</strong>
-            <div style={{ color: '#999', fontSize: 12, marginLeft: 24 }}>
-              {title ?? ''}
-            </div>
-          </div>
-        );
-      }}
-      options={areas.map((area) => {
+      placeholder={placeholder}
+      showSearch
+      style={{ width: '100%' }}
+      value={value}
+    >
+      {areas.map((area) => {
         // Parse circle/polygon data if it's JSON string
         const circle: {
           latitude: number;
@@ -99,17 +90,22 @@ export const SavedAreaSelector: React.FC<SavedAreaSelectorProps> = ({
           polygon
         );
 
-        return {
-          label: area.name,
-          title: description,
-          value: area.id,
-        };
+        return (
+          <Select.Option key={area.id} value={area.id}>
+            <div>
+              <FontAwesomeIcon
+                icon={faMapMarkerAlt}
+                style={{ marginRight: 8 }}
+              />
+              <strong>{area.name}</strong>
+              <div style={{ color: '#999', fontSize: 12, marginLeft: 24 }}>
+                {description}
+              </div>
+            </div>
+          </Select.Option>
+        );
       })}
-      placeholder={placeholder}
-      showSearch
-      style={{ width: '100%' }}
-      value={value}
-    />
+    </Select>
   );
 };
 

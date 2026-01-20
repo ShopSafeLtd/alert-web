@@ -16,7 +16,7 @@ export interface GeographicalArea {
   areaType: 'circle' | 'polygon';
   circle?: CircleGeometry;
   color: string;
-  createdAt: string;
+  createdAt: Date;
   createdBy?: {
     fullName: string;
     id: string;
@@ -25,7 +25,7 @@ export interface GeographicalArea {
   id: string;
   name: string;
   polygon?: PolygonGeometry;
-  updatedAt?: string;
+  updatedAt?: Date;
 }
 
 export interface ReportingAreaFormData {

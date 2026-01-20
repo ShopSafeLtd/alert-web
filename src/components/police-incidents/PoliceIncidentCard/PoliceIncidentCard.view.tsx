@@ -154,7 +154,7 @@ const PoliceIncidentCard = ({
                         {mappedData.images.map((image) => (
                           <div className={classes.image} key={image.id}>
                             <WatermarkImage
-                              position={image.position}
+                              position={image.position as never}
                               positionX={image.positionX}
                               positionY={image.positionY}
                               rotation={image.rotation}
@@ -198,7 +198,7 @@ const PoliceIncidentCard = ({
                   ) : fallbackImage ? (
                     <div className={classes.image}>
                       <WatermarkImage
-                        position={fallbackImage.position}
+                        position={fallbackImage.position as never}
                         positionX={fallbackImage.positionX}
                         positionY={fallbackImage.positionY}
                         rotation={fallbackImage.rotation}
@@ -346,7 +346,7 @@ const PoliceIncidentCard = ({
                     <div key={image.id}>
                       <div className="incident-card-image">
                         <WatermarkImage
-                          position={image.position}
+                          position={image.position as never}
                           positionX={image.positionX}
                           positionY={image.positionY}
                           rotation={image.rotation}
@@ -391,7 +391,7 @@ const PoliceIncidentCard = ({
             ) : fallbackImage ? (
               <div className="incident-card-image">
                 <WatermarkImage
-                  position={fallbackImage.position}
+                  position={fallbackImage.position as never}
                   positionX={fallbackImage.positionX}
                   positionY={fallbackImage.positionY}
                   rotation={fallbackImage.rotation}

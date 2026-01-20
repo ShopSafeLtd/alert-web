@@ -1,3 +1,5 @@
+import type { SharedIncidentRelayWhereInput } from '#/graphql/types';
+
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { subMonths } from 'date-fns';
 import { useAtomValue } from 'jotai';
@@ -22,13 +24,7 @@ const usePoliceHeatmap = () => {
 
   // Query variables
   const variables = useMemo(() => {
-    interface WhereInput {
-      incidentDateAfter?: string;
-      incidentDateBefore?: string;
-      schemeIds?: string[];
-    }
-
-    const where: WhereInput = {};
+    const where: SharedIncidentRelayWhereInput = {};
 
     if (schemeId) {
       where.schemeIds = [schemeId];
@@ -43,8 +39,8 @@ const usePoliceHeatmap = () => {
       const endDate = new Date(dateRange.endDate);
       endDate.setHours(23, 59, 59, 999);
 
-      where.incidentDateAfter = startDate.toISOString();
-      where.incidentDateBefore = endDate.toISOString();
+      where.incidentDateAfter = startDate;
+      where.incidentDateBefore = endDate;
     }
 
     return { where };

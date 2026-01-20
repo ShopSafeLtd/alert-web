@@ -1,5 +1,5 @@
 import type { IControl } from 'mapbox-gl';
-import type { MapMouseEvent, MapRef } from 'react-map-gl';
+import type { MapRef } from 'react-map-gl';
 
 import { formatRadius } from '#/utils/coordinate-conversion';
 import {
@@ -21,6 +21,14 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
 import Map, { Layer, Source } from 'react-map-gl';
+
+// Type for map mouse events
+interface MapMouseEvent {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  originalEvent: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  target: any;
+}
 
 // Type for map events with lngLat
 interface MapEventWithLngLat extends MapMouseEvent {

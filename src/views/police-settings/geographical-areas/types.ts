@@ -14,13 +14,13 @@ export type AreaGeometry = CircleGeometry | PolygonGeometry;
 
 export interface GeographicalArea {
   areaType: string;
-  circle?: CircleGeometry;
+  circle?: { [key: string]: unknown } | CircleGeometry | null;
   color?: null | string;
   createdAt: Date;
   description?: null | string;
   id: string;
   name: string;
-  polygon?: PolygonGeometry;
+  polygon?: { [key: string]: unknown } | PolygonGeometry | null;
 }
 
 export interface GeographicalAreaFormData {

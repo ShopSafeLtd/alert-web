@@ -135,10 +135,12 @@ export const calculatePolygonCenter = (
   let count = 0;
 
   // Exclude the last point if it's the same as the first (closing point)
+  const lastPoint = coordinates.at(-1);
   const pointsToAverage =
     coordinates.length > 1 &&
-    coordinates[0][0] === coordinates.at(-1)[0] &&
-    coordinates[0][1] === coordinates.at(-1)[1]
+    lastPoint &&
+    coordinates[0][0] === lastPoint[0] &&
+    coordinates[0][1] === lastPoint[1]
       ? coordinates.slice(0, -1)
       : coordinates;
 

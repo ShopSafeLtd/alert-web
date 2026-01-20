@@ -99,7 +99,7 @@ const PoliceVehicleCard = ({
             <div className={classes.imageContainer}>
               {mappedData.images.length > 0 ? (
                 <WatermarkImage
-                  position={mappedData.images[0].position as string}
+                  position={mappedData.images[0].position}
                   positionX={mappedData.images[0].positionX}
                   positionY={mappedData.images[0].positionY}
                   rotation={mappedData.images[0].rotation}
@@ -298,7 +298,7 @@ const PoliceVehicleCard = ({
                     }
                   >
                     <WatermarkImage
-                      position={image.position as string}
+                      position={image.position}
                       positionX={image.positionX}
                       positionY={image.positionY}
                       rotation={image.rotation}

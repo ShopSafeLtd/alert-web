@@ -12,7 +12,7 @@ import { useCallback, useState } from 'react';
 import type {
   CreateGeographicalAreaInput,
   UpdateGeographicalAreaInput,
-} from '../../../../../graphql/types';
+} from '../../../../graphql/types';
 import type {
   AreaGeometry,
   CircleGeometry,

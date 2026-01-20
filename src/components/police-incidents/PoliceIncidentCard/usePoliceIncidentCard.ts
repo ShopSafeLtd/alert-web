@@ -1,13 +1,8 @@
+import type { ImagePosition } from '#/graphql/types';
+
 import { useNavigate } from 'react-router';
 
 import type { PoliceIncidentCardFragment } from './__generated__/PoliceIncidentCard.fragment.generated';
-
-type ImagePosition =
-  | 'BOTTOM_LEFT'
-  | 'BOTTOM_RIGHT'
-  | 'CENTER'
-  | 'TOP_LEFT'
-  | 'TOP_RIGHT';
 
 interface Props {
   sharedIncident: PoliceIncidentCardFragment;

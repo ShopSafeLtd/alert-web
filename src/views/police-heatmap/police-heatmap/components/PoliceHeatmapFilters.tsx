@@ -167,7 +167,7 @@ const PoliceHeatmapFilters: React.FC<Props> = ({
   };
 
   const handleCustomDateChange = (
-    dates: [moment.Moment, moment.Moment] | null
+    dates: [moment.Moment | null, moment.Moment | null] | null
   ) => {
     if (dates && dates[0] && dates[1]) {
       const startDate = dates[0].toDate();

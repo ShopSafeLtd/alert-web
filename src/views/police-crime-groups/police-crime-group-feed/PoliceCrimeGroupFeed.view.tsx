@@ -20,6 +20,7 @@ interface Props {
   setCompactView: () => void;
   setSearch: (value: string) => void;
   setTableView: () => void;
+  tableView: boolean;
 }
 
 const PoliceCrimeGroupFeed = ({
