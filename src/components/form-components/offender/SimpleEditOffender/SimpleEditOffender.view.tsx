@@ -2,6 +2,7 @@
 import type { OffenderSettingsType } from '#/types/DataType';
 import type { FormInstance } from 'antd';
 
+import IncidentTypesSelect from '#/components/form-components/IncidentTypesSelect/IncidentTypesSelect.view';
 import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { Button, Col, Form, Input, Row, Select, Skeleton } from 'antd';
 import dayjs from 'dayjs';
@@ -113,30 +114,29 @@ const EditOffender = ({
             offenderSettings={offenderSettings}
             saving={saving}
           />
-          {data.knownFor && data.knownFor.length > 0 && (
-            <Row>
-              <Col span={24}>
-                <Form.Item
-                  label={intl.formatMessage({
-                    defaultMessage: 'Incident Types',
+          <Row>
+            <Col span={24}>
+              <Form.Item
+                label={intl.formatMessage({
+                  defaultMessage: 'Incident Types',
+                })}
+                name="knownFor"
+                tooltip={intl.formatMessage({
+                  defaultMessage:
+                    'Select the relevant incident types for this offender, these help to categorize the offender.',
+                })}
+              >
+                <IncidentTypesSelect
+                  disabled={saving}
+                  maxTagCount={3}
+                  placeholder={intl.formatMessage({
+                    defaultMessage: 'Search for incident types...',
                   })}
-                  name="knownFor"
-                  tooltip={intl.formatMessage({
-                    defaultMessage:
-                      'Select the relevant incident types for this offender, these help to categorize the offender.',
-                  })}
-                >
-                  <Select maxTagCount={3} mode="multiple">
-                    {data.knownFor.map((el) => (
-                      <Select.Option key={el} value={el}>
-                        {el}
-                      </Select.Option>
-                    ))}
-                  </Select>
-                </Form.Item>
-              </Col>
-            </Row>
-          )}
+                  treeCheckable
+                />
+              </Form.Item>
+            </Col>
+          </Row>
           {data.targetedGoods && data.targetedGoods.length > 0 && (
             <Row>
               <Col span={24}>
