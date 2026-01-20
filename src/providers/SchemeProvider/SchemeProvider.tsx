@@ -9,7 +9,7 @@ import { LocalStorageKeys } from '#/types';
 import { notification } from 'antd';
 import { usePendingCriticalBulletinsLazyQuery } from 'graphql/article/queries/__generated__/pending-critical-bulletins.generated';
 import { usePendingLoginPromptVideosLazyQuery } from 'graphql/queries/__generated__/pending-login-prompt-videos.generated';
-import { Currency, GoodsMode, Role } from 'graphql/types';
+import { Currency, GoodsMode, Role, SchemeType } from 'graphql/types';
 import { atom, useAtomValue, useSetAtom } from 'jotai/index';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -155,6 +155,7 @@ export const defaultCurrentUserSchemeAtom: UserSchemeState = {
     requireBusinessOnIncident: false,
     requireSiteNumberForUsers: false,
     restrictIncidentAccess: false,
+    schemeType: SchemeType.Default,
     showBlankActivity: false,
     skipLocationToAddress: false,
     taskTimeTracking: false,
@@ -173,6 +174,10 @@ export const currentSchemeIdAtom = atom(
 );
 export const currentSchemeAtom = atom(
   (get) => get(currentUserSchemeAtom).scheme,
+  () => {}
+);
+export const schemeTypeAtom = atom(
+  (get) => get(currentUserSchemeAtom).scheme.schemeType,
   () => {}
 );
 export const currentPermissionsAtom = atom(

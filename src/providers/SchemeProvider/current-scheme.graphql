@@ -29,6 +29,7 @@ query CurrentSchemeProvider($where: UserSchemeWhereUniqueInput!) {
       }
     }
     scheme {
+      schemeType
       usDateFormat
       disablePassword
       draftIncidents
