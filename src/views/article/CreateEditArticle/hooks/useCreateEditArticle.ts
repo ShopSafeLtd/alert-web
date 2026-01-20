@@ -34,7 +34,7 @@ interface FormData {
   business: string[];
   categories: SelectProps['options'];
   content: string;
-  criticalExpiry?: string;
+  criticalExpiry?: dayjs.Dayjs;
   groups: string[];
   importance: ArticlePriority;
   roles: string[];
@@ -131,7 +131,9 @@ const useCreateEditArticle = (): Props => {
             value: tag.name || '',
           })) || [],
         content: result?.article?.rows[0].columns[0].text || '',
-        criticalExpiry: result?.article?.criticalExpiry || undefined,
+        criticalExpiry: result?.article?.criticalExpiry
+          ? dayjs(result?.article?.criticalExpiry)
+          : undefined,
         groups: result?.article?.groups.map((group) => group.id || '') || [],
         importance: result?.article?.priority || ArticlePriority.Normal,
         roles: result?.article?.roles.map(({ id }) => id || '') || [],

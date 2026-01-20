@@ -206,12 +206,12 @@ export const userNotificationsAtom = atom(
 export const pendingLoginVideosAtom = atom<PendingVideo[]>([]);
 
 export type PendingCriticalBulletin = {
-  createdAt: string;
+  createdAt: Date;
   createdBy: {
     fullName: string;
     id: string;
   };
-  criticalExpiry?: null | string;
+  criticalExpiry?: Date | null;
   id: string;
   previewImage?: null | string;
   previewText?: null | string;

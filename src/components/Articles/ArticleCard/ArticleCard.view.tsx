@@ -276,12 +276,9 @@ const ArticleCard = ({
                     {intl.formatMessage(
                       { defaultMessage: 'Expires {time}' },
                       {
-                        time: formatDistanceToNow(
-                          new Date(criticalExpiry as string),
-                          {
-                            addSuffix: true,
-                          }
-                        ),
+                        time: formatDistanceToNow(criticalExpiry, {
+                          addSuffix: true,
+                        }),
                       }
                     )}
                   </Text>
