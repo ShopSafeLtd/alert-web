@@ -23,9 +23,11 @@ import {
   faNewspaper,
   faPeopleGroup,
   faPlayCircle,
+  faShield,
   faUsers,
   IconDefinition,
 } from '@fortawesome/pro-light-svg-icons';
+import { faMap } from '@fortawesome/pro-solid-svg-icons';
 
 import { defineMessage } from 'react-intl';
 import { PermissionMethod, PermissionModel } from 'graphql/types';
@@ -466,6 +468,185 @@ const navigationConfig: NavItem[] = [
       },
     ],
     submenu: [],
+  },
+  {
+    key: 'police-dashboard',
+    path: `${APP_PREFIX_PATH}/police-dashboard`,
+    title: 'Dashboard',
+    icon: faHome,
+    breadcrumb: false,
+    submenu: [],
+    permission: [
+      {
+        model: PermissionModel.PoliceDashboard,
+        method: PermissionMethod.Read,
+      },
+    ],
+    intl: defineMessage({
+      defaultMessage: 'Dashboard',
+    }),
+  },
+  {
+    key: 'police-heatmap',
+    path: `${APP_PREFIX_PATH}/police-heatmap`,
+    title: 'Heatmap',
+    icon: faMap,
+    breadcrumb: false,
+    submenu: [],
+    permission: [
+      {
+        model: PermissionModel.PoliceDashboard,
+        method: PermissionMethod.Read,
+      },
+    ],
+    intl: defineMessage({
+      defaultMessage: 'Heatmap',
+    }),
+  },
+  {
+    key: 'police-offenders',
+    path: `${APP_PREFIX_PATH}/police-offenders`,
+    title: 'Offenders',
+    icon: faUsers,
+    breadcrumb: true,
+    submenu: [],
+    intl: defineMessage({
+      defaultMessage: 'Offenders',
+    }),
+    permission: [
+      {
+        model: PermissionModel.PoliceOffenders,
+        method: PermissionMethod.Read,
+      },
+    ],
+  },
+  {
+    key: 'police-crime-groups',
+    path: `${APP_PREFIX_PATH}/police-crime-groups`,
+    title: 'Crime Groups',
+    icon: faPeopleGroup,
+    breadcrumb: true,
+    submenu: [],
+    intl: defineMessage({
+      defaultMessage: 'Crime Groups',
+    }),
+    permission: [
+      {
+        method: PermissionMethod.Read,
+        model: PermissionModel.PoliceCrimeGroups,
+      },
+    ],
+  },
+  {
+    key: 'police-incidents',
+    path: `${APP_PREFIX_PATH}/police-incidents`,
+    title: 'Incidents',
+    icon: faExclamationCircle,
+    breadcrumb: true,
+    submenu: [],
+    intl: defineMessage({
+      defaultMessage: 'Incidents',
+    }),
+    permission: [
+      {
+        model: PermissionModel.PoliceIncidents,
+        method: PermissionMethod.Read,
+      },
+    ],
+  },
+  {
+    key: 'police-vehicles',
+    path: `${APP_PREFIX_PATH}/police-vehicles`,
+    title: 'Vehicles',
+    icon: faCar,
+    breadcrumb: true,
+    submenu: [],
+    intl: defineMessage({
+      defaultMessage: 'Vehicles',
+    }),
+    permission: [
+      {
+        model: PermissionModel.PoliceVehicles,
+        method: PermissionMethod.Read,
+      },
+    ],
+  },
+  {
+    key: 'police-settings',
+    path: `${APP_PREFIX_PATH}/police-settings`,
+    title: 'Settings',
+    icon: faCog,
+    breadcrumb: true,
+    submenu: [
+      {
+        key: 'police-settings-users',
+        path: `${APP_PREFIX_PATH}/police-settings/users`,
+        title: 'Users',
+        icon: faUsers,
+        breadcrumb: true,
+        submenu: [],
+        intl: defineMessage({
+          defaultMessage: 'Users',
+        }),
+        permission: [
+          {
+            model: PermissionModel.PoliceSettings,
+            method: PermissionMethod.Read,
+          },
+          {
+            model: PermissionModel.Users,
+            method: PermissionMethod.Read,
+          },
+        ],
+      },
+      {
+        key: 'police-settings-roles',
+        path: `${APP_PREFIX_PATH}/police-settings/roles`,
+        title: 'Roles',
+        icon: faShield,
+        breadcrumb: true,
+        submenu: [],
+        intl: defineMessage({
+          defaultMessage: 'Roles',
+        }),
+        permission: [
+          {
+            model: PermissionModel.PoliceSettings,
+            method: PermissionMethod.Read,
+          },
+          {
+            model: PermissionModel.Roles,
+            method: PermissionMethod.Read,
+          },
+        ],
+      },
+      {
+        key: 'police-settings-reporting-areas',
+        path: `${APP_PREFIX_PATH}/police-settings/reporting-areas`,
+        title: 'Reporting Areas',
+        icon: faMap,
+        breadcrumb: true,
+        submenu: [],
+        intl: defineMessage({
+          defaultMessage: 'Reporting Areas',
+        }),
+        permission: [
+          {
+            model: PermissionModel.PoliceSettings,
+            method: PermissionMethod.Read,
+          },
+        ],
+      },
+    ],
+    intl: defineMessage({
+      defaultMessage: 'Settings',
+    }),
+    permission: [
+      {
+        model: PermissionModel.PoliceSettings,
+        method: PermissionMethod.Read,
+      },
+    ],
   },
 ];
 

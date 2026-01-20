@@ -1,0 +1,20 @@
+fragment PoliceOffenderSideListItem on SharedOffender {
+  id
+  name
+  policePriorityScore
+  totalLossValue
+  totalIncidents
+
+  images {
+    id
+    rotation
+    position
+    positionX
+    positionY
+    optimised
+  }
+
+  offender {
+    id
+  }
+}

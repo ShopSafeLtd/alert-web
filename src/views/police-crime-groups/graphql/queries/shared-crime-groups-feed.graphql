@@ -1,0 +1,31 @@
+#import "../../../../components/police-crime-groups/PoliceCrimeGroupCard/PoliceCrimeGroupCard.fragment.graphql"
+
+query SharedCrimeGroupsFeed(
+  $after: String
+  $first: Int
+  $orderBy: SharedCrimeGroupRelayOrderInput
+  $where: SharedCrimeGroupRelayWhereInput
+  $skip: Int
+) {
+  sharedCrimeGroupRelay(
+    after: $after
+    first: $first
+    orderBy: $orderBy
+    where: $where
+    skip: $skip
+  ) {
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      endCursor
+      startCursor
+    }
+    edges {
+      cursor
+      node {
+        ...PoliceCrimeGroupCard
+      }
+    }
+    totalCount
+  }
+}

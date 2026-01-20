@@ -1,0 +1,97 @@
+query PoliceHubDashboard(
+  $policeHubId: String!
+  $startDate: DateTime
+  $endDate: DateTime
+  $policeForce: String
+  $minPriorityScore: Int
+) {
+  policeHubDashboard(
+    policeHubId: $policeHubId
+    startDate: $startDate
+    endDate: $endDate
+    policeForce: $policeForce
+    minPriorityScore: $minPriorityScore
+  ) {
+    summary {
+      activeOffendersCount
+      highRiskIndividualsCount
+      activeCrimeGroupsCount
+      totalIncidentsSharedCount
+      averagePriorityScore
+      totalEstimatedValue
+      uniqueRetailersAffected
+      totalOffenders
+      averageOffenderValue
+      totalRepeatOffenders
+    }
+    topOffenders {
+      sharedOffenderId
+      policePriorityScore
+      aiImpactScore
+      aiSummary
+      threatLevel
+      riskCategory
+      incidentCount
+      daysSinceLastIncident
+      firstIncidentDate
+      lastIncidentDate
+      lastIncidentAt
+      totalValue
+      images
+      tags
+      activeAreas
+      affectedSchemes
+    }
+    repeatOffenderInsights {
+      totalRepeatOffenders
+      averageDaysBetweenIncidents
+      highFrequencyOffenders
+      recidivismDistribution
+      topByFrequency {
+        sharedOffenderId
+        policePriorityScore
+        aiSummary
+        incidentCount
+        daysSinceLastIncident
+        affectedSchemes
+      }
+    }
+    activeCrimeGroups {
+      sharedCrimeGroupId
+      crimeGroupId
+      policePriorityScore
+      aiSummary
+      aiSophisticationLevel
+      memberCount
+      recentActivityCount
+      totalValue
+      affectedSchemes
+      updatedAt
+    }
+    vehiclesOfInterest {
+      sharedVehicleId
+      vehicleIds
+      policePriorityScore
+      aiSummary
+      aiUsagePatterns
+      registration
+      make
+      model
+      color
+      incidentCount
+      associatedOffenderCount
+      lastSeenDate
+      affectedSchemes
+    }
+    incidentTypeDistribution {
+      tagId
+      tagName
+      crimeType
+      count
+    }
+    monthlyIncidentCounts {
+      month
+      count
+    }
+  }
+}

@@ -569,6 +569,150 @@ export const roleItems: {
     ],
     title: <FormattedMessage defaultMessage="Stock Removal Requests" />,
   },
+  {
+    description: (
+      <FormattedMessage defaultMessage="View police-specific dashboard with law enforcement metrics and insights." />
+    ),
+    icon: faHome,
+    key: PermissionModel.PoliceDashboard,
+    methods: [
+      {
+        key: PermissionMethod.Read,
+        name: <FormattedMessage defaultMessage="View" />,
+      },
+    ],
+    title: <FormattedMessage defaultMessage="Police Dashboard" />,
+  },
+  {
+    description: (
+      <FormattedMessage defaultMessage="Manage police-specific incident reports and law enforcement cases." />
+    ),
+    icon: faExclamationCircle,
+    key: PermissionModel.PoliceIncidents,
+    methods: [
+      {
+        key: PermissionMethod.Read,
+        name: <FormattedMessage defaultMessage="View" />,
+      },
+      {
+        key: PermissionMethod.Write,
+        name: <FormattedMessage defaultMessage="Create" />,
+      },
+      {
+        key: PermissionMethod.Approve,
+        name: <FormattedMessage defaultMessage="Approve" />,
+      },
+      {
+        key: PermissionMethod.Edit,
+        name: <FormattedMessage defaultMessage="Edit" />,
+      },
+      {
+        key: PermissionMethod.Delete,
+        name: <FormattedMessage defaultMessage="Delete" />,
+      },
+    ],
+    title: <FormattedMessage defaultMessage="Police Incidents" />,
+  },
+  {
+    description: (
+      <FormattedMessage defaultMessage="Manage police-specific offender profiles and suspect information." />
+    ),
+    icon: faUsers,
+    key: PermissionModel.PoliceOffenders,
+    methods: [
+      {
+        key: PermissionMethod.Read,
+        name: <FormattedMessage defaultMessage="View" />,
+      },
+      {
+        key: PermissionMethod.Write,
+        name: <FormattedMessage defaultMessage="Create" />,
+      },
+      {
+        key: PermissionMethod.Approve,
+        name: <FormattedMessage defaultMessage="Approve" />,
+      },
+      {
+        key: PermissionMethod.Edit,
+        name: <FormattedMessage defaultMessage="Edit" />,
+      },
+      {
+        key: PermissionMethod.Delete,
+        name: <FormattedMessage defaultMessage="Delete" />,
+      },
+    ],
+    title: <FormattedMessage defaultMessage="Police Offenders" />,
+  },
+  {
+    description: (
+      <FormattedMessage defaultMessage="Track and manage police-specific vehicle records and registrations." />
+    ),
+    icon: faCar,
+    key: PermissionModel.PoliceVehicles,
+    methods: [
+      {
+        key: PermissionMethod.Read,
+        name: <FormattedMessage defaultMessage="View" />,
+      },
+      {
+        key: PermissionMethod.Write,
+        name: <FormattedMessage defaultMessage="Create" />,
+      },
+      {
+        key: PermissionMethod.Approve,
+        name: <FormattedMessage defaultMessage="Approve" />,
+      },
+      {
+        key: PermissionMethod.Edit,
+        name: <FormattedMessage defaultMessage="Edit" />,
+      },
+      {
+        key: PermissionMethod.Delete,
+        name: <FormattedMessage defaultMessage="Delete" />,
+      },
+    ],
+    title: <FormattedMessage defaultMessage="Police Vehicles" />,
+  },
+  {
+    description: (
+      <FormattedMessage defaultMessage="Categorise and track organised crime groups from law enforcement perspective." />
+    ),
+    icon: faPeopleGroup,
+    key: PermissionModel.PoliceCrimeGroups,
+    methods: [
+      {
+        key: PermissionMethod.Read,
+        name: <FormattedMessage defaultMessage="View" />,
+      },
+      {
+        key: PermissionMethod.Write,
+        name: <FormattedMessage defaultMessage="Create" />,
+      },
+      {
+        key: PermissionMethod.Edit,
+        name: <FormattedMessage defaultMessage="Edit" />,
+      },
+      {
+        key: PermissionMethod.Delete,
+        name: <FormattedMessage defaultMessage="Delete" />,
+      },
+    ],
+    title: <FormattedMessage defaultMessage="Police Crime Groups" />,
+  },
+  {
+    description: (
+      <FormattedMessage defaultMessage="Configure police-specific system settings and preferences." />
+    ),
+    icon: faCog,
+    key: PermissionModel.PoliceSettings,
+    methods: [
+      {
+        key: PermissionMethod.Read,
+        name: <FormattedMessage defaultMessage="Manage" />,
+      },
+    ],
+    title: <FormattedMessage defaultMessage="Police Settings" />,
+  },
 ];
 export const settings = [
   {

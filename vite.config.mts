@@ -48,6 +48,9 @@ export default defineConfig((configEnv) => {
       //     /^ant-/,
       //     /^hljs-/,
       //     /^yarl__/,
+      //     /^mapbox/,           // MapboxDraw protection
+      //     /^mapboxgl/,         // MapboxDraw protection
+      //     /mapbox-gl-draw/,    // MapboxDraw protection
       //   ],
       //   defaultExtractor: (content) => content.match(/[\w-/:]+(?<!:)/g) || [],
       // }),

@@ -1,0 +1,16 @@
+#import "../../../../components/police-incidents/PoliceIncidentCard/PoliceIncidentCard.fragment.graphql"
+
+query GetSharedIncident($id: String!) {
+  sharedIncident(where: { id: $id }) {
+    ...PoliceIncidentCard
+    # Additional fields for detail view
+    aiBehavioralAnalysisSnapshot
+    aiImpactAssessmentSnapshot
+    aiInvestigationLeadsSnapshot
+    aiNetworkAnalysisSnapshot
+    aiPatternRecognitionSnapshot
+    aiPreventionInsightsSnapshot
+    aiRiskAssessmentSnapshot
+    aiImprovements
+  }
+}

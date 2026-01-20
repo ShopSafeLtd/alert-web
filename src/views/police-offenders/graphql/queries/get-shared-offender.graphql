@@ -1,0 +1,95 @@
+#import "../../../../components/police-offenders/PoliceOffenderCard/PoliceOffenderCard.fragment.graphql"
+
+query GetSharedOffender($id: String!) {
+  sharedOffender(where: { id: $id }) {
+    ...PoliceOffenderCard
+    # Additional fields for detail view
+    aiTemporalAnalysisSnapshot
+    aiGeographicAnalysisSnapshot
+    aiTargetAnalysisSnapshot
+    aiRiskAssessmentSnapshot
+    aiBehavioralAnalysisSnapshot
+    aiQualityAssessmentSnapshot
+    aiImpactAssessmentSnapshot
+    aiIdentityLinkageSnapshot
+    aiRecommendedActionsSnapshot
+
+    # Full offender data for detail view
+    offender {
+      id
+      name
+      alias
+      reference
+      totalIncidents
+      totalImages
+      totalValue
+      approved
+      knownFor
+      targetedGoods
+      comment
+      peculiarities
+      age
+      dateOfBirth
+      gender
+      race
+      hair
+      height
+      build
+      idVerified
+      createdAt
+      updatedAt
+      scheme {
+        id
+        name
+        logo {
+          url
+          optimised
+        }
+      }
+      incidents {
+        id
+        reference
+        policeRef
+        customerRef
+        subject
+        description
+        date
+        dayTime
+        totalValue
+        totalRecoveredValue
+        crimeTypes {
+          id
+          name
+        }
+        business {
+          id
+          name
+          schemes {
+            id
+            name
+            logo {
+              url
+              optimised
+            }
+          }
+        }
+        location {
+          id
+          full
+          geoLat
+          geoLng
+        }
+      }
+      latestIncident {
+        id
+        dateAgo
+        reportedBusinessName
+        dayTime
+      }
+      tags {
+        id
+        name
+      }
+    }
+  }
+}

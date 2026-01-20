@@ -25,6 +25,7 @@ import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router';
 
 interface Props {
+  basePath?: string;
   data: RolesQuery | undefined;
   fetchPage: (page: number) => void;
   loading: boolean;
@@ -45,6 +46,7 @@ interface TableData {
 }
 
 const RolesView = ({
+  basePath = '/app/scheme-settings',
   data,
   fetchPage,
   loading,
@@ -241,7 +243,7 @@ const RolesView = ({
               {intl.formatMessage({ defaultMessage: 'Export' })}
             </Button>
             <Button
-              onClick={() => navigate('/app/scheme-settings/roles/create')}
+              onClick={() => navigate(`${basePath}/roles/create`)}
               type="primary"
             >
               {intl.formatMessage({
@@ -307,7 +309,7 @@ const RolesView = ({
           loading={loading}
           onRow={(record) => ({
             onClick: () => {
-              navigate(`/app/scheme-settings/roles/${record?.key}`);
+              navigate(`${basePath}/roles/${record?.key}`);
             },
             style: { cursor: 'pointer' },
           })}
