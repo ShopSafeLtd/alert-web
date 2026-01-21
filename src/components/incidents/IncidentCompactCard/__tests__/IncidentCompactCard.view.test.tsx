@@ -28,6 +28,8 @@ describe('Detail Officer View', () => {
       },
     ],
     totalImages: 0,
+    totalValue: 0,
+    totalRecoveredValue: 0,
     offenders: [],
     newIncident: false,
     assignedUsers: [],
