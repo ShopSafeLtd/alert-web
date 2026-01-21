@@ -209,11 +209,6 @@ export const userNotificationsAtom = atom(
   () => {}
 );
 
-export const schemeTypeAtom = atom(
-  (get) => get(currentSchemeAtom).schemeType,
-  () => {}
-);
-
 export const pendingLoginVideosAtom = atom<PendingVideo[]>([]);
 
 export type PendingCriticalBulletin = {
