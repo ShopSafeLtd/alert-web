@@ -127,6 +127,7 @@ const useAddUser = ({
     skip: !schemeId,
     variables: {
       schemeId,
+      take: 1000,
     },
   });
 

@@ -95,6 +95,7 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
     skip: !schemeId,
     variables: {
       schemeId,
+      take: 1000,
     },
   });
 

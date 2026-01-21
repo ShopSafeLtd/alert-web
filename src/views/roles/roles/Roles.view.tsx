@@ -293,17 +293,23 @@ const RolesView = ({
               }),
             },
           ].filter((column) => visibleColumns.includes(column.key))}
-          dataSource={data?.roles?.edges.map(({ node: role }) => ({
-            approvalTier: role?.approvalTier || false,
-            key: role?.id,
-            name: role?.name,
-            noUsers: role?.usersCount || 0,
-            type:
-              // eslint-disable-next-line no-unsafe-optional-chaining
-              role?.type?.charAt(0).toUpperCase() +
-              // eslint-disable-next-line no-unsafe-optional-chaining
-              role?.type?.slice(1).toLowerCase().replaceAll('_', ' '),
-          }))}
+          dataSource={data?.roles?.edges
+            .filter(
+              ({ node: role }) =>
+                !search ||
+                role?.name?.toLowerCase().includes(search.toLowerCase())
+            )
+            .map(({ node: role }) => ({
+              approvalTier: role?.approvalTier || false,
+              key: role?.id,
+              name: role?.name,
+              noUsers: role?.usersCount || 0,
+              type:
+                // eslint-disable-next-line no-unsafe-optional-chaining
+                role?.type?.charAt(0).toUpperCase() +
+                // eslint-disable-next-line no-unsafe-optional-chaining
+                role?.type?.slice(1).toLowerCase().replaceAll('_', ' '),
+            }))}
           loading={loading}
           onRow={(record) => ({
             onClick: () => {
@@ -322,7 +328,11 @@ const RolesView = ({
             pageSize,
             pageSizeOptions: ['10', '25', '50', '100'],
             showSizeChanger: true,
-            total: data?.roles?.totalCount,
+            total: search
+              ? data?.roles?.edges.filter(({ node: role }) =>
+                  role?.name?.toLowerCase().includes(search.toLowerCase())
+                ).length
+              : data?.roles?.totalCount,
           }}
           size={tableSize}
         />

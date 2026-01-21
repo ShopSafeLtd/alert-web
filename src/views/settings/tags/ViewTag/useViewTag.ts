@@ -363,6 +363,7 @@ const useViewTag = (): Return => {
     fetchPolicy: 'cache-and-network',
     variables: {
       schemeId,
+      take: 1000,
     },
   });
 
