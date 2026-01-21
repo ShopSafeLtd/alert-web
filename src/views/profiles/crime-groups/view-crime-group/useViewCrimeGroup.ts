@@ -125,7 +125,7 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
   const [saving, setSaving] = useState(false);
   const [addOffender, setAddOffender] = useState(false);
   const [addExistingOffender, setAddExistingOffender] = useState(false);
-  const [offenderIds, setOffenderIds] = useState<string[]>([]);
+  const [offenderIds] = useState<string[]>([]);
   const [addNewVehicle, setAddNewVehicle] = useState(false);
   const [addExistingVehicle, setAddExistingVehicle] = useState(false);
   const [vehicleIds, setVehicleIds] = useState<string[]>([]);
@@ -158,9 +158,7 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
   const { data: crimeGroupsData, loading } = useCrimeGroupQuery({
     fetchPolicy: 'cache-and-network',
     onCompleted: ({ crimeGroup }) => {
-      if (crimeGroup?.offenders && crimeGroup.offenders.length > 0) {
-        setOffenderIds(crimeGroup.offenders.map(({ id }) => id));
-      }
+      // Note: offenders field is not fetched by the query, only totalOffenders count
       if (crimeGroup?.vehicles && crimeGroup.vehicles.length > 0) {
         setVehicleIds(crimeGroup.vehicles.map(({ id }) => id));
       }
@@ -433,12 +431,15 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
     });
 
     if (!existingData?.crimeGroup) return;
+
+    // Note: The query doesn't fetch the offenders field, only totalOffenders count
+    // We'll update the totalOffenders count instead
     store.writeQuery<CrimeGroupQuery>({
       data: {
         __typename: 'Query',
         crimeGroup: {
           ...existingData.crimeGroup,
-          offenders: [...existingData.crimeGroup.offenders, res.createOffender],
+          totalOffenders: existingData.crimeGroup.totalOffenders + 1,
         },
       },
       query: CrimeGroupDocument,

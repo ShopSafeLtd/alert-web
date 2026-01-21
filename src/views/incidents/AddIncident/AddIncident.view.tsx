@@ -110,8 +110,9 @@ const AddIncident = ({
 }: Props): JSX.Element => {
   const classes = useStyles();
   const intl = useIntl();
-  const dontSetDate = useAtomValue(currentSchemeAtom)?.dontAutoSetTimeDate;
-  const usPoliceData = useAtomValue(currentSchemeAtom)?.usPoliceData;
+  const scheme = useAtomValue(currentSchemeAtom);
+  const dontSetDate = scheme?.dontAutoSetTimeDate;
+  const usPoliceData = scheme?.usPoliceData;
 
   const reorderedAndTrimmedForm = (() => {
     const reordered = incidentForm.flatMap((field) => {

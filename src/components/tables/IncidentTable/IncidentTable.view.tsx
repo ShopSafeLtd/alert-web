@@ -1,3 +1,4 @@
+import type { SortOrder } from 'antd/lib/table/interface';
 import type { ImagePosition } from 'graphql/types';
 
 import {
@@ -260,7 +261,7 @@ const IncidentTable = ({
             if (!date) return '-';
             return date;
           },
-          sortDirections: ['descend', 'ascend', 'descend'],
+          sortDirections: ['descend', 'ascend', 'descend'] as SortOrder[],
           sortOrder: sortField === 'date' ? sortOrder : null,
           sorter: true,
           title: intl.formatMessage({

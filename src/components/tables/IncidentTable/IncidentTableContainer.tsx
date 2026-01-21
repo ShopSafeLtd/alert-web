@@ -1,8 +1,6 @@
 import { FEATURE_FLAGS } from 'configs/featureFlags';
 import React, { useMemo } from 'react';
 
-import type { UseIncidentTableDataReturn } from './useIncidentTableData';
-
 import IncidentTable from './IncidentTable.view';
 import { IncidentTableFilters } from './IncidentTableFilters';
 import { useIncidentTableData } from './useIncidentTableData';
@@ -52,7 +50,7 @@ export const IncidentTableContainer: React.FC<IncidentTableContainerProps> = ({
     sortField,
     sortOrder,
     totalCount,
-  }: UseIncidentTableDataReturn = useIncidentDataHook({
+  } = useIncidentDataHook({
     crimeGroupId,
     defaultSortOrder,
     investigationId,

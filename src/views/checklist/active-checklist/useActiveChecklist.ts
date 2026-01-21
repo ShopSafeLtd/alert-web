@@ -325,37 +325,55 @@ const useActiveChecklist = (): Return => {
       total: number;
     }[] = [];
 
+    // Helper function to recursively check if a section should be included
+    // based on its full dependency chain
+    const shouldSectionBeIncluded = (sectionIndex: number): boolean => {
+      const section = completedData.sections.find(
+        (s) => s.section === sectionIndex && s.sub === false
+      );
+
+      if (!section) return false;
+      if (!section.dependsOnWeight) return true;
+
+      const dependencyIndex = Number(section.dependsOnWeight.dependsOn);
+      const threshold = Number(section.dependsOnWeight.weight);
+
+      // Recursive check: is the parent visible?
+      if (!shouldSectionBeIncluded(dependencyIndex)) return false;
+
+      const dependentSection = completedData.sections.find(
+        (s) => s.section === dependencyIndex && s.sub === false
+      );
+
+      if (!dependentSection) return false;
+
+      // Calculate parent's score
+      const dependentTotal = dependentSection.subsections
+        .flatMap((sub) =>
+          sub.questions.map((q) =>
+            q.answer === 'N/A'
+              ? 0
+              : q.weights.find((w) => w.answer === q.answer)?.weight || 0
+          )
+        )
+        .reduce((a, b) => a + b, 0);
+
+      // Adjust threshold and compare
+      const adjustedThreshold = adjustDependentThreshold(
+        dependentSection,
+        threshold
+      );
+
+      return dependentTotal <= adjustedThreshold;
+    };
+
     for (const section of completedData.sections) {
-      // If the section has a dependency, check if the dependent section meets the threshold.
-      if (section.dependsOnWeight) {
-        const dependencyIndex = Number(section.dependsOnWeight.dependsOn);
-        const threshold = Number(section.dependsOnWeight.weight);
-        const dependentSection = completedData.sections.find(
-          (s) => s.section === dependencyIndex && s.sub === false
-        );
-        if (dependentSection) {
-          const dependentTotal = dependentSection.subsections
-            .flatMap((sub) =>
-              sub.questions.map((q) =>
-                q.answer === 'N/A'
-                  ? 0
-                  : q.weights.find((w) => w.answer === q.answer)?.weight || 0
-              )
-            )
-            .reduce((a, b) => a + b, 0);
-
-          // Adjust threshold to account for N/A answers
-          const adjustedThreshold = adjustDependentThreshold(
-            dependentSection,
-            threshold
-          );
-
-          if (dependentTotal > adjustedThreshold) {
-            continue;
-          }
-        } else {
-          continue;
-        }
+      // Check if section should be included based on full dependency chain
+      if (
+        section.dependsOnWeight &&
+        !shouldSectionBeIncluded(section.section)
+      ) {
+        continue;
       }
       section.subsections.flatMap((subsection) =>
         subsection.questions.flatMap((question, _, ogArray) => {

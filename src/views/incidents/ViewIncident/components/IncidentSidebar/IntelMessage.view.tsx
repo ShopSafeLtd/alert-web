@@ -53,7 +53,7 @@ const useStyles = createUseStyles((theme: Theme) => ({
     },
     '& .update-content-bubble': {
       '& .ant-typography': {
-        color: theme.text as string,
+        color: theme.headerColor,
         lineHeight: 1.6,
       },
       background: 'transparent',

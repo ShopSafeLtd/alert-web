@@ -1,3 +1,4 @@
+import type { UnrestrictedOffendersRelayQuery } from 'graphql/offenders/queries/__generated__/unrestricted-offenders-relay.generated';
 import type { UnrestrictedOffenderRelayInput } from 'graphql/types';
 
 import { useUnrestrictedOffendersRelayQuery } from 'graphql/offenders/queries/__generated__/unrestricted-offenders-relay.generated';
@@ -21,9 +22,8 @@ interface UseOffenderGridDataRelayProps {
   pageSize?: number;
 }
 
-interface OffenderNode {
-  [key: string]: unknown;
-}
+export type OffenderNode =
+  UnrestrictedOffendersRelayQuery['unrestrictedOffendersRelay']['edges'][number]['node'];
 
 export interface UseOffenderGridDataRelayReturn {
   error?: Error;
@@ -157,9 +157,7 @@ export const useOffenderGridDataRelay = ({
     if (!data?.unrestrictedOffendersRelay?.edges) {
       return [];
     }
-    return data.unrestrictedOffendersRelay.edges.map(
-      (edge) => edge.node as OffenderNode
-    );
+    return data.unrestrictedOffendersRelay.edges.map((edge) => edge.node);
   }, [data]);
 
   // Handlers

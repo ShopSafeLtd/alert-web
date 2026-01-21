@@ -99,43 +99,55 @@ const CompletedChecklistView = ({
     total: number;
   }[] = [];
 
-  for (const section of checklistSections.filter((s) => !s.sub)) {
-    // Check if the section has a dependsOnWeight property
-    if (section.dependsOnWeight) {
-      // Find the dependent section
-      const dependentSection = checklistSections.find(
-        (s) =>
-          s.section ===
-          Number.parseInt(section.dependsOnWeight?.dependsOn || '0')
-      );
+  // Helper function to recursively check if a section is visible
+  // based on its full dependency chain
+  const isSectionVisible = (sectionIndex: number): boolean => {
+    const section = checklistSections.find(
+      (s) => s.section === sectionIndex && !s.sub
+    );
 
-      if (dependentSection) {
-        // Calculate the total weight of the dependent section
-        let dependentWeight = 0;
-        for (const subsection of dependentSection.subsections) {
-          for (const question of subsection.questions) {
-            if (question.answer === 'N/A') continue;
-            const weight =
-              question.weights.find((w) => w.answer === question.answer)
-                ?.weight || 0;
-            dependentWeight += weight;
-          }
-        }
+    if (!section) return false;
+    if (!section.dependsOnWeight) return true;
 
-        const threshold = Number.parseInt(section.dependsOnWeight.weight);
+    const dependencyIndex = Number.parseInt(
+      section.dependsOnWeight.dependsOn || '0'
+    );
+    const threshold = Number.parseInt(section.dependsOnWeight.weight);
 
-        // Adjust threshold to account for N/A answers
-        const adjustedThreshold = adjustDependentThreshold(
-          dependentSection,
-          threshold
-        );
+    // Recursive check: is the parent visible?
+    if (!isSectionVisible(dependencyIndex)) return false;
 
-        // If the dependent weight is greater than the adjusted threshold, skip this section and its subsections
-        // Note: Using <= instead of < to match logic in other locations
-        if (dependentWeight > adjustedThreshold) {
-          continue;
-        }
+    const dependentSection = checklistSections.find(
+      (s) => s.section === dependencyIndex && !s.sub
+    );
+
+    if (!dependentSection) return false;
+
+    // Calculate parent's weight
+    let dependentWeight = 0;
+    for (const subsection of dependentSection.subsections) {
+      for (const question of subsection.questions) {
+        if (question.answer === 'N/A') continue;
+        const weight =
+          question.weights.find((w) => w.answer === question.answer)?.weight ||
+          0;
+        dependentWeight += weight;
       }
+    }
+
+    // Adjust threshold and compare
+    const adjustedThreshold = adjustDependentThreshold(
+      dependentSection,
+      threshold
+    );
+
+    return dependentWeight <= adjustedThreshold;
+  };
+
+  for (const section of checklistSections.filter((s) => !s.sub)) {
+    // Check if section is visible based on full dependency chain
+    if (section.dependsOnWeight && !isSectionVisible(section.section)) {
+      continue;
     }
 
     // Process the section and its subsections

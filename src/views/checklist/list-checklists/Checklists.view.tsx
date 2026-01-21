@@ -43,6 +43,22 @@ import type {
 import useStyles from './ListChcklists.styles';
 import CreateActiveChecklist from './drawer/create-active-checklist';
 
+interface ActiveChecklistRecord {
+  businessName: string;
+  completedAt: string;
+  completedByName: string;
+  description: string;
+  documentLink: string;
+  key: string;
+  name: string;
+  percentComplete: string;
+  reference: null | number | undefined;
+  score: string;
+  status: ChecklistStatus;
+  storeName: string;
+  timeTaken: string;
+}
+
 interface ChecklistsViewProps {
   activeChecklistSort: {
     field: ActiveChecklistSortOptions;
@@ -216,7 +232,7 @@ const ChecklistsView: React.FC<ChecklistsViewProps> = ({
           ]}
         />
         <Card>
-          <Table
+          <Table<ActiveChecklistRecord>
             columns={[
               {
                 dataIndex: 'reference',
@@ -350,14 +366,7 @@ const ChecklistsView: React.FC<ChecklistsViewProps> = ({
                 dataIndex: 'Options',
                 key: 'Options',
                 // onCellClick: (e) => e.stopPropagation(),
-                render: (
-                  _,
-                  record: {
-                    documentLink: string;
-                    key: string;
-                    status: ChecklistStatus;
-                  }
-                ) => (
+                render: (_, record: ActiveChecklistRecord) => (
                   <Space>
                     {record.status === ChecklistStatus.Completed &&
                       (record.documentLink ? (

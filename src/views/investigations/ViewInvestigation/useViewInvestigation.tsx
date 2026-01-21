@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import type { UpdateTaskMutation } from '#/components/form-components/Todos/ViewTodo/graphql/__generated__/update-todo.generated';
 import type { QuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/__generated__/listTemplates.generated';
 import type { MutationUpdaterFn } from '@apollo/client';
@@ -10,7 +11,6 @@ import type {
 import type { CreateSimpleOffenderMutation } from 'graphql/offenders/mutations/__generated__/create-simple-offender.generated';
 import type { UpdateSimpleOffenderMutation } from 'graphql/offenders/mutations/__generated__/update-simple-offender.generated';
 import type { CreateTodoMutation } from 'graphql/todos/mutations/__generated__/create-todo.generated';
-import type * as Types from 'graphql/types';
 import type {
   CrimeGroupCardData,
   OffenderData,
@@ -148,6 +148,14 @@ const onCompletedAddOffender = () => {
   );
 };
 
+const updateEditOffenderList: MutationUpdaterFn<
+  UpdateSimpleOffenderMutation
+> = (store, { data: res }) => {
+  if (res?.updateOffender === null || res?.updateOffender === undefined) return;
+  // Note: offenders field is not in the query, no cache update needed
+  // The query will refetch when needed
+};
+
 const useViewInvestigation = (investigationId: string): Return => {
   const intl = useIntl();
 
@@ -156,10 +164,10 @@ const useViewInvestigation = (investigationId: string): Return => {
   const takeAllSchemes = useStoreState(
     (state) => state.data.investigations.takeAllSchemes
   );
-  const [offenderIds, setOffenderIds] = useState<string[]>([]);
+  const [offenderIds] = useState<string[]>([]);
   const [vehicleIds, setVehicleIds] = useState<string[]>([]);
   const [crimeGroupIds, setCrimeGroupIds] = useState<string[]>([]);
-  const [incidentIds, setIncidentIds] = useState<string[]>([]);
+  const [incidentIds] = useState<string[]>([]);
   const [saving, setSaving] = useState(false);
   const [editInvestigation, setEditInvestigation] = useState(false);
   const [addVehicle, setAddVehicle] = useState(false);
@@ -209,14 +217,7 @@ const useViewInvestigation = (investigationId: string): Return => {
   };
   const { data, loading, refetch } = useViewInvestigationQuery({
     onCompleted: ({ investigation }) => {
-      if (
-        investigation?.offenders &&
-        (investigation.offenders as Array<{ id: string }>).length > 0
-      ) {
-        setOffenderIds(
-          (investigation.offenders as Array<{ id: string }>).map(({ id }) => id)
-        );
-      }
+      // Note: offenders and incidents fields are not in the query
       if (
         investigation?.vehicles &&
         (investigation.vehicles as Array<{ id: string }>).length > 0
@@ -235,14 +236,6 @@ const useViewInvestigation = (investigationId: string): Return => {
           )
         );
       }
-      if (
-        investigation?.incidents &&
-        (investigation.incidents as Array<{ id: string }>).length > 0
-      ) {
-        setIncidentIds(
-          (investigation.incidents as Array<{ id: string }>).map(({ id }) => id)
-        );
-      }
     },
     skip: !investigationId,
     variables,
@@ -253,10 +246,8 @@ const useViewInvestigation = (investigationId: string): Return => {
   };
   const onSetSuggestedOffenders = (values: OffenderData[]) => {
     if (values) {
-      const offendersId = (
-        data?.investigation?.offenders as Array<{ id: string }> | undefined
-      )?.map(({ id }) => id);
-      const filterData = values.filter(({ id }) => !offendersId?.includes(id));
+      // Note: offenders field is not in the query, use offenderIds state instead
+      const filterData = values.filter(({ id }) => !offenderIds.includes(id));
       setSuggestedOffenders(filterData);
     }
   };
@@ -382,11 +373,10 @@ const useViewInvestigation = (investigationId: string): Return => {
         __typename: 'Query',
         investigation: {
           ...existingData.investigation,
-          offenders: res.updateInvestigation.offenders.map((offender) => ({
-            ...offender,
-            totalIncidents: 0,
-            totalValue: 0,
-          })),
+          // Note: offenders field is not in the query, update totalOffenders count instead
+          totalOffenders:
+            res.updateInvestigation.offenders?.length ??
+            existingData.investigation.totalOffenders,
         },
       },
       query: ViewInvestigationDocument,
@@ -414,45 +404,6 @@ const useViewInvestigation = (investigationId: string): Return => {
         setSaving(false);
       });
     }
-  };
-  const updateEditOffenderList: MutationUpdaterFn<
-    UpdateSimpleOffenderMutation
-  > = (store, { data: res }) => {
-    if (res?.updateOffender === null || res?.updateOffender === undefined)
-      return;
-    const existingData = store.readQuery<ViewInvestigationQuery>({
-      query: ViewInvestigationDocument,
-      variables,
-    });
-    if (!existingData?.investigation) return;
-    const index = (
-      existingData?.investigation?.offenders as Array<{ id: string }>
-    )
-      .map((item) => item.id)
-      .indexOf(res.updateOffender.id);
-
-    store.writeQuery<ViewInvestigationQuery>({
-      data: {
-        __typename: 'Query',
-        investigation: {
-          ...existingData.investigation,
-          offenders: update(
-            existingData.investigation.offenders as Array<unknown>,
-            {
-              [index]: {
-                $set: {
-                  ...res.updateOffender,
-                  totalIncidents: 0,
-                  totalValue: 0,
-                },
-              },
-            }
-          ),
-        },
-      },
-      query: ViewInvestigationDocument,
-      variables,
-    });
   };
 
   // const onEditOffender = (value: OffenderData) => {
@@ -645,10 +596,8 @@ const useViewInvestigation = (investigationId: string): Return => {
         __typename: 'Query',
         investigation: {
           ...existingData.investigation,
-          offenders: [
-            ...(existingData.investigation.offenders as Array<unknown>),
-            res.createOffender,
-          ],
+          // Note: offenders field is not in the query, increment totalOffenders count
+          totalOffenders: existingData.investigation.totalOffenders + 1,
         },
       },
       query: ViewInvestigationDocument,
@@ -684,9 +633,11 @@ const useViewInvestigation = (investigationId: string): Return => {
               __typename: 'Query',
               investigation: {
                 ...existingData.investigation,
-                offenders: (
-                  existingData.investigation.offenders as Array<{ id: string }>
-                ).filter(({ id }) => id !== value),
+                // Note: offenders field is not in the query, decrement totalOffenders count
+                totalOffenders: Math.max(
+                  0,
+                  existingData.investigation.totalOffenders - 1
+                ),
               },
             },
             query: ViewInvestigationDocument,
@@ -1057,7 +1008,15 @@ const useViewInvestigation = (investigationId: string): Return => {
               __typename: 'Query',
               investigation: {
                 ...existingData.investigation,
-                crimeGroups: res.updateInvestigation.crimeGroups,
+                crimeGroups: res.updateInvestigation.crimeGroups.map((cg) => ({
+                  __typename: cg.__typename,
+                  alias: cg.alias,
+                  id: cg.id,
+                  ref: cg.reference?.toString() ?? '',
+                  totalIncidents: cg.totalIncidents,
+                  totalOffenders: cg.totalOffenders,
+                  totalValue: cg.totalValue,
+                })),
               },
             },
             query: ViewInvestigationDocument,
@@ -1140,11 +1099,12 @@ const useViewInvestigation = (investigationId: string): Return => {
               // TODO change graphql
               ...existingData.investigation.crimeGroups,
               {
-                ...res.createCrimeGroup,
+                __typename: res.createCrimeGroup.__typename,
+                alias: res.createCrimeGroup.alias,
+                id: res.createCrimeGroup.id,
+                ref: res.createCrimeGroup.reference?.toString() ?? '',
                 totalIncidents: 0,
                 totalOffenders: 0,
-                totalRecoveredValue: 0,
-                totalTheftSuccess: 0,
                 totalValue: 0,
               },
             ],
@@ -1371,20 +1331,10 @@ const useViewInvestigation = (investigationId: string): Return => {
               __typename: 'Query',
               investigation: {
                 ...existingData.investigation,
-                incidents: res.updateInvestigation.incidents.map(
-                  (incident) => ({
-                    ...incident,
-                    createdBy: {
-                      __typename: 'User' as const,
-                      fullName: '',
-                      id: '',
-                    },
-                    crimeTypes: [],
-                    description: '',
-                    groups: [],
-                    priority: 'LOW' as Types.IncidentPriority,
-                  })
-                ),
+                // Note: incidents field is not in the query, update totalIncidents count instead
+                totalIncidents:
+                  res.updateInvestigation.incidents?.length ??
+                  existingData.investigation.totalIncidents,
               },
             },
             query: ViewInvestigationDocument,
@@ -1430,9 +1380,11 @@ const useViewInvestigation = (investigationId: string): Return => {
               __typename: 'Query',
               investigation: {
                 ...existingData.investigation,
-                incidents: (
-                  existingData.investigation.incidents as Array<{ id: string }>
-                ).filter(({ id }) => id !== value),
+                // Note: incidents field is not in the query, decrement totalIncidents count
+                totalIncidents: Math.max(
+                  0,
+                  existingData.investigation.totalIncidents - 1
+                ),
               },
             },
             query: ViewInvestigationDocument,

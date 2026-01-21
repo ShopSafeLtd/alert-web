@@ -1,3 +1,4 @@
+import type { UnrestrictedOffendersRelayQuery } from 'graphql/offenders/queries/__generated__/unrestricted-offenders-relay.generated';
 import type { CascadeOptions } from 'types/investigations';
 
 import {
@@ -20,11 +21,8 @@ import useStyles from './ConnectOffendersToInvestigation.styles';
 const { Text, Title } = Typography;
 const { Option } = Select;
 
-interface Offender {
-  id: string;
-  name: string;
-  reference: string;
-}
+type Offender =
+  UnrestrictedOffendersRelayQuery['unrestrictedOffendersRelay']['edges'][number]['node'];
 
 interface ConnectOffendersToInvestigationProps {
   // Cascade options
@@ -243,8 +241,10 @@ const ConnectOffendersToInvestigation: React.FC<
                   defaultMessage: '{name} (#{reference})',
                 },
                 {
-                  name: offender.name,
-                  reference: offender.reference,
+                  name:
+                    offender.name ||
+                    intl.formatMessage({ defaultMessage: 'Unknown' }),
+                  reference: offender.reference ?? 'N/A',
                 }
               )}
             </Tag>

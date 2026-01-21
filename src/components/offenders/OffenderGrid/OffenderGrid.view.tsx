@@ -199,12 +199,19 @@ interface Offender {
   totalValue: number;
 }
 
+// Type that accepts offenders from both pagination implementations
+type OffenderItem = {
+  id: string;
+  totalIncidents: number;
+  totalValue: number;
+} & Partial<Offender>;
+
 interface Props {
   canDisconnect?: boolean;
   disconnectLabel?: string;
   editRights?: boolean;
   loading?: boolean;
-  offenders?: Offender[];
+  offenders?: OffenderItem[];
   onDisconnectOffender?: (id: string) => void;
   setEditOffenderData?: (value: OffenderData | null) => void;
   sortBy?: string;
@@ -214,7 +221,7 @@ interface OffenderCardProps {
   canDisconnect?: boolean;
   disconnectLabel?: string;
   editRights?: boolean;
-  offender: Offender;
+  offender: OffenderItem;
   onDisconnectOffender?: (id: string) => void;
   setEditOffenderData?: (value: OffenderData | null) => void;
 }

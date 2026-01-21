@@ -271,12 +271,8 @@ const ViewInvestigation = ({
           <EditInvestigation
             investigationData={{
               description: data?.investigation?.description,
-              groupIds:
-                (
-                  data?.investigation?.groups as
-                    | Array<{ id: string }>
-                    | undefined
-                )?.map((group) => group.id) || [],
+              // Note: groups field is not in the query
+              groupIds: [],
               id: data?.investigation?.id || '',
               name: data?.investigation?.name,
             }}
@@ -317,11 +313,8 @@ const ViewInvestigation = ({
       >
         {addOffender ? (
           <AddNewOffenderSimple
-            groupsIds={
-              (
-                data?.investigation?.groups as Array<{ id: string }> | undefined
-              )?.map((group) => group.id) || []
-            }
+            // Note: groups field is not in the query
+            groupsIds={[]}
             images={[]}
             investigationId={data?.investigation.id}
             onClose={toggleAddOffender}
@@ -382,11 +375,8 @@ const ViewInvestigation = ({
       >
         {addVehicle ? (
           <AddVehicleSimple
-            initialGroupIds={
-              (
-                data?.investigation?.groups as Array<{ id: string }> | undefined
-              )?.map((group) => group.id) || []
-            }
+            // Note: groups field is not in the query
+            initialGroupIds={[]}
             onClose={toggleAddVehicle}
             update={onAddVehicle}
           />

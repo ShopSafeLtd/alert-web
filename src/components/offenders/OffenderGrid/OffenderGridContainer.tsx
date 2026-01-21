@@ -5,6 +5,9 @@ import { FEATURE_FLAGS } from 'configs/featureFlags';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
+import type { UseOffenderGridDataReturn } from './useOffenderGridData';
+import type { OffenderNode } from './useOffenderGridDataRelay';
+
 import OffenderGrid from './OffenderGrid.view';
 import { useOffenderGridData } from './useOffenderGridData';
 import { useOffenderGridDataRelay } from './useOffenderGridDataRelay';
@@ -91,7 +94,12 @@ export const OffenderGridContainer: React.FC<OffenderGridContainerProps> = ({
           disconnectLabel={disconnectLabel}
           editRights={editRights}
           loading={loading}
-          offenders={offenders}
+          offenders={
+            offenders as
+              | OffenderNode[]
+              | UseOffenderGridDataReturn['offenders']
+              | undefined
+          }
           onDisconnectOffender={onDisconnectOffender}
           setEditOffenderData={setEditOffenderData}
           sortBy={currentSortBy}

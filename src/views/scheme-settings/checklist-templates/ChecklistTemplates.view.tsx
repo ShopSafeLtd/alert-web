@@ -194,7 +194,10 @@ const ChecklistTemplatesView: React.FC<ChecklistTemplatesViewProps> = ({
           }))}
           loading={loading}
           pagination={{
+            defaultPageSize: 25,
             hideOnSinglePage: true,
+            pageSizeOptions: ['25', '50', '100'],
+            showSizeChanger: true,
           }}
           size="small"
         />

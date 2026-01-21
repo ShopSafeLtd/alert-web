@@ -1,3 +1,4 @@
+import type { UnrestrictedIncidentsRelayQuery } from 'graphql/incidents/queries/__generated__/unrestricted-incidents-relay.generated';
 import type { UnrestrictedIncidentRelayInput } from 'graphql/types';
 
 import { useUnrestrictedIncidentsRelayQuery } from 'graphql/incidents/queries/__generated__/unrestricted-incidents-relay.generated';
@@ -25,9 +26,8 @@ interface UseIncidentTableDataRelayProps {
   pageSize?: number;
 }
 
-interface IncidentNode {
-  [key: string]: unknown;
-}
+export type IncidentNode =
+  UnrestrictedIncidentsRelayQuery['unrestrictedIncidentsRelay']['edges'][number]['node'];
 
 export interface UseIncidentTableDataRelayReturn {
   error?: Error;
@@ -166,9 +166,7 @@ export const useIncidentTableDataRelay = ({
     if (!data?.unrestrictedIncidentsRelay?.edges) {
       return [];
     }
-    return data.unrestrictedIncidentsRelay.edges.map(
-      (edge) => edge.node as IncidentNode
-    );
+    return data.unrestrictedIncidentsRelay.edges.map((edge) => edge.node);
   }, [data]);
 
   // Handlers
