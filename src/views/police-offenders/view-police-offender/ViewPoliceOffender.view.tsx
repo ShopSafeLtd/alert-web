@@ -344,7 +344,7 @@ const ViewPoliceOffender = ({
         id: string;
       } | null;
       reference?: null | number;
-      subject?: null | string;
+      subject?: string;
       totalValue?: null | number;
     }> = [];
 

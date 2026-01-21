@@ -57,6 +57,7 @@ interface Props {
   setGeographicalFilter: (filter: GeographicalFilter | undefined) => void;
   setHasImageFilter: (value: 'all' | 'false' | 'true') => void;
   setHasNameFilter: (value: 'all' | 'false' | 'true') => void;
+  setLightBoxOpen: (state: { index: number; open: boolean }) => void;
   setPriorityFilter: (value: 'all' | 'high' | 'low' | 'medium') => void;
   setSearch: (value: string) => void;
   setSortBy: (value: ('incidents' | 'priority' | 'recent' | 'value')[]) => void;
@@ -82,6 +83,7 @@ const PoliceOffenderFeed = ({
   setGeographicalFilter,
   setHasImageFilter,
   setHasNameFilter,
+  setLightBoxOpen,
   setPriorityFilter,
   setSearch,
   setSortBy,
@@ -433,12 +435,7 @@ const PoliceOffenderFeed = ({
 
       {/* Lightbox */}
       <Lightbox
-        close={() =>
-          lightBoxOpen.open &&
-          React.createElement('div', {
-            onClick: () => lightBoxOpen.open && console.log('close'),
-          })
-        }
+        close={() => setLightBoxOpen({ index: 0, open: false })}
         index={lightBoxOpen.index}
         open={lightBoxOpen.open}
         plugins={[Zoom]}

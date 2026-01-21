@@ -32,6 +32,7 @@ interface Props {
   search: string;
   setCompactView: () => void;
   setGeographicalFilter: (filter: GeographicalFilter | undefined) => void;
+  setLightBoxOpen: (state: { index: number; open: boolean }) => void;
   setSearch: (value: string) => void;
   setTableView: () => void;
 }
@@ -48,6 +49,7 @@ const PoliceIncidentFeed = ({
   search,
   setCompactView,
   setGeographicalFilter,
+  setLightBoxOpen,
   setSearch,
   setTableView,
 }: Props): JSX.Element => {
@@ -199,12 +201,7 @@ const PoliceIncidentFeed = ({
 
       {/* Lightbox */}
       <Lightbox
-        close={() =>
-          lightBoxOpen.open &&
-          React.createElement('div', {
-            onClick: () => lightBoxOpen.open && console.log('close'),
-          })
-        }
+        close={() => setLightBoxOpen({ index: 0, open: false })}
         index={lightBoxOpen.index}
         open={lightBoxOpen.open}
         plugins={[Zoom]}

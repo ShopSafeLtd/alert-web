@@ -98,6 +98,7 @@ const PriorityOffendersCards: React.FC<PriorityOffendersCardsProps> = ({
             xxl={8}
           >
             <PoliceOffenderCard
+              openLightbox={() => {}}
               sharedOffender={offender as unknown as PoliceOffenderCardFragment}
             />
           </Col>

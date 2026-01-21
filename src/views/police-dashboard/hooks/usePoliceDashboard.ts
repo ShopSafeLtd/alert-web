@@ -26,8 +26,8 @@ export const usePoliceDashboard = (dateRange?: DateRange) => {
       const endDate = new Date(dateRange.endDate);
       endDate.setHours(23, 59, 59, 999);
 
-      vars.startDate = startDate.toISOString();
-      vars.endDate = endDate.toISOString();
+      vars.startDate = startDate;
+      vars.endDate = endDate;
     }
     // If dateRange is null/undefined, don't pass dates (ALL TIME)
 

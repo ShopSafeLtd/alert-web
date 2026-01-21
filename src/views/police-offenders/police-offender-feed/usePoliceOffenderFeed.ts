@@ -49,6 +49,7 @@ interface Return {
   setGeographicalFilter: (filter: GeographicalFilter | undefined) => void;
   setHasImageFilter: (value: BooleanFilter) => void;
   setHasNameFilter: (value: BooleanFilter) => void;
+  setLightBoxOpen: (state: { index: number; open: boolean }) => void;
   setPriorityFilter: (value: PriorityFilter) => void;
   setSearch: (value: string) => void;
   setSortBy: (value: SortBy) => void;
@@ -288,6 +289,7 @@ const usePoliceOffenderFeed = (): Return => {
     setGeographicalFilter,
     setHasImageFilter,
     setHasNameFilter,
+    setLightBoxOpen,
     setPriorityFilter,
     setSearch,
     setSortBy,

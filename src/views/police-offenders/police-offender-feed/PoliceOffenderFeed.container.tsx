@@ -23,6 +23,7 @@ const PoliceOffenderFeedContainer = (): JSX.Element => {
     setGeographicalFilter,
     setHasImageFilter,
     setHasNameFilter,
+    setLightBoxOpen,
     setPriorityFilter,
     setSearch,
     setSortBy,
@@ -49,6 +50,7 @@ const PoliceOffenderFeedContainer = (): JSX.Element => {
       setGeographicalFilter={setGeographicalFilter}
       setHasImageFilter={setHasImageFilter}
       setHasNameFilter={setHasNameFilter}
+      setLightBoxOpen={setLightBoxOpen}
       setPriorityFilter={setPriorityFilter}
       setSearch={setSearch}
       setSortBy={setSortBy}

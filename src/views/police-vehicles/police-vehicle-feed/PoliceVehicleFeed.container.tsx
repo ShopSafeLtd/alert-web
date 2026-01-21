@@ -16,6 +16,7 @@ const PoliceVehicleFeedContainer = (): JSX.Element => {
     search,
     setCompactView,
     setGeographicalFilter,
+    setLightBoxOpen,
     setSearch,
     setTableView,
     tableView: _tableView,
@@ -34,6 +35,7 @@ const PoliceVehicleFeedContainer = (): JSX.Element => {
       search={search}
       setCompactView={setCompactView}
       setGeographicalFilter={setGeographicalFilter}
+      setLightBoxOpen={setLightBoxOpen}
       setSearch={setSearch}
       setTableView={setTableView}
     />

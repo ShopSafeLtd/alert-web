@@ -29,6 +29,7 @@ interface Return {
   search: string;
   setCompactView: () => void;
   setGeographicalFilter: (filter: GeographicalFilter | undefined) => void;
+  setLightBoxOpen: (state: { index: number; open: boolean }) => void;
   setSearch: (value: string) => void;
   setTableView: () => void;
   tableView: boolean;
@@ -157,6 +158,7 @@ const usePoliceVehicleFeed = (): Return => {
     search,
     setCompactView,
     setGeographicalFilter,
+    setLightBoxOpen,
     setSearch,
     setTableView,
     tableView,
