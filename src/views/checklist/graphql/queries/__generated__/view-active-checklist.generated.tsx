@@ -8,13 +8,14 @@ export type ActiveChecklistQueryVariables = Types.Exact<{
 }>;
 
 
-export type ActiveChecklistQuery = { __typename?: 'Query', activeChecklist: { __typename?: 'ActiveChecklist', id: string, name?: string | null, comments?: string | null, signature?: string | null, status: Types.ChecklistStatus, completedAt?: Date | null, percentageScore: string, percentComplete: number, completedBy?: { __typename?: 'User', origName: string } | null, business?: { __typename?: 'Business', name: string } | null, scheme?: { __typename?: 'Scheme', checklistRequired: boolean, logo?: { __typename?: 'Image', urlPersisted?: string | null } | null } | null, fields: Array<{ __typename?: 'ActiveChecklistFields', id: string, question: { [key: string]: any }, type: Types.ChecklistAnswerType, availableAnswers: Array<{ [key: string]: any }>, dependent?: { [key: string]: any } | null, section: number, subsection: number, order: number, answer?: { __typename?: 'ChecklistAnswer', answer: string, additionalComments?: string | null, images: Array<string> } | null }>, checklistSection: Array<{ __typename?: 'ActiveChecklistSections', sub: boolean, section: number, subsection?: number | null, titleLocaled: string, dependsOnWeight?: { __typename?: 'DependWeight', weight: string, dependsOn: string } | null }> } };
+export type ActiveChecklistQuery = { __typename?: 'Query', activeChecklist: { __typename?: 'ActiveChecklist', id: string, reference?: number | null, name?: string | null, comments?: string | null, signature?: string | null, status: Types.ChecklistStatus, completedAt?: Date | null, percentageScore: string, percentComplete: number, completedBy?: { __typename?: 'User', origName: string } | null, business?: { __typename?: 'Business', id: string, name: string } | null, scheme?: { __typename?: 'Scheme', checklistRequired: boolean, logo?: { __typename?: 'Image', urlPersisted?: string | null } | null } | null, fields: Array<{ __typename?: 'ActiveChecklistFields', id: string, question: { [key: string]: any }, type: Types.ChecklistAnswerType, availableAnswers: Array<{ [key: string]: any }>, dependent?: { [key: string]: any } | null, section: number, subsection: number, order: number, answer?: { __typename?: 'ChecklistAnswer', answer: string, additionalComments?: string | null, images: Array<string> } | null }>, checklistSection: Array<{ __typename?: 'ActiveChecklistSections', sub: boolean, section: number, subsection?: number | null, titleLocaled: string, dependsOnWeight?: { __typename?: 'DependWeight', weight: string, dependsOn: string } | null }> } };
 
 
 export const ActiveChecklistDocument = gql`
     query ActiveChecklist($where: ActiveChecklistWhereUniqueInput!) {
   activeChecklist(where: $where) {
     id
+    reference
     name
     comments
     signature
@@ -26,6 +27,7 @@ export const ActiveChecklistDocument = gql`
       origName
     }
     business {
+      id
       name
     }
     scheme {

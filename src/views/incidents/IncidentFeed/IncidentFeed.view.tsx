@@ -65,6 +65,8 @@ interface Props {
   openLightbox: (elements: { src: string }[], index: number) => void;
   setCompactView: () => void;
   setGallery: (values: string[]) => void;
+  setImpactTagsFilter: (value: string[]) => void;
+  setInvolvedTagsFilter: (value: string[]) => void;
   setPeculiarities: (value: string) => void;
   setSearch: (value: string) => void;
   setTableView: () => void;
@@ -87,6 +89,8 @@ const IncidentFeed = ({
   openLightbox,
   setCompactView,
   setGallery,
+  setImpactTagsFilter,
+  setInvolvedTagsFilter,
   setPeculiarities,
   // pagination,
   setSearch,
@@ -471,6 +475,8 @@ const IncidentFeed = ({
       >
         <IncidentFilter
           clearFilters={clearFilters}
+          setImpactTagsFilter={setImpactTagsFilter}
+          setInvolvedTagsFilter={setInvolvedTagsFilter}
           setPeculiarities={setPeculiarities}
         />
       </Drawer>

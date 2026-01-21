@@ -1,5 +1,6 @@
 import type { CarouselRef } from 'antd/lib/carousel';
 import type { ListOffendersQuery } from 'graphql/offenders/queries/__generated__/list-offenders.generated';
+import type { CascadeOptions } from 'types/investigations';
 
 import {
   faCircleInfo,
@@ -18,6 +19,7 @@ import {
   Carousel,
   Col,
   Descriptions,
+  Divider,
   Input,
   Pagination,
   Row,
@@ -25,6 +27,7 @@ import {
 } from 'antd';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import WatermarkSlide from 'components/images/WatermartkSlide.view';
+import CascadeOptionsCheckbox from 'components/investigations/CascadeOptionsCheckbox';
 import OffenderTile from 'components/offenders/OffenderTile';
 import OffenderTileSkeleton from 'components/offenders/OffenderTileSkeleton';
 import React, { useRef } from 'react';
@@ -44,6 +47,7 @@ import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 const { Title } = Typography;
 
 interface Props {
+  cascadeOptions: CascadeOptions;
   data: ListOffendersQuery | undefined;
   lightBoxOpen: {
     index: number;
@@ -64,11 +68,13 @@ interface Props {
       >['offenders'][0]
     | null
     | undefined;
+  setCascadeOptions: (value: CascadeOptions) => void;
   setCurrentId: (value: string | undefined) => void;
   setSearch: (value: string) => void;
 }
 
 const AddExistingOffender = ({
+  cascadeOptions,
   data,
   lightBoxOpen,
   loading,
@@ -80,6 +86,7 @@ const AddExistingOffender = ({
   saving,
   search,
   selectedOffender,
+  setCascadeOptions,
   setCurrentId,
   setSearch,
 }: Props): JSX.Element => {
@@ -353,6 +360,30 @@ const AddExistingOffender = ({
                     </Descriptions.Item>
                   )}
                 </Descriptions>
+              </Col>
+            </Row>
+            <Divider style={{ margin: '16px 0' }} />
+            <Row>
+              <Col span={24} style={{ margin: '0 10px' }}>
+                <Typography.Text strong>
+                  {intl.formatMessage({
+                    defaultMessage: 'Connection Options',
+                  })}
+                </Typography.Text>
+                <Typography.Text
+                  style={{ display: 'block', marginBottom: 8, marginTop: 4 }}
+                  type="secondary"
+                >
+                  {intl.formatMessage({
+                    defaultMessage: 'Automatically connect related data:',
+                  })}
+                </Typography.Text>
+                <CascadeOptionsCheckbox
+                  disabled={saving}
+                  layout="vertical"
+                  onChange={setCascadeOptions}
+                  value={cascadeOptions}
+                />
               </Col>
             </Row>
             <Row gutter={10} justify="end" style={{ marginTop: 30 }}>

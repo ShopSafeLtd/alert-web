@@ -51,6 +51,10 @@ query TodoList(
         incident {
           id
           reference
+          crimeTypes {
+            id
+            name
+          }
         }
         investigationId
         investigation {

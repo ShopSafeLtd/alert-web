@@ -27,7 +27,7 @@ const useSelectImage = ({
   onClose,
   onSelect,
 }: Props): Return => {
-  const { data: ImportData, loading } = useViewInvestigationQuery({
+  const { loading } = useViewInvestigationQuery({
     variables: {
       where: {
         id: investigationId,
@@ -35,16 +35,9 @@ const useSelectImage = ({
     },
   });
 
-  const data = ImportData?.investigation?.offenders
-    ? {
-        offenders: ImportData?.investigation?.offenders.map((offender) => ({
-          images: offender.images.map((image) => ({
-            url: image.optimisedPersisted || '',
-          })),
-          name: offender.name || '',
-        })),
-      }
-    : undefined;
+  // Note: Investigation query doesn't fetch offenders field, only totalOffenders count
+  // This component is currently unable to fetch offender images for investigations
+  const data = undefined;
 
   const onSubmit = (item: { key: string }) => {
     onSelect(item.key);

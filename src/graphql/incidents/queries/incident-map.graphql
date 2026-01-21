@@ -1,0 +1,10 @@
+query ListIncidentsForMap($where: IncidentWhereInput!) {
+  incidents(where: $where) {
+    id
+    totalValue
+    location {
+      geoLat
+      geoLng
+    }
+  }
+}

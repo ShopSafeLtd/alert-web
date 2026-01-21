@@ -1,0 +1,40 @@
+query CrimeGroupFlowData($where: CrimeGroupWhereUniqueInput!) {
+  crimeGroup(where: $where) {
+    id
+    alias
+    reference
+
+    offenders {
+      id
+      name
+      reference
+      totalIncidents
+      totalValue
+      images(take: 1) {
+        id
+        optimised
+        optimisedPersisted
+      }
+    }
+
+    incidents {
+      id
+      reference
+      dayTime
+      totalValue
+      location {
+        full
+        geoLat
+        geoLng
+      }
+      crimeTypes {
+        id
+        name
+      }
+      offenders {
+        id
+        name
+      }
+    }
+  }
+}

@@ -1,0 +1,12 @@
+query OffendersBasicInfo($where: OffenderWhereInput!) {
+  offenders(where: $where) {
+    id
+    name
+    reference
+    images(take: 1) {
+      id
+      optimised
+      optimisedPersisted
+    }
+  }
+}

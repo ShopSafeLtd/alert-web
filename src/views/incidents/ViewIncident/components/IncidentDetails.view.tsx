@@ -75,6 +75,20 @@ const IncidentDetails = ({
             {data?.incident?.subject}
           </Title>
         </Col>
+        {data?.incident?.draft && (
+          <Col>
+            <Tooltip
+              title={intl.formatMessage({
+                defaultMessage:
+                  'This incident is a live draft awaiting completion',
+              })}
+            >
+              <Tag color="orange">
+                <FormattedMessage defaultMessage="LIVE" />
+              </Tag>
+            </Tooltip>
+          </Col>
+        )}
         {data?.incident?.newIncident && (
           <Col>
             <Tag color="blue">

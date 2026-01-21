@@ -1,5 +1,4 @@
-import type { ViewInvestigationQuery } from 'graphql/investigations/queries/__generated__/view-investigation.generated';
-
+import { useInvestigationFlowDataQuery } from 'graphql/investigations/queries/__generated__/investigation-flow-data.generated';
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { ReactFlowProvider } from 'reactflow';
@@ -8,12 +7,22 @@ import ReactFlowView from './Flow.view';
 import useFlow from './hooks/useFlow';
 import { WebRtcProviderContextProvider } from './hooks/useWebRtcProvidor';
 
-interface Props {
-  importData: ViewInvestigationQuery | undefined;
-}
-
-const ReactFlowPro = ({ importData }: Props) => {
+const ReactFlowPro = () => {
   const { id: investigationId } = useParams();
+
+  const {
+    data: importData,
+    error: queryError,
+    loading: queryLoading,
+  } = useInvestigationFlowDataQuery({
+    skip: !investigationId,
+    variables: {
+      where: {
+        id: investigationId || '',
+      },
+    },
+  });
+
   const {
     clientCount,
     // reactFlowInstance,
@@ -23,6 +32,8 @@ const ReactFlowPro = ({ importData }: Props) => {
     isFullScreen,
     isSynced,
     loading,
+    loadingError,
+    loadingPhase,
     nodes,
     onConnect,
     onDragOver,
@@ -54,7 +65,9 @@ const ReactFlowPro = ({ importData }: Props) => {
       // users={users}
       isFullScreen={isFullScreen}
       isSynced={isSynced}
-      loading={loading}
+      loading={loading || queryLoading}
+      loadingError={loadingError}
+      loadingPhase={loadingPhase}
       nodes={nodes}
       onConnect={onConnect}
       onDragOver={onDragOver}
@@ -63,6 +76,7 @@ const ReactFlowPro = ({ importData }: Props) => {
       onNodeClick={onNodeClick}
       onNodesChange={onNodesChange}
       onSave={onSave}
+      queryError={queryError}
       savedWhen={savedWhen}
       // handlePointMove={handlePointMove}
       saving={saving}
@@ -73,10 +87,10 @@ const ReactFlowPro = ({ importData }: Props) => {
   );
 };
 
-const Flow = ({ importData }: Props) => (
+const Flow = () => (
   <ReactFlowProvider>
     <WebRtcProviderContextProvider>
-      <ReactFlowPro importData={importData} />
+      <ReactFlowPro />
     </WebRtcProviderContextProvider>
   </ReactFlowProvider>
 );

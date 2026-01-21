@@ -1,10 +1,6 @@
-import type { ViewInvestigationQuery } from 'graphql/investigations/queries/__generated__/view-investigation.generated';
-
-import { useQuery } from '@apollo/client';
 import { faArrowLeft } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Col, Row, Tooltip, Typography } from 'antd';
-import { ViewInvestigationDocument } from 'graphql/investigations/queries/__generated__/view-investigation.generated';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -17,18 +13,6 @@ const FlowMapPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const intl = useIntl();
-
-  const { data, loading } = useQuery<ViewInvestigationQuery>(
-    ViewInvestigationDocument,
-    {
-      skip: !id,
-      variables: {
-        where: {
-          id: id || '',
-        },
-      },
-    }
-  );
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
@@ -56,20 +40,15 @@ const FlowMapPage = () => {
           </Col>
           <Col flex={1}>
             <Title level={4} style={{ margin: 0 }}>
-              {intl.formatMessage(
-                { defaultMessage: '{name} - Flow Map' },
-                {
-                  name:
-                    data?.investigation?.name ||
-                    intl.formatMessage({ defaultMessage: 'Investigation' }),
-                }
-              )}
+              {intl.formatMessage({
+                defaultMessage: 'Investigation - Flow Map',
+              })}
             </Title>
           </Col>
         </Row>
       </div>
       <div style={{ flex: 1, overflow: 'hidden' }}>
-        {!loading && data && <Flow importData={data} />}
+        <Flow />
       </div>
     </div>
   );

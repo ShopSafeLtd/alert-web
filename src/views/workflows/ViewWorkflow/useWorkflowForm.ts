@@ -141,6 +141,10 @@ interface WorkflowConditions {
   lessThanValue?: string;
   // new
   lossValue?: boolean | string;
+  lossValueBetween?: {
+    max: string;
+    min: string;
+  };
   // new
   priority?: {
     anyAll: AnyAll;
@@ -236,6 +240,9 @@ export interface FormData {
   lessThanPrice: number;
   // new
   lossValue?: number;
+  lossValueBetweenCheck: boolean;
+  lossValueBetweenMax?: number;
+  lossValueBetweenMin?: number;
   lossValueCheck: boolean;
   name: string;
   option: AnyAll;
@@ -312,6 +319,7 @@ interface Return {
   incidentTimeCountCheck: boolean;
   lessThanSelected: boolean;
   loading: boolean;
+  lossValueBetweenSelected: boolean;
   lossValueSelected: boolean;
   modelSelected: Model | null | undefined;
   newQuestion: boolean;
@@ -474,6 +482,7 @@ const useWorkflowForm = (): Return => {
   const divisionsSelected = Form.useWatch('divisionsCheck', form);
   const prioritySelected = Form.useWatch('priorityCheck', form);
   const lossValueSelected = Form.useWatch('lossValueCheck', form);
+  const lossValueBetweenSelected = Form.useWatch('lossValueBetweenCheck', form);
   // Activity (Todo) condition watches
   const activityClosedSelected = Form.useWatch('activityClosedCheck', form);
   const activityRaisedBySelected = Form.useWatch('activityRaisedByCheck', form);
@@ -597,6 +606,13 @@ const useWorkflowForm = (): Return => {
             // New loss value fields
             lossValue: conditions?.lossValue
               ? Number(conditions.lossValue)
+              : undefined,
+            lossValueBetweenCheck: !!conditions?.lossValueBetween,
+            lossValueBetweenMax: conditions?.lossValueBetween?.max
+              ? Number(conditions.lossValueBetween.max)
+              : undefined,
+            lossValueBetweenMin: conditions?.lossValueBetween?.min
+              ? Number(conditions.lossValueBetween.min)
               : undefined,
             lossValueCheck:
               conditions?.lossValue !== undefined && !!conditions?.lossValue,
@@ -1050,6 +1066,15 @@ const useWorkflowForm = (): Return => {
         lossValueSelected && values.lossValue
           ? values.lossValue.toString()
           : undefined,
+      lossValueBetween:
+        lossValueBetweenSelected &&
+        values.lossValueBetweenMin !== undefined &&
+        values.lossValueBetweenMax !== undefined
+          ? {
+              max: values.lossValueBetweenMax.toString(),
+              min: values.lossValueBetweenMin.toString(),
+            }
+          : undefined,
       // New priority condition
       priority: values.priorityCheck
         ? {
@@ -1231,6 +1256,7 @@ const useWorkflowForm = (): Return => {
       editWorkflowLoading ||
       goodsLoading ||
       checklistLoading,
+    lossValueBetweenSelected,
     lossValueSelected,
     modelSelected,
     newQuestion,

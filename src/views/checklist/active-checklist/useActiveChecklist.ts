@@ -14,6 +14,7 @@ import { useNavigate, useParams } from 'react-router';
 import { useSearchParams } from 'react-router-dom';
 
 import FONT_FAMILIES from '../../../components/onboarding/Onboarding/SchemeTerms/utils/Fonts';
+import { adjustDependentThreshold } from '../utils/adjustDependentThreshold';
 
 type SaveStatus = 'error' | 'idle' | 'saved' | 'saving';
 
@@ -40,9 +41,11 @@ interface Return {
   saveDraft: () => void;
   saveStatus: SaveStatus;
   sections: ActiveChecklistSection[];
+  selectedBusinessId: null | string;
   selectedFont: string;
   setActiveKeys: (keys: string[]) => void;
   setFile: (value: { file: string; name: string } | null) => void;
+  setSelectedBusinessId: (value: null | string) => void;
   setSelectedFont: (value: string) => void;
   setSign: (value: string) => void;
   setTab: (value: string) => void;
@@ -141,6 +144,9 @@ const useActiveChecklist = (): Return => {
   const [submitting, setSubmitting] = useState(false);
   const [saveStatus, setSaveStatus] = useState<SaveStatus>('idle');
   const [activeKeys, setActiveKeys] = useState<string[]>(['0']); // First section open by default
+  const [selectedBusinessId, setSelectedBusinessId] = useState<null | string>(
+    null
+  );
   const [completionStats, setCompletionStats] = useState<CompletionStats>({
     answeredQuestions: 0,
     completionPercentage: 0,
@@ -319,30 +325,55 @@ const useActiveChecklist = (): Return => {
       total: number;
     }[] = [];
 
+    // Helper function to recursively check if a section should be included
+    // based on its full dependency chain
+    const shouldSectionBeIncluded = (sectionIndex: number): boolean => {
+      const section = completedData.sections.find(
+        (s) => s.section === sectionIndex && s.sub === false
+      );
+
+      if (!section) return false;
+      if (!section.dependsOnWeight) return true;
+
+      const dependencyIndex = Number(section.dependsOnWeight.dependsOn);
+      const threshold = Number(section.dependsOnWeight.weight);
+
+      // Recursive check: is the parent visible?
+      if (!shouldSectionBeIncluded(dependencyIndex)) return false;
+
+      const dependentSection = completedData.sections.find(
+        (s) => s.section === dependencyIndex && s.sub === false
+      );
+
+      if (!dependentSection) return false;
+
+      // Calculate parent's score
+      const dependentTotal = dependentSection.subsections
+        .flatMap((sub) =>
+          sub.questions.map((q) =>
+            q.answer === 'N/A'
+              ? 0
+              : q.weights.find((w) => w.answer === q.answer)?.weight || 0
+          )
+        )
+        .reduce((a, b) => a + b, 0);
+
+      // Adjust threshold and compare
+      const adjustedThreshold = adjustDependentThreshold(
+        dependentSection,
+        threshold
+      );
+
+      return dependentTotal <= adjustedThreshold;
+    };
+
     for (const section of completedData.sections) {
-      // If the section has a dependency, check if the dependent section meets the threshold.
-      if (section.dependsOnWeight) {
-        const dependencyIndex = Number(section.dependsOnWeight.dependsOn);
-        const threshold = Number(section.dependsOnWeight.weight);
-        const dependentSection = completedData.sections.find(
-          (s) => s.section === dependencyIndex && s.sub === false
-        );
-        if (dependentSection) {
-          const dependentTotal = dependentSection.subsections
-            .flatMap((sub) =>
-              sub.questions.map((q) =>
-                q.answer === 'N/A'
-                  ? 0
-                  : q.weights.find((w) => w.answer === q.answer)?.weight || 0
-              )
-            )
-            .reduce((a, b) => a + b, 0);
-          if (dependentTotal > threshold) {
-            continue;
-          }
-        } else {
-          continue;
-        }
+      // Check if section should be included based on full dependency chain
+      if (
+        section.dependsOnWeight &&
+        !shouldSectionBeIncluded(section.section)
+      ) {
+        continue;
       }
       section.subsections.flatMap((subsection) =>
         subsection.questions.flatMap((question, _, ogArray) => {
@@ -460,6 +491,7 @@ const useActiveChecklist = (): Return => {
             na: question.na,
             weight: question.weight,
           })),
+          businessId: selectedBusinessId,
           draft,
           max: maxTotal,
           // Use original signature if editing a completed checklist, otherwise use current signature
@@ -617,6 +649,11 @@ const useActiveChecklist = (): Return => {
           setSign(initData.activeChecklist.signature);
         }
 
+        // Initialize selectedBusinessId with current business ID
+        if (initData?.activeChecklist?.business?.id) {
+          setSelectedBusinessId(initData.activeChecklist.business.id);
+        }
+
         // Store original signature and completion date if editing a completed checklist
         if (isEditMode && initData?.activeChecklist?.status === 'COMPLETED') {
           originalSignatureRef.current =
@@ -659,9 +696,11 @@ const useActiveChecklist = (): Return => {
     saveDraft,
     saveStatus,
     sections,
+    selectedBusinessId,
     selectedFont,
     setActiveKeys,
     setFile,
+    setSelectedBusinessId,
     setSelectedFont,
     setSign,
     setTab,

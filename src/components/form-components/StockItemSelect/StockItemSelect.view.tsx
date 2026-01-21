@@ -7,8 +7,8 @@ import type {
 import type { Currency } from 'graphql/types';
 
 import {
-  currencyAtom,
   CurrencyCodeMap,
+  currencyAtom,
   currentSchemeIdAtom,
 } from '#/providers/SchemeProvider/SchemeProvider';
 import { Col, Row, Select, Typography } from 'antd';
@@ -36,8 +36,8 @@ export interface StockItemValue {
   name?: null | string;
   salesPriceLocal?: null | number;
   sku?: null | string;
-  variant?: string;
   styleCode?: null | string;
+  variant?: string;
 }
 
 interface Props {
@@ -65,8 +65,8 @@ const OptionLabel = ({
     name?: null | string;
     salesPriceLocal?: null | number;
     sku?: null | string;
-    variant?: null | string;
     styleCode?: null | string;
+    variant?: null | string;
   };
 }) => (
   <>
@@ -388,8 +388,8 @@ const StockItemSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
           name: item.name,
           salesPriceLocal: item.salesPriceLocal,
           sku: item.sku,
-          variant: item.variant ?? undefined,
           styleCode: item.styleCode,
+          variant: item.variant ?? undefined,
         });
     }
   };

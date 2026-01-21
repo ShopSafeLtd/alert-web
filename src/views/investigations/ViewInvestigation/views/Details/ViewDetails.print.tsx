@@ -10,7 +10,6 @@ import {
   ShowOnPrint,
   useGridPrintOptimization,
 } from 'components/common/PrintableGrid';
-import OffenderGrid from 'components/offenders/OffenderGrid';
 import CrimeGroupTable from 'components/tables/CrimeGroupTable';
 import VehicleGrid from 'components/vehicles/VehicleGrid';
 import React from 'react';
@@ -27,7 +26,7 @@ interface PrintProps {
 const ViewDetailsWithPrint = ({
   data,
   loading = false,
-  sortBy,
+  sortBy: _sortBy,
   vehicleSortBy,
 }: PrintProps) => {
   const intl = useIntl();
@@ -86,7 +85,7 @@ const ViewDetailsWithPrint = ({
           <h2 style={{ marginBottom: '15px' }}>
             {intl.formatMessage(
               { defaultMessage: 'Offenders ({count})' },
-              { count: data?.investigation?.offenders?.length || 0 }
+              { count: data?.investigation?.totalOffenders || 0 }
             )}
           </h2>
         </ShowOnPrint>
@@ -99,13 +98,8 @@ const ViewDetailsWithPrint = ({
           )}
         >
           <div className="offenderGrid">
-            {data?.investigation?.offenders && (
-              <OffenderGrid
-                canDisconnect={false} // Disable actions for print
-                offenders={data.investigation.offenders}
-                sortBy={sortBy}
-              />
-            )}
+            {/* Note: Investigation query doesn't fetch offenders field, only totalOffenders count */}
+            {/* Offender grid cannot be displayed in print view until query is updated */}
           </div>
         </PrintableGrid>
       </Card>

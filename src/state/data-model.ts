@@ -38,7 +38,9 @@ export interface IncidentFilters {
   gallery: string[];
   goods: string[];
   groups: string[];
+  impactTags: string[];
   incidentDate: DateType | undefined;
+  involvedTags: string[];
   peculiarities: string;
   policeAreas?: PoliceForce[];
   priority: IncidentPriority[];
@@ -299,7 +301,9 @@ const dataModel: DataModel = {
       gallery: [],
       goods: [],
       groups: [],
+      impactTags: [],
       incidentDate: undefined,
+      involvedTags: [],
       peculiarities: '',
       priority: [
         IncidentPriority.High,

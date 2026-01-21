@@ -1,7 +1,6 @@
 query InvestigationSuggestions(
   $where: InvestigationWhereUniqueInput!
   $associatedInvestigation: UniqueId
-  $crimeTypesWhere: TagWhereInput
 ) {
   investigation(where: $where) {
     id

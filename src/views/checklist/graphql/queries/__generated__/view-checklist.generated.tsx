@@ -8,7 +8,7 @@ export type ChecklistQueryVariables = Types.Exact<{
 }>;
 
 
-export type ChecklistQuery = { __typename?: 'Query', checklist: { __typename?: 'Checklist', id: string, title: string, description?: string | null, sections: Array<{ __typename?: 'ChecklistSection', order: number, title: string, dependsOnWeight?: { __typename?: 'DependWeight', weight: string, dependsOn: string } | null, subsections: Array<{ __typename?: 'ChecklistSubsection', title: string, order: number, questions: Array<{ __typename?: 'ChecklistQuestion', order: number, question: { [key: string]: any }, type: Types.ChecklistAnswerType, dependent?: { [key: string]: any } | null, brandIds: Array<string>, weight: Array<{ __typename?: 'AnswerWeight', weight: number, answer: string }> }> }> }>, users: Array<{ __typename?: 'User', id: string }>, roles: Array<{ __typename?: 'CustomRole', id: string }>, groups: Array<{ __typename?: 'Group', id: string }>, business: Array<{ __typename?: 'Business', id: string }> } };
+export type ChecklistQuery = { __typename?: 'Query', checklist: { __typename?: 'Checklist', id: string, title: string, description?: string | null, requiredBusiness: boolean, sections: Array<{ __typename?: 'ChecklistSection', order: number, title: string, dependsOnWeight?: { __typename?: 'DependWeight', weight: string, dependsOn: string } | null, subsections: Array<{ __typename?: 'ChecklistSubsection', title: string, order: number, questions: Array<{ __typename?: 'ChecklistQuestion', order: number, question: { [key: string]: any }, type: Types.ChecklistAnswerType, dependent?: { [key: string]: any } | null, brandIds: Array<string>, weight: Array<{ __typename?: 'AnswerWeight', weight: number, answer: string }> }> }> }>, users: Array<{ __typename?: 'User', id: string }>, roles: Array<{ __typename?: 'CustomRole', id: string }>, groups: Array<{ __typename?: 'Group', id: string }>, business: Array<{ __typename?: 'Business', id: string }> } };
 
 
 export const ChecklistDocument = gql`
@@ -17,6 +17,7 @@ export const ChecklistDocument = gql`
     id
     title
     description
+    requiredBusiness
     sections {
       order
       title

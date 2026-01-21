@@ -9,7 +9,6 @@ import type { ViewInvestigationQuery } from 'graphql/investigations/queries/__ge
 import type { ListIncidentTagsQuery } from 'graphql/tags/queries/__generated__/list-incident-tags.generated';
 import type { TagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
 import type { CreateIncidentData } from 'graphql/types';
-import type * as Types from 'graphql/types';
 import type {
   CustomQuestion,
   CustomQuestionAction,
@@ -558,24 +557,11 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
         __typename: 'Query',
         investigation: {
           ...existingData.investigation,
-          incidents: [
-            // TODO check
-            ...existingData.investigation.incidents,
-            {
-              ...res.createIncident,
-              priority: 'LOW' as Types.IncidentPriority,
-              totalRecoveredValue: res.createIncident.recoveredValue || 0,
-              totalValue: res.createIncident.value || 0,
-            },
-          ],
-          offenders: [
-            ...existingData.investigation.offenders,
-            ...res.createIncident.offenders.map((offender) => ({
-              ...offender,
-              totalIncidents: 0,
-              totalValue: 0,
-            })),
-          ],
+          // Note: incidents and offenders fields are not in the query, update counts instead
+          totalIncidents: existingData.investigation.totalIncidents + 1,
+          totalOffenders:
+            existingData.investigation.totalOffenders +
+            res.createIncident.offenders.length,
           vehicles: [
             ...existingData.investigation.vehicles,
             ...res.createIncident.vehicles,
@@ -1099,6 +1085,7 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
                   },
               policeCCTVEmail: data.policeCCTVEmail,
               policeDay: data.policeDay,
+              policeDepartment: data.policeDepartment,
               policeDistanceFromIncident: data.policeDistanceFromIncident,
               policeIncidentDuration: data.policeIncidentDuration,
               policeInvolved: data.policeInvolved,
@@ -1109,6 +1096,7 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
               policeNo: data.policeNo,
               policeObstructions: data.policeObstructions,
               policeObstructionsDetails: data.policeObstructionsDetails,
+              policeOfficerName: data.policeOfficerName,
               policeReasonRemember: data.policeReasonRemember,
               policeRef: data.policeRef,
               policeReported: data.policeReported,

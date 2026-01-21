@@ -110,7 +110,9 @@ const AddIncident = ({
 }: Props): JSX.Element => {
   const classes = useStyles();
   const intl = useIntl();
-  const dontSetDate = useAtomValue(currentSchemeAtom)?.dontAutoSetTimeDate;
+  const scheme = useAtomValue(currentSchemeAtom);
+  const dontSetDate = scheme?.dontAutoSetTimeDate;
+  const usPoliceData = scheme?.usPoliceData;
 
   const reorderedAndTrimmedForm = (() => {
     const reordered = incidentForm.flatMap((field) => {
@@ -331,6 +333,7 @@ const AddIncident = ({
                   generatingStatement={generatingStatement}
                   policeReporting={policeReporting}
                   saving={saving}
+                  usPoliceData={usPoliceData}
                 />
               );
             }

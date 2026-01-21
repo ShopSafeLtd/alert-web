@@ -29,7 +29,9 @@ query CurrentSchemeProvider($where: UserSchemeWhereUniqueInput!) {
       }
     }
     scheme {
+      schemeType
       usDateFormat
+      usPoliceData
       disablePassword
       draftIncidents
       currency

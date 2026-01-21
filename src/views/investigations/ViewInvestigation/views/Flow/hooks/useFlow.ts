@@ -1,4 +1,4 @@
-import type { ViewInvestigationQuery } from 'graphql/investigations/queries/__generated__/view-investigation.generated';
+import type { InvestigationFlowDataQuery } from 'graphql/investigations/queries/__generated__/investigation-flow-data.generated';
 import type React from 'react';
 import type { FullScreenHandle } from 'react-full-screen';
 import type {
@@ -38,12 +38,14 @@ interface Return {
   isFullScreen: boolean;
   isSynced: boolean;
   loading: boolean;
+  loadingError: {
+    error?: Error;
+    message: string;
+    type: 'query' | 'websocket';
+  } | null;
+  loadingPhase: 'connecting' | 'error' | 'query' | 'ready' | 'syncing';
   nodes: Node[];
   nodesMap: YMap<Node>;
-  offenders: {
-    name: string;
-    url: string[];
-  }[];
   onConnect: OnConnect;
   onDragOver: (event: DragEvent) => void;
   onDrop: (
@@ -71,7 +73,7 @@ interface Return {
 const TIMEOUT = 3000 + Math.floor(Math.random() * 7000);
 
 interface Props {
-  importData: ViewInvestigationQuery | undefined;
+  importData: InvestigationFlowDataQuery | undefined;
   investigationId: string;
 }
 
@@ -100,11 +102,14 @@ const useFlow = ({ importData, investigationId }: Props): Return => {
   const [usedFallbackRef, setUsedFallbackRef] = useState<boolean>(false);
   const [reactFlowInstance, setReactFlowInstance] =
     useState<ReactFlowInstance | null>(null);
-  const offenders =
-    importData?.investigation?.offenders.map((offender) => ({
-      name: offender.name || '',
-      url: offender.images?.map((image) => image?.optimised || ''),
-    })) || [];
+  const [loadingPhase, setLoadingPhase] = useState<
+    'connecting' | 'error' | 'query' | 'ready' | 'syncing'
+  >('query');
+  const [loadingError, setLoadingError] = useState<{
+    error?: Error;
+    message: string;
+    type: 'query' | 'websocket';
+  } | null>(null);
 
   const onSave = useCallback(() => {
     if (reactFlowInstance && usedFallbackRef) {
@@ -475,6 +480,48 @@ const useFlow = ({ importData, investigationId }: Props): Return => {
     provider.wsconnecting,
   ]);
 
+  // Loading phase state machine
+  useEffect(() => {
+    // Phase 1: GraphQL query loading
+    if (!importData) {
+      setLoadingPhase('query');
+      return;
+    }
+
+    // Phase 2: WebSocket connecting
+    if (provider.wsconnecting && !provider.wsconnected) {
+      setLoadingPhase('connecting');
+      return;
+    }
+
+    // Handle WebSocket connection failure
+    if (!provider.wsconnecting && !provider.wsconnected && !usedFallbackRef) {
+      setLoadingError({
+        message: 'Failed to connect to collaboration server',
+        type: 'websocket',
+      });
+      setLoadingPhase('error');
+      return;
+    }
+
+    // Phase 3: Y.js initialization
+    if (provider.wsconnected && !usedFallbackRef) {
+      setLoadingPhase('syncing');
+      return;
+    }
+
+    // Ready state
+    if (importData && provider.wsconnected && usedFallbackRef) {
+      setLoadingPhase('ready');
+      setLoadingError(null);
+    }
+  }, [
+    importData,
+    provider.wsconnecting,
+    provider.wsconnected,
+    usedFallbackRef,
+  ]);
+
   return {
     clientCount,
     downloadImage,
@@ -484,9 +531,10 @@ const useFlow = ({ importData, investigationId }: Props): Return => {
     isFullScreen,
     isSynced,
     loading,
+    loadingError,
+    loadingPhase,
     nodes,
     nodesMap,
-    offenders,
     onConnect,
     onDragOver,
     onDrop,

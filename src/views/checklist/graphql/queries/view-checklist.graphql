@@ -3,6 +3,7 @@ query Checklist($where: ChecklistWhereUniqueInput!) {
     id
     title
     description
+    requiredBusiness
     sections {
       order
       title

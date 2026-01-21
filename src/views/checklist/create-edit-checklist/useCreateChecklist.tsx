@@ -72,6 +72,7 @@ export interface FormData {
   businessIds: string[];
   description: string;
   groups: string[];
+  requiredBusiness?: boolean;
   roles: string[];
   sections: Section[];
   title: string;
@@ -278,6 +279,7 @@ export function useCreateChecklist(): Return {
           data.checklist.business.map((business) => business.id) || [],
         description: data.checklist.description ?? undefined,
         groups: data.checklist.groups.map((group) => group.id) || [],
+        requiredBusiness: data.checklist.requiredBusiness ?? false,
         roles: data.checklist.roles.map((role) => role.id) || [],
         // @ts-expect-error types not liking generics
         sections: data.checklist.sections.map((section) => ({
@@ -346,6 +348,7 @@ export function useCreateChecklist(): Return {
           businessIds: values.businessIds,
           description: values.description,
           groupsIds: values.groups,
+          requiredBusiness: values.requiredBusiness ?? false,
           roleIds: values.roles,
           sections: values.sections.map((section) => ({
             dependentWeight: section.dependentWeight

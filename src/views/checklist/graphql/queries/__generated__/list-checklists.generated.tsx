@@ -11,7 +11,7 @@ export type ChecklistsQueryVariables = Types.Exact<{
 }>;
 
 
-export type ChecklistsQuery = { __typename?: 'Query', checklists: Array<{ __typename?: 'Checklist', id: string, titleLocaled: string, descriptionLocaled: string, roles: Array<{ __typename?: 'CustomRole', id: string }>, groups: Array<{ __typename?: 'Group', id: string }>, users: Array<{ __typename?: 'User', id: string }>, business: Array<{ __typename?: 'Business', id: string }> }> };
+export type ChecklistsQuery = { __typename?: 'Query', checklists: Array<{ __typename?: 'Checklist', id: string, titleLocaled: string, descriptionLocaled: string, requiredBusiness: boolean, roles: Array<{ __typename?: 'CustomRole', id: string }>, groups: Array<{ __typename?: 'Group', id: string }>, users: Array<{ __typename?: 'User', id: string }>, business: Array<{ __typename?: 'Business', id: string }> }> };
 
 
 export const ChecklistsDocument = gql`
@@ -20,6 +20,7 @@ export const ChecklistsDocument = gql`
     id
     titleLocaled
     descriptionLocaled
+    requiredBusiness
     roles {
       id
     }

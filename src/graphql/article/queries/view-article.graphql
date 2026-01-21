@@ -29,6 +29,7 @@ query Article($where: ArticleWhereUniqueInput!) {
     createdAt
     updatedAt
     priority
+    criticalExpiry
     completedAt
     status
     tags {

@@ -1,4 +1,5 @@
 import type { FormInstance } from 'antd';
+import type { GroupSyncStrategy } from 'graphql/types';
 import type { LocationData, TagData } from 'types/DataType';
 
 import { CurrencyCodeMap } from '#/providers/SchemeProvider/SchemeProvider';
@@ -25,10 +26,13 @@ import { useIntl } from 'react-intl';
 
 import type { OnSubmitValues } from './useEditBusiness';
 
+import GroupSyncModal from './components/GroupSyncModal';
+
 interface Props {
   addTag: boolean;
   brands: { label: string; value: string }[];
   brandsLoading: boolean;
+  businessName: string;
   currency: Currency | null | undefined;
   form: FormInstance<OnSubmitValues>;
   groups: { label: string; value: string }[];
@@ -40,8 +44,11 @@ interface Props {
     value: string
   ) => Promise<{ label: string; value: string }[]>;
   onSubmit: (values: OnSubmitValues) => void;
+  onSyncCancel: () => void;
+  onSyncConfirm: (strategy: GroupSyncStrategy) => void;
   saving: boolean;
   setLocation: (value: LocationData) => void;
+  showSyncModal: boolean;
   tags: { label: string; value: string }[];
   tagsLoading: boolean;
   toggleAddTag: () => void;
@@ -52,6 +59,7 @@ const EditBusiness = ({
   addTag,
   brands,
   brandsLoading,
+  businessName,
   currency: _currency,
   form,
   groups,
@@ -61,8 +69,11 @@ const EditBusiness = ({
   onClose,
   onSearchBusiness,
   onSubmit,
+  onSyncCancel,
+  onSyncConfirm,
   saving,
   setLocation,
+  showSyncModal,
   tags,
   tagsLoading,
   toggleAddTag,
@@ -387,6 +398,12 @@ const EditBusiness = ({
           </Col>
         </Row>
       </Form.Item>
+      <GroupSyncModal
+        businessName={businessName}
+        onCancel={onSyncCancel}
+        onConfirm={onSyncConfirm}
+        visible={showSyncModal}
+      />
       <Drawer
         onClose={toggleAddTag}
         open={addTag}

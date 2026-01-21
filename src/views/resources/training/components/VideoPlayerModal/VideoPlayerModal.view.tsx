@@ -29,7 +29,7 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
 
   if (!video) return null;
 
-  const formatDate = (dateString: string | Date): string => {
+  const formatDate = (dateString: Date | string): string => {
     if (dateString instanceof Date) {
       dateString = dateString.toLocaleDateString(intl.locale, {
         day: 'numeric',

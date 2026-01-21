@@ -1,4 +1,6 @@
 import type { Theme } from 'configs/ThemeConfig';
+import type { CrimeGroupAnalyticsQuery } from 'graphql/crime-groups/queries/__generated__/crime-group-analytics.generated';
+import type { OffendersBasicInfoQuery } from 'graphql/offenders/queries/__generated__/offenders-basic-info.generated';
 import type { Edge, EdgeProps, Node } from 'reactflow';
 
 import { currencyAtom } from '#/providers/SchemeProvider/SchemeProvider';
@@ -14,6 +16,7 @@ import {
 } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Card, Col, Modal, Row, Select, Tooltip } from 'antd';
+import { CrimeGroupOffenderTier } from 'graphql/types';
 import { useAtomValue } from 'jotai';
 import React, {
   useCallback,
@@ -200,23 +203,20 @@ interface CrimeGroupData {
     reference?: null | string;
     totalValue?: null | number;
   }> | null;
-  offenders?: Array<{
-    id: string;
-    images?: Array<{
-      id: string;
-      optimised?: null | string;
-      optimisedPersisted?: null | string;
-    }> | null;
-    name?: null | string;
-    reference?: null | number;
-    totalIncidents: number;
-    totalValue: number;
-  }>;
+  offenders?: Array<
+    {
+      analytics?: CrimeGroupAnalyticsQuery['crimeGroupAnalytics'][number];
+      totalIncidents: number;
+      totalValue: number;
+    } & OffendersBasicInfoQuery['offenders'][number]
+  >;
   reference?: null | number;
 }
 
 interface Props {
   crimeGroup: CrimeGroupData;
+  layoutMode: 'impact' | 'link-analysis';
+  onLayoutModeChange: (mode: 'impact' | 'link-analysis') => void;
   onOffenderClick?: (offenderId: string) => void;
 }
 
@@ -559,7 +559,12 @@ const CustomEdge: React.FC<CustomEdgeProps> = ({
   );
 };
 
-const CrimeGroupFlow: React.FC<Props> = ({ crimeGroup, onOffenderClick }) => {
+const CrimeGroupFlow: React.FC<Props> = ({
+  crimeGroup,
+  layoutMode,
+  onLayoutModeChange,
+  onOffenderClick,
+}) => {
   const classes = useStyles();
   const intl = useIntl();
   // Currency is used in formatting
@@ -587,9 +592,6 @@ const CrimeGroupFlow: React.FC<Props> = ({ crimeGroup, onOffenderClick }) => {
     'overview'
   );
   const [maxNodes, setMaxNodes] = useState(50);
-  const [layoutMode, setLayoutMode] = useState<'impact' | 'link-analysis'>(
-    'link-analysis'
-  );
   const [toolbarExpanded, setToolbarExpanded] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [selectedNodeId, setSelectedNodeId] = useState<null | string>(null);
@@ -650,55 +652,19 @@ const CrimeGroupFlow: React.FC<Props> = ({ crimeGroup, onOffenderClick }) => {
     //   incidentOffenderMap.set(incident.id, offenderIds);
     // }
 
-    // Calculate both connection-based and impact-based scores
+    // Use backend-calculated scores based on current mode
     const offendersWithScores = offenders.map((offender) => {
-      // CONNECTION-BASED SCORING
-      // Find all incidents this offender is involved in (within this crime group)
-      const offenderIncidents = incidents.filter((incident) =>
-        incident.offenders?.some((o) => o.id === offender.id)
-      );
-
-      // Calculate connections to other offenders through shared incidents
-      // Only count connections to other crime group members
-      const connections = new Map<string, number>();
-      const crimeGroupMemberIds = new Set(offenders.map((o) => o.id));
-
-      for (const incident of offenderIncidents) {
-        const coOffenders = incident.offenders || [];
-        for (const coOffender of coOffenders) {
-          // Only count connections to other crime group members
-          if (
-            coOffender.id !== offender.id &&
-            crimeGroupMemberIds.has(coOffender.id)
-          ) {
-            connections.set(
-              coOffender.id,
-              (connections.get(coOffender.id) || 0) + 1
-            );
-          }
-        }
-      }
-
-      const totalSharedIncidents = [...connections.values()].reduce(
-        (sum, count) => sum + count,
-        0
-      );
-      const uniqueConnections = connections.size;
-      const clusterScore = totalSharedIncidents + uniqueConnections * 2; // Weight unique connections higher
-
-      // IMPACT-BASED SCORING - use crime group incident count
-      const incidentScore = offenderIncidents.length; // Count only crime group incidents
-      const valueScore = (offender.totalValue || 0) / 1000; // Normalize value
-      const impactScore = incidentScore + valueScore;
+      const analyticsData = offender.analytics;
 
       return {
         ...offender,
-        clusterScore,
-        connectionCount: uniqueConnections,
-        impactScore,
-        incidentIds: offenderIncidents.map((i) => i.id),
-        sharedIncidentCount: totalSharedIncidents,
-        totalIncidents: offenderIncidents.length, // Override with crime group incident count
+        // Use backend-calculated scores based on current mode
+        clusterScore: analyticsData?.linkClusterScore || 0,
+        connectionCount: analyticsData?.linkUniqueConnections || 0,
+        impactScore: analyticsData?.impactTotalScore || 0,
+        sharedIncidentCount: analyticsData?.linkTotalSharedIncidents || 0,
+        totalIncidents: offender.totalIncidents,
+        totalValue: offender.totalValue,
       };
     });
 
@@ -714,50 +680,78 @@ const CrimeGroupFlow: React.FC<Props> = ({ crimeGroup, onOffenderClick }) => {
         ? Math.max(...sortedOffenders.map((o) => o.clusterScore), 1)
         : Math.max(...sortedOffenders.map((o) => o.impactScore), 1);
 
+    // Use backend tier directly from analytics
+    const getTierColor = (tier?: CrimeGroupOffenderTier) => {
+      switch (tier) {
+        case CrimeGroupOffenderTier.High: {
+          return '#ff4d4f';
+        }
+        case CrimeGroupOffenderTier.Medium: {
+          return '#faad14';
+        }
+        case CrimeGroupOffenderTier.Low: {
+          return '#52c41a';
+        }
+        default: {
+          return '#52c41a';
+        }
+      }
+    };
+
+    const offendersWithTier = sortedOffenders.map((offender) => {
+      const tier = offender.analytics?.tier;
+
+      return {
+        ...offender,
+        color: getTierColor(tier),
+        tier,
+      };
+    });
+
     // Define levels and colors based on selected layout mode
-    const levels =
-      layoutMode === 'link-analysis'
-        ? [
-            { color: '#ff4d4f', name: 'Highly Connected', threshold: 0.7 },
-            { color: '#faad14', name: 'Moderately Connected', threshold: 0.4 },
-            { color: '#52c41a', name: 'Loosely Connected', threshold: 0 },
-          ]
-        : [
-            { color: '#ff4d4f', name: 'High Impact', threshold: 0.7 },
-            { color: '#faad14', name: 'Medium Impact', threshold: 0.4 },
-            { color: '#52c41a', name: 'Low Impact', threshold: 0 },
-          ];
+    // Note: levels are defined here but currently unused
+    // const levels =
+    //   layoutMode === 'link-analysis'
+    //     ? [
+    //         { color: '#ff4d4f', name: 'Highly Connected', tier: CrimeGroupOffenderTier.High },
+    //         { color: '#faad14', name: 'Moderately Connected', tier: CrimeGroupOffenderTier.Medium },
+    //         { color: '#52c41a', name: 'Loosely Connected', tier: CrimeGroupOffenderTier.Low },
+    //       ]
+    //     : [
+    //         { color: '#ff4d4f', name: 'High Impact', tier: CrimeGroupOffenderTier.High },
+    //         { color: '#faad14', name: 'Medium Impact', tier: CrimeGroupOffenderTier.Medium },
+    //         { color: '#52c41a', name: 'Low Impact', tier: CrimeGroupOffenderTier.Low },
+    //       ];
 
     // Filter offenders based on view mode
-    let displayOffenders = sortedOffenders;
+    let displayOffenders = offendersWithTier;
     if (viewMode === 'high-impact') {
-      const currentScore =
-        layoutMode === 'link-analysis' ? 'clusterScore' : 'impactScore';
-      displayOffenders = sortedOffenders.filter(
-        (o) => o[currentScore] / maxScore >= 0.4
+      displayOffenders = offendersWithTier.filter(
+        (o) =>
+          o.tier === CrimeGroupOffenderTier.High ||
+          o.tier === CrimeGroupOffenderTier.Medium
       );
     } else if (viewMode === 'overview') {
-      displayOffenders = sortedOffenders.slice(
+      displayOffenders = offendersWithTier.slice(
         0,
-        Math.min(maxNodes, sortedOffenders.length)
+        Math.min(maxNodes, offendersWithTier.length)
       );
     }
 
-    // Group offenders into tiers for analysis
-    const getCurrentRatio = (offender: (typeof sortedOffenders)[0]) =>
+    // Group offenders into tiers using backend classification
+    const getCurrentRatio = (offender: (typeof offendersWithTier)[0]) =>
       layoutMode === 'link-analysis'
         ? offender.clusterScore / maxScore
         : offender.impactScore / maxScore;
 
     const highTierOffenders = displayOffenders.filter(
-      (o) => getCurrentRatio(o) >= 0.7
+      (o) => o.tier === CrimeGroupOffenderTier.High
     );
-    const mediumTierOffenders = displayOffenders.filter((o) => {
-      const ratio = getCurrentRatio(o);
-      return ratio >= 0.4 && ratio < 0.7;
-    });
+    const mediumTierOffenders = displayOffenders.filter(
+      (o) => o.tier === CrimeGroupOffenderTier.Medium
+    );
     const lowTierOffenders = displayOffenders.filter(
-      (o) => getCurrentRatio(o) < 0.4
+      (o) => o.tier === CrimeGroupOffenderTier.Low
     );
 
     // Calculate layout dimensions
@@ -859,14 +853,12 @@ const CrimeGroupFlow: React.FC<Props> = ({ crimeGroup, onOffenderClick }) => {
       // Just prepare node data for now
       for (const offender of sortedForPlacement) {
         const currentRatio = getCurrentRatio(offender);
-        const level =
-          levels.find((l) => currentRatio >= l.threshold) || levels.at(-1);
         const size = 40 + currentRatio * 60; // 40px to 100px
 
         nodes.push({
           data: {
             clusterScore: offender.clusterScore,
-            color: level?.color ?? '#52c41a',
+            color: offender.color,
             connectionCount: offender.connectionCount,
             currentRatio,
             id: offender.id,
@@ -892,8 +884,6 @@ const CrimeGroupFlow: React.FC<Props> = ({ crimeGroup, onOffenderClick }) => {
       // Original layout logic for other modes
       for (const [, offender] of sortedForPlacement.entries()) {
         const currentRatio = getCurrentRatio(offender);
-        const level =
-          levels.find((l) => currentRatio >= l.threshold) || levels.at(-1);
 
         // Size based on current scoring method
         const size = 40 + currentRatio * 60; // 40px to 100px
@@ -959,7 +949,7 @@ const CrimeGroupFlow: React.FC<Props> = ({ crimeGroup, onOffenderClick }) => {
         nodes.push({
           data: {
             clusterScore: offender.clusterScore,
-            color: level?.color ?? '#52c41a',
+            color: offender.color,
             connectionCount: offender.connectionCount,
             currentRatio,
             id: offender.id,
@@ -1741,7 +1731,7 @@ const CrimeGroupFlow: React.FC<Props> = ({ crimeGroup, onOffenderClick }) => {
                   >
                     <Select
                       onChange={(value) => {
-                        setLayoutMode(value);
+                        onLayoutModeChange(value);
                         setSelectedNodeId(null); // Clear selection when changing layout
                       }}
                       options={[

@@ -6,8 +6,6 @@ const defaultOptions = {} as const;
 export type ListTagsQueryVariables = Types.Exact<{
   where: Types.TagWhereInput;
   order?: Types.InputMaybe<Types.TagOrderByWithRelationInput>;
-  take?: Types.InputMaybe<Types.Scalars['Int']>;
-  skip?: Types.InputMaybe<Types.Scalars['Int']>;
 }>;
 
 
@@ -15,7 +13,7 @@ export type ListTagsQuery = { __typename?: 'Query', listTags: { __typename?: 'Li
 
 
 export const ListTagsDocument = gql`
-    query ListTags($where: TagWhereInput!, $order: TagOrderByWithRelationInput, $take: Int, $skip: Int) {
+    query ListTags($where: TagWhereInput!, $order: TagOrderByWithRelationInput) {
   listTags(where: $where, order: $order) {
     tags {
       id

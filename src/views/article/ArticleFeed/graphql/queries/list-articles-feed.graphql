@@ -3,6 +3,7 @@ fragment ArticlePreview on Article {
   watermarkImage
   previewImage
   priority
+  criticalExpiry
   status
   tags {
     id

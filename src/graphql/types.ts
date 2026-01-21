@@ -251,6 +251,7 @@ export type ActiveChecklist = {
   name?: Maybe<Scalars['String']>;
   percentComplete: Scalars['Int'];
   percentageScore: Scalars['String'];
+  reference?: Maybe<Scalars['Int']>;
   scheme?: Maybe<Scheme>;
   signature?: Maybe<Scalars['String']>;
   status: ChecklistStatus;
@@ -487,6 +488,32 @@ export enum Age {
   Unknown = 'UNKNOWN'
 }
 
+export type AiActivityTrends = {
+  __typename?: 'AiActivityTrends';
+  createdAt: Scalars['Date'];
+  crimeGroup: CrimeGroup;
+  evolutionNotes?: Maybe<Scalars['String']>;
+  geographicFocus: Scalars['String'];
+  id: Scalars['ID'];
+  peakActivityPeriods: Scalars['String'];
+  recentActivityTrend: Scalars['String'];
+  targetPreferences: Array<Scalars['String']>;
+  totalIncidents: Scalars['Int'];
+  updatedAt: Scalars['Date'];
+};
+
+export type AiAssociatedRisk = {
+  __typename?: 'AiAssociatedRisk';
+  aggregatedRiskLevel: AiRiskAssessmentThreatLevel;
+  averageOffenderRisk: Scalars['Float'];
+  createdAt: Scalars['Date'];
+  highRiskOffenderCount: Scalars['Int'];
+  id: Scalars['ID'];
+  riskJustification: Scalars['String'];
+  updatedAt: Scalars['Date'];
+  vehicle: Vehicle;
+};
+
 export type AiBehavioralAnalysis = {
   __typename?: 'AiBehavioralAnalysis';
   createdAt: Scalars['Date'];
@@ -511,6 +538,31 @@ export type AiGeographicAnalysis = {
   id: Scalars['ID'];
   offender: Offender;
   travelDistance: Scalars['String'];
+  updatedAt: Scalars['Date'];
+};
+
+export type AiGeographicMovement = {
+  __typename?: 'AiGeographicMovement';
+  createdAt: Scalars['Date'];
+  crossBorderActivity: Scalars['Boolean'];
+  hotspots: Array<Scalars['String']>;
+  id: Scalars['ID'];
+  primaryRegions: Array<Scalars['String']>;
+  travelRadius: Scalars['String'];
+  updatedAt: Scalars['Date'];
+  vehicle: Vehicle;
+};
+
+export type AiGroupSophistication = {
+  __typename?: 'AiGroupSophistication';
+  adaptabilityScore: Scalars['Int'];
+  createdAt: Scalars['Date'];
+  crimeGroup: CrimeGroup;
+  id: Scalars['ID'];
+  organizationStructure: Scalars['String'];
+  planningCapability: Scalars['String'];
+  resourceLevel: Scalars['String'];
+  sophisticationLevel: AiSophisticationLevel;
   updatedAt: Scalars['Date'];
 };
 
@@ -573,6 +625,21 @@ export type AiInvestigationLeads = {
   keyCCTVTimestamps: Array<Scalars['String']>;
   suggestedActions: Array<Scalars['String']>;
   updatedAt: Scalars['Date'];
+};
+
+export type AiMemberRiskAggregation = {
+  __typename?: 'AiMemberRiskAggregation';
+  aggregatedThreatLevel: AiRiskAssessmentThreatLevel;
+  averageMemberRisk: Scalars['Float'];
+  createdAt: Scalars['Date'];
+  crimeGroup: CrimeGroup;
+  highRiskMembers: Scalars['Int'];
+  id: Scalars['ID'];
+  prolificMembersCount: Scalars['Int'];
+  riskJustification: Scalars['String'];
+  totalMembers: Scalars['Int'];
+  updatedAt: Scalars['Date'];
+  violentMembersCount: Scalars['Int'];
 };
 
 export type AiNetworkAnalysis = {
@@ -712,6 +779,18 @@ export type AiTemporalAnalysis = {
   patternPrediction: Scalars['String'];
   timePatterns: Scalars['String'];
   updatedAt: Scalars['Date'];
+};
+
+export type AiVehicleUsageAnalysis = {
+  __typename?: 'AiVehicleUsageAnalysis';
+  createdAt: Scalars['Date'];
+  dayPatterns: Scalars['String'];
+  id: Scalars['ID'];
+  incidentFrequency: Scalars['Int'];
+  primaryIncidentTypes: Array<Scalars['String']>;
+  timePatterns: Scalars['String'];
+  updatedAt: Scalars['Date'];
+  vehicle: Vehicle;
 };
 
 export type AiVisionCameraWhereInput = {
@@ -908,6 +987,7 @@ export type Article = {
   completedAt?: Maybe<Scalars['Date']>;
   createdAt: Scalars['Date'];
   createdBy: User;
+  criticalExpiry?: Maybe<Scalars['Date']>;
   documents: Array<Document>;
   groups: Array<Group>;
   id: Scalars['ID'];
@@ -967,10 +1047,13 @@ export enum ArticleColumnScalarFieldEnum {
 }
 
 export type ArticleOrderByWithRelationInput = {
+  criticalExpiry?: InputMaybe<SortOrder>;
+  priority?: InputMaybe<SortOrder>;
   updatedAt?: InputMaybe<SortOrder>;
 };
 
 export enum ArticlePriority {
+  Critical = 'CRITICAL',
   High = 'HIGH',
   Medium = 'MEDIUM',
   Normal = 'NORMAL'
@@ -1254,6 +1337,33 @@ export type BansOnOffenderUpdate = {
   delete?: InputMaybe<Array<UniqueId>>;
   disconnect?: InputMaybe<Array<UniqueId>>;
   update?: InputMaybe<Array<BanNestedUpdate>>;
+};
+
+export type BatchConfigDetail = {
+  __typename?: 'BatchConfigDetail';
+  error?: Maybe<Scalars['String']>;
+  hubForce: PoliceForce;
+  policeHubId: Scalars['String'];
+  policeHubName: Scalars['String'];
+  sharingConfigId?: Maybe<Scalars['String']>;
+  status: Scalars['String'];
+};
+
+export type BatchPoliceSharingConfigInput = {
+  hubForceFilter?: InputMaybe<Array<PoliceForce>>;
+  mode: SharingMode;
+  schemeFrom: UniqueId;
+};
+
+export type BatchPoliceSharingConfigResult = {
+  __typename?: 'BatchPoliceSharingConfigResult';
+  created: Scalars['Int'];
+  details: Array<BatchConfigDetail>;
+  failed: Scalars['Int'];
+  skipped: Scalars['Int'];
+  success: Scalars['Boolean'];
+  tagMappingsGenerated: Scalars['Int'];
+  total: Scalars['Int'];
 };
 
 export type BillingCalculationSummary = {
@@ -1721,6 +1831,30 @@ export enum BusinessScalarFieldEnum {
   UpdatedAt = 'updatedAt'
 }
 
+export type BusinessStatistics = {
+  __typename?: 'BusinessStatistics';
+  /** Total number of businesses in the scheme */
+  totalBusinesses: Scalars['Int'];
+  /** Number of businesses with UK-based locations */
+  ukBasedCount: Scalars['Int'];
+  /** Percentage of businesses that are UK-based */
+  ukBasedPercentage: Scalars['Float'];
+  /** Number of businesses with configured police force */
+  withPoliceAreaCount: Scalars['Int'];
+  /** Percentage of businesses with configured police force */
+  withPoliceAreaPercentage: Scalars['Float'];
+};
+
+export type BusinessSyncResult = {
+  __typename?: 'BusinessSyncResult';
+  businessId: Scalars['String'];
+  businessName: Scalars['String'];
+  groupCount: Scalars['Int'];
+  incidents: EntitySyncStats;
+  offenders: EntitySyncStats;
+  vehicles: EntitySyncStats;
+};
+
 export type BusinessUpdateInput = {
   brands?: InputMaybe<BusinessBrandsInput>;
   currency?: InputMaybe<NullableEnumCurrencyFieldUpdateOperationsInput>;
@@ -1780,6 +1914,14 @@ export type BusinessWhereUniqueInput = {
   todos?: InputMaybe<TodoListRelationFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
   users?: InputMaybe<UserListRelationFilter>;
+};
+
+export type CategoryCount = {
+  __typename?: 'CategoryCount';
+  /** Category name */
+  category: Scalars['String'];
+  /** Number of occurrences */
+  count: Scalars['Int'];
 };
 
 export type CctvCreateUpdate = {
@@ -2104,6 +2246,7 @@ export type Checklist = {
   descriptionLocaled: Scalars['String'];
   groups: Array<Group>;
   id: Scalars['ID'];
+  requiredBusiness: Scalars['Boolean'];
   roles: Array<CustomRole>;
   schemes: Array<Scheme>;
   sections: Array<ChecklistSection>;
@@ -2173,6 +2316,7 @@ export type ChecklistCreateUpdateInput = {
   businessIds?: InputMaybe<Array<Scalars['String']>>;
   description?: InputMaybe<Scalars['String']>;
   groupsIds?: InputMaybe<Array<Scalars['String']>>;
+  requiredBusiness?: InputMaybe<Scalars['Boolean']>;
   roleIds?: InputMaybe<Array<Scalars['String']>>;
   sections: Array<SectionInput>;
   title: Scalars['String'];
@@ -2298,6 +2442,7 @@ export type ChecklistUpdateInput = {
   businessIds?: InputMaybe<Array<Scalars['String']>>;
   description?: InputMaybe<Scalars['String']>;
   groupsIds?: InputMaybe<Array<Scalars['String']>>;
+  requiredBusiness?: InputMaybe<Scalars['Boolean']>;
   roleIds?: InputMaybe<Array<Scalars['String']>>;
   sections?: InputMaybe<Array<SectionInput>>;
   title?: InputMaybe<Scalars['String']>;
@@ -2327,6 +2472,15 @@ export type ChecklistWhereUniqueInput = {
   id?: InputMaybe<Scalars['String']>;
   schemes?: InputMaybe<SchemeListRelationFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
+};
+
+export type CircleFilterInput = {
+  /** Center latitude (-90 to 90) */
+  latitude: Scalars['Float'];
+  /** Center longitude (-180 to 180) */
+  longitude: Scalars['Float'];
+  /** Radius in meters (1 to 100000) */
+  radiusMeters: Scalars['Float'];
 };
 
 export enum CityEnum {
@@ -2507,6 +2661,7 @@ export type CompassMatchWhereUniqueInput = {
 export type CompleteActiveChecklistInput = {
   additionalInfo?: InputMaybe<Scalars['String']>;
   answers: Array<ActiveChecklistAnswerInput>;
+  businessId?: InputMaybe<Scalars['String']>;
   draft: Scalars['Boolean'];
   max?: InputMaybe<Scalars['Int']>;
   signature?: InputMaybe<Scalars['String']>;
@@ -2542,6 +2697,14 @@ export type ConnectIdDisconnectBool = {
 export type ConnectImageToIncident = {
   id: Scalars['String'];
   offenders?: InputMaybe<Array<IncidentOffenderWhereInput>>;
+};
+
+export type ConnectOffendersToInvestigationInput = {
+  connectCrimeGroups?: InputMaybe<Scalars['Boolean']>;
+  connectIncidents?: InputMaybe<Scalars['Boolean']>;
+  connectVehicles?: InputMaybe<Scalars['Boolean']>;
+  investigationId: Scalars['String'];
+  offenderIds: Array<Scalars['String']>;
 };
 
 export type ConnectOnlyArrayHelper = {
@@ -2713,6 +2876,7 @@ export type CreateArticleImages = {
 export type CreateArticleInput = {
   business?: InputMaybe<Scalars['String']>;
   categories?: InputMaybe<Array<Scalars['String']>>;
+  criticalExpiry?: InputMaybe<Scalars['DateTime']>;
   documents?: InputMaybe<Array<CreateDocument>>;
   draft?: InputMaybe<Scalars['Boolean']>;
   groups: Array<Scalars['String']>;
@@ -2885,6 +3049,21 @@ export type CreateFlowInput = {
   name: Scalars['String'];
 };
 
+export type CreateGeographicalAreaInput = {
+  /** Define a circular area */
+  circle?: InputMaybe<CircleFilterInput>;
+  /** Hex color for map display (e.g., "#FF5733") */
+  color?: InputMaybe<Scalars['String']>;
+  /** Optional description */
+  description?: InputMaybe<Scalars['String']>;
+  /** Name for this geographical area */
+  name: Scalars['String'];
+  /** Define a polygon area */
+  polygon?: InputMaybe<PolygonFilterInput>;
+  /** Police hub scheme ID this area belongs to */
+  schemeId: Scalars['String'];
+};
+
 export type CreateGoodsTypeDataInput = {
   name: Scalars['String'];
   schemeIds: Array<Scalars['String']>;
@@ -2934,6 +3113,7 @@ export type CreateIncidentData = {
   offenders: CreateIncidentOffenders;
   policeCCTVEmail?: InputMaybe<Scalars['String']>;
   policeDay?: InputMaybe<Scalars['Boolean']>;
+  policeDepartment?: InputMaybe<Scalars['String']>;
   policeDistanceFromIncident?: InputMaybe<Scalars['String']>;
   policeIncidentDuration?: InputMaybe<Scalars['String']>;
   policeInside?: InputMaybe<Scalars['Boolean']>;
@@ -2945,6 +3125,7 @@ export type CreateIncidentData = {
   policeNo?: InputMaybe<Scalars['String']>;
   policeObstructions?: InputMaybe<Scalars['String']>;
   policeObstructionsDetails?: InputMaybe<Scalars['String']>;
+  policeOfficerName?: InputMaybe<Scalars['String']>;
   policeReasonRemember?: InputMaybe<Scalars['String']>;
   policeRef?: InputMaybe<Scalars['String']>;
   policeReported?: InputMaybe<Scalars['Boolean']>;
@@ -3205,6 +3386,8 @@ export type CreateStockRemovalRequestInput = {
   reasonForNonReturn?: InputMaybe<Scalars['String']>;
   rechargeBrand?: InputMaybe<Scalars['String']>;
   rechargeReference?: InputMaybe<Scalars['String']>;
+  recipientName?: InputMaybe<Scalars['String']>;
+  recipientPhone?: InputMaybe<Scalars['String']>;
   returnDate?: InputMaybe<Scalars['DateTime']>;
   schemeId: Scalars['String'];
   shippingAddress?: InputMaybe<Scalars['String']>;
@@ -3327,6 +3510,17 @@ export type CreationBreakdown = {
 export type CrimeGroup = {
   __typename?: 'CrimeGroup';
   activities: Array<Todo>;
+  aiActivityPatterns?: Maybe<Scalars['String']>;
+  aiActivityTrends?: Maybe<AiActivityTrends>;
+  aiGroupSophistication?: Maybe<AiGroupSophistication>;
+  aiImpactScore?: Maybe<Scalars['Int']>;
+  aiImprovements?: Maybe<Scalars['String']>;
+  aiKeyObservations: Array<Scalars['String']>;
+  aiMemberRiskAggregation?: Maybe<AiMemberRiskAggregation>;
+  aiOrganizationStructure?: Maybe<Scalars['String']>;
+  aiQualityScore?: Maybe<Scalars['Int']>;
+  aiSophisticationLevel?: Maybe<Scalars['String']>;
+  aiSummary?: Maybe<Scalars['String']>;
   alias?: Maybe<Scalars['String']>;
   evidence: Array<Document>;
   groups: Array<Group>;
@@ -3334,6 +3528,8 @@ export type CrimeGroup = {
   incidents: Array<Incident>;
   investigations: Array<Investigation>;
   latestUpdate?: Maybe<Update>;
+  /** Analytics for offenders in this crime group with tier classifications and scoring metrics */
+  offenderAnalytics: Array<CrimeGroupOffenderAnalytics>;
   offenders: Array<Offender>;
   ref: Scalars['String'];
   reference?: Maybe<Scalars['Int']>;
@@ -3388,6 +3584,11 @@ export type CrimeGroupInvestigationsArgs = {
 };
 
 
+export type CrimeGroupOffenderAnalyticsArgs = {
+  mode: CrimeGroupAnalyticsMode;
+};
+
+
 export type CrimeGroupOffendersArgs = {
   cursor?: InputMaybe<OffenderWhereUniqueInput>;
   distinct?: InputMaybe<Array<OffenderScalarFieldEnum>>;
@@ -3427,6 +3628,11 @@ export type CrimeGroupVehiclesArgs = {
   where?: InputMaybe<VehicleWhereInput>;
 };
 
+export enum CrimeGroupAnalyticsMode {
+  Impact = 'IMPACT',
+  LinkAnalysis = 'LINK_ANALYSIS'
+}
+
 export type CrimeGroupListRelationFilter = {
   every?: InputMaybe<CrimeGroupWhereInput>;
   none?: InputMaybe<CrimeGroupWhereInput>;
@@ -3442,6 +3648,67 @@ export type CrimeGroupMap = {
 export type CrimeGroupNestedCreateOnIncident = {
   offenders?: InputMaybe<ConnectOnlyArrayHelper>;
 };
+
+export type CrimeGroupOffenderAnalytics = {
+  __typename?: 'CrimeGroupOffenderAnalytics';
+  /** Total number of crime group incidents this offender is involved in */
+  crimeGroupIncidentCount: Scalars['Int'];
+  /** Total value of stolen items across all incidents */
+  crimeGroupTotalValue: Scalars['Float'];
+  /** Number of crime group incidents this offender is linked to */
+  impactIncidentScore: Scalars['Int'];
+  /** Total impact score. Formula: incidentScore + valueScore */
+  impactTotalScore: Scalars['Float'];
+  /** Value score based on total stolen value. Formula: totalValueCount / 1000 */
+  impactValueScore: Scalars['Float'];
+  /** Cluster score combining shared incidents and unique connections. Formula: totalSharedIncidents + (uniqueConnections × 2) */
+  linkClusterScore: Scalars['Int'];
+  /** Map of offender IDs to shared incident counts. Format: { [offenderId]: sharedIncidentCount } */
+  linkConnectionsMap?: Maybe<Scalars['JSON']>;
+  /** Total number of crime group incidents shared with other members */
+  linkTotalSharedIncidents: Scalars['Int'];
+  /** Count of distinct crime group members this offender has worked with */
+  linkUniqueConnections: Scalars['Int'];
+  offender: Offender;
+  /** The primary score used for tier calculation (linkClusterScore for LINK_ANALYSIS, impactTotalScore for IMPACT) */
+  score: Scalars['Float'];
+  /** Tier classification relative to other crime group members. HIGH (≥70% of max), MEDIUM (40-70%), LOW (<40%) */
+  tier: CrimeGroupOffenderTier;
+};
+
+export type CrimeGroupOffenderAnalyticsSimple = {
+  __typename?: 'CrimeGroupOffenderAnalyticsSimple';
+  /** Number of incidents in this crime group */
+  crimeGroupIncidentCount: Scalars['Int'];
+  /** Total value of offenses in this crime group */
+  crimeGroupTotalValue: Scalars['Float'];
+  /** Number of incidents (scoped to crime group) */
+  impactIncidentScore: Scalars['Int'];
+  /** Total impact score (incident score + value score) */
+  impactTotalScore: Scalars['Float'];
+  /** Total value score (totalValueCount / 1000) */
+  impactValueScore: Scalars['Float'];
+  /** Total cluster score (shared incidents + unique connections * 2) */
+  linkClusterScore: Scalars['Int'];
+  /** Map of connected offender IDs to shared incident counts */
+  linkConnectionsMap?: Maybe<Scalars['JSON']>;
+  /** Total number of incidents shared with other crime group members */
+  linkTotalSharedIncidents: Scalars['Int'];
+  /** Number of unique co-offenders in the crime group */
+  linkUniqueConnections: Scalars['Int'];
+  /** The ID of the offender */
+  offenderId: Scalars['String'];
+  /** The score used for tier calculation (mode-dependent) */
+  score: Scalars['Float'];
+  /** Tier classification (HIGH/MEDIUM/LOW) based on relative score */
+  tier: CrimeGroupOffenderTier;
+};
+
+export enum CrimeGroupOffenderTier {
+  High = 'HIGH',
+  Low = 'LOW',
+  Medium = 'MEDIUM'
+}
 
 export type CrimeGroupOrderByRelationAggregateInput = {
   _count?: InputMaybe<SortOrder>;
@@ -5035,6 +5302,25 @@ export type EnhancedTranscription = {
   segments: Array<TranscriptionSegment>;
   speakersDetected: Scalars['Int'];
   suggestedCorrections: Array<TranscriptionCorrection>;
+};
+
+export type EntitySyncStats = {
+  __typename?: 'EntitySyncStats';
+  errors: Scalars['Int'];
+  found: Scalars['Int'];
+  updated: Scalars['Int'];
+};
+
+export type EntityTypeViewBreakdown = {
+  __typename?: 'EntityTypeViewBreakdown';
+  /** Number of crime group views */
+  crimeGroups: Scalars['Int'];
+  /** Number of incident views */
+  incidents: Scalars['Int'];
+  /** Number of offender views */
+  offenders: Scalars['Int'];
+  /** Number of vehicle views */
+  vehicles: Scalars['Int'];
 };
 
 export type EnumAiSuggestionStatusNullableFilter = {
@@ -6917,6 +7203,33 @@ export type GeoIpWhereInput = {
   timezone?: InputMaybe<StringNullableFilter>;
 };
 
+export type GeographicalArea = {
+  __typename?: 'GeographicalArea';
+  areaType: Scalars['String'];
+  /** Circle definition (only present when areaType is "circle"). Format: { latitude: number, longitude: number, radiusMeters: number } */
+  circle?: Maybe<Scalars['JSON']>;
+  color?: Maybe<Scalars['String']>;
+  createdAt: Scalars['DateTime'];
+  createdBy?: Maybe<User>;
+  description?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  /** Polygon definition (only present when areaType is "polygon"). Format: { coordinates: [[lng, lat], ...] } */
+  polygon?: Maybe<Scalars['JSON']>;
+  scheme: Scheme;
+  schemeId: Scalars['String'];
+  updatedAt: Scalars['DateTime'];
+};
+
+export type GeographicalFilterInput = {
+  /** Use a saved geographical area by ID */
+  areaId?: InputMaybe<Scalars['String']>;
+  /** Define a circular area inline */
+  circle?: InputMaybe<CircleFilterInput>;
+  /** Define a polygon area inline */
+  polygon?: InputMaybe<PolygonFilterInput>;
+};
+
 export enum GoodsMode {
   Generic = 'GENERIC',
   Specific = 'SPECIFIC'
@@ -7102,6 +7415,11 @@ export type GroupSummary = {
   name: Scalars['String'];
   totalIncidents: Scalars['Int'];
 };
+
+export enum GroupSyncStrategy {
+  Merge = 'MERGE',
+  Replace = 'REPLACE'
+}
 
 export type GroupUpdateInput = {
   approver?: InputMaybe<SetArrayHelper>;
@@ -7785,6 +8103,7 @@ export type Incident = {
   offenders: Array<Offender>;
   originalDescription: Scalars['String'];
   policeDay?: Maybe<Scalars['Boolean']>;
+  policeDepartment?: Maybe<Scalars['String']>;
   policeDistanceFromIncident?: Maybe<Scalars['String']>;
   policeIncidentDuration?: Maybe<Scalars['String']>;
   policeInside?: Maybe<Scalars['Boolean']>;
@@ -7794,6 +8113,7 @@ export type Incident = {
   policeMG11?: Maybe<Scalars['Boolean']>;
   policeNo?: Maybe<Scalars['String']>;
   policeObstructions?: Maybe<Scalars['String']>;
+  policeOfficerName?: Maybe<Scalars['String']>;
   policeReasonRemember?: Maybe<Scalars['String']>;
   policeRef?: Maybe<Scalars['String']>;
   policeReportEligible: Scalars['Boolean'];
@@ -8900,8 +9220,10 @@ export type IncidentUpdateInput = {
   incidentItems?: InputMaybe<IncidentItemUpdateManyWithoutIncidentInput>;
   location?: InputMaybe<UpdateSimpleLocation>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutIncidentsNested>;
+  policeDepartment?: InputMaybe<NullableSetStringHelper>;
   policeInvolved?: InputMaybe<NullableSetBooleanHelper>;
   policeNo?: InputMaybe<NullableSetStringHelper>;
+  policeOfficerName?: InputMaybe<NullableSetStringHelper>;
   policeRef?: InputMaybe<NullableSetStringHelper>;
   policeReported?: InputMaybe<NullableSetBooleanHelper>;
   priority?: InputMaybe<EnumIncidentPriorityFieldUpdateOperationsInput>;
@@ -11181,9 +11503,72 @@ export enum Model {
   Vehicle = 'VEHICLE'
 }
 
+export type MonthlyHubStats = {
+  __typename?: 'MonthlyHubStats';
+  /** Number of shared crime groups created in this month for this hub */
+  crimeGroups: Scalars['Int'];
+  /** Number of shared incidents created in this month for this hub */
+  incidents: Scalars['Int'];
+  /** Month name and year (e.g., "January 26") */
+  month: Scalars['String'];
+  /** Month number (1-12) */
+  monthNumber: Scalars['Int'];
+  /** Number of shared offenders created in this month for this hub */
+  offenders: Scalars['Int'];
+  /** Number of shared vehicles created in this month for this hub */
+  vehicles: Scalars['Int'];
+  /** Year as integer */
+  year: Scalars['Int'];
+};
+
+export type MonthlyRecidivismAverage = {
+  __typename?: 'MonthlyRecidivismAverage';
+  /** Average days between incidents for this month */
+  averageDaysBetweenIncidents: Scalars['Float'];
+  /** Month label (e.g., "January 25") */
+  month: Scalars['String'];
+  /** Month number (1-12) */
+  monthNumber: Scalars['Int'];
+  /** Total incidents from repeat offenders */
+  totalIncidents: Scalars['Int'];
+  /** Number of repeat offenders in this month */
+  totalRepeatOffenders: Scalars['Int'];
+  /** Year */
+  year: Scalars['Int'];
+};
+
+export type MonthlySharedEntityStats = {
+  __typename?: 'MonthlySharedEntityStats';
+  /** Number of shared crime groups created in this month */
+  crimeGroups: Scalars['Int'];
+  /** Number of shared incidents created in this month */
+  incidents: Scalars['Int'];
+  /** Month name and year (e.g., "January 26") */
+  month: Scalars['String'];
+  /** Month number (1-12) */
+  monthNumber: Scalars['Int'];
+  /** Number of shared offenders created in this month */
+  offenders: Scalars['Int'];
+  /** Number of shared vehicles created in this month */
+  vehicles: Scalars['Int'];
+  /** Year as integer */
+  year: Scalars['Int'];
+};
+
+export type MostViewedEntity = {
+  __typename?: 'MostViewedEntity';
+  /** ID of the entity */
+  entityId: Scalars['String'];
+  /** Type of entity (INCIDENT, OFFENDER, VEHICLE, CRIME_GROUP) */
+  entityType: Scalars['String'];
+  /** Number of times viewed */
+  viewCount: Scalars['Int'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   abortPatrolRun: PatrolRun;
+  acknowledgeCriticalBulletin: Scalars['Boolean'];
   addAudioIncidentGoods: Scalars['Boolean'];
   addImageIntel: Intel;
   addImagesToIncident: Incident;
@@ -11205,6 +11590,7 @@ export type Mutation = {
   closeInvestigation: Investigation;
   completeAudioStream: CompleteAudioResult;
   completeChecklist: ActiveChecklist;
+  connectOffendersToInvestigation: Investigation;
   copyEvidenceOnInvestigation: Document;
   copyEvidenceToAlert: Document;
   copyOffender: Offender;
@@ -11212,6 +11598,7 @@ export type Mutation = {
   createActiveChecklist: ActiveChecklist;
   createActivityCsvZip: Scalars['String'];
   createArticle: Article;
+  createBatchPoliceSharingConfigs: BatchPoliceSharingConfigResult;
   createBillingCustomer: BillingCustomer;
   createBlankImage: Image;
   createBlurFaces: Image;
@@ -11229,6 +11616,7 @@ export type Mutation = {
   createDocument: Document;
   createDocuments: Array<Document>;
   createFlow: Flow;
+  createGeographicalArea: GeographicalArea;
   createGoodsType: GoodsType;
   createGroup: Group;
   createIncident: Incident;
@@ -11250,6 +11638,7 @@ export type Mutation = {
   createOneStatementTemplate: StatementTemplate;
   createOneTier: Tier;
   createOneWorkflow: Workflow;
+  createPoliceSharingConfig: SharingConfig;
   createReportGroup: ReportGroup;
   createReportTemplate: ReportTemplate;
   createScheme: Scheme;
@@ -11293,6 +11682,7 @@ export type Mutation = {
   deleteFace: RekFace;
   deleteFeedItem: FeedItem;
   deleteFolder: Folder;
+  deleteGeographicalArea: GeographicalArea;
   deleteGroup: Group;
   deleteIncident: Incident;
   deleteIncidentStatus: IncidentStatus;
@@ -11361,6 +11751,10 @@ export type Mutation = {
   markBulletinViewed: Impression;
   markDocumentViewed: Impression;
   markOffenderViewed: Impression;
+  markSharedCrimeGroupViewed: Impression;
+  markSharedIncidentViewed: Impression;
+  markSharedOffenderViewed: Impression;
+  markSharedVehicleViewed: Impression;
   markStockRemovalRequestAsCollected: StockRemovalRequest;
   markStockRemovalRequestAsPicked: StockRemovalRequest;
   markStockRemovalRequestAsReturned: StockRemovalRequest;
@@ -11368,6 +11762,8 @@ export type Mutation = {
   mergeBusinesses: Business;
   mergeBusinessesWithSameName: Business;
   mergeOffender: Offender;
+  /** Merges a source SharedOffender into a target SharedOffender, combining all relationships, AI data, and statistics */
+  mergeSharedOffenders: SharedOffender;
   midCountiesImportData: SystemTask;
   mySafetyImportData: SystemTask;
   nextImportData: SystemTask;
@@ -11420,6 +11816,7 @@ export type Mutation = {
   subscribeToInvestigation: Investigation;
   subscribeToOffender: Offender;
   subscribeToVehicle: Vehicle;
+  syncBusinessGroups: SyncBusinessGroupsResult;
   /** Syncs police force data for all businesses in a scheme based on their postcodes. Only processes businesses that do not already have police force data assigned. */
   syncBusinessPoliceForces: SyncPoliceForceResult;
   syncFeedItems: SystemTask;
@@ -11451,6 +11848,7 @@ export type Mutation = {
   updateDocument: Document;
   updateFlow: Flow;
   updateFolder: Folder;
+  updateGeographicalArea: GeographicalArea;
   updateGroup: Group;
   updateIncident: Incident;
   updateIncidentBusiness: Incident;
@@ -11479,6 +11877,7 @@ export type Mutation = {
   updateStockItem: StockItem;
   updateStockRemovalRequest: StockRemovalRequest;
   updateTag: Tag;
+  updateTagPoliceSharing: Tag;
   updateTagQs: Array<TagQuestion>;
   updateTimeoutDetectionConfig: Scalars['String'];
   updateTodo: Todo;
@@ -11511,6 +11910,11 @@ export type Mutation = {
 export type MutationAbortPatrolRunArgs = {
   reason?: InputMaybe<Scalars['String']>;
   runId: Scalars['ID'];
+};
+
+
+export type MutationAcknowledgeCriticalBulletinArgs = {
+  articleId: Scalars['String'];
 };
 
 
@@ -11632,6 +12036,11 @@ export type MutationCompleteChecklistArgs = {
 };
 
 
+export type MutationConnectOffendersToInvestigationArgs = {
+  data: ConnectOffendersToInvestigationInput;
+};
+
+
 export type MutationCopyEvidenceOnInvestigationArgs = {
   data: ImportDemEvidence;
   where: UniqueId;
@@ -11666,6 +12075,11 @@ export type MutationCreateActivityCsvZipArgs = {
 
 export type MutationCreateArticleArgs = {
   data: CreateArticleInput;
+};
+
+
+export type MutationCreateBatchPoliceSharingConfigsArgs = {
+  data: BatchPoliceSharingConfigInput;
 };
 
 
@@ -11755,6 +12169,11 @@ export type MutationCreateDocumentsArgs = {
 
 export type MutationCreateFlowArgs = {
   data: CreateFlowInput;
+};
+
+
+export type MutationCreateGeographicalAreaArgs = {
+  data: CreateGeographicalAreaInput;
 };
 
 
@@ -11865,6 +12284,11 @@ export type MutationCreateOneTierArgs = {
 
 export type MutationCreateOneWorkflowArgs = {
   data: WorkflowCreateInput;
+};
+
+
+export type MutationCreatePoliceSharingConfigArgs = {
+  data: PoliceSharingConfigInput;
 };
 
 
@@ -12079,6 +12503,11 @@ export type MutationDeleteFeedItemArgs = {
 
 export type MutationDeleteFolderArgs = {
   where: UniqueId;
+};
+
+
+export type MutationDeleteGeographicalAreaArgs = {
+  id: Scalars['String'];
 };
 
 
@@ -12433,6 +12862,26 @@ export type MutationMarkOffenderViewedArgs = {
 };
 
 
+export type MutationMarkSharedCrimeGroupViewedArgs = {
+  sharedCrimeGroupId: Scalars['String'];
+};
+
+
+export type MutationMarkSharedIncidentViewedArgs = {
+  sharedIncidentId: Scalars['String'];
+};
+
+
+export type MutationMarkSharedOffenderViewedArgs = {
+  sharedOffenderId: Scalars['String'];
+};
+
+
+export type MutationMarkSharedVehicleViewedArgs = {
+  sharedVehicleId: Scalars['String'];
+};
+
+
 export type MutationMarkStockRemovalRequestAsCollectedArgs = {
   where: UniqueId;
 };
@@ -12465,6 +12914,13 @@ export type MutationMergeBusinessesWithSameNameArgs = {
 
 export type MutationMergeOffenderArgs = {
   data: MergeOffendersInput;
+};
+
+
+export type MutationMergeSharedOffendersArgs = {
+  deleteSource?: InputMaybe<Scalars['Boolean']>;
+  sourceId: Scalars['String'];
+  targetId: Scalars['String'];
 };
 
 
@@ -12705,6 +13161,11 @@ export type MutationSubscribeToVehicleArgs = {
 };
 
 
+export type MutationSyncBusinessGroupsArgs = {
+  data: SyncBusinessGroupsInput;
+};
+
+
 export type MutationSyncBusinessPoliceForcesArgs = {
   batchSize?: InputMaybe<Scalars['Int']>;
   concurrentLookups?: InputMaybe<Scalars['Int']>;
@@ -12847,6 +13308,12 @@ export type MutationUpdateFlowArgs = {
 export type MutationUpdateFolderArgs = {
   data: UpdateFolder;
   where: UniqueId;
+};
+
+
+export type MutationUpdateGeographicalAreaArgs = {
+  data: UpdateGeographicalAreaInput;
+  id: Scalars['String'];
 };
 
 
@@ -13003,6 +13470,12 @@ export type MutationUpdateStockRemovalRequestArgs = {
 export type MutationUpdateTagArgs = {
   data: TagUpdateInput;
   where: UniqueId;
+};
+
+
+export type MutationUpdateTagPoliceSharingArgs = {
+  policeSharing: Scalars['Boolean'];
+  tagId: Scalars['String'];
 };
 
 
@@ -15602,6 +16075,12 @@ export enum PermissionModel {
   OffenderWarnings = 'OFFENDER_WARNINGS',
   Patrol = 'PATROL',
   PatrolSettings = 'PATROL_SETTINGS',
+  PoliceCrimeGroups = 'POLICE_CRIME_GROUPS',
+  PoliceDashboard = 'POLICE_DASHBOARD',
+  PoliceIncidents = 'POLICE_INCIDENTS',
+  PoliceOffenders = 'POLICE_OFFENDERS',
+  PoliceSettings = 'POLICE_SETTINGS',
+  PoliceVehicles = 'POLICE_VEHICLES',
   RecycleBin = 'RECYCLE_BIN',
   Reports = 'REPORTS',
   Roles = 'ROLES',
@@ -15673,6 +16152,32 @@ export type PlatformUsageBreakdown = {
   uniqueUsers: Scalars['Int'];
 };
 
+export type PoliceEngagementStats = {
+  __typename?: 'PoliceEngagementStats';
+  /** Most recent view timestamp */
+  lastViewedAt: Scalars['DateTime'];
+  /** The most viewed entity from this police hub */
+  mostViewedEntity?: Maybe<MostViewedEntity>;
+  /** Police force name (e.g., METROPOLITAN) */
+  policeForce: Scalars['String'];
+  /** ID of the police hub scheme */
+  policeSchemeId: Scalars['String'];
+  /** Name of the police hub */
+  policeSchemeName: Scalars['String'];
+  /** Number of shared crime groups viewed */
+  sharedCrimeGroupsViewed: Scalars['Int'];
+  /** Number of shared incidents viewed */
+  sharedIncidentsViewed: Scalars['Int'];
+  /** Number of shared offenders viewed */
+  sharedOffendersViewed: Scalars['Int'];
+  /** Number of shared vehicles viewed */
+  sharedVehiclesViewed: Scalars['Int'];
+  /** Total number of views from this police hub */
+  totalViews: Scalars['Int'];
+  /** Number of unique officers who viewed data */
+  uniqueOfficers: Scalars['Int'];
+};
+
 export enum PoliceForce {
   AvonAndSomerset = 'AVON_AND_SOMERSET',
   Bedfordshire = 'BEDFORDSHIRE',
@@ -15722,6 +16227,232 @@ export enum PoliceForce {
   Wiltshire = 'WILTSHIRE'
 }
 
+export type PoliceHubConfigResult = {
+  __typename?: 'PoliceHubConfigResult';
+  /** Business statistics for the source scheme */
+  businessStats: BusinessStatistics;
+  /** Monthly trend data for shared entities */
+  monthlyTrends: Array<MonthlySharedEntityStats>;
+  /** List of police hubs with sharing configurations */
+  policeHubs: Array<PoliceHubDetail>;
+  /** Tags configured for police sharing */
+  policeSharingTags: Array<TagDetail>;
+  /** Aggregate shared entity statistics across all hubs */
+  sharedEntityStats: SharedEntityStats;
+};
+
+export type PoliceHubCrimeGroupSummary = {
+  __typename?: 'PoliceHubCrimeGroupSummary';
+  /** Retail schemes targeted by this group */
+  affectedSchemes: Array<Scalars['String']>;
+  /** LOW/MEDIUM/HIGH sophistication level */
+  aiSophisticationLevel?: Maybe<Scalars['String']>;
+  /** AI-generated summary of group */
+  aiSummary?: Maybe<Scalars['String']>;
+  /** Original crime group ID */
+  crimeGroupId: Scalars['String'];
+  /** Known members in group */
+  memberCount: Scalars['Int'];
+  /** Police priority score */
+  policePriorityScore?: Maybe<Scalars['Int']>;
+  /** Incidents in time period */
+  recentActivityCount: Scalars['Int'];
+  /** Shared crime group ID */
+  sharedCrimeGroupId: Scalars['String'];
+  /** Total value of crimes attributed to group */
+  totalValue?: Maybe<Scalars['Float']>;
+  /** Last update to shared record */
+  updatedAt: Scalars['DateTime'];
+};
+
+export type PoliceHubDashboard = {
+  __typename?: 'PoliceHubDashboard';
+  /** Active organized crime groups (top 5 by sophistication) */
+  activeCrimeGroups: Array<PoliceHubCrimeGroupSummary>;
+  /** Distribution of incidents by crime type/tag */
+  incidentTypeDistribution: Array<PoliceHubIncidentTypeDistribution>;
+  /** Incident counts by month for the past 12 months */
+  monthlyIncidentCounts: Array<PoliceHubMonthlyIncidentCount>;
+  /** Analysis of recidivism patterns and high-frequency offenders */
+  repeatOffenderInsights: PoliceHubRepeatOffenderInsights;
+  /** High-level metrics for the time period */
+  summary: PoliceHubSummaryMetrics;
+  /** Top 10 offenders ranked by police priority score */
+  topOffenders: Array<PoliceHubTopOffender>;
+  /** Top 5 vehicles by priority score */
+  vehiclesOfInterest: Array<PoliceHubVehicleSummary>;
+};
+
+export type PoliceHubDetail = {
+  __typename?: 'PoliceHubDetail';
+  /** Police force enum (e.g., METROPOLITAN, GREATER_MANCHESTER) */
+  hubForce?: Maybe<PoliceForce>;
+  /** Police hub scheme ID */
+  hubId: Scalars['String'];
+  /** Police hub scheme name */
+  hubName: Scalars['String'];
+  /** Monthly breakdown of shared entities for this hub */
+  monthlyStats: Array<MonthlyHubStats>;
+  /** Sharing configuration details */
+  sharingConfig: SharingConfigDetail;
+};
+
+export type PoliceHubIncidentTypeDistribution = {
+  __typename?: 'PoliceHubIncidentTypeDistribution';
+  /** Number of incidents with this type */
+  count: Scalars['Int'];
+  /** Mapped crime type category (THEFT_HANDLING, VIOLENCE, etc.) */
+  crimeType?: Maybe<Scalars['String']>;
+  /** Tag ID for the incident type */
+  tagId: Scalars['String'];
+  /** Display name of the incident type */
+  tagName: Scalars['String'];
+};
+
+export type PoliceHubMonthlyIncidentCount = {
+  __typename?: 'PoliceHubMonthlyIncidentCount';
+  /** Number of incidents in this month */
+  count: Scalars['Int'];
+  /** Month in YYYY-MM format */
+  month: Scalars['String'];
+};
+
+export type PoliceHubRelayOrderInput = {
+  createdAt?: InputMaybe<SortOrder>;
+  name?: InputMaybe<SortOrder>;
+  updatedAt?: InputMaybe<SortOrder>;
+};
+
+export type PoliceHubRelayWhereInput = {
+  /** Filter schemes created after this date */
+  createdAfter?: InputMaybe<Scalars['DateTime']>;
+  /** Filter schemes created before this date */
+  createdBefore?: InputMaybe<Scalars['DateTime']>;
+  /** Filter by specific police force */
+  hubForce?: InputMaybe<PoliceForce>;
+  /** Case-insensitive search across scheme name */
+  search?: InputMaybe<Scalars['String']>;
+};
+
+export type PoliceHubRepeatOffenderInsights = {
+  __typename?: 'PoliceHubRepeatOffenderInsights';
+  /** Average recidivism rate */
+  averageDaysBetweenIncidents: Scalars['Float'];
+  /** Offenders with 5+ incidents (escalating threat) */
+  highFrequencyOffenders: Scalars['Int'];
+  /** Distribution: period0to30, period31to90, period91to180, period180plus */
+  recidivismDistribution: Scalars['JSON'];
+  /** Top 5 most frequent offenders */
+  topByFrequency: Array<PoliceHubTopOffender>;
+  /** Offenders with 3+ incidents in period */
+  totalRepeatOffenders: Scalars['Int'];
+};
+
+export type PoliceHubSummaryMetrics = {
+  __typename?: 'PoliceHubSummaryMetrics';
+  /** Crime groups with recent activity */
+  activeCrimeGroupsCount: Scalars['Int'];
+  /** Offenders with activity in the time period */
+  activeOffendersCount: Scalars['Int'];
+  /** Average total loss value per offender */
+  averageOffenderValue?: Maybe<Scalars['Float']>;
+  /** Average police priority score across active offenders */
+  averagePriorityScore?: Maybe<Scalars['Float']>;
+  /** Offenders with HIGH threat level from AI risk assessment */
+  highRiskIndividualsCount: Scalars['Int'];
+  /** Total value of incidents in period */
+  totalEstimatedValue?: Maybe<Scalars['Float']>;
+  /** Total incidents shared in time period */
+  totalIncidentsSharedCount: Scalars['Int'];
+  /** Total number of offenders with incidents in the time period */
+  totalOffenders: Scalars['Int'];
+  /** Number of offenders with 3+ incidents (repeat offenders) */
+  totalRepeatOffenders: Scalars['Int'];
+  /** Number of unique retail schemes sharing data */
+  uniqueRetailersAffected: Scalars['Int'];
+};
+
+export type PoliceHubTopOffender = {
+  __typename?: 'PoliceHubTopOffender';
+  /** Geographic areas of activity */
+  activeAreas: Array<Scalars['String']>;
+  /** Retail schemes this offender has targeted */
+  affectedSchemes: Array<Scalars['String']>;
+  /** AI-calculated impact/threat score */
+  aiImpactScore?: Maybe<Scalars['Int']>;
+  /** Key behavioral patterns observed */
+  aiKeyObservations: Array<Scalars['String']>;
+  /** Crime methods employed */
+  aiMethods: Array<Scalars['String']>;
+  /** 1-2 sentence overview of threat */
+  aiSummary?: Maybe<Scalars['String']>;
+  /** Days since most recent incident */
+  daysSinceLastIncident?: Maybe<Scalars['Int']>;
+  /** Date of first incident */
+  firstIncidentDate?: Maybe<Scalars['DateTime']>;
+  /** Images associated with this offender */
+  images: Scalars['JSON'];
+  /** Number of incidents in time period */
+  incidentCount: Scalars['Int'];
+  /** Date of last incident for this offender */
+  lastIncidentAt?: Maybe<Scalars['DateTime']>;
+  /** Date of most recent incident */
+  lastIncidentDate?: Maybe<Scalars['DateTime']>;
+  /** Original offender IDs (many-to-many) */
+  offenderIds: Array<Scalars['String']>;
+  /** Police priority score for ranking */
+  policePriorityScore?: Maybe<Scalars['Int']>;
+  /** Primary risk category */
+  riskCategory?: Maybe<Scalars['String']>;
+  /** Shared offender ID */
+  sharedOffenderId: Scalars['String'];
+  /** Tags associated with this offender */
+  tags: Scalars['JSON'];
+  /** HIGH/MEDIUM/LOW from risk assessment */
+  threatLevel?: Maybe<Scalars['String']>;
+  /** Total loss value associated with this offender */
+  totalValue?: Maybe<Scalars['Float']>;
+  /** Last update to shared record */
+  updatedAt: Scalars['DateTime'];
+};
+
+export type PoliceHubVehicleSummary = {
+  __typename?: 'PoliceHubVehicleSummary';
+  /** Retail schemes where vehicle was seen */
+  affectedSchemes: Array<Scalars['String']>;
+  /** AI-generated summary of vehicle usage */
+  aiSummary?: Maybe<Scalars['String']>;
+  /** Temporal usage patterns */
+  aiUsagePatterns?: Maybe<Scalars['String']>;
+  /** Number of associated offenders */
+  associatedOffenderCount: Scalars['Int'];
+  /** Vehicle color */
+  color?: Maybe<Scalars['String']>;
+  /** Number of incidents involving this vehicle */
+  incidentCount: Scalars['Int'];
+  /** Date of most recent incident */
+  lastSeenDate?: Maybe<Scalars['DateTime']>;
+  /** Vehicle make */
+  make?: Maybe<Scalars['String']>;
+  /** Vehicle model */
+  model?: Maybe<Scalars['String']>;
+  /** Police priority score */
+  policePriorityScore?: Maybe<Scalars['Int']>;
+  /** Vehicle registration number */
+  registration?: Maybe<Scalars['String']>;
+  /** Shared vehicle ID */
+  sharedVehicleId: Scalars['String'];
+  /** Original vehicle IDs (many-to-many) */
+  vehicleIds: Array<Scalars['String']>;
+};
+
+export type PoliceHubView = {
+  __typename?: 'PoliceHubView';
+  hub: Scheme;
+  sourceSchemes: Array<SourceSchemeStats>;
+  totalStats: SharedEntityTotals;
+};
+
 export enum PoliceResponseTime {
   NoResponse = 'NO_RESPONSE',
   Over_24Hours = 'OVER_24_HOURS',
@@ -15730,6 +16461,12 @@ export enum PoliceResponseTime {
   Within_12Hours = 'WITHIN_12_HOURS',
   Within_24Hours = 'WITHIN_24_HOURS'
 }
+
+export type PoliceSharingConfigInput = {
+  mode: SharingMode;
+  schemeFrom: UniqueId;
+  schemeTo: UniqueId;
+};
 
 export type PoliceSummary = {
   __typename?: 'PoliceSummary';
@@ -15754,6 +16491,11 @@ export enum PoliceTriageStatus {
   Report = 'REPORT',
   Review = 'REVIEW'
 }
+
+export type PolygonFilterInput = {
+  /** Array of [longitude, latitude] coordinate pairs. Must form a closed polygon (first and last points match). Min 4 points, max 100 points. Example: [[0.0, 51.0], [0.1, 51.0], [0.1, 51.1], [0.0, 51.1], [0.0, 51.0]] */
+  coordinates: Scalars['JSON'];
+};
 
 export type PreSelectedGood = {
   __typename?: 'PreSelectedGood';
@@ -15791,6 +16533,7 @@ export type Query = {
   address: Address;
   addresses: Array<Address>;
   adminDashboard: AdminDashboardData;
+  adminIncidentCrimeTypeTags: Array<Tag>;
   aiSuggestion: AiSuggestion;
   aiSuggestions: QueryAiSuggestionsConnection;
   aiVisionCamera: AiVisionCamera;
@@ -15845,6 +16588,8 @@ export type Query = {
   compassMatch?: Maybe<CompassMatch>;
   compassMatches: ListCompassMatches;
   crimeGroup: CrimeGroup;
+  /** Get analytics for offenders in a crime group */
+  crimeGroupAnalytics: Array<CrimeGroupOffenderAnalyticsSimple>;
   crimeGroupPerformance: ListCrimeGroupPerformance;
   crimeGroupReport: CrimeGroupReport;
   crimeGroups: QueryCrimeGroupsConnection;
@@ -15875,6 +16620,8 @@ export type Query = {
   feedRelay: QueryFeedRelayConnection;
   folder: Folder;
   folders: QueryFoldersConnection;
+  geographicalArea: GeographicalArea;
+  geographicalAreas: Array<GeographicalArea>;
   getAudioIncidentCapabilities: Scalars['JSON'];
   getAudioIncidentSession: Scalars['JSON'];
   goodsTypes: Array<GoodsType>;
@@ -15975,19 +16722,29 @@ export type Query = {
   patrolRoutes: Array<PatrolRoute>;
   patrolRun?: Maybe<PatrolRun>;
   patrolRuns: Array<PatrolRun>;
+  pendingCriticalBulletins: Array<Article>;
   pendingLoginPromptVideos: Array<TrainingVideo>;
   performanceReport: PerformanceReport;
   platformFeatureUsage: Array<PlatformFeatureUsage>;
   platformUsageBreakdown: Array<PlatformUsageBreakdown>;
+  /** View police hub engagement analytics for a specific source scheme */
+  policeEngagementOverview: Array<PoliceEngagementStats>;
+  policeHubConfig: PoliceHubConfigResult;
+  policeHubDashboard: PoliceHubDashboard;
+  policeHubSchemesRelay: QueryPoliceHubSchemesRelayConnection;
+  policeHubView: PoliceHubView;
   policeTriageByStore: Array<StoreTriageStatistics>;
   policeTriageStatistics: PoliceTriageStatistics;
   previewIncidentExport: IncidentExport;
   question: Question;
   questions: QueryQuestionsConnection;
+  recidivismAverage: RecidivismAverage;
+  recidivismPatternsTrend: Array<RecidivismMonthlyData>;
   recycledItem?: Maybe<RecycledItem>;
   recycledItems: Array<RecycledItem>;
   recycledItemsCount: Scalars['Int'];
   repeatOffenderDetails: Array<RepeatOffenderDetail>;
+  repeatOffenderOverview: RepeatOffenderOverview;
   reportGroup: ReportGroup;
   reportGroups: QueryReportGroupsConnection;
   reportTemplate: ReportTemplate;
@@ -16001,6 +16758,15 @@ export type Query = {
   schemes: Array<Scheme>;
   searchAudioIncidentGoods: Array<StockItemCandidate>;
   searchOffenders: QuerySearchOffendersConnection;
+  sharedCrimeGroup: SharedCrimeGroup;
+  sharedCrimeGroupRelay: QuerySharedCrimeGroupRelayConnection;
+  sharedIncident: SharedIncident;
+  sharedIncidentHeatmap: SharedIncidentHeatmap;
+  sharedIncidentRelay: QuerySharedIncidentRelayConnection;
+  sharedOffender: SharedOffender;
+  sharedOffenderRelay: QuerySharedOffenderRelayConnection;
+  sharedVehicle: SharedVehicle;
+  sharedVehicleRelay: QuerySharedVehicleRelayConnection;
   sharingBusinesses: Array<SharingBusiness>;
   sharingConfig: SharingConfig;
   sharingConfigs: Array<SharingConfig>;
@@ -16032,6 +16798,8 @@ export type Query = {
   trainingVideoAudit: TrainingVideoAudit;
   trainingVideos: Array<TrainingVideo>;
   translateText: Array<TranslatedText>;
+  unrestrictedIncidentsRelay: QueryUnrestrictedIncidentsRelayConnection;
+  unrestrictedOffendersRelay: QueryUnrestrictedOffendersRelayConnection;
   updates: Array<Update>;
   user: User;
   userActivityGauge: UserActivityGauge;
@@ -16127,6 +16895,11 @@ export type QueryAddressesArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<AddressWhereInput>;
+};
+
+
+export type QueryAdminIncidentCrimeTypeTagsArgs = {
+  schemeId: Scalars['String'];
 };
 
 
@@ -16460,6 +17233,12 @@ export type QueryCrimeGroupArgs = {
 };
 
 
+export type QueryCrimeGroupAnalyticsArgs = {
+  crimeGroupId: Scalars['String'];
+  mode: CrimeGroupAnalyticsMode;
+};
+
+
 export type QueryCrimeGroupPerformanceArgs = {
   where: UserContributionWhereInput;
 };
@@ -16675,6 +17454,16 @@ export type QueryFoldersArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<FolderWhereInput>;
+};
+
+
+export type QueryGeographicalAreaArgs = {
+  id: Scalars['String'];
+};
+
+
+export type QueryGeographicalAreasArgs = {
+  schemeId: Scalars['String'];
 };
 
 
@@ -17386,6 +18175,11 @@ export type QueryPatrolRunsArgs = {
 };
 
 
+export type QueryPendingCriticalBulletinsArgs = {
+  schemeId: Scalars['String'];
+};
+
+
 export type QueryPendingLoginPromptVideosArgs = {
   schemeId: Scalars['String'];
 };
@@ -17407,6 +18201,44 @@ export type QueryPlatformUsageBreakdownArgs = {
   endDate?: InputMaybe<Scalars['String']>;
   schemeId: Scalars['String'];
   startDate?: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryPoliceEngagementOverviewArgs = {
+  sourceSchemeId?: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryPoliceHubConfigArgs = {
+  monthsBack?: InputMaybe<Scalars['Int']>;
+  schemeId: Scalars['String'];
+};
+
+
+export type QueryPoliceHubDashboardArgs = {
+  endDate?: InputMaybe<Scalars['DateTime']>;
+  minPriorityScore?: InputMaybe<Scalars['Int']>;
+  policeForce?: InputMaybe<Scalars['String']>;
+  policeHubId?: InputMaybe<Scalars['String']>;
+  schemeIds?: InputMaybe<Array<Scalars['String']>>;
+  startDate?: InputMaybe<Scalars['DateTime']>;
+};
+
+
+export type QueryPoliceHubSchemesRelayArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<PoliceHubRelayOrderInput>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<PoliceHubRelayWhereInput>;
+};
+
+
+export type QueryPoliceHubViewArgs = {
+  policeHubId: Scalars['String'];
 };
 
 
@@ -17446,6 +18278,21 @@ export type QueryQuestionsArgs = {
 };
 
 
+export type QueryRecidivismAverageArgs = {
+  endDate?: InputMaybe<Scalars['String']>;
+  minIncidents?: InputMaybe<Scalars['Int']>;
+  schemeId: Scalars['String'];
+  startDate?: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryRecidivismPatternsTrendArgs = {
+  endDate?: InputMaybe<Scalars['String']>;
+  minIncidents?: InputMaybe<Scalars['Int']>;
+  schemeId: Scalars['String'];
+};
+
+
 export type QueryRecycledItemArgs = {
   where: RecycledItemWhereUniqueInput;
 };
@@ -17476,6 +18323,18 @@ export type QueryRepeatOffenderDetailsArgs = {
   limit?: InputMaybe<Scalars['Int']>;
   minIncidents?: InputMaybe<Scalars['Int']>;
   schemeId: Scalars['String'];
+  startDate?: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryRepeatOffenderOverviewArgs = {
+  endDate?: InputMaybe<Scalars['String']>;
+  minIncidents?: InputMaybe<Scalars['Int']>;
+  page?: InputMaybe<Scalars['Int']>;
+  pageSize?: InputMaybe<Scalars['Int']>;
+  schemeId: Scalars['String'];
+  sortBy?: InputMaybe<Scalars['String']>;
+  sortOrder?: InputMaybe<Scalars['String']>;
   startDate?: InputMaybe<Scalars['String']>;
 };
 
@@ -17574,6 +18433,79 @@ export type QuerySearchOffendersArgs = {
   last?: InputMaybe<Scalars['Int']>;
   order?: InputMaybe<SearchOffenderSort>;
   where: SearchOffenderWhere;
+};
+
+
+export type QuerySharedCrimeGroupArgs = {
+  where: SharedCrimeGroupWhereUniqueInput;
+};
+
+
+export type QuerySharedCrimeGroupRelayArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<SharedCrimeGroupRelayOrderInput>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<SharedCrimeGroupRelayWhereInput>;
+};
+
+
+export type QuerySharedIncidentArgs = {
+  where: SharedIncidentWhereUniqueInput;
+};
+
+
+export type QuerySharedIncidentHeatmapArgs = {
+  where?: InputMaybe<SharedIncidentRelayWhereInput>;
+};
+
+
+export type QuerySharedIncidentRelayArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<SharedIncidentRelayOrderInput>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<SharedIncidentRelayWhereInput>;
+};
+
+
+export type QuerySharedOffenderArgs = {
+  where: SharedOffenderWhereUniqueInput;
+};
+
+
+export type QuerySharedOffenderRelayArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<SharedOffenderRelayOrderInput>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<SharedOffenderRelayWhereInput>;
+};
+
+
+export type QuerySharedVehicleArgs = {
+  where: SharedVehicleWhereUniqueInput;
+};
+
+
+export type QuerySharedVehicleRelayArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<SharedVehicleRelayOrderInput>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<SharedVehicleRelayWhereInput>;
 };
 
 
@@ -17803,6 +18735,26 @@ export type QueryTrainingVideosArgs = {
 
 export type QueryTranslateTextArgs = {
   data: TranslateTextInput;
+};
+
+
+export type QueryUnrestrictedIncidentsRelayArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<IncidentOrderByWithRelationInput>;
+  where: UnrestrictedIncidentRelayInput;
+};
+
+
+export type QueryUnrestrictedOffendersRelayArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<OffenderOrderByWithRelationInput>;
+  where: UnrestrictedOffenderRelayInput;
 };
 
 
@@ -18389,6 +19341,19 @@ export type QueryNotificationRelayConnectionEdge = {
   node: UserNotification;
 };
 
+export type QueryPoliceHubSchemesRelayConnection = {
+  __typename?: 'QueryPoliceHubSchemesRelayConnection';
+  edges: Array<QueryPoliceHubSchemesRelayConnectionEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type QueryPoliceHubSchemesRelayConnectionEdge = {
+  __typename?: 'QueryPoliceHubSchemesRelayConnectionEdge';
+  cursor: Scalars['String'];
+  node: Scheme;
+};
+
 export type QueryQuestionsConnection = {
   __typename?: 'QueryQuestionsConnection';
   edges: Array<QueryQuestionsConnectionEdge>;
@@ -18439,6 +19404,58 @@ export type QuerySearchOffendersConnectionEdge = {
   __typename?: 'QuerySearchOffendersConnectionEdge';
   cursor: Scalars['String'];
   node: Offender;
+};
+
+export type QuerySharedCrimeGroupRelayConnection = {
+  __typename?: 'QuerySharedCrimeGroupRelayConnection';
+  edges: Array<QuerySharedCrimeGroupRelayConnectionEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type QuerySharedCrimeGroupRelayConnectionEdge = {
+  __typename?: 'QuerySharedCrimeGroupRelayConnectionEdge';
+  cursor: Scalars['String'];
+  node: SharedCrimeGroup;
+};
+
+export type QuerySharedIncidentRelayConnection = {
+  __typename?: 'QuerySharedIncidentRelayConnection';
+  edges: Array<QuerySharedIncidentRelayConnectionEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type QuerySharedIncidentRelayConnectionEdge = {
+  __typename?: 'QuerySharedIncidentRelayConnectionEdge';
+  cursor: Scalars['String'];
+  node: SharedIncident;
+};
+
+export type QuerySharedOffenderRelayConnection = {
+  __typename?: 'QuerySharedOffenderRelayConnection';
+  edges: Array<QuerySharedOffenderRelayConnectionEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type QuerySharedOffenderRelayConnectionEdge = {
+  __typename?: 'QuerySharedOffenderRelayConnectionEdge';
+  cursor: Scalars['String'];
+  node: SharedOffender;
+};
+
+export type QuerySharedVehicleRelayConnection = {
+  __typename?: 'QuerySharedVehicleRelayConnection';
+  edges: Array<QuerySharedVehicleRelayConnectionEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type QuerySharedVehicleRelayConnectionEdge = {
+  __typename?: 'QuerySharedVehicleRelayConnectionEdge';
+  cursor: Scalars['String'];
+  node: SharedVehicle;
 };
 
 export type QueryShoesConnection = {
@@ -18530,6 +19547,32 @@ export type QueryTodoRelayConnectionEdge = {
   __typename?: 'QueryTodoRelayConnectionEdge';
   cursor: Scalars['String'];
   node: Todo;
+};
+
+export type QueryUnrestrictedIncidentsRelayConnection = {
+  __typename?: 'QueryUnrestrictedIncidentsRelayConnection';
+  edges: Array<QueryUnrestrictedIncidentsRelayConnectionEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type QueryUnrestrictedIncidentsRelayConnectionEdge = {
+  __typename?: 'QueryUnrestrictedIncidentsRelayConnectionEdge';
+  cursor: Scalars['String'];
+  node: Incident;
+};
+
+export type QueryUnrestrictedOffendersRelayConnection = {
+  __typename?: 'QueryUnrestrictedOffendersRelayConnection';
+  edges: Array<QueryUnrestrictedOffendersRelayConnectionEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type QueryUnrestrictedOffendersRelayConnectionEdge = {
+  __typename?: 'QueryUnrestrictedOffendersRelayConnectionEdge';
+  cursor: Scalars['String'];
+  node: Offender;
 };
 
 export type QueryUserGroupRelayConnection = {
@@ -18838,6 +19881,68 @@ export type RadialValueGraph = {
   data: Array<Graph>;
   label: Scalars['String'];
   value: Scalars['Float'];
+};
+
+export type RecentViewActivity = {
+  __typename?: 'RecentViewActivity';
+  /** Date of activity */
+  date: Scalars['Date'];
+  /** Unique officers active */
+  uniqueOfficers: Scalars['Int'];
+  /** Total views on this date */
+  viewCount: Scalars['Int'];
+};
+
+export type RecidivismAverage = {
+  __typename?: 'RecidivismAverage';
+  /** Average days between first and last incident for repeat offenders */
+  averageDaysBetweenIncidents: Scalars['Float'];
+  /** Average number of incidents per repeat offender */
+  averageIncidentsPerOffender: Scalars['Float'];
+  /** Distribution of repeat offenders across time periods */
+  distribution: Scalars['JSON'];
+  /** Maximum days between incidents */
+  maxDaysBetweenIncidents: Scalars['Int'];
+  /** Median days between first and last incident */
+  medianDaysBetweenIncidents: Scalars['Float'];
+  /** Minimum days between incidents */
+  minDaysBetweenIncidents: Scalars['Int'];
+  /** Monthly breakdown of average days between incidents */
+  monthlyAverages: Array<MonthlyRecidivismAverage>;
+  /** Total incidents from repeat offenders */
+  totalIncidents: Scalars['Int'];
+  /** Total number of repeat offenders in the period */
+  totalRepeatOffenders: Scalars['Int'];
+};
+
+export type RecidivismMonthlyData = {
+  __typename?: 'RecidivismMonthlyData';
+  /** Average incidents per repeat offender */
+  averageIncidentsPerOffender: Scalars['Float'];
+  /** Breakdown by recidivism period */
+  breakdowns: Array<RecidivismPeriodBreakdown>;
+  /** Month label (e.g., "January 25") */
+  month: Scalars['String'];
+  /** Month number (1-12) */
+  monthNumber: Scalars['Int'];
+  /** Total incidents from repeat offenders */
+  totalIncidents: Scalars['Int'];
+  /** Total number of repeat offenders this month */
+  totalRepeatOffenders: Scalars['Int'];
+  /** Year */
+  year: Scalars['Int'];
+};
+
+export type RecidivismPeriodBreakdown = {
+  __typename?: 'RecidivismPeriodBreakdown';
+  /** Average incident count for offenders in this period */
+  averageIncidents: Scalars['Float'];
+  /** Number of repeat offenders in this period */
+  count: Scalars['Int'];
+  /** Percentage of total repeat offenders */
+  percentage: Scalars['Float'];
+  /** Time period category (0-30, 31-90, 91-180, 180+) */
+  period: Scalars['String'];
 };
 
 export type RecycleExtenstion = {
@@ -19425,6 +20530,56 @@ export type RepeatOffenderDetail = {
   totalValue?: Maybe<Scalars['Float']>;
 };
 
+export type RepeatOffenderDetailItem = {
+  __typename?: 'RepeatOffenderDetailItem';
+  /** Categories of incidents */
+  categories: Array<Scalars['String']>;
+  /** Days between first and last incident */
+  daysBetweenIncidents: Scalars['Int'];
+  /** Date of first incident */
+  firstIncidentDate: Scalars['DateTime'];
+  /** Number of incidents */
+  incidentCount: Scalars['Int'];
+  /** Date of most recent incident */
+  lastIncidentDate: Scalars['DateTime'];
+  /** Offender ID */
+  offenderId: Scalars['String'];
+  /** Offender name */
+  offenderName: Scalars['String'];
+  /** Total value of incidents if available */
+  totalValue?: Maybe<Scalars['Float']>;
+};
+
+export type RepeatOffenderOverview = {
+  __typename?: 'RepeatOffenderOverview';
+  /** Paginated array of repeat offender details */
+  offenders: Array<RepeatOffenderDetailItem>;
+  /** Current page number */
+  page: Scalars['Int'];
+  /** Number of items per page */
+  pageSize: Scalars['Int'];
+  /** Summary statistics based on ALL repeat offenders */
+  summary: RepeatOffenderSummary;
+  /** Total number of repeat offenders (for pagination) */
+  totalCount: Scalars['Int'];
+  /** Total number of pages */
+  totalPages: Scalars['Int'];
+};
+
+export type RepeatOffenderSummary = {
+  __typename?: 'RepeatOffenderSummary';
+  /** Average days between first and last incident */
+  averageDaysBetween: Scalars['Float'];
+  /** Top 10 most common incident categories */
+  topCategories: Array<CategoryCount>;
+  /** Total incidents from all repeat offenders */
+  totalIncidents: Scalars['Int'];
+  /** Total number of repeat offenders */
+  totalRepeatOffenders: Scalars['Int'];
+  /** Total value/loss from all repeat offenders */
+  totalValue?: Maybe<Scalars['Float']>;
+};
+
 export type ReportGroup = {
   __typename?: 'ReportGroup';
   createdAt: Scalars['Date'];
@@ -19896,6 +21051,7 @@ export type Scheme = {
   groupsCount: Scalars['Int'];
   /** Check if scheme has access to a specific feature */
   hasFeature: Scalars['Boolean'];
+  hubForce?: Maybe<PoliceForce>;
   id: Scalars['ID'];
   images: Array<Image>;
   imagesRequiredOnOffenders: Scalars['Boolean'];
@@ -19952,6 +21108,9 @@ export type Scheme = {
   restrictIncidentAccessByRole: Scalars['Boolean'];
   roles: Array<CustomRole>;
   schemeTags: Array<Tag>;
+  schemeType: SchemeType;
+  /** Total count of shared incidents for this police hub */
+  sharedIncidentCount: Scalars['Int'];
   sharingFrom: Array<SharingConfig>;
   sharingTo: Array<SharingConfig>;
   showBlankActivity: Scalars['Boolean'];
@@ -20636,6 +21795,12 @@ export type SchemeTier = {
   userLimit: Scalars['Int'];
 };
 
+export enum SchemeType {
+  Default = 'DEFAULT',
+  PoliceHub = 'POLICE_HUB',
+  RetalHub = 'RETAL_HUB'
+}
+
 export type SchemeUpdateInput = {
   activityAllowAllGroups?: InputMaybe<SetBooleanHelper>;
   activityAssignToUser?: InputMaybe<SetBooleanHelper>;
@@ -21223,6 +22388,363 @@ export type ShareDataInput = {
   offender?: InputMaybe<UniqueId>;
 };
 
+export type SharedCrimeGroup = {
+  __typename?: 'SharedCrimeGroup';
+  aiActivityPatterns?: Maybe<Scalars['String']>;
+  aiActivityTrendsSnapshot?: Maybe<Scalars['JSON']>;
+  aiGroupSophisticationSnapshot?: Maybe<Scalars['JSON']>;
+  aiImprovements?: Maybe<Scalars['String']>;
+  aiKeyObservations: Array<Scalars['String']>;
+  aiMemberRiskAggregationSnapshot?: Maybe<Scalars['JSON']>;
+  aiOrganizationStructure?: Maybe<Scalars['String']>;
+  aiQualityScore?: Maybe<Scalars['Int']>;
+  aiSophisticationLevel?: Maybe<AiSophisticationLevel>;
+  aiSummary?: Maybe<Scalars['String']>;
+  createdAt: Scalars['Date'];
+  crimeGroup: CrimeGroup;
+  crimeGroupId: Scalars['String'];
+  id: Scalars['ID'];
+  policePriorityScore?: Maybe<Scalars['Int']>;
+  schemes: Array<Scheme>;
+  updatedAt: Scalars['Date'];
+};
+
+export type SharedCrimeGroupRelayOrderInput = {
+  aiQualityScore?: InputMaybe<SortOrder>;
+  aiSophisticationLevel?: InputMaybe<SortOrder>;
+  createdAt?: InputMaybe<SortOrder>;
+  policePriorityScore?: InputMaybe<SortOrder>;
+  updatedAt?: InputMaybe<SortOrder>;
+};
+
+export type SharedCrimeGroupRelayWhereInput = {
+  /** Maximum AI quality score */
+  aiQualityScoreMax?: InputMaybe<Scalars['Int']>;
+  /** Minimum AI quality score */
+  aiQualityScoreMin?: InputMaybe<Scalars['Int']>;
+  /** Filter by sophistication level: LOW, MEDIUM, HIGH */
+  aiSophisticationLevel?: InputMaybe<AiSophisticationLevel>;
+  /** Filter crime groups created after this date */
+  createdAfter?: InputMaybe<Scalars['DateTime']>;
+  /** Filter crime groups created before this date */
+  createdBefore?: InputMaybe<Scalars['DateTime']>;
+  /** Maximum police priority score */
+  policePriorityScoreMax?: InputMaybe<Scalars['Int']>;
+  /** Minimum police priority score */
+  policePriorityScoreMin?: InputMaybe<Scalars['Int']>;
+  /** Filter by police hub scheme IDs */
+  schemeIds?: InputMaybe<Array<Scalars['String']>>;
+  /** Case-insensitive search across AI summary, organization structure, and activity patterns */
+  search?: InputMaybe<Scalars['String']>;
+  /** Filter crime groups updated after this date */
+  updatedAfter?: InputMaybe<Scalars['DateTime']>;
+  /** Filter crime groups updated before this date */
+  updatedBefore?: InputMaybe<Scalars['DateTime']>;
+};
+
+export type SharedCrimeGroupWhereUniqueInput = {
+  id: Scalars['String'];
+};
+
+export type SharedEntityCounts = {
+  __typename?: 'SharedEntityCounts';
+  crimeGroups: Scalars['Int'];
+  incidents: Scalars['Int'];
+  offenders: Scalars['Int'];
+  vehicles: Scalars['Int'];
+};
+
+export type SharedEntityStats = {
+  __typename?: 'SharedEntityStats';
+  /** Total number of shared crime groups across all police hubs */
+  totalCrimeGroups: Scalars['Int'];
+  /** Total number of shared incidents across all police hubs */
+  totalIncidents: Scalars['Int'];
+  /** Total number of shared offenders across all police hubs */
+  totalOffenders: Scalars['Int'];
+  /** Total number of shared vehicles across all police hubs */
+  totalVehicles: Scalars['Int'];
+};
+
+export type SharedEntityTotals = {
+  __typename?: 'SharedEntityTotals';
+  totalBusinessesInForceArea: Scalars['Int'];
+  totalCrimeGroups: Scalars['Int'];
+  totalIncidents: Scalars['Int'];
+  totalOffenders: Scalars['Int'];
+  totalVehicles: Scalars['Int'];
+};
+
+export type SharedIncident = {
+  __typename?: 'SharedIncident';
+  aiBehavioralAnalysisSnapshot?: Maybe<Scalars['JSON']>;
+  aiImpactAssessmentSnapshot?: Maybe<Scalars['JSON']>;
+  aiImprovements?: Maybe<Scalars['String']>;
+  aiInvestigationLeadsSnapshot?: Maybe<Scalars['JSON']>;
+  aiKeyObservations: Array<Scalars['String']>;
+  aiMO?: Maybe<Scalars['String']>;
+  aiMethod?: Maybe<Scalars['String']>;
+  aiNetworkAnalysisSnapshot?: Maybe<Scalars['JSON']>;
+  aiPatternRecognitionSnapshot?: Maybe<Scalars['JSON']>;
+  aiPreventionInsightsSnapshot?: Maybe<Scalars['JSON']>;
+  aiQualityScore?: Maybe<Scalars['Int']>;
+  aiRiskAssessmentSnapshot?: Maybe<Scalars['JSON']>;
+  aiSummary?: Maybe<Scalars['String']>;
+  createdAt: Scalars['Date'];
+  id: Scalars['ID'];
+  incident: Incident;
+  incidentId: Scalars['String'];
+  policeArea: PoliceForce;
+  policePriorityScore?: Maybe<Scalars['Int']>;
+  schemes: Array<Scheme>;
+  tag: Array<Tag>;
+  updatedAt: Scalars['Date'];
+};
+
+export type SharedIncidentHeatmap = {
+  __typename?: 'SharedIncidentHeatmap';
+  /** Array of coordinates for the heatmap */
+  points: Array<SharedIncidentHeatmapPoint>;
+  /** Total number of points returned */
+  total: Scalars['Int'];
+};
+
+export type SharedIncidentHeatmapPoint = {
+  __typename?: 'SharedIncidentHeatmapPoint';
+  /** When the incident was created */
+  createdAt: Scalars['DateTime'];
+  id: Scalars['ID'];
+  /** Latitude coordinate */
+  lat: Scalars['Float'];
+  /** Longitude coordinate */
+  lng: Scalars['Float'];
+  /** Police priority score for weighting the heatmap */
+  policePriorityScore?: Maybe<Scalars['Int']>;
+};
+
+export type SharedIncidentRelayOrderInput = {
+  aiQualityScore?: InputMaybe<SortOrder>;
+  createdAt?: InputMaybe<SortOrder>;
+  policePriorityScore?: InputMaybe<SortOrder>;
+  updatedAt?: InputMaybe<SortOrder>;
+};
+
+export type SharedIncidentRelayWhereInput = {
+  /** Maximum AI quality score */
+  aiQualityScoreMax?: InputMaybe<Scalars['Int']>;
+  /** Minimum AI quality score */
+  aiQualityScoreMin?: InputMaybe<Scalars['Int']>;
+  /** Filter incidents created after this date */
+  createdAfter?: InputMaybe<Scalars['DateTime']>;
+  /** Filter incidents created before this date */
+  createdBefore?: InputMaybe<Scalars['DateTime']>;
+  /** Filter by geographical area */
+  geographicalFilter?: InputMaybe<GeographicalFilterInput>;
+  /** Filter by incident date (when incident occurred) - after this date */
+  incidentDateAfter?: InputMaybe<Scalars['DateTime']>;
+  /** Filter by incident date (when incident occurred) - before this date */
+  incidentDateBefore?: InputMaybe<Scalars['DateTime']>;
+  /** Filter by police area */
+  policeArea?: InputMaybe<PoliceForce>;
+  /** Maximum police priority score */
+  policePriorityScoreMax?: InputMaybe<Scalars['Int']>;
+  /** Minimum police priority score */
+  policePriorityScoreMin?: InputMaybe<Scalars['Int']>;
+  /** Filter by police hub scheme IDs */
+  schemeIds?: InputMaybe<Array<Scalars['String']>>;
+  /** Case-insensitive search across AI summary, method, and MO */
+  search?: InputMaybe<Scalars['String']>;
+  /** Filter by associated tag IDs */
+  tagIds?: InputMaybe<Array<Scalars['String']>>;
+  /** Filter incidents updated after this date */
+  updatedAfter?: InputMaybe<Scalars['DateTime']>;
+  /** Filter incidents updated before this date */
+  updatedBefore?: InputMaybe<Scalars['DateTime']>;
+};
+
+export type SharedIncidentWhereUniqueInput = {
+  id: Scalars['String'];
+};
+
+export type SharedOffender = {
+  __typename?: 'SharedOffender';
+  aiBehavioralAnalysisSnapshot?: Maybe<Scalars['JSON']>;
+  aiGenerationAttempts: Scalars['Int'];
+  aiGenerationStatus?: Maybe<Scalars['String']>;
+  aiGeographicAnalysisSnapshot?: Maybe<Scalars['JSON']>;
+  aiIdentityLinkageSnapshot?: Maybe<Scalars['JSON']>;
+  aiImpactAssessmentSnapshot?: Maybe<Scalars['JSON']>;
+  aiImpactScore?: Maybe<Scalars['Int']>;
+  aiImprovements?: Maybe<Scalars['String']>;
+  aiKeyObservations: Array<Scalars['String']>;
+  aiLastGeneratedAt?: Maybe<Scalars['Date']>;
+  aiLastGenerationError?: Maybe<Scalars['String']>;
+  aiMO?: Maybe<Scalars['String']>;
+  aiMethods: Array<Scalars['String']>;
+  aiPatternSignature: Array<Scalars['String']>;
+  aiQualityAssessmentSnapshot?: Maybe<Scalars['JSON']>;
+  aiQualityScore?: Maybe<Scalars['Int']>;
+  aiRecommendedActionsSnapshot?: Maybe<Scalars['JSON']>;
+  aiRiskAssessmentSnapshot?: Maybe<Scalars['JSON']>;
+  aiSnapshotVersion: Scalars['Int'];
+  aiSummary?: Maybe<Scalars['String']>;
+  aiTargetAnalysisSnapshot?: Maybe<Scalars['JSON']>;
+  aiTemporalAnalysisSnapshot?: Maybe<Scalars['JSON']>;
+  createdAt: Scalars['Date'];
+  hasImages: Scalars['Boolean'];
+  hasName: Scalars['Boolean'];
+  id: Scalars['ID'];
+  images: Array<Image>;
+  lastIncidentAt?: Maybe<Scalars['Date']>;
+  lastProcessedIncidentCount: Scalars['Int'];
+  lastProcessedOffenderIds: Array<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  offender: Array<Offender>;
+  offenderId: Scalars['String'];
+  /** Police hub schemes where this offender has been shared */
+  policeHubs: Array<Scheme>;
+  policePriorityScore?: Maybe<Scalars['Int']>;
+  schemes: Array<Scheme>;
+  /** Source schemes where this offender has been shared from */
+  sources: Array<Scheme>;
+  tag: Array<Tag>;
+  totalIncidents: Scalars['Int'];
+  totalLossValue?: Maybe<Scalars['Float']>;
+  updatedAt: Scalars['Date'];
+};
+
+export type SharedOffenderRelayOrderInput = {
+  aiImpactScore?: InputMaybe<SortOrder>;
+  aiLastGeneratedAt?: InputMaybe<SortOrder>;
+  aiQualityScore?: InputMaybe<SortOrder>;
+  createdAt?: InputMaybe<SortOrder>;
+  lastIncidentAt?: InputMaybe<SortOrder>;
+  name?: InputMaybe<SortOrder>;
+  policePriorityScore?: InputMaybe<SortOrder>;
+  totalIncidents?: InputMaybe<SortOrder>;
+  totalLossValue?: InputMaybe<SortOrder>;
+  updatedAt?: InputMaybe<SortOrder>;
+};
+
+export type SharedOffenderRelayWhereInput = {
+  /** Filter by AI generation status: pending, processing, completed, failed */
+  aiGenerationStatus?: InputMaybe<Scalars['String']>;
+  /** Maximum AI impact score */
+  aiImpactScoreMax?: InputMaybe<Scalars['Int']>;
+  /** Minimum AI impact score */
+  aiImpactScoreMin?: InputMaybe<Scalars['Int']>;
+  /** Filter by AI data generated after this date */
+  aiLastGeneratedAfter?: InputMaybe<Scalars['DateTime']>;
+  /** Filter by AI data generated before this date */
+  aiLastGeneratedBefore?: InputMaybe<Scalars['DateTime']>;
+  /** Maximum AI quality score */
+  aiQualityScoreMax?: InputMaybe<Scalars['Int']>;
+  /** Minimum AI quality score */
+  aiQualityScoreMin?: InputMaybe<Scalars['Int']>;
+  /** Filter offenders created after this date */
+  createdAfter?: InputMaybe<Scalars['DateTime']>;
+  /** Filter offenders created before this date */
+  createdBefore?: InputMaybe<Scalars['DateTime']>;
+  /** Filter by geographical area based on associated incident locations */
+  geographicalFilter?: InputMaybe<GeographicalFilterInput>;
+  /** Filter by whether offender has associated images */
+  hasImages?: InputMaybe<Scalars['Boolean']>;
+  /** Filter by whether offender has a name */
+  hasName?: InputMaybe<Scalars['Boolean']>;
+  /** Filter offenders with last incident after this date */
+  lastIncidentAfter?: InputMaybe<Scalars['DateTime']>;
+  /** Filter offenders with last incident before this date */
+  lastIncidentBefore?: InputMaybe<Scalars['DateTime']>;
+  /** Maximum police priority score */
+  policePriorityScoreMax?: InputMaybe<Scalars['Int']>;
+  /** Minimum police priority score */
+  policePriorityScoreMin?: InputMaybe<Scalars['Int']>;
+  /** Filter by police hub scheme IDs */
+  schemeIds?: InputMaybe<Array<Scalars['String']>>;
+  /** Case-insensitive search across name, AI summary, and MO */
+  search?: InputMaybe<Scalars['String']>;
+  /** Filter by associated tag IDs */
+  tagIds?: InputMaybe<Array<Scalars['String']>>;
+  /** Filter offenders updated after this date */
+  updatedAfter?: InputMaybe<Scalars['DateTime']>;
+  /** Filter offenders updated before this date */
+  updatedBefore?: InputMaybe<Scalars['DateTime']>;
+};
+
+export type SharedOffenderWhereUniqueInput = {
+  id: Scalars['String'];
+};
+
+export type SharedVehicle = {
+  __typename?: 'SharedVehicle';
+  aiAssociatedRiskSnapshot?: Maybe<Scalars['JSON']>;
+  aiGenerationAttempts: Scalars['Int'];
+  aiGenerationStatus?: Maybe<Scalars['String']>;
+  aiGeographicMovementSnapshot?: Maybe<Scalars['JSON']>;
+  aiGeographicPattern?: Maybe<Scalars['String']>;
+  aiImprovements?: Maybe<Scalars['String']>;
+  aiKeyObservations: Array<Scalars['String']>;
+  aiLastGeneratedAt?: Maybe<Scalars['Date']>;
+  aiLastGenerationError?: Maybe<Scalars['String']>;
+  aiQualityScore?: Maybe<Scalars['Int']>;
+  aiSnapshotVersion: Scalars['Int'];
+  aiSummary?: Maybe<Scalars['String']>;
+  aiUsagePatterns?: Maybe<Scalars['String']>;
+  aiVehicleUsageAnalysisSnapshot?: Maybe<Scalars['JSON']>;
+  createdAt: Scalars['Date'];
+  id: Scalars['ID'];
+  lastProcessedIncidentCount: Scalars['Int'];
+  lastProcessedVehicleIds: Array<Scalars['String']>;
+  policePriorityScore?: Maybe<Scalars['Int']>;
+  schemes: Array<Scheme>;
+  updatedAt: Scalars['Date'];
+  vehicle: Array<Vehicle>;
+  vehicleId: Scalars['String'];
+};
+
+export type SharedVehicleRelayOrderInput = {
+  aiLastGeneratedAt?: InputMaybe<SortOrder>;
+  aiQualityScore?: InputMaybe<SortOrder>;
+  createdAt?: InputMaybe<SortOrder>;
+  policePriorityScore?: InputMaybe<SortOrder>;
+  updatedAt?: InputMaybe<SortOrder>;
+};
+
+export type SharedVehicleRelayWhereInput = {
+  /** Filter by AI generation status: pending, processing, completed, failed */
+  aiGenerationStatus?: InputMaybe<Scalars['String']>;
+  /** Filter by AI data generated after this date */
+  aiLastGeneratedAfter?: InputMaybe<Scalars['DateTime']>;
+  /** Filter by AI data generated before this date */
+  aiLastGeneratedBefore?: InputMaybe<Scalars['DateTime']>;
+  /** Maximum AI quality score */
+  aiQualityScoreMax?: InputMaybe<Scalars['Int']>;
+  /** Minimum AI quality score */
+  aiQualityScoreMin?: InputMaybe<Scalars['Int']>;
+  /** Filter vehicles created after this date */
+  createdAfter?: InputMaybe<Scalars['DateTime']>;
+  /** Filter vehicles created before this date */
+  createdBefore?: InputMaybe<Scalars['DateTime']>;
+  /** Filter by geographical area based on associated incident locations */
+  geographicalFilter?: InputMaybe<GeographicalFilterInput>;
+  /** Maximum police priority score */
+  policePriorityScoreMax?: InputMaybe<Scalars['Int']>;
+  /** Minimum police priority score */
+  policePriorityScoreMin?: InputMaybe<Scalars['Int']>;
+  /** Filter by police hub scheme IDs */
+  schemeIds?: InputMaybe<Array<Scalars['String']>>;
+  /** Case-insensitive search across AI summary, usage patterns, and geographic pattern */
+  search?: InputMaybe<Scalars['String']>;
+  /** Filter vehicles updated after this date */
+  updatedAfter?: InputMaybe<Scalars['DateTime']>;
+  /** Filter vehicles updated before this date */
+  updatedBefore?: InputMaybe<Scalars['DateTime']>;
+};
+
+export type SharedVehicleWhereUniqueInput = {
+  id: Scalars['String'];
+};
+
 export type SharingBusiness = {
   __typename?: 'SharingBusiness';
   label: Scalars['String'];
@@ -21231,15 +22753,15 @@ export type SharingBusiness = {
 
 export type SharingConfig = {
   __typename?: 'SharingConfig';
-  businessMap: Scalars['JSON'];
-  conditions: Scalars['JSON'];
+  businessMap?: Maybe<Scalars['JSON']>;
+  conditions?: Maybe<Scalars['JSON']>;
   createdAt: Scalars['Date'];
   id: Scalars['ID'];
   mode: SharingMode;
   noCondition: Scalars['Boolean'];
   schemeFrom: Scheme;
   schemeTo: Scheme;
-  tagMap: Scalars['JSON'];
+  tagMap?: Maybe<Scalars['JSON']>;
   type: SharingType;
   updatedAt: Scalars['Date'];
 };
@@ -21260,6 +22782,24 @@ export type SharingConfigCreateInput = {
   schemeTo: UniqueId;
   tagMap?: InputMaybe<Array<SharingConfigMapInput>>;
   type: SharingType;
+};
+
+export type SharingConfigDetail = {
+  __typename?: 'SharingConfigDetail';
+  /** Sharing conditions as JSON */
+  conditions?: Maybe<Scalars['JSON']>;
+  /** Sharing config ID */
+  configId: Scalars['String'];
+  /** When the sharing config was created */
+  createdAt: Scalars['Date'];
+  /** Models included in sharing (INCIDENT, OFFENDER, VEHICLE, etc.) */
+  includedModels: Array<Model>;
+  /** Sharing mode (AUTOMATIC or MANUAL) */
+  mode: SharingMode;
+  /** Tag mapping configuration as JSON */
+  tagMap?: Maybe<Scalars['JSON']>;
+  /** When the sharing config was last updated */
+  updatedAt: Scalars['Date'];
 };
 
 export type SharingConfigMapInput = {
@@ -21294,7 +22834,8 @@ export enum SharingMode {
 
 export enum SharingType {
   Connected = 'CONNECTED',
-  External = 'EXTERNAL'
+  External = 'EXTERNAL',
+  PoliceHub = 'POLICE_HUB'
 }
 
 export type Shoe = {
@@ -21471,6 +23012,31 @@ export enum SortOrder {
   Asc = 'asc',
   Desc = 'desc'
 }
+
+export type SourceSchemeEngagement = {
+  __typename?: 'SourceSchemeEngagement';
+  /** Most recent view */
+  lastViewedAt?: Maybe<Scalars['DateTime']>;
+  /** Daily activity for last 30 days */
+  recentActivity: Array<RecentViewActivity>;
+  /** Top 5 most viewed entities from this source */
+  topViewedEntities: Array<TopViewedEntity>;
+  /** Total views from police hub */
+  totalViews: Scalars['Int'];
+  /** Unique officers who viewed */
+  uniqueOfficers: Scalars['Int'];
+  /** Views broken down by entity type */
+  viewsByEntityType: EntityTypeViewBreakdown;
+};
+
+export type SourceSchemeStats = {
+  __typename?: 'SourceSchemeStats';
+  /** Engagement analytics for this source scheme */
+  engagementAnalytics: SourceSchemeEngagement;
+  scheme: Scheme;
+  sharedCounts: SharedEntityCounts;
+  sharingConfig: SharingConfig;
+};
 
 export type StatementTemplate = {
   __typename?: 'StatementTemplate';
@@ -21823,6 +23389,8 @@ export type StockRemovalRequest = {
   reasonForNonReturn?: Maybe<Scalars['String']>;
   rechargeBrand?: Maybe<Scalars['String']>;
   rechargeReference?: Maybe<Scalars['String']>;
+  recipientName?: Maybe<Scalars['String']>;
+  recipientPhone?: Maybe<Scalars['String']>;
   reference?: Maybe<Scalars['Int']>;
   returnDate?: Maybe<Scalars['DateTime']>;
   scheme: Scheme;
@@ -22085,6 +23653,24 @@ export type SuggestedQuestion = {
   required: Scalars['Boolean'];
 };
 
+export type SyncBusinessGroupsInput = {
+  businessIds?: InputMaybe<Array<Scalars['String']>>;
+  schemeId: Scalars['String'];
+  strategy?: InputMaybe<GroupSyncStrategy>;
+};
+
+export type SyncBusinessGroupsResult = {
+  __typename?: 'SyncBusinessGroupsResult';
+  businessResults: Array<BusinessSyncResult>;
+  businessesProcessed: Scalars['Int'];
+  message: Scalars['String'];
+  success: Scalars['Boolean'];
+  totalErrors: Scalars['Int'];
+  totalIncidentsUpdated: Scalars['Int'];
+  totalOffendersUpdated: Scalars['Int'];
+  totalVehiclesUpdated: Scalars['Int'];
+};
+
 /** Result of syncing police forces for businesses based on their postcodes */
 export type SyncPoliceForceResult = {
   __typename?: 'SyncPoliceForceResult';
@@ -22132,6 +23718,7 @@ export type Tag = {
   parentTag?: Maybe<Tag>;
   parentTagId?: Maybe<Scalars['String']>;
   policeReporting: Scalars['Boolean'];
+  policeSharing: Scalars['Boolean'];
   recycleBin?: Maybe<RecycledItem>;
   recycled?: Maybe<Scalars['Boolean']>;
   roles: Array<CustomRole>;
@@ -22278,6 +23865,20 @@ export type TagCreateWithoutOffenders = {
   description: Scalars['String'];
   name: Scalars['String'];
   schemes: ConnectOnlyArrayHelper;
+};
+
+export type TagDetail = {
+  __typename?: 'TagDetail';
+  /** Data type (INCIDENT, OFFENDER, etc.) */
+  dataType: Model;
+  /** Tag description */
+  description: Scalars['String'];
+  /** Tag ID */
+  id: Scalars['String'];
+  /** Tag name */
+  name: Scalars['String'];
+  /** Whether this tag is enabled for police sharing */
+  policeSharing: Scalars['Boolean'];
 };
 
 export type TagListRelationFilter = {
@@ -23526,6 +25127,20 @@ export type TopContributors = {
   updatesCreated: Scalars['Int'];
 };
 
+export type TopViewedEntity = {
+  __typename?: 'TopViewedEntity';
+  /** Entity ID */
+  entityId: Scalars['String'];
+  /** Entity name/description */
+  entityName?: Maybe<Scalars['String']>;
+  /** Type of entity (INCIDENT, OFFENDER, VEHICLE, CRIME_GROUP) */
+  entityType: Scalars['String'];
+  /** Last viewed timestamp */
+  lastViewedAt: Scalars['DateTime'];
+  /** Number of views */
+  viewCount: Scalars['Int'];
+};
+
 export type TrainingVideo = {
   __typename?: 'TrainingVideo';
   completions: Array<TrainingVideoCompletion>;
@@ -23725,6 +25340,30 @@ export type UnlinkedImage = {
   localId: Scalars['String'];
 };
 
+export type UnrestrictedIncidentRelayInput = {
+  approved?: InputMaybe<Scalars['Boolean']>;
+  crimeGroupIds?: InputMaybe<Array<Scalars['String']>>;
+  crimeTypes?: InputMaybe<Array<Scalars['String']>>;
+  dateRange?: InputMaybe<DateTimeFilter>;
+  groupIds?: InputMaybe<Array<Scalars['String']>>;
+  hasCrimeReference?: InputMaybe<Scalars['Boolean']>;
+  investigationIds?: InputMaybe<Array<Scalars['String']>>;
+  locationId?: InputMaybe<Scalars['String']>;
+  offenderIds?: InputMaybe<Array<Scalars['String']>>;
+  search?: InputMaybe<Scalars['String']>;
+  vehicleIds?: InputMaybe<Array<Scalars['String']>>;
+};
+
+export type UnrestrictedOffenderRelayInput = {
+  approved?: InputMaybe<Scalars['Boolean']>;
+  crimeGroupIds?: InputMaybe<Array<Scalars['String']>>;
+  groupIds?: InputMaybe<Array<Scalars['String']>>;
+  incidentIds?: InputMaybe<Array<Scalars['String']>>;
+  investigationIds?: InputMaybe<Array<Scalars['String']>>;
+  search?: InputMaybe<Scalars['String']>;
+  vehicleIds?: InputMaybe<Array<Scalars['String']>>;
+};
+
 export type Update = {
   __typename?: 'Update';
   createdAt: Scalars['Date'];
@@ -23918,6 +25557,19 @@ export type UpdateFolder = {
   name?: InputMaybe<SetStringHelper>;
   parentId?: InputMaybe<Scalars['String']>;
   roleIds?: InputMaybe<Array<Scalars['String']>>;
+};
+
+export type UpdateGeographicalAreaInput = {
+  /** Update to a circular area */
+  circle?: InputMaybe<CircleFilterInput>;
+  /** Hex color for map display (e.g., "#FF5733") */
+  color?: InputMaybe<Scalars['String']>;
+  /** Optional description */
+  description?: InputMaybe<Scalars['String']>;
+  /** Name for this geographical area */
+  name?: InputMaybe<Scalars['String']>;
+  /** Update to a polygon area */
+  polygon?: InputMaybe<PolygonFilterInput>;
 };
 
 export enum UpdateIcon {
@@ -24155,6 +25807,8 @@ export type UpdateStockRemovalRequestInput = {
   reasonForNonReturn?: InputMaybe<Scalars['String']>;
   rechargeBrand?: InputMaybe<Scalars['String']>;
   rechargeReference?: InputMaybe<Scalars['String']>;
+  recipientName?: InputMaybe<Scalars['String']>;
+  recipientPhone?: InputMaybe<Scalars['String']>;
   returnDate?: InputMaybe<Scalars['DateTime']>;
   schemeId?: InputMaybe<Scalars['String']>;
   shippingAddress?: InputMaybe<Scalars['String']>;
@@ -26075,6 +27729,15 @@ export type ValueTotals = {
 export type Vehicle = {
   __typename?: 'Vehicle';
   actions: Array<Action>;
+  aiAssociatedRisk?: Maybe<AiAssociatedRisk>;
+  aiGeographicMovement?: Maybe<AiGeographicMovement>;
+  aiGeographicPattern?: Maybe<Scalars['String']>;
+  aiImprovements?: Maybe<Scalars['String']>;
+  aiKeyObservations: Array<Scalars['String']>;
+  aiQualityScore?: Maybe<Scalars['Int']>;
+  aiSummary?: Maybe<Scalars['String']>;
+  aiUsagePatterns?: Maybe<Scalars['String']>;
+  aiVehicleUsageAnalysis?: Maybe<AiVehicleUsageAnalysis>;
   colour?: Maybe<Scalars['String']>;
   createdAt: Scalars['Date'];
   createdBy?: Maybe<User>;

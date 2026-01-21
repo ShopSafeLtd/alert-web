@@ -31,29 +31,10 @@ query CrimeGroup($where: CrimeGroupWhereUniqueInput!) {
       name
     }
     incidents {
-      ...IncidentsDetailed
+        id
     }
     vehicles {
       ...Vehicles
-      images {
-        ...Images
-      }
-    }
-    offenders {
-      ...Offenders
-      alias
-      totalIncidents
-      totalValue
-      latestIncident {
-        id
-        date
-      }
-      knownFor
-      targetedBusinesses {
-        id
-        name
-      }
-      targetedGoods
       images {
         ...Images
       }

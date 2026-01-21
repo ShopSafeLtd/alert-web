@@ -8,6 +8,7 @@ import {
 } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Card, Col, Empty, Row, Spin, Typography } from 'antd';
+import { ThumbnailStatus } from 'graphql/types';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
@@ -18,7 +19,6 @@ import EditVideoModal from '../components/EditVideoModal';
 import UploadVideoModal from '../components/UploadVideoModal';
 import VideoPreviewModal from '../components/VideoPreviewModal';
 import useStyles from './ListTrainingVideos.styles';
-import { ThumbnailStatus } from 'graphql/types';
 
 const { Title } = Typography;
 
@@ -59,7 +59,7 @@ const ListTrainingVideosView: React.FC<ListTrainingVideosViewProps> = ({
   const intl = useIntl();
   const navigate = useNavigate();
 
-  const formatDate = (dateString: string | Date): string => {
+  const formatDate = (dateString: Date | string): string => {
     if (dateString instanceof Date) {
       dateString = dateString.toLocaleDateString(intl.locale, {
         day: 'numeric',

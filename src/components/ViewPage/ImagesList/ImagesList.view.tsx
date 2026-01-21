@@ -304,6 +304,7 @@ const ImagesList = ({
       </Row>
       <ImageEditor
         image={editImageData}
+        key={editImageData?.id}
         onClose={() => setEditImageData(null)}
         open={!!editImageData}
         submitImage={onEditImage}

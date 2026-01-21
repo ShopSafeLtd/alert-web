@@ -34,13 +34,13 @@ const CollapsibleSidebar: React.FC<Props> = ({
   onSectionChange,
   sections,
 }) => {
-  const classes = useStyles();
-  const intl = useIntl();
-
   const [activeSection, setActiveSection] = useState<string>(
     defaultSection || sections[0]?.id || ''
   );
   const [expanded, setExpanded] = useState(defaultExpanded);
+
+  const classes = useStyles({ expanded });
+  const intl = useIntl();
 
   const handleSectionClick = (sectionId: string) => {
     setActiveSection(sectionId);

@@ -307,7 +307,13 @@ const ViewIncident = ({
                               />
                             </Col>
                             <Col xl={12} xs={24}>
-                              <Police data={data} loading={loading} />
+                              <Police
+                                data={data}
+                                loading={loading}
+                                usPoliceData={
+                                  data?.incident?.scheme?.usPoliceData
+                                }
+                              />
                             </Col>
                           </Row>
                           <Items

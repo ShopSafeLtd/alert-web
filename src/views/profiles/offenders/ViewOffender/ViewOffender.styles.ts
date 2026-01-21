@@ -109,13 +109,19 @@ const useStyles = createUseStyles((theme: Theme) => ({
   offenderRow: {
     overflowX: 'auto',
   },
+  rightSidebar: {
+    flex: '0 0 auto',
+    height: '100vh',
+    position: 'sticky',
+    top: 0,
+  },
   selectCard: {
     position: 'relative',
   },
+
   tag: {
     marginBottom: 3,
   },
-
   tagLabel: { marginTop: 2 },
   updatesContainer: {
     height: '100%',

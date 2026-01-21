@@ -1,7 +1,6 @@
 import type { CreateBlurFacesMutation } from '#/components/ViewPage/ImagesList/graphql/__generated__/create_blur_faces.generated';
 import type { AddVehicleData } from '#/components/form-components/Vehicle/AddVehicleSimple/useAddVehicleSimple';
 import type { CreateDocumentsMutation } from '#/graphql/documents/mutations/__generated__/create-documents.generated';
-import type { OffenderIncidentsQuery } from '#/views/profiles/offenders/ViewOffender/__graphql__/queries/__generated__/list-incidents.generated';
 import type { MutationUpdaterFn } from '@apollo/client';
 import type { ItemType } from 'antd/lib/menu/hooks/useItems';
 import type { DeleteDocumentMutation } from 'graphql/documents/mutations/__generated__/delete-document.generated';
@@ -16,11 +15,11 @@ import type {
 } from 'graphql/offenders/queries/__generated__/view-offender.generated';
 import type { LanguageCode } from 'graphql/types';
 import type { CreateSimpleVehicleMutation } from 'graphql/vehicles/mutations/__generated__/create-simple-vehicle.generated';
-import type { Dispatch } from 'react';
 import type {
   BanData,
   EditFeedImage,
   ImageCardData,
+  InvestigationData,
   LocationData,
   VehicleData,
 } from 'types/DataType';
@@ -33,7 +32,6 @@ import {
 import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import hasRolePermission from '#/utils/has-role-permission';
 import publicOffenderDob from '#/utils/public-offender-dob';
-import { useOffenderIncidentsQuery } from '#/views/profiles/offenders/ViewOffender/__graphql__/queries/__generated__/list-incidents.generated';
 import {
   faChartBar,
   faEdit,
@@ -61,23 +59,19 @@ import {
   useViewOffenderQuery,
 } from 'graphql/offenders/queries/__generated__/view-offender.generated';
 import { useTranslateLazyQuery } from 'graphql/translate/queries/__generated__/translate.generated';
-import {
-  PermissionMethod,
-  PermissionModel,
-  SortOrder,
-  TagType,
-} from 'graphql/types';
+import { PermissionMethod, PermissionModel, TagType } from 'graphql/types';
 import { useCreateSimpleVehicleMutation } from 'graphql/vehicles/mutations/__generated__/create-simple-vehicle.generated';
 import { useUpdateSimpleVehicleMutation } from 'graphql/vehicles/mutations/__generated__/update-simple-vehicle.generated';
 import update from 'immutability-helper';
 import { useAtomValue } from 'jotai/index';
-import React, { useEffect, useReducer, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router';
 import { useStoreState } from 'state';
 import errorNotification from 'types/mutation_notifications/error_notification';
 
 import { useMarkOffenderViewedMutation } from '../../../../graphql/engagement/mutations/__generated__/mark-offender-viewed.generated';
+import { useInvestigationActions } from './useInvestigationActions';
 
 const { confirm } = Modal;
 
@@ -123,12 +117,11 @@ interface Return {
   editUpdate: { id: string; text: string } | null;
   editUpdateInput: string;
   editVehicleData: VehicleData | null;
+  handleCreateInvestigation: (investigationId: string) => Promise<void>;
   handleEditUpdate: () => void;
+  handleLinkInvestigation: (investigation: InvestigationData) => Promise<void>;
+  handleUnlinkInvestigation: (investigationId: string) => Promise<void>;
   hasConnectedSchemes: boolean;
-  incidents: OffenderIncidentsQuery['offender']['incidents'] | null;
-  incidentsLoading: boolean;
-  incidentsPagination: PaginationState;
-  incidentsPaginationDispatch: Dispatch<PaginationAction>;
   isTranslated: null | string;
   knowOffender: boolean;
   languageCount: number;
@@ -140,6 +133,8 @@ interface Return {
     src: string;
   }[];
   linkIncident: boolean;
+  linkInvestigation: boolean;
+  linkingInvestigation: boolean;
   loadMore: boolean;
   loading: boolean;
   onAddAddress: (value: LocationData) => void;
@@ -211,6 +206,7 @@ interface Return {
   toggleEditOffender: () => void;
   toggleKnowOffender: () => void;
   toggleLinkIncident: () => void;
+  toggleLinkInvestigation: () => void;
   toggleSelectImages: (id: string) => void;
   toggleShareOpen: () => void;
   toggleShowIncidentOptions: () => void;
@@ -228,43 +224,6 @@ interface Return {
   viewMatches: null | string;
 }
 
-export interface PaginationState {
-  currentPage: number;
-  pageSize: number;
-}
-
-export type PaginationAction =
-  | { payload: number; type: 'changePage' }
-  | { payload: number; type: 'changePageSize' };
-
-const initialState: PaginationState = {
-  currentPage: 1,
-  pageSize: 5,
-};
-
-function paginationReducer(
-  state: PaginationState,
-  action: PaginationAction
-): PaginationState {
-  switch (action.type) {
-    case 'changePage': {
-      return { ...state, currentPage: action.payload };
-    }
-    case 'changePageSize': {
-      return { ...state, currentPage: 1, pageSize: action.payload };
-    }
-    default: {
-      return state;
-    }
-  }
-}
-
-type UsePagination = [PaginationState, Dispatch<PaginationAction>];
-
-export function usePagination(): UsePagination {
-  return useReducer(paginationReducer, initialState);
-}
-
 const useViewOffender = (offenderId: string): Return => {
   const intl = useIntl();
   const navigate = useNavigate();
@@ -275,10 +234,7 @@ const useViewOffender = (offenderId: string): Return => {
   const currentUser = useAtomValue(currentUserAtom);
   const [shareOpen, setShareOpen] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [paginationState, dispatch] = usePagination();
   const hasTrackedView = useRef(false);
-  const { currentPage: incidentPage, pageSize: incidentPageSize } =
-    paginationState;
   const [viewMatches, toggleViewMatches] = useState<null | string>(null);
   const [optionRowShow, setOptionRowShow] = useState(false);
   const [linkIncident, setLinkIncident] = useState(false);
@@ -320,6 +276,7 @@ const useViewOffender = (offenderId: string): Return => {
   const [addBan, setAddBan] = useState(false);
   const [editBanData, setEditBanData] = useState<BanData | null>(null);
   const [addInvestigation, setAddInvestigation] = useState(false);
+  const [linkInvestigation, setLinkInvestigation] = useState(false);
   const [showIncidentOptions, setShowIncidentOptions] = useState(false);
   const [addImageToIncidents, setAddImageToIncidents] = useState(false);
   const [selectedIncidentId, setSelectedIncidentId] = useState<string>('');
@@ -386,6 +343,13 @@ const useViewOffender = (offenderId: string): Return => {
     variables,
   });
 
+  const {
+    handleCreateInvestigation,
+    handleLinkInvestigation,
+    handleUnlinkInvestigation,
+    linking: linkingInvestigation,
+  } = useInvestigationActions({ offenderId });
+
   // Track offender view silently
   const [markOffenderViewed] = useMarkOffenderViewedMutation({
     onError: () => {
@@ -403,23 +367,6 @@ const useViewOffender = (offenderId: string): Return => {
       });
     }
   }, [offenderId, loading, data, markOffenderViewed]);
-
-  const {
-    data: incidentsData,
-    loading: incidentsLoading,
-    previousData,
-  } = useOffenderIncidentsQuery({
-    variables: {
-      orderBy: {
-        date: SortOrder.Desc,
-      },
-      skip: (incidentPage - 1) * incidentPageSize,
-      take: incidentPageSize,
-      where: {
-        id: offenderId,
-      },
-    },
-  });
 
   const { data: associatesData, loading: associatesLoading } =
     useAssociatedOffendersQuery({
@@ -613,6 +560,15 @@ const useViewOffender = (offenderId: string): Return => {
 
   const onEditImage = (value: EditFeedImage) => {
     setSaving(true);
+
+    // 🐛 DEBUG: Log incoming values
+    console.log('onEditImage received:', {
+      id: value.id,
+      position: value.position,
+      positionX: value.positionX,
+      positionY: value.positionY,
+    });
+
     if (value) {
       const findPrimaryId = data?.offender?.images.find(
         ({ primary }) => primary
@@ -631,6 +587,38 @@ const useViewOffender = (offenderId: string): Return => {
           ]
         : [];
 
+      const mutationVariables = {
+        id: offenderId,
+        images: {
+          update: [
+            {
+              data: {
+                policeImage: { set: value.policeImage || false },
+                position: { set: value.position },
+                positionX: {
+                  set: value.positionX ?? 50,
+                },
+                positionY: {
+                  set: value.positionY ?? 50,
+                },
+                primary: { set: value.primary || false },
+                rotation: { set: value.rotation || 0 },
+              },
+              where: {
+                id: value.id,
+              },
+            },
+            ...primaryImage,
+          ],
+        },
+      };
+
+      // 🐛 DEBUG: Log mutation variables being sent
+      console.log(
+        'Mutation variables:',
+        JSON.stringify(mutationVariables, null, 2)
+      );
+
       void updateOffenderImages({
         onCompleted: () => {
           notification.success({
@@ -643,33 +631,7 @@ const useViewOffender = (offenderId: string): Return => {
             placement: 'bottomRight',
           });
         },
-        variables: {
-          id: offenderId,
-          images: {
-            update: [
-              {
-                data: {
-                  policeImage: { set: value.policeImage || false },
-                  position: { set: value.position },
-                  positionX:
-                    value.positionX === undefined
-                      ? undefined
-                      : { set: value.positionX },
-                  positionY:
-                    value.positionY === undefined
-                      ? undefined
-                      : { set: value.positionY },
-                  primary: { set: value.primary || false },
-                  rotation: { set: value.rotation || 0 },
-                },
-                where: {
-                  id: value.id,
-                },
-              },
-              ...primaryImage,
-            ],
-          },
-        },
+        variables: mutationVariables,
         // update: updateImageList,
       }).finally(() => {
         setEditImageData(null);
@@ -1947,6 +1909,9 @@ const useViewOffender = (offenderId: string): Return => {
   const toggleAddInvestigation = () => {
     setAddInvestigation(() => !addInvestigation);
   };
+  const toggleLinkInvestigation = () => {
+    setLinkInvestigation(() => !linkInvestigation);
+  };
   const toggleShowIncidentOptions = () => {
     setShowIncidentOptions(!showIncidentOptions);
   };
@@ -2025,21 +1990,19 @@ const useViewOffender = (offenderId: string): Return => {
     editUpdate,
     editUpdateInput,
     editVehicleData,
+    handleCreateInvestigation,
     handleEditUpdate,
+    handleLinkInvestigation,
+    handleUnlinkInvestigation,
     hasConnectedSchemes: connectedToSchemes && connectedToSchemes.length > 0,
-    incidents:
-      incidentsData?.offender.incidents ||
-      previousData?.offender.incidents ||
-      null,
-    incidentsLoading,
-    incidentsPagination: paginationState,
-    incidentsPaginationDispatch: dispatch,
     isTranslated,
     knowOffender,
     languageCount,
     lightBoxOpen,
     lightboxElements,
     linkIncident,
+    linkInvestigation,
+    linkingInvestigation,
     loadMore,
     loading: data?.offender ? false : loading,
     onAddAddress,
@@ -2096,6 +2059,7 @@ const useViewOffender = (offenderId: string): Return => {
     toggleEditOffender,
     toggleKnowOffender,
     toggleLinkIncident,
+    toggleLinkInvestigation,
     toggleSelectImages,
     toggleShareOpen,
     toggleShowIncidentOptions,

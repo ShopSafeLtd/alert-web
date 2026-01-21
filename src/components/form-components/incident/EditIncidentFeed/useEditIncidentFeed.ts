@@ -35,8 +35,10 @@ export interface FormData {
     value?: number;
   }[];
   groups: string[];
+  policeDepartment?: string;
   policeInvolved?: boolean;
   policeNo?: string;
+  policeOfficerName?: string;
   policeRef?: string;
   policeReported?: boolean;
   priority: IncidentPriority;
@@ -69,6 +71,7 @@ interface Return {
   onSubmit: (value: FormData) => void;
   saving: boolean;
   tagsLoading: boolean;
+  usPoliceData?: boolean;
 }
 
 const useEditIncidentFeed = ({ incidentId, onClose }: Props): Return => {
@@ -196,8 +199,10 @@ const useEditIncidentFeed = ({ incidentId, onClose }: Props): Return => {
             groups: {
               set: data.groups.map((id) => ({ id })),
             },
+            policeDepartment: { set: data.policeDepartment || '' },
             policeInvolved: { set: data.policeInvolved || false },
             policeNo: { set: data.policeNo || '' },
+            policeOfficerName: { set: data.policeOfficerName || '' },
             policeRef: { set: data.policeRef || '' },
             policeReported: { set: data.policeReported || false },
             priority: { set: data.priority },
@@ -256,6 +261,7 @@ const useEditIncidentFeed = ({ incidentId, onClose }: Props): Return => {
     onSubmit,
     saving,
     tagsLoading,
+    usPoliceData: incidentData?.incident?.scheme?.usPoliceData,
   };
 };
 

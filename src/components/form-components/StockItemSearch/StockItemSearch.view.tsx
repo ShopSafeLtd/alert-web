@@ -5,8 +5,8 @@ import type {
   ListStockItemsQueryVariables,
 } from 'graphql/stock-item/__generated__/stock-items-import.generated';
 
-import { useApolloClient } from '@apollo/client';
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import { useApolloClient } from '@apollo/client';
 import { Col, Row, Select, Spin, Typography } from 'antd';
 import { ListStockItemsDocument } from 'graphql/stock-item/__generated__/stock-items-import.generated';
 import { QueryMode } from 'graphql/types';
@@ -39,8 +39,8 @@ export interface StockItemValue {
   name?: null | string;
   salesPriceLocal?: null | number;
   sku?: null | string;
-  variant?: string;
   styleCode?: null | string;
+  variant?: string;
 }
 
 // @deprecated
