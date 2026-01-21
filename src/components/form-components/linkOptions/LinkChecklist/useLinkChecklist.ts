@@ -6,7 +6,10 @@ import type {
 import type { ChecklistData } from 'types/DataType';
 
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
-import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
+import {
+  currentSchemeGroups,
+  currentUserAtom,
+} from '#/providers/UserProvider/UserProvider';
 import { useStoreState } from '#/state';
 import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
@@ -52,6 +55,8 @@ const useLinkChecklist = ({
   const [selected, setSelected] = useState<string | undefined>();
   const schemeId = useAtomValue(currentSchemeIdAtom);
   const userId = useAtomValue(currentUserAtom)?.id ?? '';
+  const userGroups = useAtomValue(currentSchemeGroups);
+  const userGroupIds = userGroups?.map((g) => g.id) || [];
 
   // const [pagination, setPagination] = useState({
   //   page: 1,
@@ -74,6 +79,59 @@ const useLinkChecklist = ({
         OR: [
           {
             checklist: {
+              OR: [
+                // Case 1: Public checklists (no restrictions)
+                {
+                  groups: { none: {} },
+                  roles: { none: {} },
+                  users: { none: {} },
+                },
+                // Case 2: Named user override (direct assignment)
+                {
+                  users: { some: { id: { equals: userId } } },
+                },
+                // Case 3: Has role AND in group (when both specified)
+                {
+                  AND: [
+                    {
+                      roles: {
+                        some: {
+                          users: {
+                            some: { userId: { equals: userId } },
+                          },
+                        },
+                      },
+                    },
+                    {
+                      groups: {
+                        some: {
+                          id: { in: userGroupIds },
+                        },
+                      },
+                    },
+                  ],
+                },
+                // Case 4: Has role only (no groups specified)
+                {
+                  groups: { none: {} },
+                  roles: {
+                    some: {
+                      users: {
+                        some: { userId: { equals: userId } },
+                      },
+                    },
+                  },
+                },
+                // Case 5: In group only (no roles specified)
+                {
+                  groups: {
+                    some: {
+                      id: { in: userGroupIds },
+                    },
+                  },
+                  roles: { none: {} },
+                },
+              ],
               business: checklistFilter.businesses?.length
                 ? { some: { id: { in: checklistFilter.businesses } } }
                 : undefined,
@@ -87,14 +145,63 @@ const useLinkChecklist = ({
               ? { id: { in: checklistFilter.businesses } }
               : undefined,
             checklist: {
+              OR: [
+                // Case 1: Public checklists (no restrictions)
+                {
+                  groups: { none: {} },
+                  roles: { none: {} },
+                  users: { none: {} },
+                },
+                // Case 2: Named user override (direct assignment)
+                {
+                  users: { some: { id: { equals: userId } } },
+                },
+                // Case 3: Has role AND in group (when both specified)
+                {
+                  AND: [
+                    {
+                      roles: {
+                        some: {
+                          users: {
+                            some: { userId: { equals: userId } },
+                          },
+                        },
+                      },
+                    },
+                    {
+                      groups: {
+                        some: {
+                          id: { in: userGroupIds },
+                        },
+                      },
+                    },
+                  ],
+                },
+                // Case 4: Has role only (no groups specified)
+                {
+                  groups: { none: {} },
+                  roles: {
+                    some: {
+                      users: {
+                        some: { userId: { equals: userId } },
+                      },
+                    },
+                  },
+                },
+                // Case 5: In group only (no roles specified)
+                {
+                  groups: {
+                    some: {
+                      id: { in: userGroupIds },
+                    },
+                  },
+                  roles: { none: {} },
+                },
+              ],
               schemes: {
                 some: { id: { equals: schemeId } },
               },
             },
-
-            completedBy: checklistFilter.ownUser
-              ? { id: { equals: userId } }
-              : undefined,
           },
         ],
         id: { notIn: checklistIds },

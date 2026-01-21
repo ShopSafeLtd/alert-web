@@ -21,7 +21,6 @@ export interface FilterModelValues {
   activeStatus?: (ChecklistStatus.Completed | ChecklistStatus.InProgress)[];
   businesses: string[];
   completedBy: string[];
-  ownUser: boolean;
   searchValue: string;
   templates: string[];
 }
@@ -29,7 +28,6 @@ export interface SetChecklistFilterModel {
   activeStatus?: (ChecklistStatus.Completed | ChecklistStatus.InProgress)[];
   businesses?: string[];
   completedBy?: string[];
-  ownUser?: boolean;
   searchValue?: string;
   templates?: string[];
 }
@@ -67,7 +65,6 @@ const filterModel: FilterModel = {
     activeStatus: [ChecklistStatus.InProgress, ChecklistStatus.Completed],
     businesses: [],
     completedBy: [],
-    ownUser: false,
     searchValue: '',
     templates: [],
   },
@@ -81,7 +78,6 @@ const filterModel: FilterModel = {
       activeStatus: [ChecklistStatus.InProgress, ChecklistStatus.Completed],
       businesses: [],
       completedBy: [],
-      ownUser: false,
       searchValue: '',
       templates: [],
     };
