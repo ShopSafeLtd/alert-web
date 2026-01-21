@@ -1,3 +1,4 @@
+import type { ApolloError } from '@apollo/client';
 import type { DragEvent } from 'react';
 import type { FullScreenHandle } from 'react-full-screen';
 import type {
@@ -33,6 +34,8 @@ import 'reactflow/dist/style.css';
 
 import { useStoreState } from '../../../../../state';
 import { visualColours } from '../../../../../utils/node-colour';
+import FlowErrorState from './components/FlowErrorState';
+import FlowLoadingOverlay from './components/FlowLoadingOverlay';
 import Sidebar from './sidebar/Sidebar';
 import styles from './style.module.css';
 import './styles.css';
@@ -53,6 +56,12 @@ interface FlowProps {
   isFullScreen: boolean;
   isSynced: boolean;
   loading: boolean;
+  loadingError: {
+    error?: Error;
+    message: string;
+    type: 'query' | 'websocket';
+  } | null;
+  loadingPhase: 'connecting' | 'error' | 'query' | 'ready' | 'syncing';
   nodes: Node[];
   onConnect: OnConnect;
   onDragOver: (event: DragEvent) => void;
@@ -66,6 +75,7 @@ interface FlowProps {
   onNodeClick: (event: React.MouseEvent, node: Node) => void;
   onNodesChange: OnNodesChange;
   onSave: () => void;
+  queryError?: ApolloError;
   savedWhen: null | string;
   // eslint-disable-next-line
   saving: boolean;
@@ -78,6 +88,10 @@ interface FlowProps {
 
 const antIcon = <LoadingOutlined spin style={{ fontSize: 24 }} />;
 
+const handleRetry = () => {
+  window.location.reload();
+};
+
 const ReactFlowView = ({
   clientCount,
   // handlePointMove,
@@ -86,7 +100,8 @@ const ReactFlowView = ({
   flowScreen,
   isFullScreen,
   isSynced,
-  loading,
+  loadingError,
+  loadingPhase,
   nodes,
   onConnect,
   onDragOver,
@@ -95,6 +110,7 @@ const ReactFlowView = ({
   onNodeClick,
   onNodesChange,
   onSave,
+  queryError,
   savedWhen,
   saving,
   setFullScreen,
@@ -104,15 +120,16 @@ const ReactFlowView = ({
 // provider,
 // reactFlowInstance,
 FlowProps) => {
+  const intl = useIntl();
+  const darkTheme =
+    useStoreState((state) => state.theme.currentTheme) === 'dark';
+
   const edgeTypes = useMemo(
     () => ({
       floating: FloatingEdge,
     }),
     []
   );
-  const intl = useIntl();
-  const darkTheme =
-    useStoreState((state) => state.theme.currentTheme) === 'dark';
 
   const nodeTypes = useMemo(
     () => ({
@@ -164,7 +181,7 @@ FlowProps) => {
               {intl.formatMessage({
                 defaultMessage: 'Last Saved: ',
               })}
-              {saving || loading ? (
+              {saving ? (
                 <Spin indicator={antIcon} style={{ marginLeft: 5 }} />
               ) : (
                 savedWhen || intl.formatMessage({ defaultMessage: 'never' })
@@ -180,59 +197,93 @@ FlowProps) => {
               handle={flowScreen}
             >
               <div className={styles.rfWrapper} ref={wrapperRef}>
-                <ReactFlow
-                  edgeTypes={edgeTypes}
-                  edges={edges}
-                  elementsSelectable={!isFullScreen}
-                  fitView
-                  minZoom={0.1}
-                  nodeTypes={nodeTypes}
-                  nodes={nodes}
-                  nodesConnectable={!isFullScreen}
-                  nodesDraggable={!isFullScreen}
-                  onConnect={onConnect}
-                  onDragOver={onDragOver}
-                  onDrop={onDrop}
-                  onEdgesChange={onEdgesChange}
-                  onInit={setReactFlowInstance}
-                  onNodeClick={onNodeClick}
-                  onNodesChange={onNodesChange}
-                  proOptions={{ hideAttribution: true }}
-                  style={{
-                    height: '100%',
-                    width: '100%',
-                  }}
-                >
-                  <Controls showInteractive={!isFullScreen}>
-                    <ControlButton
-                      onClick={setFullScreen}
-                      title={intl.formatMessage({
-                        defaultMessage: 'Full Screen',
-                      })}
-                    >
-                      <FontAwesomeIcon
-                        icon={faExpandArrows}
-                        size="sm"
-                        style={{
-                          color: 'black',
-                        }}
-                      />
-                    </ControlButton>
-                  </Controls>
-                  <MiniMap
-                    nodeColor={(node: Node) => nodeColor(node.type as string)}
-                    nodeStrokeWidth={3}
-                    pannable
+                {/* Loading overlay for query, connecting, syncing phases */}
+                {(loadingPhase === 'query' ||
+                  loadingPhase === 'connecting' ||
+                  loadingPhase === 'syncing') && (
+                  <FlowLoadingOverlay
+                    darkTheme={darkTheme}
+                    phase={loadingPhase}
+                  />
+                )}
+
+                {/* GraphQL error state */}
+                {queryError && (
+                  <FlowErrorState
+                    errorType="query"
+                    onRetry={handleRetry}
+                    queryError={queryError}
+                  />
+                )}
+
+                {/* WebSocket error state */}
+                {loadingPhase === 'error' &&
+                  loadingError?.type === 'websocket' && (
+                    <FlowErrorState
+                      errorType="websocket"
+                      loadingError={loadingError}
+                      onRetry={handleRetry}
+                    />
+                  )}
+
+                {/* Render ReactFlow only when ready or graceful WebSocket error */}
+                {(loadingPhase === 'ready' ||
+                  (loadingPhase === 'error' &&
+                    loadingError?.type === 'websocket')) && (
+                  <ReactFlow
+                    edgeTypes={edgeTypes}
+                    edges={edges}
+                    elementsSelectable={!isFullScreen}
+                    fitView
+                    minZoom={0.1}
+                    nodeTypes={nodeTypes}
+                    nodes={nodes}
+                    nodesConnectable={!isFullScreen}
+                    nodesDraggable={!isFullScreen}
+                    onConnect={onConnect}
+                    onDragOver={onDragOver}
+                    onDrop={onDrop}
+                    onEdgesChange={onEdgesChange}
+                    onInit={setReactFlowInstance}
+                    onNodeClick={onNodeClick}
+                    onNodesChange={onNodesChange}
+                    proOptions={{ hideAttribution: true }}
                     style={{
-                      backgroundColor: darkTheme ? '#2b2b2b' : '#fff',
+                      height: '100%',
+                      width: '100%',
                     }}
-                    zoomable
-                  />
-                  <Background
-                    color="#99b3ec"
-                    // variant={BackgroundVariant.Dots}
-                  />
-                </ReactFlow>
+                  >
+                    <Controls showInteractive={!isFullScreen}>
+                      <ControlButton
+                        onClick={setFullScreen}
+                        title={intl.formatMessage({
+                          defaultMessage: 'Full Screen',
+                        })}
+                      >
+                        <FontAwesomeIcon
+                          icon={faExpandArrows}
+                          size="sm"
+                          style={{
+                            color: 'black',
+                          }}
+                        />
+                      </ControlButton>
+                    </Controls>
+                    <MiniMap
+                      nodeColor={(node: Node) => nodeColor(node.type as string)}
+                      nodeStrokeWidth={3}
+                      pannable
+                      style={{
+                        backgroundColor: darkTheme ? '#2b2b2b' : '#fff',
+                      }}
+                      zoomable
+                    />
+                    <Background
+                      color="#99b3ec"
+                      // variant={BackgroundVariant.Dots}
+                    />
+                  </ReactFlow>
+                )}
               </div>
             </FullScreen>
           </div>

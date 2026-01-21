@@ -65,14 +65,22 @@ interface ChecklistsViewProps {
   deleteChecklist: (id: string) => void;
   loading: boolean;
   saving: boolean;
-  selectedChecklist: { id: string; title: string } | null;
+  selectedChecklist: {
+    id: string;
+    requiredBusiness?: boolean;
+    title: string;
+  } | null;
   setActiveChecklistSort: (args: {
     field: ActiveChecklistSortOptions;
     order: ChecklistSortOrder;
   }) => void;
   setChecklistFilters: (filters: SetChecklistFilterModel) => void;
   toggleCreateChecklistDrawer: (
-    args: { checklistId: string; title: string } | null
+    args: {
+      checklistId: string;
+      requiredBusiness?: boolean;
+      title: string;
+    } | null
   ) => void;
 }
 
@@ -171,6 +179,7 @@ const ChecklistsView: React.FC<ChecklistsViewProps> = ({
                     onClick: () => {
                       toggleCreateChecklistDrawer({
                         checklistId: checklist.id,
+                        requiredBusiness: checklist.requiredBusiness,
                         title: checklist.titleLocaled || '',
                       });
                     },
@@ -209,6 +218,20 @@ const ChecklistsView: React.FC<ChecklistsViewProps> = ({
         <Card>
           <Table
             columns={[
+              {
+                dataIndex: 'reference',
+                key: 'reference',
+                render: (
+                  _,
+                  record: { key: string; reference: null | number | undefined }
+                ) => (
+                  <Link to={`/app/checklists/active/${record.key}`}>
+                    {record.reference}
+                  </Link>
+                ),
+                title: <FormattedMessage defaultMessage="Alert ID" />,
+                width: 80,
+              },
               {
                 dataIndex: 'name',
                 defaultSortOrder:
@@ -446,6 +469,7 @@ const ChecklistsView: React.FC<ChecklistsViewProps> = ({
                 key: checklist.id,
                 name: checklist.name || '',
                 percentComplete: `${checklist.percentComplete || 0}%`,
+                reference: checklist.reference,
                 score: checklist.percentageScore,
                 status: checklist.status,
                 storeName: checklist.business?.name || '',
@@ -511,6 +535,7 @@ const ChecklistsView: React.FC<ChecklistsViewProps> = ({
             close={() => toggleCreateChecklistDrawer(null)}
             createActive={createActive}
             defaultTitle={selectedChecklist.title}
+            requiredBusiness={selectedChecklist.requiredBusiness}
           />
         )}
       </Drawer>

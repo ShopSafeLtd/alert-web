@@ -10,17 +10,16 @@ import {
   faEdit,
   faExternalLink,
   faTag,
-  faTrash,
   faUnlink,
   faUser,
 } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, Col, Dropdown, Menu, Row, Skeleton, Typography } from 'antd';
+import { Col, Dropdown, Menu, Row, Skeleton, Typography } from 'antd';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import dayjs from 'dayjs';
 import { useAtomValue } from 'jotai';
 import React, { useEffect, useRef, useState } from 'react';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { useIntl } from 'react-intl';
 import { createUseStyles } from 'react-jss';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -29,20 +28,7 @@ import {
   getOffenderRace,
 } from 'utils/offender/get-offender-desc';
 
-import { usePrintShowAll } from './usePrintShowAll';
-
 const useStyles = createUseStyles((theme: Theme) => ({
-  actionButtons: {
-    '& button': {
-      fontSize: 11,
-      height: 24,
-      minWidth: 24,
-      padding: '2px 6px',
-    },
-    display: 'flex',
-    gap: 6,
-    marginTop: 8,
-  },
   badge: {
     '& .ant-badge-status-text': {
       color: theme.secondaryText,
@@ -215,10 +201,10 @@ interface Offender {
 
 interface Props {
   canDisconnect?: boolean;
-  deleteRights?: boolean;
+  disconnectLabel?: string;
   editRights?: boolean;
+  loading?: boolean;
   offenders?: Offender[];
-  onDeleteOffender?: (id: string) => void;
   onDisconnectOffender?: (id: string) => void;
   setEditOffenderData?: (value: OffenderData | null) => void;
   sortBy?: string;
@@ -226,20 +212,18 @@ interface Props {
 
 interface OffenderCardProps {
   canDisconnect?: boolean;
-  deleteRights?: boolean;
+  disconnectLabel?: string;
   editRights?: boolean;
   offender: Offender;
-  onDeleteOffender?: (id: string) => void;
   onDisconnectOffender?: (id: string) => void;
   setEditOffenderData?: (value: OffenderData | null) => void;
 }
 
 const OffenderCard = ({
   canDisconnect,
-  deleteRights,
+  disconnectLabel,
   editRights,
   offender,
-  onDeleteOffender,
   onDisconnectOffender,
   setEditOffenderData,
 }: OffenderCardProps) => {
@@ -274,13 +258,29 @@ const OffenderCard = ({
     },
   });
 
+  // Add edit option if user has edit rights
+  if (editRights) {
+    contextMenuItems.push({
+      icon: <FontAwesomeIcon icon={faEdit} />,
+      key: 'edit',
+      label: intl.formatMessage({ defaultMessage: 'Edit' }),
+      onClick: () => {
+        setEditOffenderData && setEditOffenderData(offender);
+      },
+    });
+  }
+
+  // Add disconnect option if enabled
   if (canDisconnect) {
     contextMenuItems.push({
+      danger: true,
       icon: <FontAwesomeIcon icon={faUnlink} />,
       key: 'disconnect',
-      label: intl.formatMessage({
-        defaultMessage: 'Disconnect from Crime Group',
-      }),
+      label:
+        disconnectLabel ||
+        intl.formatMessage({
+          defaultMessage: 'Disconnect from Crime Group',
+        }),
       onClick: () => {
         onDisconnectOffender && onDisconnectOffender(offender.id);
       },
@@ -421,39 +421,6 @@ const OffenderCard = ({
             </span>
           </div>
         </div>
-
-        {/* Action buttons */}
-        {(editRights || deleteRights) && (
-          <div className={classes.actionButtons}>
-            {editRights && (
-              <Button
-                icon={<FontAwesomeIcon icon={faEdit} />}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setEditOffenderData && setEditOffenderData(offender);
-                }}
-                size="small"
-                type="text"
-              >
-                {intl.formatMessage({ defaultMessage: 'Edit' })}
-              </Button>
-            )}
-            {deleteRights && (
-              <Button
-                danger
-                icon={<FontAwesomeIcon icon={faTrash} />}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onDeleteOffender && onDeleteOffender(offender.id);
-                }}
-                size="small"
-                type="text"
-              >
-                {intl.formatMessage({ defaultMessage: 'Delete' })}
-              </Button>
-            )}
-          </div>
-        )}
       </div>
     </div>
   );
@@ -471,10 +438,10 @@ const OffenderCard = ({
 
 const OffenderGrid = ({
   canDisconnect,
-  deleteRights,
+  disconnectLabel,
   editRights,
+  loading = false,
   offenders,
-  onDeleteOffender,
   onDisconnectOffender,
   setEditOffenderData,
   sortBy = 'lastSeen',
@@ -483,40 +450,6 @@ const OffenderGrid = ({
 
   const [offendersData, setOffendersData] = useState<Offender[]>([]);
   const [columns, setColumns] = useState(6);
-  const [showAll, setShowAll] = useState(false);
-  const [, forceUpdate] = useState({});
-
-  // Force show all items when printing
-  usePrintShowAll(setShowAll);
-
-  // Additional check for print mode using body class
-  useEffect(() => {
-    const checkForPrintMode = () => {
-      if (document.body.classList.contains('print-mode')) {
-        console.log(
-          '[OffenderGrid] print-mode detected, setting showAll to true'
-        );
-        setShowAll(true);
-        // Force re-render
-        forceUpdate({});
-      }
-    };
-
-    // Check immediately
-    checkForPrintMode();
-
-    // Set up MutationObserver to watch for class changes
-    const observer = new MutationObserver(() => {
-      checkForPrintMode();
-    });
-
-    observer.observe(document.body, {
-      attributeFilter: ['class'],
-      attributes: true,
-    });
-
-    return () => observer.disconnect();
-  }, [columns]);
 
   const sortOffenders = (offendersList: Offender[], sortKey: string) =>
     [...offendersList].sort((a, b) => {
@@ -561,55 +494,11 @@ const OffenderGrid = ({
       }
     });
 
-  const calcOffenders = (value: number) => {
-    console.log(
-      '[calcOffenders] called with showAll:',
-      showAll,
-      'columns:',
-      value,
-      'total offenders:',
-      offenders?.length
-    );
+  const calcOffenders = () => {
     if (offenders) {
-      let toDisplay = offenders;
-
-      // Apply sorting
-      toDisplay = sortOffenders(toDisplay, sortBy);
-
-      // Apply pagination
-      // Force show all if in print mode
-      const isPrintMode =
-        document.body.classList.contains('print-mode') ||
-        window.matchMedia('print').matches;
-
-      if (showAll || isPrintMode) {
-        console.log(
-          '[calcOffenders] showAll or print mode is true, displaying all',
-          toDisplay.length,
-          'offenders'
-        );
-        setOffendersData(toDisplay);
-      } else
-        switch (value) {
-          case 24: {
-            setOffendersData(toDisplay.slice(0, 4)); // 1 column: show 4
-
-            break;
-          }
-          case 12: {
-            setOffendersData(toDisplay.slice(0, 6)); // 2 columns: show 6
-
-            break;
-          }
-          case 8: {
-            setOffendersData(toDisplay.slice(0, 9)); // 3 columns: show 9
-
-            break;
-          }
-          default: {
-            setOffendersData(toDisplay.slice(0, 12)); // 4 columns: show 12
-          }
-        }
+      // Apply sorting and display all offenders (pagination is server-side)
+      const toDisplay = sortOffenders(offenders, sortBy);
+      setOffendersData(toDisplay);
     }
   };
 
@@ -644,59 +533,65 @@ const OffenderGrid = ({
   }, []);
 
   useEffect(() => {
-    calcOffenders(columns);
+    calcOffenders();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [offenders, showAll, columns, sortBy]);
-
-  const toggleShowAll = () => {
-    setShowAll(!showAll);
-  };
-
-  console.log(
-    '[OffenderGrid render] showAll:',
-    showAll,
-    'offenders:',
-    offenders?.length,
-    'offendersData:',
-    offendersData.length
-  );
+  }, [offenders, sortBy]);
 
   return (
     <div>
       <Row gutter={[24, 24]} ref={rowRef}>
-        {offendersData &&
-          offendersData.map((item, index) => (
-            <Col
-              className={`offender-col offender-col-${index}`}
-              key={item.id}
-              span={columns}
-            >
-              <OffenderCard
-                canDisconnect={canDisconnect}
-                deleteRights={deleteRights}
-                editRights={editRights}
-                offender={item}
-                onDeleteOffender={onDeleteOffender}
-                onDisconnectOffender={onDisconnectOffender}
-                setEditOffenderData={setEditOffenderData}
-              />
-            </Col>
-          ))}
+        {loading
+          ? // Show skeleton cards while loading
+            Array.from({ length: 12 }).map((_, index) => (
+              <Col
+                className={`offender-col offender-col-${index}`}
+                key={`skeleton-${index}`}
+                span={columns}
+              >
+                <div
+                  style={{
+                    backgroundColor: 'var(--component-background)',
+                    border: '1px solid var(--border-color)',
+                    borderRadius: 16,
+                    display: 'flex',
+                    height: 220,
+                    overflow: 'hidden',
+                    padding: 0,
+                  }}
+                >
+                  <Skeleton.Image
+                    active
+                    style={{
+                      borderBottomLeftRadius: 16,
+                      borderTopLeftRadius: 16,
+                      height: 220,
+                      width: 160,
+                    }}
+                  />
+                  <div style={{ flex: 1, padding: '16px 20px' }}>
+                    <Skeleton active paragraph={{ rows: 4 }} title />
+                  </div>
+                </div>
+              </Col>
+            ))
+          : offendersData &&
+            offendersData.map((item, index) => (
+              <Col
+                className={`offender-col offender-col-${index}`}
+                key={item.id}
+                span={columns}
+              >
+                <OffenderCard
+                  canDisconnect={canDisconnect}
+                  disconnectLabel={disconnectLabel}
+                  editRights={editRights}
+                  offender={item}
+                  onDisconnectOffender={onDisconnectOffender}
+                  setEditOffenderData={setEditOffenderData}
+                />
+              </Col>
+            ))}
       </Row>
-      {offenders && (offenders.length > offendersData.length || showAll) && (
-        <Row justify="center" style={{ marginTop: 20 }}>
-          <Col>
-            <Button danger onClick={toggleShowAll}>
-              {!showAll && (
-                <FormattedMessage defaultMessage="Show All Offenders" />
-              )}
-              {showAll && (
-                <FormattedMessage defaultMessage="Minimise Offender" />
-              )}
-            </Button>
-          </Col>
-        </Row>
-      )}
     </div>
   );
 };

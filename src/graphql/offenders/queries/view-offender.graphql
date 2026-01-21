@@ -43,7 +43,10 @@ query ViewOffender(
         totalImages
         totalIncidents
         incidents {
-            ...IncidentsDetailed
+            id
+            dayTime
+            reference
+            subject
         }
         customGalleries {
             id

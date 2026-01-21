@@ -49,8 +49,8 @@ export const useInvestigationActions = ({
           defaultMessage: 'Investigation linked successfully',
         }),
       });
-    } catch (error) {
-      errorNotification(error);
+    } catch {
+      errorNotification();
     }
   };
 
@@ -75,8 +75,8 @@ export const useInvestigationActions = ({
           defaultMessage: 'Investigation linked successfully',
         }),
       });
-    } catch (error) {
-      errorNotification(error);
+    } catch {
+      errorNotification();
     }
   };
 
@@ -101,8 +101,8 @@ export const useInvestigationActions = ({
           defaultMessage: 'Investigation unlinked successfully',
         }),
       });
-    } catch (error) {
-      errorNotification(error);
+    } catch {
+      errorNotification();
     }
   };
 

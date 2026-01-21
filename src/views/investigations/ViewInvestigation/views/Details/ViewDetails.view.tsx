@@ -6,6 +6,7 @@ import type {
   OffenderData,
   VehicleData,
 } from 'types/DataType';
+import type { CascadeOptions } from 'types/investigations';
 
 import { currencyAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import {
@@ -43,7 +44,6 @@ import {
   Modal,
   Popconfirm,
   Row,
-  Select,
   Skeleton,
   Spin,
   Statistic,
@@ -55,16 +55,18 @@ import {
 import IntelSection from 'components/ViewPage/IntelSection';
 import Toolbar from 'components/common/Toolbar/Toolbar';
 import EditIncidentFeed from 'components/form-components/incident/EditIncidentFeed';
+import ConnectOffenderModal from 'components/investigations/ConnectOffenderModal';
 import SuggestedIncidents from 'components/investigations/SuggestedIncidents';
 import SuggestedOffenders from 'components/investigations/SuggestedOffenders';
 import SuggestedVehicles from 'components/investigations/SuggestedVehicles';
-import MapCard from 'components/map/MapCard/MapCard.view';
-import OffenderGrid, {
+import { IncidentMapContainer } from 'components/map/IncidentMap';
+import {
+  OffenderGridContainer,
   OffenderSortSelect,
   useOffenderSort,
 } from 'components/offenders/OffenderGrid';
 import CrimeGroupTable from 'components/tables/CrimeGroupTable';
-import IncidentTable from 'components/tables/IncidentTable';
+import { IncidentTableContainer } from 'components/tables/IncidentTable';
 import VehicleGrid, {
   VehicleSortSelect,
   useVehicleSort,
@@ -72,7 +74,7 @@ import VehicleGrid, {
 import dayjs from 'dayjs';
 import { InvestigationStatus } from 'graphql/types';
 import { useAtomValue } from 'jotai';
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate, useOutletContext } from 'react-router';
 import GetInvestigationStatusValues from 'types/enums/investigation-status';
@@ -92,6 +94,7 @@ interface Props {
   _templatesLoading: boolean;
   _toggleAddTodo: () => void;
   componentRef: RefObject<HTMLDivElement>;
+  confirmConnectOffender: (cascadeOptions: CascadeOptions) => void;
   confirmDeleteUpdate: (updateId: string) => void;
   data: ViewInvestigationQuery | undefined;
   demId: null | string | undefined;
@@ -117,6 +120,11 @@ interface Props {
   onDeleteVehicle: (id: string) => void;
   onReopenInvestigation: () => void;
   optionRowShow: boolean;
+  pendingOffenderConnection: {
+    id: string;
+    name: string;
+    reference?: number;
+  } | null;
   replyTo: {
     createdAt: string;
     createdBy: string;
@@ -133,6 +141,9 @@ interface Props {
   setEditUpdateInput: (value: string) => void;
   setEditVehicleData: (value: VehicleData | null) => void;
   setOptionRowShow: (value: boolean) => void;
+  setPendingOffenderConnection: (
+    value: { id: string; name: string; reference?: number } | null
+  ) => void;
   setReplyTo: (
     value: {
       createdAt: string;
@@ -182,6 +193,7 @@ const ViewInvestigation = ({
   _templatesLoading,
   _toggleAddTodo,
   componentRef,
+  confirmConnectOffender,
   confirmDeleteUpdate,
   data,
   demId,
@@ -207,6 +219,7 @@ const ViewInvestigation = ({
   onDeleteVehicle,
   onReopenInvestigation,
   optionRowShow,
+  pendingOffenderConnection,
   replyTo,
   saving,
   scrolledToTop,
@@ -215,6 +228,7 @@ const ViewInvestigation = ({
   setEditUpdate,
   setEditUpdateInput,
   setOptionRowShow,
+  setPendingOffenderConnection,
   setReplyTo,
   setViewTodoVisible,
   suggestedData,
@@ -241,12 +255,10 @@ const ViewInvestigation = ({
   const navigate = useNavigate();
   const intl = useIntl();
   const currency = useAtomValue(currencyAtom);
-  const { setSortBy, sortBy } = useOffenderSort('lastSeen');
   const { setSortBy: setVehicleSortBy, sortBy: vehicleSortBy } =
     useVehicleSort('registration');
-  const [incidentSort, setIncidentSort] = useState<'newest' | 'oldest'>(
-    'newest'
-  );
+  const { setSortBy: setOffenderSortBy, sortBy: offenderSortBy } =
+    useOffenderSort('lastSeen');
   const [sidebarSection, setSidebarSection] = useState<
     'activities' | 'history' | 'intel' | 'suggestions'
   >('intel');
@@ -262,31 +274,6 @@ const ViewInvestigation = ({
   const rightSidebarOpen = outletContext?.rightSidebarOpen ?? sidebarExpanded;
   const setRightSidebarOpen =
     outletContext?.setRightSidebarOpen ?? setSidebarExpanded;
-
-  // Sort incidents based on selected order
-  const sortedIncidents = useMemo(() => {
-    if (!data?.investigation?.incidents) return [];
-
-    const incidents = [...data.investigation.incidents];
-    return incidents
-      .sort((a, b) => {
-        const dateA = new Date(a.dayTime).getTime();
-        const dateB = new Date(b.dayTime).getTime();
-
-        return incidentSort === 'newest' ? dateB - dateA : dateA - dateB;
-      })
-      .map((incident) => ({
-        ...incident,
-        offenders: incident.offenders?.map((offender) => ({
-          ...offender,
-          images: offender.images?.map((img) => ({
-            ...img,
-            position: img.position,
-          })),
-          reference: offender.reference?.toString(),
-        })),
-      }));
-  }, [data?.investigation?.incidents, incidentSort]);
 
   return (
     <>
@@ -648,19 +635,24 @@ const ViewInvestigation = ({
                           size="small"
                           type="ghost"
                         >
-                          {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
-                          {
-                            suggestedData.investigation?.suggestedOffenders
-                              .length
-                          }
-                          {intl.formatMessage({
-                            defaultMessage: ' Suggested Offenders',
-                          })}
+                          {intl.formatMessage(
+                            {
+                              defaultMessage: '{count} Suggested Offenders',
+                            },
+                            {
+                              count:
+                                suggestedData.investigation?.suggestedOffenders
+                                  .length || 0,
+                            }
+                          )}
                         </Button>
                       </Col>
                     )}
                   <Col>
-                    <OffenderSortSelect onChange={setSortBy} value={sortBy} />
+                    <OffenderSortSelect
+                      onChange={setOffenderSortBy}
+                      value={offenderSortBy}
+                    />
                   </Col>
                   <Col>
                     <Dropdown
@@ -714,23 +706,17 @@ const ViewInvestigation = ({
                   </Col>
                 </Row>
 
-                {data?.investigation?.offenders &&
-                data.investigation.offenders.length > 0 &&
-                !loading ? (
-                  <OffenderGrid
-                    canDisconnect={editRights}
-                    offenders={data.investigation.offenders}
-                    onDisconnectOffender={onDeleteOffender}
-                    sortBy={sortBy}
-                  />
-                ) : (
-                  <Empty
-                    description={intl.formatMessage({
-                      defaultMessage: 'No offenders for this investigation',
-                    })}
-                    image={Empty.PRESENTED_IMAGE_SIMPLE}
-                  />
-                )}
+                <OffenderGridContainer
+                  canDisconnect={editRights}
+                  defaultSortBy="lastSeen"
+                  disconnectLabel={intl.formatMessage({
+                    defaultMessage: 'Disconnect from Investigation',
+                  })}
+                  investigationId={investigationId}
+                  onDisconnectOffender={onDeleteOffender}
+                  pageSize={12}
+                  sortBy={offenderSortBy}
+                />
               </Card>
 
               <Card loading={loading} style={{ marginBottom: 20 }}>
@@ -752,32 +738,19 @@ const ViewInvestigation = ({
                           onClick={toggleViewSuggestedIncidents}
                           size="small"
                         >
-                          {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
-                          {
-                            suggestedData.investigation.suggestedIncidents
-                              .length
-                          }
-                          {intl.formatMessage({
-                            defaultMessage: ' Suggested Incidents',
-                          })}
+                          {intl.formatMessage(
+                            {
+                              defaultMessage: '{count} Suggested Incidents',
+                            },
+                            {
+                              count:
+                                suggestedData.investigation.suggestedIncidents
+                                  .length || 0,
+                            }
+                          )}
                         </Button>
                       </Col>
                     )}
-                  <Col>
-                    <Select
-                      onChange={setIncidentSort}
-                      size="small"
-                      style={{ width: 150 }}
-                      value={incidentSort}
-                    >
-                      <Select.Option value="newest">
-                        {intl.formatMessage({ defaultMessage: 'Newest first' })}
-                      </Select.Option>
-                      <Select.Option value="oldest">
-                        {intl.formatMessage({ defaultMessage: 'Oldest first' })}
-                      </Select.Option>
-                    </Select>
-                  </Col>
                   <Col>
                     <Dropdown
                       overlay={
@@ -833,30 +806,22 @@ const ViewInvestigation = ({
                   </Col>
                 </Row>
                 <div className={classes.table}>
-                  <IncidentTable
+                  <IncidentTableContainer
                     deleteRights={editRights}
                     hasNavigation
-                    incidents={sortedIncidents}
+                    investigationId={investigationId}
                     onDelete={onDeleteIncident}
-                    // className={classes.table}
                     setEditData={setEditIncidentId}
+                    showFilters={true}
                   />
                 </div>
               </Card>
-              {data?.investigation?.incidents &&
-                data?.investigation?.incidents.length > 0 && (
-                  <MapCard
-                    height={500}
-                    markers={
-                      data?.investigation?.incidents.map((incident) => ({
-                        ...incident,
-                        geoLat: incident?.location?.geoLat,
-                        geoLng: incident?.location?.geoLng,
-                      })) || []
-                    }
-                    width="100%"
-                  />
-                )}
+              <IncidentMapContainer
+                height={500}
+                investigationId={investigationId}
+                showEmptyState={false}
+                width="100%"
+              />
               <Card loading={loading}>
                 <Row align="middle" gutter={8} style={{ marginBottom: 10 }}>
                   <Col flex={1}>
@@ -2000,6 +1965,15 @@ const ViewInvestigation = ({
           <div />
         )}
       </Drawer>
+
+      {/* Connect Offender Modal */}
+      <ConnectOffenderModal
+        loading={false}
+        offender={pendingOffenderConnection}
+        onCancel={() => setPendingOffenderConnection(null)}
+        onConfirm={confirmConnectOffender}
+        visible={!!pendingOffenderConnection}
+      />
     </>
   );
 };

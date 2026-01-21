@@ -63,7 +63,11 @@ interface Return {
   deleteTemplate: (id: string) => void;
   loading: boolean;
   saving: boolean;
-  selectedChecklist: { id: string; title: string } | null;
+  selectedChecklist: {
+    id: string;
+    requiredBusiness?: boolean;
+    title: string;
+  } | null;
   setActiveChecklistSort: (args: {
     field: ActiveChecklistSortOptions;
     order: ChecklistSortOrder;
@@ -74,7 +78,11 @@ interface Return {
     order: ChecklistSortOrder;
   }) => void;
   toggleCreateChecklistDrawer: (
-    args: { checklistId: string; title: string } | null
+    args: {
+      checklistId: string;
+      requiredBusiness?: boolean;
+      title: string;
+    } | null
   ) => void;
 }
 
@@ -261,15 +269,21 @@ const useChecklists = (): Return => {
 
   const [selectedChecklist, setSelectedChecklist] = useState<{
     id: string;
+    requiredBusiness?: boolean;
     title: string;
   } | null>(null);
 
   const toggleCreateChecklistDrawer = (
-    args: { checklistId: string; title: string } | null
+    args: {
+      checklistId: string;
+      requiredBusiness?: boolean;
+      title: string;
+    } | null
   ) => {
     if (args) {
       setSelectedChecklist({
         id: args.checklistId,
+        requiredBusiness: args.requiredBusiness,
         title: args.title,
       });
     } else {

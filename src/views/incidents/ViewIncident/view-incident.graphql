@@ -13,6 +13,8 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
     policeReported
     policeRef
     policeNo
+    policeDepartment
+    policeOfficerName
     draft
     policeInvolved
     actions {
@@ -93,6 +95,7 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
       id
       mg11Available
       restrictIncidentAccess
+      usPoliceData
     }
     crimeTypes {
       id

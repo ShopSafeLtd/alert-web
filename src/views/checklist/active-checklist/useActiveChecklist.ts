@@ -14,6 +14,7 @@ import { useNavigate, useParams } from 'react-router';
 import { useSearchParams } from 'react-router-dom';
 
 import FONT_FAMILIES from '../../../components/onboarding/Onboarding/SchemeTerms/utils/Fonts';
+import { adjustDependentThreshold } from '../utils/adjustDependentThreshold';
 
 type SaveStatus = 'error' | 'idle' | 'saved' | 'saving';
 
@@ -40,9 +41,11 @@ interface Return {
   saveDraft: () => void;
   saveStatus: SaveStatus;
   sections: ActiveChecklistSection[];
+  selectedBusinessId: null | string;
   selectedFont: string;
   setActiveKeys: (keys: string[]) => void;
   setFile: (value: { file: string; name: string } | null) => void;
+  setSelectedBusinessId: (value: null | string) => void;
   setSelectedFont: (value: string) => void;
   setSign: (value: string) => void;
   setTab: (value: string) => void;
@@ -141,6 +144,9 @@ const useActiveChecklist = (): Return => {
   const [submitting, setSubmitting] = useState(false);
   const [saveStatus, setSaveStatus] = useState<SaveStatus>('idle');
   const [activeKeys, setActiveKeys] = useState<string[]>(['0']); // First section open by default
+  const [selectedBusinessId, setSelectedBusinessId] = useState<null | string>(
+    null
+  );
   const [completionStats, setCompletionStats] = useState<CompletionStats>({
     answeredQuestions: 0,
     completionPercentage: 0,
@@ -337,7 +343,14 @@ const useActiveChecklist = (): Return => {
               )
             )
             .reduce((a, b) => a + b, 0);
-          if (dependentTotal > threshold) {
+
+          // Adjust threshold to account for N/A answers
+          const adjustedThreshold = adjustDependentThreshold(
+            dependentSection,
+            threshold
+          );
+
+          if (dependentTotal > adjustedThreshold) {
             continue;
           }
         } else {
@@ -460,6 +473,7 @@ const useActiveChecklist = (): Return => {
             na: question.na,
             weight: question.weight,
           })),
+          businessId: selectedBusinessId,
           draft,
           max: maxTotal,
           // Use original signature if editing a completed checklist, otherwise use current signature
@@ -617,6 +631,11 @@ const useActiveChecklist = (): Return => {
           setSign(initData.activeChecklist.signature);
         }
 
+        // Initialize selectedBusinessId with current business ID
+        if (initData?.activeChecklist?.business?.id) {
+          setSelectedBusinessId(initData.activeChecklist.business.id);
+        }
+
         // Store original signature and completion date if editing a completed checklist
         if (isEditMode && initData?.activeChecklist?.status === 'COMPLETED') {
           originalSignatureRef.current =
@@ -659,9 +678,11 @@ const useActiveChecklist = (): Return => {
     saveDraft,
     saveStatus,
     sections,
+    selectedBusinessId,
     selectedFont,
     setActiveKeys,
     setFile,
+    setSelectedBusinessId,
     setSelectedFont,
     setSign,
     setTab,

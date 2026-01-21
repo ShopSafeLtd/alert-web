@@ -1,0 +1,51 @@
+query unrestrictedOffendersRelay(
+  $first: Int
+  $after: String
+  $orderBy: OffenderOrderByWithRelationInput
+  $where: UnrestrictedOffenderRelayInput!
+) {
+  unrestrictedOffendersRelay(
+    first: $first
+    after: $after
+    orderBy: $orderBy
+    where: $where
+  ) {
+    edges {
+      cursor
+      node {
+        id
+        name
+        reference
+        gender
+        race
+        age
+        build
+        dateOfBirth
+        totalIncidents
+        totalValue
+        latestIncident {
+          id
+          date
+        }
+        knownFor
+        targetedBusinesses {
+          id
+          name
+        }
+        images(take: 1) {
+          id
+          optimised
+          position
+          rotation
+        }
+      }
+    }
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
+    }
+    totalCount
+  }
+}

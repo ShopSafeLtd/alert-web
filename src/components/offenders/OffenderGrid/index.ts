@@ -1,2 +1,4 @@
 export { default } from './OffenderGrid.view';
-export { OffenderSortSelect, useOffenderSort } from './OffenderSort';
+export { OffenderGridContainer } from './OffenderGridContainer';
+export { OffenderSortSelect } from './OffenderSortSelect';
+export { useOffenderSort } from './useOffenderSort';

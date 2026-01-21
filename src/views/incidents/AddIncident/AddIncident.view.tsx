@@ -111,6 +111,7 @@ const AddIncident = ({
   const classes = useStyles();
   const intl = useIntl();
   const dontSetDate = useAtomValue(currentSchemeAtom)?.dontAutoSetTimeDate;
+  const usPoliceData = useAtomValue(currentSchemeAtom)?.usPoliceData;
 
   const reorderedAndTrimmedForm = (() => {
     const reordered = incidentForm.flatMap((field) => {
@@ -331,6 +332,7 @@ const AddIncident = ({
                   generatingStatement={generatingStatement}
                   policeReporting={policeReporting}
                   saving={saving}
+                  usPoliceData={usPoliceData}
                 />
               );
             }

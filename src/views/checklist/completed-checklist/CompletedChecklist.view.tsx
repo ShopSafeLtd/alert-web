@@ -20,6 +20,8 @@ import { useReactToPrint } from 'react-to-print';
 
 import type { ActiveChecklistSection } from '../active-checklist/useActiveChecklist';
 
+import { adjustDependentThreshold } from '../utils/adjustDependentThreshold';
+
 interface QuestionWeight {
   additionalInfo: string;
   answer: string;
@@ -50,6 +52,7 @@ const CompletedChecklistView = ({
   generating = false,
   logo,
   onBack = () => {},
+  reference,
   signature,
   storeName,
   theme = 'dark',
@@ -63,6 +66,7 @@ const CompletedChecklistView = ({
   generating?: boolean;
   logo?: string;
   onBack?: () => void;
+  reference?: null | number;
   signature: string;
   storeName?: string;
   theme?: 'dark' | 'light';
@@ -110,6 +114,7 @@ const CompletedChecklistView = ({
         let dependentWeight = 0;
         for (const subsection of dependentSection.subsections) {
           for (const question of subsection.questions) {
+            if (question.answer === 'N/A') continue;
             const weight =
               question.weights.find((w) => w.answer === question.answer)
                 ?.weight || 0;
@@ -117,8 +122,17 @@ const CompletedChecklistView = ({
           }
         }
 
-        // If the dependent weight is less than the required weight, skip this section and its subsections
-        if (dependentWeight < Number.parseInt(section.dependsOnWeight.weight)) {
+        const threshold = Number.parseInt(section.dependsOnWeight.weight);
+
+        // Adjust threshold to account for N/A answers
+        const adjustedThreshold = adjustDependentThreshold(
+          dependentSection,
+          threshold
+        );
+
+        // If the dependent weight is greater than the adjusted threshold, skip this section and its subsections
+        // Note: Using <= instead of < to match logic in other locations
+        if (dependentWeight > adjustedThreshold) {
           continue;
         }
       }
@@ -759,6 +773,14 @@ const CompletedChecklistView = ({
           ]}
           onBack={onBack}
           style={{ paddingLeft: 0, paddingRight: 0, width: '100%' }}
+          subTitle={
+            reference
+              ? intl.formatMessage(
+                  { defaultMessage: 'Alert ID: {reference}' },
+                  { reference }
+                )
+              : undefined
+          }
           title={intl.formatMessage({
             defaultMessage: 'Checklists',
           })}

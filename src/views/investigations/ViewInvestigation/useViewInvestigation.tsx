@@ -1,5 +1,4 @@
 import type { UpdateTaskMutation } from '#/components/form-components/Todos/ViewTodo/graphql/__generated__/update-todo.generated';
-import type { OffenderSearchDetailsFragment } from '#/components/form-components/offender/AddExistingOffender/graphql/queries/__generated__/search-offender.generated';
 import type { QuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/__generated__/listTemplates.generated';
 import type { MutationUpdaterFn } from '@apollo/client';
 import type { UpdateInvestigationOffendersMutation } from 'graphql/investigations/mutations/update/__generated__/update-investigation-offenders.generated';
@@ -78,7 +77,6 @@ interface Return {
   onAddCrimeGroup: (value: CrimeGroupCardData) => void;
   onAddExistingCrimeGroup: (value: string) => void;
   onAddExistingIncident: (value: string[]) => void;
-  onAddExistingOffender: (value: OffenderSearchDetailsFragment[]) => void;
   onAddExistingOffenders: (value: string[]) => void;
   onAddExistingVehicle: (value: string) => void;
   onAddExistingVehicles: (value: string[]) => void;
@@ -96,6 +94,7 @@ interface Return {
   // onAddOffender: (value: OffenderData) => void;
   onEditCrimeGroup: (value: CrimeGroupCardData) => void;
   onEditVehicle: (value: VehicleData) => void;
+  onRefetchInvestigation: () => void;
   onReopenInvestigation: () => void;
   saving: boolean;
   setCompleteTodoVisible: (value: null | string) => void;
@@ -208,34 +207,64 @@ const useViewInvestigation = (investigationId: string): Return => {
       id: investigationId,
     },
   };
-  const { data, loading } = useViewInvestigationQuery({
+  const { data, loading, refetch } = useViewInvestigationQuery({
     onCompleted: ({ investigation }) => {
-      if (investigation?.offenders && investigation.offenders.length > 0) {
-        setOffenderIds(investigation.offenders.map(({ id }) => id));
+      if (
+        investigation?.offenders &&
+        (investigation.offenders as Array<{ id: string }>).length > 0
+      ) {
+        setOffenderIds(
+          (investigation.offenders as Array<{ id: string }>).map(({ id }) => id)
+        );
       }
-      if (investigation?.vehicles && investigation.vehicles.length > 0) {
-        setVehicleIds(investigation.vehicles.map(({ id }) => id));
+      if (
+        investigation?.vehicles &&
+        (investigation.vehicles as Array<{ id: string }>).length > 0
+      ) {
+        setVehicleIds(
+          (investigation.vehicles as Array<{ id: string }>).map(({ id }) => id)
+        );
       }
-      if (investigation?.crimeGroups && investigation.crimeGroups.length > 0) {
-        setCrimeGroupIds(investigation.crimeGroups.map(({ id }) => id));
+      if (
+        investigation?.crimeGroups &&
+        (investigation.crimeGroups as Array<{ id: string }>).length > 0
+      ) {
+        setCrimeGroupIds(
+          (investigation.crimeGroups as Array<{ id: string }>).map(
+            ({ id }) => id
+          )
+        );
       }
-      if (investigation?.incidents && investigation.incidents.length > 0) {
-        setIncidentIds(investigation.incidents.map(({ id }) => id));
+      if (
+        investigation?.incidents &&
+        (investigation.incidents as Array<{ id: string }>).length > 0
+      ) {
+        setIncidentIds(
+          (investigation.incidents as Array<{ id: string }>).map(({ id }) => id)
+        );
       }
     },
     skip: !investigationId,
     variables,
   });
+
+  const onRefetchInvestigation = () => {
+    void refetch();
+  };
   const onSetSuggestedOffenders = (values: OffenderData[]) => {
     if (values) {
-      const offendersId = data?.investigation?.offenders.map(({ id }) => id);
+      const offendersId = (
+        data?.investigation?.offenders as Array<{ id: string }> | undefined
+      )?.map(({ id }) => id);
       const filterData = values.filter(({ id }) => !offendersId?.includes(id));
       setSuggestedOffenders(filterData);
     }
   };
   const onSetSuggestedVehicles = (values: VehicleData[]) => {
     if (values) {
-      const vehiclesId = data?.investigation?.vehicles.map(({ id }) => id);
+      const vehiclesId = (
+        data?.investigation?.vehicles as Array<{ id: string }> | undefined
+      )?.map(({ id }) => id);
       const filterData = values.filter(({ id }) => !vehiclesId?.includes(id));
       setSuggestedVehicles(filterData);
     }
@@ -332,6 +361,7 @@ const useViewInvestigation = (investigationId: string): Return => {
         errorNotification();
       },
     });
+
   const updateAddExistingOffenderList: MutationUpdaterFn<
     UpdateInvestigationOffendersMutation
   > = (store, { data: res }) => {
@@ -385,29 +415,6 @@ const useViewInvestigation = (investigationId: string): Return => {
       });
     }
   };
-  const onAddExistingOffender = (values: OffenderSearchDetailsFragment[]) => {
-    setSaving(true);
-    if (values) {
-      void updateInvestigationOffenders({
-        onCompleted: () => {
-          successNotification(
-            ProfileUpdatedModel.Offender,
-            ProfileUpdatedModel.Investigation,
-            ProfileUpdatedType.added
-          );
-        },
-        update: updateAddExistingOffenderList,
-        variables: {
-          id: investigationId,
-          offenderIds: values.map(({ id }) => id),
-        },
-      }).finally(() => {
-        setAddExistingOffender(false);
-        setSaving(false);
-      });
-    }
-  };
-
   const updateEditOffenderList: MutationUpdaterFn<
     UpdateSimpleOffenderMutation
   > = (store, { data: res }) => {
@@ -418,7 +425,9 @@ const useViewInvestigation = (investigationId: string): Return => {
       variables,
     });
     if (!existingData?.investigation) return;
-    const index = existingData?.investigation?.offenders
+    const index = (
+      existingData?.investigation?.offenders as Array<{ id: string }>
+    )
       .map((item) => item.id)
       .indexOf(res.updateOffender.id);
 
@@ -427,15 +436,18 @@ const useViewInvestigation = (investigationId: string): Return => {
         __typename: 'Query',
         investigation: {
           ...existingData.investigation,
-          offenders: update(existingData.investigation.offenders, {
-            [index]: {
-              $set: {
-                ...res.updateOffender,
-                totalIncidents: 0,
-                totalValue: 0,
+          offenders: update(
+            existingData.investigation.offenders as Array<unknown>,
+            {
+              [index]: {
+                $set: {
+                  ...res.updateOffender,
+                  totalIncidents: 0,
+                  totalValue: 0,
+                },
               },
-            },
-          }),
+            }
+          ),
         },
       },
       query: ViewInvestigationDocument,
@@ -634,7 +646,7 @@ const useViewInvestigation = (investigationId: string): Return => {
         investigation: {
           ...existingData.investigation,
           offenders: [
-            ...existingData.investigation.offenders,
+            ...(existingData.investigation.offenders as Array<unknown>),
             res.createOffender,
           ],
         },
@@ -672,9 +684,9 @@ const useViewInvestigation = (investigationId: string): Return => {
               __typename: 'Query',
               investigation: {
                 ...existingData.investigation,
-                offenders: existingData.investigation.offenders.filter(
-                  ({ id }) => id !== value
-                ),
+                offenders: (
+                  existingData.investigation.offenders as Array<{ id: string }>
+                ).filter(({ id }) => id !== value),
               },
             },
             query: ViewInvestigationDocument,
@@ -1217,9 +1229,9 @@ const useViewInvestigation = (investigationId: string): Return => {
       });
       if (!existingData?.investigation) return;
 
-      const filterCrimeGroups = existingData?.investigation?.crimeGroups.filter(
-        ({ id }) => id !== res.updateCrimeGroup.id
-      );
+      const filterCrimeGroups = (
+        existingData?.investigation?.crimeGroups as Array<{ id: string }>
+      ).filter(({ id }) => id !== res.updateCrimeGroup.id);
 
       store.writeQuery<ViewInvestigationQuery>({
         data: {
@@ -1418,9 +1430,9 @@ const useViewInvestigation = (investigationId: string): Return => {
               __typename: 'Query',
               investigation: {
                 ...existingData.investigation,
-                incidents: existingData.investigation.incidents.filter(
-                  ({ id }) => id !== value
-                ),
+                incidents: (
+                  existingData.investigation.incidents as Array<{ id: string }>
+                ).filter(({ id }) => id !== value),
               },
             },
             query: ViewInvestigationDocument,
@@ -1629,7 +1641,6 @@ const useViewInvestigation = (investigationId: string): Return => {
     onAddCrimeGroup,
     onAddExistingCrimeGroup,
     onAddExistingIncident,
-    onAddExistingOffender,
     onAddExistingOffenders,
     onAddExistingVehicle,
     onAddExistingVehicles,
@@ -1646,6 +1657,7 @@ const useViewInvestigation = (investigationId: string): Return => {
     onDeleteVehicle,
     onEditCrimeGroup,
     onEditVehicle,
+    onRefetchInvestigation,
     onReopenInvestigation,
     saving,
     setCompleteTodoVisible,

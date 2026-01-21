@@ -50,6 +50,7 @@ export interface FormData {
   offenders: StateOffenderData[] | null;
   policeCCTVEmail?: string;
   policeDay?: boolean;
+  policeDepartment?: string;
   policeDistanceFromIncident?: string;
   policeIncidentDuration?: string;
   policeInvolved?: boolean;
@@ -60,6 +61,7 @@ export interface FormData {
   policeNo?: string;
   policeObstructions?: string;
   policeObstructionsDetails?: string; // new
+  policeOfficerName?: string;
   policeReasonRemember?: string;
   policeRef?: string;
   policeReported?: boolean;

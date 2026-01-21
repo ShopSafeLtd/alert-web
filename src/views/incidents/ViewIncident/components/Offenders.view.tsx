@@ -6,7 +6,7 @@ import type { UpdateSimpleOffenderMutation } from 'graphql/offenders/mutations/_
 
 import AddNewOffenderSimple from '#/components/form-components/offender/AddNewOffenderSimple/AddNewOffender.container';
 import SimpleEditOffender from '#/components/form-components/offender/SimpleEditOffender/SimpleEditOffender.container';
-import OffenderTable from '#/components/tables/OffenderTable';
+import { OffenderGridContainer } from '#/components/offenders/OffenderGrid';
 import errorNotification from '#/types/mutation_notifications/error_notification';
 import { ViewIncidentDocument } from '#/views/incidents/ViewIncident/__generated__/view-incident.generated';
 import { faMagnifyingGlass, faPlus } from '@fortawesome/pro-light-svg-icons';
@@ -17,7 +17,6 @@ import {
   Col,
   Drawer,
   Dropdown,
-  Empty,
   Menu,
   Row,
   Typography,
@@ -47,7 +46,7 @@ const Offenders = ({
   editRights,
   incidentId,
   loading,
-  saving,
+  saving: _saving,
   setSaving,
 }: Props) => {
   const intl = useIntl();
@@ -316,24 +315,17 @@ const Offenders = ({
           )}
         </Row>
 
-        {data?.incident?.offenders.length && !loading ? (
-          <OffenderTable
-            deleteRights={deleteRights}
-            editRights={editRights}
-            hasNavigation
-            offenders={data?.incident?.offenders}
-            onDeleteOffender={onDeleteOffender}
-            saving={saving}
-            setEditOffenderData={setEditOffenderData}
-          />
-        ) : (
-          <Empty
-            description={intl.formatMessage({
-              defaultMessage: 'No offenders for this incident',
-            })}
-            image={Empty.PRESENTED_IMAGE_SIMPLE}
-          />
-        )}
+        <OffenderGridContainer
+          canDisconnect={deleteRights}
+          disconnectLabel={intl.formatMessage({
+            defaultMessage: 'Disconnect from Incident',
+          })}
+          editRights={editRights}
+          incidentId={incidentId}
+          onDisconnectOffender={onDeleteOffender}
+          pageSize={12}
+          setEditOffenderData={setEditOffenderData}
+        />
       </Card>
       <Drawer
         onClose={() => setEditOffenderData(null)}

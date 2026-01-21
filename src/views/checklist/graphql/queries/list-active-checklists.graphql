@@ -21,6 +21,7 @@ query ActiveChecklists(
         edges {
             node {
                 id
+                reference
                 name
                 percentageScore
                 percentComplete

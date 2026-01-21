@@ -56,9 +56,9 @@ import AddInvestigation from 'components/form-components/Investigation/AddInvest
 import AddVehicle from 'components/form-components/Vehicle/AddVehicle';
 import LinkVehicle from 'components/form-components/linkOptions/LinkVehicle';
 import AddNewOffenderSimple from 'components/form-components/offender/AddNewOffenderSimple';
-import MapCard from 'components/map/MapCard/MapCard.view';
+import { IncidentMapContainer } from 'components/map/IncidentMap';
 import EvidenceTable from 'components/tables/EvidenceTable';
-import IncidentTable from 'components/tables/IncidentTable';
+import { IncidentTableContainer } from 'components/tables/IncidentTable';
 import InvestigationTable from 'components/tables/InvestigationTable';
 import VehicleGrid, {
   VehicleSortSelect,
@@ -67,7 +67,7 @@ import VehicleGrid, {
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { useAtomValue } from 'jotai';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { calcAge } from 'utils';
 import {
@@ -79,70 +79,13 @@ import {
 dayjs.extend(relativeTime);
 import { ProfileUpdatedModel } from 'types/enums/profile-update-type';
 
-import CrimeGroupFlow from '../../../../components/crime-groups/CrimeGroupFlow';
-import OffenderGrid, {
-  OffenderSortSelect,
-  useOffenderSort,
-} from '../../../../components/offenders/OffenderGrid';
+import { CrimeGroupFlowContainer as CrimeGroupFlow } from '../../../../components/crime-groups/CrimeGroupFlow';
+import { OffenderGridContainer } from '../../../../components/offenders/OffenderGrid';
 import './ViewCrimeGroup.print.v2.styles.css';
 import useStyles from './ViewCrimeGroup.styles';
 
 const { Title } = Typography;
 const { confirm } = Modal;
-
-// Memoized CrimeGroupFlow to prevent unnecessary re-renders
-const MemoizedCrimeGroupFlow = React.memo(
-  ({ data }: { data: CrimeGroupQuery }) => {
-    const crimeGroupData = useMemo(() => {
-      if (!data?.crimeGroup) return null;
-
-      return {
-        alias: data.crimeGroup.alias,
-        id: data.crimeGroup.id,
-        incidents: data.crimeGroup.incidents.map((incident) => ({
-          id: incident.id,
-          incidentType: incident.crimeTypes?.at(0)?.name || null,
-          location: incident.location
-            ? {
-                address: incident.location.full,
-                lat: incident.location.geoLat,
-                lng: incident.location.geoLng,
-              }
-            : null,
-          occurredAt: incident.dayTime,
-          offenders: incident.offenders?.map((o) => ({
-            id: o.id,
-            name: o.name,
-          })),
-          reference: incident.reference?.toString() || null,
-          totalValue: incident.totalValue,
-        })),
-        offenders: data.crimeGroup.offenders.map((offender) => ({
-          id: offender.id,
-          images: offender.images,
-          name: offender.name,
-          reference: offender.reference,
-          totalIncidents: offender.totalIncidents || 0,
-          totalValue: offender.totalValue || 0,
-        })),
-        reference: data.crimeGroup.reference,
-      };
-    }, [data?.crimeGroup]);
-
-    const handleOffenderClick = React.useCallback((offenderId: string) => {
-      window.open(`/app/offenders/view/${offenderId}`, '_blank');
-    }, []);
-
-    if (!crimeGroupData) return null;
-
-    return (
-      <CrimeGroupFlow
-        crimeGroup={crimeGroupData}
-        onOffenderClick={handleOffenderClick}
-      />
-    );
-  }
-);
 
 interface Props {
   addAlias: boolean;
@@ -267,7 +210,6 @@ const ViewCrimeGroup = ({
   const intl = useIntl();
   const { componentRef, handlePrint, isPrinting } = useReportPrint();
   const currency = useAtomValue(currencyAtom);
-  const { setSortBy, sortBy } = useOffenderSort('lastSeen');
   const { setSortBy: setVehicleSortBy, sortBy: vehicleSortBy } =
     useVehicleSort('registration');
 
@@ -707,10 +649,19 @@ const ViewCrimeGroup = ({
                 </Col>
               </Row>
 
-              {data?.crimeGroup?.offenders &&
-                data.crimeGroup.offenders.length > 0 && (
+              {data?.crimeGroup?.totalOffenders &&
+                data.crimeGroup.totalOffenders > 0 && (
                   <div className="crime-group-flow-container">
-                    <MemoizedCrimeGroupFlow data={data} />
+                    <CrimeGroupFlow
+                      crimeGroupId={crimeGroupId}
+                      key={crimeGroupId}
+                      onOffenderClick={(offenderId) =>
+                        window.open(
+                          `/app/offenders/view/${offenderId}`,
+                          '_blank'
+                        )
+                      }
+                    />
                   </div>
                 )}
 
@@ -744,9 +695,6 @@ const ViewCrimeGroup = ({
                         </Button>
                       </Col>
                     )}
-                  <Col>
-                    <OffenderSortSelect onChange={setSortBy} value={sortBy} />
-                  </Col>
                   <Col>
                     <Dropdown
                       overlay={
@@ -799,36 +747,20 @@ const ViewCrimeGroup = ({
                   </Col>
                 </Row>
 
-                {data?.crimeGroup?.offenders.length && !loading ? (
-                  <div className="offender-grid-container">
-                    <OffenderGrid
-                      canDisconnect={editRights}
-                      offenders={data?.crimeGroup?.offenders}
-                      onDisconnectOffender={onDisconnectOffender}
-                      sortBy={sortBy}
-                    />
-                  </div>
-                ) : (
-                  <Empty
-                    description={intl.formatMessage({
-                      defaultMessage: 'No offenders for this crime group',
-                    })}
-                    image={Empty.PRESENTED_IMAGE_SIMPLE}
-                  />
-                )}
+                <OffenderGridContainer
+                  canDisconnect={editRights}
+                  crimeGroupId={crimeGroupId}
+                  defaultSortBy="lastSeen"
+                  onDisconnectOffender={onDisconnectOffender}
+                  pageSize={12}
+                />
               </Card>
 
               {data?.crimeGroup?.incidents &&
                 data?.crimeGroup?.incidents.length > 0 && (
-                  <MapCard
+                  <IncidentMapContainer
+                    crimeGroupId={crimeGroupId}
                     height={500}
-                    markers={
-                      data?.crimeGroup?.incidents.map((incident) => ({
-                        ...incident,
-                        geoLat: incident?.location?.geoLat,
-                        geoLng: incident?.location?.geoLng,
-                      })) || []
-                    }
                     width="100%"
                   />
                 )}
@@ -924,48 +856,17 @@ const ViewCrimeGroup = ({
                 )}
               </Card>
               <Card loading={loading}>
-                {data?.crimeGroup?.incidents &&
-                data?.crimeGroup?.incidents.length > 0 &&
-                !loading ? (
-                  <IncidentTable // TODO
-                    hasNavigation
-                    incidents={data?.crimeGroup?.incidents
-                      .filter((incident) => incident !== null)
-                      .map((incident) => ({
-                        ...incident,
-                        offenders: incident.offenders?.map((offender) => ({
-                          ...offender,
-                          images: offender.images?.map((img) => ({
-                            ...img,
-                            position: img.position,
-                          })),
-                          reference: offender.reference?.toString(),
-                        })),
-                      }))}
-                    pageSize={20}
-                    title={
-                      <Title level={4} style={{ margin: 0 }}>
-                        {intl.formatMessage({
-                          defaultMessage: 'Incidents',
-                        })}
-                      </Title>
-                    }
-                  />
-                ) : (
-                  <>
-                    <Title level={4}>
-                      {intl.formatMessage({
-                        defaultMessage: 'Incidents',
-                      })}
-                    </Title>
-                    <Empty
-                      description={intl.formatMessage({
-                        defaultMessage: 'No incidents for this crime group',
-                      })}
-                      image={Empty.PRESENTED_IMAGE_SIMPLE}
-                    />
-                  </>
-                )}
+                <Title level={4} style={{ marginBottom: 16 }}>
+                  {intl.formatMessage({
+                    defaultMessage: 'Incidents',
+                  })}
+                </Title>
+                <IncidentTableContainer
+                  crimeGroupId={crimeGroupId}
+                  hasNavigation
+                  pageSize={20}
+                  showFilters={true}
+                />
               </Card>
               <Card loading={loading}>
                 <Row align="middle" gutter={8} style={{ marginBottom: 10 }}>

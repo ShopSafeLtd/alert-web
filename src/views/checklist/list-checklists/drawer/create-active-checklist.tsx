@@ -20,6 +20,7 @@ interface Props {
     title: string;
   }) => Promise<FetchResult<CreateActiveChecklistMutation>>;
   defaultTitle: string;
+  requiredBusiness?: boolean;
 }
 
 interface FormData {
@@ -32,6 +33,7 @@ const createActiveChecklistDrawer = ({
   close,
   createActive,
   defaultTitle,
+  requiredBusiness,
 }: Props) => {
   const intl = useIntl();
   const handleSubmit = (formData: FormData) => {
@@ -58,9 +60,17 @@ const createActiveChecklistDrawer = ({
       <Form.Item
         label={intl.formatMessage({ defaultMessage: 'Business' })}
         name="businessId"
+        rules={[
+          {
+            message: intl.formatMessage({
+              defaultMessage: 'Please select a business',
+            }),
+            required: requiredBusiness,
+          },
+        ]}
       >
         <BusinessesSelect
-          allowClear
+          allowClear={!requiredBusiness}
           placeholder={intl.formatMessage({
             defaultMessage: 'Search for a business...',
           })}

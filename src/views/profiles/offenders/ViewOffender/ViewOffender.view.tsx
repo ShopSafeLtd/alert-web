@@ -2,7 +2,6 @@ import type { CreateBlurFacesMutation } from '#/components/ViewPage/ImagesList/g
 import type { AddVehicleData } from '#/components/form-components/Vehicle/AddVehicleSimple/useAddVehicleSimple';
 import type { CreateDocumentsMutation } from '#/graphql/documents/mutations/__generated__/create-documents.generated';
 import type { ViewOffenderQuery } from '#/graphql/offenders/queries/__generated__/view-offender.generated';
-import type { OffenderIncidentsQuery } from '#/views/profiles/offenders/ViewOffender/__graphql__/queries/__generated__/list-incidents.generated';
 import type { MutationUpdaterFn } from '@apollo/client';
 import type { DeleteDocumentMutation } from 'graphql/documents/mutations/__generated__/delete-document.generated';
 import type { CreateInvestigationMutation } from 'graphql/investigations/mutations/__generated__/create-investigations.generated';
@@ -19,7 +18,7 @@ import type {
 import PermissionCheckWrapper from '#/components/PermissionCheck/PermissionCheckWrapper';
 import ShareData from '#/components/form-components/ShareData/ShareData';
 import AddDocuments from '#/components/form-components/documents/AddDocuments';
-import IncidentTable from '#/components/tables/IncidentTable';
+import { IncidentTableContainer } from '#/components/tables/IncidentTable';
 import { currencyAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import useReportPrint from '#/utils/reportPrint/usePrintReports';
 import AiDetailsView from '#/views/profiles/offenders/ViewOffender/components/AiDetails.view';
@@ -96,7 +95,7 @@ import EditExclusion from 'components/form-components/offender/exclusion/EditExc
 import EditImageAnalyseList from 'components/images/EditImageAnalyseList';
 import LightBox from 'components/images/LightBox/LightBox.container';
 import WatermarkImage from 'components/images/WatermarkImage.view';
-import MapCard from 'components/map/MapCard/MapCard.view';
+import { IncidentMapContainer } from 'components/map/IncidentMap';
 import AssociatedOffender from 'components/offenders/AssociatedOffender';
 import OffenderSideList from 'components/offenders/OffenderSideList';
 import OffenderMatches from 'components/rekognition/OffenderMatches/OffenderMatches.container';
@@ -106,14 +105,9 @@ import EvidenceTable from 'components/tables/EvidenceTable';
 import InvestigationTable from 'components/tables/InvestigationTable';
 import VehicleTable from 'components/tables/VehicleTable';
 import dayjs from 'dayjs';
-import {
-  BanType,
-  PermissionMethod,
-  PermissionModel,
-  SortOrder,
-} from 'graphql/types';
+import { BanType, PermissionMethod, PermissionModel } from 'graphql/types';
 import { useAtomValue } from 'jotai';
-import React, { type Dispatch } from 'react';
+import React from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router';
 import { ProfileUpdatedModel } from 'types/enums/profile-update-type';
@@ -130,11 +124,7 @@ import {
 } from 'utils/offender/get-offender-desc';
 import { calcExpired } from 'utils/offender/get-offender-exclusion';
 
-import type {
-  PaginationAction,
-  PaginationState,
-  ViewAssociate,
-} from './useViewOffender';
+import type { ViewAssociate } from './useViewOffender';
 
 import TranslateButton from '../../../../components/util-components/TranslateButton';
 import useStyles from './ViewOffender.styles';
@@ -183,19 +173,9 @@ interface Props {
   editVehicleData: VehicleData | null;
   handleCreateInvestigation: (investigationId: string) => Promise<void>;
   handleEditUpdate: () => void;
-  handleIncidentSort: (
-    field: 'date' | 'totalValue',
-    order: 'ascend' | 'descend'
-  ) => void;
   handleLinkInvestigation: (investigation: InvestigationData) => Promise<void>;
   handleUnlinkInvestigation: (investigationId: string) => Promise<void>;
   hasConnectedSchemes: boolean;
-  incidentSortField: 'date' | 'totalValue';
-  incidentSortOrder: SortOrder;
-  incidents: OffenderIncidentsQuery['offender']['incidents'] | null;
-  incidentsLoading: boolean;
-  incidentsPagination: PaginationState;
-  incidentsPaginationDispatch: Dispatch<PaginationAction>;
   knowOffender: boolean;
   lightBoxOpen: {
     index: number;
@@ -322,18 +302,11 @@ const ViewOffender = ({
   editUpdateInput,
   editVehicleData,
   handleEditUpdate,
-  handleIncidentSort,
   handleLinkInvestigation,
   handleUnlinkInvestigation,
   hasConnectedSchemes,
-  incidentSortField,
-  incidentSortOrder,
-  incidents,
-  incidentsLoading,
-  // incidentsPaginationDispatch,
   knowOffender,
   lightBoxOpen,
-  // incidentsPagination,
   linkIncident,
   linkInvestigation,
   linkingInvestigation,
@@ -438,7 +411,11 @@ const ViewOffender = ({
         <Col flex={1}>
           <div className={classes.viewOffender}>
             <Row className={classes.content}>
-              <Col className={classes.detailsContainer} span={16}>
+              <Col
+                className={classes.detailsContainer}
+                flex="1"
+                style={{ minWidth: 0 }}
+              >
                 {data?.offender?.approved === false && (
                   <div className={classes.approveBar}>
                     <Row gutter={8} justify="end">
@@ -1198,18 +1175,10 @@ const ViewOffender = ({
                             <Col span={24}>
                               {data?.offender?.incidents &&
                               data?.offender?.incidents.length > 0 ? (
-                                <MapCard
+                                <IncidentMapContainer
                                   height={301}
                                   isPrinting={isPrinting}
-                                  markers={
-                                    data?.offender?.incidents.map(
-                                      (incident) => ({
-                                        ...incident,
-                                        geoLat: incident.location?.geoLat,
-                                        geoLng: incident.location?.geoLng,
-                                      })
-                                    ) || []
-                                  }
+                                  offenderId={offenderId}
                                   width="100%"
                                 />
                               ) : (
@@ -1685,46 +1654,11 @@ const ViewOffender = ({
                                   defaultMessage: 'Incidents',
                                 })}
                               </Title>
-                              {incidents?.length || incidentsLoading ? (
-                                <IncidentTable
-                                  hasNavigation
-                                  incidents={
-                                    incidents?.map((incident) => ({
-                                      ...incident,
-                                      dayTime: incident.dayTime,
-                                      offenders:
-                                        incident.offenders?.map((offender) => ({
-                                          ...offender,
-                                          images:
-                                            offender.images?.map((img) => ({
-                                              id: img.id,
-                                              optimised: img.optimised,
-                                              position: null,
-                                              rotation: img.rotation,
-                                            })) || null,
-                                          reference:
-                                            offender.reference?.toString(),
-                                        })) || [],
-                                    })) || []
-                                  }
-                                  loading={incidentsLoading}
-                                  onSortChange={handleIncidentSort}
-                                  sortField={incidentSortField}
-                                  sortOrder={
-                                    incidentSortOrder === SortOrder.Asc
-                                      ? 'ascend'
-                                      : 'descend'
-                                  }
-                                />
-                              ) : (
-                                <Empty
-                                  description={intl.formatMessage({
-                                    defaultMessage:
-                                      'No incidents for this offender',
-                                  })}
-                                  image={Empty.PRESENTED_IMAGE_SIMPLE}
-                                />
-                              )}
+                              <IncidentTableContainer
+                                hasNavigation
+                                offenderId={offenderId}
+                                showFilters={true}
+                              />
                             </Card>
                           </PermissionCheckWrapper>
                           <PermissionCheckWrapper
@@ -2234,7 +2168,7 @@ const ViewOffender = ({
                   </div>
                 </div>
               </Col>
-              <Col className="no-print" span={8}>
+              <Col className={`${classes.rightSidebar} no-print`}>
                 <OffenderSidebar
                   confirmDeleteUpdate={confirmDeleteUpdate}
                   data={data}
@@ -2384,8 +2318,8 @@ const ViewOffender = ({
             },
           ]}
           dataSource={
-            incidents
-              ? incidents.map((incident) => ({
+            data?.offender?.incidents
+              ? data.offender.incidents.map((incident) => ({
                   date: incident.dayTime,
                   incidentId: incident.id,
                   // location: incident.business?.name || incident.location?.full,

@@ -199,8 +199,8 @@ const OffenderSidebar: React.FC<Props> = ({
             </div>
             <div style={{ flex: 1, overflow: 'auto', padding: '0 8px' }}>
               {data?.offender?.updates && data.offender.updates.length > 0 ? (
-                <div style={{ paddingBottom: 8, paddingTop: 8 }}>
-                  {[...data.offender.updates].reverse().map((update) => (
+                <div style={{ paddingBottom: 24, paddingTop: 8 }}>
+                  {data.offender.updates.map((update) => (
                     <IntelMessage
                       confirmDeleteUpdate={confirmDeleteUpdate}
                       editRights={editRights}
@@ -245,16 +245,20 @@ const OffenderSidebar: React.FC<Props> = ({
       },
       {
         content: (
-          <div style={{ padding: '16px' }}>
-            <Typography.Title level={4}>
-              {intl.formatMessage({ defaultMessage: 'Compass' })}
-            </Typography.Title>
-            <Empty
-              description={intl.formatMessage({
-                defaultMessage: 'Coming soon',
-              })}
-              image={Empty.PRESENTED_IMAGE_SIMPLE}
-            />
+          <div
+            style={{ display: 'flex', flexDirection: 'column', height: '100%' }}
+          >
+            <div style={{ flex: 1, overflow: 'auto', padding: '16px' }}>
+              <Typography.Title level={4}>
+                {intl.formatMessage({ defaultMessage: 'Compass' })}
+              </Typography.Title>
+              <Empty
+                description={intl.formatMessage({
+                  defaultMessage: 'Coming soon',
+                })}
+                image={Empty.PRESENTED_IMAGE_SIMPLE}
+              />
+            </div>
           </div>
         ),
         icon: <FontAwesomeIcon icon={faCompass} />,
@@ -265,48 +269,54 @@ const OffenderSidebar: React.FC<Props> = ({
 
     baseSections.push({
       content: (
-        <HistoryTimeline
-          actions={
-            data?.offender?.actions as NonNullable<
-              ViewOffenderQuery['offender']
-            >['actions']
-          }
-          onEntityClick={(entityType, entityId) => {
-            switch (entityType) {
-              case 'Todo': {
-                setSelectedActivity(entityId);
-                break;
+        <div
+          style={{ display: 'flex', flexDirection: 'column', height: '100%' }}
+        >
+          <div style={{ flex: 1, overflow: 'auto' }}>
+            <HistoryTimeline
+              actions={
+                data?.offender?.actions as NonNullable<
+                  ViewOffenderQuery['offender']
+                >['actions']
               }
-              case 'Incident': {
-                navigate(`/app/incidents/view/${entityId}`);
-                break;
-              }
-              case 'Offender': {
-                navigate(`/app/offenders/view/${entityId}`);
-                break;
-              }
-              case 'Vehicle': {
-                navigate(`/app/vehicles/view/${entityId}`);
-                break;
-              }
-              case 'CrimeGroup': {
-                navigate(`/app/crime-groups/view/${entityId}`);
-                break;
-              }
-              case 'Article': {
-                navigate(`/app/articles/view/${entityId}`);
-                break;
-              }
-              case 'User': {
-                // Users typically don't have a view page
-                break;
-              }
-              default: {
-                break;
-              }
-            }
-          }}
-        />
+              onEntityClick={(entityType, entityId) => {
+                switch (entityType) {
+                  case 'Todo': {
+                    setSelectedActivity(entityId);
+                    break;
+                  }
+                  case 'Incident': {
+                    navigate(`/app/incidents/view/${entityId}`);
+                    break;
+                  }
+                  case 'Offender': {
+                    navigate(`/app/offenders/view/${entityId}`);
+                    break;
+                  }
+                  case 'Vehicle': {
+                    navigate(`/app/vehicles/view/${entityId}`);
+                    break;
+                  }
+                  case 'CrimeGroup': {
+                    navigate(`/app/crime-groups/view/${entityId}`);
+                    break;
+                  }
+                  case 'Article': {
+                    navigate(`/app/articles/view/${entityId}`);
+                    break;
+                  }
+                  case 'User': {
+                    // Users typically don't have a view page
+                    break;
+                  }
+                  default: {
+                    break;
+                  }
+                }
+              }}
+            />
+          </div>
+        </div>
       ),
       icon: <FontAwesomeIcon icon={faHistory} />,
       id: 'history',
@@ -317,13 +327,16 @@ const OffenderSidebar: React.FC<Props> = ({
       baseSections.push({
         badge: activeTodos.length > 0 ? activeTodos.length : undefined,
         content: (
-          <div style={{ padding: '16px' }}>
+          <div
+            style={{ display: 'flex', flexDirection: 'column', height: '100%' }}
+          >
             <div
               style={{
                 alignItems: 'center',
+                borderBottom: `1px solid ${classes.borderColor}`,
                 display: 'flex',
                 justifyContent: 'space-between',
-                marginBottom: 16,
+                padding: '16px 20px',
               }}
             >
               <Typography.Title level={4} style={{ margin: 0 }}>
@@ -341,166 +354,160 @@ const OffenderSidebar: React.FC<Props> = ({
                 </Button>
               )}
             </div>
-            {activeTodos.length > 0 || completedTodos.length > 0 ? (
-              <div className={classes.activitiesList}>
-                {activeTodos.length > 0 && (
-                  <>
-                    <Typography.Title level={5}>
-                      {intl.formatMessage({
-                        defaultMessage: 'Active Tasks',
-                      })}
-                    </Typography.Title>
-                    {activeTodos.map((activity) => {
-                      const menuItems: {
-                        danger?: boolean;
-                        key: string;
-                        label: string;
-                        onClick: () => void;
-                      }[] = [];
+            <div style={{ flex: 1, overflow: 'auto', padding: '16px' }}>
+              {activeTodos.length > 0 || completedTodos.length > 0 ? (
+                <div className={classes.activitiesList}>
+                  {activeTodos.length > 0 && (
+                    <>
+                      <Typography.Title level={5}>
+                        {intl.formatMessage({
+                          defaultMessage: 'Active Tasks',
+                        })}
+                      </Typography.Title>
+                      {activeTodos.map((activity) => {
+                        const menuItems: {
+                          danger?: boolean;
+                          key: string;
+                          label: string;
+                          onClick: () => void;
+                        }[] = [];
 
-                      if (hasActivityEditPermission) {
-                        menuItems.push({
-                          key: 'edit',
-                          label: intl.formatMessage({ defaultMessage: 'Edit' }),
-                          onClick: () => setEditingActivity(activity.id),
-                        });
-                      }
+                        if (hasActivityEditPermission) {
+                          menuItems.push({
+                            key: 'edit',
+                            label: intl.formatMessage({
+                              defaultMessage: 'Edit',
+                            }),
+                            onClick: () => setEditingActivity(activity.id),
+                          });
+                        }
 
-                      if (hasActivityDeletePermission) {
-                        menuItems.push({
-                          danger: true,
-                          key: 'delete',
-                          label: intl.formatMessage({
-                            defaultMessage: 'Delete',
-                          }),
-                          onClick: () => handleDeleteActivity(activity.id),
-                        });
-                      }
+                        if (hasActivityDeletePermission) {
+                          menuItems.push({
+                            danger: true,
+                            key: 'delete',
+                            label: intl.formatMessage({
+                              defaultMessage: 'Delete',
+                            }),
+                            onClick: () => handleDeleteActivity(activity.id),
+                          });
+                        }
 
-                      const cardContent = (
-                        <Card
-                          className={classes.activityCard}
-                          key={activity.id}
-                          size="small"
-                        >
-                          <Row gutter={[12, 12]}>
-                            <Col span={24}>
-                              <Row align="middle" gutter={8}>
-                                <Col
-                                  flex="1"
-                                  onClick={() =>
-                                    setSelectedActivity(activity.id)
-                                  }
-                                  style={{ cursor: 'pointer' }}
-                                >
-                                  <div>
-                                    <Typography.Text
-                                      className={classes.activityName}
-                                    >
-                                      {activity.name}
-                                      {activity.reference && (
-                                        <span
-                                          className={classes.activityReference}
-                                        >
-                                          {intl.formatMessage(
-                                            { defaultMessage: ' #{reference}' },
-                                            { reference: activity.reference }
-                                          )}
-                                        </span>
-                                      )}
-                                    </Typography.Text>
-                                  </div>
-                                </Col>
-                                <Col>
-                                  <Tag
-                                    className={classes.activityStatus}
-                                    color="blue"
+                        const cardContent = (
+                          <Card
+                            className={classes.activityCard}
+                            key={activity.id}
+                            size="small"
+                          >
+                            <Row gutter={[12, 12]}>
+                              <Col span={24}>
+                                <Row align="middle" gutter={8}>
+                                  <Col
+                                    flex="1"
+                                    onClick={() =>
+                                      setSelectedActivity(activity.id)
+                                    }
+                                    style={{ cursor: 'pointer' }}
                                   >
-                                    {intl.formatMessage({
-                                      defaultMessage: 'Active',
-                                    })}
-                                  </Tag>
-                                </Col>
-                                {hasActivityEditPermission && (
+                                    <div>
+                                      <Typography.Text
+                                        className={classes.activityName}
+                                      >
+                                        {activity.name}
+                                        {activity.reference && (
+                                          <span
+                                            className={
+                                              classes.activityReference
+                                            }
+                                          >
+                                            {intl.formatMessage(
+                                              {
+                                                defaultMessage: ' #{reference}',
+                                              },
+                                              { reference: activity.reference }
+                                            )}
+                                          </span>
+                                        )}
+                                      </Typography.Text>
+                                    </div>
+                                  </Col>
                                   <Col>
-                                    <Tooltip
-                                      title={intl.formatMessage({
-                                        defaultMessage: 'Edit Activity',
-                                      })}
+                                    <Tag
+                                      className={classes.activityStatus}
+                                      color="blue"
                                     >
-                                      <Button
-                                        icon={<FontAwesomeIcon icon={faPen} />}
-                                        onClick={(e) => {
-                                          e.stopPropagation();
-                                          setEditingActivity(activity.id);
-                                        }}
-                                        size="small"
-                                        type="text"
-                                      />
-                                    </Tooltip>
+                                      {intl.formatMessage({
+                                        defaultMessage: 'Active',
+                                      })}
+                                    </Tag>
+                                  </Col>
+                                  {hasActivityEditPermission && (
+                                    <Col>
+                                      <Tooltip
+                                        title={intl.formatMessage({
+                                          defaultMessage: 'Edit Activity',
+                                        })}
+                                      >
+                                        <Button
+                                          icon={
+                                            <FontAwesomeIcon icon={faPen} />
+                                          }
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            setEditingActivity(activity.id);
+                                          }}
+                                          size="small"
+                                          type="text"
+                                        />
+                                      </Tooltip>
+                                    </Col>
+                                  )}
+                                </Row>
+                              </Col>
+                              {activity.assignedUsers &&
+                                activity.assignedUsers.length > 0 && (
+                                  <Col
+                                    onClick={() =>
+                                      setSelectedActivity(activity.id)
+                                    }
+                                    span={24}
+                                    style={{ cursor: 'pointer' }}
+                                  >
+                                    <div className={classes.activityAssignees}>
+                                      <span className={classes.activityLabel}>
+                                        {intl.formatMessage({
+                                          defaultMessage: 'Assigned to:',
+                                        })}
+                                      </span>
+                                      <Avatar.Group maxCount={3}>
+                                        {activity.assignedUsers.map(
+                                          (user: {
+                                            fullName?: null | string;
+                                            id: string;
+                                          }) => (
+                                            <Tooltip
+                                              key={user.id}
+                                              title={user.fullName}
+                                            >
+                                              <Avatar
+                                                size="small"
+                                                style={{
+                                                  backgroundColor: '#1890ff',
+                                                }}
+                                              >
+                                                {user.fullName
+                                                  ?.split(' ')
+                                                  .map((n: string) => n[0])
+                                                  .join('')
+                                                  .toUpperCase()}
+                                              </Avatar>
+                                            </Tooltip>
+                                          )
+                                        )}
+                                      </Avatar.Group>
+                                    </div>
                                   </Col>
                                 )}
-                              </Row>
-                            </Col>
-                            {activity.assignedUsers &&
-                              activity.assignedUsers.length > 0 && (
-                                <Col
-                                  onClick={() =>
-                                    setSelectedActivity(activity.id)
-                                  }
-                                  span={24}
-                                  style={{ cursor: 'pointer' }}
-                                >
-                                  <div className={classes.activityAssignees}>
-                                    <span className={classes.activityLabel}>
-                                      {intl.formatMessage({
-                                        defaultMessage: 'Assigned to:',
-                                      })}
-                                    </span>
-                                    <Avatar.Group maxCount={3}>
-                                      {activity.assignedUsers.map(
-                                        (user: {
-                                          fullName?: null | string;
-                                          id: string;
-                                        }) => (
-                                          <Tooltip
-                                            key={user.id}
-                                            title={user.fullName}
-                                          >
-                                            <Avatar
-                                              size="small"
-                                              style={{
-                                                backgroundColor: '#1890ff',
-                                              }}
-                                            >
-                                              {user.fullName
-                                                ?.split(' ')
-                                                .map((n: string) => n[0])
-                                                .join('')
-                                                .toUpperCase()}
-                                            </Avatar>
-                                          </Tooltip>
-                                        )
-                                      )}
-                                    </Avatar.Group>
-                                  </div>
-                                </Col>
-                              )}
-                            <Col
-                              onClick={() => setSelectedActivity(activity.id)}
-                              span={12}
-                              style={{ cursor: 'pointer' }}
-                            >
-                              <span className={classes.activityDetailLabel}>
-                                {intl.formatMessage({
-                                  defaultMessage: 'Created',
-                                })}
-                              </span>
-                              <span className={classes.activityDetailValue}>
-                                {dayjs(activity.createdAt).format('DD/MM/YYYY')}
-                              </span>
-                            </Col>
-                            {activity.dueDate && (
                               <Col
                                 onClick={() => setSelectedActivity(activity.id)}
                                 span={12}
@@ -508,237 +515,277 @@ const OffenderSidebar: React.FC<Props> = ({
                               >
                                 <span className={classes.activityDetailLabel}>
                                   {intl.formatMessage({
-                                    defaultMessage: 'Due',
+                                    defaultMessage: 'Created',
                                   })}
                                 </span>
                                 <span className={classes.activityDetailValue}>
-                                  {dayjs(activity.dueDate).format('DD/MM/YYYY')}
+                                  {dayjs(activity.createdAt).format(
+                                    'DD/MM/YYYY'
+                                  )}
                                 </span>
                               </Col>
-                            )}
-                          </Row>
-                        </Card>
-                      );
-
-                      if (menuItems.length > 0) {
-                        return (
-                          <Dropdown
-                            key={activity.id}
-                            menu={{ items: menuItems }}
-                            overlayClassName="activity-context-menu"
-                            trigger={['contextMenu']}
-                          >
-                            {cardContent}
-                          </Dropdown>
-                        );
-                      }
-
-                      return cardContent;
-                    })}
-                  </>
-                )}
-
-                {completedTodos.length > 0 && (
-                  <>
-                    <Typography.Title level={5} style={{ marginTop: 16 }}>
-                      {intl.formatMessage({
-                        defaultMessage: 'Completed Tasks',
-                      })}
-                    </Typography.Title>
-                    {completedTodos.map((activity) => {
-                      const menuItems: {
-                        danger?: boolean;
-                        key: string;
-                        label: string;
-                        onClick: () => void;
-                      }[] = [];
-
-                      if (hasActivityEditPermission) {
-                        menuItems.push({
-                          key: 'edit',
-                          label: intl.formatMessage({ defaultMessage: 'Edit' }),
-                          onClick: () => setEditingActivity(activity.id),
-                        });
-                      }
-
-                      if (hasActivityDeletePermission) {
-                        menuItems.push({
-                          danger: true,
-                          key: 'delete',
-                          label: intl.formatMessage({
-                            defaultMessage: 'Delete',
-                          }),
-                          onClick: () => handleDeleteActivity(activity.id),
-                        });
-                      }
-
-                      const cardContent = (
-                        <Card
-                          className={classes.activityCard}
-                          key={activity.id}
-                          size="small"
-                          style={{ opacity: 0.7 }}
-                        >
-                          <Row gutter={[12, 12]}>
-                            <Col span={24}>
-                              <Row align="middle" gutter={8}>
+                              {activity.dueDate && (
                                 <Col
-                                  flex="1"
                                   onClick={() =>
                                     setSelectedActivity(activity.id)
                                   }
+                                  span={12}
                                   style={{ cursor: 'pointer' }}
                                 >
-                                  <div>
-                                    <Typography.Text
-                                      className={classes.activityName}
-                                      style={{ textDecoration: 'line-through' }}
-                                    >
-                                      {activity.name}
-                                      {activity.reference && (
-                                        <span
-                                          className={classes.activityReference}
-                                        >
-                                          {intl.formatMessage(
-                                            { defaultMessage: ' #{reference}' },
-                                            { reference: activity.reference }
-                                          )}
-                                        </span>
-                                      )}
-                                    </Typography.Text>
-                                  </div>
-                                </Col>
-                                <Col>
-                                  <Tag
-                                    className={classes.activityStatus}
-                                    color="success"
-                                  >
+                                  <span className={classes.activityDetailLabel}>
                                     {intl.formatMessage({
-                                      defaultMessage: 'Completed',
+                                      defaultMessage: 'Due',
                                     })}
-                                  </Tag>
-                                </Col>
-                                {hasActivityEditPermission && (
-                                  <Col>
-                                    <Tooltip
-                                      title={intl.formatMessage({
-                                        defaultMessage: 'Edit Activity',
-                                      })}
-                                    >
-                                      <Button
-                                        icon={<FontAwesomeIcon icon={faPen} />}
-                                        onClick={(e) => {
-                                          e.stopPropagation();
-                                          setEditingActivity(activity.id);
-                                        }}
-                                        size="small"
-                                        type="text"
-                                      />
-                                    </Tooltip>
-                                  </Col>
-                                )}
-                              </Row>
-                            </Col>
-                            {activity.completedBy && activity.completedDate && (
-                              <Col
-                                onClick={() => setSelectedActivity(activity.id)}
-                                span={24}
-                                style={{ cursor: 'pointer' }}
-                              >
-                                <div style={{ color: '#8c8c8c', fontSize: 12 }}>
-                                  <FontAwesomeIcon
-                                    icon={faCheck}
-                                    style={{ color: '#52c41a', marginRight: 6 }}
-                                  />
-                                  {intl.formatMessage(
-                                    {
-                                      defaultMessage:
-                                        'Completed by {name} on {date}',
-                                    },
-                                    {
-                                      date: dayjs(
-                                        activity.completedDate
-                                      ).format('DD/MM/YYYY'),
-                                      name: activity.completedBy.fullName,
-                                    }
-                                  )}
-                                </div>
-                              </Col>
-                            )}
-                            {activity.assignedUsers &&
-                              activity.assignedUsers.length > 0 && (
-                                <Col
-                                  onClick={() =>
-                                    setSelectedActivity(activity.id)
-                                  }
-                                  span={24}
-                                  style={{ cursor: 'pointer' }}
-                                >
-                                  <div className={classes.activityAssignees}>
-                                    <span className={classes.activityLabel}>
-                                      {intl.formatMessage({
-                                        defaultMessage: 'Assigned to:',
-                                      })}
-                                    </span>
-                                    <Avatar.Group maxCount={3}>
-                                      {activity.assignedUsers.map(
-                                        (user: {
-                                          fullName?: null | string;
-                                          id: string;
-                                        }) => (
-                                          <Tooltip
-                                            key={user.id}
-                                            title={user.fullName}
-                                          >
-                                            <Avatar
-                                              size="small"
-                                              style={{
-                                                backgroundColor: '#1890ff',
-                                              }}
-                                            >
-                                              {user.fullName
-                                                ?.split(' ')
-                                                .map((n: string) => n[0])
-                                                .join('')
-                                                .toUpperCase()}
-                                            </Avatar>
-                                          </Tooltip>
-                                        )
-                                      )}
-                                    </Avatar.Group>
-                                  </div>
+                                  </span>
+                                  <span className={classes.activityDetailValue}>
+                                    {dayjs(activity.dueDate).format(
+                                      'DD/MM/YYYY'
+                                    )}
+                                  </span>
                                 </Col>
                               )}
-                          </Row>
-                        </Card>
-                      );
-
-                      if (menuItems.length > 0) {
-                        return (
-                          <Dropdown
-                            key={activity.id}
-                            menu={{ items: menuItems }}
-                            overlayClassName="activity-context-menu"
-                            trigger={['contextMenu']}
-                          >
-                            {cardContent}
-                          </Dropdown>
+                            </Row>
+                          </Card>
                         );
-                      }
 
-                      return cardContent;
-                    })}
-                  </>
-                )}
-              </div>
-            ) : (
-              <Empty
-                description={intl.formatMessage({
-                  defaultMessage: 'No activities found',
-                })}
-                image={Empty.PRESENTED_IMAGE_SIMPLE}
-              />
-            )}
+                        if (menuItems.length > 0) {
+                          return (
+                            <Dropdown
+                              key={activity.id}
+                              menu={{ items: menuItems }}
+                              overlayClassName="activity-context-menu"
+                              trigger={['contextMenu']}
+                            >
+                              {cardContent}
+                            </Dropdown>
+                          );
+                        }
+
+                        return cardContent;
+                      })}
+                    </>
+                  )}
+
+                  {completedTodos.length > 0 && (
+                    <>
+                      <Typography.Title level={5} style={{ marginTop: 16 }}>
+                        {intl.formatMessage({
+                          defaultMessage: 'Completed Tasks',
+                        })}
+                      </Typography.Title>
+                      {completedTodos.map((activity) => {
+                        const menuItems: {
+                          danger?: boolean;
+                          key: string;
+                          label: string;
+                          onClick: () => void;
+                        }[] = [];
+
+                        if (hasActivityEditPermission) {
+                          menuItems.push({
+                            key: 'edit',
+                            label: intl.formatMessage({
+                              defaultMessage: 'Edit',
+                            }),
+                            onClick: () => setEditingActivity(activity.id),
+                          });
+                        }
+
+                        if (hasActivityDeletePermission) {
+                          menuItems.push({
+                            danger: true,
+                            key: 'delete',
+                            label: intl.formatMessage({
+                              defaultMessage: 'Delete',
+                            }),
+                            onClick: () => handleDeleteActivity(activity.id),
+                          });
+                        }
+
+                        const cardContent = (
+                          <Card
+                            className={classes.activityCard}
+                            key={activity.id}
+                            size="small"
+                            style={{ opacity: 0.7 }}
+                          >
+                            <Row gutter={[12, 12]}>
+                              <Col span={24}>
+                                <Row align="middle" gutter={8}>
+                                  <Col
+                                    flex="1"
+                                    onClick={() =>
+                                      setSelectedActivity(activity.id)
+                                    }
+                                    style={{ cursor: 'pointer' }}
+                                  >
+                                    <div>
+                                      <Typography.Text
+                                        className={classes.activityName}
+                                        style={{
+                                          textDecoration: 'line-through',
+                                        }}
+                                      >
+                                        {activity.name}
+                                        {activity.reference && (
+                                          <span
+                                            className={
+                                              classes.activityReference
+                                            }
+                                          >
+                                            {intl.formatMessage(
+                                              {
+                                                defaultMessage: ' #{reference}',
+                                              },
+                                              { reference: activity.reference }
+                                            )}
+                                          </span>
+                                        )}
+                                      </Typography.Text>
+                                    </div>
+                                  </Col>
+                                  <Col>
+                                    <Tag
+                                      className={classes.activityStatus}
+                                      color="success"
+                                    >
+                                      {intl.formatMessage({
+                                        defaultMessage: 'Completed',
+                                      })}
+                                    </Tag>
+                                  </Col>
+                                  {hasActivityEditPermission && (
+                                    <Col>
+                                      <Tooltip
+                                        title={intl.formatMessage({
+                                          defaultMessage: 'Edit Activity',
+                                        })}
+                                      >
+                                        <Button
+                                          icon={
+                                            <FontAwesomeIcon icon={faPen} />
+                                          }
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            setEditingActivity(activity.id);
+                                          }}
+                                          size="small"
+                                          type="text"
+                                        />
+                                      </Tooltip>
+                                    </Col>
+                                  )}
+                                </Row>
+                              </Col>
+                              {activity.completedBy &&
+                                activity.completedDate && (
+                                  <Col
+                                    onClick={() =>
+                                      setSelectedActivity(activity.id)
+                                    }
+                                    span={24}
+                                    style={{ cursor: 'pointer' }}
+                                  >
+                                    <div
+                                      style={{ color: '#8c8c8c', fontSize: 12 }}
+                                    >
+                                      <FontAwesomeIcon
+                                        icon={faCheck}
+                                        style={{
+                                          color: '#52c41a',
+                                          marginRight: 6,
+                                        }}
+                                      />
+                                      {intl.formatMessage(
+                                        {
+                                          defaultMessage:
+                                            'Completed by {name} on {date}',
+                                        },
+                                        {
+                                          date: dayjs(
+                                            activity.completedDate
+                                          ).format('DD/MM/YYYY'),
+                                          name: activity.completedBy.fullName,
+                                        }
+                                      )}
+                                    </div>
+                                  </Col>
+                                )}
+                              {activity.assignedUsers &&
+                                activity.assignedUsers.length > 0 && (
+                                  <Col
+                                    onClick={() =>
+                                      setSelectedActivity(activity.id)
+                                    }
+                                    span={24}
+                                    style={{ cursor: 'pointer' }}
+                                  >
+                                    <div className={classes.activityAssignees}>
+                                      <span className={classes.activityLabel}>
+                                        {intl.formatMessage({
+                                          defaultMessage: 'Assigned to:',
+                                        })}
+                                      </span>
+                                      <Avatar.Group maxCount={3}>
+                                        {activity.assignedUsers.map(
+                                          (user: {
+                                            fullName?: null | string;
+                                            id: string;
+                                          }) => (
+                                            <Tooltip
+                                              key={user.id}
+                                              title={user.fullName}
+                                            >
+                                              <Avatar
+                                                size="small"
+                                                style={{
+                                                  backgroundColor: '#1890ff',
+                                                }}
+                                              >
+                                                {user.fullName
+                                                  ?.split(' ')
+                                                  .map((n: string) => n[0])
+                                                  .join('')
+                                                  .toUpperCase()}
+                                              </Avatar>
+                                            </Tooltip>
+                                          )
+                                        )}
+                                      </Avatar.Group>
+                                    </div>
+                                  </Col>
+                                )}
+                            </Row>
+                          </Card>
+                        );
+
+                        if (menuItems.length > 0) {
+                          return (
+                            <Dropdown
+                              key={activity.id}
+                              menu={{ items: menuItems }}
+                              overlayClassName="activity-context-menu"
+                              trigger={['contextMenu']}
+                            >
+                              {cardContent}
+                            </Dropdown>
+                          );
+                        }
+
+                        return cardContent;
+                      })}
+                    </>
+                  )}
+                </div>
+              ) : (
+                <Empty
+                  description={intl.formatMessage({
+                    defaultMessage: 'No activities found',
+                  })}
+                  image={Empty.PRESENTED_IMAGE_SIMPLE}
+                />
+              )}
+            </div>
           </div>
         ),
         icon: <FontAwesomeIcon icon={faListAlt} />,

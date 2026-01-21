@@ -211,6 +211,25 @@ const CreateChecklistView: React.FC<Props> = ({
             <Col span={12}>
               <Form.Item
                 label={intl.formatMessage({
+                  defaultMessage: 'Require Business Selection',
+                })}
+                name="requiredBusiness"
+                tooltip={intl.formatMessage({
+                  defaultMessage:
+                    'When enabled, users must select a business when completing this checklist',
+                })}
+                valuePropName="checked"
+              >
+                <Checkbox>
+                  {intl.formatMessage({
+                    defaultMessage: 'Business is required for this checklist',
+                  })}
+                </Checkbox>
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                label={intl.formatMessage({
                   defaultMessage: 'Roles',
                 })}
                 name="roles"

@@ -1,7 +1,6 @@
 import type { CreateBlurFacesMutation } from '#/components/ViewPage/ImagesList/graphql/__generated__/create_blur_faces.generated';
 import type { AddVehicleData } from '#/components/form-components/Vehicle/AddVehicleSimple/useAddVehicleSimple';
 import type { CreateDocumentsMutation } from '#/graphql/documents/mutations/__generated__/create-documents.generated';
-import type { OffenderIncidentsQuery } from '#/views/profiles/offenders/ViewOffender/__graphql__/queries/__generated__/list-incidents.generated';
 import type { MutationUpdaterFn } from '@apollo/client';
 import type { ItemType } from 'antd/lib/menu/hooks/useItems';
 import type { DeleteDocumentMutation } from 'graphql/documents/mutations/__generated__/delete-document.generated';
@@ -16,7 +15,6 @@ import type {
 } from 'graphql/offenders/queries/__generated__/view-offender.generated';
 import type { LanguageCode } from 'graphql/types';
 import type { CreateSimpleVehicleMutation } from 'graphql/vehicles/mutations/__generated__/create-simple-vehicle.generated';
-import type { Dispatch } from 'react';
 import type {
   BanData,
   EditFeedImage,
@@ -34,7 +32,6 @@ import {
 import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import hasRolePermission from '#/utils/has-role-permission';
 import publicOffenderDob from '#/utils/public-offender-dob';
-import { useOffenderIncidentsQuery } from '#/views/profiles/offenders/ViewOffender/__graphql__/queries/__generated__/list-incidents.generated';
 import {
   faChartBar,
   faEdit,
@@ -62,23 +59,12 @@ import {
   useViewOffenderQuery,
 } from 'graphql/offenders/queries/__generated__/view-offender.generated';
 import { useTranslateLazyQuery } from 'graphql/translate/queries/__generated__/translate.generated';
-import {
-  PermissionMethod,
-  PermissionModel,
-  SortOrder,
-  TagType,
-} from 'graphql/types';
+import { PermissionMethod, PermissionModel, TagType } from 'graphql/types';
 import { useCreateSimpleVehicleMutation } from 'graphql/vehicles/mutations/__generated__/create-simple-vehicle.generated';
 import { useUpdateSimpleVehicleMutation } from 'graphql/vehicles/mutations/__generated__/update-simple-vehicle.generated';
 import update from 'immutability-helper';
 import { useAtomValue } from 'jotai/index';
-import React, {
-  useCallback,
-  useEffect,
-  useReducer,
-  useRef,
-  useState,
-} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router';
 import { useStoreState } from 'state';
@@ -133,19 +119,9 @@ interface Return {
   editVehicleData: VehicleData | null;
   handleCreateInvestigation: (investigationId: string) => Promise<void>;
   handleEditUpdate: () => void;
-  handleIncidentSort: (
-    field: 'date' | 'totalValue',
-    order: 'ascend' | 'descend'
-  ) => void;
   handleLinkInvestigation: (investigation: InvestigationData) => Promise<void>;
   handleUnlinkInvestigation: (investigationId: string) => Promise<void>;
   hasConnectedSchemes: boolean;
-  incidentSortField: 'date' | 'totalValue';
-  incidentSortOrder: SortOrder;
-  incidents: OffenderIncidentsQuery['offender']['incidents'] | null;
-  incidentsLoading: boolean;
-  incidentsPagination: PaginationState;
-  incidentsPaginationDispatch: Dispatch<PaginationAction>;
   isTranslated: null | string;
   knowOffender: boolean;
   languageCount: number;
@@ -248,43 +224,6 @@ interface Return {
   viewMatches: null | string;
 }
 
-export interface PaginationState {
-  currentPage: number;
-  pageSize: number;
-}
-
-export type PaginationAction =
-  | { payload: number; type: 'changePage' }
-  | { payload: number; type: 'changePageSize' };
-
-const initialState: PaginationState = {
-  currentPage: 1,
-  pageSize: 5,
-};
-
-function paginationReducer(
-  state: PaginationState,
-  action: PaginationAction
-): PaginationState {
-  switch (action.type) {
-    case 'changePage': {
-      return { ...state, currentPage: action.payload };
-    }
-    case 'changePageSize': {
-      return { ...state, currentPage: 1, pageSize: action.payload };
-    }
-    default: {
-      return state;
-    }
-  }
-}
-
-type UsePagination = [PaginationState, Dispatch<PaginationAction>];
-
-export function usePagination(): UsePagination {
-  return useReducer(paginationReducer, initialState);
-}
-
 const useViewOffender = (offenderId: string): Return => {
   const intl = useIntl();
   const navigate = useNavigate();
@@ -295,16 +234,7 @@ const useViewOffender = (offenderId: string): Return => {
   const currentUser = useAtomValue(currentUserAtom);
   const [shareOpen, setShareOpen] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [paginationState, dispatch] = usePagination();
   const hasTrackedView = useRef(false);
-  const { currentPage: incidentPage, pageSize: incidentPageSize } =
-    paginationState;
-  const [incidentSortField, setIncidentSortField] = useState<
-    'date' | 'totalValue'
-  >('date');
-  const [incidentSortOrder, setIncidentSortOrder] = useState<SortOrder>(
-    SortOrder.Desc
-  );
   const [viewMatches, toggleViewMatches] = useState<null | string>(null);
   const [optionRowShow, setOptionRowShow] = useState(false);
   const [linkIncident, setLinkIncident] = useState(false);
@@ -437,23 +367,6 @@ const useViewOffender = (offenderId: string): Return => {
       });
     }
   }, [offenderId, loading, data, markOffenderViewed]);
-
-  const {
-    data: incidentsData,
-    loading: incidentsLoading,
-    previousData,
-  } = useOffenderIncidentsQuery({
-    variables: {
-      orderBy: {
-        [incidentSortField]: incidentSortOrder,
-      },
-      skip: (incidentPage - 1) * incidentPageSize,
-      take: incidentPageSize,
-      where: {
-        id: offenderId,
-      },
-    },
-  });
 
   const { data: associatesData, loading: associatesLoading } =
     useAssociatedOffendersQuery({
@@ -2033,15 +1946,6 @@ const useViewOffender = (offenderId: string): Return => {
     );
   };
 
-  const handleIncidentSort = useCallback(
-    (field: 'date' | 'totalValue', order: 'ascend' | 'descend') => {
-      setIncidentSortField(field);
-      setIncidentSortOrder(order === 'ascend' ? SortOrder.Asc : SortOrder.Desc);
-      dispatch({ payload: 1, type: 'changePage' }); // Reset to first page when sorting changes
-    },
-    []
-  );
-
   const toggleShareOpen = () => {
     setShareOpen(!shareOpen);
   };
@@ -2088,19 +1992,9 @@ const useViewOffender = (offenderId: string): Return => {
     editVehicleData,
     handleCreateInvestigation,
     handleEditUpdate,
-    handleIncidentSort,
     handleLinkInvestigation,
     handleUnlinkInvestigation,
     hasConnectedSchemes: connectedToSchemes && connectedToSchemes.length > 0,
-    incidentSortField,
-    incidentSortOrder,
-    incidents:
-      incidentsData?.offender.incidents ||
-      previousData?.offender.incidents ||
-      null,
-    incidentsLoading,
-    incidentsPagination: paginationState,
-    incidentsPaginationDispatch: dispatch,
     isTranslated,
     knowOffender,
     languageCount,

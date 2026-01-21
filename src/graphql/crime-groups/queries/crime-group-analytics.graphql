@@ -1,0 +1,19 @@
+query CrimeGroupAnalytics(
+  $crimeGroupId: String!
+  $mode: CrimeGroupAnalyticsMode!
+) {
+  crimeGroupAnalytics(crimeGroupId: $crimeGroupId, mode: $mode) {
+    offenderId
+    tier
+    score
+    linkClusterScore
+    linkTotalSharedIncidents
+    linkUniqueConnections
+    linkConnectionsMap
+    impactTotalScore
+    impactIncidentScore
+    impactValueScore
+    crimeGroupIncidentCount
+    crimeGroupTotalValue
+  }
+}

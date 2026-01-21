@@ -160,6 +160,7 @@ export const defaultCurrentUserSchemeAtom: UserSchemeState = {
     skipLocationToAddress: false,
     taskTimeTracking: false,
     usDateFormat: false,
+    usPoliceData: false,
     useBusinessGroupsOnIncident: false,
     userTodos: 0,
   },

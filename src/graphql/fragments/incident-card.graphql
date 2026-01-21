@@ -56,4 +56,6 @@ fragment IncidentCard on Incident {
   }
   description
   createdByUser
+  totalValue
+  totalRecoveredValue
 }

@@ -26,6 +26,7 @@ interface Props {
   onSubmit: (value: FormData) => void;
   saving: boolean;
   tagsLoading: boolean;
+  usPoliceData?: boolean;
   // onSearchBusiness: (
   //   value: string
   // ) => Promise<{ label: React.ReactNode; value: string }[]>;
@@ -42,6 +43,7 @@ const EditGroup = ({
   onSubmit,
   saving,
   tagsLoading,
+  usPoliceData,
 }: // onSearchBusiness,
 Props): JSX.Element => {
   const intl = useIntl();
@@ -51,6 +53,9 @@ Props): JSX.Element => {
   );
   const [form] = Form.useForm();
   const [hasShownModal, setHasShownModal] = useState(false);
+  const policeReported = Form.useWatch('policeReported', form) as
+    | boolean
+    | undefined;
 
   const handleIncidentTypeChange = (newValues: string | string[]) => {
     const currentValues = data?.crimeTypes?.map(({ id }) => id) || [];
@@ -461,6 +466,43 @@ Props): JSX.Element => {
               <Input disabled={saving} style={{ width: 200 }} />
             </Form.Item>
           </Col>
+          {policeReported && usPoliceData && (
+            <>
+              <Col span={12}>
+                <Form.Item
+                  label={intl.formatMessage({
+                    defaultMessage: 'Police Department',
+                  })}
+                  name="policeDepartment"
+                  tooltip={intl.formatMessage({
+                    defaultMessage:
+                      'The police department handling this incident.',
+                  })}
+                >
+                  <Input.TextArea
+                    disabled={saving}
+                    rows={2}
+                    style={{ width: 400 }}
+                  />
+                </Form.Item>
+              </Col>
+              <Col span={1} />
+              <Col span={11}>
+                <Form.Item
+                  label={intl.formatMessage({
+                    defaultMessage: 'Police Officer Name',
+                  })}
+                  name="policeOfficerName"
+                  tooltip={intl.formatMessage({
+                    defaultMessage:
+                      'The name of the police officer assigned to this case.',
+                  })}
+                >
+                  <Input disabled={saving} style={{ width: 200 }} />
+                </Form.Item>
+              </Col>
+            </>
+          )}
           <Col span={12}>
             <Form.Item
               label={intl.formatMessage({

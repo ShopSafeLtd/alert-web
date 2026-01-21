@@ -36,16 +36,9 @@ const ViewOffender = (): JSX.Element => {
     editVehicleData,
     handleCreateInvestigation,
     handleEditUpdate,
-    handleIncidentSort,
     handleLinkInvestigation,
     handleUnlinkInvestigation,
     hasConnectedSchemes,
-    incidentSortField,
-    incidentSortOrder,
-    incidents,
-    incidentsLoading,
-    incidentsPagination,
-    incidentsPaginationDispatch,
     knowOffender,
     lightBoxOpen,
     linkIncident,
@@ -154,16 +147,9 @@ const ViewOffender = (): JSX.Element => {
       editVehicleData={editVehicleData}
       handleCreateInvestigation={handleCreateInvestigation}
       handleEditUpdate={handleEditUpdate}
-      handleIncidentSort={handleIncidentSort}
       handleLinkInvestigation={handleLinkInvestigation}
       handleUnlinkInvestigation={handleUnlinkInvestigation}
       hasConnectedSchemes={hasConnectedSchemes}
-      incidentSortField={incidentSortField}
-      incidentSortOrder={incidentSortOrder}
-      incidents={incidents}
-      incidentsLoading={incidentsLoading}
-      incidentsPagination={incidentsPagination}
-      incidentsPaginationDispatch={incidentsPaginationDispatch}
       knowOffender={knowOffender}
       lightBoxOpen={lightBoxOpen}
       linkIncident={linkIncident}

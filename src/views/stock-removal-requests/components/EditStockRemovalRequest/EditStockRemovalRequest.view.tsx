@@ -60,9 +60,10 @@ export interface FormData {
   reasonForNonReturn: string;
   rechargeBrand: 'No' | 'Yes';
   rechargeReference?: string;
+  recipientName?: string;
+  recipientPhone?: string;
   returnDate?: Date;
   shippingAddress?: string;
-  smqAccountNumber?: string;
   socialHandles?: string;
   storeOrDC: 'DC' | 'Store';
   title: string;
@@ -162,11 +163,12 @@ const EditStockRemovalRequest = ({ onClose, requestId }: Props) => {
         reasonForNonReturn: request.reasonForNonReturn ?? '',
         rechargeBrand: (request.rechargeBrand as 'No' | 'Yes') ?? 'No',
         rechargeReference: request.rechargeReference ?? undefined,
+        recipientName: request.recipientName ?? undefined,
+        recipientPhone: request.recipientPhone ?? undefined,
         returnDate: request.returnDate
           ? new Date(request.returnDate)
           : undefined,
         shippingAddress: request.shippingAddress ?? undefined,
-        smqAccountNumber: request.smqAccountNumber ?? undefined,
         socialHandles: request.socialHandles ?? undefined,
         storeOrDC: (request.storeOrDC as 'DC' | 'Store') ?? 'Store',
         title: request.title,
@@ -281,10 +283,11 @@ const EditStockRemovalRequest = ({ onClose, requestId }: Props) => {
           reasonForNonReturn: values.reasonForNonReturn,
           rechargeBrand: values.rechargeBrand,
           rechargeReference: values.rechargeReference,
+          recipientName: values.recipientName,
+          recipientPhone: values.recipientPhone,
           returnDate: values.returnDate,
           schemeId: currentScheme,
           shippingAddress: values.shippingAddress,
-          smqAccountNumber: values.smqAccountNumber,
           socialHandles: values.socialHandles,
           storeOrDC: values.storeOrDC,
           title: values.title,
@@ -413,22 +416,44 @@ const EditStockRemovalRequest = ({ onClose, requestId }: Props) => {
           </Col>
         )}
         {storeOrDC === 'DC' && (
-          <Col span={12}>
-            <Form.Item
-              label={intl.formatMessage({ defaultMessage: 'Shipping Address' })}
-              name="shippingAddress"
-              rules={[
-                {
-                  message: intl.formatMessage({
-                    defaultMessage: 'Please provide an address',
-                  }),
-                  required: true,
-                },
-              ]}
-            >
-              <Input.TextArea disabled={saving} />
-            </Form.Item>
-          </Col>
+          <>
+            <Col span={12}>
+              <Form.Item
+                label={intl.formatMessage({ defaultMessage: 'Recipient Name' })}
+                name="recipientName"
+              >
+                <Input disabled={saving} />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                label={intl.formatMessage({
+                  defaultMessage: 'Recipient Phone',
+                })}
+                name="recipientPhone"
+              >
+                <Input disabled={saving} />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                label={intl.formatMessage({
+                  defaultMessage: 'Shipping Address',
+                })}
+                name="shippingAddress"
+                rules={[
+                  {
+                    message: intl.formatMessage({
+                      defaultMessage: 'Please provide an address',
+                    }),
+                    required: true,
+                  },
+                ]}
+              >
+                <Input.TextArea disabled={saving} />
+              </Form.Item>
+            </Col>
+          </>
         )}
       </Row>
       <Row>
@@ -531,31 +556,6 @@ const EditStockRemovalRequest = ({ onClose, requestId }: Props) => {
           </Form.Item>
         </Col>
         <Col span={12}>
-          {willStockBeReturned === 'Yes' && (
-            <Form.Item
-              label={intl.formatMessage({
-                defaultMessage: 'Enter SMQ Account Number',
-              })}
-              name="smqAccountNumber"
-              rules={[
-                {
-                  message: intl.formatMessage({
-                    defaultMessage: 'This is a required field.',
-                  }),
-                  required: true,
-                },
-                {
-                  message: intl.formatMessage({
-                    defaultMessage: 'SMQ Account Number must be 4 or 5 digits',
-                  }),
-                  pattern: /^\d{4,5}$/,
-                },
-              ]}
-            >
-              {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
-              <Input maxLength={5} placeholder="12345" />
-            </Form.Item>
-          )}
           {willStockBeReturned === 'Yes' && (
             <Form.Item
               label={intl.formatMessage({

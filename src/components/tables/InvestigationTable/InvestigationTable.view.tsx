@@ -1,3 +1,4 @@
+import type { ColumnsType } from 'antd/es/table';
 import type { InvestigationStatus } from 'graphql/types';
 
 import { faUnlink } from '@fortawesome/pro-light-svg-icons';
@@ -31,6 +32,16 @@ interface Props {
   unlinking?: boolean;
 }
 
+interface DataSourceItem {
+  closedAt?: Date | null;
+  createdAt: Date;
+  description?: null | string;
+  key: string;
+  name: string;
+  reference?: null | number | string;
+  status?: InvestigationStatus;
+}
+
 const InvestigationTable = ({
   investigations,
   onUnlink,
@@ -41,7 +52,7 @@ const InvestigationTable = ({
 
   const navigate = useNavigate();
 
-  const columns = [
+  const columns: ColumnsType<DataSourceItem> = [
     {
       dataIndex: 'name',
       key: 'name',
@@ -95,7 +106,7 @@ const InvestigationTable = ({
   if (onUnlink) {
     columns.push({
       key: 'actions',
-      render: (_: unknown, record: { key: string }) => (
+      render: (_: unknown, record: DataSourceItem) => (
         <Popconfirm
           cancelText={intl.formatMessage({ defaultMessage: 'Cancel' })}
           okText={intl.formatMessage({ defaultMessage: 'Unlink' })}

@@ -548,6 +548,13 @@ export const roleItems: {
         name: <FormattedMessage defaultMessage="View" />,
       },
       {
+        key: PermissionMethod.ReadAll,
+        name: <FormattedMessage defaultMessage="View All" />,
+        tooltip: (
+          <FormattedMessage defaultMessage="Allows the user to view all stock removal requests within their scheme, not just their own requests or requests they're involved with." />
+        ),
+      },
+      {
         key: PermissionMethod.Write,
         name: <FormattedMessage defaultMessage="Create" />,
       },

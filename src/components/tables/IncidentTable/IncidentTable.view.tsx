@@ -115,14 +115,11 @@ interface Props {
   onDelete?: (id: string) => void;
   onPageChange?: (page: number) => void;
   onPageSizeChange?: (pageSize: number) => void;
-  onSortChange?: (
-    field: 'date' | 'totalValue',
-    order: 'ascend' | 'descend'
-  ) => void;
+  onSortChange?: (field: 'date', order: 'ascend' | 'descend') => void;
   page?: number;
   pageSize?: number;
   setEditData?: (id: string) => void;
-  sortField?: 'date' | 'totalValue';
+  sortField?: 'date';
   sortOrder?: 'ascend' | 'descend';
   title?: React.ReactNode;
   total?: number;
@@ -278,9 +275,6 @@ const IncidentTable = ({
               currency,
               style: 'currency',
             }),
-          sortDirections: ['descend', 'ascend', 'descend'],
-          sortOrder: sortField === 'totalValue' ? sortOrder : null,
-          sorter: true,
           title: intl.formatMessage({
             defaultMessage: 'Loss',
           }),
@@ -491,12 +485,11 @@ const IncidentTable = ({
       onChange={(pagination, filters, sorter) => {
         if (
           !Array.isArray(sorter) &&
-          sorter.columnKey &&
+          sorter.columnKey === 'date' &&
           sorter.order &&
           onSortChange
         ) {
-          const field = sorter.columnKey === 'loss' ? 'totalValue' : 'date';
-          onSortChange(field, sorter.order);
+          onSortChange('date', sorter.order);
         }
       }}
       pagination={{

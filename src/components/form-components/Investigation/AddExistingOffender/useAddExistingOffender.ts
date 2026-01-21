@@ -1,9 +1,10 @@
 import type { ListOffendersQuery } from 'graphql/offenders/queries/__generated__/list-offenders.generated';
+import type { CascadeOptions } from 'types/investigations';
 
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import publicOffenderDob from '#/utils/public-offender-dob';
 import { notification } from 'antd';
-import { useUpdateInvestigationMutation } from 'graphql/investigations/mutations/__generated__/update-investigation.generated';
+import { useConnectOffendersToInvestigationMutation } from 'graphql/investigations/mutations/__generated__/connect-offenders-to-investigation.generated';
 import { useListOffendersQuery } from 'graphql/offenders/queries/__generated__/list-offenders.generated';
 import { QueryMode, SortOrder } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
@@ -19,6 +20,7 @@ interface Props {
 }
 
 interface Return {
+  cascadeOptions: CascadeOptions;
   data: ListOffendersQuery | undefined;
   lightBoxOpen: {
     index: number;
@@ -38,6 +40,7 @@ interface Return {
       >['offenders'][0]
     | null
     | undefined;
+  setCascadeOptions: (value: CascadeOptions) => void;
   setCurrentId: (value: string | undefined) => void;
   setSearch: (value: string) => void;
 }
@@ -49,6 +52,11 @@ const useAddExistingOffender = ({ offenderIds, onClose }: Props): Return => {
 
   const [saving, setSaving] = useState(false);
   const [currentId, setCurrentId] = useState<string | undefined>(undefined);
+  const [cascadeOptions, setCascadeOptions] = useState<CascadeOptions>({
+    connectCrimeGroups: false,
+    connectIncidents: false,
+    connectVehicles: false,
+  });
 
   const [selectedOffender, setSelectedOffender] = useState<
     | Exclude<
@@ -121,18 +129,17 @@ const useAddExistingOffender = ({ offenderIds, onClose }: Props): Return => {
       },
     });
   };
-  const [updateInvestigation] = useUpdateInvestigationMutation({
+  const [connectOffenders] = useConnectOffendersToInvestigationMutation({
     onCompleted: () => {
       setSaving(false);
       onClose();
       notification.success({
         description: intl.formatMessage({
-          defaultMessage: 'The offender has been added to the investigation! ',
+          defaultMessage: 'The offender has been added to the investigation!',
         }),
         message: intl.formatMessage({
           defaultMessage: 'Successfully Updated!',
         }),
-
         placement: 'bottomRight',
       });
     },
@@ -148,19 +155,19 @@ const useAddExistingOffender = ({ offenderIds, onClose }: Props): Return => {
       data.listOffenders.offenders.length > 0 &&
       selectedOffender
     ) {
-      void updateInvestigation({
+      void connectOffenders({
         variables: {
           data: {
+            investigationId: params.id || '',
             offenderIds: [selectedOffender.id],
-          },
-          where: {
-            id: params.id || '',
+            ...cascadeOptions,
           },
         },
       });
+    } else {
+      setSaving(false);
+      onClose();
     }
-    setSaving(false);
-    onClose();
   };
 
   const openLightbox = (index: number) => {
@@ -177,6 +184,7 @@ const useAddExistingOffender = ({ offenderIds, onClose }: Props): Return => {
     }
   }, [currentId]);
   return {
+    cascadeOptions,
     data,
     lightBoxOpen,
     loading: data?.listOffenders ? false : loading,
@@ -187,6 +195,7 @@ const useAddExistingOffender = ({ offenderIds, onClose }: Props): Return => {
     saving,
     search: variables.search,
     selectedOffender,
+    setCascadeOptions,
     setCurrentId,
     setSearch,
   };

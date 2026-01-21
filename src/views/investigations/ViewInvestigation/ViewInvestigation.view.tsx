@@ -1,5 +1,4 @@
 import type { UpdateTaskMutation } from '#/components/form-components/Todos/ViewTodo/graphql/__generated__/update-todo.generated';
-import type { OffenderSearchDetailsFragment } from '#/components/form-components/offender/AddExistingOffender/graphql/queries/__generated__/search-offender.generated';
 import type { QuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/__generated__/listTemplates.generated';
 import type { MutationUpdaterFn } from '@apollo/client';
 import type { ViewInvestigationQuery } from 'graphql/investigations/queries/__generated__/view-investigation.generated';
@@ -15,7 +14,6 @@ import type {
 import AddCrimeGroup from '#/components/form-components/CrimeGroupSelect/crimeGroup/AddCrimeGroup';
 import EditCrimeGroup from '#/components/form-components/CrimeGroupSelect/crimeGroup/EditCrimeGroup';
 import AddDocuments from '#/components/form-components/documents/AddDocuments';
-import AddExistingOffender from '#/components/form-components/offender/AddExistingOffender';
 import useReportPrint from '#/utils/reportPrint/usePrintReports';
 // Icons removed - not used in this component
 import { Button, Col, Drawer, Modal, Row } from 'antd';
@@ -29,6 +27,7 @@ import LinkVehicle from 'components/form-components/linkOptions/LinkVehicle';
 import SelectIncidents from 'components/form-components/linkOptions/SelectIncidents';
 import AddNewOffenderSimple from 'components/form-components/offender/AddNewOffenderSimple';
 import SimpleEditOffender from 'components/form-components/offender/SimpleEditOffender';
+import ConnectOffendersToInvestigation from 'components/investigations/ConnectOffendersToInvestigation';
 import MultiSelectOffenders from 'components/investigations/MultiSelectOffenders';
 import MultiSelectVehicles from 'components/investigations/MultiSelectVehicles';
 // InvestigationStatus removed - not used
@@ -67,7 +66,6 @@ interface Props {
   onAddCrimeGroup: (value: CrimeGroupCardData) => void;
   onAddExistingCrimeGroup: (value: string) => void;
   onAddExistingIncident: (value: string[]) => void;
-  onAddExistingOffender: (value: OffenderSearchDetailsFragment[]) => void;
   onAddExistingOffenders: (value: string[]) => void;
   onAddExistingVehicle: (value: string) => void;
   onAddExistingVehicles: (value: string[]) => void;
@@ -83,6 +81,7 @@ interface Props {
   onDeleteVehicle: (id: string) => void;
   onEditCrimeGroup: (value: CrimeGroupCardData) => void;
   onEditVehicle: (value: VehicleData) => void;
+  onRefetchInvestigation: () => void;
   onReopenInvestigation: () => void;
   saving: boolean;
   setCompleteTodoVisible: (value: null | string) => void;
@@ -162,7 +161,6 @@ const ViewInvestigation = ({
   onAddCrimeGroup,
   onAddExistingCrimeGroup,
   onAddExistingIncident,
-  onAddExistingOffender,
   onAddExistingOffenders,
   onAddExistingVehicle,
   onAddExistingVehicles,
@@ -178,6 +176,7 @@ const ViewInvestigation = ({
   onDeleteVehicle,
   onEditCrimeGroup,
   onEditVehicle,
+  onRefetchInvestigation,
   onReopenInvestigation,
   saving,
   setCompleteTodoVisible,
@@ -273,7 +272,11 @@ const ViewInvestigation = ({
             investigationData={{
               description: data?.investigation?.description,
               groupIds:
-                data?.investigation?.groups.map((group) => group.id) || [],
+                (
+                  data?.investigation?.groups as
+                    | Array<{ id: string }>
+                    | undefined
+                )?.map((group) => group.id) || [],
               id: data?.investigation?.id || '',
               name: data?.investigation?.name,
             }}
@@ -287,17 +290,17 @@ const ViewInvestigation = ({
       <Drawer
         onClose={toggleAddExistingOffender}
         open={addExistingOffender}
-        title={<FormattedMessage defaultMessage="Add Existing Offenders" />}
-        width="1000"
+        title={<FormattedMessage defaultMessage="Connect Offenders" />}
+        width="1200"
         zIndex={1001}
       >
         {addExistingOffender ? (
-          <AddExistingOffender
-            offenderIds={offenderIds}
+          <ConnectOffendersToInvestigation
+            existingOffenderIds={offenderIds}
+            investigationId={data?.investigation?.id || ''}
+            investigationName={data?.investigation?.name || ''}
             onClose={toggleAddExistingOffender}
-            takeAllSchemes={takeAllSchemes}
-            type={'multiple'}
-            update={onAddExistingOffender}
+            onSuccess={onRefetchInvestigation}
           />
         ) : (
           <div />
@@ -315,7 +318,9 @@ const ViewInvestigation = ({
         {addOffender ? (
           <AddNewOffenderSimple
             groupsIds={
-              data?.investigation?.groups.map((group) => group.id) || []
+              (
+                data?.investigation?.groups as Array<{ id: string }> | undefined
+              )?.map((group) => group.id) || []
             }
             images={[]}
             investigationId={data?.investigation.id}
@@ -378,7 +383,9 @@ const ViewInvestigation = ({
         {addVehicle ? (
           <AddVehicleSimple
             initialGroupIds={
-              data?.investigation?.groups.map((group) => group.id) || []
+              (
+                data?.investigation?.groups as Array<{ id: string }> | undefined
+              )?.map((group) => group.id) || []
             }
             onClose={toggleAddVehicle}
             update={onAddVehicle}
