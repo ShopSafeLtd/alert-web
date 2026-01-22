@@ -55,7 +55,7 @@ export interface OffenderData {
   idSource?: IdSource | null;
   idVerified?: boolean;
   imageUid?: string[] | undefined;
-  images?: ImageCardData[];
+  images?: ImageCardData[] | null;
   infoSource?: null | string;
   justification?: null | string;
   knownFor?: string[];

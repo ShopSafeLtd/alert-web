@@ -10,10 +10,12 @@ import type { StateImageData } from '../../ImageSection/useImageSection';
 export interface AddVehicleData {
   colour?: null | string | undefined;
   id: string;
-  images?: {
-    id: string;
-    optimised?: null | string;
-  }[];
+  images?:
+    | {
+        id: string;
+        optimised?: null | string;
+      }[]
+    | null;
   make?: null | string | undefined;
   model?: null | string | undefined;
   reference?: null | number;
