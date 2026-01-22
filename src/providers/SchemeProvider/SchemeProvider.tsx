@@ -243,6 +243,7 @@ export const useSchemeProvider = () => {
 const SchemeProvider = ({ children }: Props) => {
   const navigate = useNavigate();
   const currentUserSchemeId = useAtomValue(currentUserSchemeIdAtom);
+  const currentSchemeId = useAtomValue(currentSchemeIdAtom);
   const setCurrentUserScheme = useSetAtom(currentUserSchemeAtom);
   const setStateIsSet = useSetAtom(stateIsSetAtom);
   const setSettingScheme = useSetAtom(settingSchemeAtom);
@@ -288,27 +289,27 @@ const SchemeProvider = ({ children }: Props) => {
 
   // Fetch pending videos when scheme is loaded
   useEffect(() => {
-    if (shouldCheckVideos && currentUserSchemeId) {
+    if (shouldCheckVideos && currentSchemeId) {
       void fetchPendingVideos({
         variables: {
-          schemeId: currentUserSchemeId,
+          schemeId: currentSchemeId,
         },
       });
       setShouldCheckVideos(false);
     }
-  }, [shouldCheckVideos, currentUserSchemeId, fetchPendingVideos]);
+  }, [shouldCheckVideos, currentSchemeId, fetchPendingVideos]);
 
   // Fetch pending critical bulletins when scheme is loaded
   useEffect(() => {
-    if (shouldCheckBulletins && currentUserSchemeId) {
+    if (shouldCheckBulletins && currentSchemeId) {
       void fetchPendingBulletins({
         variables: {
-          schemeId: currentUserSchemeId,
+          schemeId: currentSchemeId,
         },
       });
       setShouldCheckBulletins(false);
     }
-  }, [shouldCheckBulletins, currentUserSchemeId, fetchPendingBulletins]);
+  }, [shouldCheckBulletins, currentSchemeId, fetchPendingBulletins]);
 
   void useCurrentSchemeProviderQuery({
     onCompleted: (data) => {
