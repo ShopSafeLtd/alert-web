@@ -25,6 +25,7 @@ interface MandatoryCriticalBulletinModalProps {
   handleContinue: () => void;
   isAcknowledging: boolean;
   isCurrentBulletinAcknowledged: boolean;
+  onComplete: () => void;
   visible: boolean;
 }
 
@@ -41,6 +42,7 @@ const MandatoryCriticalBulletinModal: React.FC<
   handleContinue,
   isAcknowledging,
   isCurrentBulletinAcknowledged,
+  onComplete,
   visible,
 }) => {
   const intl = useIntl();
@@ -231,7 +233,7 @@ const MandatoryCriticalBulletinModal: React.FC<
                     void handleAcknowledge(currentBulletin.id).then(() => {
                       // If there's only one bulletin, close the modal after acknowledging
                       if (bulletins.length === 1) {
-                        handleContinue();
+                        onComplete();
                       }
                     });
                   }}

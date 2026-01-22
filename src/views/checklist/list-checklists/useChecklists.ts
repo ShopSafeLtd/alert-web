@@ -20,6 +20,7 @@ import {
 } from '#/views/checklist/graphql/queries/__generated__/list-active-checklists.generated';
 import { useChecklistsQuery } from '#/views/checklist/graphql/queries/__generated__/list-checklists.generated';
 import { notification } from 'antd';
+import { SortOrder } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -105,8 +106,9 @@ const useChecklists = (): Return => {
     fetchPolicy: 'cache-and-network',
     variables: {
       order: {
-        [checklistSort.field]: checklistSort.order,
+        title: SortOrder.Asc,
       },
+      take: 100,
       where: {
         OR: [
           // Case 1: Public checklists (no restrictions)
