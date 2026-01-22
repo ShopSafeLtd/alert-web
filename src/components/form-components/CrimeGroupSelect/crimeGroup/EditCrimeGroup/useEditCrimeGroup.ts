@@ -48,8 +48,9 @@ const useEditCrimeGroup = ({ editData, update }: Props): Return => {
   }, [editData]);
 
   useEffect(() => {
-    form.setFieldsValue({ offenders: offendersData });
-  }, [offendersData]);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-argument
+    form.setFieldsValue({ offenders: offendersData } as any);
+  }, [offendersData, form]);
 
   const updateVehiclesList = (selectedVehicle: VehicleData) => {
     setVehiclesData([...vehiclesData, selectedVehicle]);

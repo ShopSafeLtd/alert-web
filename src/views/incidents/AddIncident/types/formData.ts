@@ -47,7 +47,7 @@ export interface FormData {
   hasVictims: boolean;
   images?: StateImageData[];
   involvedTags?: string[];
-  offenders: StateOffenderData[] | null;
+  offenders?: StateOffenderData[];
   policeCCTVEmail?: string;
   policeDay?: boolean;
   policeDepartment?: string;
@@ -85,7 +85,7 @@ export interface FormData {
   subject: string;
   tags: string[];
   value?: number;
-  vehicles: StateVehicleData[] | null;
+  vehicles?: StateVehicleData[];
   victimsDetails?: {
     description?: string;
     email?: string;

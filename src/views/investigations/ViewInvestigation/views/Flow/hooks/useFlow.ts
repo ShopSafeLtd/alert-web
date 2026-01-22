@@ -194,7 +194,8 @@ const useFlow = ({ importData, investigationId }: Props): Return => {
     handleSaveDebounced.cancel();
   }, [handleSaveDebounced]);
 
-  useObservableListener('update', handleYDocUpdate, provider.doc);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-argument
+  useObservableListener('update', handleYDocUpdate, provider.doc as any);
 
   useEffect(() => {
     let isMounted = true;
