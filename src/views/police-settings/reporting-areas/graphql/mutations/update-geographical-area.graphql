@@ -1,0 +1,12 @@
+mutation UpdateGeographicalArea($id: String!, $data: UpdateGeographicalAreaInput!) {
+  updateGeographicalArea(id: $id, data: $data) {
+    id
+    name
+    description
+    color
+    areaType
+    circle
+    polygon
+    updatedAt
+  }
+}

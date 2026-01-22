@@ -1,0 +1,31 @@
+#import "../../../../components/police-vehicles/PoliceVehicleCard/PoliceVehicleCard.fragment.graphql"
+
+query SharedVehiclesFeed(
+  $after: String
+  $first: Int
+  $orderBy: SharedVehicleRelayOrderInput
+  $where: SharedVehicleRelayWhereInput
+  $skip: Int
+) {
+  sharedVehicleRelay(
+    after: $after
+    first: $first
+    orderBy: $orderBy
+    where: $where
+    skip: $skip
+  ) {
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      endCursor
+      startCursor
+    }
+    edges {
+      cursor
+      node {
+        ...PoliceVehicleCard
+      }
+    }
+    totalCount
+  }
+}

@@ -634,7 +634,6 @@ const useActiveChecklist = (): Return => {
 
         form.setFieldsValue({
           additionalInfo: initData?.activeChecklist?.comments || '',
-          // @ts-expect-error type error with generics
           sections: sectionsAndSubsections,
         });
         setSections(sectionsAndSubsections as ActiveChecklistSection[]);

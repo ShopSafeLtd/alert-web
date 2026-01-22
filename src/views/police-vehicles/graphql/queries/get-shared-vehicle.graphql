@@ -1,0 +1,11 @@
+#import "../../../../components/police-vehicles/PoliceVehicleCard/PoliceVehicleCard.fragment.graphql"
+
+query GetSharedVehicle($id: String!) {
+  sharedVehicle(where: { id: $id }) {
+    ...PoliceVehicleCard
+    # Additional fields for detail view
+    aiAssociatedRiskSnapshot
+    aiGeographicMovementSnapshot
+    aiVehicleUsageAnalysisSnapshot
+  }
+}

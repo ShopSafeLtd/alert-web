@@ -554,7 +554,7 @@ const useWorkflowForm = (): Return => {
             checklistScore: conditions?.checkListScore?.score || null,
             checklistScoreGreaterThan:
               conditions?.checkListScore?.greaterThan ?? null,
-            checklistTemplate: conditions?.checklistTemplate || null,
+            checklistTemplate: conditions?.checklistTemplate ?? undefined,
             // New countries fields
             countries: conditions?.countries?.countries,
             countriesCheck: !!conditions?.countries?.countries?.length,
@@ -1111,7 +1111,7 @@ const useWorkflowForm = (): Return => {
       modelSelected && modelSelected === Model.Checklist
         ? WorkflowTrigger.Completed
         : modelSelected && modelSelected === Model.Incident
-          ? values.workflowTrigger ?? WorkflowTrigger.Created
+          ? (values.workflowTrigger ?? WorkflowTrigger.Created)
           : WorkflowTrigger.Created;
     if (EditId) {
       void updateWorkflow({
@@ -1178,7 +1178,7 @@ const useWorkflowForm = (): Return => {
                 ? values.frequency
                   ? Model.Cron
                   : Model.Incident
-                : modelSelected ?? Model.Incident,
+                : (modelSelected ?? Model.Incident),
           },
         },
       });

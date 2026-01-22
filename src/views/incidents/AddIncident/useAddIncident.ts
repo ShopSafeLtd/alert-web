@@ -652,7 +652,13 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
       setGoodsVisible(true);
     }
 
-    form.setFieldsValue(formData);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    form.setFieldsValue({
+      ...formData,
+      offenders: formData.offenders ?? undefined,
+      vehicles: formData.vehicles ?? undefined,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } as any);
     setHidePostDraftSections(false);
     setDraftSet(true);
   }, [draftData, draftSet, form, incidentTagsData]);
@@ -796,7 +802,7 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
                         connect:
                           groups && groups.length === 1
                             ? groups.map(({ value: id }) => ({ id }))
-                            : data.groups?.map((id) => ({ id })) ?? [],
+                            : (data.groups?.map((id) => ({ id })) ?? []),
                       },
                       hair: offender.hair || null,
                       height: offender.height || null,
@@ -897,7 +903,7 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
                       connect:
                         groups && groups.length === 1
                           ? groups.map(({ value: id }) => ({ id }))
-                          : data.groups?.map((id) => ({ id })) ?? [],
+                          : (data.groups?.map((id) => ({ id })) ?? []),
                     },
                     localId: vehicle.id,
                     make: vehicle.make,
@@ -914,7 +920,7 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
                         connect:
                           groups && groups.length === 1
                             ? groups.map(({ value: id }) => ({ id }))
-                            : data.groups?.map((id) => ({ id })) ?? [],
+                            : (data.groups?.map((id) => ({ id })) ?? []),
                       },
                       make: { set: vehicle.make },
                       model: { set: vehicle.model },
@@ -1043,7 +1049,7 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
               groups:
                 groups && groups.length === 1
                   ? groups.map(({ value: id }) => ({ id }))
-                  : data.groups?.map((id) => ({ id })) ?? [],
+                  : (data.groups?.map((id) => ({ id })) ?? []),
               images: getImages(),
               investigationId: investigationId || null,
               items: data.goods

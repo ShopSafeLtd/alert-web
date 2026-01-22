@@ -121,7 +121,6 @@ const LocatingModal = ({
           {viewport ? (
             <Map
               initialViewState={{
-                fitBoundsOptions: { duration: 100 },
                 latitude: viewport?.latitude,
                 longitude: viewport?.longitude,
                 pitch: 45,

@@ -38,6 +38,13 @@ const Businesses = lazy(() => import('./businesses/router'));
 const StockRemovalRequests = lazy(
   () => import('./stock-removal-requests/router')
 );
+const PoliceDashboard = lazy(() => import('./police-dashboard/router'));
+const PoliceIncidents = lazy(() => import('./police-incidents/router'));
+const PoliceOffenders = lazy(() => import('./police-offenders/router'));
+const PoliceVehicles = lazy(() => import('./police-vehicles/router'));
+const PoliceCrimeGroups = lazy(() => import('./police-crime-groups/router'));
+const PoliceSettings = lazy(() => import('./police-settings/router'));
+const PoliceHeatmap = lazy(() => import('./police-heatmap/router'));
 
 export const AppViews = (): JSX.Element => {
   const { isLoaded } = useAuthClerk();
@@ -145,6 +152,41 @@ export const AppViews = (): JSX.Element => {
             element={<StockRemovalRequests />}
             key="stockRemovalRequests"
             path="stock-removal-requests/*"
+          />
+          <Route
+            element={<PoliceDashboard />}
+            key="police-dashboard"
+            path="police-dashboard/*"
+          />
+          <Route
+            element={<PoliceHeatmap />}
+            key="police-heatmap"
+            path="police-heatmap/*"
+          />
+          <Route
+            element={<PoliceIncidents />}
+            key="police-incidents"
+            path="police-incidents/*"
+          />
+          <Route
+            element={<PoliceOffenders />}
+            key="police-offenders"
+            path="police-offenders/*"
+          />
+          <Route
+            element={<PoliceVehicles />}
+            key="police-vehicles"
+            path="police-vehicles/*"
+          />
+          <Route
+            element={<PoliceCrimeGroups />}
+            key="police-crime-groups"
+            path="police-crime-groups/*"
+          />
+          <Route
+            element={<PoliceSettings />}
+            key="police-settings"
+            path="police-settings/*"
           />
         </Routes>
       )}

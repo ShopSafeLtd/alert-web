@@ -1,0 +1,12 @@
+query PoliceGeographicalAreas($schemeId: String!) {
+  geographicalAreas(schemeId: $schemeId) {
+    id
+    name
+    description
+    areaType
+    color
+    circle
+    polygon
+    createdAt
+  }
+}

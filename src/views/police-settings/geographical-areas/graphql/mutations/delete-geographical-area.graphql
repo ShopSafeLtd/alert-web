@@ -1,0 +1,5 @@
+mutation DeletePoliceGeographicalArea($id: String!) {
+  deleteGeographicalArea(id: $id) {
+    id
+  }
+}
