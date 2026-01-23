@@ -34,6 +34,7 @@ const RoleSelect = ({
     variables: {
       roleId,
       schemeId,
+      take: 1000,
     },
   });
 

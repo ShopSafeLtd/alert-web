@@ -20,6 +20,7 @@ const MandatoryCriticalBulletinModalContainer: React.FC<
     <MandatoryCriticalBulletinModalView
       {...props}
       bulletins={bulletins}
+      onComplete={onComplete}
       visible={visible}
     />
   );

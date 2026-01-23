@@ -238,6 +238,13 @@ const useMandatoryVideoModal = ({
     }
   }, [canProceed, onComplete]);
 
+  // Automatically continue when all mandatory videos are complete
+  useEffect(() => {
+    if (allMandatoryComplete) {
+      onComplete();
+    }
+  }, [allMandatoryComplete, onComplete]);
+
   return {
     allMandatoryComplete,
     canProceed,

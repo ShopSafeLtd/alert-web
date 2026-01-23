@@ -41,6 +41,7 @@ const RolesSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
   const { data, loading } = useUserRolesQuery({
     variables: queryVars ?? {
       schemeId: currentSchemeId,
+      take: 1000,
     },
   });
 

@@ -20,6 +20,7 @@ import {
 } from '#/views/checklist/graphql/queries/__generated__/list-active-checklists.generated';
 import { useChecklistsQuery } from '#/views/checklist/graphql/queries/__generated__/list-checklists.generated';
 import { notification } from 'antd';
+import { SortOrder } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -105,21 +106,45 @@ const useChecklists = (): Return => {
     fetchPolicy: 'cache-and-network',
     variables: {
       order: {
-        [checklistSort.field]: checklistSort.order,
+        title: SortOrder.Asc,
       },
+      take: 100,
       where: {
         OR: [
+          // Case 1: Public checklists (no restrictions)
           {
-            groups: {
-              none: {},
-            },
-            // Templates with no roles AND no groups (public templates)
-            roles: {
-              none: {},
-            },
+            groups: { none: {} },
+            roles: { none: {} },
+            users: { none: {} },
           },
+          // Case 2: Named user override (direct assignment)
           {
-            // Templates where user has the assigned role
+            users: { some: { id: { equals: userId } } },
+          },
+          // Case 3: Has role AND in group (when both specified)
+          {
+            AND: [
+              {
+                roles: {
+                  some: {
+                    users: {
+                      some: { userId: { equals: userId } },
+                    },
+                  },
+                },
+              },
+              {
+                groups: {
+                  some: {
+                    id: { in: userGroupIds },
+                  },
+                },
+              },
+            ],
+          },
+          // Case 4: Has role only (no groups specified)
+          {
+            groups: { none: {} },
             roles: {
               some: {
                 users: {
@@ -128,13 +153,14 @@ const useChecklists = (): Return => {
               },
             },
           },
+          // Case 5: In group only (no roles specified)
           {
-            // Templates where user is in one of the assigned groups
             groups: {
               some: {
                 id: { in: userGroupIds },
               },
             },
+            roles: { none: {} },
           },
         ],
         business: checklistFilter.businesses?.length
@@ -144,9 +170,6 @@ const useChecklists = (): Return => {
         schemes: {
           some: { id: { equals: schemeId } },
         },
-        users: checklistFilter.ownUser
-          ? { some: { id: { equals: userId } } }
-          : undefined,
       },
     },
   });
@@ -159,17 +182,40 @@ const useChecklists = (): Return => {
         {
           checklist: {
             OR: [
+              // Case 1: Public checklists (no restrictions)
               {
-                groups: {
-                  none: {},
-                },
-                // Templates with no roles AND no groups (public templates)
-                roles: {
-                  none: {},
-                },
+                groups: { none: {} },
+                roles: { none: {} },
+                users: { none: {} },
               },
+              // Case 2: Named user override (direct assignment)
               {
-                // Templates where user has the assigned role
+                users: { some: { id: { equals: userId } } },
+              },
+              // Case 3: Has role AND in group (when both specified)
+              {
+                AND: [
+                  {
+                    roles: {
+                      some: {
+                        users: {
+                          some: { userId: { equals: userId } },
+                        },
+                      },
+                    },
+                  },
+                  {
+                    groups: {
+                      some: {
+                        id: { in: userGroupIds },
+                      },
+                    },
+                  },
+                ],
+              },
+              // Case 4: Has role only (no groups specified)
+              {
+                groups: { none: {} },
                 roles: {
                   some: {
                     users: {
@@ -178,13 +224,14 @@ const useChecklists = (): Return => {
                   },
                 },
               },
+              // Case 5: In group only (no roles specified)
               {
-                // Templates where user is in one of the assigned groups
                 groups: {
                   some: {
                     id: { in: userGroupIds },
                   },
                 },
+                roles: { none: {} },
               },
             ],
             business: checklistFilter.businesses?.length
@@ -204,17 +251,40 @@ const useChecklists = (): Return => {
             : undefined,
           checklist: {
             OR: [
+              // Case 1: Public checklists (no restrictions)
               {
-                groups: {
-                  none: {},
-                },
-                // Templates with no roles AND no groups (public templates)
-                roles: {
-                  none: {},
-                },
+                groups: { none: {} },
+                roles: { none: {} },
+                users: { none: {} },
               },
+              // Case 2: Named user override (direct assignment)
               {
-                // Templates where user has the assigned role
+                users: { some: { id: { equals: userId } } },
+              },
+              // Case 3: Has role AND in group (when both specified)
+              {
+                AND: [
+                  {
+                    roles: {
+                      some: {
+                        users: {
+                          some: { userId: { equals: userId } },
+                        },
+                      },
+                    },
+                  },
+                  {
+                    groups: {
+                      some: {
+                        id: { in: userGroupIds },
+                      },
+                    },
+                  },
+                ],
+              },
+              // Case 4: Has role only (no groups specified)
+              {
+                groups: { none: {} },
                 roles: {
                   some: {
                     users: {
@@ -223,13 +293,14 @@ const useChecklists = (): Return => {
                   },
                 },
               },
+              // Case 5: In group only (no roles specified)
               {
-                // Templates where user is in one of the assigned groups
                 groups: {
                   some: {
                     id: { in: userGroupIds },
                   },
                 },
+                roles: { none: {} },
               },
             ],
             id: checklistFilter.templates?.length
@@ -240,11 +311,9 @@ const useChecklists = (): Return => {
             },
           },
 
-          completedBy: checklistFilter.ownUser
-            ? { id: { equals: userId } }
-            : checklistFilter.completedBy?.length
-              ? { id: { in: checklistFilter.completedBy } }
-              : undefined,
+          completedBy: checklistFilter.completedBy?.length
+            ? { id: { in: checklistFilter.completedBy } }
+            : undefined,
         },
       ],
       completedBy: checklistFilter.completedBy?.length

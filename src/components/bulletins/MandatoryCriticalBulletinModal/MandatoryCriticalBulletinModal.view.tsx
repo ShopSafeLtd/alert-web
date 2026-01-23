@@ -25,6 +25,7 @@ interface MandatoryCriticalBulletinModalProps {
   handleContinue: () => void;
   isAcknowledging: boolean;
   isCurrentBulletinAcknowledged: boolean;
+  onComplete: () => void;
   visible: boolean;
 }
 
@@ -41,6 +42,7 @@ const MandatoryCriticalBulletinModal: React.FC<
   handleContinue,
   isAcknowledging,
   isCurrentBulletinAcknowledged,
+  onComplete,
   visible,
 }) => {
   const intl = useIntl();
@@ -92,78 +94,80 @@ const MandatoryCriticalBulletinModal: React.FC<
       width="90%"
     >
       <div style={{ display: 'flex', gap: 24, minHeight: '60vh' }}>
-        {/* Bulletin List Sidebar */}
-        <div
-          style={{
-            borderRight: '1px solid #f0f0f0',
-            minWidth: 280,
-            paddingRight: 16,
-          }}
-        >
-          <Title level={5}>
-            <FormattedMessage defaultMessage="Bulletins Requiring Acknowledgement" />
-          </Title>
-          <List
-            dataSource={bulletins}
-            renderItem={(bulletin) => {
-              const isAcknowledged =
-                acknowledgementStatus[bulletin.id]?.isAcknowledged;
-              const isCurrent = currentBulletin?.id === bulletin.id;
+        {/* Bulletin List Sidebar - Only show when there are multiple bulletins */}
+        {bulletins.length > 1 && (
+          <div
+            style={{
+              borderRight: '1px solid #f0f0f0',
+              minWidth: 280,
+              paddingRight: 16,
+            }}
+          >
+            <Title level={5}>
+              <FormattedMessage defaultMessage="Bulletins Requiring Acknowledgement" />
+            </Title>
+            <List
+              dataSource={bulletins}
+              renderItem={(bulletin) => {
+                const isAcknowledged =
+                  acknowledgementStatus[bulletin.id]?.isAcknowledged;
+                const isCurrent = currentBulletin?.id === bulletin.id;
 
-              return (
-                <List.Item
-                  onClick={() => handleBulletinSelect(bulletin.id)}
-                  style={{
-                    backgroundColor: isCurrent ? '#e6f7ff' : 'transparent',
-                    border: isCurrent
-                      ? '1px solid #1890ff'
-                      : '1px solid transparent',
-                    borderRadius: 4,
-                    cursor: 'pointer',
-                    marginBottom: 8,
-                    padding: 12,
-                  }}
-                >
-                  <div style={{ width: '100%' }}>
-                    <div
-                      style={{
-                        alignItems: 'center',
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                      }}
-                    >
-                      <Text strong style={{ fontSize: 13 }}>
-                        {bulletin.title}
-                      </Text>
-                      {isAcknowledged && (
-                        <CheckCircleOutlined
-                          style={{ color: '#52c41a', fontSize: 16 }}
-                        />
+                return (
+                  <List.Item
+                    onClick={() => handleBulletinSelect(bulletin.id)}
+                    style={{
+                      backgroundColor: isCurrent ? '#e6f7ff' : 'transparent',
+                      border: isCurrent
+                        ? '1px solid #1890ff'
+                        : '1px solid transparent',
+                      borderRadius: 4,
+                      cursor: 'pointer',
+                      marginBottom: 8,
+                      padding: 12,
+                    }}
+                  >
+                    <div style={{ width: '100%' }}>
+                      <div
+                        style={{
+                          alignItems: 'center',
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                        }}
+                      >
+                        <Text strong style={{ fontSize: 13 }}>
+                          {bulletin.title}
+                        </Text>
+                        {isAcknowledged && (
+                          <CheckCircleOutlined
+                            style={{ color: '#52c41a', fontSize: 16 }}
+                          />
+                        )}
+                      </div>
+                      {bulletin.criticalExpiry && (
+                        <Text
+                          style={{ color: '#ff4d4f', fontSize: 11 }}
+                          type="secondary"
+                        >
+                          <FormattedMessage
+                            defaultMessage="Expires {time}"
+                            values={{
+                              time: formatDistanceToNow(
+                                new Date(bulletin.criticalExpiry),
+                                { addSuffix: true }
+                              ),
+                            }}
+                          />
+                        </Text>
                       )}
                     </div>
-                    {bulletin.criticalExpiry && (
-                      <Text
-                        style={{ color: '#ff4d4f', fontSize: 11 }}
-                        type="secondary"
-                      >
-                        <FormattedMessage
-                          defaultMessage="Expires {time}"
-                          values={{
-                            time: formatDistanceToNow(
-                              new Date(bulletin.criticalExpiry),
-                              { addSuffix: true }
-                            ),
-                          }}
-                        />
-                      </Text>
-                    )}
-                  </div>
-                </List.Item>
-              );
-            }}
-            size="small"
-          />
-        </div>
+                  </List.Item>
+                );
+              }}
+              size="small"
+            />
+          </div>
+        )}
 
         {/* Bulletin Content */}
         <div style={{ flex: 1 }}>
@@ -220,15 +224,19 @@ const MandatoryCriticalBulletinModal: React.FC<
                 </div>
               )}
 
-              <div style={{ display: 'flex', gap: 12, marginTop: 24 }}>
+              <div style={{ marginTop: 24 }}>
                 <Button
                   disabled={isCurrentBulletinAcknowledged}
                   icon={<CheckCircleOutlined />}
                   loading={isAcknowledging}
                   onClick={() => {
-                    void handleAcknowledge(currentBulletin.id);
+                    void handleAcknowledge(currentBulletin.id).then(() => {
+                      // If there's only one bulletin, close the modal after acknowledging
+                      if (bulletins.length === 1) {
+                        onComplete();
+                      }
+                    });
                   }}
-                  size="large"
                   type="primary"
                 >
                   {isCurrentBulletinAcknowledged ? (
@@ -236,14 +244,6 @@ const MandatoryCriticalBulletinModal: React.FC<
                   ) : (
                     <FormattedMessage defaultMessage="Acknowledge & Continue" />
                   )}
-                </Button>
-
-                <Button
-                  href={`/app/article/view/${currentBulletin.id}`}
-                  target="_blank"
-                  type="link"
-                >
-                  <FormattedMessage defaultMessage="View Full Bulletin" />
                 </Button>
               </div>
             </Card>
