@@ -163,7 +163,7 @@ export const useGenerateMG11Statement = ({
       const distanceFromIncident = policeDistanceFromIncident;
 
       let viewObstructed = 'unobstructed';
-      if (policeObstructions === 'false' || policeObstructions === false) {
+      if (policeObstructions === 'false') {
         viewObstructed = policeObstructionsDetails
           ? `obstructed by ${policeObstructionsDetails}`
           : 'obstructed';
