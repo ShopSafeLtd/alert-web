@@ -3,6 +3,7 @@ import {
   faChartBar,
   faPoundSign,
   faRedoAlt,
+  faShareNodes,
   faUser,
   faUsers,
 } from '@fortawesome/pro-light-svg-icons';
@@ -33,8 +34,8 @@ const SummaryMetrics: React.FC<SummaryMetricsProps> = ({
         title={intl.formatMessage({ defaultMessage: 'Key Metrics' })}
       >
         <Row gutter={[16, 16]}>
-          {Array.from({ length: 6 }).map((_, index) => (
-            <Col key={index} lg={6} md={8} sm={12} xl={4} xs={12}>
+          {Array.from({ length: 7 }).map((_, index) => (
+            <Col key={index} lg={6} md={8} sm={12} xl={3} xs={12}>
               <Skeleton.Input active style={{ width: '100%' }} />
               <Skeleton.Input
                 active
@@ -55,7 +56,7 @@ const SummaryMetrics: React.FC<SummaryMetricsProps> = ({
     >
       <Row gutter={[16, 16]}>
         {/* Active Offenders */}
-        <Col lg={6} md={8} sm={12} xl={4} xs={12}>
+        <Col lg={6} md={8} sm={12} xl={3} xs={12}>
           <Statistic
             prefix={<FontAwesomeIcon icon={faUser} />}
             title={intl.formatMessage({
@@ -66,7 +67,7 @@ const SummaryMetrics: React.FC<SummaryMetricsProps> = ({
         </Col>
 
         {/* Incidents */}
-        <Col lg={6} md={8} sm={12} xl={4} xs={12}>
+        <Col lg={6} md={8} sm={12} xl={3} xs={12}>
           <Statistic
             prefix={<FontAwesomeIcon icon={faChartBar} />}
             title={intl.formatMessage({
@@ -77,7 +78,7 @@ const SummaryMetrics: React.FC<SummaryMetricsProps> = ({
         </Col>
 
         {/* Total Value */}
-        <Col lg={6} md={8} sm={12} xl={4} xs={12}>
+        <Col lg={6} md={8} sm={12} xl={3} xs={12}>
           <Statistic
             precision={0}
             prefix={<FontAwesomeIcon icon={faPoundSign} />}
@@ -90,7 +91,7 @@ const SummaryMetrics: React.FC<SummaryMetricsProps> = ({
         </Col>
 
         {/* Total Offenders */}
-        <Col lg={6} md={8} sm={12} xl={4} xs={12}>
+        <Col lg={6} md={8} sm={12} xl={3} xs={12}>
           <Statistic
             prefix={<FontAwesomeIcon icon={faUsers} />}
             title={intl.formatMessage({
@@ -101,7 +102,7 @@ const SummaryMetrics: React.FC<SummaryMetricsProps> = ({
         </Col>
 
         {/* Average Offender Value */}
-        <Col lg={6} md={8} sm={12} xl={4} xs={12}>
+        <Col lg={6} md={8} sm={12} xl={3} xs={12}>
           <Statistic
             precision={0}
             prefix={<FontAwesomeIcon icon={faPoundSign} />}
@@ -114,13 +115,24 @@ const SummaryMetrics: React.FC<SummaryMetricsProps> = ({
         </Col>
 
         {/* Total Repeat Offenders */}
-        <Col lg={6} md={8} sm={12} xl={4} xs={12}>
+        <Col lg={6} md={8} sm={12} xl={3} xs={12}>
           <Statistic
             prefix={<FontAwesomeIcon icon={faRedoAlt} />}
             title={intl.formatMessage({
               defaultMessage: 'Repeat Offenders',
             })}
             value={summary?.totalRepeatOffenders ?? 0}
+          />
+        </Col>
+
+        {/* Offenders Shared with Other Police Hubs */}
+        <Col lg={6} md={8} sm={12} xl={3} xs={12}>
+          <Statistic
+            prefix={<FontAwesomeIcon icon={faShareNodes} />}
+            title={intl.formatMessage({
+              defaultMessage: 'Cross Force Offenders',
+            })}
+            value={summary?.offendersSharedWithOtherPoliceHubs ?? 0}
           />
         </Col>
       </Row>

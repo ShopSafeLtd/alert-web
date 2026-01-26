@@ -90,9 +90,7 @@ const usePoliceOffenderFeed = (): Return => {
     const now = dayjs();
     switch (dateFilter) {
       case 'all': {
-        return {
-          lastIncidentAfter: now.subtract(12, 'months').toDate(),
-        };
+        return {};
       }
       case '6months': {
         return {
@@ -241,13 +239,19 @@ const usePoliceOffenderFeed = (): Return => {
         updateQuery: (prev, { fetchMoreResult }) => {
           if (!fetchMoreResult) return prev;
 
+          // Deduplicate edges by node ID to prevent duplicate keys
+          const prevEdges = prev.sharedOffenderRelay?.edges || [];
+          const newEdges = fetchMoreResult.sharedOffenderRelay?.edges || [];
+
+          const seenIds = new Set(prevEdges.map((edge) => edge.node.id));
+          const uniqueNewEdges = newEdges.filter(
+            (edge) => !seenIds.has(edge.node.id)
+          );
+
           return {
             sharedOffenderRelay: {
               ...fetchMoreResult.sharedOffenderRelay,
-              edges: [
-                ...(prev.sharedOffenderRelay?.edges || []),
-                ...(fetchMoreResult.sharedOffenderRelay?.edges || []),
-              ],
+              edges: [...prevEdges, ...uniqueNewEdges],
             },
           };
         },

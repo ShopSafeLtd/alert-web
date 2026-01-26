@@ -30,12 +30,12 @@ import {
 import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import hasPermission from '#/utils/has-permission';
 import hasRolePermission from '#/utils/has-role-permission';
-import { useGenerateStatementBodyMutation } from '#/views/incidents/AddIncident/graphql/__generated__/generateStatementBody.generated';
 import { useUpsertIncidentMutation } from '#/views/incidents/AddIncident/graphql/mutations/__generated__/upsert-incident.generated';
 import { useBusinessGroupsLazyQuery } from '#/views/incidents/AddIncident/graphql/queries/__generated__/business-groups.generated';
 import { useIncidentDraftDetailsQuery } from '#/views/incidents/AddIncident/graphql/queries/__generated__/edit-incident-draft.generated';
 import generateInitData from '#/views/incidents/AddIncident/helpers/generate-init-data';
 import upsertIncident from '#/views/incidents/AddIncident/helpers/upsert-incident';
+import { useGenerateMG11Statement } from '#/views/incidents/AddIncident/hooks/useGenerateMG11Statement';
 import { Form, Modal, notification } from 'antd';
 import dayjs from 'dayjs';
 import { useBusinessBrandsLazyQuery } from 'graphql/businesses/queries/__generated__/business-brands.generated';
@@ -55,8 +55,7 @@ import {
 } from 'graphql/types';
 // noinspection ES6PreferShortImport
 import { useAtomValue } from 'jotai/index';
-import { debounce } from 'lodash-es';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
 import { useStoreActions, useStoreState } from 'state';
@@ -165,7 +164,6 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
   const [newAddressData, setNewAddressData] = useState<LocationData>();
   const [primaryImage, setPrimaryImage] = useState<string>('');
   const [policeReporting, setPoliceReporting] = useState(false);
-  const [generatingStatement, setGeneratingStatement] = useState(false);
   const [formDataVersion, setFormDataVersion] = useState(0);
 
   const [isTheft] = useState(false);
@@ -184,30 +182,6 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
   const victimInvolved = Form.useWatch('victimInvolved', form);
   const witnessesInvolved = Form.useWatch('witnessesInvolved', form);
   const cctvAvailable = Form.useWatch('cctvAvailable', form);
-  const policeMG11 = Form.useWatch('policeMG11', form);
-
-  const description = Form.useWatch('description', form);
-  const policeDistanceFromIncident = Form.useWatch(
-    'policeDistanceFromIncident',
-    form
-  );
-  const fellingTags = Form.useWatch('fellingTags', form);
-  const policeIncidentDuration = Form.useWatch('policeIncidentDuration', form);
-  const involvedTags = Form.useWatch('involvedTags', form);
-  const goods = Form.useWatch('goods', form);
-  const policeKnownBefore = Form.useWatch('policeKnownBefore', form);
-  const policeObstructions = Form.useWatch('policeObstructions', form);
-  const offenders = Form.useWatch('offenders', form);
-  const policeItemsLocation = Form.useWatch('policeItemsLocation', form);
-  const policeItemsMO = Form.useWatch('policeItemsMO', form);
-  const policeReasonRemember = Form.useWatch('policeReasonRemember', form);
-  const policeObstructionsDetails = Form.useWatch(
-    'policeObstructionsDetails',
-    form
-  );
-  const policeWitnessLength = Form.useWatch('policeWitnessLength', form);
-  const vehicles = Form.useWatch('vehicles', form);
-  const policeWitnessAtTime = Form.useWatch('policeWitnessAtTime', form);
 
   const { data: draftData, loading: draftLoading } =
     useIncidentDraftDetailsQuery({
@@ -237,7 +211,6 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
     }
   }, [businesses]);
 
-  const [generateStatementBody] = useGenerateStatementBodyMutation();
   const [getBrands] = useBusinessBrandsLazyQuery();
   const [getGroups] = useBusinessGroupsLazyQuery();
 
@@ -284,132 +257,12 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
     }
   }, [formBusiness]);
 
-  const handleStatementGeneration = async () => {
-    if (policeReporting && policeWitnessAtTime !== undefined) {
-      const formData = form.getFieldsValue();
-      if (!formData.description) return;
-      setGeneratingStatement(true);
-
-      const statementData = await generateStatementBody({
-        variables: {
-          data: {
-            businessId: formData.business?.value,
-            cctv:
-              formData.cctv?.map((item) => ({
-                aheadBehind: item.aheadBehind,
-                correctTime: item.correctTime,
-                description: item.description,
-                end: item.endTime,
-                incorrectBy: item.incorrectBy
-                  ? item.incorrectBy.toString()
-                  : undefined,
-                start: item.startTime,
-              })) ?? [],
-            date: formData.date,
-            description: formData.description,
-            distanceFromIncident: formData.policeDistanceFromIncident,
-            impactTags: formData.fellingTags ?? [],
-            incidentDuration: formData.policeIncidentDuration,
-            incidentType: formData.tags[0],
-            involvedTags: formData.involvedTags ?? [],
-            items: formData.goods?.map((item) => ({
-              description: item.description,
-              goodsId: item.goodsType,
-              recoveredValue: item.recoveredValue,
-              value: item.value,
-            })),
-            knownSubjects: formData.policeKnownBefore,
-            obstructions: formData.policeObstructions,
-            offenders:
-              formData.offenders?.map((item) => ({
-                age: item.age,
-                build: item.build,
-                characteristics: item.peculiarities,
-                comment: item.comment,
-                ethnicity: item.race,
-                hair: item.hair,
-                height: item.height,
-                name: item.name,
-                sex: item.gender,
-              })) ?? [],
-            policeItemsLocation: formData.policeItemsLocation,
-            policeItemsMO: formData.policeItemsMO,
-            policeObstructionsDetails: formData.policeObstructionsDetails,
-            policeWitnessLength: formData.policeWitnessLength,
-            reasonToRemember: formData.policeReasonRemember,
-            vehicles:
-              formData.vehicles?.map((item) => ({
-                colour: item.colour,
-                make: item.make,
-                model: item.model,
-                registrationPlate: item.registration,
-              })) ?? [],
-            witnessedInPerson: formData.policeWitnessAtTime ?? false,
-          },
-        },
-      });
-      setGeneratingStatement(false);
-
-      form.setFieldValue(
-        'policeStatement',
-        statementData.data?.generateStatementBody.statement ?? ''
-      );
-    }
-  };
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const debouncedHandleStatementGeneration = useCallback(
-    debounce(() => {
-      void handleStatementGeneration();
-    }, 1000),
-    [
-      policeReporting,
-      policeMG11,
-      policeWitnessAtTime,
-      vehicles,
-      policeObstructionsDetails,
-      policeWitnessLength,
-      policeReasonRemember,
-      policeItemsMO,
-      policeItemsLocation,
-      offenders,
-      policeObstructions,
-      policeKnownBefore,
-      goods,
-      involvedTags,
-      formTags,
-      policeIncidentDuration,
-
-      fellingTags,
-      policeDistanceFromIncident,
-      description,
-    ]
-  );
-
-  useEffect(() => {
-    void debouncedHandleStatementGeneration();
-    return () => debouncedHandleStatementGeneration.cancel();
-  }, [
+  // Generate MG11 statement from form data
+  const { generating: generatingStatement } = useGenerateMG11Statement({
+    businessId,
+    form,
     policeReporting,
-    policeMG11,
-    policeWitnessAtTime,
-    vehicles,
-    policeObstructionsDetails,
-    policeWitnessLength,
-    policeReasonRemember,
-    policeItemsMO,
-    policeItemsLocation,
-    offenders,
-    policeObstructions,
-    policeKnownBefore,
-    goods,
-    involvedTags,
-    formTags,
-    policeIncidentDuration,
-    fellingTags,
-    policeDistanceFromIncident,
-    description,
-  ]);
+  });
 
   const navigate = useNavigate();
 

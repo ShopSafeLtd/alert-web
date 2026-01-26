@@ -16360,6 +16360,8 @@ export type PoliceHubSummaryMetrics = {
   averagePriorityScore?: Maybe<Scalars['Float']>;
   /** Offenders with HIGH threat level from AI risk assessment */
   highRiskIndividualsCount: Scalars['Int'];
+  /** Offenders shared with other police hub schemes in the time period */
+  offendersSharedWithOtherPoliceHubs: Scalars['Int'];
   /** Total value of incidents in period */
   totalEstimatedValue?: Maybe<Scalars['Float']>;
   /** Total incidents shared in time period */
@@ -16390,6 +16392,10 @@ export type PoliceHubTopOffender = {
   daysSinceLastIncident?: Maybe<Scalars['Int']>;
   /** Date of first incident */
   firstIncidentDate?: Maybe<Scalars['DateTime']>;
+  /** Whether this offender has associated images */
+  hasImages: Scalars['Boolean'];
+  /** Whether this offender has a name */
+  hasName: Scalars['Boolean'];
   /** Images associated with this offender */
   images: Scalars['JSON'];
   /** Number of incidents in time period */
@@ -16398,6 +16404,8 @@ export type PoliceHubTopOffender = {
   lastIncidentAt?: Maybe<Scalars['DateTime']>;
   /** Date of most recent incident */
   lastIncidentDate?: Maybe<Scalars['DateTime']>;
+  /** Offender name if available */
+  name?: Maybe<Scalars['String']>;
   /** Original offender IDs (many-to-many) */
   offenderIds: Array<Scalars['String']>;
   /** Police priority score for ranking */

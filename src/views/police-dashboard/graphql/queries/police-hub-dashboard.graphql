@@ -23,9 +23,11 @@ query PoliceHubDashboard(
       totalOffenders
       averageOffenderValue
       totalRepeatOffenders
+      offendersSharedWithOtherPoliceHubs
     }
     topOffenders {
       sharedOffenderId
+      name
       policePriorityScore
       aiImpactScore
       aiSummary
@@ -37,6 +39,8 @@ query PoliceHubDashboard(
       lastIncidentDate
       lastIncidentAt
       totalValue
+      hasImages
+      hasName
       images
       tags
       activeAreas

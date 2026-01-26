@@ -97,6 +97,22 @@ interface Return {
   openLightbox: (elements: { src: string }[], index: number) => void;
 }
 
+// Type for dashboard image objects
+interface DashboardImage {
+  card?: null | string;
+  id: string;
+  isFace?: boolean | null;
+  low?: null | string;
+  optimised?: null | string;
+  policeImage?: boolean | null;
+  position?: ImagePosition | string;
+  positionX?: null | number;
+  positionY?: null | number;
+  primary?: boolean | null;
+  rotation?: number;
+  url?: null | string;
+}
+
 // Parse JSON fields if they're from PoliceHubTopOffender
 const parseJSONField = <T>(field: unknown, fallback: T): T => {
   if (!field) return fallback;
@@ -130,10 +146,36 @@ const usePoliceOffenderCard = ({ sharedOffender }: Props): Return => {
 
   const images =
     isPoliceHubTopOffender && topOffender
-      ? parseJSONField<Array<Return['mappedData']['images'][number]>>(
-          topOffender.images,
-          []
-        )
+      ? (() => {
+          const parsed = parseJSONField<
+            DashboardImage[] | Record<string, DashboardImage>
+          >(topOffender.images, []);
+
+          let imagesArray: DashboardImage[] = [];
+
+          // Handle both array and object-with-numeric-keys formats
+          if (Array.isArray(parsed)) {
+            imagesArray = parsed;
+          } else if (parsed && typeof parsed === 'object') {
+            // Convert object with numeric keys to array (e.g., { "0": {...}, "1": {...} } => [{...}, {...}])
+            imagesArray = Object.values(parsed);
+          }
+
+          // Map dashboard image structure to expected structure
+          return imagesArray.map((img) => ({
+            id: img.id,
+            // Dashboard images have 'card', 'low', 'url' but not 'optimised'
+            isFace: img.isFace || null,
+            // Use 'card' for optimised display, fallback to 'low' then 'url'
+            optimised: img.optimised || img.card || img.low || img.url,
+            policeImage: img.policeImage || null,
+            position: (img.position as ImagePosition) || 'CENTER_CENTER',
+            positionX: img.positionX || null,
+            positionY: img.positionY || null,
+            primary: img.primary || null,
+            rotation: img.rotation || 0,
+          }));
+        })()
       : sharedOffender.images || [];
 
   const tags =
@@ -176,7 +218,11 @@ const usePoliceOffenderCard = ({ sharedOffender }: Props): Return => {
     totalIncidents:
       topOffender?.incidentCount ?? sharedOffender.totalIncidents ?? null,
     // CHANGED: Use totalValue from SharedOffender or PoliceHubTopOffender
-    totalValue: topOffender?.totalValue ?? topOffender?.totalLossValue ?? null,
+    totalValue:
+      topOffender?.totalValue ??
+      topOffender?.totalLossValue ??
+      sharedOffender.totalLossValue ??
+      null,
     updatedAt: topOffender?.updatedAt
       ? new Date(topOffender.updatedAt)
       : new Date(),
