@@ -57,15 +57,18 @@ const useMandatoryVideoModal = ({
 
   // Initialize completion status for all videos
   useEffect(() => {
-    const initialStatus: Record<string, VideoCompletionStatus> = {};
-    for (const video of videos) {
-      initialStatus[video.id] = {
-        hasWatched: false,
-        progress: 0,
-        videoId: video.id,
-      };
-    }
-    setCompletionStatus(initialStatus);
+    setCompletionStatus((prev) => {
+      const newStatus: Record<string, VideoCompletionStatus> = {};
+      for (const video of videos) {
+        // Preserve existing completion status if video was already tracked
+        newStatus[video.id] = prev[video.id] || {
+          hasWatched: false,
+          progress: 0,
+          videoId: video.id,
+        };
+      }
+      return newStatus;
+    });
   }, [videos]);
 
   // Reset the onComplete guard when videos change
@@ -76,6 +79,7 @@ const useMandatoryVideoModal = ({
   const [markComplete, { loading: isMarking }] = useMutation(
     MARK_TRAINING_VIDEO_COMPLETE,
     {
+      awaitRefetchQueries: false,
       onCompleted: () => {
         notification.success({
           description: intl.formatMessage({
@@ -98,10 +102,12 @@ const useMandatoryVideoModal = ({
           placement: 'bottomRight',
         });
       },
+      refetchQueries: ['PendingLoginPromptVideos'],
     }
   );
 
   const [dismissPrompt] = useDismissTrainingVideoPromptMutation({
+    awaitRefetchQueries: false,
     onCompleted: () => {
       notification.success({
         description: intl.formatMessage({
@@ -124,6 +130,7 @@ const useMandatoryVideoModal = ({
         placement: 'bottomRight',
       });
     },
+    refetchQueries: ['PendingLoginPromptVideos'],
   });
 
   const currentVideo = useMemo(
@@ -161,6 +168,17 @@ const useMandatoryVideoModal = ({
           // Mark as watched and trigger backend call
           void markComplete({
             variables: { trainingVideoId: currentVideoId },
+          }).then(() => {
+            // Check if all mandatory videos are now complete
+            const mandatoryVideos = videos.filter((v) => v.mandatory);
+            const allComplete = mandatoryVideos.every(
+              (v) => v.id === currentVideoId || prev[v.id]?.hasWatched
+            );
+
+            // If all mandatory videos complete, close modal
+            if (allComplete) {
+              onComplete();
+            }
           });
 
           return {
@@ -185,11 +203,12 @@ const useMandatoryVideoModal = ({
         return prev;
       });
     },
-    [currentVideoId, markComplete]
+    [currentVideoId, markComplete, videos, onComplete]
   );
 
   const handleMarkComplete = useCallback(
     (videoId: string) => {
+      // Update local state optimistically
       setCompletionStatus((prev) => ({
         ...prev,
         [videoId]: {
@@ -199,11 +218,23 @@ const useMandatoryVideoModal = ({
         },
       }));
 
+      // Execute mutation
       void markComplete({
         variables: { trainingVideoId: videoId },
+      }).then(() => {
+        // Check if all mandatory videos are now complete
+        const mandatoryVideos = videos.filter((v) => v.mandatory);
+        const allComplete = mandatoryVideos.every(
+          (v) => v.id === videoId || completionStatus[v.id]?.hasWatched
+        );
+
+        // If all mandatory videos complete, close modal immediately
+        if (allComplete) {
+          onComplete();
+        }
       });
     },
-    [markComplete]
+    [markComplete, videos, completionStatus, onComplete]
   );
 
   const handleDismiss = useCallback(
@@ -222,6 +253,7 @@ const useMandatoryVideoModal = ({
         return;
       }
 
+      // Update local state optimistically
       setCompletionStatus((prev) => ({
         ...prev,
         [videoId]: {
@@ -231,11 +263,23 @@ const useMandatoryVideoModal = ({
         },
       }));
 
+      // Execute mutation
       void dismissPrompt({
         variables: { trainingVideoId: videoId },
+      }).then(() => {
+        // Check if all mandatory videos are complete (not affected by dismissing optional video)
+        const mandatoryVideos = videos.filter((v) => v.mandatory);
+        const allComplete = mandatoryVideos.every(
+          (v) => completionStatus[v.id]?.hasWatched
+        );
+
+        // If all mandatory videos complete, close modal immediately
+        if (allComplete) {
+          onComplete();
+        }
       });
     },
-    [videos, dismissPrompt, intl]
+    [videos, dismissPrompt, intl, completionStatus, onComplete]
   );
 
   const handleVideoSelect = useCallback((videoId: string) => {
