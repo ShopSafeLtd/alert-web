@@ -5,10 +5,9 @@ import { useAtomValue } from 'jotai/index';
 import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
-import {
-  useResourceTrainingVideosQuery,
-  ResourceTrainingVideosQuery,
-} from '../graphql/queries/__generated__/training-videos.generated';
+import type { ResourceTrainingVideosQuery } from '../graphql/queries/__generated__/training-videos.generated';
+
+import { useResourceTrainingVideosQuery } from '../graphql/queries/__generated__/training-videos.generated';
 
 export interface Tag {
   id: string;

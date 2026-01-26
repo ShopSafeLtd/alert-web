@@ -4,7 +4,10 @@ import type { FormInstance } from 'antd';
 import type { Role } from 'graphql/types';
 
 import { useFoldersSelectQuery } from '#/components/form-components/Folders/FolderSelect/graphql/__generated__/FolderSelectQuery.generated';
-import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import {
+  currentSchemeIdAtom,
+  schemeTypeAtom,
+} from '#/providers/SchemeProvider/SchemeProvider';
 import { useStoreState } from '#/state';
 import { useSelectChecklistsQuery } from '#/views/checklist/graphql/queries/__generated__/select-checklists.generated';
 import { useDeleteRoleMutation } from '#/views/roles/graphql/mutations/__generated__/deleteRole.generated';
@@ -25,6 +28,7 @@ import { useNavigate } from 'react-router';
 import type { FormData } from '../types';
 
 import { roleItems, settings } from '../types';
+import { filterRoleItemsBySchemeType } from '../utils/filterRoleItemsBySchemeType';
 
 export interface DeleteFormValues {
   newRoleId: string;
@@ -75,6 +79,7 @@ export interface FormValues extends FormData {
 export function useRole(id: string | undefined, create: boolean): Props {
   const intl = useIntl();
   const schemeId = useAtomValue(currentSchemeIdAtom);
+  const schemeType = useAtomValue(schemeTypeAtom);
   const { checklistSort } = useStoreState((state) => state.filter);
   const [form] = Form.useForm<FormValues>();
 
@@ -250,8 +255,12 @@ export function useRole(id: string | undefined, create: boolean): Props {
   };
 
   const clearAll = () => {
-    // Filter out disabled items (Automations, Vision, Vision Settings)
-    const enabledRoleItems = roleItems.filter((item) => !item.disabled);
+    // Filter by scheme type first, then disabled status
+    const filteredRoleItems = filterRoleItemsBySchemeType(
+      roleItems,
+      schemeType
+    );
+    const enabledRoleItems = filteredRoleItems.filter((item) => !item.disabled);
     const enabledSettingsChildren = settings[0].children.filter(
       (item) => !item.disabled
     );
@@ -270,8 +279,12 @@ export function useRole(id: string | undefined, create: boolean): Props {
     });
   };
   const setAll = () => {
-    // Filter out disabled items (Automations, Vision, Vision Settings)
-    const enabledRoleItems = roleItems.filter((item) => !item.disabled);
+    // Filter by scheme type first, then disabled status
+    const filteredRoleItems = filterRoleItemsBySchemeType(
+      roleItems,
+      schemeType
+    );
+    const enabledRoleItems = filteredRoleItems.filter((item) => !item.disabled);
     const enabledSettingsChildren = settings[0].children.filter(
       (item) => !item.disabled
     );

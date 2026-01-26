@@ -3,7 +3,11 @@ import React from 'react';
 import View from './UserList.view';
 import useUserList from './useUserList';
 
-const UserList = (): JSX.Element => {
+interface Props {
+  basePath?: string;
+}
+
+const UserList = ({ basePath }: Props): JSX.Element => {
   const {
     addUser,
     bulkInviteConfirm,
@@ -39,6 +43,7 @@ const UserList = (): JSX.Element => {
   return (
     <View
       addUser={addUser}
+      basePath={basePath}
       bulkInviteConfirm={bulkInviteConfirm}
       bulkInviting={bulkInviting}
       clearFilters={clearFilters}

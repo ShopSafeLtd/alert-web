@@ -36,3 +36,6 @@ postInstall.js
 en/lang.json
 src/**/!(*.generated).{ts,tsx}
 /src/graphql/types.ts
+
+# Documentation files
+*.md

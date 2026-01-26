@@ -13,6 +13,8 @@ query stockRemovalRequest($where: UniqueId!) {
         reasonForNonReturn
         rechargeBrand
         rechargeReference
+        recipientName
+        recipientPhone
         returnDate
         shippingAddress
         smqAccountNumber

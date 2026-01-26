@@ -15,6 +15,8 @@ const IncidentFeed = (): JSX.Element => {
     openLightbox,
     setCompactView,
     setGallery,
+    setImpactTagsFilter,
+    setInvolvedTagsFilter,
     setPeculiarities,
     setSearch,
     setTableView,
@@ -37,6 +39,8 @@ const IncidentFeed = (): JSX.Element => {
       openLightbox={openLightbox}
       setCompactView={setCompactView}
       setGallery={setGallery}
+      setImpactTagsFilter={setImpactTagsFilter}
+      setInvolvedTagsFilter={setInvolvedTagsFilter}
       setPeculiarities={setPeculiarities}
       setSearch={setSearch}
       setTableView={setTableView}

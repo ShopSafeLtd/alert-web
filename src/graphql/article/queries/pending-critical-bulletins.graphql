@@ -1,0 +1,15 @@
+query PendingCriticalBulletins($schemeId: String!) {
+  pendingCriticalBulletins(schemeId: $schemeId) {
+    id
+    title
+    previewText
+    previewImage
+    criticalExpiry
+    priority
+    createdAt
+    createdBy {
+      id
+      fullName
+    }
+  }
+}

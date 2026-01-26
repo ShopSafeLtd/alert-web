@@ -20,7 +20,7 @@ const VideoPreviewModalView: React.FC<VideoPreviewModalViewProps> = ({
 }) => {
   const intl = useIntl();
 
-  const formatDate = (dateString: string | Date): string => {
+  const formatDate = (dateString: Date | string): string => {
     if (dateString instanceof Date) {
       dateString = dateString.toLocaleDateString(intl.locale, {
         day: 'numeric',

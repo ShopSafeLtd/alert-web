@@ -19,6 +19,7 @@ const EditIncidentFeed = ({ incidentId, onClose }: Props): JSX.Element => {
     onSubmit,
     saving,
     tagsLoading,
+    usPoliceData,
     // onSearchBusiness,
   } = useEditIncidentFeed({
     incidentId,
@@ -37,6 +38,7 @@ const EditIncidentFeed = ({ incidentId, onClose }: Props): JSX.Element => {
       onSubmit={onSubmit}
       saving={saving}
       tagsLoading={tagsLoading}
+      usPoliceData={usPoliceData}
       // onSearchBusiness={onSearchBusiness}
     />
   );

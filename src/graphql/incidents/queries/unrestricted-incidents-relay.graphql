@@ -1,0 +1,51 @@
+query unrestrictedIncidentsRelay(
+  $first: Int
+  $after: String
+  $orderBy: IncidentOrderByWithRelationInput
+  $where: UnrestrictedIncidentRelayInput!
+) {
+  unrestrictedIncidentsRelay(
+    first: $first
+    after: $after
+    orderBy: $orderBy
+    where: $where
+  ) {
+    edges {
+      cursor
+      node {
+        id
+        subject
+        dayTime
+        reference
+        policeRef
+        business {
+          id
+          name
+        }
+        location {
+          id
+          full
+        }
+        incidentItems {
+          value
+          recoveredValue
+        }
+        offenders {
+          id
+          name
+          images(take: 1) {
+            id
+            optimised
+          }
+        }
+      }
+    }
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
+    }
+    totalCount
+  }
+}

@@ -329,10 +329,12 @@ const IncidentImport = () => {
             },
           });
 
-          return response.data?.businessRelay.edges.map((item) => ({
-            label: item.node.name,
-            value: item.node.id,
-          }));
+          return (
+            response.data?.businessRelay.edges.map((item) => ({
+              label: item.node.name,
+              value: item.node.id,
+            })) ?? []
+          );
         },
         async get(query: string) {
           const response = await getBusinesses({
@@ -362,22 +364,24 @@ const IncidentImport = () => {
           };
         },
       },
-      goodsData: typesData
-        ? new GenericProvider(
-            goodsData?.goodsTypes.reduce((acc, curr) => {
-              acc[curr.id] = curr.name;
-              return acc;
-            }, {}) ?? {}
-          )
-        : {},
-      typesData: typesData
-        ? new GenericProvider(
-            typesData.listIncidentTags.reduce((acc, curr) => {
-              acc[curr.value] = curr.label;
-              return acc;
-            }, {})
-          )
-        : {},
+      ...(typesData
+        ? {
+            goodsData: new GenericProvider(
+              // eslint-disable-next-line unicorn/no-array-reduce
+              goodsData?.goodsTypes.reduce((acc, curr) => {
+                acc[curr.id] = curr.name;
+                return acc;
+              }, {}) ?? {}
+            ),
+            typesData: new GenericProvider(
+              // eslint-disable-next-line unicorn/no-array-reduce
+              typesData.listIncidentTags.reduce((acc, curr) => {
+                acc[curr.value] = curr.label;
+                return acc;
+              }, {})
+            ),
+          }
+        : {}),
     }),
     [goodsData, typesData, getBusinesses, schemeId]
   );

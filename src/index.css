@@ -39185,3 +39185,44 @@ a.mapboxgl-ctrl-logo {
   height: 100%;
   width: 100%;
 }
+
+/* ========================================
+   MapboxDraw Critical Styles - Bug Fix
+   Force visibility for polygon drawing vertices
+   ======================================== */
+
+/* Force visibility for drawing vertices and lines */
+.mapbox-gl-draw_polygon,
+.mapbox-gl-draw_line,
+.mapbox-gl-draw_point {
+  position: absolute !important;
+  pointer-events: auto !important;
+  opacity: 1 !important;
+  z-index: 999 !important;
+}
+
+/* Vertex circles - orange dots when drawing */
+.mapbox-gl-draw_point {
+  width: 15px !important;
+  height: 15px !important;
+  border-radius: 50% !important;
+  background-color: #fbb03b !important;
+  border: 2px solid #fff !important;
+  box-shadow: 0 0 0 2px #fbb03b !important;
+  cursor: pointer !important;
+}
+
+/* Active vertex (red when selected) */
+.mapbox-gl-draw_point.active {
+  background-color: #ff6b6b !important;
+}
+
+/* Ensure canvas accepts pointer events */
+.mapboxgl-canvas-container canvas {
+  pointer-events: auto !important;
+}
+
+/* Make draw controls visible if needed */
+.mapboxgl-ctrl-group button {
+  display: block;
+}

@@ -1,7 +1,7 @@
 /* eslint-disable formatjs/no-literal-string-in-jsx */
+import PermissionCheckWrapper from '#/components/PermissionCheck/PermissionCheckWrapper';
 import { faEdit } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import PermissionCheckWrapper from '#/components/PermissionCheck/PermissionCheckWrapper';
 import {
   Button,
   Card,
@@ -19,6 +19,8 @@ import { useNavigate } from 'react-router';
 import { useReactToPrint } from 'react-to-print';
 
 import type { ActiveChecklistSection } from '../active-checklist/useActiveChecklist';
+
+import { adjustDependentThreshold } from '../utils/adjustDependentThreshold';
 
 interface QuestionWeight {
   additionalInfo: string;
@@ -48,12 +50,13 @@ const CompletedChecklistView = ({
   completedAt,
   completedByUser,
   generating = false,
+  logo,
   onBack = () => {},
+  reference,
   signature,
+  storeName,
   theme = 'dark',
   title,
-  logo,
-  storeName,
 }: {
   additionalInfo: string;
   checklistId?: string;
@@ -61,12 +64,13 @@ const CompletedChecklistView = ({
   completedAt: string;
   completedByUser: string;
   generating?: boolean;
+  logo?: string;
   onBack?: () => void;
+  reference?: null | number;
   signature: string;
+  storeName?: string;
   theme?: 'dark' | 'light';
   title: string;
-  logo?: string;
-  storeName?: string;
 }) => {
   const intl = useIntl();
   const navigate = useNavigate();
@@ -95,33 +99,55 @@ const CompletedChecklistView = ({
     total: number;
   }[] = [];
 
-  for (const section of checklistSections.filter((s) => !s.sub)) {
-    // Check if the section has a dependsOnWeight property
-    if (section.dependsOnWeight) {
-      // Find the dependent section
-      const dependentSection = checklistSections.find(
-        (s) =>
-          s.section ===
-          Number.parseInt(section.dependsOnWeight?.dependsOn || '0')
-      );
+  // Helper function to recursively check if a section is visible
+  // based on its full dependency chain
+  const isSectionVisible = (sectionIndex: number): boolean => {
+    const section = checklistSections.find(
+      (s) => s.section === sectionIndex && !s.sub
+    );
 
-      if (dependentSection) {
-        // Calculate the total weight of the dependent section
-        let dependentWeight = 0;
-        for (const subsection of dependentSection.subsections) {
-          for (const question of subsection.questions) {
-            const weight =
-              question.weights.find((w) => w.answer === question.answer)
-                ?.weight || 0;
-            dependentWeight += weight;
-          }
-        }
+    if (!section) return false;
+    if (!section.dependsOnWeight) return true;
 
-        // If the dependent weight is less than the required weight, skip this section and its subsections
-        if (dependentWeight < Number.parseInt(section.dependsOnWeight.weight)) {
-          continue;
-        }
+    const dependencyIndex = Number.parseInt(
+      section.dependsOnWeight.dependsOn || '0'
+    );
+    const threshold = Number.parseInt(section.dependsOnWeight.weight);
+
+    // Recursive check: is the parent visible?
+    if (!isSectionVisible(dependencyIndex)) return false;
+
+    const dependentSection = checklistSections.find(
+      (s) => s.section === dependencyIndex && !s.sub
+    );
+
+    if (!dependentSection) return false;
+
+    // Calculate parent's weight
+    let dependentWeight = 0;
+    for (const subsection of dependentSection.subsections) {
+      for (const question of subsection.questions) {
+        if (question.answer === 'N/A') continue;
+        const weight =
+          question.weights.find((w) => w.answer === question.answer)?.weight ||
+          0;
+        dependentWeight += weight;
       }
+    }
+
+    // Adjust threshold and compare
+    const adjustedThreshold = adjustDependentThreshold(
+      dependentSection,
+      threshold
+    );
+
+    return dependentWeight <= adjustedThreshold;
+  };
+
+  for (const section of checklistSections.filter((s) => !s.sub)) {
+    // Check if section is visible based on full dependency chain
+    if (section.dependsOnWeight && !isSectionVisible(section.section)) {
+      continue;
     }
 
     // Process the section and its subsections
@@ -244,7 +270,7 @@ const CompletedChecklistView = ({
     return (
       <div className="page" ref={componentRef}>
         {(logo || storeName) && (
-          <Row style={{ marginBottom: 20, alignItems: 'center' }}>
+          <Row style={{ alignItems: 'center', marginBottom: 20 }}>
             {logo && (
               <Col>
                 <img
@@ -263,8 +289,8 @@ const CompletedChecklistView = ({
               <div
                 style={{
                   border: '1px solid #d9d9d9',
-                  padding: 12,
                   borderRadius: 4,
+                  padding: 12,
                 }}
               >
                 {storeName && (
@@ -272,10 +298,10 @@ const CompletedChecklistView = ({
                     Store: {storeName}
                   </Typography.Text>
                 )}
-                <Typography.Text type="secondary" style={{ display: 'block' }}>
+                <Typography.Text style={{ display: 'block' }} type="secondary">
                   Completed: {completedAt}
                 </Typography.Text>
-                <Typography.Text type="secondary" style={{ display: 'block' }}>
+                <Typography.Text style={{ display: 'block' }} type="secondary">
                   By: {completedByUser}
                 </Typography.Text>
               </div>
@@ -759,6 +785,14 @@ const CompletedChecklistView = ({
           ]}
           onBack={onBack}
           style={{ paddingLeft: 0, paddingRight: 0, width: '100%' }}
+          subTitle={
+            reference
+              ? intl.formatMessage(
+                  { defaultMessage: 'Alert ID: {reference}' },
+                  { reference }
+                )
+              : undefined
+          }
           title={intl.formatMessage({
             defaultMessage: 'Checklists',
           })}
@@ -768,7 +802,7 @@ const CompletedChecklistView = ({
       <Card>
         <div ref={componentRef}>
           {(logo || storeName) && (
-            <Row style={{ marginBottom: 20, alignItems: 'center' }}>
+            <Row style={{ alignItems: 'center', marginBottom: 20 }}>
               {logo && (
                 <Col>
                   <img
@@ -787,8 +821,8 @@ const CompletedChecklistView = ({
                 <div
                   style={{
                     border: '1px solid #d9d9d9',
-                    padding: 12,
                     borderRadius: 4,
+                    padding: 12,
                   }}
                 >
                   {storeName && (
@@ -797,14 +831,14 @@ const CompletedChecklistView = ({
                     </Typography.Text>
                   )}
                   <Typography.Text
-                    type="secondary"
                     style={{ display: 'block' }}
+                    type="secondary"
                   >
                     Completed: {completedAt}
                   </Typography.Text>
                   <Typography.Text
-                    type="secondary"
                     style={{ display: 'block' }}
+                    type="secondary"
                   >
                     By: {completedByUser}
                   </Typography.Text>

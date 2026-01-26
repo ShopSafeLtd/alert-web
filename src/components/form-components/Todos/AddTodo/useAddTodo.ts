@@ -237,7 +237,8 @@ const useAddTodo = ({
           label: question.questionFormatted,
           options: question.optionsFormFormatted || [],
           questionId: question.id,
-          required: false,
+          required:
+            template.requiredQuestionIds?.includes(question.id) ?? false,
           tagQuestionId: '',
           value: '',
         }))
@@ -430,21 +431,27 @@ const useAddTodo = ({
             questions:
               selectedQuestions && selectedQuestions.length > 0
                 ? {
-                    create: selectedQuestions.map((question) => ({
-                      answers: {
-                        create: [
-                          {
-                            answer: (data[question.id] as string) || '',
-                            type: question.type,
-                          },
-                        ],
-                      },
-                      question: {
-                        connect: {
-                          id: question.id,
+                    create: selectedQuestions.map((question) => {
+                      const customQ = questions.find(
+                        (q) => q.questionId === question.id
+                      );
+                      return {
+                        answers: {
+                          create: [
+                            {
+                              answer: (data[question.id] as string) || '',
+                              type: question.type,
+                            },
+                          ],
                         },
-                      },
-                    })),
+                        question: {
+                          connect: {
+                            id: question.id,
+                          },
+                        },
+                        req: customQ?.required ?? false,
+                      };
+                    }),
                   }
                 : undefined,
 

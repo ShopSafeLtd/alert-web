@@ -1,0 +1,200 @@
+/* Screen: Hide the print container by default */
+.printContainer {
+  display: none;
+}
+
+/* Print media query: Show and style for printing */
+@media print {
+  .printContainer {
+    display: block;
+    font-family: Arial, sans-serif;
+    color: #000;
+    background: #fff;
+    padding: 20px;
+  }
+
+  /* Header Section */
+  .header {
+    margin-bottom: 24px;
+    border-bottom: 3px solid #000;
+    padding-bottom: 16px;
+  }
+
+  .title {
+    font-size: 28pt;
+    font-weight: bold;
+    margin: 0 0 12px 0;
+    text-align: center;
+    letter-spacing: 2px;
+  }
+
+  .headerInfo {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .referenceNumber {
+    font-size: 20pt;
+    font-weight: bold;
+  }
+
+  .metadata {
+    text-align: right;
+    font-size: 11pt;
+    line-height: 1.6;
+  }
+
+  /* Recipient Section */
+  .recipientSection {
+    margin-bottom: 24px;
+    padding: 16px;
+    background-color: #f5f5f5;
+    border: 2px solid #000;
+    border-radius: 4px;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .recipientLabel {
+    font-size: 14pt;
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+
+  .recipientAddress,
+  .recipientName {
+    font-size: 12pt;
+    line-height: 1.5;
+    white-space: pre-line;
+  }
+
+  /* Items Table */
+  .itemsTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 24px;
+    font-size: 11pt;
+  }
+
+  .itemsTable thead {
+    background-color: #000;
+    color: #fff;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .itemsTable th {
+    padding: 12px 8px;
+    text-align: left;
+    font-weight: bold;
+    border: 1px solid #000;
+    font-size: 12pt;
+  }
+
+  .itemsTable td {
+    padding: 10px 8px;
+    border: 1px solid #333;
+    vertical-align: top;
+  }
+
+  .evenRow {
+    background-color: #f9f9f9;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Table Columns */
+  .skuCell {
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    width: 120px;
+  }
+
+  .brandCell {
+    width: 100px;
+  }
+
+  .nameCell {
+    min-width: 200px;
+  }
+
+  .quantityColumn {
+    text-align: center;
+    width: 100px;
+  }
+
+  .quantityCell {
+    text-align: center;
+    font-size: 16pt;
+    font-weight: bold;
+  }
+
+  .pickedColumn {
+    text-align: center;
+    width: 100px;
+    background-color: #fff;
+  }
+
+  .pickedCell {
+    text-align: center;
+    background-color: #fff;
+    border: 2px solid #000;
+    min-height: 40px;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Footer Section */
+  .footer {
+    margin-top: 32px;
+    page-break-inside: avoid;
+  }
+
+  .signatureLine {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    font-size: 12pt;
+  }
+
+  .signatureField {
+    flex: 1;
+  }
+
+  .signatureField:first-child {
+    margin-right: 24px;
+  }
+
+  .notesSection {
+    font-size: 12pt;
+  }
+
+  .notesLines {
+    margin-top: 8px;
+  }
+
+  .notesLine {
+    margin-bottom: 8px;
+  }
+
+  /* Page break controls */
+  .itemsTable {
+    page-break-inside: auto;
+  }
+
+  .itemsTable tr {
+    page-break-inside: avoid;
+    page-break-after: auto;
+  }
+
+  .itemsTable thead {
+    display: table-header-group;
+  }
+
+  /* Ensure proper printing */
+  body {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}

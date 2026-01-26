@@ -1,6 +1,6 @@
 import { gql, useMutation } from '@apollo/client';
 import { notification } from 'antd';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
 
 import type { PendingVideo, VideoCompletionStatus } from './types';
@@ -46,6 +46,7 @@ const useMandatoryVideoModal = ({
   const [completionStatus, setCompletionStatus] = useState<
     Record<string, VideoCompletionStatus>
   >({});
+  const onCompleteCalledRef = useRef(false);
 
   // Initialize first video
   useEffect(() => {
@@ -65,6 +66,11 @@ const useMandatoryVideoModal = ({
       };
     }
     setCompletionStatus(initialStatus);
+  }, [videos]);
+
+  // Reset the onComplete guard when videos change
+  useEffect(() => {
+    onCompleteCalledRef.current = false;
   }, [videos]);
 
   const [markComplete, { loading: isMarking }] = useMutation(
@@ -148,34 +154,38 @@ const useMandatoryVideoModal = ({
     (state: { played: number }) => {
       if (!currentVideoId) return;
 
-      const currentStatus = completionStatus[currentVideoId];
-      if (currentStatus && !currentStatus.hasWatched && state.played >= 0.9) {
-        // Update progress
-        setCompletionStatus((prev) => ({
-          ...prev,
-          [currentVideoId]: {
-            ...prev[currentVideoId],
-            hasWatched: true,
-            progress: 1,
-          },
-        }));
+      setCompletionStatus((prev) => {
+        const currentStatus = prev[currentVideoId];
 
-        // Automatically mark as complete for the backend
-        void markComplete({
-          variables: { trainingVideoId: currentVideoId },
-        });
-      } else if (currentStatus) {
-        // Update progress even if not complete yet
-        setCompletionStatus((prev) => ({
-          ...prev,
-          [currentVideoId]: {
-            ...prev[currentVideoId],
-            progress: state.played,
-          },
-        }));
-      }
+        if (currentStatus && !currentStatus.hasWatched && state.played >= 0.9) {
+          // Mark as watched and trigger backend call
+          void markComplete({
+            variables: { trainingVideoId: currentVideoId },
+          });
+
+          return {
+            ...prev,
+            [currentVideoId]: {
+              ...currentStatus,
+              hasWatched: true,
+              progress: 1,
+            },
+          };
+        } else if (currentStatus) {
+          // Update progress
+          return {
+            ...prev,
+            [currentVideoId]: {
+              ...currentStatus,
+              progress: state.played,
+            },
+          };
+        }
+
+        return prev;
+      });
     },
-    [currentVideoId, completionStatus, markComplete]
+    [currentVideoId, markComplete]
   );
 
   const handleMarkComplete = useCallback(
@@ -237,6 +247,14 @@ const useMandatoryVideoModal = ({
       onComplete();
     }
   }, [canProceed, onComplete]);
+
+  // Automatically continue when all mandatory videos are complete
+  useEffect(() => {
+    if (allMandatoryComplete && !onCompleteCalledRef.current) {
+      onCompleteCalledRef.current = true;
+      onComplete();
+    }
+  }, [allMandatoryComplete, onComplete]);
 
   return {
     allMandatoryComplete,

@@ -28,6 +28,10 @@ mutation CreateTodo($data: TodoCreateInput!) {
     incident {
       id
       reference
+      crimeTypes {
+        id
+        name
+      }
     }
     investigationId
     investigation {

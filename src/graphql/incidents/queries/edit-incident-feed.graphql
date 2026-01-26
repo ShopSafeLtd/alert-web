@@ -10,6 +10,8 @@ query EditIncidentFeed($where: IncidentWhereUniqueInput!) {
     policeReported
     policeRef
     policeNo
+    policeDepartment
+    policeOfficerName
     policeInvolved
     activityAuthorised
     subscribed
@@ -310,6 +312,10 @@ query EditIncidentFeed($where: IncidentWhereUniqueInput!) {
           }
         }
       }
+    }
+    scheme {
+      id
+      usPoliceData
     }
   }
 }

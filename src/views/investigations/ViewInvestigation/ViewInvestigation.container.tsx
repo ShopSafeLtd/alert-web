@@ -32,7 +32,6 @@ const ViewCustomer: React.FC = () => {
     onAddCrimeGroup,
     onAddExistingCrimeGroup,
     onAddExistingIncident,
-    onAddExistingOffender,
     onAddExistingOffenders,
     onAddExistingVehicle,
     onAddExistingVehicles,
@@ -48,6 +47,7 @@ const ViewCustomer: React.FC = () => {
     onDeleteVehicle,
     onEditCrimeGroup,
     onEditVehicle,
+    onRefetchInvestigation,
     onReopenInvestigation,
     saving,
     setCompleteTodoVisible,
@@ -112,7 +112,6 @@ const ViewCustomer: React.FC = () => {
       onAddCrimeGroup={onAddCrimeGroup}
       onAddExistingCrimeGroup={onAddExistingCrimeGroup}
       onAddExistingIncident={onAddExistingIncident}
-      onAddExistingOffender={onAddExistingOffender}
       onAddExistingOffenders={onAddExistingOffenders}
       onAddExistingVehicle={onAddExistingVehicle}
       onAddExistingVehicles={onAddExistingVehicles}
@@ -128,6 +127,7 @@ const ViewCustomer: React.FC = () => {
       onDeleteVehicle={onDeleteVehicle}
       onEditCrimeGroup={onEditCrimeGroup}
       onEditVehicle={onEditVehicle}
+      onRefetchInvestigation={onRefetchInvestigation}
       onReopenInvestigation={onReopenInvestigation}
       saving={saving}
       setCompleteTodoVisible={setCompleteTodoVisible}

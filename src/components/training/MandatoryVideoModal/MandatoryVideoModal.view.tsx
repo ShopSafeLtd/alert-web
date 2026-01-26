@@ -28,10 +28,10 @@ interface MandatoryVideoModalProps {
 
 const MandatoryVideoModal: React.FC<MandatoryVideoModalProps> = ({
   allMandatoryComplete,
-  canProceed,
+  canProceed: _canProceed,
   completionStatus,
   currentVideo,
-  handleContinue,
+  handleContinue: _handleContinue,
   handleDismiss,
   handleMarkComplete,
   handleProgress,
@@ -283,33 +283,6 @@ const MandatoryVideoModal: React.FC<MandatoryVideoModalProps> = ({
               </>
             )}
           </div>
-        </div>
-
-        {/* Footer */}
-        <div className={classes.footer}>
-          <Text type="secondary">
-            {allMandatoryComplete ? (
-              <FormattedMessage defaultMessage="All required videos completed. You may continue to the application." />
-            ) : (
-              <FormattedMessage
-                defaultMessage="{count} required {count, plural, one {video} other {videos}} remaining. Watch to 90% completion to proceed."
-                values={{
-                  count: mandatoryVideos.filter(
-                    (v) => !completionStatus[v.id]?.hasWatched
-                  ).length,
-                }}
-              />
-            )}
-          </Text>
-          <Button
-            className={classes.continueButton}
-            disabled={!canProceed}
-            onClick={handleContinue}
-            size="large"
-            type="primary"
-          >
-            <FormattedMessage defaultMessage="Continue to Application" />
-          </Button>
         </div>
       </div>
     </Modal>

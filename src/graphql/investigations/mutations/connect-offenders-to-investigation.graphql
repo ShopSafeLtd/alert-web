@@ -1,0 +1,13 @@
+mutation ConnectOffendersToInvestigation($data: ConnectOffendersToInvestigationInput!) {
+  connectOffendersToInvestigation(data: $data) {
+    id
+    offenders {
+      ...Offenders
+      images {
+        ...Images
+        isFace
+      }
+    }
+    totalOffenders
+  }
+}

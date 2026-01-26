@@ -11,6 +11,7 @@ interface Props {
   generatingStatement: boolean;
   policeReporting: boolean;
   saving: boolean;
+  usPoliceData?: boolean;
 }
 
 const IncidentPolice = ({
@@ -18,15 +19,21 @@ const IncidentPolice = ({
   generatingStatement,
   policeReporting,
   saving,
+  usPoliceData,
 }: Props) =>
   policeReporting ? (
     <IncidentPoliceReportingView
       form={form}
       generatingStatement={generatingStatement}
       saving={saving}
+      usPoliceData={usPoliceData}
     />
   ) : (
-    <IncidentPoliceView form={form} saving={saving} />
+    <IncidentPoliceView
+      form={form}
+      saving={saving}
+      usPoliceData={usPoliceData}
+    />
   );
 
 export default IncidentPolice;

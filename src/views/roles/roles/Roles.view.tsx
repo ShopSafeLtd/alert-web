@@ -25,6 +25,7 @@ import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router';
 
 interface Props {
+  basePath?: string;
   data: RolesQuery | undefined;
   fetchPage: (page: number) => void;
   loading: boolean;
@@ -45,6 +46,7 @@ interface TableData {
 }
 
 const RolesView = ({
+  basePath = '/app/scheme-settings',
   data,
   fetchPage,
   loading,
@@ -241,7 +243,7 @@ const RolesView = ({
               {intl.formatMessage({ defaultMessage: 'Export' })}
             </Button>
             <Button
-              onClick={() => navigate('/app/scheme-settings/roles/create')}
+              onClick={() => navigate(`${basePath}/roles/create`)}
               type="primary"
             >
               {intl.formatMessage({
@@ -293,21 +295,27 @@ const RolesView = ({
               }),
             },
           ].filter((column) => visibleColumns.includes(column.key))}
-          dataSource={data?.roles?.edges.map(({ node: role }) => ({
-            approvalTier: role?.approvalTier || false,
-            key: role?.id,
-            name: role?.name,
-            noUsers: role?.usersCount || 0,
-            type:
-              // eslint-disable-next-line no-unsafe-optional-chaining
-              role?.type?.charAt(0).toUpperCase() +
-              // eslint-disable-next-line no-unsafe-optional-chaining
-              role?.type?.slice(1).toLowerCase().replaceAll('_', ' '),
-          }))}
+          dataSource={data?.roles?.edges
+            .filter(
+              ({ node: role }) =>
+                !search ||
+                role?.name?.toLowerCase().includes(search.toLowerCase())
+            )
+            .map(({ node: role }) => ({
+              approvalTier: role?.approvalTier || false,
+              key: role?.id,
+              name: role?.name,
+              noUsers: role?.usersCount || 0,
+              type:
+                // eslint-disable-next-line no-unsafe-optional-chaining
+                role?.type?.charAt(0).toUpperCase() +
+                // eslint-disable-next-line no-unsafe-optional-chaining
+                role?.type?.slice(1).toLowerCase().replaceAll('_', ' '),
+            }))}
           loading={loading}
           onRow={(record) => ({
             onClick: () => {
-              navigate(`/app/scheme-settings/roles/${record?.key}`);
+              navigate(`${basePath}/roles/${record?.key}`);
             },
             style: { cursor: 'pointer' },
           })}
@@ -322,7 +330,11 @@ const RolesView = ({
             pageSize,
             pageSizeOptions: ['10', '25', '50', '100'],
             showSizeChanger: true,
-            total: data?.roles?.totalCount,
+            total: search
+              ? data?.roles?.edges.filter(({ node: role }) =>
+                  role?.name?.toLowerCase().includes(search.toLowerCase())
+                ).length
+              : data?.roles?.totalCount,
           }}
           size={tableSize}
         />

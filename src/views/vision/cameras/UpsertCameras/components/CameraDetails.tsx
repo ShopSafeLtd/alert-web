@@ -120,9 +120,8 @@ const CameraDetails = () => {
             <Form.Item
               name={['duplicateMatchTimeout', 'hours']}
               noStyle
-              validateTrigger={['onChange', 'onBlur']}
               rules={[
-                { required: true, message: '' },
+                { message: '', required: true },
                 {
                   validator: (_, value) => {
                     const num = Number(value);
@@ -133,12 +132,13 @@ const CameraDetails = () => {
                   },
                 },
               ]}
+              validateTrigger={['onChange', 'onBlur']}
             >
               <Input
-                type="number"
-                min={0}
-                max={99}
                 addonAfter={<FormattedMessage defaultMessage="Hours" />}
+                max={99}
+                min={0}
+                type="number"
               />
             </Form.Item>
           </Col>
@@ -146,9 +146,8 @@ const CameraDetails = () => {
             <Form.Item
               name={['duplicateMatchTimeout', 'minutes']}
               noStyle
-              validateTrigger={['onChange', 'onBlur']}
               rules={[
-                { required: true, message: '' },
+                { message: '', required: true },
                 {
                   validator: (_, value) => {
                     const num = Number(value);
@@ -159,12 +158,13 @@ const CameraDetails = () => {
                   },
                 },
               ]}
+              validateTrigger={['onChange', 'onBlur']}
             >
               <Input
-                type="number"
-                min={0}
-                max={59}
                 addonAfter={<FormattedMessage defaultMessage="Minutes" />}
+                max={59}
+                min={0}
+                type="number"
               />
             </Form.Item>
           </Col>
@@ -172,9 +172,8 @@ const CameraDetails = () => {
             <Form.Item
               name={['duplicateMatchTimeout', 'seconds']}
               noStyle
-              validateTrigger={['onChange', 'onBlur']}
               rules={[
-                { required: true, message: '' },
+                { message: '', required: true },
                 {
                   validator: (_, value) => {
                     const num = Number(value);
@@ -185,12 +184,13 @@ const CameraDetails = () => {
                   },
                 },
               ]}
+              validateTrigger={['onChange', 'onBlur']}
             >
               <Input
-                type="number"
-                min={0}
-                max={59}
                 addonAfter={<FormattedMessage defaultMessage="Seconds" />}
+                max={59}
+                min={0}
+                type="number"
               />
             </Form.Item>
           </Col>

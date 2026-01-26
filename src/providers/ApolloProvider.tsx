@@ -46,7 +46,7 @@ export function createSSELink(options: ClientOptions): ApolloLink {
           {
             complete: sink.complete.bind(sink),
             error: sink.error.bind(sink),
-            next: sink.next.bind(sink),
+            next: (value) => sink.next(value as FetchResult),
           }
         )
       )

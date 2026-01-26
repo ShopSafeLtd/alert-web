@@ -11,19 +11,19 @@ import React from 'react';
 import ConfigHeader from './components/CameraHeader';
 
 const UpsertCamerasView = ({
-  loading,
   data: _,
-  form,
   detectionConfigs,
-  handleFormSubmit,
   editId,
+  form,
+  handleFormSubmit,
+  loading,
 }: {
-  loading: boolean;
   data: ViewAiCameraQuery['aiVisionCamera'] | null | undefined;
-  form: FormInstance<CameraUpsertForm>;
   detectionConfigs: DetectionConfigItem[];
+  editId: null | string;
+  form: FormInstance<CameraUpsertForm>;
   handleFormSubmit: (formData: CameraUpsertForm) => void;
-  editId: string | null;
+  loading: boolean;
 }) => (
   <div style={{ padding: 15, width: '100%' }}>
     <div
@@ -46,7 +46,7 @@ const UpsertCamerasView = ({
         <Row gutter={16}>
           <Col span={10}>
             <CameraDetails />
-            <ConfigSelect form={form} configs={detectionConfigs} />
+            <ConfigSelect configs={detectionConfigs} form={form} />
           </Col>
         </Row>
       </Form>

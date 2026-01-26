@@ -12,6 +12,7 @@ import {
   currentSchemeBusinessesAtom,
   currentSchemeIdAtom,
   currentUserSchemeAtom,
+  pendingCriticalBulletinsAtom,
   pendingLoginVideosAtom,
   settingSchemeAtom,
 } from '#/providers/SchemeProvider/SchemeProvider';
@@ -20,6 +21,7 @@ import { useAuth as useAuthClerk } from '@clerk/clerk-react';
 import { faBars } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Grid, Layout } from 'antd';
+import MandatoryCriticalBulletinModal from 'components/bulletins/MandatoryCriticalBulletinModal';
 import MobileNav, {
   mobileNavOpenAtom,
 } from 'components/layout-components/AntD/navigation/MobileNav';
@@ -29,7 +31,7 @@ import navigationConfig from 'configs/NavigationConfig';
 import { useAtomValue, useSetAtom } from 'jotai/index';
 import AppViews from 'navigation/app-views/router';
 import { usePostHog } from 'posthog-js/react';
-import React, { Suspense, useEffect, useState } from 'react';
+import React, { Suspense, useCallback, useEffect, useState } from 'react';
 import { useThemeSwitcher } from 'react-css-theme-switcher/src';
 import { createUseStyles } from 'react-jss';
 import { useLocation } from 'react-router-dom';
@@ -70,6 +72,7 @@ const AppLayout = (): JSX.Element => {
   const screens = utils.getBreakPoint(useBreakpoint());
   const isMobile = !screens.includes('xl');
   const isNavSide = navType === NavType.SIDE;
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
   const { isLoaded } = useAuthClerk();
 
   const getLayoutGutter = () => {
@@ -90,35 +93,50 @@ const AppLayout = (): JSX.Element => {
   const termsExpired = currentUser?.termsExpired ?? false;
   const forcePasswordReset = noPassword
     ? false
-    : currentUser?.forcePasswordReset ?? false;
+    : (currentUser?.forcePasswordReset ?? false);
   const isSet = !!currentUser;
 
   const currentScheme = useAtomValue(currentSchemeIdAtom);
   const setMobileNavOpen = useSetAtom(mobileNavOpenAtom);
   const pendingVideos = useAtomValue(pendingLoginVideosAtom);
   const setPendingVideos = useSetAtom(pendingLoginVideosAtom);
+  const pendingBulletins = useAtomValue(pendingCriticalBulletinsAtom);
+  const setPendingBulletins = useSetAtom(pendingCriticalBulletinsAtom);
   const [showVideoModal, setShowVideoModal] = useState(false);
+  const [showBulletinModal, setShowBulletinModal] = useState(false);
 
   const onMobileNavToggle = () => {
     setMobileNavOpen(true);
   };
 
-  const handleVideosComplete = () => {
+  const handleBulletinsComplete = useCallback(() => {
+    setPendingBulletins([]);
+    setShowBulletinModal(false);
+  }, [setPendingBulletins, setShowBulletinModal]);
+
+  const handleVideosComplete = useCallback(() => {
     setPendingVideos([]);
     setShowVideoModal(false);
-  };
+  }, [setPendingVideos, setShowVideoModal]);
 
-  // Show modal when pending videos are loaded
+  // Show bulletin modal when pending critical bulletins are loaded
   useEffect(() => {
-    if (pendingVideos.length > 0) {
+    if (pendingBulletins.length > 0) {
+      setShowBulletinModal(true);
+    }
+  }, [pendingBulletins]);
+
+  // Show video modal when pending videos are loaded (only if no bulletins)
+  useEffect(() => {
+    if (pendingVideos.length > 0 && pendingBulletins.length === 0) {
       setShowVideoModal(true);
     }
-  }, [pendingVideos]);
+  }, [pendingVideos, pendingBulletins]);
 
   const { status } = useThemeSwitcher();
 
   useEffect(() => {
-    getCurrentUser();
+    void getCurrentUser();
   }, []);
   useEffect(() => {
     if (id) {
@@ -136,11 +154,11 @@ const AppLayout = (): JSX.Element => {
       document.cookie = `shopsafe_user_id=${id}; path=/; domain=.shopsafe.io; Secure; SameSite=None`;
 
       if (oldDistinctId) {
-        posthog.alias(oldDistinctId, id);
+        void posthog.alias(oldDistinctId, id);
       }
 
       if (sessionId) {
-        posthog.capture('user_logged_in', { session_id: sessionId });
+        void posthog.capture('user_logged_in', { session_id: sessionId });
       }
     }
   }, [posthog, id, email, currentScheme, fullName]);
@@ -190,6 +208,11 @@ const AppLayout = (): JSX.Element => {
               <FontAwesomeIcon color="#FFF" icon={faBars} size="xl" />
             </div>
           )}
+          <MandatoryCriticalBulletinModal
+            bulletins={pendingBulletins}
+            onComplete={handleBulletinsComplete}
+            visible={showBulletinModal}
+          />
           <MandatoryVideoModal
             onComplete={handleVideosComplete}
             videos={pendingVideos}

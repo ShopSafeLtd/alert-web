@@ -1,0 +1,12 @@
+mutation CreatePoliceGeographicalArea($data: CreateGeographicalAreaInput!) {
+  createGeographicalArea(data: $data) {
+    id
+    name
+    description
+    areaType
+    color
+    circle
+    polygon
+    createdAt
+  }
+}

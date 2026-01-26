@@ -7,8 +7,9 @@ import { useStoreActions } from '#/state';
 import { defaultAdminLayout, defaultUserLayout } from '#/state/dashboard-model';
 import { LocalStorageKeys } from '#/types';
 import { notification } from 'antd';
+import { usePendingCriticalBulletinsLazyQuery } from 'graphql/article/queries/__generated__/pending-critical-bulletins.generated';
 import { usePendingLoginPromptVideosLazyQuery } from 'graphql/queries/__generated__/pending-login-prompt-videos.generated';
-import { Currency, GoodsMode, Role } from 'graphql/types';
+import { Currency, GoodsMode, Role, SchemeType } from 'graphql/types';
 import { atom, useAtomValue, useSetAtom } from 'jotai/index';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -154,10 +155,12 @@ export const defaultCurrentUserSchemeAtom: UserSchemeState = {
     requireBusinessOnIncident: false,
     requireSiteNumberForUsers: false,
     restrictIncidentAccess: false,
+    schemeType: SchemeType.Default,
     showBlankActivity: false,
     skipLocationToAddress: false,
     taskTimeTracking: false,
     usDateFormat: false,
+    usPoliceData: false,
     useBusinessGroupsOnIncident: false,
     userTodos: 0,
   },
@@ -172,6 +175,10 @@ export const currentSchemeIdAtom = atom(
 );
 export const currentSchemeAtom = atom(
   (get) => get(currentUserSchemeAtom).scheme,
+  () => {}
+);
+export const schemeTypeAtom = atom(
+  (get) => get(currentUserSchemeAtom).scheme.schemeType,
   () => {}
 );
 export const currentPermissionsAtom = atom(
@@ -204,6 +211,22 @@ export const userNotificationsAtom = atom(
 
 export const pendingLoginVideosAtom = atom<PendingVideo[]>([]);
 
+export type PendingCriticalBulletin = {
+  createdAt: Date;
+  createdBy: {
+    fullName: string;
+    id: string;
+  };
+  criticalExpiry?: Date | null;
+  id: string;
+  previewImage?: null | string;
+  previewText?: null | string;
+  priority: string;
+  title: string;
+};
+
+export const pendingCriticalBulletinsAtom = atom<PendingCriticalBulletin[]>([]);
+
 export const useSchemeProvider = () => {
   const setStateScheme = useSetAtom(currentUserSchemeIdAtom);
 
@@ -220,12 +243,15 @@ export const useSchemeProvider = () => {
 const SchemeProvider = ({ children }: Props) => {
   const navigate = useNavigate();
   const currentUserSchemeId = useAtomValue(currentUserSchemeIdAtom);
+  const currentSchemeId = useAtomValue(currentSchemeIdAtom);
   const setCurrentUserScheme = useSetAtom(currentUserSchemeAtom);
   const setStateIsSet = useSetAtom(stateIsSetAtom);
   const setSettingScheme = useSetAtom(settingSchemeAtom);
   const setCurrentSchemeId = useSetAtom(currentUserSchemeIdAtom);
   const setPendingLoginVideos = useSetAtom(pendingLoginVideosAtom);
+  const setPendingCriticalBulletins = useSetAtom(pendingCriticalBulletinsAtom);
   const [shouldCheckVideos, setShouldCheckVideos] = useState(false);
+  const [shouldCheckBulletins, setShouldCheckBulletins] = useState(false);
 
   const setDashboard = useStoreActions(
     (actions) => actions.dashboard.setSchemeLayouts
@@ -243,21 +269,47 @@ const SchemeProvider = ({ children }: Props) => {
     },
   });
 
+  // Query for pending critical bulletins
+  const [fetchPendingBulletins] = usePendingCriticalBulletinsLazyQuery({
+    fetchPolicy: 'network-only',
+    onCompleted: (data) => {
+      setPendingCriticalBulletins(
+        data.pendingCriticalBulletins as PendingCriticalBulletin[]
+      );
+    },
+    onError: () => {
+      // Silently fail - don't block app if this fails
+      setPendingCriticalBulletins([]);
+    },
+  });
+
   useEffect(() => {
     setSettingScheme(true);
   }, [currentUserSchemeId]);
 
   // Fetch pending videos when scheme is loaded
   useEffect(() => {
-    if (shouldCheckVideos && currentUserSchemeId) {
+    if (shouldCheckVideos && currentSchemeId) {
       void fetchPendingVideos({
         variables: {
-          schemeId: currentUserSchemeId,
+          schemeId: currentSchemeId,
         },
       });
       setShouldCheckVideos(false);
     }
-  }, [shouldCheckVideos, currentUserSchemeId, fetchPendingVideos]);
+  }, [shouldCheckVideos, currentSchemeId, fetchPendingVideos]);
+
+  // Fetch pending critical bulletins when scheme is loaded
+  useEffect(() => {
+    if (shouldCheckBulletins && currentSchemeId) {
+      void fetchPendingBulletins({
+        variables: {
+          schemeId: currentSchemeId,
+        },
+      });
+      setShouldCheckBulletins(false);
+    }
+  }, [shouldCheckBulletins, currentSchemeId, fetchPendingBulletins]);
 
   void useCurrentSchemeProviderQuery({
     onCompleted: (data) => {
@@ -305,6 +357,8 @@ const SchemeProvider = ({ children }: Props) => {
 
       // Check for pending login prompt videos
       setShouldCheckVideos(true);
+      // Check for pending critical bulletins
+      setShouldCheckBulletins(true);
     },
     onError: (error) => {
       // Handle disabled scheme error

@@ -14,7 +14,7 @@ const VisionCentre = () => {
   const visionId = useParams().id || '';
 
   return (
-    <div style={{ paddingLeft: 16, paddingRight: 16, marginTop: 16 }}>
+    <div style={{ marginTop: 16, paddingLeft: 16, paddingRight: 16 }}>
       <Row gutter={32}>
         <Col
           span={12}
@@ -45,7 +45,7 @@ const VisionConfig = () => {
   const onDetectionConfigs = () => navigate('/app/vision/detection-configs');
 
   return (
-    <Row style={{ marginBottom: 10, justifyContent: 'space-between' }}>
+    <Row style={{ justifyContent: 'space-between', marginBottom: 10 }}>
       <div />
       <div>
         <Button

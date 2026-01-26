@@ -33,7 +33,7 @@ export interface BanData {
 // Offender
 export interface OffenderData {
   age?: Age | null;
-  alias?: null | string[];
+  alias?: string[];
   approved?: boolean | null;
   bans?: BanData[] | undefined;
   build?: Build | null;
@@ -55,10 +55,10 @@ export interface OffenderData {
   idSource?: IdSource | null;
   idVerified?: boolean;
   imageUid?: string[] | undefined;
-  images?: ImageCardData[] | null | undefined;
+  images?: ImageCardData[] | null;
   infoSource?: null | string;
   justification?: null | string;
-  knownFor?: null | string[];
+  knownFor?: string[];
   lastActive?:
     | { dayTime?: null | string | undefined; id: string }
     | null
@@ -72,7 +72,7 @@ export interface OffenderData {
     id: string;
     name: string;
   }[];
-  targetedGoods?: null | string[];
+  targetedGoods?: string[];
   updatedAt?: Date;
 }
 

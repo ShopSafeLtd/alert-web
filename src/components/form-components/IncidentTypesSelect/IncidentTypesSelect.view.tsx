@@ -42,43 +42,70 @@ const IncidentTypesSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
     },
   });
 
-  const { hasNestedStructure, treeData } = useMemo(() => {
+  const treeData = useMemo(() => {
     if (!data?.listIncidentTags) {
-      return { hasNestedStructure: false, treeData: [] };
+      return [];
     }
 
-    // Check if any tag has children (nested structure)
-    const hasNested = data.listIncidentTags.some((tag) =>
-      data.listIncidentTags.some((otherTag) => otherTag.parentId === tag.value)
-    );
-
-    const tree = data.listIncidentTags
+    return data.listIncidentTags
       .filter((tag) => tag.tier === 0)
       .sort((a, b) => a.label.localeCompare(b.label))
-      .map((tag) => ({
-        children: data.listIncidentTags
+      .map((tag) => {
+        const tier1Children = data.listIncidentTags
           .filter((tag2) => tag2.parentId === tag.value)
           .sort((a, b) => a.label.localeCompare(b.label))
-          .map((tag2) => ({
-            children: data.listIncidentTags
+          .map((tag2) => {
+            const tier2Children = data.listIncidentTags
               .filter((tag3) => tag3.parentId === tag2.value)
               .sort((a, b) => a.label.localeCompare(b.label))
               .map((tag3) => ({
                 label: tag3.label,
                 value: tag3.value,
-              })),
-            label: tag2.label,
-            value: tag2.value,
-          })),
-        label: tag.label,
-        value: tag.value,
-      }));
+              }));
 
-    return { hasNestedStructure: hasNested, treeData: tree };
+            return {
+              ...(tier2Children.length > 0 && { children: tier2Children }),
+              label: tag2.label,
+              value: tag2.value,
+            };
+          });
+
+        return {
+          ...(tier1Children.length > 0 && { children: tier1Children }),
+          label: tag.label,
+          value: tag.value,
+        };
+      });
   }, [data]);
 
+  // Normalize incoming values: convert labels to IDs if needed
+  // This handles legacy data that stores labels instead of IDs
+  const normalizedValue = useMemo(() => {
+    if (!value || !data?.listIncidentTags) return value;
+
+    // Create lookup maps for both directions
+    const valueSet = new Set(data.listIncidentTags.map((tag) => tag.value));
+    const labelToIdMap = new Map(
+      data.listIncidentTags.map((tag) => [tag.label, tag.value])
+    );
+
+    const valueArray = Array.isArray(value) ? value : [value];
+
+    const normalized = valueArray.map((v) => {
+      // If it's already a valid ID, keep it as-is (backward compatibility)
+      if (valueSet.has(v)) {
+        return v;
+      }
+      // Otherwise, try to convert label to ID
+      return labelToIdMap.get(v) || v;
+    });
+
+    return Array.isArray(value) ? normalized : normalized[0];
+  }, [value, data]);
+
   // Determine if multiple selection should be allowed
-  const allowMultiple = multiple === undefined ? !hasNestedStructure : multiple;
+  // Default to true to support multiple selections (most common use case)
+  const allowMultiple = multiple ?? true;
 
   const onTreeChange = (items: string | string[]) => {
     if (onChange) {
@@ -105,7 +132,7 @@ const IncidentTypesSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
       onChange={onTreeChange}
       optionFilterProp="label"
       placeholder={placeholder}
-      showCheckedStrategy={TreeSelect.SHOW_CHILD}
+      showCheckedStrategy={TreeSelect.SHOW_ALL}
       showSearch
       size={size}
       style={style}
@@ -113,7 +140,7 @@ const IncidentTypesSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
       treeData={treeData}
       treeDefaultExpandAll
       treeNodeFilterProp="label"
-      value={value}
+      value={loading ? undefined : normalizedValue}
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...props}
     />

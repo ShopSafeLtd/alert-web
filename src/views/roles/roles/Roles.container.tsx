@@ -3,7 +3,11 @@ import React from 'react';
 import View from './Roles.view';
 import useRoles from './useRoles';
 
-const RolesContainer = () => {
+interface Props {
+  basePath?: string;
+}
+
+const RolesContainer = ({ basePath }: Props) => {
   const {
     data,
     fetchPage,
@@ -17,6 +21,7 @@ const RolesContainer = () => {
   } = useRoles();
   return (
     <View
+      basePath={basePath}
       data={data}
       fetchPage={fetchPage}
       loading={loading}

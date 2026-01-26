@@ -3,7 +3,7 @@ import type * as Types from '../../../../../../graphql/types';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
-export type ArticlePreviewFragment = { __typename?: 'Article', previewText?: string | null, watermarkImage: boolean, previewImage?: string | null, priority: Types.ArticlePriority, status: Types.CompleteStatus, title: string, updatedAt: Date, completedAt?: Date | null, id: string, tags: Array<{ __typename?: 'Tag', id: string, name: string }>, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, card?: string | null, position: Types.ImagePosition, rotation: number }>, image?: { __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, card?: string | null } | null, createdBy: { __typename?: 'User', fullName: string, id: string, businesses: Array<{ __typename?: 'Business', id: string, name: string }> }, groups: Array<{ __typename?: 'Group', id: string, name: string }> };
+export type ArticlePreviewFragment = { __typename?: 'Article', previewText?: string | null, watermarkImage: boolean, previewImage?: string | null, priority: Types.ArticlePriority, criticalExpiry?: Date | null, status: Types.CompleteStatus, title: string, updatedAt: Date, completedAt?: Date | null, id: string, tags: Array<{ __typename?: 'Tag', id: string, name: string }>, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, card?: string | null, position: Types.ImagePosition, rotation: number }>, image?: { __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, card?: string | null } | null, createdBy: { __typename?: 'User', fullName: string, id: string, businesses: Array<{ __typename?: 'Business', id: string, name: string }> }, groups: Array<{ __typename?: 'Group', id: string, name: string }> };
 
 export type ListArticlesFeedQueryVariables = Types.Exact<{
   where?: Types.InputMaybe<Types.ArticleWhereInput>;
@@ -15,7 +15,7 @@ export type ListArticlesFeedQueryVariables = Types.Exact<{
 }>;
 
 
-export type ListArticlesFeedQuery = { __typename?: 'Query', listArticlesRelay: { __typename?: 'QueryListArticlesRelayConnection', edges: Array<{ __typename?: 'QueryListArticlesRelayConnectionEdge', node: { __typename?: 'Article', previewText?: string | null, watermarkImage: boolean, previewImage?: string | null, priority: Types.ArticlePriority, status: Types.CompleteStatus, title: string, updatedAt: Date, completedAt?: Date | null, id: string, tags: Array<{ __typename?: 'Tag', id: string, name: string }>, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, card?: string | null, position: Types.ImagePosition, rotation: number }>, image?: { __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, card?: string | null } | null, createdBy: { __typename?: 'User', fullName: string, id: string, businesses: Array<{ __typename?: 'Business', id: string, name: string }> }, groups: Array<{ __typename?: 'Group', id: string, name: string }> } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null } } };
+export type ListArticlesFeedQuery = { __typename?: 'Query', listArticlesRelay: { __typename?: 'QueryListArticlesRelayConnection', edges: Array<{ __typename?: 'QueryListArticlesRelayConnectionEdge', node: { __typename?: 'Article', previewText?: string | null, watermarkImage: boolean, previewImage?: string | null, priority: Types.ArticlePriority, criticalExpiry?: Date | null, status: Types.CompleteStatus, title: string, updatedAt: Date, completedAt?: Date | null, id: string, tags: Array<{ __typename?: 'Tag', id: string, name: string }>, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, card?: string | null, position: Types.ImagePosition, rotation: number }>, image?: { __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, card?: string | null } | null, createdBy: { __typename?: 'User', fullName: string, id: string, businesses: Array<{ __typename?: 'Business', id: string, name: string }> }, groups: Array<{ __typename?: 'Group', id: string, name: string }> } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null } } };
 
 export const ArticlePreviewFragmentDoc = gql`
     fragment ArticlePreview on Article {
@@ -23,6 +23,7 @@ export const ArticlePreviewFragmentDoc = gql`
   watermarkImage
   previewImage
   priority
+  criticalExpiry
   status
   tags {
     id

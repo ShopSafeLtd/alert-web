@@ -2,14 +2,18 @@ import type { DateType } from 'types/DataType';
 
 import BusinessesSelect from '#/components/form-components/BusinessesSelect/BusinessesSelect.view';
 import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
+import ImpactTagsSelect from '#/components/form-components/ImpactTagsSelect/ImpactTagsSelect.view';
 import IncidentTypesSelect from '#/components/form-components/IncidentTypesSelect/IncidentTypesSelect.view';
+import InvolvedTagsSelect from '#/components/form-components/InvolvedTagsSelect/InvolvedTagsSelect.view';
 import UsersSelect from '#/components/form-components/UsersSelect/UsersSelect.view';
 import GoodsSelect from '#/components/form-components/goodsSelect/GoodsSelect.view';
 import DatePicker from '#/components/util-components/DatePicker';
+import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { formatPoliceForceLabel } from '#/utils/formatPoliceAreas';
 import { Button, Col, Form, Input, Row, Select, Space, Typography } from 'antd';
 import { useListIncidentStatusesQuery } from 'graphql/incidents/queries/__generated__/list-incident-statuses.generated';
 import { PoliceForce } from 'graphql/types';
+import { useAtomValue } from 'jotai';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import { IncidentSort, useStoreActions, useStoreState } from 'state';
@@ -26,11 +30,15 @@ interface FormData {
 
 interface Props {
   clearFilters: () => void;
+  setImpactTagsFilter: (value: string[]) => void;
+  setInvolvedTagsFilter: (value: string[]) => void;
   setPeculiarities: (value: string) => void;
 }
 
 const IncidentFilter = ({
   clearFilters,
+  setImpactTagsFilter,
+  setInvolvedTagsFilter,
   setPeculiarities,
 }: Props): JSX.Element => {
   const classes = useStyles();
@@ -47,7 +55,11 @@ const IncidentFilter = ({
     (actions) => actions.data.setIncidents
   );
 
-  const { data: statusesData } = useListIncidentStatusesQuery();
+  const currentScheme = useAtomValue(currentSchemeAtom);
+
+  const { data: statusesData } = useListIncidentStatusesQuery({
+    skip: !currentScheme.incidentStatusEnabled,
+  });
 
   const setOrder = (value: IncidentSort) => {
     setIncidentsState({
@@ -368,29 +380,71 @@ const IncidentFilter = ({
           <Col span={23}>
             <Typography.Paragraph className={classes.selectTitle}>
               {intl.formatMessage({
-                defaultMessage: 'Status',
+                defaultMessage: 'Impact Categories',
               })}
             </Typography.Paragraph>
-            <Select
+            <ImpactTagsSelect
               allowClear
               className={classes.select}
-              mode="multiple"
-              onChange={setStatusesFilter}
+              maxTagCount={4}
+              onChange={setImpactTagsFilter}
               placeholder={intl.formatMessage({
-                defaultMessage: 'Select Status',
+                defaultMessage: 'Select Impact Categories',
               })}
               size="small"
-              style={{ width: '100%' }}
-              value={statuses}
-            >
-              {statusesData?.incidentStatuses.map((status) => (
-                <Select.Option key={status.id} value={status.id}>
-                  {status.name}
-                </Select.Option>
-              ))}
-            </Select>
+              value={variables.impactTags}
+            />
           </Col>
         </Row>
+        <Row gutter={16}>
+          <Col span={23}>
+            <Typography.Paragraph className={classes.selectTitle}>
+              {intl.formatMessage({
+                defaultMessage: 'Involved Tags',
+              })}
+            </Typography.Paragraph>
+            <InvolvedTagsSelect
+              allowClear
+              className={classes.select}
+              maxTagCount={4}
+              onChange={setInvolvedTagsFilter}
+              placeholder={intl.formatMessage({
+                defaultMessage: 'Select Involved Tags',
+              })}
+              size="small"
+              value={variables.involvedTags}
+            />
+          </Col>
+        </Row>
+        {currentScheme.incidentStatusEnabled && (
+          <Row gutter={16}>
+            <Col span={23}>
+              <Typography.Paragraph className={classes.selectTitle}>
+                {intl.formatMessage({
+                  defaultMessage: 'Status',
+                })}
+              </Typography.Paragraph>
+              <Select
+                allowClear
+                className={classes.select}
+                mode="multiple"
+                onChange={setStatusesFilter}
+                placeholder={intl.formatMessage({
+                  defaultMessage: 'Select Status',
+                })}
+                size="small"
+                style={{ width: '100%' }}
+                value={statuses}
+              >
+                {statusesData?.incidentStatuses.map((status) => (
+                  <Select.Option key={status.id} value={status.id}>
+                    {status.name}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Col>
+          </Row>
+        )}
         <Typography.Paragraph className={classes.filtersTitle}>
           {intl.formatMessage({ defaultMessage: 'Details' })}
         </Typography.Paragraph>

@@ -159,7 +159,7 @@ const GroupsSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
   };
 
   return allowTree && userSchemes.length > 0 ? (
-    <Row wrap={false}>
+    <Row style={{ width: '100%' }} wrap={false}>
       <Col flex={1}>
         <TreeSelect
           allowClear={allowClear}
@@ -196,7 +196,7 @@ const GroupsSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
       </Col>
     </Row>
   ) : (
-    <Row>
+    <Row style={{ width: '100%' }}>
       <Col flex={1}>
         <Select
           allowClear={allowClear}

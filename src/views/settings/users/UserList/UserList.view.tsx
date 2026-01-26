@@ -33,6 +33,7 @@ import { GetUserStatusValues, userStatusValues } from 'types/enums/user_status';
 
 interface Props {
   addUser: boolean;
+  basePath?: string;
   bulkInviteConfirm: () => void;
   bulkInviting: boolean;
   clearFilters: () => void;
@@ -70,6 +71,7 @@ const getTextStatus = (value: UserStatus) => {
 };
 const UserList = ({
   addUser,
+  basePath = '/app/scheme-settings',
   bulkInviteConfirm,
   bulkInviting,
   clearFilters,
@@ -199,9 +201,7 @@ const UserList = ({
             dataIndex: 'name',
             key: 'name',
             render: (value, record) => (
-              <Link to={`/app/scheme-settings/users/view/${record.key}`}>
-                {value}
-              </Link>
+              <Link to={`${basePath}/users/view/${record.key}`}>{value}</Link>
             ),
             title: intl.formatMessage({
               defaultMessage: 'Name',

@@ -13,9 +13,10 @@ const { Title } = Typography;
 interface Props {
   form: FormInstance<FormData>;
   saving: boolean;
+  usPoliceData?: boolean;
 }
 
-const IncidentPolice = ({ form, saving }: Props) => {
+const IncidentPolice = ({ form, saving, usPoliceData }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
 
@@ -121,6 +122,34 @@ const IncidentPolice = ({ form, saving }: Props) => {
             >
               <Input disabled={saving} />
             </Form.Item>
+            {usPoliceData && (
+              <>
+                <Form.Item
+                  label={intl.formatMessage({
+                    defaultMessage: 'Police Department',
+                  })}
+                  name="policeDepartment"
+                  tooltip={intl.formatMessage({
+                    defaultMessage:
+                      'The police department handling this incident.',
+                  })}
+                >
+                  <Input.TextArea disabled={saving} rows={2} />
+                </Form.Item>
+                <Form.Item
+                  label={intl.formatMessage({
+                    defaultMessage: 'Police Officer Name',
+                  })}
+                  name="policeOfficerName"
+                  tooltip={intl.formatMessage({
+                    defaultMessage:
+                      'The name of the police officer assigned to this case.',
+                  })}
+                >
+                  <Input disabled={saving} />
+                </Form.Item>
+              </>
+            )}
           </Col>
         )}
         {reported && (

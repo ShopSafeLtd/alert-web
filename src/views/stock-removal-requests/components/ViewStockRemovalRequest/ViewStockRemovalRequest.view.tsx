@@ -1,8 +1,10 @@
 import { currentPermissionsAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import hasPermission from '#/utils/has-permission';
+import useReportPrint from '#/utils/reportPrint/usePrintReports';
 import MarkAsPickedModal from '#/views/stock-removal-requests/components/MarkAsPickedModal/MarkAsPickedModal';
 import StockRemovalRequestStatusBadge from '#/views/stock-removal-requests/components/StockRemovalRequestStatusBadge/StockRemovalRequestStatusBadge';
+import PickingListPrint from '#/views/stock-removal-requests/components/ViewStockRemovalRequest/PickingListPrint';
 import { useApprovePapStockRequestMutation } from '#/views/stock-removal-requests/components/ViewStockRemovalRequest/graphql/__generated__/approve-pap-stock-request.generated';
 import { useApproveStockRequestMutation } from '#/views/stock-removal-requests/components/ViewStockRemovalRequest/graphql/__generated__/approve-stock-request.generated';
 import { useMarkStockRemovalRequestAsCollectedMutation } from '#/views/stock-removal-requests/components/ViewStockRemovalRequest/graphql/__generated__/mark-collected.generated';
@@ -10,7 +12,7 @@ import { useMarkStockRemovalRequestAsReturnedMutation } from '#/views/stock-remo
 import { useRejectPapStockRequestMutation } from '#/views/stock-removal-requests/components/ViewStockRemovalRequest/graphql/__generated__/reject-pap-stock-request.generated';
 import { useRejectStockRequestMutation } from '#/views/stock-removal-requests/components/ViewStockRemovalRequest/graphql/__generated__/reject-stock-request.generated';
 import { useStockRemovalRequestQuery } from '#/views/stock-removal-requests/components/ViewStockRemovalRequest/graphql/__generated__/stock-removal-request.generated';
-import { faClose } from '@fortawesome/pro-light-svg-icons';
+import { faClose, faPrint } from '@fortawesome/pro-light-svg-icons';
 import { faCheck } from '@fortawesome/pro-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -69,6 +71,7 @@ const ViewStockRemovalRequest = ({ requestId }: Props) => {
   const permissions = useAtomValue(currentPermissionsAtom);
 
   const [showPickedModal, setShowPickedModal] = useState(false);
+  const { componentRef, handlePrint, isPrinting } = useReportPrint();
 
   const { data } = useStockRemovalRequestQuery({
     variables: {
@@ -548,13 +551,33 @@ const ViewStockRemovalRequest = ({ requestId }: Props) => {
                 </Tag>
               </Descriptions.Item>
               {data?.stockRemovalRequest.storeOrDC === 'DC' && (
-                <Descriptions.Item
-                  label={intl.formatMessage({
-                    defaultMessage: 'Shipping Address',
-                  })}
-                >
-                  {data?.stockRemovalRequest.shippingAddress}
-                </Descriptions.Item>
+                <>
+                  {data?.stockRemovalRequest.recipientName && (
+                    <Descriptions.Item
+                      label={intl.formatMessage({
+                        defaultMessage: 'Recipient Name',
+                      })}
+                    >
+                      {data?.stockRemovalRequest.recipientName}
+                    </Descriptions.Item>
+                  )}
+                  {data?.stockRemovalRequest.recipientPhone && (
+                    <Descriptions.Item
+                      label={intl.formatMessage({
+                        defaultMessage: 'Recipient Phone',
+                      })}
+                    >
+                      {data?.stockRemovalRequest.recipientPhone}
+                    </Descriptions.Item>
+                  )}
+                  <Descriptions.Item
+                    label={intl.formatMessage({
+                      defaultMessage: 'Shipping Address',
+                    })}
+                  >
+                    {data?.stockRemovalRequest.shippingAddress}
+                  </Descriptions.Item>
+                </>
               )}
               {data?.stockRemovalRequest.storeOrDC === 'Store' && (
                 <Descriptions.Item
@@ -755,12 +778,21 @@ const ViewStockRemovalRequest = ({ requestId }: Props) => {
                   </>
                 )}
                 {showPickingButton && (
-                  <Button
-                    onClick={() => setShowPickedModal(true)}
-                    type="primary"
-                  >
-                    <FormattedMessage defaultMessage="Mark as Picked" />
-                  </Button>
+                  <>
+                    <Button
+                      icon={<FontAwesomeIcon icon={faPrint} />}
+                      loading={isPrinting}
+                      onClick={handlePrint}
+                    >
+                      <FormattedMessage defaultMessage="Print Picking List" />
+                    </Button>
+                    <Button
+                      onClick={() => setShowPickedModal(true)}
+                      type="primary"
+                    >
+                      <FormattedMessage defaultMessage="Mark as Picked" />
+                    </Button>
+                  </>
                 )}
                 {showCollectedButton && (
                   <Button onClick={handleMarkAsCollected} type="primary">
@@ -922,6 +954,36 @@ const ViewStockRemovalRequest = ({ requestId }: Props) => {
           requestId={requestId}
           visible={showPickedModal}
         />
+      )}
+
+      {/* Hidden printable component */}
+      {data && (
+        <div style={{ display: 'none' }}>
+          <div ref={componentRef}>
+            <PickingListPrint
+              createdAt={data.stockRemovalRequest.createdAt}
+              createdBy={data.stockRemovalRequest.createdBy.fullName ?? ''}
+              items={data.stockRemovalRequest.items ?? []}
+              recipientInfo={{
+                address: isDC
+                  ? data.stockRemovalRequest.shippingAddress ?? ''
+                  : undefined,
+                name: isDC
+                  ? 'Distribution Center'
+                  : data.stockRemovalRequest.business?.name ?? '',
+                recipientName: isDC
+                  ? data.stockRemovalRequest.recipientName ?? undefined
+                  : undefined,
+                recipientPhone: isDC
+                  ? data.stockRemovalRequest.recipientPhone ?? undefined
+                  : undefined,
+                type: isDC ? 'DC' : 'Store',
+              }}
+              reference={data.stockRemovalRequest.reference ?? 0}
+              title={data.stockRemovalRequest.title ?? ''}
+            />
+          </div>
+        </div>
       )}
     </div>
   );

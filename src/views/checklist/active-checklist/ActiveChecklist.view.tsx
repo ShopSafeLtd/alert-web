@@ -1,6 +1,11 @@
 import type { ActiveChecklistQuery } from '#/views/checklist/graphql/queries/__generated__/view-active-checklist.generated';
 import type { FormInstance } from 'antd';
 
+import PermissionCheckWrapper from '#/components/PermissionCheck/PermissionCheckWrapper';
+import BusinessesSelect from '#/components/form-components/BusinessesSelect/BusinessesSelect.view';
+import FormattedMessageFixed from '#/components/util-components/FormattedMessageFixed';
+import { getCustomUrls } from '#/providers/GetCustomUrls';
+import MediaUrlUploader from '#/views/checklist/active-checklist/media-component';
 import {
   CheckCircleOutlined,
   ClockCircleOutlined,
@@ -10,9 +15,6 @@ import {
 } from '@ant-design/icons';
 import { faFileUpload } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import FormattedMessageFixed from '#/components/util-components/FormattedMessageFixed';
-import { getCustomUrls } from '#/providers/GetCustomUrls';
-import MediaUrlUploader from '#/views/checklist/active-checklist/media-component';
 import {
   Badge,
   Button,
@@ -32,17 +34,22 @@ import {
   Upload,
 } from 'antd';
 import FONT_FAMILIES from 'components/onboarding/Onboarding/SchemeTerms/utils/Fonts';
-import { ChecklistStatus } from 'graphql/types';
+import {
+  ChecklistStatus,
+  PermissionMethod,
+  PermissionModel,
+} from 'graphql/types';
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router';
 import { useSearchParams } from 'react-router-dom';
 
-import SigSeal from '../../../components/onboarding/Onboarding/SchemeTerms/SigSeal';
 import SignatureInput from '../../../components/SignBox';
+import SigSeal from '../../../components/onboarding/Onboarding/SchemeTerms/SigSeal';
 import { useStoreState } from '../../../state';
 import CompletedChecklistView from '../completed-checklist/CompletedChecklist.view';
+import { adjustDependentThreshold } from '../utils/adjustDependentThreshold';
 import useStyles from './ActiveChecklist.styles';
 import {
   type ActiveChecklistSection,
@@ -74,9 +81,11 @@ interface Props {
   saveDraft: () => void;
   saveStatus: SaveStatus;
   sections: ActiveChecklistSection[];
+  selectedBusinessId: null | string;
   selectedFont: string;
   setActiveKeys: (keys: string[]) => void;
   setFile: (value: { file: string; name: string } | null) => void;
+  setSelectedBusinessId: (value: null | string) => void;
   setSelectedFont: (value: string) => void;
   setSign: (value: string) => void;
   setTab: (value: string) => void;
@@ -108,9 +117,11 @@ const ActiveChecklistView = ({
   saveDraft,
   saveStatus,
   sections,
+  selectedBusinessId,
   selectedFont,
   setActiveKeys,
   setFile,
+  setSelectedBusinessId,
   setSelectedFont,
   setSign,
   setTab,
@@ -171,10 +182,10 @@ const ActiveChecklistView = ({
           )
         : '',
       completedByUser: data?.activeChecklist.completedBy?.origName || '',
-      signature: data?.activeChecklist.signature || '',
-      title: data?.activeChecklist.name || '',
       logo: data?.activeChecklist.scheme?.logo?.urlPersisted || '',
+      signature: data?.activeChecklist.signature || '',
       storeName: data?.activeChecklist.business?.name || '',
+      title: data?.activeChecklist.name || '',
     })
   );
   if (
@@ -195,12 +206,13 @@ const ActiveChecklistView = ({
             : ''
         }
         completedByUser={data?.activeChecklist?.completedBy?.origName || ''}
+        logo={data?.activeChecklist.scheme?.logo?.urlPersisted || ''}
         onBack={() => navigate('/app/checklists')}
+        reference={data?.activeChecklist.reference}
         signature={data?.activeChecklist.signature || ''}
+        storeName={data?.activeChecklist.business?.name || ''}
         theme={theme}
         title={data?.activeChecklist.name || ''}
-        logo={data?.activeChecklist.scheme?.logo?.urlPersisted || ''}
-        storeName={data?.activeChecklist.business?.name || ''}
       />
     );
   }
@@ -209,6 +221,14 @@ const ActiveChecklistView = ({
     <div className="page-view">
       <PageHeader
         onBack={() => navigate('/app/checklists')}
+        subTitle={
+          data?.activeChecklist.reference
+            ? intl.formatMessage(
+                { defaultMessage: 'Alert ID: {reference}' },
+                { reference: data.activeChecklist.reference }
+              )
+            : undefined
+        }
         title={
           data?.activeChecklist.name ||
           intl.formatMessage({
@@ -236,6 +256,36 @@ const ActiveChecklistView = ({
             </Typography.Text>
           </div>
         )}
+
+      {/* Store Selector - Edit Mode */}
+      {isEditMode && (
+        <PermissionCheckWrapper
+          permission={{
+            method: PermissionMethod.Edit,
+            model: PermissionModel.Checklist,
+          }}
+        >
+          <Card style={{ marginBottom: 16 }}>
+            <Form.Item
+              help={intl.formatMessage({
+                defaultMessage:
+                  'Changes will be saved when you submit the checklist',
+              })}
+              label={intl.formatMessage({ defaultMessage: 'Store' })}
+            >
+              <BusinessesSelect
+                allowClear
+                onChange={(ids) => setSelectedBusinessId(ids[0] || null)}
+                placeholder={intl.formatMessage({
+                  defaultMessage: 'Select a store (optional)',
+                })}
+                style={{ maxWidth: 500, width: '100%' }}
+                value={selectedBusinessId ? [selectedBusinessId] : undefined}
+              />
+            </Form.Item>
+          </Card>
+        </PermissionCheckWrapper>
+      )}
 
       {/* Save Status Indicator */}
       {renderSaveStatus()}
@@ -313,7 +363,13 @@ const ActiveChecklistView = ({
                   )
                   .reduce((a, b) => a + b, 0);
 
-                return totalWeight <= threshold;
+                // Adjust threshold to account for N/A answers
+                const adjustedThreshold = adjustDependentThreshold(
+                  dependSection,
+                  threshold
+                );
+
+                return totalWeight <= adjustedThreshold;
               };
 
               // Filter sections and map with field info
@@ -503,8 +559,6 @@ const ActiveChecklistView = ({
                                                           schemeRequired
                                                             ? [
                                                                 {
-                                                                  required:
-                                                                    true,
                                                                   message:
                                                                     intl.formatMessage(
                                                                       {
@@ -512,6 +566,8 @@ const ActiveChecklistView = ({
                                                                           'This question is required',
                                                                       }
                                                                     ),
+                                                                  required:
+                                                                    true,
                                                                 },
                                                               ]
                                                             : []

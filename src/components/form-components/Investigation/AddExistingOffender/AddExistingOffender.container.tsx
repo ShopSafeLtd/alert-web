@@ -15,6 +15,7 @@ const AddExistingOffender = ({
   onClose,
 }: Props): JSX.Element => {
   const {
+    cascadeOptions,
     data,
     lightBoxOpen,
     loading,
@@ -25,12 +26,14 @@ const AddExistingOffender = ({
     saving,
     search,
     selectedOffender,
+    setCascadeOptions,
     setCurrentId,
     setSearch,
   } = useAddExistingOffender({ offenderIds, onClose });
 
   return (
     <View
+      cascadeOptions={cascadeOptions}
       data={data}
       lightBoxOpen={lightBoxOpen}
       loading={loading}
@@ -42,6 +45,7 @@ const AddExistingOffender = ({
       saving={saving}
       search={search}
       selectedOffender={selectedOffender}
+      setCascadeOptions={setCascadeOptions}
       setCurrentId={setCurrentId}
       setSearch={setSearch}
     />

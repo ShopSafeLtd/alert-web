@@ -29,10 +29,6 @@ query ViewInvestigation($where: InvestigationWhereUniqueInput!) {
         previewImage
       }
     }
-    groups {
-      id
-      name
-    }
     subscribed
     todos {
       ...Todos
@@ -40,94 +36,16 @@ query ViewInvestigation($where: InvestigationWhereUniqueInput!) {
     vehicles {
       ...Vehicles
     }
-    offenders {
-      id
-      reference
-      name
-      age
-      gender
-      race
-      build
-      totalIncidents
-      totalValue
-      knownFor
-      targetedBusinesses {
-        id
-        name
-      }
-      latestIncident {
-        id
-        date
-      }
-      images {
-        id
-        optimised
-        optimisedPersisted
-        position
-        rotation
-      }
-    }
-    incidents(orderBy: { date: desc }) {
-      ...IncidentsDetailed
-      vehicles {
-        ...Vehicles
-      }
-      offenders {
-        ...Offenders
-        images {
-          ...Images
-        }
-      }
-    }
     updates(orderBy: { createdAt: desc }) {
       ...Updates
     }
     crimeGroups {
-      ...CrimeGroups
-      vehicles {
-        ...Vehicles
-      }
-      offenders {
-        ...Offenders
-
-        images {
-          ...Images
-        }
-      }
-    }
-    flows {
-      updatedAt
-      name
-      id
-      description
-      edges {
         id
-        type
-        markerEnd
-        source
-        sourceHandle
-        target
-        targetHandle
-      }
-      nodes {
-        id
-        type
-        data
-        height
-        width
-        style {
-          height
-          width
-        }
-        position {
-          x
-          y
-        }
-        positionAbsolute {
-          x
-          y
-        }
-      }
+        alias
+        ref
+        totalValue
+        totalOffenders
+        totalIncidents
     }
   }
 }

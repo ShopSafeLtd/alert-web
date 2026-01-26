@@ -8,7 +8,7 @@ export type CreateTodoMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateTodoMutation = { __typename?: 'Mutation', createTodo: { __typename?: 'Todo', id: string, name?: string | null, authorised?: boolean | null, description?: string | null, dueDate?: Date | null, completedDate?: Date | null, completed?: boolean | null, createdAt: Date, type?: Types.TodoType | null, vehicleId?: string | null, offenderId?: string | null, crimeGroupId?: string | null, incidentId?: string | null, investigationId?: string | null, chatId?: string | null, vehicle?: { __typename?: 'Vehicle', id: string, reference?: number | null } | null, offender?: { __typename?: 'Offender', id: string, reference?: number | null } | null, crimeGroup?: { __typename?: 'CrimeGroup', id: string, reference?: number | null } | null, incident?: { __typename?: 'Incident', id: string, reference?: number | null } | null, investigation?: { __typename?: 'Investigation', id: string, reference?: number | null } | null, assignedUsers: Array<{ __typename?: 'User', id: string, fullName: string }>, groups: Array<{ __typename?: 'Group', id: string, name: string }> } };
+export type CreateTodoMutation = { __typename?: 'Mutation', createTodo: { __typename?: 'Todo', id: string, name?: string | null, authorised?: boolean | null, description?: string | null, dueDate?: Date | null, completedDate?: Date | null, completed?: boolean | null, createdAt: Date, type?: Types.TodoType | null, vehicleId?: string | null, offenderId?: string | null, crimeGroupId?: string | null, incidentId?: string | null, investigationId?: string | null, chatId?: string | null, vehicle?: { __typename?: 'Vehicle', id: string, reference?: number | null } | null, offender?: { __typename?: 'Offender', id: string, reference?: number | null } | null, crimeGroup?: { __typename?: 'CrimeGroup', id: string, reference?: number | null } | null, incident?: { __typename?: 'Incident', id: string, reference?: number | null, crimeTypes: Array<{ __typename?: 'Tag', id: string, name: string }> } | null, investigation?: { __typename?: 'Investigation', id: string, reference?: number | null } | null, assignedUsers: Array<{ __typename?: 'User', id: string, fullName: string }>, groups: Array<{ __typename?: 'Group', id: string, name: string }> } };
 
 
 export const CreateTodoDocument = gql`
@@ -42,6 +42,10 @@ export const CreateTodoDocument = gql`
     incident {
       id
       reference
+      crimeTypes {
+        id
+        name
+      }
     }
     investigationId
     investigation {

@@ -35,7 +35,9 @@ import {
   Popconfirm,
   Radio,
   Row,
+  Space,
   Table,
+  Tag,
   Tooltip,
   Typography,
 } from 'antd';
@@ -106,10 +108,24 @@ interface Props {
 const getLinkedItemId = (todo: TodoListQuery['todoRelay']['edges'][0]) => {
   if (todo.node.incident)
     return (
-      <FormattedMessage
-        defaultMessage="Incident: {var1}"
-        values={{ var1: todo.node.incident.reference }}
-      />
+      <div>
+        <FormattedMessage
+          defaultMessage="Incident: {var1}"
+          values={{ var1: todo.node.incident.reference }}
+        />
+        {todo.node.incident.crimeTypes &&
+          todo.node.incident.crimeTypes.length > 0 && (
+            <div style={{ marginTop: 4 }}>
+              <Space size={[0, 4]} wrap>
+                {todo.node.incident.crimeTypes.map((type) => (
+                  <Tag color="red" key={type.id}>
+                    {type.name}
+                  </Tag>
+                ))}
+              </Space>
+            </div>
+          )}
+      </div>
     );
   if (todo.node.offender)
     return (

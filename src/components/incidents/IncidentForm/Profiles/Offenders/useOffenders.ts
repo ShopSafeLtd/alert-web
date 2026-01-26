@@ -66,7 +66,7 @@ interface ImageType {
 export interface AddOffenderData {
   address?: AddressData;
   age?: Age | null;
-  alias?: null | string[];
+  alias?: string[];
   build?: Build | null;
   comment?: null | string;
   dateOfBirth?: Date | null;
@@ -77,17 +77,17 @@ export interface AddOffenderData {
   id: string;
   idSource?: IdSource;
   idVerified?: boolean;
-  images?: ImageType[] | null;
+  images?: ImageType[];
   infoSource?: null | string;
   justification?: null | string;
   knowAddress?: boolean;
-  knownFor?: null | string[];
+  knownFor?: string[];
   name?: null | string;
   peculiarities?: null | string;
   race?: Race | null;
   reference?: null | number;
   sourceDetails?: null | string;
-  targetedGoods?: null | string[];
+  targetedGoods?: string[];
   // groupIds?: string[];
 }
 
