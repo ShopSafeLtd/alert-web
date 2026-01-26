@@ -1,0 +1,97 @@
+fragment PoliceOffenderCard on SharedOffender {
+  id
+  name
+  createdAt
+  updatedAt
+  policePriorityScore
+  aiQualityScore
+  aiImpactScore
+  aiSummary
+  aiKeyObservations
+  aiMethods
+  aiMO
+  aiPatternSignature
+  aiGenerationStatus
+  aiLastGeneratedAt
+  aiGenerationAttempts
+
+  # Direct fields from SharedOffender (replaces nested offender access for most use cases)
+  images {
+    id
+    rotation
+    position
+    positionX
+    positionY
+    optimised
+    primary
+    policeImage
+    isFace
+  }
+  hasImages
+  hasName
+  lastIncidentAt
+  totalLossValue
+  totalIncidents
+
+  # Tags associated with this shared offender
+  tag {
+    id
+    name
+  }
+
+  # Schemes sharing this offender
+  schemes {
+    id
+    name
+    hubForce
+    logo {
+      url
+      optimised
+    }
+    darkLogo {
+      url
+    }
+  }
+
+  # Source schemes where this offender originated
+  sources {
+    id
+    name
+    logo {
+      url
+      optimised
+    }
+    darkLogo {
+      url
+    }
+  }
+
+  # Police hubs with access to this shared offender
+  policeHubs {
+    id
+    name
+    hubForce
+    logo {
+      url
+      optimised
+    }
+    darkLogo {
+      url
+    }
+  }
+
+  # Nested offenders array - minimal data needed for feed card
+  offender {
+    id
+    name
+    reference
+    totalImages
+    idVerified
+    latestIncident {
+      id
+      dateAgo
+      reportedBusinessName
+      dayTime
+    }
+  }
+}

@@ -2,7 +2,10 @@ import type { CarouselRef } from 'antd/lib/carousel';
 import type { IncidentCardFragment } from 'graphql/fragments/__generated__/incident-card.generated';
 import type { EditFeedImage } from 'types/DataType';
 
-import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import {
+  currencyAtom,
+  currentSchemeAtom,
+} from '#/providers/SchemeProvider/SchemeProvider';
 import hasRolePermission from '#/utils/has-role-permission';
 import {
   faClock,
@@ -11,6 +14,7 @@ import {
   faImage,
   faLocationDot,
   faPlus,
+  faSterlingSign,
   faTrash,
 } from '@fortawesome/pro-light-svg-icons';
 import {
@@ -100,6 +104,10 @@ const IncidentCard = ({
   const intl = useIntl();
   const classes = useStyles();
   const currentScheme = useAtomValue(currentSchemeAtom);
+  const currency = useAtomValue(currencyAtom);
+  const totalValue = incident.totalValue || 0;
+  const totalRecoveredValue = incident.totalRecoveredValue || 0;
+  const netValue = totalValue - totalRecoveredValue;
 
   // Get fallback image from offender if incident has no images
   const getFallbackOffenderImage = () => {
@@ -329,6 +337,23 @@ const IncidentCard = ({
                       {incident?.subject}
                     </Title>
                   </Col>
+                  {incident?.draft && (
+                    <Col style={{ marginTop: 2 }}>
+                      <Tooltip
+                        title={intl.formatMessage({
+                          defaultMessage:
+                            'This incident is a live draft awaiting completion',
+                        })}
+                      >
+                        <Tag
+                          color="orange"
+                          style={{ fontSize: 10, padding: '0 4px' }}
+                        >
+                          <FormattedMessage defaultMessage="LIVE" />
+                        </Tag>
+                      </Tooltip>
+                    </Col>
+                  )}
                   {currentScheme.incidentStatusEnabled &&
                     incident?.newIncident && (
                       <Col style={{ marginTop: 2 }}>
@@ -397,6 +422,23 @@ const IncidentCard = ({
                           {incident.dayTime}
                         </Text>
                       </Col>
+                      {totalValue > 0 && (
+                        <Col>
+                          <Text style={{ fontSize: 14 }} type="secondary">
+                            <span style={{ marginLeft: 8 }}>
+                              <FontAwesomeIcon
+                                icon={faSterlingSign}
+                                style={{ marginRight: 4 }}
+                              />
+                              {intl.formatNumber(totalValue, {
+                                currency,
+                                notation: 'compact',
+                                style: 'currency',
+                              })}
+                            </span>
+                          </Text>
+                        </Col>
+                      )}
                     </Row>
                   </Col>
                   {currentScheme.incidentAssignmentEnabled &&
@@ -584,6 +626,20 @@ const IncidentCard = ({
                     {incident?.subject}
                   </Title>
                 </Col>
+                {incident?.draft && (
+                  <Col>
+                    <Tooltip
+                      title={intl.formatMessage({
+                        defaultMessage:
+                          'This incident is a live draft awaiting completion',
+                      })}
+                    >
+                      <Tag color="orange">
+                        <FormattedMessage defaultMessage="LIVE" />
+                      </Tag>
+                    </Tooltip>
+                  </Col>
+                )}
                 {currentScheme.incidentStatusEnabled &&
                   incident?.newIncident && (
                     <Col>
@@ -700,6 +756,62 @@ const IncidentCard = ({
                       <Col>
                         <Text ellipsis style={{ flex: 1 }} type="secondary">
                           {incident?.business?.name || incident?.location?.full}
+                        </Text>
+                      </Col>
+                    </Row>
+                  </Col>
+                </Row>
+
+                <Row gutter={8} style={{ marginBottom: 5 }} wrap={false}>
+                  <Col span={12}>
+                    <Row wrap={false}>
+                      <Col>
+                        <FontAwesomeIcon
+                          className="incident-card-icon"
+                          icon={faSterlingSign}
+                          size="sm"
+                        />
+                      </Col>
+                      <Col>
+                        <Text type="secondary">
+                          {intl.formatMessage(
+                            { defaultMessage: 'Total Value: {value}' },
+                            {
+                              value: intl.formatNumber(totalValue, {
+                                currency,
+                                style: 'currency',
+                              }),
+                            }
+                          )}
+                        </Text>
+                      </Col>
+                    </Row>
+                  </Col>
+                  <Col span={12}>
+                    <Row wrap={false}>
+                      <Col>
+                        <FontAwesomeIcon
+                          className="incident-card-icon"
+                          icon={faSterlingSign}
+                          size="sm"
+                        />
+                      </Col>
+                      <Col>
+                        <Text
+                          style={{
+                            color: netValue < 0 ? '#52c41a' : undefined,
+                          }}
+                          type="secondary"
+                        >
+                          {intl.formatMessage(
+                            { defaultMessage: 'Loss: {value}' },
+                            {
+                              value: intl.formatNumber(netValue, {
+                                currency,
+                                style: 'currency',
+                              }),
+                            }
+                          )}
                         </Text>
                       </Col>
                     </Row>

@@ -1,0 +1,41 @@
+fragment PoliceVehicleCard on SharedVehicle {
+  id
+  createdAt
+  updatedAt
+  policePriorityScore
+  aiQualityScore
+  aiSummary
+  aiKeyObservations
+  aiUsagePatterns
+  aiGeographicPattern
+  aiGenerationStatus
+  aiLastGeneratedAt
+
+  schemes {
+    id
+    name
+    hubForce
+  }
+
+  vehicle {
+    id
+    registration
+    reference
+    make
+    model
+    colour
+    totalIncidents
+    totalOffenders
+    totalImages
+    images {
+      id
+      rotation
+      position
+      positionX
+      positionY
+      optimised
+      primary
+      url
+    }
+  }
+}

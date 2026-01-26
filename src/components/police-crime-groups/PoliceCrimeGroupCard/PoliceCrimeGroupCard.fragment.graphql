@@ -1,0 +1,37 @@
+fragment PoliceCrimeGroupCard on SharedCrimeGroup {
+  id
+  crimeGroupId
+  createdAt
+  updatedAt
+
+  # Scoring
+  policePriorityScore
+  aiQualityScore
+  aiSophisticationLevel
+
+  # AI Analysis
+  aiSummary
+  aiActivityPatterns
+  aiOrganizationStructure
+  aiKeyObservations
+
+  # Schemes
+  schemes {
+    id
+    name
+    hubForce
+  }
+
+  # Nested crime group data (SINGLE OBJECT - not array!)
+  crimeGroup {
+    id
+    ref
+    reference
+    alias
+    totalIncidents
+    totalOffenders
+    totalValue
+    totalRecoveredValue
+    totalTheftSuccess
+  }
+}

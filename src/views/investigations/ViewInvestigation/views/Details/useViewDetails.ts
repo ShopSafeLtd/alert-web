@@ -6,10 +6,12 @@ import type {
   ViewInvestigationQuery,
   ViewInvestigationQueryVariables,
 } from 'graphql/investigations/queries/__generated__/view-investigation.generated';
+import type { CascadeOptions } from 'types/investigations';
 
 import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import hasRolePermission from '#/utils/has-role-permission';
 import { Modal } from 'antd';
+import { useConnectOffendersToInvestigationMutation } from 'graphql/investigations/mutations/__generated__/connect-offenders-to-investigation.generated';
 import { useUpdateInvestigationMutation } from 'graphql/investigations/mutations/__generated__/update-investigation.generated';
 import {
   InvestigationSuggestionsDocument,
@@ -18,7 +20,7 @@ import {
 import { ViewInvestigationDocument } from 'graphql/investigations/queries/__generated__/view-investigation.generated';
 import { useDeleteUpdateMutation } from 'graphql/mutations/__generated__/delete-update.generated';
 import { useUpdateUpdateMutation } from 'graphql/mutations/__generated__/update-update.generated';
-import { PermissionMethod, PermissionModel, TagType } from 'graphql/types';
+import { PermissionMethod, PermissionModel } from 'graphql/types';
 import update from 'immutability-helper';
 import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
@@ -27,6 +29,7 @@ import { useIntl } from 'react-intl';
 const { confirm } = Modal;
 
 interface Return {
+  confirmConnectOffender: (cascadeOptions: CascadeOptions) => void;
   confirmDeleteUpdate: (updateId: string) => void;
   editIncidentId: string;
   editRights: boolean;
@@ -38,6 +41,11 @@ interface Return {
   handleEditUpdate: () => void;
   loadMore: boolean;
   optionRowShow: boolean;
+  pendingOffenderConnection: {
+    id: string;
+    name: string;
+    reference?: number;
+  } | null;
   replyTo: {
     createdAt: string;
     createdBy: string;
@@ -49,6 +57,9 @@ interface Return {
   setEditUpdate: (value: { id: string; text: string } | null) => void;
   setEditUpdateInput: (value: string) => void;
   setOptionRowShow: (value: boolean) => void;
+  setPendingOffenderConnection: (
+    value: { id: string; name: string; reference?: number } | null
+  ) => void;
   setReplyTo: (
     value: {
       createdAt: string;
@@ -85,6 +96,11 @@ const useViewDetails = ({ investigationId }: Props): Return => {
   const [viewSuggestedVehicles, setViewSuggestedVehicles] = useState(false);
   const userId = useAtomValue(currentUserAtom)?.id ?? '';
   const [editIncidentId, setEditIncidentId] = useState('');
+  const [pendingOffenderConnection, setPendingOffenderConnection] = useState<{
+    id: string;
+    name: string;
+    reference?: number;
+  } | null>(null);
 
   const [replyTo, setReplyTo] = useState<{
     createdAt: string;
@@ -108,11 +124,6 @@ const useViewDetails = ({ investigationId }: Props): Return => {
       associatedInvestigation: {
         id: investigationId,
       },
-      crimeTypesWhere: {
-        type: {
-          equals: TagType.IncidentCrimeType,
-        },
-      },
       where: {
         id: investigationId,
       },
@@ -123,6 +134,7 @@ const useViewDetails = ({ investigationId }: Props): Return => {
 
   const [updateUpdate] = useUpdateUpdateMutation();
   const [updateInvestigation] = useUpdateInvestigationMutation();
+  const [connectOffenders] = useConnectOffendersToInvestigationMutation();
 
   const handleEditUpdate = () => {
     if (editUpdate !== null)
@@ -275,8 +287,24 @@ const useViewDetails = ({ investigationId }: Props): Return => {
   };
 
   const handleConnectOffender = (offenderId: string) => {
+    const offender = suggestedData?.investigation?.suggestedOffenders?.find(
+      (o) => o.id === offenderId
+    );
+    if (offender) {
+      setPendingOffenderConnection({
+        id: offender.id,
+        name: offender.name || '',
+        reference: offender.reference ?? undefined,
+      });
+    }
+  };
+
+  const confirmConnectOffender = (cascadeOptions: CascadeOptions) => {
+    if (!pendingOffenderConnection) return;
+
     toggleViewSuggestedOffenders();
-    void updateInvestigation({
+
+    void connectOffenders({
       update: (store, result) => {
         const existingData = store.readQuery<
           InvestigationSuggestionsQuery,
@@ -284,59 +312,43 @@ const useViewDetails = ({ investigationId }: Props): Return => {
         >({
           query: InvestigationSuggestionsDocument,
           variables: {
-            associatedInvestigation: {
-              id: investigationId,
-            },
-            crimeTypesWhere: {
-              type: {
-                equals: TagType.IncidentCrimeType,
-              },
-            },
-            where: {
-              id: investigationId,
-            },
+            associatedInvestigation: { id: investigationId },
+            where: { id: investigationId },
           },
         });
 
-        if (existingData?.investigation && result.data?.updateInvestigation)
-          store.writeQuery<
-            InvestigationSuggestionsQuery,
-            InvestigationSuggestionsQueryVariables
-          >({
+        if (
+          existingData?.investigation &&
+          result.data?.connectOffendersToInvestigation
+        ) {
+          store.writeQuery({
             data: {
               investigation: {
                 ...existingData.investigation,
                 suggestedOffenders:
-                  existingData.investigation?.suggestedOffenders?.filter(
-                    (offender) => offender.id !== offenderId
+                  existingData.investigation.suggestedOffenders?.filter(
+                    (offender) => offender.id !== pendingOffenderConnection.id
                   ),
               },
             },
             query: InvestigationSuggestionsDocument,
             variables: {
-              associatedInvestigation: {
-                id: investigationId,
-              },
-              crimeTypesWhere: {
-                type: {
-                  equals: TagType.IncidentCrimeType,
-                },
-              },
-              where: {
-                id: investigationId,
-              },
+              associatedInvestigation: { id: investigationId },
+              where: { id: investigationId },
             },
           });
+        }
       },
       variables: {
         data: {
-          offenderIds: [offenderId],
-        },
-        where: {
-          id: investigationId,
+          investigationId,
+          offenderIds: [pendingOffenderConnection.id],
+          ...cascadeOptions,
         },
       },
     });
+
+    setPendingOffenderConnection(null);
   };
   const handleConnectIncident = (incidentId: string) => {
     toggleViewSuggestedIncidents();
@@ -350,11 +362,6 @@ const useViewDetails = ({ investigationId }: Props): Return => {
           variables: {
             associatedInvestigation: {
               id: investigationId,
-            },
-            crimeTypesWhere: {
-              type: {
-                equals: TagType.IncidentCrimeType,
-              },
             },
             where: {
               id: investigationId,
@@ -380,11 +387,6 @@ const useViewDetails = ({ investigationId }: Props): Return => {
             variables: {
               associatedInvestigation: {
                 id: investigationId,
-              },
-              crimeTypesWhere: {
-                type: {
-                  equals: TagType.IncidentCrimeType,
-                },
               },
               where: {
                 id: investigationId,
@@ -415,11 +417,6 @@ const useViewDetails = ({ investigationId }: Props): Return => {
             associatedInvestigation: {
               id: investigationId,
             },
-            crimeTypesWhere: {
-              type: {
-                equals: TagType.IncidentCrimeType,
-              },
-            },
             where: {
               id: investigationId,
             },
@@ -445,11 +442,6 @@ const useViewDetails = ({ investigationId }: Props): Return => {
               associatedInvestigation: {
                 id: investigationId,
               },
-              crimeTypesWhere: {
-                type: {
-                  equals: TagType.IncidentCrimeType,
-                },
-              },
               where: {
                 id: investigationId,
               },
@@ -474,6 +466,7 @@ const useViewDetails = ({ investigationId }: Props): Return => {
   });
 
   return {
+    confirmConnectOffender,
     confirmDeleteUpdate,
     editIncidentId,
     editRights,
@@ -485,12 +478,14 @@ const useViewDetails = ({ investigationId }: Props): Return => {
     handleEditUpdate,
     loadMore,
     optionRowShow,
+    pendingOffenderConnection,
     replyTo,
     scrolledToTop,
     setEditIncidentId,
     setEditUpdate,
     setEditUpdateInput,
     setOptionRowShow,
+    setPendingOffenderConnection,
     setReplyTo,
     suggestedData,
     toggleViewSuggestedIncidents,

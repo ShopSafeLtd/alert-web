@@ -5,8 +5,10 @@ import type { NavType, SideNavTheme } from 'state';
 
 import { mobileNavOpenAtom } from '#/components/layout-components/AntD/navigation/MobileNav';
 import NavTranslations from '#/components/layout-components/AntD/navigation/NavTranslations';
+import { filterNavigationBySchemeType } from '#/configs/utils/filterNavigationBySchemeType';
 import {
   currentPermissionsAtom,
+  schemeTypeAtom,
   settingSchemeAtom,
   userNotificationsAtom,
   userTodosAtom,
@@ -362,6 +364,7 @@ const SideNavContent = ({
 
   const setMobileNavOpen = useSetAtom(mobileNavOpenAtom);
   const permissions = useAtomValue(currentPermissionsAtom);
+  const schemeType = useAtomValue(schemeTypeAtom);
   const settingScheme = useAtomValue(settingSchemeAtom);
   const currentTheme = useStoreState((state) => state.theme.currentTheme);
 
@@ -422,7 +425,7 @@ const SideNavContent = ({
         </div>
       ) : (
         <div className={classes.treeMenu}>
-          {navigationConfig
+          {filterNavigationBySchemeType(navigationConfig, schemeType)
             .filter((el) =>
               el.permission
                 ? hasPermission({ permission: el.permission, permissions })

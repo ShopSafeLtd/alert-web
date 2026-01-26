@@ -15,29 +15,29 @@ import useCreateColumns from './types';
 
 interface Props {
   data: DetectionConfigItem[];
-  loading: boolean;
-  search?: string;
-  onSearchChange: (value: string | null) => void;
-  totalCount: number;
   filterState: FilterState;
+  loading: boolean;
+  onSearchChange: (value: null | string) => void;
   onTableChange: (
     filters: Record<string, FilterValue | null>,
     sorter:
       | SorterResult<DetectionConfigItem>
       | SorterResult<DetectionConfigItem>[]
   ) => void;
+  search?: string;
   setPage: (page: number) => void;
+  totalCount: number;
 }
 
 const ListDetectionConfigsView = ({
   data,
-  loading,
-  search: _,
-  onSearchChange,
-  totalCount,
   filterState,
+  loading,
+  onSearchChange,
   onTableChange,
+  search: _,
   setPage,
+  totalCount,
 }: Props) => {
   const navigate = useNavigate();
   const intl = useIntl();
@@ -75,13 +75,13 @@ const ListDetectionConfigsView = ({
           <Col span={6}>
             <DebouncedInput
               allowClear
+              onChange={(event) => {
+                onSearchChange(event.target.value || null);
+              }}
               placeholder={intl.formatMessage({
                 defaultMessage: 'Search for anything in detection configs...',
               })}
               size="small"
-              onChange={(event) => {
-                onSearchChange(event.target.value || null);
-              }}
             />
           </Col>
         </Row>
@@ -98,9 +98,9 @@ const ListDetectionConfigsView = ({
           pagination={{
             defaultPageSize: 20,
             hideOnSinglePage: true,
-            total: totalCount,
             showTotal: (total, range) =>
               `${range[0]}-${range[1]} of ${total} detection configs`,
+            total: totalCount,
           }}
           size="small"
         />

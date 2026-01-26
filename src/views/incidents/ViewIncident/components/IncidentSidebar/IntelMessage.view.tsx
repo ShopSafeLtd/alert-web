@@ -1,4 +1,5 @@
 import type { ViewIncidentQuery } from '#/views/incidents/ViewIncident/__generated__/view-incident.generated';
+import type { Theme } from 'configs/ThemeConfig';
 
 import UpdateContent from '#/components/ViewPage/IntelSection/Update.view';
 import { faEdit, faReply, faTrash } from '@fortawesome/pro-light-svg-icons';
@@ -9,7 +10,7 @@ import React from 'react';
 import { useIntl } from 'react-intl';
 import { createUseStyles } from 'react-jss';
 
-const useStyles = createUseStyles({
+const useStyles = createUseStyles((theme: Theme) => ({
   messageActions: {
     '& button': {
       fontSize: 12,
@@ -18,28 +19,28 @@ const useStyles = createUseStyles({
     },
     display: 'flex',
     gap: 8,
-    marginLeft: 48,
-    marginTop: 8,
+    marginTop: 4,
   },
   messageAuthor: {
-    color: '#b4bed2',
+    color: theme.headerColor,
     fontSize: 14,
     fontWeight: 500,
-    marginRight: 8,
+    marginLeft: 8,
   },
   messageAvatar: {
-    left: 8,
-    position: 'absolute',
-    top: 0,
+    flexShrink: 0,
   },
   messageContent: {
     '& .ant-card': {
       '&:hover': {
-        border: '1px solid #4a5666',
-        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+        border: `1px solid ${theme.borderColor}`,
+        boxShadow:
+          theme.colorScheme === 'dark'
+            ? '0 2px 4px rgba(0, 0, 0, 0.3)'
+            : '0 2px 4px rgba(0, 0, 0, 0.1)',
       },
-      background: '#1b2531',
-      border: '1px solid #3a4556',
+      background: theme.componentBackground,
+      border: `1px solid ${theme.borderColor}`,
       borderRadius: 8,
       marginTop: 8,
     },
@@ -52,7 +53,7 @@ const useStyles = createUseStyles({
     },
     '& .update-content-bubble': {
       '& .ant-typography': {
-        color: '#b4bed2',
+        color: theme.headerColor,
         lineHeight: 1.6,
       },
       background: 'transparent',
@@ -60,26 +61,32 @@ const useStyles = createUseStyles({
     },
     '& .update-content-card': {
       '&:hover': {
-        border: '1px solid #4a5666',
-        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
+        border: `1px solid ${theme.borderColor}`,
+        boxShadow:
+          theme.colorScheme === 'dark'
+            ? '0 2px 8px rgba(0, 0, 0, 0.3)'
+            : '0 2px 8px rgba(0, 0, 0, 0.15)',
       },
-      background: '#283240',
-      border: '1px solid #3a4556',
+      background:
+        theme.colorScheme === 'dark'
+          ? 'rgba(255, 255, 255, 0.04)'
+          : 'rgba(0, 0, 0, 0.02)',
+      border: `1px solid ${theme.borderColor}`,
       borderRadius: 12,
       padding: '12px 16px',
       position: 'relative',
     },
-    marginLeft: 48,
+    marginTop: 4,
   },
   messageHeader: {
     alignItems: 'center',
     display: 'flex',
-    marginBottom: 8,
-    paddingLeft: 48,
+    marginBottom: 4,
   },
   messageTime: {
-    color: '#72849a',
-    fontSize: 12,
+    color: theme.secondaryText,
+    fontSize: 11,
+    marginLeft: 8,
     opacity: 0.8,
     transition: 'opacity 0.2s',
   },
@@ -93,19 +100,22 @@ const useStyles = createUseStyles({
     position: 'relative',
   },
   replyWrapper: {
-    borderLeft: '2px solid #3a4556',
-    marginLeft: 32,
+    borderLeft: `2px solid ${theme.borderColor}`,
+    marginLeft: 12,
     marginTop: 8,
     paddingLeft: 16,
   },
   systemMessage: {
     '& .update-content-card': {
-      background: '#2a3441',
-      borderLeft: '3px solid #4a5666',
+      background:
+        theme.colorScheme === 'dark'
+          ? 'rgba(255, 255, 255, 0.06)'
+          : 'rgba(0, 0, 0, 0.04)',
+      borderLeft: `3px solid ${theme.borderColor}`,
       fontStyle: 'italic',
     },
   },
-});
+}));
 
 interface Props {
   confirmDeleteUpdate: (updateId: string) => void;
@@ -150,9 +160,9 @@ const IntelMessage: React.FC<Props> = ({
   const messageContent = (
     <>
       {!isSystemMessage && (
-        <>
+        <div className={classes.messageHeader}>
           <div className={classes.messageAvatar}>
-            <Avatar size={32} style={{ backgroundColor: '#1890ff' }}>
+            <Avatar size={20} style={{ backgroundColor: '#1890ff' }}>
               {update.createdBy.fullName
                 ?.split(' ')
                 .map((n) => n[0])
@@ -160,17 +170,15 @@ const IntelMessage: React.FC<Props> = ({
                 .toUpperCase() || intl.formatMessage({ defaultMessage: '?' })}
             </Avatar>
           </div>
-          <div className={classes.messageHeader}>
-            <Typography.Text className={classes.messageAuthor}>
-              {isOwnMessage
-                ? intl.formatMessage({ defaultMessage: 'You' })
-                : update.createdBy.fullName}
-            </Typography.Text>
-            <Typography.Text className={classes.messageTime}>
-              {dayjs(update.createdAt).format('DD/MM/YYYY HH:mm')}
-            </Typography.Text>
-          </div>
-        </>
+          <Typography.Text className={classes.messageAuthor}>
+            {isOwnMessage
+              ? intl.formatMessage({ defaultMessage: 'You' })
+              : update.createdBy.fullName}
+          </Typography.Text>
+          <Typography.Text className={classes.messageTime}>
+            {dayjs(update.createdAt).format('DD/MM/YYYY HH:mm')}
+          </Typography.Text>
+        </div>
       )}
       <div className={classes.messageContent}>
         <UpdateContent

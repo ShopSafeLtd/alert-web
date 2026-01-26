@@ -22,16 +22,6 @@ const useStyles = createUseStyles((theme: Theme) => ({
     gap: '24px',
     minHeight: 0,
   },
-  continueButton: {
-    width: '100%',
-  },
-  footer: {
-    borderTop: `1px solid ${theme.borderColor}`,
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '12px',
-    paddingTop: '16px',
-  },
   header: {
     alignItems: 'center',
     display: 'flex',
@@ -61,9 +51,11 @@ const useStyles = createUseStyles((theme: Theme) => ({
     minWidth: 0,
   },
   playerContainer: {
+    aspectRatio: '16 / 9',
     backgroundColor: '#000',
-    paddingTop: '56.25%',
+    maxHeight: 'calc(70vh - 220px)',
     position: 'relative',
+    width: '100%',
   },
   playerDescription: {
     color: theme.secondaryText,

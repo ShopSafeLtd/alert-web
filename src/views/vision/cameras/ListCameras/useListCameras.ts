@@ -16,33 +16,33 @@ const uploadInLast24Hours = (lastUploaded: Date) => {
 
 export interface CameraList {
   business: string;
-  lastUploaded: string;
-  make: string | null | undefined;
-  model: string | null | undefined;
-  serialNumber: string | null | undefined;
-  status: string;
   id: string;
+  lastUploaded: string;
+  make: null | string | undefined;
+  model: null | string | undefined;
+  serialNumber: null | string | undefined;
+  status: string;
 }
 
 interface Return {
   data: CameraList[];
+  defaultTimeout?: string;
+  drawerVisible: boolean;
+  form: ReturnType<typeof Form.useForm<DeafultTimeoutForm>>[0];
+  handleDrawerClose: () => void;
+  handleEditClick: () => void;
+  handleFormSubmit: () => void;
   loading: boolean;
-  search?: string;
-  setSearch: (value: string | null) => void;
+  loadingDefault: boolean;
+  onPageChange: (page: number, pageSize: number) => void;
+  onUpdateDefaultTimeout: (values: DeafultTimeoutForm) => Promise<void>;
   page: number;
   pageSize: number;
-  total: number;
-  onPageChange: (page: number, pageSize: number) => void;
-  defaultTimeout?: string;
-  loadingDefault: boolean;
-  onUpdateDefaultTimeout: (values: DeafultTimeoutForm) => Promise<void>;
-  drawerVisible: boolean;
+  search?: string;
   setDrawerVisible: (visible: boolean) => void;
-  form: ReturnType<typeof Form.useForm<DeafultTimeoutForm>>[0];
+  setSearch: (value: null | string) => void;
   submitting: boolean;
-  handleEditClick: () => void;
-  handleDrawerClose: () => void;
-  handleFormSubmit: () => void;
+  total: number;
 }
 
 export interface DeafultTimeoutForm {
@@ -54,7 +54,7 @@ export interface DeafultTimeoutForm {
 
 const useListCameras = (): Return => {
   const currentScheme = useAtomValue(currentSchemeIdAtom);
-  const [search, setSearch] = useState<string | null>(null);
+  const [search, setSearch] = useState<null | string>(null);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [drawerVisible, setDrawerVisible] = useState(false);
@@ -63,12 +63,12 @@ const useListCameras = (): Return => {
 
   const { data, loading, refetch } = useListVisionCamerasQuery({
     variables: {
+      skip: (page - 1) * pageSize,
+      take: pageSize,
       where: {
         schemeIds: [currentScheme],
         search,
       },
-      take: pageSize,
-      skip: (page - 1) * pageSize,
     },
   });
 
@@ -86,6 +86,7 @@ const useListCameras = (): Return => {
   const sortedData =
     data?.aiVisionCameras.edges.map((edge) => ({
       business: edge.node.business.name,
+      id: edge.node.id,
       lastUploaded: edge.node.lastUploaded
         ? new Date(edge.node.lastUploaded).toLocaleString()
         : 'No uploads',
@@ -97,7 +98,6 @@ const useListCameras = (): Return => {
         uploadInLast24Hours(new Date(edge.node.lastUploaded))
           ? 'Online'
           : 'Offline',
-      id: edge.node.id,
     })) ?? [];
 
   const handlePageChange = (newPage: number, newPageSize: number) => {
@@ -163,23 +163,23 @@ const useListCameras = (): Return => {
 
   return {
     data: sortedData,
+    defaultTimeout: schemeDefault?.scheme?.duplicateMatchTimeout ?? undefined,
+    drawerVisible,
+    form,
+    handleDrawerClose,
+    handleEditClick,
+    handleFormSubmit,
     loading,
-    search: search ?? undefined,
-    setSearch,
+    loadingDefault,
+    onPageChange: handlePageChange,
+    onUpdateDefaultTimeout: handleUpdateDefaultTimeout,
     page,
     pageSize,
-    total: data?.aiVisionCameras.totalCount ?? 0,
-    onPageChange: handlePageChange,
-    defaultTimeout: schemeDefault?.scheme?.duplicateMatchTimeout ?? undefined,
-    loadingDefault,
-    onUpdateDefaultTimeout: handleUpdateDefaultTimeout,
-    drawerVisible,
+    search: search ?? undefined,
     setDrawerVisible,
-    form,
+    setSearch,
     submitting,
-    handleEditClick,
-    handleDrawerClose,
-    handleFormSubmit,
+    total: data?.aiVisionCameras.totalCount ?? 0,
   };
 };
 

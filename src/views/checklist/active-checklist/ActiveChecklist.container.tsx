@@ -17,9 +17,11 @@ const ActiveChecklistContainer = () => {
     saveDraft,
     saveStatus,
     sections,
+    selectedBusinessId,
     selectedFont,
     setActiveKeys,
     setFile,
+    setSelectedBusinessId,
     setSelectedFont,
     setSign,
     setTab,
@@ -43,9 +45,11 @@ const ActiveChecklistContainer = () => {
       saveDraft={saveDraft}
       saveStatus={saveStatus}
       sections={sections}
+      selectedBusinessId={selectedBusinessId}
       selectedFont={selectedFont}
       setActiveKeys={setActiveKeys}
       setFile={setFile}
+      setSelectedBusinessId={setSelectedBusinessId}
       setSelectedFont={setSelectedFont}
       setSign={setSign}
       setTab={setTab}

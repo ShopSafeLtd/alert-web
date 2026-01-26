@@ -33,6 +33,7 @@ const WorkflowFormContainer = () => {
     incidentTimeCountCheck,
     lessThanSelected,
     loading,
+    lossValueBetweenSelected,
     lossValueSelected,
     modelSelected,
     newQuestion,
@@ -94,6 +95,7 @@ const WorkflowFormContainer = () => {
       incidentTimeCountCheck={incidentTimeCountCheck}
       lessThanSelected={lessThanSelected}
       loading={loading}
+      lossValueBetweenSelected={lossValueBetweenSelected}
       lossValueSelected={lossValueSelected}
       modelSelected={modelSelected}
       newQuestion={newQuestion}

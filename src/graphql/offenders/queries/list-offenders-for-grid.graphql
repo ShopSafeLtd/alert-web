@@ -1,0 +1,43 @@
+query listOffendersForGrid(
+  $scheme: SchemeWhereUniqueInput!
+  $where: OffenderWhereInput
+  $order: OffenderOrderByWithRelationInput
+  $take: Int
+  $skip: Int
+) {
+  listOffenders(
+    scheme: $scheme
+    where: $where
+    order: $order
+    take: $take
+    skip: $skip
+  ) {
+    offenders {
+      id
+      name
+      reference
+      gender
+      race
+      age
+      dateOfBirth
+      totalIncidents
+      totalValue
+      latestIncident {
+        id
+        date
+      }
+      knownFor
+      targetedBusinesses {
+        id
+        name
+      }
+      images(take: 1) {
+        id
+        optimised
+        position
+        rotation
+      }
+    }
+    total
+  }
+}

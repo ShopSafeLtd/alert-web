@@ -1,0 +1,17 @@
+query GeographicalAreas($schemeId: String!) {
+  geographicalAreas(schemeId: $schemeId) {
+    id
+    name
+    description
+    color
+    areaType
+    circle
+    polygon
+    createdAt
+    updatedAt
+    createdBy {
+      id
+      fullName
+    }
+  }
+}

@@ -11,6 +11,7 @@ import {
   Tag,
   Typography,
 } from 'antd';
+import { ThumbnailStatus } from 'graphql/types';
 import React, { useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
@@ -18,7 +19,6 @@ import type { SortOption, TrainingVideo } from './useListVideos';
 
 import VideoPlayerModal from '../components/VideoPlayerModal';
 import useStyles from './ListVideos.styles';
-import { ThumbnailStatus } from 'graphql/types';
 
 const { Text, Title } = Typography;
 const { Search } = Input;
@@ -59,7 +59,7 @@ const ListVideosView: React.FC<ListVideosViewProps> = ({
   const intl = useIntl();
   const [loomModalOpen, setLoomModalOpen] = useState<null | string>(null);
 
-  const formatDate = (dateString: string | Date): string => {
+  const formatDate = (dateString: Date | string): string => {
     if (dateString instanceof Date) {
       dateString = dateString.toLocaleDateString(intl.locale, {
         day: 'numeric',

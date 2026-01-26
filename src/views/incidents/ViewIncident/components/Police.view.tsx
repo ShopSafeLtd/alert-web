@@ -10,9 +10,10 @@ const { Title } = Typography;
 interface Props {
   data: ViewIncidentQuery | undefined;
   loading: boolean;
+  usPoliceData?: boolean;
 }
 
-const Police = ({ data, loading }: Props) => {
+const Police = ({ data, loading, usPoliceData }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
 
@@ -90,6 +91,28 @@ const Police = ({ data, loading }: Props) => {
               defaultMessage: 'Not Provided',
             })}
         </Descriptions.Item>
+        {data?.incident?.policeReported && usPoliceData && (
+          <>
+            <Descriptions.Item
+              className={classes.detail}
+              label={intl.formatMessage({
+                defaultMessage: 'Police Department',
+              })}
+            >
+              {data?.incident?.policeDepartment ||
+                intl.formatMessage({ defaultMessage: 'Not Provided' })}
+            </Descriptions.Item>
+            <Descriptions.Item
+              className={classes.detail}
+              label={intl.formatMessage({
+                defaultMessage: 'Police Officer Name',
+              })}
+            >
+              {data?.incident?.policeOfficerName ||
+                intl.formatMessage({ defaultMessage: 'Not Provided' })}
+            </Descriptions.Item>
+          </>
+        )}
       </Descriptions>
     </Card>
   );

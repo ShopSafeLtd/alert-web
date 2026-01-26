@@ -1,0 +1,78 @@
+fragment PoliceIncidentCard on SharedIncident {
+  id
+  createdAt
+  updatedAt
+  policePriorityScore
+  policeArea
+  aiQualityScore
+  aiSummary
+  aiKeyObservations
+  aiMethod
+  aiMO
+
+  # Tags associated with this shared incident
+  tag {
+    id
+    name
+  }
+
+  # Schemes sharing this incident
+  schemes {
+    id
+    name
+    hubForce
+  }
+
+  # Nested incident with all display fields
+  incident {
+    id
+    subject
+    description
+    reference
+    policeRef
+    customerRef
+    priority
+    totalImages
+    newIncident
+    dayTime
+
+    crimeTypes {
+      id
+      name
+    }
+
+    business {
+      id
+      name
+    }
+
+    location {
+      id
+      full
+    }
+
+    images {
+      id
+      low
+      optimised
+      rotation
+      position
+      positionX
+      positionY
+      primary
+    }
+
+    offenders {
+      id
+      name
+      images(take: 1, orderBy: { createdAt: desc }) {
+        id
+        optimised
+        rotation
+        position
+        positionX
+        positionY
+      }
+    }
+  }
+}

@@ -1,11 +1,11 @@
-import { faFilter, faRefresh } from '@fortawesome/pro-light-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AiVisionMatchCard from '#/components/ai-vision/AiVisionMatchCard.view';
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import DebouncedInput from '#/utils/debounced-input';
 import VisionMatchDrawer from '#/views/vision/vision-centre/components/VisionMatchDrawer/VisionMatchDrawer.view';
 import { useAiVisionMatchesQuery } from '#/views/vision/vision-centre/components/VisionMatches/__generated__/VisionMatches.generated';
 import { useDismissAiMatchMutation } from '#/views/vision/vision-centre/components/VisionMatches/graphql/mutations/__generated__/DismissMatch.generated';
+import { faFilter, faRefresh } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Card, Col, Row, Skeleton, Typography } from 'antd';
 import { AiVisionMatchConfidence, SortOrder } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
@@ -64,13 +64,13 @@ const VisionMatched = ({ initId }: { initId?: string }) => {
   return (
     <>
       <Card
+        bordered
         style={{
+          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
           position: 'sticky',
           top: 0,
           zIndex: 1000,
-          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
         }}
-        bordered
       >
         <Row align="middle" gutter={8} style={{ marginBottom: 10 }}>
           <Col flex={1}>

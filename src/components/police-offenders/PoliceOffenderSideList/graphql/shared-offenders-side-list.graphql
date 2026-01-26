@@ -1,0 +1,29 @@
+#import "../PoliceOffenderSideListItem.fragment.graphql"
+
+query SharedOffendersSideList(
+  $after: String
+  $first: Int
+  $orderBy: SharedOffenderRelayOrderInput
+  $where: SharedOffenderRelayWhereInput
+) {
+  sharedOffenderRelay(
+    after: $after
+    first: $first
+    orderBy: $orderBy
+    where: $where
+  ) {
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      endCursor
+      startCursor
+    }
+    edges {
+      cursor
+      node {
+        ...PoliceOffenderSideListItem
+      }
+    }
+    totalCount
+  }
+}

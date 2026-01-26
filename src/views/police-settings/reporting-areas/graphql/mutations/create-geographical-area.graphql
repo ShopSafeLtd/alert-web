@@ -1,0 +1,16 @@
+mutation CreateGeographicalArea($data: CreateGeographicalAreaInput!) {
+  createGeographicalArea(data: $data) {
+    id
+    name
+    description
+    color
+    areaType
+    circle
+    polygon
+    createdAt
+    createdBy {
+      id
+      fullName
+    }
+  }
+}

@@ -6,7 +6,7 @@ import { ConfigProvider } from 'antd';
 import enUSAntd from 'antd/es/locale/en_US';
 import { isValid } from 'date-fns';
 
-const InternalDatePicker = generatePicker<Date>(dateFnsGenerateConfig);
+const InternalDatePicker: any = generatePicker<Date>(dateFnsGenerateConfig);
 
 function wrapInEnglish<P>(PickerComponent: React.ComponentType<P>) {
   return (

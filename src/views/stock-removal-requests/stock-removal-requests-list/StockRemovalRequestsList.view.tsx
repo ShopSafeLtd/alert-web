@@ -1,5 +1,6 @@
 import type { Theme } from '#/configs/ThemeConfig';
 
+import PermissionCheckWrapper from '#/components/PermissionCheck/PermissionCheckWrapper';
 import {
   currentPermissionsAtom,
   currentSchemeIdAtom,
@@ -343,23 +344,33 @@ const StockRemovalRequestsList = () => {
             value={searchQuery}
           />
         </Col>
-        <Col>
-          <Radio.Group
-            onChange={(e) => setCreatorFilter(e.target.value as 'ALL' | 'MINE')}
-            value={creatorFilter}
-          >
-            <Radio.Button value="ALL">
-              {intl.formatMessage({
-                defaultMessage: 'All Requests',
-              })}
-            </Radio.Button>
-            <Radio.Button value="MINE">
-              {intl.formatMessage({
-                defaultMessage: 'My Requests',
-              })}
-            </Radio.Button>
-          </Radio.Group>
-        </Col>
+        <PermissionCheckWrapper
+          permission={{
+            method: PermissionMethod.ReadAll,
+            model: PermissionModel.StockRemovalRequests,
+          }}
+          unauthorizedElement={<div />}
+        >
+          <Col>
+            <Radio.Group
+              onChange={(e) =>
+                setCreatorFilter(e.target.value as 'ALL' | 'MINE')
+              }
+              value={creatorFilter}
+            >
+              <Radio.Button value="ALL">
+                {intl.formatMessage({
+                  defaultMessage: 'All Requests',
+                })}
+              </Radio.Button>
+              <Radio.Button value="MINE">
+                {intl.formatMessage({
+                  defaultMessage: 'My Requests',
+                })}
+              </Radio.Button>
+            </Radio.Group>
+          </Col>
+        </PermissionCheckWrapper>
         <Col>
           <Radio.Group
             onChange={(e) => setStatusFilter(e.target.value as string)}

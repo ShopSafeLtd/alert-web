@@ -1,0 +1,28 @@
+mutation MergeBusinesses($data: MergeBusinessesInput!) {
+  mergeBusinesses(data: $data) {
+    id
+    name
+    siteNumber
+    fullName
+    publicName
+    policeArea
+    demId
+    parent {
+      id
+      name
+    }
+    locations {
+      id
+      full
+    }
+    groups {
+      id
+      name
+    }
+    tags {
+      id
+      name
+    }
+    totalUsers
+  }
+}

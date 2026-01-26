@@ -1,10 +1,10 @@
 import type { Theme } from '#/configs/ThemeConfig';
 
-import { faArrowsLeftRight, faCircle } from '@fortawesome/pro-light-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import WatermarkImage from '#/components/images/WatermarkImage.view';
 import VisionMap from '#/views/vision/vision-centre/components/VisionMap/VisionMap';
 import { useAiVisionMatchDrawerQuery } from '#/views/vision/vision-centre/components/VisionMatchDrawer/__generated__/VisionMatchDrawer.generated';
+import { faArrowsLeftRight, faCircle } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
   Col,

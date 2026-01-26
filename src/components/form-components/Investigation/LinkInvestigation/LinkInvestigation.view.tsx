@@ -5,7 +5,6 @@ import FormatCalendar from '#/utils/format-calendar-24h';
 import { Button, Col, Input, Row, Select, Table, Typography } from 'antd';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { Link } from 'react-router-dom';
 
 import type { LinkInvestigationsQuery } from './graphql/__generated__/list-investigations-link.generated';
 
@@ -23,7 +22,7 @@ interface Props {
   onClose: () => void;
   onPaginationChange: (pageValue: number, sizeValue: number) => void;
   onSelect: (item: { key: string }) => void;
-  onSubmit: () => void;
+  onSubmit: () => Promise<void> | void;
   saving: boolean;
 }
 
@@ -79,9 +78,6 @@ const LinkInvestigation = ({
               {
                 dataIndex: 'name',
                 key: 'name',
-                render: (value, item) => (
-                  <Link to={`view/${item.key}`}>{value}</Link>
-                ),
                 title: <FormattedMessage defaultMessage="Name" />,
               },
               {
@@ -144,6 +140,7 @@ const LinkInvestigation = ({
               placeholder={intl.formatMessage({
                 defaultMessage: 'Select groups...',
               })}
+              style={{ width: '100%' }}
               // size="small"
               value={groupsFilter}
             />
@@ -201,7 +198,9 @@ const LinkInvestigation = ({
           <Button
             disabled={saving}
             loading={saving}
-            onClick={onSubmit}
+            onClick={() => {
+              void onSubmit();
+            }}
             type="primary"
           >
             {intl.formatMessage({

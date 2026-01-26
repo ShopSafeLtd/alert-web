@@ -27,7 +27,7 @@ const useStyles = createUseStyles((theme: Theme) => ({
   },
 }));
 
-type OutcomeType = 'activity' | 'notification' | 'email' | 'sms' | null;
+type OutcomeType = 'activity' | 'email' | 'notification' | 'sms' | null;
 
 type DetectionOutcomesProps = Pick<
   DetectionConfigProps,

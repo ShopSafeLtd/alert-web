@@ -65,6 +65,7 @@ export interface WorkflowProps {
   incidentTimeCountCheck: boolean;
   lessThanSelected: boolean;
   loading: boolean;
+  lossValueBetweenSelected: boolean;
   lossValueSelected: boolean;
   modelSelected: Model | null | undefined;
   newQuestion: boolean;
@@ -129,6 +130,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
   incidentTimeCountCheck,
   lessThanSelected,
   loading,
+  lossValueBetweenSelected,
   lossValueSelected,
   modelSelected,
   newQuestion,
@@ -231,6 +233,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                   incidentTimeCountCheck={incidentTimeCountCheck}
                   lessThanSelected={lessThanSelected}
                   loading={loading}
+                  lossValueBetweenSelected={lossValueBetweenSelected}
                   lossValueSelected={lossValueSelected}
                   modelSelected={modelSelected}
                   prefix={prefix}

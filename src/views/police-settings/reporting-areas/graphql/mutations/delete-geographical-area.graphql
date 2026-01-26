@@ -1,0 +1,6 @@
+mutation DeleteGeographicalArea($id: String!) {
+  deleteGeographicalArea(id: $id) {
+    id
+    name
+  }
+}

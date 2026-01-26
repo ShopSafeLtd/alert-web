@@ -6,6 +6,7 @@ const defaultOptions = {} as const;
 export type UserRolesQueryVariables = Types.Exact<{
   schemeId: Types.Scalars['String'];
   roleId?: Types.InputMaybe<Types.Scalars['String']>;
+  take?: Types.InputMaybe<Types.Scalars['Int']>;
 }>;
 
 
@@ -13,8 +14,8 @@ export type UserRolesQuery = { __typename?: 'Query', roles: { __typename?: 'Quer
 
 
 export const UserRolesDocument = gql`
-    query UserRoles($schemeId: String!, $roleId: String) {
-  roles(schemeId: $schemeId, roleId: $roleId) {
+    query UserRoles($schemeId: String!, $roleId: String, $take: Int) {
+  roles(schemeId: $schemeId, roleId: $roleId, take: $take) {
     edges {
       node {
         type

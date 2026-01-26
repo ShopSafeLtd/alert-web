@@ -3,8 +3,12 @@ import type { FormInstance } from 'antd';
 
 import RoleSelect from '#/components/form-components/Roles/RoleSelect';
 import RolesSelect from '#/components/form-components/RolesSelect/RolesSelect.view';
-import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import {
+  currentSchemeIdAtom,
+  schemeTypeAtom,
+} from '#/providers/SchemeProvider/SchemeProvider';
 import { roleItems, settings } from '#/views/roles/types';
+import { filterRoleItemsBySchemeType } from '#/views/roles/utils/filterRoleItemsBySchemeType';
 import {
   faCheckSquare,
   faFileSpreadsheet,
@@ -98,6 +102,7 @@ const RoleView = ({
   const checklists = Form.useWatch('checklists', form);
 
   const schemeId = useAtomValue(currentSchemeIdAtom);
+  const schemeType = useAtomValue(schemeTypeAtom);
 
   const intl = useIntl();
   const formatMessage = intl.formatMessage.bind(intl);
@@ -118,7 +123,13 @@ const RoleView = ({
           <Row align="middle">
             <Col flex={1}>
               <PageHeader
-                onBack={() => navigate('/app/scheme-settings/roles')}
+                onBack={() =>
+                  navigate(
+                    schemeType === 'POLICE_HUB'
+                      ? '/app/police-settings/roles'
+                      : '/app/scheme-settings/roles'
+                  )
+                }
                 title={
                   roleName ||
                   formatMessage({
@@ -307,63 +318,166 @@ const RoleView = ({
                       </Row>
                     </Card>
                     <Row gutter={[16, 16]} style={{ marginBottom: 16 }}>
-                      {roleItems.map((item) => (
-                        <Col key={item.key} span={12}>
-                          <Card style={{ marginBottom: 0 }}>
-                            <Row gutter={8}>
-                              <Col>
-                                <FontAwesomeIcon icon={item.icon} size="xl" />
-                              </Col>
-                              <Col flex={1}>
-                                <Typography.Title
-                                  level={4}
-                                  style={{ marginBottom: 2 }}
-                                >
-                                  {item.title}
-                                </Typography.Title>
-                              </Col>
-                            </Row>
-                            <Typography.Paragraph>
-                              {item.description}
-                            </Typography.Paragraph>
-                            <Row gutter={32}>
-                              {item.methods.map((method) => (
-                                <Col key={method.key}>
-                                  <Tooltip
-                                    placement="bottom"
-                                    title={method.tooltip}
-                                  >
-                                    <Row align="middle" gutter={6}>
-                                      <Col>
-                                        <Form.Item
-                                          name={`${item.key}:${method.key}`}
-                                          style={{ marginBottom: 0 }}
-                                          valuePropName="checked"
-                                        >
-                                          <Switch
-                                            disabled={loading || item.disabled}
-                                            loading={loading}
-                                          />
-                                        </Form.Item>
-                                      </Col>
-                                      <Col>
-                                        <Typography.Text>
-                                          {method.name}
-                                        </Typography.Text>
-                                      </Col>
-                                    </Row>
-                                  </Tooltip>
+                      {filterRoleItemsBySchemeType(roleItems, schemeType).map(
+                        (item) => (
+                          <Col key={item.key} span={12}>
+                            <Card style={{ marginBottom: 0 }}>
+                              <Row gutter={8}>
+                                <Col>
+                                  <FontAwesomeIcon icon={item.icon} size="xl" />
                                 </Col>
-                              ))}
-                            </Row>
-                          </Card>
-                        </Col>
-                      ))}
+                                <Col flex={1}>
+                                  <Typography.Title
+                                    level={4}
+                                    style={{ marginBottom: 2 }}
+                                  >
+                                    {item.title}
+                                  </Typography.Title>
+                                </Col>
+                              </Row>
+                              <Typography.Paragraph>
+                                {item.description}
+                              </Typography.Paragraph>
+                              <Row gutter={32}>
+                                {item.methods.map((method) => (
+                                  <Col key={method.key}>
+                                    <Tooltip
+                                      placement="bottom"
+                                      title={method.tooltip}
+                                    >
+                                      <Row align="middle" gutter={6}>
+                                        <Col>
+                                          <Form.Item
+                                            name={`${item.key}:${method.key}`}
+                                            style={{ marginBottom: 0 }}
+                                            valuePropName="checked"
+                                          >
+                                            <Switch
+                                              disabled={
+                                                loading || item.disabled
+                                              }
+                                              loading={loading}
+                                            />
+                                          </Form.Item>
+                                        </Col>
+                                        <Col>
+                                          <Typography.Text>
+                                            {method.name}
+                                          </Typography.Text>
+                                        </Col>
+                                      </Row>
+                                    </Tooltip>
+                                  </Col>
+                                ))}
+                              </Row>
+                            </Card>
+                          </Col>
+                        )
+                      )}
                       <Col />
                     </Row>
-                    <Row gutter={[16, 16]}>
-                      {settings.map((item) => (
-                        <Col key={item.key} span={24}>
+                    {schemeType !== 'POLICE_HUB' && (
+                      <Row gutter={[16, 16]}>
+                        {settings.map((item) => (
+                          <Col key={item.key} span={24}>
+                            <Card style={{ marginBottom: 0 }}>
+                              <Row
+                                gutter={16}
+                                style={{ width: '100%' }}
+                                wrap={false}
+                              >
+                                <Col flex={1}>
+                                  <Row gutter={8}>
+                                    <Col>
+                                      <FontAwesomeIcon
+                                        icon={item.icon}
+                                        size="xl"
+                                      />
+                                    </Col>
+                                    <Col flex={1}>
+                                      <Typography.Title
+                                        level={4}
+                                        style={{ marginBottom: 2 }}
+                                      >
+                                        {item.title}
+                                      </Typography.Title>
+                                    </Col>
+                                  </Row>
+                                  <Typography.Paragraph>
+                                    {item.description}
+                                  </Typography.Paragraph>
+                                </Col>
+                                <Col>
+                                  <Form.Item
+                                    name={`${PermissionModel.Settings}:${PermissionMethod.Read}`}
+                                    style={{ marginBottom: 0 }}
+                                    valuePropName="checked"
+                                  >
+                                    <Switch
+                                      disabled={loading}
+                                      loading={loading}
+                                      onChange={() =>
+                                        onSettingsToggle(settingsEnabled)
+                                      }
+                                    />
+                                  </Form.Item>
+                                </Col>
+                              </Row>
+
+                              {settingsEnabled && (
+                                <Row gutter={16}>
+                                  {item.children?.map((child) => (
+                                    <Col
+                                      key={child.key}
+                                      span={12}
+                                      style={{ marginBottom: 4 }}
+                                    >
+                                      <Typography.Text strong>
+                                        {child.title}
+                                      </Typography.Text>
+                                      <Row gutter={16}>
+                                        {child.methods.map((method) => (
+                                          <Col
+                                            key={method.key}
+                                            style={{ marginTop: 4 }}
+                                          >
+                                            <Row align="middle" gutter={6}>
+                                              <Col>
+                                                <Form.Item
+                                                  name={`${child.key}:${method.key}`}
+                                                  style={{ marginBottom: 0 }}
+                                                  valuePropName="checked"
+                                                >
+                                                  <Switch
+                                                    disabled={
+                                                      loading || child.disabled
+                                                    }
+                                                    loading={loading}
+                                                  />
+                                                </Form.Item>
+                                              </Col>
+                                              <Col>
+                                                <Typography.Text>
+                                                  {method.name}
+                                                </Typography.Text>
+                                              </Col>
+                                            </Row>
+                                          </Col>
+                                        ))}
+                                      </Row>
+                                    </Col>
+                                  ))}
+                                </Row>
+                              )}
+                            </Card>
+                          </Col>
+                        ))}
+                        <Col />
+                      </Row>
+                    )}
+                    {schemeType !== 'POLICE_HUB' && (
+                      <Row gutter={16} style={{ marginBottom: 20 }}>
+                        <Col span={12}>
                           <Card style={{ marginBottom: 0 }}>
                             <Row
                               gutter={16}
@@ -374,214 +488,125 @@ const RoleView = ({
                                 <Row gutter={8}>
                                   <Col>
                                     <FontAwesomeIcon
-                                      icon={item.icon}
+                                      icon={faFolders}
                                       size="xl"
                                     />
                                   </Col>
-                                  <Col flex={1}>
-                                    <Typography.Title
-                                      level={4}
-                                      style={{ marginBottom: 2 }}
-                                    >
-                                      {item.title}
+                                  <Col flex={1} style={{ marginBottom: 0 }}>
+                                    <Typography.Title level={4}>
+                                      <FormattedMessage defaultMessage="Folders" />
                                     </Typography.Title>
                                   </Col>
                                 </Row>
                                 <Typography.Paragraph>
-                                  {item.description}
+                                  <FormattedMessage defaultMessage="Manage the access to folders for this role." />
                                 </Typography.Paragraph>
                               </Col>
+
                               <Col>
                                 <Form.Item
-                                  name={`${PermissionModel.Settings}:${PermissionMethod.Read}`}
+                                  name="selectAllFolders"
                                   style={{ marginBottom: 0 }}
                                   valuePropName="checked"
                                 >
-                                  <Switch
+                                  <Button
                                     disabled={loading}
                                     loading={loading}
-                                    onChange={() =>
-                                      onSettingsToggle(settingsEnabled)
-                                    }
-                                  />
+                                    onClick={() => onFoldersToggle(true)}
+                                    style={{ paddingBottom: -20 }}
+                                  >
+                                    <FormattedMessage defaultMessage="Select All" />
+                                  </Button>
                                 </Form.Item>
                               </Col>
                             </Row>
 
-                            {settingsEnabled && (
-                              <Row gutter={16}>
-                                {item.children?.map((child) => (
-                                  <Col
-                                    key={child.key}
-                                    span={12}
-                                    style={{ marginBottom: 4 }}
-                                  >
-                                    <Typography.Text strong>
-                                      {child.title}
-                                    </Typography.Text>
-                                    <Row gutter={16}>
-                                      {child.methods.map((method) => (
-                                        <Col
-                                          key={method.key}
-                                          style={{ marginTop: 4 }}
-                                        >
-                                          <Row align="middle" gutter={6}>
-                                            <Col>
-                                              <Form.Item
-                                                name={`${child.key}:${method.key}`}
-                                                style={{ marginBottom: 0 }}
-                                                valuePropName="checked"
-                                              >
-                                                <Switch
-                                                  disabled={
-                                                    loading || child.disabled
-                                                  }
-                                                  loading={loading}
-                                                />
-                                              </Form.Item>
-                                            </Col>
-                                            <Col>
-                                              <Typography.Text>
-                                                {method.name}
-                                              </Typography.Text>
-                                            </Col>
-                                          </Row>
-                                        </Col>
-                                      ))}
-                                    </Row>
-                                  </Col>
-                                ))}
-                              </Row>
-                            )}
+                            <Row gutter={32}>
+                              <Form.Item
+                                name="folders"
+                                style={{ width: '100%' }}
+                              >
+                                <Tree
+                                  blockNode
+                                  checkable
+                                  checkedKeys={folders}
+                                  disabled={loading}
+                                  height={200}
+                                  onCheck={(checkedKeys) => {
+                                    const keys = Array.isArray(checkedKeys)
+                                      ? checkedKeys
+                                      : checkedKeys.checked;
+                                    onSelectFolder(keys as string[]);
+                                  }}
+                                  // style={style}
+                                  treeData={foldersData}
+                                />
+                              </Form.Item>
+                            </Row>
                           </Card>
                         </Col>
-                      ))}
-                      <Col />
-                    </Row>
-                    <Row gutter={16} style={{ marginBottom: 20 }}>
-                      <Col span={12}>
-                        <Card style={{ marginBottom: 0 }}>
-                          <Row
-                            gutter={16}
-                            style={{ width: '100%' }}
-                            wrap={false}
-                          >
-                            <Col flex={1}>
-                              <Row gutter={8}>
-                                <Col>
-                                  <FontAwesomeIcon icon={faFolders} size="xl" />
-                                </Col>
-                                <Col flex={1} style={{ marginBottom: 0 }}>
-                                  <Typography.Title level={4}>
-                                    <FormattedMessage defaultMessage="Folders" />
-                                  </Typography.Title>
-                                </Col>
-                              </Row>
-                              <Typography.Paragraph>
-                                <FormattedMessage defaultMessage="Manage the access to folders for this role." />
-                              </Typography.Paragraph>
-                            </Col>
+                        <Col span={12}>
+                          <Card style={{ marginBottom: 0 }}>
+                            <Row
+                              gutter={16}
+                              style={{ width: '100%' }}
+                              wrap={false}
+                            >
+                              <Col flex={1}>
+                                <Row gutter={8}>
+                                  <Col>
+                                    <FontAwesomeIcon
+                                      icon={faFileSpreadsheet}
+                                      size="xl"
+                                    />
+                                  </Col>
+                                  <Col flex={1} style={{ marginBottom: 0 }}>
+                                    <Typography.Title level={4}>
+                                      <FormattedMessage defaultMessage="Checklist Templates" />
+                                    </Typography.Title>
+                                  </Col>
+                                </Row>
+                                <Typography.Paragraph>
+                                  <FormattedMessage defaultMessage="Manage the access to checklist templates for this role." />
+                                </Typography.Paragraph>
+                              </Col>
 
-                            <Col>
-                              <Form.Item
-                                name="selectAllFolders"
-                                style={{ marginBottom: 0 }}
-                                valuePropName="checked"
-                              >
+                              <Col>
                                 <Button
                                   disabled={loading}
                                   loading={loading}
-                                  onClick={() => onFoldersToggle(true)}
-                                  style={{ paddingBottom: -20 }}
+                                  onClick={() => onChecklistsToggle(true)}
                                 >
                                   <FormattedMessage defaultMessage="Select All" />
                                 </Button>
-                              </Form.Item>
-                            </Col>
-                          </Row>
+                              </Col>
+                            </Row>
 
-                          <Row gutter={32}>
-                            <Form.Item name="folders" style={{ width: '100%' }}>
-                              <Tree
-                                blockNode
-                                checkable
-                                checkedKeys={folders}
-                                disabled={loading}
-                                height={200}
-                                onCheck={(checkedKeys) => {
-                                  const keys = Array.isArray(checkedKeys)
-                                    ? checkedKeys
-                                    : checkedKeys.checked;
-                                  onSelectFolder(keys as string[]);
-                                }}
-                                // style={style}
-                                treeData={foldersData}
-                              />
-                            </Form.Item>
-                          </Row>
-                        </Card>
-                      </Col>
-                      <Col span={12}>
-                        <Card style={{ marginBottom: 0 }}>
-                          <Row
-                            gutter={16}
-                            style={{ width: '100%' }}
-                            wrap={false}
-                          >
-                            <Col flex={1}>
-                              <Row gutter={8}>
-                                <Col>
-                                  <FontAwesomeIcon
-                                    icon={faFileSpreadsheet}
-                                    size="xl"
-                                  />
-                                </Col>
-                                <Col flex={1} style={{ marginBottom: 0 }}>
-                                  <Typography.Title level={4}>
-                                    <FormattedMessage defaultMessage="Checklist Templates" />
-                                  </Typography.Title>
-                                </Col>
-                              </Row>
-                              <Typography.Paragraph>
-                                <FormattedMessage defaultMessage="Manage the access to checklist templates for this role." />
-                              </Typography.Paragraph>
-                            </Col>
-
-                            <Col>
-                              <Button
-                                disabled={loading}
-                                loading={loading}
-                                onClick={() => onChecklistsToggle(true)}
+                            <Row gutter={32}>
+                              <Form.Item
+                                name="checklists"
+                                style={{ width: '100%' }}
                               >
-                                <FormattedMessage defaultMessage="Select All" />
-                              </Button>
-                            </Col>
-                          </Row>
-
-                          <Row gutter={32}>
-                            <Form.Item
-                              name="checklists"
-                              style={{ width: '100%' }}
-                            >
-                              <Tree
-                                blockNode
-                                checkable
-                                checkedKeys={checklists}
-                                disabled={loading}
-                                height={200}
-                                onCheck={(checkedKeys) => {
-                                  const keys = Array.isArray(checkedKeys)
-                                    ? checkedKeys
-                                    : checkedKeys.checked;
-                                  onSelectChecklist(keys as string[]);
-                                }}
-                                treeData={checklistsData}
-                              />
-                            </Form.Item>
-                          </Row>
-                        </Card>
-                      </Col>
-                    </Row>
+                                <Tree
+                                  blockNode
+                                  checkable
+                                  checkedKeys={checklists}
+                                  disabled={loading}
+                                  height={200}
+                                  onCheck={(checkedKeys) => {
+                                    const keys = Array.isArray(checkedKeys)
+                                      ? checkedKeys
+                                      : checkedKeys.checked;
+                                    onSelectChecklist(keys as string[]);
+                                  }}
+                                  treeData={checklistsData}
+                                />
+                              </Form.Item>
+                            </Row>
+                          </Card>
+                        </Col>
+                      </Row>
+                    )}
 
                     <Row>
                       <Col flex={1} />

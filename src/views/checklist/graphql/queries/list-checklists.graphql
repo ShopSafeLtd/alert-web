@@ -8,6 +8,7 @@ query Checklists(
     id
     titleLocaled
     descriptionLocaled
+    requiredBusiness
     roles {
       id
     }

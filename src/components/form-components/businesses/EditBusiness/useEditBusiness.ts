@@ -7,7 +7,11 @@ import type {
   SearchBusinessesQuery,
   SearchBusinessesQueryVariables,
 } from 'graphql/businesses/queries/__generated__/search-businesses.generated';
-import type { BusinessUpdateInput, Currency } from 'graphql/types';
+import type {
+  BusinessUpdateInput,
+  Currency,
+  GroupSyncStrategy,
+} from 'graphql/types';
 import type { LocationData, TagData } from 'types/DataType';
 
 import { BusinessesSideListDocument } from '#/components/businesses/BusinessSideList/graphql/queries/__generated__/sidelist.generated';
@@ -16,6 +20,7 @@ import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { useBrandsQuery } from '#/views/settings/brands/graphql/queries/__generated__/brands.generated';
 import { useApolloClient } from '@apollo/client';
 import { Form, notification } from 'antd';
+import { useSyncBusinessGroupsMutation } from 'graphql/businesses/mutations/__generated__/sync-business-groups.generated';
 import { useUpdateBusinessMutation } from 'graphql/businesses/mutations/__generated__/update-business.generated';
 import { useEditBusinessQuery } from 'graphql/businesses/queries/__generated__/edit-business.generated';
 import { SearchBusinessesDocument } from 'graphql/businesses/queries/__generated__/search-businesses.generated';
@@ -54,6 +59,7 @@ interface Return {
   addTag: boolean;
   brands: { label: string; value: string }[];
   brandsLoading: boolean;
+  businessName: string;
   currency: Currency | null | undefined;
   form: FormInstance<OnSubmitValues>;
   groups: { label: string; value: string }[];
@@ -64,13 +70,27 @@ interface Return {
     value: string
   ) => Promise<{ label: string; value: string }[]>;
   onSubmit: (values: OnSubmitValues) => void;
+  onSyncCancel: () => void;
+  onSyncConfirm: (strategy: GroupSyncStrategy) => void;
   saving: boolean;
   setLocation: (value: LocationData) => void;
+  showSyncModal: boolean;
   tags: { label: string; value: string }[];
   tagsLoading: boolean;
   toggleAddTag: () => void;
   updateNewTagData: (values: TagData) => void;
 }
+
+const hasGroupsAdded = (original: string[], current: string[]): boolean => {
+  const originalSet = new Set(original);
+  const currentSet = new Set(current);
+
+  // Check if there are any new groups in current that weren't in original
+  for (const id of currentSet) {
+    if (!originalSet.has(id)) return true;
+  }
+  return false;
+};
 
 const useEditBusiness = ({ businessId, onClose }: Props): Return => {
   const client = useApolloClient();
@@ -85,15 +105,28 @@ const useEditBusiness = ({ businessId, onClose }: Props): Return => {
   const [tagData, setTagData] = useState<TagData[]>([]);
   const [addTag, setAddTag] = useState(false);
 
+  // Group sync state
+  const [originalGroups, setOriginalGroups] = useState<string[]>([]);
+  const [pendingFormValues, setPendingFormValues] =
+    useState<OnSubmitValues | null>(null);
+  const [pendingSyncConfig, setPendingSyncConfig] = useState<{
+    shouldSync: boolean;
+    strategy: GroupSyncStrategy;
+  } | null>(null);
+  const [showSyncModal, setShowSyncModal] = useState(false);
+
   const { data, loading } = useEditBusinessQuery({
     fetchPolicy: 'cache-and-network',
     onCompleted: (res) => {
+      const groupIds = res.business?.groups.map(({ id }) => id) || [];
+      setOriginalGroups(groupIds);
+
       form.setFieldsValue({
         brands: res.business?.brands,
         building: res.business?.locations[0]?.building || '',
         county: res.business?.locations[0]?.county || '',
         currency: res.business?.currency || null,
-        groups: res.business?.groups.map(({ id }) => id),
+        groups: groupIds,
         name: res.business?.name || '',
         parent: res.business
           ? {
@@ -197,15 +230,22 @@ const useEditBusiness = ({ businessId, onClose }: Props): Return => {
 
   const [updateBusiness] = useUpdateBusinessMutation({
     onCompleted: () => {
-      setSaving(false);
-      onClose();
-      notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Shop has been updated',
-        }),
+      // Check if we should sync groups
+      if (pendingSyncConfig?.shouldSync) {
+        // Don't close yet - trigger sync
+        syncGroups();
+      } else {
+        // Standard completion flow
+        setSaving(false);
+        onClose();
+        notification.success({
+          message: intl.formatMessage({
+            defaultMessage: 'Shop has been updated',
+          }),
 
-        placement: 'bottomRight',
-      });
+          placement: 'bottomRight',
+        });
+      }
     },
     onError: () => {
       setSaving(false);
@@ -311,7 +351,125 @@ const useEditBusiness = ({ businessId, onClose }: Props): Return => {
     },
   });
 
+  const [syncBusinessGroups] = useSyncBusinessGroupsMutation({
+    onCompleted: (syncData) => {
+      setSaving(false);
+      onClose();
+      setPendingSyncConfig(null);
+
+      const {
+        totalErrors,
+        totalIncidentsUpdated,
+        totalOffendersUpdated,
+        totalVehiclesUpdated,
+      } = syncData.syncBusinessGroups;
+
+      if (totalErrors > 0) {
+        notification.warning({
+          description: intl.formatMessage(
+            {
+              defaultMessage:
+                'Updated {incidents} incidents, {offenders} offenders, {vehicles} vehicles ({errors} errors)',
+            },
+            {
+              errors: totalErrors,
+              incidents: totalIncidentsUpdated,
+              offenders: totalOffendersUpdated,
+              vehicles: totalVehiclesUpdated,
+            }
+          ),
+          duration: 6,
+          message: intl.formatMessage({
+            defaultMessage: 'Groups synced with warnings',
+          }),
+          placement: 'bottomRight',
+        });
+      } else {
+        notification.success({
+          description: intl.formatMessage(
+            {
+              defaultMessage:
+                'Groups synced: {incidents} incidents, {offenders} offenders, {vehicles} vehicles',
+            },
+            {
+              incidents: totalIncidentsUpdated,
+              offenders: totalOffendersUpdated,
+              vehicles: totalVehiclesUpdated,
+            }
+          ),
+          duration: 5,
+          message: intl.formatMessage({
+            defaultMessage: 'Shop updated successfully',
+          }),
+          placement: 'bottomRight',
+        });
+      }
+    },
+    onError: (error) => {
+      setSaving(false);
+      onClose();
+      setPendingSyncConfig(null);
+
+      notification.warning({
+        description: error.message,
+        duration: 8,
+        message: intl.formatMessage({
+          defaultMessage: 'Shop updated (groups sync failed)',
+        }),
+        placement: 'bottomRight',
+      });
+    },
+  });
+
+  const syncGroups = () => {
+    if (!pendingSyncConfig) return;
+
+    void syncBusinessGroups({
+      variables: {
+        businessIds: [businessId!],
+        schemeId: currentScheme,
+        strategy: pendingSyncConfig.strategy,
+      },
+    });
+  };
+
+  const handleSyncConfirm = (strategy: GroupSyncStrategy) => {
+    if (!pendingFormValues) return;
+
+    setShowSyncModal(false);
+    setPendingSyncConfig({
+      shouldSync: true,
+      strategy,
+    });
+
+    executeBusinessUpdate(pendingFormValues);
+  };
+
+  const handleSyncSkip = () => {
+    if (!pendingFormValues) return;
+
+    setShowSyncModal(false);
+    setPendingSyncConfig(null);
+
+    executeBusinessUpdate(pendingFormValues);
+  };
+
   const onSubmit = (values: OnSubmitValues) => {
+    // Only show modal if groups were added (not removed)
+    const groupsAdded = hasGroupsAdded(originalGroups, values.groups);
+
+    if (groupsAdded) {
+      // Store pending values and show modal
+      setPendingFormValues(values);
+      setShowSyncModal(true);
+      return; // Don't proceed with mutation yet
+    }
+
+    // No new groups added - proceed normally
+    executeBusinessUpdate(values);
+  };
+
+  const executeBusinessUpdate = (values: OnSubmitValues) => {
     setSaving(true);
     const getParent = () => {
       if (values.parent.value)
@@ -532,6 +690,7 @@ const useEditBusiness = ({ businessId, onClose }: Props): Return => {
         value: group.id,
       })) || [],
     brandsLoading,
+    businessName: data?.business?.name || '',
     currency: data?.business?.currency,
     form,
     groups,
@@ -540,8 +699,11 @@ const useEditBusiness = ({ businessId, onClose }: Props): Return => {
     location,
     onSearchBusiness,
     onSubmit,
+    onSyncCancel: handleSyncSkip,
+    onSyncConfirm: handleSyncConfirm,
     saving,
     setLocation: onSetLocation,
+    showSyncModal,
     tags:
       tagsData?.tags.map((tag) => ({
         label: tag.name,

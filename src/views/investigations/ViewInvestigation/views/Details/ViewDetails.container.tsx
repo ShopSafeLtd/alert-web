@@ -85,6 +85,7 @@ const ViewDetails = ({
   toggleSubscribe,
 }: Props) => {
   const {
+    confirmConnectOffender,
     confirmDeleteUpdate,
     editIncidentId,
     editRights,
@@ -96,12 +97,14 @@ const ViewDetails = ({
     handleEditUpdate,
     loadMore,
     optionRowShow,
+    pendingOffenderConnection,
     replyTo,
     scrolledToTop,
     setEditIncidentId,
     setEditUpdate,
     setEditUpdateInput,
     setOptionRowShow,
+    setPendingOffenderConnection,
     setReplyTo,
     suggestedData,
     toggleViewSuggestedIncidents,
@@ -123,6 +126,7 @@ const ViewDetails = ({
       _templatesLoading={templatesLoading}
       _toggleAddTodo={toggleAddTodo}
       componentRef={componentRef}
+      confirmConnectOffender={confirmConnectOffender}
       confirmDeleteUpdate={confirmDeleteUpdate}
       data={data}
       demId={demId}
@@ -148,6 +152,7 @@ const ViewDetails = ({
       onDeleteVehicle={onDeleteVehicle}
       onReopenInvestigation={onReopenInvestigation}
       optionRowShow={optionRowShow}
+      pendingOffenderConnection={pendingOffenderConnection}
       replyTo={replyTo}
       saving={saving}
       scrolledToTop={scrolledToTop}
@@ -159,6 +164,7 @@ const ViewDetails = ({
       setEditUpdateInput={setEditUpdateInput}
       setEditVehicleData={setEditVehicleData}
       setOptionRowShow={setOptionRowShow}
+      setPendingOffenderConnection={setPendingOffenderConnection}
       setReplyTo={setReplyTo}
       setViewTodoVisible={setViewTodoVisible}
       suggestedData={suggestedData}

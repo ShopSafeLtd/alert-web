@@ -1,12 +1,14 @@
 /* eslint-disable formatjs/no-literal-string-in-jsx */
 import type { ColumnsType, SortOrder } from 'antd/es/table/interface';
 
+import { schemeTypeAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import GetInvestigationStatusValues from '#/types/enums/investigation-status';
 import { faUserLarge } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Avatar, Typography } from 'antd';
 import dayjs from 'dayjs';
-import { InvestigationStatus } from 'graphql/types';
+import { InvestigationStatus, SchemeType } from 'graphql/types';
+import { useAtomValue } from 'jotai';
 import React from 'react';
 import { FormattedMessage, FormattedNumber } from 'react-intl';
 import { Link } from 'react-router-dom';
@@ -1022,10 +1024,39 @@ export interface IncidentsTableData {
   valueRec: string;
 }
 
+const AlertIdCell = ({
+  alertId,
+  incidentKey,
+}: {
+  alertId: null | number | undefined;
+  incidentKey: string;
+}) => {
+  const schemeType = useAtomValue(schemeTypeAtom);
+  const isPoliceHub = schemeType === SchemeType.PoliceHub;
+
+  if (!incidentKey || !alertId) {
+    return <Typography.Text>{alertId ?? '-'}</Typography.Text>;
+  }
+
+  const route = isPoliceHub
+    ? `/app/police-incidents/view/${incidentKey}`
+    : `/app/incidents/view/${incidentKey}`;
+
+  return (
+    <Link to={route}>
+      <Typography.Text style={{ color: '#1890ff' }}>{alertId}</Typography.Text>
+    </Link>
+  );
+};
+
 export const IncidentsColumns: ColumnsType<IncidentsTableData> = [
   {
     dataIndex: 'alertId',
     key: 'alertId',
+    render: (
+      alertId: null | number | undefined,
+      record: IncidentsTableData
+    ) => <AlertIdCell alertId={alertId} incidentKey={record.key} />,
     title: <FormattedMessage defaultMessage="Alert ID" />,
   },
   {

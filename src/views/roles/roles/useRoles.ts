@@ -5,7 +5,7 @@ import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { RoleSort } from '#/types/enums/role_sort';
 import { useRolesQuery } from '#/views/roles/graphql/queries/__generated__/roles.generated';
 import { useAtomValue } from 'jotai/index';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 
 interface Return {
   data: RolesQuery | undefined;
@@ -48,7 +48,7 @@ const useRoles = (): Return => {
   const currentScheme = useAtomValue(currentSchemeIdAtom);
   const [search, setSearch] = useState('');
   const [order, setOrder] = useState<RoleSort>(RoleSort.nameAsc);
-  const [pageSize, setPageSize] = useState(25);
+  const [pageSize, setPageSize] = useState(100);
 
   const {
     data: rawData,
@@ -63,44 +63,18 @@ const useRoles = (): Return => {
     },
   });
 
-  // Client-side filtering based on search
-  const data = useMemo(() => {
-    if (!rawData || !search) return rawData;
-
-    return {
-      ...rawData,
-      roles: {
-        ...rawData.roles,
-        edges:
-          rawData.roles?.edges.filter(({ node: role }) =>
-            role?.name?.toLowerCase().includes(search.toLowerCase())
-          ) || [],
-        totalCount:
-          rawData.roles?.edges.filter(({ node: role }) =>
-            role?.name?.toLowerCase().includes(search.toLowerCase())
-          ).length || 0,
-      },
-    };
-  }, [rawData, search]);
+  // Simply return rawData instead of filtering
+  const data = rawData;
 
   const fetchPage = (page: number) => {
     void fetchMore({
-      updateQuery: (prev, { fetchMoreResult }) => {
-        if (!fetchMoreResult) return prev;
-        return {
-          roles: {
-            ...fetchMoreResult.roles,
-            edges: [
-              ...(prev.roles?.edges || []),
-              ...(fetchMoreResult.roles?.edges || []),
-            ],
-          },
-        };
-      },
+      updateQuery: (_prev, { fetchMoreResult }) =>
+        // Replace data instead of appending
+        fetchMoreResult || _prev,
       variables: {
         orderBy: getOrderBy[order],
         schemeId: currentScheme || '',
-        skip: page * pageSize,
+        skip: (page - 1) * pageSize, // Fix: page is 1-indexed from Ant Design
         take: pageSize,
       },
     });

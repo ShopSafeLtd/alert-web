@@ -1,0 +1,12 @@
+query SharedIncidentHeatmap($where: SharedIncidentRelayWhereInput) {
+  sharedIncidentHeatmap(where: $where) {
+    points {
+      id
+      lat
+      lng
+      policePriorityScore
+      createdAt
+    }
+    total
+  }
+}

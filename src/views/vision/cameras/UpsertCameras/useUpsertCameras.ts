@@ -20,43 +20,43 @@ import { useUpsertAiCameraMutation } from './graphql/mutations/__generated__/ups
 export interface CameraList {
   business: string;
   lastUploaded: string;
-  make: string | null | undefined;
-  model: string | null | undefined;
-  serialNumber: string | null | undefined;
+  make: null | string | undefined;
+  model: null | string | undefined;
+  serialNumber: null | string | undefined;
   status: string;
 }
 export interface CameraUpsertForm {
-  make: string | null | undefined;
-  model: string | null | undefined;
-  serialNumber: string;
-  detectionConfigs: string[];
-  groups: string[];
   businessId: string[];
+  detectionConfigs: string[];
   duplicateMatchTimeout: {
     hours: number;
     minutes: number;
     seconds: number;
   };
+  groups: string[];
+  make: null | string | undefined;
+  model: null | string | undefined;
+  serialNumber: string;
 }
 interface Return {
-  loading: boolean;
   data: ViewAiCameraQuery['aiVisionCamera'] | null | undefined;
-  form: FormInstance<CameraUpsertForm>;
   detectionConfigs: DetectionConfigItem[];
+  editId: null | string;
+  form: FormInstance<CameraUpsertForm>;
   handleFormSubmit: (formData: CameraUpsertForm) => void;
-  editId: string | null;
+  loading: boolean;
 }
 
 interface DetectionConfigItem {
-  key: string;
+  cameraCount: number;
   id: string;
-  name: string;
-  type: DetectActionType;
+  key: string;
   minimumConfidenceTrigger: AiVisionMatchConfidence;
   minimumPriorityTrigger: AiVisionMatchPriority;
-  cameraCount: number;
+  name: string;
+  type: DetectActionType;
 }
-const useUpsertCameras = ({ id }: { id: string | null }): Return => {
+const useUpsertCameras = ({ id }: { id: null | string }): Return => {
   const currentScheme = useAtomValue(currentSchemeIdAtom);
   const navigate = useNavigate();
   const [form] = Form.useForm<CameraUpsertForm>();
@@ -64,8 +64,8 @@ const useUpsertCameras = ({ id }: { id: string | null }): Return => {
   const [settingState, setSettingState] = useState(!!id);
   const configVariables: ListDetectionConfigsQueryVariables = {
     where: {
-      search: undefined,
       schemeId: currentScheme,
+      search: undefined,
       type: undefined,
     },
   };
@@ -80,24 +80,24 @@ const useUpsertCameras = ({ id }: { id: string | null }): Return => {
     detectConfigsData?.detectionConfigs?.edges.map((edge) => {
       const config = edge.node;
       return {
-        key: config.id,
+        cameraCount: config.cameraCount,
         id: config.id,
-        name: config.name,
-        type: config.type,
+        key: config.id,
         minimumConfidenceTrigger: config.minimumConfidenceTrigger,
         minimumPriorityTrigger: config.minimumPriorityTrigger,
-        cameraCount: config.cameraCount,
+        name: config.name,
+        type: config.type,
       };
     }) ?? [];
 
   const { data, loading } = useViewAiCameraQuery({
     fetchPolicy: 'cache-and-network',
+    skip: !id,
     variables: {
       where: {
         id: id || '',
       },
     },
-    skip: !id,
   });
 
   useEffect(() => {
@@ -113,17 +113,17 @@ const useUpsertCameras = ({ id }: { id: string | null }): Return => {
       const [hours, minutes, seconds] = timeoutString.split(':').map(Number);
 
       form.setFieldsValue({
-        make: config.make || undefined,
-        model: config.model || undefined,
-        serialNumber: config.serialNumber || '',
-        detectionConfigs: validConfigs.map((c) => c.id) || [],
-        groups: config.groups?.map((g) => g.id) || [],
         businessId: [config.business.id],
+        detectionConfigs: validConfigs.map((c) => c.id) || [],
         duplicateMatchTimeout: {
           hours: hours || 0,
           minutes: minutes || 0,
           seconds: seconds || 0,
         },
+        groups: config.groups?.map((g) => g.id) || [],
+        make: config.make || undefined,
+        model: config.model || undefined,
+        serialNumber: config.serialNumber || '',
       });
 
       setSettingState(false);
@@ -162,33 +162,33 @@ const useUpsertCameras = ({ id }: { id: string | null }): Return => {
     void upsertCamera({
       variables: {
         data: {
-          id: id || undefined,
-          scheme: currentScheme,
           business: formData.businessId[0],
           duplicateMatchTimeout: timeoutString,
           groups: {
             connect: newGroups.map((id) => id),
             disconnect: missingGroups.map((id) => id),
           },
-          model: formData.model,
+          id: id || undefined,
           make: formData.make,
-          serialNumber: formData.serialNumber,
+          model: formData.model,
           onDetect: {
             connect: newConfigs.map((id) => id),
             disconnect: missingConfigs.map((id) => id),
           },
+          scheme: currentScheme,
+          serialNumber: formData.serialNumber,
         },
       },
     });
   };
 
   return {
-    loading: loading || detectConfigsLoading || submitting || settingState,
-    detectionConfigs,
     data: data?.aiVisionCamera,
+    detectionConfigs,
+    editId: id,
     form,
     handleFormSubmit,
-    editId: id,
+    loading: loading || detectConfigsLoading || submitting || settingState,
   };
 };
 

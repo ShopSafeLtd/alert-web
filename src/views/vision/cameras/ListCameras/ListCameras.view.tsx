@@ -4,9 +4,9 @@ import type {
 } from '#/views/vision/cameras/ListCameras/useListCameras';
 import type { FormInstance } from 'antd';
 
-import { EditOutlined } from '@ant-design/icons';
 import PermissionCheckWrapper from '#/components/PermissionCheck/PermissionCheckWrapper';
 import DebouncedInput from '#/utils/debounced-input';
+import { EditOutlined } from '@ant-design/icons';
 import {
   Button,
   Card,
@@ -28,40 +28,40 @@ import { useNavigate } from 'react-router-dom';
 
 const ListCamerasView = ({
   data,
-  loading,
-  search: _,
-  setSearch,
-  page,
-  pageSize,
-  total,
-  onPageChange,
   defaultTimeout,
-  loadingDefault,
   drawerVisible,
   form,
-  submitting,
-  handleEditClick,
   handleDrawerClose,
+  handleEditClick,
   handleFormSubmit,
+  loading,
+  loadingDefault,
+  onPageChange,
+  page,
+  pageSize,
+  search: _,
+  setSearch,
+  submitting,
+  total,
 }: {
   data: CameraList[];
+  defaultTimeout?: string;
+  drawerVisible: boolean;
+  form: FormInstance<DeafultTimeoutForm>;
+  handleDrawerClose: () => void;
+  handleEditClick: () => void;
+  handleFormSubmit: () => void;
   loading: boolean;
-  search?: string;
-  setSearch: (value: string | null) => void;
+  loadingDefault: boolean;
+  onPageChange: (page: number, pageSize: number) => void;
+  onUpdateDefaultTimeout: (values: DeafultTimeoutForm) => Promise<void>;
   page: number;
   pageSize: number;
-  total: number;
-  onPageChange: (page: number, pageSize: number) => void;
-  defaultTimeout?: string;
-  loadingDefault: boolean;
-  onUpdateDefaultTimeout: (values: DeafultTimeoutForm) => Promise<void>;
-  drawerVisible: boolean;
+  search?: string;
   setDrawerVisible: (visible: boolean) => void;
-  form: FormInstance<DeafultTimeoutForm>;
+  setSearch: (value: null | string) => void;
   submitting: boolean;
-  handleEditClick: () => void;
-  handleDrawerClose: () => void;
-  handleFormSubmit: () => void;
+  total: number;
 }) => {
   const navigate = useNavigate();
   const intl = useIntl();
@@ -86,11 +86,6 @@ const ListCamerasView = ({
         title={<FormattedMessage defaultMessage="Connected Cameras" />}
       />
       <Card
-        loading={loadingDefault}
-        style={{
-          margin: `${[0, 16, 16, 16].join('px ')}px`,
-        }}
-        title={<FormattedMessage defaultMessage="Scheme Default Timeout" />}
         extra={
           <PermissionCheckWrapper
             permission={{
@@ -108,6 +103,11 @@ const ListCamerasView = ({
             </Button>
           </PermissionCheckWrapper>
         }
+        loading={loadingDefault}
+        style={{
+          margin: `${[0, 16, 16, 16].join('px ')}px`,
+        }}
+        title={<FormattedMessage defaultMessage="Scheme Default Timeout" />}
       >
         <Typography.Text
           strong
@@ -132,18 +132,17 @@ const ListCamerasView = ({
           <Col span={6}>
             <DebouncedInput
               allowClear
+              onChange={(event) => {
+                setSearch(event.target.value || null);
+              }}
               placeholder={intl.formatMessage({
                 defaultMessage: 'Search for camera...',
               })}
               size="small"
-              onChange={(event) => {
-                setSearch(event.target.value || null);
-              }}
             />
           </Col>
         </Row>
         <Table
-          loading={loading}
           columns={[
             {
               dataIndex: 'status',
@@ -198,37 +197,38 @@ const ListCamerasView = ({
             },
           ]}
           dataSource={data}
+          loading={loading}
           pagination={{
             current: page,
-            pageSize,
-            total,
             hideOnSinglePage: true,
-            showTotal: (totalCount) => `Total ${totalCount} cameras`,
             onChange: onPageChange,
+            pageSize,
+            showTotal: (totalCount) => `Total ${totalCount} cameras`,
+            total,
           }}
           size="small"
         />
       </Card>
 
       <Drawer
-        title={<FormattedMessage defaultMessage="Edit Default Timeout" />}
-        open={drawerVisible}
-        onClose={handleDrawerClose}
-        width={500}
         footer={
           <Space style={{ float: 'right' }}>
             <Button onClick={handleDrawerClose}>
               <FormattedMessage defaultMessage="Cancel" />
             </Button>
             <Button
-              type="primary"
               loading={submitting}
               onClick={handleFormSubmit}
+              type="primary"
             >
               <FormattedMessage defaultMessage="Save" />
             </Button>
           </Space>
         }
+        onClose={handleDrawerClose}
+        open={drawerVisible}
+        title={<FormattedMessage defaultMessage="Edit Default Timeout" />}
+        width={500}
       >
         <Form form={form} layout="vertical">
           <Form.Item
@@ -240,15 +240,15 @@ const ListCamerasView = ({
                   name="hours"
                   noStyle
                   rules={[
-                    { required: true, message: '' },
-                    { type: 'number', min: 0, max: 99, message: '' },
+                    { message: '', required: true },
+                    { max: 99, message: '', min: 0, type: 'number' },
                   ]}
                 >
                   <Input
-                    type="number"
-                    min={0}
-                    max={99}
                     addonAfter={<FormattedMessage defaultMessage="Hours" />}
+                    max={99}
+                    min={0}
+                    type="number"
                   />
                 </Form.Item>
               </Col>
@@ -257,15 +257,15 @@ const ListCamerasView = ({
                   name="minutes"
                   noStyle
                   rules={[
-                    { required: true, message: '' },
-                    { type: 'number', min: 0, max: 59, message: '' },
+                    { message: '', required: true },
+                    { max: 59, message: '', min: 0, type: 'number' },
                   ]}
                 >
                   <Input
-                    type="number"
-                    min={0}
-                    max={59}
                     addonAfter={<FormattedMessage defaultMessage="Minutes" />}
+                    max={59}
+                    min={0}
+                    type="number"
                   />
                 </Form.Item>
               </Col>
@@ -274,15 +274,15 @@ const ListCamerasView = ({
                   name="seconds"
                   noStyle
                   rules={[
-                    { required: true, message: '' },
-                    { type: 'number', min: 0, max: 59, message: '' },
+                    { message: '', required: true },
+                    { max: 59, message: '', min: 0, type: 'number' },
                   ]}
                 >
                   <Input
-                    type="number"
-                    min={0}
-                    max={59}
                     addonAfter={<FormattedMessage defaultMessage="Seconds" />}
+                    max={59}
+                    min={0}
+                    type="number"
                   />
                 </Form.Item>
               </Col>

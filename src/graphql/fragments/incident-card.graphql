@@ -1,5 +1,6 @@
 fragment IncidentCard on Incident {
   approved
+  draft
   id
   totalImages
   crimeTypes {
@@ -55,4 +56,6 @@ fragment IncidentCard on Incident {
   }
   description
   createdByUser
+  totalValue
+  totalRecoveredValue
 }

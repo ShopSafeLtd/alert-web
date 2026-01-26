@@ -1,0 +1,57 @@
+#import "../../../../components/police-crime-groups/PoliceCrimeGroupCard/PoliceCrimeGroupCard.fragment.graphql"
+
+query GetSharedCrimeGroup($id: String!) {
+  sharedCrimeGroup(where: { id: $id }) {
+    ...PoliceCrimeGroupCard
+
+    # Additional AI snapshots for detail view
+    aiActivityTrendsSnapshot
+    aiGroupSophisticationSnapshot
+    aiMemberRiskAggregationSnapshot
+
+    # Full nested crime group with relationships
+    crimeGroup {
+      id
+      ref
+      reference
+      alias
+      totalIncidents
+      totalOffenders
+      totalValue
+      totalRecoveredValue
+      totalTheftSuccess
+
+      # Related entities for detail view
+      offenders {
+        id
+        name
+        reference
+        totalIncidents
+        totalValue
+        images {
+          id
+          optimised
+          primary
+        }
+      }
+
+      vehicles {
+        id
+        registration
+        reference
+        make
+        model
+        colour
+        totalIncidents
+      }
+
+      incidents {
+        id
+        reference
+        dateAgo
+        reportedBusinessName
+        totalValue
+      }
+    }
+  }
+}

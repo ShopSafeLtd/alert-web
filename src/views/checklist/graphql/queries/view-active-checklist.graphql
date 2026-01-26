@@ -1,6 +1,7 @@
 query ActiveChecklist($where: ActiveChecklistWhereUniqueInput!) {
     activeChecklist(where: $where) {
         id
+        reference
         name
         comments
         signature
@@ -12,6 +13,7 @@ query ActiveChecklist($where: ActiveChecklistWhereUniqueInput!) {
             origName
         }
         business {
+            id
             name
         }
         scheme {

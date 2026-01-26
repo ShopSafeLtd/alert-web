@@ -1,0 +1,39 @@
+query InvestigationFlowData($where: InvestigationWhereUniqueInput!) {
+  investigation(where: $where) {
+    id
+    flows {
+      id
+      name
+      description
+      updatedAt
+      nodes {
+        id
+        type
+        data
+        height
+        width
+        style {
+          height
+          width
+        }
+        position {
+          x
+          y
+        }
+        positionAbsolute {
+          x
+          y
+        }
+      }
+      edges {
+        id
+        type
+        markerEnd
+        source
+        sourceHandle
+        target
+        targetHandle
+      }
+    }
+  }
+}

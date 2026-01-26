@@ -7,15 +7,15 @@ import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 
 export const ConfigSelect: React.FC<{
-  form: FormInstance<CameraUpsertForm>;
   configs: DetectionConfigItem[];
-}> = ({ form, configs }) => {
+  form: FormInstance<CameraUpsertForm>;
+}> = ({ configs, form }) => {
   const intl = useIntl();
 
   const dataSource = configs.map((config) => ({
+    description: `Type: ${config.type}, Min Confidence: ${config.minimumConfidenceTrigger}, Min Priority: ${config.minimumPriorityTrigger}, Cameras Assigned: ${config.cameraCount}`,
     key: config.id,
     title: config.name,
-    description: `Type: ${config.type}, Min Confidence: ${config.minimumConfidenceTrigger}, Min Priority: ${config.minimumPriorityTrigger}, Cameras Assigned: ${config.cameraCount}`,
   }));
 
   const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
@@ -43,12 +43,7 @@ export const ConfigSelect: React.FC<{
             <Form.Item name="detectionConfigs" noStyle>
               <Transfer
                 dataSource={dataSource}
-                titles={[
-                  intl.formatMessage({ defaultMessage: 'Available Configs' }),
-                  intl.formatMessage({ defaultMessage: 'Selected Configs' }),
-                ]}
-                targetKeys={targetKeys}
-                selectedKeys={selectedKeys}
+                listStyle={{ height: 300, width: 400 }}
                 onChange={(next) => handleChange(next)}
                 onSelectChange={(sourceSelectedKeys, targetSelectedKeys) => {
                   setSelectedKeys([
@@ -57,8 +52,13 @@ export const ConfigSelect: React.FC<{
                   ]);
                 }}
                 render={(item) => item.title}
-                listStyle={{ width: 400, height: 300 }}
                 rowKey={(record) => record.key}
+                selectedKeys={selectedKeys}
+                targetKeys={targetKeys}
+                titles={[
+                  intl.formatMessage({ defaultMessage: 'Available Configs' }),
+                  intl.formatMessage({ defaultMessage: 'Selected Configs' }),
+                ]}
               />
             </Form.Item>
           );

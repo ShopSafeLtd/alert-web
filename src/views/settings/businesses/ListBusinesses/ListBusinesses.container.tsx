@@ -7,15 +7,21 @@ const ListBusinesses = () => {
   const {
     addVisible,
     canDelete,
+    canMerge,
     currencyFilter,
     data,
     deleteConfirm,
     divisionFilter,
     filtersOpen,
+    getSelectedBusinesses,
     groupData,
     groupFilter,
+    handleMergeConfirm,
+    handleRowSelectionChange,
     linkVisible,
     loading,
+    mergeModalVisible,
+    merging,
     onSearchChange,
     onSubmit,
     onUpdateLinkBusiness,
@@ -25,6 +31,7 @@ const ListBusinesses = () => {
     policeAreaFilter,
     saving,
     searchValue,
+    selectedBusinessIds,
     setCurrencyFilter,
     setDivisionFilter,
     setGroupFilter,
@@ -37,21 +44,28 @@ const ListBusinesses = () => {
     toggleAddVisible,
     toggleFiltersOpen,
     toggleLinkVisible,
+    toggleMergeModal,
   } = useListBusinesses();
 
   return (
     <View
       addVisible={addVisible}
       canDelete={canDelete}
+      canMerge={canMerge}
       currencyFilter={currencyFilter}
       data={data}
       deleteConfirm={deleteConfirm}
       divisionFilter={divisionFilter}
       filtersOpen={filtersOpen}
+      getSelectedBusinesses={getSelectedBusinesses}
       groupData={groupData}
       groupFilter={groupFilter}
+      handleMergeConfirm={handleMergeConfirm}
+      handleRowSelectionChange={handleRowSelectionChange}
       linkVisible={linkVisible}
       loading={loading}
+      mergeModalVisible={mergeModalVisible}
+      merging={merging}
       onSearchChange={onSearchChange}
       onSubmit={onSubmit}
       onUpdateLinkBusiness={onUpdateLinkBusiness}
@@ -61,6 +75,7 @@ const ListBusinesses = () => {
       policeAreaFilter={policeAreaFilter}
       saving={saving}
       searchValue={searchValue}
+      selectedBusinessIds={selectedBusinessIds}
       setCurrencyFilter={setCurrencyFilter}
       setDivisionFilter={setDivisionFilter}
       setGroupFilter={setGroupFilter}
@@ -73,6 +88,7 @@ const ListBusinesses = () => {
       toggleAddVisible={toggleAddVisible}
       toggleFiltersOpen={toggleFiltersOpen}
       toggleLinkVisible={toggleLinkVisible}
+      toggleMergeModal={toggleMergeModal}
     />
   );
 };

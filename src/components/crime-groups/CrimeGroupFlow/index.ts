@@ -1,1 +1,2 @@
-export { default } from './CrimeGroupFlow.view';
+export { CrimeGroupFlowContainer } from './CrimeGroupFlowContainer';
+export { CrimeGroupFlowContainer as default } from './CrimeGroupFlowContainer';
