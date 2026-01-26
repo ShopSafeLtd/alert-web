@@ -46,6 +46,7 @@ export const CurrentSchemeProviderDocument = gql`
       schemeType
       usDateFormat
       usPoliceData
+      schemeType
       disablePassword
       draftIncidents
       currency

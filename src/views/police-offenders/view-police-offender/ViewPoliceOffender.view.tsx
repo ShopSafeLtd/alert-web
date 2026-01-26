@@ -362,7 +362,11 @@ const ViewPoliceOffender = ({
 
         markers.push({
           ...incident,
-          date: incident.date ? incident.date.toISOString() : null,
+          date: incident.date
+            ? typeof incident.date === 'string'
+              ? incident.date
+              : incident.date.toISOString()
+            : null,
           geoLat: incident.location.geoLat,
           geoLng: incident.location.geoLng,
           subject: incident.subject ?? undefined,

@@ -17,10 +17,10 @@ import { usePoliceDashboard } from './hooks/usePoliceDashboard';
 const PoliceDashboard: React.FC = () => {
   const intl = useIntl();
 
-  // Default to Last 3 Months (matches current backend behavior)
+  // Default to Last 12 Months
   const [dateRange, setDateRange] = useState<DateRange>({
     endDate: new Date(),
-    startDate: subMonths(new Date(), 3),
+    startDate: subMonths(new Date(), 12),
   });
 
   const {

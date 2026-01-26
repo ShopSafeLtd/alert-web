@@ -31,7 +31,7 @@ import navigationConfig from 'configs/NavigationConfig';
 import { useAtomValue, useSetAtom } from 'jotai/index';
 import AppViews from 'navigation/app-views/router';
 import { usePostHog } from 'posthog-js/react';
-import React, { Suspense, useEffect, useState } from 'react';
+import React, { Suspense, useCallback, useEffect, useState } from 'react';
 import { useThemeSwitcher } from 'react-css-theme-switcher/src';
 import { createUseStyles } from 'react-jss';
 import { useLocation } from 'react-router-dom';
@@ -72,6 +72,7 @@ const AppLayout = (): JSX.Element => {
   const screens = utils.getBreakPoint(useBreakpoint());
   const isMobile = !screens.includes('xl');
   const isNavSide = navType === NavType.SIDE;
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
   const { isLoaded } = useAuthClerk();
 
   const getLayoutGutter = () => {
@@ -92,7 +93,7 @@ const AppLayout = (): JSX.Element => {
   const termsExpired = currentUser?.termsExpired ?? false;
   const forcePasswordReset = noPassword
     ? false
-    : currentUser?.forcePasswordReset ?? false;
+    : (currentUser?.forcePasswordReset ?? false);
   const isSet = !!currentUser;
 
   const currentScheme = useAtomValue(currentSchemeIdAtom);
@@ -108,15 +109,15 @@ const AppLayout = (): JSX.Element => {
     setMobileNavOpen(true);
   };
 
-  const handleBulletinsComplete = () => {
+  const handleBulletinsComplete = useCallback(() => {
     setPendingBulletins([]);
     setShowBulletinModal(false);
-  };
+  }, [setPendingBulletins, setShowBulletinModal]);
 
-  const handleVideosComplete = () => {
+  const handleVideosComplete = useCallback(() => {
     setPendingVideos([]);
     setShowVideoModal(false);
-  };
+  }, [setPendingVideos, setShowVideoModal]);
 
   // Show bulletin modal when pending critical bulletins are loaded
   useEffect(() => {
@@ -135,7 +136,7 @@ const AppLayout = (): JSX.Element => {
   const { status } = useThemeSwitcher();
 
   useEffect(() => {
-    getCurrentUser();
+    void getCurrentUser();
   }, []);
   useEffect(() => {
     if (id) {
@@ -153,11 +154,11 @@ const AppLayout = (): JSX.Element => {
       document.cookie = `shopsafe_user_id=${id}; path=/; domain=.shopsafe.io; Secure; SameSite=None`;
 
       if (oldDistinctId) {
-        posthog.alias(oldDistinctId, id);
+        void posthog.alias(oldDistinctId, id);
       }
 
       if (sessionId) {
-        posthog.capture('user_logged_in', { session_id: sessionId });
+        void posthog.capture('user_logged_in', { session_id: sessionId });
       }
     }
   }, [posthog, id, email, currentScheme, fullName]);

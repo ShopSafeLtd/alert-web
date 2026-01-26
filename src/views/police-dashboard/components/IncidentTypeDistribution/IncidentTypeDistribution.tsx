@@ -46,9 +46,9 @@ const IncidentTypeDistribution: React.FC<Props> = ({ data, loading }) => {
           angleKey: 'value',
           angleName: intl.formatMessage({ defaultMessage: 'Count' }),
           calloutLabel: {
-            enabled: true,
+            enabled: false,
           },
-          calloutLabelKey: 'category',
+          legendItemKey: 'category',
           sectorLabel: {
             enabled: true,
             formatter: (params: {

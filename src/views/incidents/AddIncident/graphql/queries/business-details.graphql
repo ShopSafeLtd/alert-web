@@ -1,0 +1,15 @@
+query BusinessDetails($where: BusinessWhereUniqueInput!) {
+  business(where: $where) {
+    id
+    name
+    fullName
+    locations {
+      id
+      building
+      street
+      townCity
+      county
+      postcode
+    }
+  }
+}

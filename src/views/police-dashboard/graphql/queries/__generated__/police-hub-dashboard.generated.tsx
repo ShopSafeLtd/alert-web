@@ -12,7 +12,7 @@ export type PoliceHubDashboardQueryVariables = Types.Exact<{
 }>;
 
 
-export type PoliceHubDashboardQuery = { __typename?: 'Query', policeHubDashboard: { __typename?: 'PoliceHubDashboard', summary: { __typename?: 'PoliceHubSummaryMetrics', activeOffendersCount: number, highRiskIndividualsCount: number, activeCrimeGroupsCount: number, totalIncidentsSharedCount: number, averagePriorityScore?: number | null, totalEstimatedValue?: number | null, uniqueRetailersAffected: number, totalOffenders: number, averageOffenderValue?: number | null, totalRepeatOffenders: number }, topOffenders: Array<{ __typename?: 'PoliceHubTopOffender', sharedOffenderId: string, policePriorityScore?: number | null, aiImpactScore?: number | null, aiSummary?: string | null, threatLevel?: string | null, riskCategory?: string | null, incidentCount: number, daysSinceLastIncident?: number | null, firstIncidentDate?: Date | null, lastIncidentDate?: Date | null, lastIncidentAt?: Date | null, totalValue?: number | null, images: { [key: string]: any }, tags: { [key: string]: any }, activeAreas: Array<string>, affectedSchemes: Array<string> }>, repeatOffenderInsights: { __typename?: 'PoliceHubRepeatOffenderInsights', totalRepeatOffenders: number, averageDaysBetweenIncidents: number, highFrequencyOffenders: number, recidivismDistribution: { [key: string]: any }, topByFrequency: Array<{ __typename?: 'PoliceHubTopOffender', sharedOffenderId: string, policePriorityScore?: number | null, aiSummary?: string | null, incidentCount: number, daysSinceLastIncident?: number | null, affectedSchemes: Array<string> }> }, activeCrimeGroups: Array<{ __typename?: 'PoliceHubCrimeGroupSummary', sharedCrimeGroupId: string, crimeGroupId: string, policePriorityScore?: number | null, aiSummary?: string | null, aiSophisticationLevel?: string | null, memberCount: number, recentActivityCount: number, totalValue?: number | null, affectedSchemes: Array<string>, updatedAt: Date }>, vehiclesOfInterest: Array<{ __typename?: 'PoliceHubVehicleSummary', sharedVehicleId: string, vehicleIds: Array<string>, policePriorityScore?: number | null, aiSummary?: string | null, aiUsagePatterns?: string | null, registration?: string | null, make?: string | null, model?: string | null, color?: string | null, incidentCount: number, associatedOffenderCount: number, lastSeenDate?: Date | null, affectedSchemes: Array<string> }>, incidentTypeDistribution: Array<{ __typename?: 'PoliceHubIncidentTypeDistribution', tagId: string, tagName: string, crimeType?: string | null, count: number }>, monthlyIncidentCounts: Array<{ __typename?: 'PoliceHubMonthlyIncidentCount', month: string, count: number }> } };
+export type PoliceHubDashboardQuery = { __typename?: 'Query', policeHubDashboard: { __typename?: 'PoliceHubDashboard', summary: { __typename?: 'PoliceHubSummaryMetrics', activeOffendersCount: number, highRiskIndividualsCount: number, activeCrimeGroupsCount: number, totalIncidentsSharedCount: number, averagePriorityScore?: number | null, totalEstimatedValue?: number | null, uniqueRetailersAffected: number, totalOffenders: number, averageOffenderValue?: number | null, totalRepeatOffenders: number, offendersSharedWithOtherPoliceHubs: number }, topOffenders: Array<{ __typename?: 'PoliceHubTopOffender', sharedOffenderId: string, name?: string | null, policePriorityScore?: number | null, aiImpactScore?: number | null, aiSummary?: string | null, threatLevel?: string | null, riskCategory?: string | null, incidentCount: number, daysSinceLastIncident?: number | null, firstIncidentDate?: Date | null, lastIncidentDate?: Date | null, lastIncidentAt?: Date | null, totalValue?: number | null, hasImages: boolean, hasName: boolean, images: { [key: string]: any }, tags: { [key: string]: any }, activeAreas: Array<string>, affectedSchemes: Array<string> }>, repeatOffenderInsights: { __typename?: 'PoliceHubRepeatOffenderInsights', totalRepeatOffenders: number, averageDaysBetweenIncidents: number, highFrequencyOffenders: number, recidivismDistribution: { [key: string]: any }, topByFrequency: Array<{ __typename?: 'PoliceHubTopOffender', sharedOffenderId: string, policePriorityScore?: number | null, aiSummary?: string | null, incidentCount: number, daysSinceLastIncident?: number | null, affectedSchemes: Array<string> }> }, activeCrimeGroups: Array<{ __typename?: 'PoliceHubCrimeGroupSummary', sharedCrimeGroupId: string, crimeGroupId: string, policePriorityScore?: number | null, aiSummary?: string | null, aiSophisticationLevel?: string | null, memberCount: number, recentActivityCount: number, totalValue?: number | null, affectedSchemes: Array<string>, updatedAt: Date }>, vehiclesOfInterest: Array<{ __typename?: 'PoliceHubVehicleSummary', sharedVehicleId: string, vehicleIds: Array<string>, policePriorityScore?: number | null, aiSummary?: string | null, aiUsagePatterns?: string | null, registration?: string | null, make?: string | null, model?: string | null, color?: string | null, incidentCount: number, associatedOffenderCount: number, lastSeenDate?: Date | null, affectedSchemes: Array<string> }>, incidentTypeDistribution: Array<{ __typename?: 'PoliceHubIncidentTypeDistribution', tagId: string, tagName: string, crimeType?: string | null, count: number }>, monthlyIncidentCounts: Array<{ __typename?: 'PoliceHubMonthlyIncidentCount', month: string, count: number }> } };
 
 
 export const PoliceHubDashboardDocument = gql`
@@ -35,9 +35,11 @@ export const PoliceHubDashboardDocument = gql`
       totalOffenders
       averageOffenderValue
       totalRepeatOffenders
+      offendersSharedWithOtherPoliceHubs
     }
     topOffenders {
       sharedOffenderId
+      name
       policePriorityScore
       aiImpactScore
       aiSummary
@@ -49,6 +51,8 @@ export const PoliceHubDashboardDocument = gql`
       lastIncidentDate
       lastIncidentAt
       totalValue
+      hasImages
+      hasName
       images
       tags
       activeAreas

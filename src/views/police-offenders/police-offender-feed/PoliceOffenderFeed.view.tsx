@@ -92,8 +92,20 @@ const PoliceOffenderFeed = ({
   const intl = useIntl();
   const currentScheme = useAtomValue(currentSchemeAtom);
 
-  const offenders =
-    data?.sharedOffenderRelay?.edges?.map((edge) => edge.node) || [];
+  // Extract offenders and deduplicate by ID (safety check for any backend duplicates)
+  const offenders = React.useMemo(() => {
+    const allOffenders =
+      data?.sharedOffenderRelay?.edges?.map((edge) => edge.node) || [];
+    const seenIds = new Set<string>();
+    return allOffenders.filter((offender) => {
+      if (seenIds.has(offender.id)) {
+        return false;
+      }
+      seenIds.add(offender.id);
+      return true;
+    });
+  }, [data?.sharedOffenderRelay?.edges]);
+
   const hasNextPage = data?.sharedOffenderRelay?.pageInfo.hasNextPage || false;
   const isLoadingMore = loading && offenders.length > 0;
 
@@ -230,7 +242,7 @@ const PoliceOffenderFeed = ({
                         value={dateFilter}
                       >
                         <Radio.Button value="all">
-                          {intl.formatMessage({ defaultMessage: '12 Months' })}
+                          {intl.formatMessage({ defaultMessage: 'All Time' })}
                         </Radio.Button>
                         <Radio.Button value="6months">
                           {intl.formatMessage({ defaultMessage: '6 Months' })}
