@@ -318,7 +318,7 @@ const compareIncident = (): Return => {
           name: preview.name,
           offenderIds: offenders
             .map(({ id }) => id)
-            .filter((id) => id !== preview.id),
+            .filter((id) => id !== offenderId),
           peculiarities: preview.peculiarities,
           race: preview.race,
           tags: preview.tags.map(({ id }) => id),
