@@ -125,14 +125,22 @@ export const useIncidentTableDataRelay = ({
   );
 
   // Execute query
-  const { data, error, loading, refetch } = useUnrestrictedIncidentsRelayQuery({
-    fetchPolicy: 'cache-and-network',
-    variables: {
-      first: initialPageSize,
-      orderBy,
-      where,
-    },
-  });
+  const { data, error, loading, networkStatus, refetch } =
+    useUnrestrictedIncidentsRelayQuery({
+      fetchPolicy: 'cache-and-network',
+      notifyOnNetworkStatusChange: true,
+      variables: {
+        after: undefined,
+        first: initialPageSize,
+        orderBy,
+        where,
+      },
+    });
+
+  // NetworkStatus 4 means refetch is in progress
+  // This ensures loading state is true during pagination changes
+  const isRefetching = networkStatus === 4;
+  const isLoading = loading || isRefetching;
 
   // Extract pagination info from response
   const totalCount = data?.unrestrictedIncidentsRelay?.totalCount || 0;
@@ -143,7 +151,7 @@ export const useIncidentTableDataRelay = ({
   // Use cursor pagination hook
   const {
     currentPage,
-    fetchVariables,
+    getCursorForPage,
     handlePageChange: handleCursorPageChange,
     resetPagination,
     updateCursorCache,
@@ -174,9 +182,12 @@ export const useIncidentTableDataRelay = ({
     (newPage: number, newPageSize?: number) => {
       handleCursorPageChange(newPage, newPageSize);
 
+      // Compute the cursor for the new page directly to avoid stale state
+      const cursorForNewPage = getCursorForPage(newPage);
+
       // Refetch with new pagination variables
       void refetch({
-        ...fetchVariables,
+        after: cursorForNewPage,
         first: newPageSize || initialPageSize,
         orderBy,
         where,
@@ -184,8 +195,8 @@ export const useIncidentTableDataRelay = ({
     },
     [
       handleCursorPageChange,
+      getCursorForPage,
       refetch,
-      fetchVariables,
       initialPageSize,
       where,
       orderBy,
@@ -226,7 +237,7 @@ export const useIncidentTableDataRelay = ({
     handlePageChange,
     handleSortChange,
     incidents,
-    loading,
+    loading: isLoading,
     page: currentPage,
     pageSize: initialPageSize,
     refetch: handleRefetch,
