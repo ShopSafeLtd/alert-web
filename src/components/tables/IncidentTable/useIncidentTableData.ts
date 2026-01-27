@@ -136,10 +136,17 @@ export const useIncidentTableData = ({
   ]);
 
   // Execute query
-  const { data, error, loading, refetch } = useListIncidentsForTableQuery({
-    fetchPolicy: 'cache-and-network',
-    variables: queryVariables,
-  });
+  const { data, error, loading, networkStatus, refetch } =
+    useListIncidentsForTableQuery({
+      fetchPolicy: 'cache-and-network',
+      notifyOnNetworkStatusChange: true,
+      variables: queryVariables,
+    });
+
+  // NetworkStatus 4 means refetch is in progress
+  // This ensures loading state is true during pagination changes
+  const isRefetching = networkStatus === 4;
+  const isLoading = loading || isRefetching;
 
   // Handlers
   const handlePageChange = useCallback(
@@ -189,7 +196,7 @@ export const useIncidentTableData = ({
     handlePageChange,
     handleSortChange,
     incidents: data?.listIncidents?.incidents || [],
-    loading,
+    loading: isLoading,
     page,
     pageSize,
     refetch: handleRefetch,

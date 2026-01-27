@@ -1,4 +1,9 @@
-query PerformanceReport($where: UserContributionWhereInput!) {
+query PerformanceReport(
+  $where: UserContributionWhereInput!
+  $businessContributionSkip: Int
+  $businessContributionTake: Int
+  $businessContributionOrderBy: BusinessContributionOrderByInput
+) {
   performanceReport(where: $where) {
     createdDataCounts {
       crimeGroups
@@ -92,7 +97,12 @@ query PerformanceReport($where: UserContributionWhereInput!) {
       totalBulletins
     }
   }
-  businessContribution(where: $where) {
+  businessContribution(
+    where: $where
+    skip: $businessContributionSkip
+    take: $businessContributionTake
+    orderBy: $businessContributionOrderBy
+  ) {
     businessContributions {
       name
       totalUsers
@@ -122,17 +132,6 @@ query PerformanceReport($where: UserContributionWhereInput!) {
       alertId
     }
     total
-  }
-  userContributions(where: $where) {
-    total
-    userContributions {
-      name
-      totalIncidents
-      totalOffenders
-      totalUpdates
-      totalMessages
-      totalLogins
-    }
   }
   targetedGoods(where: $where) {
     targetedGoods {

@@ -21,18 +21,40 @@ import type {
 export interface Props {
   addLogo: (arg0: string) => void;
   addLogoDrawer: boolean;
+  businessContributionCurrentPage: number;
+  businessContributionPageSize: number;
+  businessContributionSortDirection: 'asc' | 'desc';
+  businessContributionSortField: string;
   businessContributionTableData: [] | BusinessTableData[];
+  // Business Contribution Table pagination/sorting
+  businessContributionTotal: number;
   changeSize: (arg0: string, arg1: number) => void;
   componentRef: RefObject<HTMLDivElement>;
   crimeGroupPerformanceTableData: [] | CrimeGroupPerformanceTableData[];
+  currentPage: number;
   data: PerformanceReportQuery | undefined;
   dateRange: { endDate: Date; startDate: Date };
   editMode: boolean;
   filterCount: number;
   filtersOpen: boolean;
+  getBusinessContributionSortIndicator: (columnField: string) => string;
+  getSortIndicator: (columnField: string) => string;
+  getTargetedBusinessSortIndicator: (columnField: string) => string;
   groups: SelectOptions[];
   groupsLoading: boolean;
+  handleBusinessContributionPageChange: (
+    page: number,
+    newPageSize?: number
+  ) => void;
+  handleBusinessContributionSort: (field: string) => void;
+  handlePageChange: (page: number, newPageSize?: number) => void;
   handlePrint: () => void;
+  handleSort: (field: string) => void;
+  handleTargetedBusinessPageChange: (
+    page: number,
+    newPageSize?: number
+  ) => void;
+  handleTargetedBusinessSort: (field: string) => void;
   incidentTypeIds: string[];
   investigationsData: [] | InvestigationsTableData[];
   isPrinting: boolean;
@@ -42,6 +64,7 @@ export interface Props {
   metadata: MetaData[];
   minDrawer: boolean;
   offendersTableData: [] | OffenderTableData[];
+  pageSize: number;
   redactOnPrint: boolean;
   removeItem: (arg0: string) => void;
   removeLogo: (arg0: number) => void;
@@ -71,11 +94,23 @@ export interface Props {
   setSelectedBrands: (brands: string[]) => void;
   setSelectedBusiness: (businesses: string[]) => void;
   setSelectedGroups: (groups: string[]) => void;
+
   setSelectedIndustries: (brands: string[]) => void;
   setSelectedRoles: (roles: string[]) => void;
+  sortDirection: 'asc' | 'desc';
+  sortField: string;
+  targetedBusinessCurrentPage: number;
   targetedBusinessData: [] | TargetedBusinessTableData[];
+  targetedBusinessPageSize: number;
+  targetedBusinessSortDirection: 'asc' | 'desc';
+
+  targetedBusinessSortField: string;
+  // Targeted Business Table pagination/sorting
+  targetedBusinessTotal: number;
   targetedGoodsData: [] | TargetedGoodsTableData[];
   templates: IReportTemplate[];
   toggleFiltersOpen: () => void;
   userContributionTableData: [] | ContributionTableData[];
+  userContributionsTotal: number;
+  userEngagementLoading: boolean;
 }

@@ -11,15 +11,19 @@ import { useReactToPrint } from 'react-to-print';
 
 interface Return {
   componentRef: RefObject<HTMLDivElement>;
+  currentPage: number;
   data:
-    | Exclude<UserEngagementQuery['listUserContribution'], null | undefined>
+    | Exclude<UserEngagementQuery['userContributions'], null | undefined>
     | null
     | undefined;
   dateRange: { endDate: Date; startDate: Date };
   filtersOpen: boolean;
+  handlePageChange: (page: number, newPageSize?: number) => void;
   handlePrint: () => void;
+  handleSort: (field: string) => void;
   isPrinting: boolean;
   loading: boolean;
+  pageSize: number;
   search: string;
   selectedBusinessGroups: string[];
   selectedBusinesses: string[];
@@ -35,6 +39,8 @@ interface Return {
   setSelectedDataBrands: (groups: string[]) => void;
   setSelectedGroups: (groups: string[]) => void;
   setSelectedRoles: (value: string[]) => void;
+  sortDirection: 'asc' | 'desc';
+  sortField: string;
   toggleFiltersOpen: () => void;
 }
 
@@ -71,10 +77,27 @@ const useUserEngagement = (): Return => {
   });
   const { groups, groupsLoading } = useGroupsContext();
 
+  // Pagination and sorting state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(30);
+  const [sortField, setSortField] = useState<string>('totalIncidents');
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
+
+  // Calculate skip offset for pagination
+  const skip = (currentPage - 1) * pageSize;
+
+  // Build orderBy object for sorting
+  const orderBy = {
+    [sortField]: sortDirection,
+  };
+
   const { data, loading } = useUserEngagementQuery({
     fetchPolicy: 'cache-and-network',
     skip: !currentScheme || groupsLoading || !selectedGroups,
     variables: {
+      orderBy,
+      skip,
+      take: pageSize,
       where: {
         businessesIds: selectedBusinesses ?? [],
         dataBusinessBrandsIds:
@@ -119,6 +142,41 @@ const useUserEngagement = (): Return => {
       promiseResolveRef.current();
     }
   }, [isPrinting]);
+
+  // Reset pagination when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [
+    selectedGroups,
+    selectedBusinesses,
+    selectedRoles,
+    selectedBusinessGroups,
+    selectedDataBrands,
+    dateRange,
+    search,
+  ]);
+
+  // Pagination handler
+  const handlePageChange = (page: number, newPageSize?: number) => {
+    setCurrentPage(page);
+    if (newPageSize && newPageSize !== pageSize) {
+      setPageSize(newPageSize);
+      setCurrentPage(1); // Reset to first page when page size changes
+    }
+  };
+
+  // Sorting handler
+  const handleSort = (field: string) => {
+    if (sortField === field) {
+      // Toggle direction if same field
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+    } else {
+      // New field, default to desc
+      setSortField(field);
+      setSortDirection('desc');
+    }
+    setCurrentPage(1); // Reset to first page when sorting changes
+  };
 
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
@@ -167,12 +225,16 @@ const useUserEngagement = (): Return => {
 
   return {
     componentRef,
-    data: data?.listUserContribution,
+    currentPage,
+    data: data?.userContributions,
     dateRange,
     filtersOpen,
+    handlePageChange,
     handlePrint,
+    handleSort,
     isPrinting,
     loading,
+    pageSize,
     search,
     selectedBusinessGroups,
     selectedBusinesses,
@@ -186,6 +248,8 @@ const useUserEngagement = (): Return => {
     setSelectedDataBrands,
     setSelectedGroups,
     setSelectedRoles,
+    sortDirection,
+    sortField,
     toggleFiltersOpen,
   };
 };

@@ -1,3 +1,4 @@
+import type { ColumnsType } from 'antd/es/table';
 import type {
   BusinessTableData,
   ContributionTableData,
@@ -49,7 +50,16 @@ import {
   faUsers,
 } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, Card, Col, Row, Statistic, Table, Typography } from 'antd';
+import {
+  Button,
+  Card,
+  Col,
+  Row,
+  Statistic,
+  Table,
+  Tooltip,
+  Typography,
+} from 'antd';
 import CustomQuestionsCountGraph from 'components/reports/components/CustomQuestionsCountGraph/CustomQuestionsCountGraph';
 import {
   BarGraph,
@@ -57,8 +67,6 @@ import {
   TimeHeatMap,
 } from 'components/reports/graphs';
 import {
-  BusinessColumns,
-  ContributionColumns,
   CrimeGroupPerformanceColumns,
   InvestigationsColumns,
   OffenderColumns,
@@ -102,12 +110,34 @@ export type FilterProps = Pick<
 >;
 
 interface Props {
+  businessContributionCurrentPage: number;
+  businessContributionPageSize: number;
+  businessContributionSortDirection: 'asc' | 'desc';
+  businessContributionSortField: string;
   businessContributionTableData: [] | BusinessTableData[];
+  // Business Contribution Table pagination/sorting
+  businessContributionTotal: number;
   changeSize: (arg0: string, arg1: number) => void;
   crimeGroupPerformanceTableData: [] | CrimeGroupPerformanceTableData[];
+  currentPage: number;
   data: PerformanceReportQuery | undefined;
   editMode: boolean;
   filters: FilterProps;
+  getBusinessContributionSortIndicator: (columnField: string) => string;
+  getSortIndicator: (columnField: string) => string;
+  getTargetedBusinessSortIndicator: (columnField: string) => string;
+  handleBusinessContributionPageChange: (
+    page: number,
+    newPageSize?: number
+  ) => void;
+  handleBusinessContributionSort: (field: string) => void;
+  handlePageChange: (page: number, newPageSize?: number) => void;
+  handleSort: (field: string) => void;
+  handleTargetedBusinessPageChange: (
+    page: number,
+    newPageSize?: number
+  ) => void;
+  handleTargetedBusinessSort: (field: string) => void;
   investigationsData: [] | InvestigationsTableData[];
   isPrinting: boolean;
   layout: RGL.Layout[];
@@ -115,12 +145,25 @@ interface Props {
   margin: [number, number];
   metadata: MetaData[];
   offendersTableData: [] | OffenderTableData[];
+
+  pageSize: number;
   removeItem: (arg0: string) => void;
   rowHeight: number;
   setMetadata: (arg0: MetaData[]) => void;
+  sortDirection: 'asc' | 'desc';
+  sortField: string;
+  targetedBusinessCurrentPage: number;
   targetedBusinessData: [] | TargetedBusinessTableData[];
+
+  targetedBusinessPageSize: number;
+  targetedBusinessSortDirection: 'asc' | 'desc';
+  targetedBusinessSortField: string;
+  // Targeted Business Table pagination/sorting
+  targetedBusinessTotal: number;
   targetedGoodsData: [] | TargetedGoodsTableData[];
   userContributionTableData: [] | ContributionTableData[];
+  userContributionsTotal: number;
+  userEngagementLoading: boolean;
 }
 
 const generateDefaultMetaData = (
@@ -139,12 +182,27 @@ const generateDefaultMetaData = (
 };
 
 const PerformanceReportLayout = ({
+  businessContributionCurrentPage,
+  businessContributionPageSize,
+  businessContributionSortDirection,
+  businessContributionSortField,
   businessContributionTableData,
+  businessContributionTotal,
   changeSize,
   crimeGroupPerformanceTableData,
+  currentPage,
   data,
   editMode,
   filters,
+  getBusinessContributionSortIndicator,
+  getSortIndicator,
+  getTargetedBusinessSortIndicator,
+  handleBusinessContributionPageChange,
+  handleBusinessContributionSort,
+  handlePageChange,
+  handleSort,
+  handleTargetedBusinessPageChange,
+  handleTargetedBusinessSort,
   investigationsData,
   isPrinting,
   layout,
@@ -152,12 +210,22 @@ const PerformanceReportLayout = ({
   margin,
   metadata,
   offendersTableData,
+  pageSize,
   removeItem,
   rowHeight,
   setMetadata,
+  sortDirection,
+  sortField,
+  targetedBusinessCurrentPage,
   targetedBusinessData,
+  targetedBusinessPageSize,
+  targetedBusinessSortDirection,
+  targetedBusinessSortField,
+  targetedBusinessTotal,
   targetedGoodsData,
   userContributionTableData,
+  userContributionsTotal,
+  userEngagementLoading,
 }: Props) => {
   const classes = useStyles();
   const calculateHeight = (key: string, offset?: number) => {
@@ -171,6 +239,270 @@ const PerformanceReportLayout = ({
 
   const intl = useIntl();
   const navigate = useNavigate();
+
+  // Create server-side sortable columns for user contributions
+  const userContributionColumns: ColumnsType<ContributorTable> = [
+    {
+      dataIndex: 'fullName',
+      key: 'fullName',
+      onHeaderCell: () => ({
+        onClick: () => handleSort('fullName'),
+        style: { cursor: 'pointer' },
+      }),
+      title:
+        intl.formatMessage({ defaultMessage: 'Name' }) +
+        getSortIndicator('fullName'),
+    },
+    {
+      dataIndex: 'incidentsCreated',
+      key: 'incidentsCreated',
+      onHeaderCell: () => ({
+        onClick: () => handleSort('totalIncidents'),
+        style: { cursor: 'pointer' },
+      }),
+      title:
+        intl.formatMessage({ defaultMessage: 'Incidents' }) +
+        getSortIndicator('totalIncidents'),
+    },
+    {
+      dataIndex: 'offendersCreated',
+      key: 'offendersCreated',
+      onHeaderCell: () => ({
+        onClick: () => handleSort('totalOffenders'),
+        style: { cursor: 'pointer' },
+      }),
+      title:
+        intl.formatMessage({ defaultMessage: 'Offenders' }) +
+        getSortIndicator('totalOffenders'),
+    },
+    {
+      dataIndex: 'updatesCreated',
+      key: 'updatesCreated',
+      onHeaderCell: () => ({
+        onClick: () => handleSort('totalUpdates'),
+        style: { cursor: 'pointer' },
+      }),
+      title:
+        intl.formatMessage({ defaultMessage: 'Updates' }) +
+        getSortIndicator('totalUpdates'),
+    },
+    {
+      dataIndex: 'messagesSent',
+      key: 'messagesSent',
+      onHeaderCell: () => ({
+        onClick: () => handleSort('totalMessages'),
+        style: { cursor: 'pointer' },
+      }),
+      title:
+        intl.formatMessage({ defaultMessage: 'Messages' }) +
+        getSortIndicator('totalMessages'),
+    },
+    {
+      dataIndex: 'logins',
+      key: 'logins',
+      onHeaderCell: () => ({
+        onClick: () => handleSort('totalLogins'),
+        style: { cursor: 'pointer' },
+      }),
+      title:
+        intl.formatMessage({ defaultMessage: 'Logins' }) +
+        getSortIndicator('totalLogins'),
+    },
+  ];
+
+  // Create server-side sortable columns for business contributions
+  const businessContributionColumns: ColumnsType<BusinessTableData> = [
+    {
+      dataIndex: 'fullName',
+      key: 'fullName',
+      onHeaderCell: () => ({
+        onClick: () => handleBusinessContributionSort('name'),
+        style: { cursor: 'pointer' },
+      }),
+      title:
+        intl.formatMessage({ defaultMessage: 'Name' }) +
+        getBusinessContributionSortIndicator('name'),
+    },
+    {
+      dataIndex: 'incidentsCreated',
+      key: 'incidentsCreated',
+      onHeaderCell: () => ({
+        onClick: () => handleBusinessContributionSort('totalIncidents'),
+        style: { cursor: 'pointer' },
+      }),
+      title:
+        intl.formatMessage({ defaultMessage: 'Incidents' }) +
+        getBusinessContributionSortIndicator('totalIncidents'),
+    },
+    {
+      dataIndex: 'offendersCreated',
+      key: 'offendersCreated',
+      onHeaderCell: () => ({
+        onClick: () => handleBusinessContributionSort('totalOffenders'),
+        style: { cursor: 'pointer' },
+      }),
+      title:
+        intl.formatMessage({ defaultMessage: 'Offenders' }) +
+        getBusinessContributionSortIndicator('totalOffenders'),
+    },
+    {
+      dataIndex: 'updatesCreated',
+      key: 'updatesCreated',
+      onHeaderCell: () => ({
+        onClick: () => handleBusinessContributionSort('totalUpdates'),
+        style: { cursor: 'pointer' },
+      }),
+      title:
+        intl.formatMessage({ defaultMessage: 'Updates' }) +
+        getBusinessContributionSortIndicator('totalUpdates'),
+    },
+    {
+      dataIndex: 'messagesSent',
+      key: 'messagesSent',
+      onHeaderCell: () => ({
+        onClick: () => handleBusinessContributionSort('totalMessages'),
+        style: { cursor: 'pointer' },
+      }),
+      title:
+        intl.formatMessage({ defaultMessage: 'Messages' }) +
+        getBusinessContributionSortIndicator('totalMessages'),
+    },
+    {
+      dataIndex: 'logins',
+      key: 'logins',
+      onHeaderCell: () => ({
+        onClick: () => handleBusinessContributionSort('totalLogins'),
+        style: { cursor: 'pointer' },
+      }),
+      title:
+        intl.formatMessage({ defaultMessage: 'Logins' }) +
+        getBusinessContributionSortIndicator('totalLogins'),
+    },
+    {
+      dataIndex: 'users',
+      key: 'users',
+      onHeaderCell: () => ({
+        onClick: () => handleBusinessContributionSort('totalUsers'),
+        style: { cursor: 'pointer' },
+      }),
+      title:
+        intl.formatMessage({ defaultMessage: 'Users' }) +
+        getBusinessContributionSortIndicator('totalUsers'),
+    },
+  ];
+
+  // Create server-side sortable columns for targeted business table
+  const targetedBusinessColumns: ColumnsType<TargetedBusinessTableData> = [
+    {
+      dataIndex: 'fullName',
+      key: 'fullName',
+      onHeaderCell: () => ({
+        onClick: () => handleTargetedBusinessSort('name'),
+        style: { cursor: 'pointer' },
+      }),
+      render: (text: string) => (
+        <Tooltip placement="topLeft" title={text}>
+          {text}
+        </Tooltip>
+      ),
+      title:
+        intl.formatMessage({ defaultMessage: 'Name' }) +
+        getTargetedBusinessSortIndicator('name'),
+    },
+    {
+      dataIndex: 'incidentsCreated',
+      key: 'incidentsCreated',
+      onHeaderCell: () => ({
+        onClick: () => handleTargetedBusinessSort('totalIncidents'),
+        style: { cursor: 'pointer' },
+      }),
+      title:
+        intl.formatMessage({ defaultMessage: 'Incidents' }) +
+        getTargetedBusinessSortIndicator('totalIncidents'),
+    },
+    {
+      dataIndex: 'offendersCreated',
+      key: 'offendersCreated',
+      onHeaderCell: () => ({
+        onClick: () => handleTargetedBusinessSort('totalOffenders'),
+        style: { cursor: 'pointer' },
+      }),
+      title:
+        intl.formatMessage({ defaultMessage: 'Offenders' }) +
+        getTargetedBusinessSortIndicator('totalOffenders'),
+    },
+    {
+      dataIndex: 'lostValue',
+      key: 'lostValue',
+      onHeaderCell: () => ({
+        onClick: () => handleTargetedBusinessSort('totalLostValue'),
+        style: { cursor: 'pointer' },
+      }),
+      render: (value: string) => `${currency}${value}`,
+      title:
+        intl.formatMessage({ defaultMessage: 'Lost Value' }) +
+        getTargetedBusinessSortIndicator('totalLostValue'),
+    },
+    {
+      dataIndex: 'recoveredValue',
+      key: 'recoveredValue',
+      onHeaderCell: () => ({
+        onClick: () => handleTargetedBusinessSort('totalRecoveredValue'),
+        style: { cursor: 'pointer' },
+      }),
+      render: (value: string) => `${currency}${value}`,
+      title:
+        intl.formatMessage({ defaultMessage: 'Recovered Value' }) +
+        getTargetedBusinessSortIndicator('totalRecoveredValue'),
+    },
+    {
+      dataIndex: 'successRate',
+      key: 'successRate',
+      onHeaderCell: () => ({
+        onClick: () => handleTargetedBusinessSort('totalSuccessRate'),
+        style: { cursor: 'pointer' },
+      }),
+      render: (value: string) => `${value}%`,
+      title:
+        intl.formatMessage({ defaultMessage: 'Recovery Rate' }) +
+        getTargetedBusinessSortIndicator('totalSuccessRate'),
+    },
+    {
+      dataIndex: 'commonLost',
+      key: 'commonLost',
+      onHeaderCell: () => ({
+        onClick: () => handleTargetedBusinessSort('mostCommonGoodLost'),
+        style: { cursor: 'pointer' },
+      }),
+      title:
+        intl.formatMessage({ defaultMessage: 'Most Common Lost' }) +
+        getTargetedBusinessSortIndicator('mostCommonGoodLost'),
+    },
+    {
+      dataIndex: 'highestValueLost',
+      key: 'highestValueLost',
+      onHeaderCell: () => ({
+        onClick: () => handleTargetedBusinessSort('highestTotalValueGoodLost'),
+        style: { cursor: 'pointer' },
+      }),
+      render: (value: number) => `${currency}${value}`,
+      title:
+        intl.formatMessage({ defaultMessage: 'Highest Value Lost' }) +
+        getTargetedBusinessSortIndicator('highestTotalValueGoodLost'),
+    },
+    {
+      dataIndex: 'avgLost',
+      key: 'avgLost',
+      onHeaderCell: () => ({
+        onClick: () => handleTargetedBusinessSort('averageLossValue'),
+        style: { cursor: 'pointer' },
+      }),
+      render: (value: string) => `${currency}${value}`,
+      title:
+        intl.formatMessage({ defaultMessage: 'Average Lost' }) +
+        getTargetedBusinessSortIndicator('averageLossValue'),
+    },
+  ];
 
   interface GetComponentArgs {
     component: AllowedValue;
@@ -1834,20 +2166,22 @@ const PerformanceReportLayout = ({
                 defaultMessage: 'Business Contribution',
               })}
             </Title>
-            <Table
+            <Table<BusinessTableData>
               className="no-break"
-              columns={BusinessColumns}
+              columns={businessContributionColumns}
               dataSource={businessContributionTableData}
               pagination={{
-                defaultPageSize: 10,
+                current: businessContributionCurrentPage,
                 hideOnSinglePage: true,
-                onChange: (_, pageSize) => {
-                  changeSize('businessContributionTable', pageSize);
-                },
+                onChange: handleBusinessContributionPageChange,
+                onShowSizeChange: handleBusinessContributionPageChange,
+                pageSize: isPrinting
+                  ? businessContributionTotal
+                  : businessContributionPageSize,
                 showSizeChanger: true,
                 showTotal: (total, range) =>
                   `${range[0]}-${range[1]} of ${total}`,
-                total: data?.businessContribution?.total || 0,
+                total: businessContributionTotal,
               }}
               size="small"
             />
@@ -1860,7 +2194,7 @@ const PerformanceReportLayout = ({
             bodyStyle={{ overflow: 'auto' }}
             className="no-break"
             key="topContributors"
-            loading={loading}
+            loading={userEngagementLoading}
             style={{ height: calculateHeight('topContributors') }}
           >
             <Button
@@ -1879,18 +2213,18 @@ const PerformanceReportLayout = ({
             </Title>
             <Table<ContributorTable>
               className="no-break"
-              columns={ContributionColumns}
+              columns={userContributionColumns}
               dataSource={userContributionTableData}
               pagination={{
-                defaultPageSize: 10,
+                current: currentPage,
                 hideOnSinglePage: true,
-                onChange: (_, pageSize) => {
-                  changeSize('topContributors', pageSize);
-                },
+                onChange: handlePageChange,
+                onShowSizeChange: handlePageChange,
+                pageSize: isPrinting ? userContributionsTotal : pageSize,
                 showSizeChanger: true,
                 showTotal: (total, range) =>
                   `${range[0]}-${range[1]} of ${total}`,
-                total: data?.userContributions?.total || 0,
+                total: userContributionsTotal,
               }}
               size="small"
             />
@@ -1994,9 +2328,23 @@ const PerformanceReportLayout = ({
           >
             <TargetedBusinessTable
               changeSize={changeSize}
+              columns={targetedBusinessColumns}
               editMode={editMode}
               key="targetedBusinessTable"
               metadata={metadata}
+              pagination={{
+                current: targetedBusinessCurrentPage,
+                hideOnSinglePage: true,
+                onChange: handleTargetedBusinessPageChange,
+                onShowSizeChange: handleTargetedBusinessPageChange,
+                pageSize: isPrinting
+                  ? targetedBusinessTotal
+                  : targetedBusinessPageSize,
+                showSizeChanger: true,
+                showTotal: (total, range) =>
+                  `${range[0]}-${range[1]} of ${total}`,
+                total: targetedBusinessTotal,
+              }}
               removeItem={() => removeItem('targetedBusinessTable')}
               setMetadata={setMetadata}
               targetedBusinessData={targetedBusinessData}
@@ -2511,6 +2859,21 @@ const PerformanceReportLayout = ({
       targetedGoodsData,
       metadata,
       filters,
+      userContributionsTotal,
+      currentPage,
+      pageSize,
+      sortField,
+      sortDirection,
+      businessContributionTotal,
+      businessContributionCurrentPage,
+      businessContributionPageSize,
+      businessContributionSortField,
+      businessContributionSortDirection,
+      targetedBusinessTotal,
+      targetedBusinessCurrentPage,
+      targetedBusinessPageSize,
+      targetedBusinessSortField,
+      targetedBusinessSortDirection,
     ]
   );
 };
