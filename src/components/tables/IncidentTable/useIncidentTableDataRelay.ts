@@ -73,6 +73,17 @@ export const useIncidentTableDataRelay = ({
     defaultSortOrder
   );
   const [filters, setFilters] = useState<IncidentFilters>({});
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(initialPageSize);
+
+  // Initialize cursor pagination hook early
+  const { getCursorForPage, resetPagination, updateCursorCache } =
+    useCursorPagination({
+      currentCursor: undefined,
+      hasNextPage: false,
+      pageSize,
+      totalCount: 0,
+    });
 
   // Build where clause using simplified input structure with server-side filters
   const where: UnrestrictedIncidentRelayInput = useMemo(() => {
@@ -124,17 +135,23 @@ export const useIncidentTableDataRelay = ({
     [sortOrder]
   );
 
+  // Compute query variables reactively
+  const queryVariables = useMemo(
+    () => ({
+      after: getCursorForPage(page),
+      first: pageSize,
+      orderBy,
+      where,
+    }),
+    [page, pageSize, getCursorForPage, orderBy, where]
+  );
+
   // Execute query
   const { data, error, loading, networkStatus, refetch } =
     useUnrestrictedIncidentsRelayQuery({
       fetchPolicy: 'cache-and-network',
       notifyOnNetworkStatusChange: true,
-      variables: {
-        after: undefined,
-        first: initialPageSize,
-        orderBy,
-        where,
-      },
+      variables: queryVariables,
     });
 
   // NetworkStatus 4 means refetch is in progress
@@ -146,28 +163,13 @@ export const useIncidentTableDataRelay = ({
   const totalCount = data?.unrestrictedIncidentsRelay?.totalCount || 0;
   const pageInfo = data?.unrestrictedIncidentsRelay?.pageInfo;
   const currentCursor = pageInfo?.endCursor;
-  const hasNextPage = pageInfo?.hasNextPage || false;
-
-  // Use cursor pagination hook
-  const {
-    currentPage,
-    getCursorForPage,
-    handlePageChange: handleCursorPageChange,
-    resetPagination,
-    updateCursorCache,
-  } = useCursorPagination({
-    currentCursor,
-    hasNextPage,
-    pageSize: initialPageSize,
-    totalCount,
-  });
 
   // Update cursor cache when data changes
   useEffect(() => {
-    if (currentCursor && currentPage > 0) {
-      updateCursorCache(currentPage, currentCursor);
+    if (currentCursor && page > 0) {
+      updateCursorCache(page, currentCursor);
     }
-  }, [currentCursor, currentPage, updateCursorCache]);
+  }, [currentCursor, page, updateCursorCache]);
 
   // Extract incidents from edges - all filtering is now server-side
   const incidents = useMemo((): IncidentNode[] => {
@@ -180,34 +182,35 @@ export const useIncidentTableDataRelay = ({
   // Handlers
   const handlePageChange = useCallback(
     (newPage: number, newPageSize?: number) => {
-      handleCursorPageChange(newPage, newPageSize);
-
-      // Compute the cursor for the new page directly to avoid stale state
-      const cursorForNewPage = getCursorForPage(newPage);
-
-      // Refetch with new pagination variables
-      void refetch({
-        after: cursorForNewPage,
-        first: newPageSize || initialPageSize,
-        orderBy,
-        where,
-      });
+      if (newPageSize && newPageSize !== pageSize) {
+        // Page size changed - reset to page 1
+        setPageSize(newPageSize);
+        setPage(1);
+        resetPagination();
+      } else {
+        // Check if we have the cursor for non-sequential navigation
+        const cursorForNewPage = getCursorForPage(newPage);
+        if (cursorForNewPage === undefined && newPage > 1) {
+          // Non-sequential jump without cached cursor - reset to page 1
+          console.warn(
+            `Cursor not available for page ${newPage}. Resetting to page 1.`
+          );
+          setPage(1);
+          resetPagination();
+        } else {
+          setPage(newPage);
+        }
+      }
     },
-    [
-      handleCursorPageChange,
-      getCursorForPage,
-      refetch,
-      initialPageSize,
-      where,
-      orderBy,
-    ]
+    [pageSize, getCursorForPage, resetPagination]
   );
 
   const handleSortChange = useCallback(
     (field: 'date', order: 'ascend' | 'descend') => {
       setSortField(field);
       setSortOrder(order);
-      resetPagination(); // Reset to first page on sort change
+      setPage(1); // Reset to first page
+      resetPagination(); // Clear cursor cache
     },
     [resetPagination]
   );
@@ -215,13 +218,15 @@ export const useIncidentTableDataRelay = ({
   const handleFiltersChange = useCallback(
     (newFilters: Partial<IncidentFilters>) => {
       setFilters((prev) => ({ ...prev, ...newFilters }));
-      resetPagination(); // Reset to first page on filter change
+      setPage(1); // Reset to first page
+      resetPagination(); // Clear cursor cache
     },
     [resetPagination]
   );
 
   const handleClearFilters = useCallback(() => {
     setFilters({});
+    setPage(1);
     resetPagination();
   }, [resetPagination]);
 
@@ -238,8 +243,8 @@ export const useIncidentTableDataRelay = ({
     handleSortChange,
     incidents,
     loading: isLoading,
-    page: currentPage,
-    pageSize: initialPageSize,
+    page,
+    pageSize,
     refetch: handleRefetch,
     sortField,
     sortOrder,
