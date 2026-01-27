@@ -7,18 +7,33 @@ const PerformanceReport = (): JSX.Element => {
   const {
     addLogo,
     addLogoDrawer,
+    businessContributionCurrentPage,
+    businessContributionPageSize,
+    businessContributionSortDirection,
+    businessContributionSortField,
     businessContributionTableData,
+    businessContributionTotal,
     changeSize,
     componentRef,
     crimeGroupPerformanceTableData,
+    currentPage,
     data,
     dateRange,
     editMode,
     filterCount,
     filtersOpen,
+    getBusinessContributionSortIndicator,
+    getSortIndicator,
+    getTargetedBusinessSortIndicator,
     groups,
     groupsLoading,
+    handleBusinessContributionPageChange,
+    handleBusinessContributionSort,
+    handlePageChange,
     handlePrint,
+    handleSort,
+    handleTargetedBusinessPageChange,
+    handleTargetedBusinessSort,
     incidentTypeIds,
     investigationsData,
     isPrinting,
@@ -28,6 +43,7 @@ const PerformanceReport = (): JSX.Element => {
     metadata,
     minDrawer,
     offendersTableData,
+    pageSize,
     redactOnPrint,
     removeItem,
     removeLogo,
@@ -56,28 +72,56 @@ const PerformanceReport = (): JSX.Element => {
     setSelectedGroups,
     setSelectedIndustries,
     setSelectedRoles,
+    sortDirection,
+    sortField,
+    targetedBusinessCurrentPage,
     targetedBusinessData,
+    targetedBusinessPageSize,
+    targetedBusinessSortDirection,
+    targetedBusinessSortField,
+    targetedBusinessTotal,
     targetedGoodsData,
     templates,
     toggleFiltersOpen,
     userContributionTableData,
+    userContributionsTotal,
+    userEngagementLoading,
   } = usePerformanceReport();
   return (
     <View
       addLogo={addLogo}
       addLogoDrawer={addLogoDrawer}
+      businessContributionCurrentPage={businessContributionCurrentPage}
+      businessContributionPageSize={businessContributionPageSize}
+      businessContributionSortDirection={businessContributionSortDirection}
+      businessContributionSortField={businessContributionSortField}
       businessContributionTableData={businessContributionTableData}
+      businessContributionTotal={businessContributionTotal}
       changeSize={changeSize}
       componentRef={componentRef}
       crimeGroupPerformanceTableData={crimeGroupPerformanceTableData}
+      currentPage={currentPage}
       data={data}
       dateRange={dateRange}
       editMode={editMode}
       filterCount={filterCount}
       filtersOpen={filtersOpen}
+      getBusinessContributionSortIndicator={
+        getBusinessContributionSortIndicator
+      }
+      getSortIndicator={getSortIndicator}
+      getTargetedBusinessSortIndicator={getTargetedBusinessSortIndicator}
       groups={groups}
       groupsLoading={groupsLoading}
+      handleBusinessContributionPageChange={
+        handleBusinessContributionPageChange
+      }
+      handleBusinessContributionSort={handleBusinessContributionSort}
+      handlePageChange={handlePageChange}
       handlePrint={handlePrint}
+      handleSort={handleSort}
+      handleTargetedBusinessPageChange={handleTargetedBusinessPageChange}
+      handleTargetedBusinessSort={handleTargetedBusinessSort}
       incidentTypeIds={incidentTypeIds}
       investigationsData={investigationsData}
       isPrinting={isPrinting}
@@ -87,6 +131,7 @@ const PerformanceReport = (): JSX.Element => {
       metadata={metadata}
       minDrawer={minDrawer}
       offendersTableData={offendersTableData}
+      pageSize={pageSize}
       redactOnPrint={redactOnPrint}
       removeItem={removeItem}
       removeLogo={removeLogo}
@@ -115,11 +160,20 @@ const PerformanceReport = (): JSX.Element => {
       setSelectedGroups={setSelectedGroups}
       setSelectedIndustries={setSelectedIndustries}
       setSelectedRoles={setSelectedRoles}
+      sortDirection={sortDirection}
+      sortField={sortField}
+      targetedBusinessCurrentPage={targetedBusinessCurrentPage}
       targetedBusinessData={targetedBusinessData}
+      targetedBusinessPageSize={targetedBusinessPageSize}
+      targetedBusinessSortDirection={targetedBusinessSortDirection}
+      targetedBusinessSortField={targetedBusinessSortField}
+      targetedBusinessTotal={targetedBusinessTotal}
       targetedGoodsData={targetedGoodsData}
       templates={templates}
       toggleFiltersOpen={toggleFiltersOpen}
       userContributionTableData={userContributionTableData}
+      userContributionsTotal={userContributionsTotal}
+      userEngagementLoading={userEngagementLoading}
     />
   );
 };

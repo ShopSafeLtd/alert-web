@@ -32,15 +32,19 @@ const { Title } = Typography;
 
 interface Props {
   componentRef: RefObject<HTMLDivElement>;
+  currentPage: number;
   data:
-    | Exclude<UserEngagementQuery['listUserContribution'], null | undefined>
+    | Exclude<UserEngagementQuery['userContributions'], null | undefined>
     | null
     | undefined;
   dateRange: { endDate: Date; startDate: Date };
   filtersOpen: boolean;
+  handlePageChange: (page: number, newPageSize?: number) => void;
   handlePrint: () => void;
+  handleSort: (field: string) => void;
   isPrinting: boolean;
   loading: boolean;
+  pageSize: number;
   search: string;
   selectedBusinessGroups: string[];
   selectedBusinesses: string[];
@@ -56,17 +60,23 @@ interface Props {
   setSelectedDataBrands: (groups: string[]) => void;
   setSelectedGroups: (groups: string[]) => void;
   setSelectedRoles: (value: string[]) => void;
+  sortDirection: 'asc' | 'desc';
+  sortField: string;
   toggleFiltersOpen: () => void;
 }
 
 const PerformanceReport = ({
   componentRef,
+  currentPage,
   data,
   dateRange,
   filtersOpen,
+  handlePageChange,
   handlePrint,
+  handleSort,
   isPrinting,
   loading,
+  pageSize,
   search,
   selectedBusinessGroups,
   selectedBusinesses,
@@ -80,11 +90,21 @@ const PerformanceReport = ({
   setSelectedDataBrands,
   setSelectedGroups,
   setSelectedRoles,
+  sortDirection,
+  sortField,
   toggleFiltersOpen,
 }: Props) => {
   const logo = localStorage.getItem('logo');
   const intl = useIntl();
   const [collapsed, setCollapsed] = useState(false);
+
+  // Helper function to show sort indicator
+  const getSortIndicator = (columnField: string) => {
+    if (sortField === columnField) {
+      return sortDirection === 'asc' ? ' ↑' : ' ↓';
+    }
+    return '';
+  };
   const csvData = [
     [
       'Name',
@@ -220,9 +240,9 @@ const PerformanceReport = ({
                           if (value.length > 2) {
                             return (
                               <>
-                                {value
-                                  ?.slice(0, 2)
-                                  .map((el) => <Tag key={el}>{el}</Tag>)}
+                                {value?.slice(0, 2).map((el) => (
+                                  <Tag key={el}>{el}</Tag>
+                                ))}
                                 <Tag>
                                   {intl.formatMessage(
                                     {
@@ -244,54 +264,75 @@ const PerformanceReport = ({
                       },
                       {
                         dataIndex: 'incidentsCreated',
-                        defaultSortOrder: 'descend',
                         key: 'incidentsCreated',
-                        sorter: (a, b) =>
-                          a.incidentsCreated - b.incidentsCreated,
-                        title: intl.formatMessage({
-                          defaultMessage: 'Incidents',
+                        onHeaderCell: () => ({
+                          onClick: () => handleSort('totalIncidents'),
+                          style: { cursor: 'pointer' },
                         }),
+                        title:
+                          intl.formatMessage({
+                            defaultMessage: 'Incidents',
+                          }) + getSortIndicator('totalIncidents'),
                       },
                       {
                         dataIndex: 'offendersCreated',
                         key: 'offendersCreated',
-                        sorter: (a, b) =>
-                          a.offendersCreated - b.offendersCreated,
-                        title: intl.formatMessage({
-                          defaultMessage: 'Offenders',
+                        onHeaderCell: () => ({
+                          onClick: () => handleSort('totalOffenders'),
+                          style: { cursor: 'pointer' },
                         }),
+                        title:
+                          intl.formatMessage({
+                            defaultMessage: 'Offenders',
+                          }) + getSortIndicator('totalOffenders'),
                       },
                       {
                         dataIndex: 'updatesCreated',
                         key: 'updatesCreated',
-                        sorter: (a, b) => a.updatesCreated - b.updatesCreated,
-                        title: intl.formatMessage({
-                          defaultMessage: 'Updates',
+                        onHeaderCell: () => ({
+                          onClick: () => handleSort('totalUpdates'),
+                          style: { cursor: 'pointer' },
                         }),
+                        title:
+                          intl.formatMessage({
+                            defaultMessage: 'Updates',
+                          }) + getSortIndicator('totalUpdates'),
                       },
                       {
                         dataIndex: 'messagesSent',
                         key: 'messagesSent',
-                        sorter: (a, b) => a.messagesSent - b.messagesSent,
-                        title: intl.formatMessage({
-                          defaultMessage: 'Messages',
+                        onHeaderCell: () => ({
+                          onClick: () => handleSort('totalMessages'),
+                          style: { cursor: 'pointer' },
                         }),
+                        title:
+                          intl.formatMessage({
+                            defaultMessage: 'Messages',
+                          }) + getSortIndicator('totalMessages'),
                       },
                       {
                         dataIndex: 'logins',
                         key: 'logins',
-                        sorter: (a, b) => a.logins - b.logins,
-                        title: intl.formatMessage({
-                          defaultMessage: 'Logins',
+                        onHeaderCell: () => ({
+                          onClick: () => handleSort('totalLogins'),
+                          style: { cursor: 'pointer' },
                         }),
+                        title:
+                          intl.formatMessage({
+                            defaultMessage: 'Logins',
+                          }) + getSortIndicator('totalLogins'),
                       },
                       {
                         dataIndex: 'lastLogin',
                         key: 'lastLogin',
-                        title: intl.formatMessage({
-                          defaultMessage: 'Last Login',
+                        onHeaderCell: () => ({
+                          onClick: () => handleSort('lastLogin'),
+                          style: { cursor: 'pointer' },
                         }),
-                        // sorter: (a, b) => a.lastLogin - b.lastLogin,
+                        title:
+                          intl.formatMessage({
+                            defaultMessage: 'Last Login',
+                          }) + getSortIndicator('lastLogin'),
                       },
                     ]}
                     dataSource={data?.userContributions.map((user, i) => ({
@@ -306,10 +347,13 @@ const PerformanceReport = ({
                       updatesCreated: user.totalUpdates,
                     }))}
                     pagination={{
+                      current: currentPage,
                       defaultPageSize: 30,
                       hideOnSinglePage: true,
+                      onChange: handlePageChange,
+                      onShowSizeChange: handlePageChange,
                       pageSize:
-                        isPrinting && data?.total ? data.total : undefined,
+                        isPrinting && data?.total ? data.total : pageSize,
                       showSizeChanger: true,
                       showTotal: (total, range) =>
                         `${range[0]}-${range[1]} of ${total}`,

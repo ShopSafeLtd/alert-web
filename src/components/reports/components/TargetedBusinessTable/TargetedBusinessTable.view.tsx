@@ -1,5 +1,6 @@
 import type { MetaData } from '#/views/reports/types';
-import type { ColumnsType, SortOrder } from 'antd/es/table/interface';
+import type { TablePaginationConfig } from 'antd';
+import type { ColumnsType } from 'antd/es/table/interface';
 
 import { faCog, faTrash } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -11,13 +12,12 @@ import {
   Form,
   Row,
   Table,
-  Tooltip,
   Typography,
 } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { FormattedMessage, FormattedNumber, useIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 
-const { Paragraph, Title } = Typography;
+const { Title } = Typography;
 
 interface TargetedBusinessTableData {
   avgLost: string;
@@ -31,133 +31,12 @@ interface TargetedBusinessTableData {
   successRate: string;
 }
 
-const TargetedBusinessColumns: ColumnsType<TargetedBusinessTableData> = [
-  {
-    dataIndex: 'fullName',
-    key: 'fullName',
-    render: (text: string) => (
-      <Tooltip title={text}>
-        <Paragraph
-          ellipsis={{
-            rows: 1,
-          }}
-          style={{ marginBottom: 0, maxWidth: 300 }}
-        >
-          {text}
-        </Paragraph>
-      </Tooltip>
-    ),
-    title: <FormattedMessage defaultMessage="Name" />,
-  },
-  {
-    dataIndex: 'incidentsCreated',
-    defaultSortOrder: 'descend' as SortOrder,
-    key: 'incidentsCreated',
-    sorter: (a: TargetedBusinessTableData, b: TargetedBusinessTableData) =>
-      a.incidentsCreated - b.incidentsCreated,
-    title: <FormattedMessage defaultMessage="Incidents" />,
-  },
-  {
-    dataIndex: 'offendersCreated',
-    key: 'offendersCreated',
-    sorter: (a: TargetedBusinessTableData, b: TargetedBusinessTableData) =>
-      a.offendersCreated - b.offendersCreated,
-    title: <FormattedMessage defaultMessage="Offenders" />,
-  },
-  {
-    dataIndex: 'lostValue',
-    key: 'lostValue',
-    render: (text: string) => (
-      // eslint-disable-next-line formatjs/no-literal-string-in-jsx
-      <Typography.Text>
-        <FormattedNumber
-          currency={'GBP'}
-          style={'currency'}
-          value={Number.parseInt(text || '0', 10)}
-        />
-      </Typography.Text>
-    ),
-    sorter: (a: TargetedBusinessTableData, b: TargetedBusinessTableData) =>
-      Number.parseInt(a.lostValue || '0', 10) -
-      Number.parseInt(b.lostValue || '0', 10),
-    title: <FormattedMessage defaultMessage="Total Loss" />,
-  },
-  {
-    dataIndex: 'recoveredValue',
-    key: 'recoveredValue',
-    render: (text: string) => (
-      // eslint-disable-next-line formatjs/no-literal-string-in-jsx
-      <Typography.Text>
-        <FormattedNumber
-          currency={'GBP'}
-          style={'currency'}
-          value={Number.parseInt(text || '0', 10)}
-        />
-      </Typography.Text>
-    ),
-    sorter: (a: TargetedBusinessTableData, b: TargetedBusinessTableData) =>
-      Number.parseInt(a.recoveredValue || '0', 10) -
-      Number.parseInt(b.recoveredValue || '0', 10),
-    title: <FormattedMessage defaultMessage="Recovered value" />,
-  },
-  {
-    dataIndex: 'successRate',
-    key: 'successRate',
-    // eslint-disable-next-line formatjs/no-literal-string-in-jsx
-    render: (text: string) => <Typography.Text>{text}%</Typography.Text>,
-    sorter: (a: TargetedBusinessTableData, b: TargetedBusinessTableData) =>
-      Number.parseInt(a.successRate || '0', 10) -
-      Number.parseInt(b.successRate || '0', 10),
-    title: <FormattedMessage defaultMessage="Recovery Rate" />,
-  },
-  {
-    dataIndex: 'commonLost',
-    key: 'commonLost',
-    sorter: (a: TargetedBusinessTableData, b: TargetedBusinessTableData) =>
-      a.commonLost.localeCompare(b.commonLost),
-    title: <FormattedMessage defaultMessage="Top Item" />,
-  },
-  {
-    dataIndex: 'highestValueLost',
-    key: 'highestValueLost',
-    // eslint-disable-next-line formatjs/no-literal-string-in-jsx
-    render: (text: number) => (
-      <Typography.Text>
-        <FormattedNumber
-          currency={'GBP'}
-          style={'currency'}
-          value={text || 0}
-        />
-      </Typography.Text>
-    ),
-    sorter: (a: TargetedBusinessTableData, b: TargetedBusinessTableData) =>
-      a.highestValueLost - b.highestValueLost,
-    title: <FormattedMessage defaultMessage="Highest Value" />,
-  },
-  {
-    dataIndex: 'avgLost',
-    key: 'avgLost',
-    render: (text: string) => (
-      // eslint-disable-next-line formatjs/no-literal-string-in-jsx
-      <Typography.Text>
-        <FormattedNumber
-          currency={'GBP'}
-          style={'currency'}
-          value={Number.parseInt(text || '0', 10)}
-        />
-      </Typography.Text>
-    ),
-    sorter: (a: TargetedBusinessTableData, b: TargetedBusinessTableData) =>
-      Number.parseInt(a.avgLost || '0', 10) -
-      Number.parseInt(b.avgLost || '0', 10),
-    title: <FormattedMessage defaultMessage="Average Loss" />,
-  },
-];
-
 interface Props {
   changeSize: (name: string, pageSize: number) => void;
+  columns: ColumnsType<TargetedBusinessTableData>;
   editMode: boolean;
   metadata: MetaData[];
+  pagination?: TablePaginationConfig;
   removeItem: () => void;
   setMetadata: (arg0: MetaData[]) => void;
   targetedBusinessData: TargetedBusinessTableData[];
@@ -166,8 +45,10 @@ interface Props {
 
 const TargetedBusinessTable = ({
   changeSize,
+  columns: providedColumns,
   editMode,
   metadata,
+  pagination,
   removeItem,
   setMetadata,
   targetedBusinessData,
@@ -263,20 +144,22 @@ const TargetedBusinessTable = ({
       </Title>
       <Table
         className="no-break"
-        columns={TargetedBusinessColumns.filter(({ key }) =>
+        columns={providedColumns.filter(({ key }) =>
           metadataColumns.includes(key as string)
         )}
         dataSource={targetedBusinessData}
-        pagination={{
-          defaultPageSize: 10,
-          hideOnSinglePage: true,
-          onChange: (_, pageSize) => {
-            changeSize('targetedBusinessTable', pageSize);
-          },
-          showSizeChanger: true,
-          showTotal: (total, range) => `${range[0]}-${range[1]} of ${total}`,
-          total,
-        }}
+        pagination={
+          pagination || {
+            defaultPageSize: 10,
+            hideOnSinglePage: true,
+            onChange: (_, pageSize) => {
+              changeSize('targetedBusinessTable', pageSize);
+            },
+            showSizeChanger: true,
+            showTotal: (total, range) => `${range[0]}-${range[1]} of ${total}`,
+            total,
+          }
+        }
         size="small"
       />
 

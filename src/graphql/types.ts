@@ -1641,6 +1641,20 @@ export type BusinessBrandsInput = {
   set?: InputMaybe<Array<UniqueId>>;
 };
 
+export type BusinessContributionOrderByInput = {
+  averageLossValue?: InputMaybe<SortOrder>;
+  name?: InputMaybe<SortOrder>;
+  totalIncidents?: InputMaybe<SortOrder>;
+  totalLogins?: InputMaybe<SortOrder>;
+  totalLostValue?: InputMaybe<SortOrder>;
+  totalMessages?: InputMaybe<SortOrder>;
+  totalOffenders?: InputMaybe<SortOrder>;
+  totalRecoveredValue?: InputMaybe<SortOrder>;
+  totalSuccessRate?: InputMaybe<SortOrder>;
+  totalUpdates?: InputMaybe<SortOrder>;
+  totalUsers?: InputMaybe<SortOrder>;
+};
+
 export type BusinessContributions = {
   __typename?: 'BusinessContributions';
   averageLossValue?: Maybe<Scalars['Float']>;
@@ -17093,6 +17107,9 @@ export type QueryBusinessArgs = {
 
 
 export type QueryBusinessContributionArgs = {
+  orderBy?: InputMaybe<BusinessContributionOrderByInput>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
   where: UserContributionWhereInput;
 };
 
@@ -18006,6 +18023,9 @@ export type QueryListTodosArgs = {
 
 
 export type QueryListUserContributionArgs = {
+  orderBy?: InputMaybe<UserContributionOrderByInput>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
   where: UserContributionWhereInput;
 };
 
@@ -18804,6 +18824,9 @@ export type QueryUserChatsArgs = {
 
 
 export type QueryUserContributionsArgs = {
+  orderBy?: InputMaybe<UserContributionOrderByInput>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
   where: UserContributionWhereInput;
 };
 
@@ -26881,6 +26904,15 @@ export type UserContribution = {
   totalMessages: Scalars['Int'];
   totalOffenders: Scalars['Int'];
   totalUpdates: Scalars['Int'];
+};
+
+export type UserContributionOrderByInput = {
+  fullName?: InputMaybe<SortOrder>;
+  totalIncidents?: InputMaybe<SortOrder>;
+  totalLogins?: InputMaybe<SortOrder>;
+  totalMessages?: InputMaybe<SortOrder>;
+  totalOffenders?: InputMaybe<SortOrder>;
+  totalUpdates?: InputMaybe<SortOrder>;
 };
 
 export type UserContributionWhereInput = {
