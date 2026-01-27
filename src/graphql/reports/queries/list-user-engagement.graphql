@@ -1,5 +1,16 @@
-query UserEngagement($where: UserContributionWhereInput!) {
-  listUserContribution(where: $where) {
+query UserEngagement(
+  $where: UserContributionWhereInput!
+  $skip: Int
+  $take: Int
+  $orderBy: UserContributionOrderByInput
+) {
+  userContributions(
+    where: $where
+    skip: $skip
+    take: $take
+    orderBy: $orderBy
+  ) {
+    total
     userContributions {
       name
       businesses
@@ -11,6 +22,5 @@ query UserEngagement($where: UserContributionWhereInput!) {
       lastLogin
       groups
     }
-    total
   }
 }
