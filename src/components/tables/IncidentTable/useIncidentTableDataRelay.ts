@@ -4,7 +4,7 @@ import type { UnrestrictedIncidentRelayInput } from 'graphql/types';
 import { useUnrestrictedIncidentsRelayQuery } from 'graphql/incidents/queries/__generated__/unrestricted-incidents-relay.generated';
 import { SortOrder } from 'graphql/types';
 import { useCursorPagination } from 'hooks/useCursorPagination';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 export interface IncidentFilters {
   crimeTypes?: string[];
@@ -77,13 +77,22 @@ export const useIncidentTableDataRelay = ({
   const [pageSize, setPageSize] = useState(initialPageSize);
 
   // Initialize cursor pagination hook early
-  const { getCursorForPage, resetPagination, updateCursorCache } =
-    useCursorPagination({
-      currentCursor: undefined,
-      hasNextPage: false,
-      pageSize,
-      totalCount: 0,
-    });
+  const {
+    getCursorForPage,
+    resetPagination: _resetPagination,
+    updateCursorCache,
+  } = useCursorPagination({
+    currentCursor: undefined,
+    hasNextPage: false,
+    pageSize,
+    totalCount: 0,
+  });
+
+  // Wrap resetPagination to also reset our own page state
+  const resetPagination = useCallback(() => {
+    _resetPagination();
+    setPage(1);
+  }, [_resetPagination]);
 
   // Build where clause using simplified input structure with server-side filters
   const where: UnrestrictedIncidentRelayInput = useMemo(() => {
@@ -164,8 +173,9 @@ export const useIncidentTableDataRelay = ({
   const pageInfo = data?.unrestrictedIncidentsRelay?.pageInfo;
   const currentCursor = pageInfo?.endCursor;
 
-  // Update cursor cache when data changes
-  useEffect(() => {
+  // Update cursor cache synchronously when data changes (not in useEffect to avoid race condition)
+  // This ensures the cursor is cached before users can interact with pagination
+  useMemo(() => {
     if (currentCursor && page > 0) {
       updateCursorCache(page, currentCursor);
     }
@@ -187,19 +197,36 @@ export const useIncidentTableDataRelay = ({
         setPageSize(newPageSize);
         setPage(1);
         resetPagination();
+      } else if (newPage === 1) {
+        // Going to page 1 is always allowed
+        setPage(1);
       } else {
-        // Check if we have the cursor for non-sequential navigation
-        const cursorForNewPage = getCursorForPage(newPage);
-        if (cursorForNewPage === undefined && newPage > 1) {
-          // Non-sequential jump without cached cursor - reset to page 1
-          console.warn(
-            `Cursor not available for page ${newPage}. Resetting to page 1.`
-          );
-          setPage(1);
-          resetPagination();
-        } else {
-          setPage(newPage);
-        }
+        // For pages > 1, use functional setState to access current page value
+        setPage((currentPage) => {
+          // Check if this is sequential navigation
+          const isSequentialForward = newPage === currentPage + 1;
+          const isSequentialBackward = newPage === currentPage - 1;
+
+          if (isSequentialForward || isSequentialBackward) {
+            // Sequential navigation - cursor should be cached, allow it
+            return newPage;
+          } else {
+            // Non-sequential jump - verify cursor is available
+            const cursorForNewPage = getCursorForPage(newPage);
+
+            if (cursorForNewPage === undefined) {
+              // Cursor not available - cannot jump
+              console.warn(
+                `Cannot jump to page ${newPage}. Please navigate sequentially using Next/Previous buttons.`
+              );
+              // Stay on current page
+              return currentPage;
+            } else {
+              // Cursor is cached, allow the jump
+              return newPage;
+            }
+          }
+        });
       }
     },
     [pageSize, getCursorForPage, resetPagination]

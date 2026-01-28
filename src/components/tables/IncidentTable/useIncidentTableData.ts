@@ -5,7 +5,7 @@ import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { useListIncidentsForTableQuery } from 'graphql/incidents/queries/__generated__/list-incidents-for-table.generated';
 import { SortOrder } from 'graphql/types';
 import { useAtomValue } from 'jotai';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 export interface IncidentFilters {
   crimeTypes?: string[];
@@ -55,6 +55,11 @@ export const useIncidentTableData = ({
   pageSize: initialPageSize = 10,
 }: UseIncidentTableDataProps): UseIncidentTableDataReturn => {
   const schemeId = useAtomValue(currentSchemeIdAtom);
+  const [instanceId] = useState(() => {
+    const id = Math.random().toString(36).slice(7);
+    console.log('[useIncidentTableData] Hook instance created:', id);
+    return id;
+  });
 
   // State management
   const [page, setPage] = useState(1);
@@ -64,6 +69,14 @@ export const useIncidentTableData = ({
     defaultSortOrder
   );
   const [filters, setFilters] = useState<IncidentFilters>({});
+
+  // Debug: Track page state changes
+  useEffect(() => {
+    console.log(
+      `[useIncidentTableData:${instanceId}] Page state changed to:`,
+      page
+    );
+  }, [page, instanceId]);
 
   // Build query variables
   const queryVariables = useMemo(() => {
@@ -117,13 +130,25 @@ export const useIncidentTableData = ({
       date: sortOrder === 'ascend' ? SortOrder.Asc : SortOrder.Desc,
     };
 
-    return {
+    const vars = {
       order: orderBy,
       scheme: { id: schemeId },
       skip: (page - 1) * pageSize,
       take: pageSize,
       where,
     };
+
+    console.log(
+      `[useIncidentTableData:${instanceId}] Query variables computed:`,
+      {
+        page,
+        pageSize,
+        skip: vars.skip,
+        take: vars.take,
+      }
+    );
+
+    return vars;
   }, [
     crimeGroupId,
     investigationId,
@@ -133,6 +158,7 @@ export const useIncidentTableData = ({
     page,
     pageSize,
     schemeId,
+    instanceId,
   ]);
 
   // Execute query
@@ -143,6 +169,14 @@ export const useIncidentTableData = ({
       variables: queryVariables,
     });
 
+  console.log(`[useIncidentTableData:${instanceId}] Query state:`, {
+    dataCount: data?.listIncidents?.incidents.length || 0,
+    loading,
+    networkStatus,
+    page,
+    pageSize,
+  });
+
   // NetworkStatus 4 means refetch is in progress
   // This ensures loading state is true during pagination changes
   const isRefetching = networkStatus === 4;
@@ -151,15 +185,40 @@ export const useIncidentTableData = ({
   // Handlers
   const handlePageChange = useCallback(
     (newPage: number, newPageSize?: number) => {
+      console.log(
+        `[useIncidentTableData:${instanceId}] handlePageChange called:`,
+        {
+          newPage,
+          newPageSize,
+        }
+      );
+
       if (newPageSize && newPageSize !== pageSize) {
         // Reset to page 1 if pageSize changes
+        console.log(
+          `[useIncidentTableData:${instanceId}] Setting pageSize to:`,
+          newPageSize,
+          'and page to 1'
+        );
         setPageSize(newPageSize);
         setPage(1);
       } else {
-        setPage(newPage);
+        console.log(
+          `[useIncidentTableData:${instanceId}] About to call setPage with:`,
+          newPage
+        );
+        setPage((prevPage) => {
+          console.log(
+            `[useIncidentTableData:${instanceId}] setPage callback - prevPage:`,
+            prevPage,
+            'newPage:',
+            newPage
+          );
+          return newPage;
+        });
       }
     },
-    [pageSize]
+    [pageSize, instanceId]
   );
 
   const handleSortChange = useCallback(
