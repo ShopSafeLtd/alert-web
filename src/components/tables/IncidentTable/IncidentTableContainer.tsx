@@ -1,9 +1,7 @@
-import { FEATURE_FLAGS } from 'configs/featureFlags';
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 
 import IncidentTable from './IncidentTable.view';
 import { IncidentTableFilters } from './IncidentTableFilters';
-import { useIncidentTableData } from './useIncidentTableData';
 import { useIncidentTableDataRelay } from './useIncidentTableDataRelay';
 
 interface IncidentTableContainerProps {
@@ -32,11 +30,6 @@ export const IncidentTableContainer: React.FC<IncidentTableContainerProps> = ({
   setEditData,
   showFilters = true,
 }) => {
-  // Use Relay pagination if feature flag is enabled, otherwise use original implementation
-  const useIncidentDataHook = FEATURE_FLAGS.USE_RELAY_PAGINATION_INCIDENTS
-    ? useIncidentTableDataRelay
-    : useIncidentTableData;
-
   const {
     filters,
     handleClearFilters,
@@ -50,13 +43,21 @@ export const IncidentTableContainer: React.FC<IncidentTableContainerProps> = ({
     sortField,
     sortOrder,
     totalCount,
-  } = useIncidentDataHook({
+  } = useIncidentTableDataRelay({
     crimeGroupId,
     defaultSortOrder,
     investigationId,
     offenderId,
     pageSize,
   });
+
+  // Wrapper for page size changes - resets to page 1 with new size
+  const handlePageSizeChange = useCallback(
+    (newPageSize: number) => {
+      handlePageChange(1, newPageSize);
+    },
+    [handlePageChange]
+  );
 
   // Map incidents to the format expected by IncidentTable
   const mappedIncidents = useMemo(
@@ -115,6 +116,7 @@ export const IncidentTableContainer: React.FC<IncidentTableContainerProps> = ({
         loading={loading}
         onDelete={onDelete}
         onPageChange={handlePageChange}
+        onPageSizeChange={handlePageSizeChange}
         onSortChange={handleSortChange}
         page={page}
         pageSize={currentPageSize}

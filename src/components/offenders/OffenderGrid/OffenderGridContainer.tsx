@@ -1,15 +1,12 @@
 import type { OffenderData } from 'types/DataType';
 
 import { Empty, Pagination } from 'antd';
-import { FEATURE_FLAGS } from 'configs/featureFlags';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
-import type { UseOffenderGridDataReturn } from './useOffenderGridData';
 import type { OffenderNode } from './useOffenderGridDataRelay';
 
 import OffenderGrid from './OffenderGrid.view';
-import { useOffenderGridData } from './useOffenderGridData';
 import { useOffenderGridDataRelay } from './useOffenderGridDataRelay';
 
 interface OffenderGridContainerProps {
@@ -41,11 +38,6 @@ export const OffenderGridContainer: React.FC<OffenderGridContainerProps> = ({
 }) => {
   const intl = useIntl();
 
-  // Use Relay pagination if feature flag is enabled, otherwise use original implementation
-  const useOffenderDataHook = FEATURE_FLAGS.USE_RELAY_PAGINATION_OFFENDERS
-    ? useOffenderGridDataRelay
-    : useOffenderGridData;
-
   const {
     handlePageChange,
     loading,
@@ -54,7 +46,7 @@ export const OffenderGridContainer: React.FC<OffenderGridContainerProps> = ({
     pageSize,
     sortBy: internalSortBy,
     totalCount,
-  } = useOffenderDataHook({
+  } = useOffenderGridDataRelay({
     crimeGroupId,
     defaultSortBy: externalSortBy || defaultSortBy,
     incidentId,
@@ -94,12 +86,7 @@ export const OffenderGridContainer: React.FC<OffenderGridContainerProps> = ({
           disconnectLabel={disconnectLabel}
           editRights={editRights}
           loading={loading}
-          offenders={
-            offenders as
-              | OffenderNode[]
-              | UseOffenderGridDataReturn['offenders']
-              | undefined
-          }
+          offenders={offenders as OffenderNode[] | undefined}
           onDisconnectOffender={onDisconnectOffender}
           setEditOffenderData={setEditOffenderData}
           sortBy={currentSortBy}
