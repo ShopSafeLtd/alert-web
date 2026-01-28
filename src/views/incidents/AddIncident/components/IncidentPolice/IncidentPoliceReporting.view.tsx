@@ -7,12 +7,15 @@ import WitnessAuthorView from '#/views/incidents/AddIncident/components/Incident
 import {
   Card,
   Col,
+  DatePicker,
   Divider,
   Form,
   Input,
+  InputNumber,
   Radio,
   Row,
   Select,
+  TimePicker,
   Typography,
 } from 'antd';
 import { PoliceResponseTime } from 'graphql/types';
@@ -46,6 +49,8 @@ const IncidentPolice = ({
   const policeKnownBefore = Form.useWatch('policeKnownBefore', form);
   const policeWitnessAtTime = Form.useWatch('policeWitnessAtTime', form);
   const obstructed = Form.useWatch('policeObstructions', form) === 'true';
+  const cctvAvailable = Form.useWatch('cctvAvailable', form);
+  const policeCCTVTimeCorrect = Form.useWatch('policeCCTVTimeCorrect', form);
   return (
     <Card className={classes.card}>
       <Row align="bottom" style={{ marginBottom: 20 }}>
@@ -557,6 +562,191 @@ const IncidentPolice = ({
                             </Form.Item>
                           </Col>
                         </Row>
+                      </>
+                    )}
+
+                    {policeWitnessAtTime === false && !cctvAvailable && (
+                      <>
+                        <Divider />
+                        <Title level={5} style={{ marginBottom: 16 }}>
+                          {intl.formatMessage({
+                            defaultMessage: 'CCTV Review Details',
+                          })}
+                        </Title>
+                        <Row gutter={16}>
+                          <Col span={8}>
+                            <Form.Item
+                              label={intl.formatMessage({
+                                defaultMessage: 'CCTV Review Date',
+                              })}
+                              name="policeCCTVReviewDate"
+                              rules={[
+                                {
+                                  message: intl.formatMessage({
+                                    defaultMessage:
+                                      'Please provide the date you reviewed CCTV.',
+                                  }),
+                                  required: true,
+                                },
+                              ]}
+                              tooltip={intl.formatMessage({
+                                defaultMessage:
+                                  'The date when you reviewed the CCTV footage.',
+                              })}
+                            >
+                              <DatePicker style={{ width: '100%' }} />
+                            </Form.Item>
+                          </Col>
+                          <Col span={8}>
+                            <Form.Item
+                              label={intl.formatMessage({
+                                defaultMessage: 'CCTV Review Time',
+                              })}
+                              name="policeCCTVReviewTime"
+                              rules={[
+                                {
+                                  message: intl.formatMessage({
+                                    defaultMessage:
+                                      'Please provide the time you reviewed CCTV.',
+                                  }),
+                                  required: true,
+                                },
+                              ]}
+                              tooltip={intl.formatMessage({
+                                defaultMessage:
+                                  'The time when you reviewed the CCTV footage.',
+                              })}
+                            >
+                              <TimePicker style={{ width: '100%' }} />
+                            </Form.Item>
+                          </Col>
+                          <Col span={8}>
+                            <Form.Item
+                              label={intl.formatMessage({
+                                defaultMessage: 'CCTV Time Correct',
+                              })}
+                              name="policeCCTVTimeCorrect"
+                              rules={[
+                                {
+                                  message: intl.formatMessage({
+                                    defaultMessage:
+                                      'Please answer this question.',
+                                  }),
+                                  required: true,
+                                },
+                              ]}
+                              tooltip={intl.formatMessage({
+                                defaultMessage:
+                                  'Does the CCTV system display the correct time and date?',
+                              })}
+                            >
+                              <Radio.Group
+                                disabled={saving}
+                                optionType="button"
+                                options={[
+                                  {
+                                    label: intl.formatMessage({
+                                      defaultMessage: 'Yes',
+                                    }),
+                                    value: true,
+                                  },
+                                  {
+                                    label: intl.formatMessage({
+                                      defaultMessage: 'No',
+                                    }),
+                                    value: false,
+                                  },
+                                ]}
+                              />
+                            </Form.Item>
+                          </Col>
+                        </Row>
+                        {policeCCTVTimeCorrect === false && (
+                          <Row gutter={16}>
+                            <Col span={12}>
+                              <Form.Item
+                                label={intl.formatMessage({
+                                  defaultMessage: 'Ahead/Behind',
+                                })}
+                                name="policeCCTVAheadBehind"
+                                rules={[
+                                  {
+                                    message: intl.formatMessage({
+                                      defaultMessage:
+                                        'Please select Ahead or Behind',
+                                    }),
+                                    required: true,
+                                  },
+                                ]}
+                                tooltip={intl.formatMessage({
+                                  defaultMessage:
+                                    'Is the CCTV time ahead of or behind actual time?',
+                                })}
+                              >
+                                <Select>
+                                  <Select.Option value="ahead">
+                                    {intl.formatMessage({
+                                      defaultMessage: 'Ahead',
+                                    })}
+                                  </Select.Option>
+                                  <Select.Option value="behind">
+                                    {intl.formatMessage({
+                                      defaultMessage: 'Behind',
+                                    })}
+                                  </Select.Option>
+                                </Select>
+                              </Form.Item>
+                            </Col>
+                            <Col span={12}>
+                              <Form.Item
+                                label={intl.formatMessage({
+                                  defaultMessage: 'Incorrect By (minutes)',
+                                })}
+                                name="policeCCTVIncorrectBy"
+                                rules={[
+                                  {
+                                    message: intl.formatMessage({
+                                      defaultMessage:
+                                        'Please input the number of minutes',
+                                    }),
+                                    required: true,
+                                  },
+                                  {
+                                    validator: (_, value) => {
+                                      if (
+                                        value === undefined ||
+                                        value === null
+                                      ) {
+                                        return Promise.resolve();
+                                      }
+                                      return Number.isInteger(value)
+                                        ? Promise.resolve()
+                                        : Promise.reject(
+                                            new Error(
+                                              intl.formatMessage({
+                                                defaultMessage:
+                                                  'Please enter a whole number',
+                                              })
+                                            )
+                                          );
+                                    },
+                                  },
+                                ]}
+                                tooltip={intl.formatMessage({
+                                  defaultMessage:
+                                    'How many minutes is the CCTV time off by?',
+                                })}
+                              >
+                                <InputNumber
+                                  min={0}
+                                  step={1}
+                                  style={{ width: '100%' }}
+                                />
+                              </Form.Item>
+                            </Col>
+                          </Row>
+                        )}
+                        <Divider />
                       </>
                     )}
 

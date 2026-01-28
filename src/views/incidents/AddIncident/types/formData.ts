@@ -48,7 +48,12 @@ export interface FormData {
   images?: StateImageData[];
   involvedTags?: string[];
   offenders?: StateOffenderData[];
+  policeCCTVAheadBehind?: string;
   policeCCTVEmail?: string;
+  policeCCTVIncorrectBy?: number;
+  policeCCTVReviewDate?: Date;
+  policeCCTVReviewTime?: Date;
+  policeCCTVTimeCorrect?: boolean;
   policeDay?: boolean;
   policeDepartment?: string;
   policeDistanceFromIncident?: string;

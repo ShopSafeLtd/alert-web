@@ -46,6 +46,7 @@ export const useGenerateMG11Statement = ({
   const date = Form.useWatch('date', form);
   const tags = Form.useWatch('tags', form);
   const cctv = Form.useWatch('cctv', form);
+  const cctvAvailable = Form.useWatch('cctvAvailable', form);
   const offenders = Form.useWatch('offenders', form);
   const goods = Form.useWatch('goods', form);
   const images = Form.useWatch('images', form);
@@ -61,6 +62,13 @@ export const useGenerateMG11Statement = ({
     'policeObstructionsDetails',
     form
   );
+  const policeKnownBefore = Form.useWatch('policeKnownBefore', form);
+  const policeReasonRemember = Form.useWatch('policeReasonRemember', form);
+  const policeCCTVReviewDate = Form.useWatch('policeCCTVReviewDate', form);
+  const policeCCTVReviewTime = Form.useWatch('policeCCTVReviewTime', form);
+  const policeCCTVTimeCorrect = Form.useWatch('policeCCTVTimeCorrect', form);
+  const policeCCTVAheadBehind = Form.useWatch('policeCCTVAheadBehind', form);
+  const policeCCTVIncorrectBy = Form.useWatch('policeCCTVIncorrectBy', form);
 
   /**
    * Map form data to template data structure
@@ -120,30 +128,57 @@ export const useGenerateMG11Statement = ({
       const incidentDate = formatDate(date);
       const incidentTime = formatTime(date);
 
-      // Get CCTV details from first CCTV record
-      const firstCCTV = cctv?.[0];
-      const cctvReviewTime = firstCCTV
-        ? formatTime(firstCCTV.startTime)
-        : undefined;
-      const cctvReviewDate = firstCCTV
-        ? formatDate(firstCCTV.startTime)
-        : undefined;
-      const cctvTimeCorrect = firstCCTV?.correctTime;
-      const cctvIncorrectBy = firstCCTV?.incorrectBy;
-      const cctvAheadBehind = firstCCTV?.aheadBehind?.toLowerCase() as
-        | 'ahead'
-        | 'behind'
-        | undefined;
+      // Get CCTV details from CCTV section or police fields
+      // Prefer CCTV section data if available, otherwise use police fields
+      let cctvReviewTime: string | undefined;
+      let cctvReviewDate: string | undefined;
+      let cctvTimeCorrect: boolean | undefined;
+      let cctvIncorrectBy: number | undefined;
+      let cctvAheadBehind: 'ahead' | 'behind' | undefined;
+
+      if (cctvAvailable && cctv?.[0]) {
+        // Use CCTV section data
+        const firstCCTV = cctv[0];
+        cctvReviewTime = formatTime(firstCCTV.startTime);
+        cctvReviewDate = formatDate(firstCCTV.startTime);
+        cctvTimeCorrect = firstCCTV.correctTime;
+        cctvIncorrectBy = firstCCTV.incorrectBy;
+        cctvAheadBehind = firstCCTV.aheadBehind?.toLowerCase() as
+          | 'ahead'
+          | 'behind'
+          | undefined;
+      } else if (!cctvAvailable && policeWitnessAtTime === false) {
+        // Use police fields when CCTV section is not available
+        cctvReviewTime = policeCCTVReviewTime
+          ? formatTime(policeCCTVReviewTime)
+          : undefined;
+        cctvReviewDate = policeCCTVReviewDate
+          ? formatDate(policeCCTVReviewDate)
+          : undefined;
+        cctvTimeCorrect = policeCCTVTimeCorrect;
+        cctvIncorrectBy = policeCCTVIncorrectBy;
+        cctvAheadBehind = policeCCTVAheadBehind?.toLowerCase() as
+          | 'ahead'
+          | 'behind'
+          | undefined;
+      }
 
       // Get offender details
       const firstOffender = offenders?.[0];
       let offenderName = 'unknown to me';
-      if (
-        firstOffender &&
-        firstOffender.name &&
-        firstOffender.name !== 'Unidentified Offender'
-      ) {
-        offenderName = `known to me as ${firstOffender.name}`;
+
+      // Determine offender identification based on policeKnownBefore field
+      if (policeKnownBefore && policeKnownBefore !== 'NOT_KNOWN') {
+        // Witness knows the offender
+        offenderName =
+          firstOffender &&
+          firstOffender.name &&
+          firstOffender.name !== 'Unidentified Offender'
+            ? `known to me as ${firstOffender.name}`
+            : 'known to me';
+      } else {
+        // Witness doesn't know the offender
+        offenderName = 'unknown to me';
       }
       // Use comment field as description (description field doesn't exist on offender type)
       const offenderDescription: string | undefined =
@@ -194,6 +229,8 @@ export const useGenerateMG11Statement = ({
         jobTitle,
         offenderDescription,
         offenderName,
+        policeKnownBefore,
+        policeReasonRemember,
         policeWitnessAtTime: policeWitnessAtTime || false,
         screenshotDate,
         screenshotTime,
@@ -207,6 +244,7 @@ export const useGenerateMG11Statement = ({
       tags,
       date,
       cctv,
+      cctvAvailable,
       offenders,
       images,
       goods,
@@ -215,6 +253,13 @@ export const useGenerateMG11Statement = ({
       policeDistanceFromIncident,
       policeObstructions,
       policeObstructionsDetails,
+      policeKnownBefore,
+      policeReasonRemember,
+      policeCCTVReviewDate,
+      policeCCTVReviewTime,
+      policeCCTVTimeCorrect,
+      policeCCTVAheadBehind,
+      policeCCTVIncorrectBy,
     ]);
 
   /**
@@ -294,6 +339,7 @@ export const useGenerateMG11Statement = ({
     date,
     tags,
     cctv,
+    cctvAvailable,
     offenders,
     goods,
     images,
@@ -302,6 +348,13 @@ export const useGenerateMG11Statement = ({
     policeDistanceFromIncident,
     policeObstructions,
     policeObstructionsDetails,
+    policeKnownBefore,
+    policeReasonRemember,
+    policeCCTVReviewDate,
+    policeCCTVReviewTime,
+    policeCCTVTimeCorrect,
+    policeCCTVAheadBehind,
+    policeCCTVIncorrectBy,
     debouncedGenerateStatement,
   ]);
 
