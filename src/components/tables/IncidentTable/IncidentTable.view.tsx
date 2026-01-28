@@ -484,30 +484,31 @@ const IncidentTable = ({
       }
       loading={loading}
       onChange={(pagination, filters, sorter) => {
+        // Only call onSortChange if the sort actually changed
         if (
           !Array.isArray(sorter) &&
           sorter.columnKey === 'date' &&
           sorter.order &&
-          onSortChange
+          onSortChange &&
+          sorter.order !== sortOrder // Check if sort order actually changed
         ) {
           onSortChange('date', sorter.order);
         }
       }}
       pagination={{
-        defaultPageSize: pageSize || 5,
+        current: page,
         hideOnSinglePage: !!(pageSize && pageSize < 100) || true,
-        onChange:
-          onPageSizeChange || onPageChange
-            ? (tablePage: number, tablePageSize: number) => {
-                if (onPageSizeChange && pageSize !== tablePageSize) {
-                  onPageSizeChange(tablePageSize);
-                }
-                if (onPageChange && page !== tablePage) {
-                  onPageChange(tablePage);
-                }
-              }
-            : undefined,
+        onChange: (tablePage: number, tablePageSize: number) => {
+          const effectivePageSize = pageSize || 5;
+          if (tablePageSize === effectivePageSize) {
+            onPageChange?.(tablePage);
+          } else {
+            onPageSizeChange?.(tablePageSize);
+          }
+        },
+        pageSize: pageSize || 5,
         pageSizeOptions: [5, 10, 20, 50, 100],
+        showQuickJumper: false,
         showSizeChanger: true,
         total: total || filteredIncidents?.length || 0,
       }}
