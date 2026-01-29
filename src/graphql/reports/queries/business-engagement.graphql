@@ -1,5 +1,15 @@
-query BusinessEngagement($where: UserContributionWhereInput!) {
-  businessContribution(where: $where) {
+query BusinessEngagement(
+  $where: UserContributionWhereInput!
+  $skip: Int
+  $take: Int
+  $orderBy: BusinessContributionOrderByInput
+) {
+  businessContribution(
+    where: $where
+    skip: $skip
+    take: $take
+    orderBy: $orderBy
+  ) {
     businessContributions {
       name
       totalUsers
