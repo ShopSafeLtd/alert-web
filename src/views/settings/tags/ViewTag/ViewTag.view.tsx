@@ -30,7 +30,7 @@ import {
 } from 'antd';
 import EditCrimeType from 'components/form-components/tags/crimeTypes/EditCrimeType';
 import { IncidentFormField } from 'graphql/types';
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import RGL, { WidthProvider } from 'react-grid-layout';
 import 'react-grid-layout/css/styles.css';
 import { FormattedMessage, useIntl } from 'react-intl';
@@ -188,14 +188,18 @@ const ViewTag = ({
   const ReactGridLayout = useMemo(() => WidthProvider(RGL), []);
   const intl = useIntl();
 
-  const tagqs = data?.tag?.tagQuestions?.map((tagq) => ({
-    dependOn: tagq.dependentQuestions[0],
-    i: tagq.id,
-    qId: tagq.question.id,
-    question: tagq.question.questionFormatted,
-    required: tagq.req,
-    type: tagq.question.type,
-  }));
+  const tagqs = useMemo(
+    () =>
+      data?.tag?.tagQuestions?.map((tagq) => ({
+        dependOn: tagq.dependentQuestions[0],
+        i: tagq.id,
+        qId: tagq.question.id,
+        question: tagq.question.questionFormatted,
+        required: tagq.req,
+        type: tagq.question.type,
+      })),
+    [data]
+  );
 
   const tagQsFormatted = useMemo(
     () =>
@@ -230,12 +234,15 @@ const ViewTag = ({
   };
 
   // Helper to get condition count for a module
-  const getConditionCount = (fieldType: IncidentFormField) => {
-    const moduleConditions = data?.tag?.incidentForm?.fields?.find(
-      (field) => field.type === fieldType
-    )?.conditions;
-    return Array.isArray(moduleConditions) ? moduleConditions.length : 0;
-  };
+  const getConditionCount = useCallback(
+    (fieldType: IncidentFormField) => {
+      const moduleConditions = data?.tag?.incidentForm?.fields?.find(
+        (field) => field.type === fieldType
+      )?.conditions;
+      return Array.isArray(moduleConditions) ? moduleConditions.length : 0;
+    },
+    [data]
+  );
 
   const incidentFormElements: Elements = {
     cctv: (
@@ -306,6 +313,7 @@ const ViewTag = ({
               <Switch
                 checked={incidentFormFields.CCTV}
                 checkedChildren="On"
+                className="cancelDrag"
                 onChange={() => {
                   toggleField(IncidentFormField.Cctv);
                 }}
@@ -384,6 +392,7 @@ const ViewTag = ({
               <Switch
                 checked={incidentFormFields.CUSTOM}
                 checkedChildren="On"
+                className="cancelDrag"
                 onChange={() => {
                   toggleField(IncidentFormField.Custom);
                 }}
@@ -433,6 +442,7 @@ const ViewTag = ({
                 <Switch
                   checked={incidentFormFields.DRAFT}
                   checkedChildren="On"
+                  className="cancelDrag"
                   onChange={() => {
                     toggleField(IncidentFormField.Draft);
                   }}
@@ -563,6 +573,7 @@ const ViewTag = ({
               <Switch
                 checked={incidentFormFields.GOODS}
                 checkedChildren="On"
+                className="cancelDrag"
                 onChange={() => {
                   toggleField(IncidentFormField.Goods);
                 }}
@@ -578,6 +589,7 @@ const ViewTag = ({
             <Col>
               <Switch
                 checked={showDamagedQuantity}
+                className="cancelDrag"
                 disabled={!incidentFormFields.GOODS}
                 onChange={(checked) => {
                   setShowDamagedQuantity(checked);
@@ -660,6 +672,7 @@ const ViewTag = ({
               <Switch
                 checked={incidentFormFields.GROUPS}
                 checkedChildren="On"
+                className="cancelDrag"
                 onChange={() => toggleField(IncidentFormField.Groups)}
                 unCheckedChildren="Off"
               />
@@ -736,6 +749,7 @@ const ViewTag = ({
               <Switch
                 checked={incidentFormFields.IMAGES}
                 checkedChildren="On"
+                className="cancelDrag"
                 onChange={() => {
                   toggleField(IncidentFormField.Images);
                 }}
@@ -856,6 +870,7 @@ const ViewTag = ({
               <Switch
                 checked={incidentFormFields.POLICE}
                 checkedChildren="On"
+                className="cancelDrag"
                 onChange={() => {
                   toggleField(IncidentFormField.Police);
                 }}
@@ -936,6 +951,7 @@ const ViewTag = ({
               <Switch
                 checked={incidentFormFields.OFFENDERS}
                 checkedChildren="On"
+                className="cancelDrag"
                 onChange={() => {
                   toggleField(IncidentFormField.Offenders);
                 }}
@@ -972,6 +988,7 @@ const ViewTag = ({
             <Col>
               <Switch
                 checked={incidentFormFields.WITNESSES}
+                className="cancelDrag"
                 onChange={() => {
                   toggleField(IncidentFormField.Witnesses);
                 }}
@@ -987,6 +1004,7 @@ const ViewTag = ({
             <Col>
               <Switch
                 checked={incidentFormFields.VICTIMS}
+                className="cancelDrag"
                 onChange={() => {
                   toggleField(IncidentFormField.Victims);
                 }}
@@ -1048,6 +1066,7 @@ const ViewTag = ({
             <Col>
               <Switch
                 checked={incidentFormFields.IMPACT}
+                className="cancelDrag"
                 onChange={() => {
                   toggleField(IncidentFormField.Impact);
                 }}
@@ -1069,6 +1088,7 @@ const ViewTag = ({
                 <Switch
                   checked={involvedMode}
                   checkedChildren="Single"
+                  className="cancelDrag"
                   disabled={!incidentFormFields.INVOLVED}
                   onChange={(checked) => {
                     toggleInvolvedMode(checked);
@@ -1082,6 +1102,7 @@ const ViewTag = ({
             <Col style={{ marginLeft: 8 }}>
               <Switch
                 checked={incidentFormFields.INVOLVED}
+                className="cancelDrag"
                 onChange={() => {
                   toggleField(IncidentFormField.Involved);
                 }}
@@ -1160,6 +1181,7 @@ const ViewTag = ({
               <Switch
                 checked={incidentFormFields.WHERE}
                 checkedChildren="On"
+                className="cancelDrag"
                 onChange={() => {
                   toggleField(IncidentFormField.Where);
                 }}
@@ -1184,6 +1206,9 @@ const ViewTag = ({
       fieldTitles,
       draftState,
       showDamagedQuantity,
+      data,
+      showDraft,
+      loading,
     ]
   );
 
@@ -1288,7 +1313,7 @@ const ViewTag = ({
           </div>
         );
       }),
-    [questionsLayout, tagqs]
+    [questionsLayout, tagqs, intl, setSelectedQuestion, deleteQuestion]
   );
 
   return (
