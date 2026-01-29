@@ -5,19 +5,23 @@ import type { RefObject } from 'react';
 import { useGroupsContext } from '#/context/groups-context';
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { useBusinessEngagementQuery } from 'graphql/reports/queries/__generated__/business-engagement.generated';
+import { SortOrder } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
 import { useEffect, useRef, useState } from 'react';
 import { useReactToPrint } from 'react-to-print';
 
 interface Return {
   componentRef: RefObject<HTMLDivElement>;
+  currentPage: number;
   data: BusinessEngagementQuery | undefined;
   dateRange: { endDate: Date; startDate: Date };
   groups: SelectOptions[];
   groupsLoading: boolean;
+  handlePageChange: (page: number, newPageSize?: number) => void;
   handlePrint: () => void;
   isPrinting: boolean;
   loading: boolean;
+  pageSize: number;
   selectedGroups: string[];
   setDateRange: (
     dateRange: { endDate: Date; startDate: Date } | undefined
@@ -49,6 +53,12 @@ const useBusinessEngagement = (): Return => {
       )
     ),
   });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(30);
+
+  const skip = (currentPage - 1) * pageSize;
+  const orderBy = { totalIncidents: SortOrder.Desc };
+
   const { groups: groupsData, groupsLoading } = useGroupsContext();
 
   useEffect(() => {
@@ -59,9 +69,12 @@ const useBusinessEngagement = (): Return => {
   }, [groupsData]);
 
   const { data, loading } = useBusinessEngagementQuery({
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy: 'cache-first',
     skip: !currentScheme,
     variables: {
+      orderBy,
+      skip,
+      take: pageSize,
       where: {
         dateRange,
         groupIds:
@@ -129,15 +142,30 @@ const useBusinessEngagement = (): Return => {
       }
     );
 
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedGroups, dateRange]);
+
+  const handlePageChange = (page: number, newPageSize?: number) => {
+    setCurrentPage(page);
+    if (newPageSize && newPageSize !== pageSize) {
+      setPageSize(newPageSize);
+      setCurrentPage(1);
+    }
+  };
+
   return {
     componentRef,
+    currentPage,
     data,
     dateRange,
     groups,
     groupsLoading,
+    handlePageChange,
     handlePrint,
     isPrinting,
     loading,
+    pageSize,
     selectedGroups,
     setDateRange: onSetDateRange,
     setSelectedGroups,
