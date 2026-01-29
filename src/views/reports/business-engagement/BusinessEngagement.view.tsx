@@ -19,12 +19,15 @@ const { Title } = Typography;
 
 interface Props {
   componentRef: RefObject<HTMLDivElement>;
+  currentPage: number;
   data: BusinessEngagementQuery | undefined;
   dateRange: { endDate: Date; startDate: Date };
   groups: SelectOptions[];
+  handlePageChange: (page: number, newPageSize?: number) => void;
   handlePrint: () => void;
   isPrinting: boolean;
   loading: boolean;
+  pageSize: number;
   selectedGroups: string[];
   setDateRange: (
     dateRange: { endDate: Date; startDate: Date } | undefined
@@ -34,12 +37,15 @@ interface Props {
 
 const PerformanceReport = ({
   componentRef,
+  currentPage,
   data,
   dateRange,
   groups,
+  handlePageChange,
   handlePrint,
   isPrinting,
   loading,
+  pageSize,
   selectedGroups,
   setDateRange,
   setSelectedGroups,
@@ -222,12 +228,15 @@ const PerformanceReport = ({
                       })
                     )}
                     pagination={{
+                      current: currentPage,
                       defaultPageSize: 30,
                       hideOnSinglePage: true,
+                      onChange: handlePageChange,
+                      onShowSizeChange: handlePageChange,
                       pageSize:
                         isPrinting && data?.businessContribution?.total
                           ? data.businessContribution.total
-                          : undefined,
+                          : pageSize,
                       showSizeChanger: true,
                       showTotal: (total, range) =>
                         `${range[0]}-${range[1]} of ${total}`,
