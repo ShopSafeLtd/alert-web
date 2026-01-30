@@ -124,7 +124,7 @@ const ArticleCard = ({
         permission: item.permission,
       })
     )
-    .map(({ permission: _permission, ...item }) => item) as MenuProps['items'];
+    .map(({ permission: _permission, ...item }) => item);
 
   return (
     <div
@@ -137,7 +137,7 @@ const ArticleCard = ({
       {menuItems.length > 0 && (
         <Dropdown
           arrow={{ pointAtCenter: true }}
-          overlay={<Menu items={menuItems} />}
+          overlay={<Menu items={menuItems as MenuProps['items']} />}
           placement="bottomRight"
           trigger={['click']}
         >
