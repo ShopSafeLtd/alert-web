@@ -243,7 +243,7 @@ const useCreateEditArticle = (): Props => {
         title: result?.article?.title || '',
         watermarkImage: !!result?.article?.watermarkImage,
       });
-      setInitialValue(res?.article?.rows[0].columns[0].text || '');
+      setInitialValue(result?.article?.rows[0].columns[0].text || '');
     },
     skip: !articleId,
     variables: {

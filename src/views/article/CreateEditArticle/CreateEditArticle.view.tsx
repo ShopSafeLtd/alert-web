@@ -373,160 +373,175 @@ const CreateEditArticleView = ({
               }
             </Form.Item>
             <div style={{ margin: 25 }}>
-              <Editor
-                init={{
-                  branding: false,
-                  content_css: theme ? 'dark' : undefined,
-                  content_style:
-                    'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
-                  contextmenu: false,
-                  default_link_target: '_blank',
-                  elementpath: false,
-                  file_picker_callback: filePickerCallback,
-                  file_picker_types: 'file, image, media',
-                  images_upload_handler: imagesUploadHandler,
-                  // @ts-expect-error prop issue
-                  license_key: 'gpl',
-                  licenseKey: 'gpl',
+              {initData === undefined ? (
+                <div
+                  style={{
+                    alignItems: 'center',
+                    border: '1px solid #d9d9d9',
+                    borderRadius: '2px',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    minHeight: 500,
+                  }}
+                >
+                  <Loading />
+                </div>
+              ) : (
+                <Editor
+                  init={{
+                    branding: false,
+                    content_css: theme ? 'dark' : undefined,
+                    content_style:
+                      'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+                    contextmenu: false,
+                    default_link_target: '_blank',
+                    elementpath: false,
+                    file_picker_callback: filePickerCallback,
+                    file_picker_types: 'file, image, media',
+                    images_upload_handler: imagesUploadHandler,
+                    // @ts-expect-error prop issue
+                    license_key: 'gpl',
+                    licenseKey: 'gpl',
 
-                  menubar: 'file edit view insert format tools table',
-                  min_height: 500,
-                  plugins: [
-                    'preview',
-                    'importcss',
-                    'searchreplace',
-                    'save',
-                    'directionality',
-                    'visualblocks',
-                    'visualchars',
-                    'fullscreen',
-                    'image',
-                    'link',
-                    'media',
+                    menubar: 'file edit view insert format tools table',
+                    min_height: 500,
+                    plugins: [
+                      'preview',
+                      'importcss',
+                      'searchreplace',
+                      'save',
+                      'directionality',
+                      'visualblocks',
+                      'visualchars',
+                      'fullscreen',
+                      'image',
+                      'link',
+                      'media',
 
-                    'table',
-                    'charmap',
-                    'pagebreak',
-                    'nonbreaking',
-                    'anchor',
-                    'insertdatetime',
-                    'advlist',
-                    'lists',
-                    'wordcount',
-                    'charmap',
-                    'quickbars',
-                    'emoticons',
-                    'autoresize',
-                  ],
-                  promotion: false,
-                  setup: (editor) => {
-                    editor.ui.registry.addMenuButton('insertMenuButton', {
-                      fetch(callback) {
-                        const items = [
-                          {
-                            onAction() {
-                              drawer.open({
-                                defaultTitle: intl.formatMessage({
-                                  defaultMessage: 'Add Incident',
-                                }),
-                                id: 'addIncident',
-                              });
+                      'table',
+                      'charmap',
+                      'pagebreak',
+                      'nonbreaking',
+                      'anchor',
+                      'insertdatetime',
+                      'advlist',
+                      'lists',
+                      'wordcount',
+                      'charmap',
+                      'quickbars',
+                      'emoticons',
+                      'autoresize',
+                    ],
+                    promotion: false,
+                    setup: (editor) => {
+                      editor.ui.registry.addMenuButton('insertMenuButton', {
+                        fetch(callback) {
+                          const items = [
+                            {
+                              onAction() {
+                                drawer.open({
+                                  defaultTitle: intl.formatMessage({
+                                    defaultMessage: 'Add Incident',
+                                  }),
+                                  id: 'addIncident',
+                                });
+                              },
+                              text: intl.formatMessage({
+                                defaultMessage: 'Add Incident',
+                              }),
+                              type: 'menuitem',
                             },
-                            text: intl.formatMessage({
-                              defaultMessage: 'Add Incident',
-                            }),
-                            type: 'menuitem',
-                          },
-                          {
-                            onAction() {
-                              drawer.open({
-                                defaultTitle: intl.formatMessage({
-                                  defaultMessage: 'Add Offender',
-                                }),
-                                id: 'addOffender',
-                              });
+                            {
+                              onAction() {
+                                drawer.open({
+                                  defaultTitle: intl.formatMessage({
+                                    defaultMessage: 'Add Offender',
+                                  }),
+                                  id: 'addOffender',
+                                });
+                              },
+                              text: intl.formatMessage({
+                                defaultMessage: 'Add Offender',
+                              }),
+                              type: 'menuitem',
                             },
-                            text: intl.formatMessage({
-                              defaultMessage: 'Add Offender',
-                            }),
-                            type: 'menuitem',
-                          },
-                          {
-                            onAction() {
-                              filePickerCallback(
-                                (file, { title }) => {
-                                  editor.insertContent(
-                                    `<a href="${file}" target="_blank" rel="noopener noreferrer">${title}</a>`
-                                  );
-                                },
-                                'document',
-                                { filetype: 'file' }
-                              );
+                            {
+                              onAction() {
+                                filePickerCallback(
+                                  (file, { title }) => {
+                                    editor.insertContent(
+                                      `<a href="${file}" target="_blank" rel="noopener noreferrer">${title}</a>`
+                                    );
+                                  },
+                                  'document',
+                                  { filetype: 'file' }
+                                );
+                              },
+                              text: intl.formatMessage({
+                                defaultMessage: 'Add Document Link',
+                              }),
+                              type: 'menuitem',
                             },
-                            text: intl.formatMessage({
-                              defaultMessage: 'Add Document Link',
-                            }),
-                            type: 'menuitem',
-                          },
-                          //                           This works but won't on native
-                          //                 {
-                          //                   onAction() {
-                          //                     filePickerCallback(
-                          //                       (file, { title }) => {
-                          //                         editor.insertContent(
-                          //                           `
-                          //   <iframe allowtransparency="true"
-                          //           src="${file}#toolbar=0&navpanes=0&scrollbar=0&view=FitH"
-                          //           style="background: transparent; border: none; display: block; width: 100%; height: 700px;"
-                          //           loading="lazy"
-                          //           onload="this.height=this.contentWindow.document.body.scrollHeight;"
-                          //           title="${title}">
-                          //   </iframe>
-                          // `
-                          //                         );
-                          //                       },
-                          //                       'document',
-                          //                       { filetype: 'application/pdf' },
-                          //                       true
-                          //                     );
-                          //                   },
-                          //                   text: intl.formatMessage({
-                          //                     defaultMessage: 'Add Document Link',
-                          //                   }),
-                          //                   type: 'menuitem',
-                          //                 },
+                            //                           This works but won't on native
+                            //                 {
+                            //                   onAction() {
+                            //                     filePickerCallback(
+                            //                       (file, { title }) => {
+                            //                         editor.insertContent(
+                            //                           `
+                            //   <iframe allowtransparency="true"
+                            //           src="${file}#toolbar=0&navpanes=0&scrollbar=0&view=FitH"
+                            //           style="background: transparent; border: none; display: block; width: 100%; height: 700px;"
+                            //           loading="lazy"
+                            //           onload="this.height=this.contentWindow.document.body.scrollHeight;"
+                            //           title="${title}">
+                            //   </iframe>
+                            // `
+                            //                         );
+                            //                       },
+                            //                       'document',
+                            //                       { filetype: 'application/pdf' },
+                            //                       true
+                            //                     );
+                            //                   },
+                            //                   text: intl.formatMessage({
+                            //                     defaultMessage: 'Add Document Link',
+                            //                   }),
+                            //                   type: 'menuitem',
+                            //                 },
 
-                          {
-                            onAction() {
-                              pdfFilePickerCallback((htmlContent) => {
-                                editor.insertContent(htmlContent);
-                              });
+                            {
+                              onAction() {
+                                pdfFilePickerCallback((htmlContent) => {
+                                  editor.insertContent(htmlContent);
+                                });
+                              },
+                              text: 'Embed Pdf',
+                              type: 'menuitem',
                             },
-                            text: 'Embed Pdf',
-                            type: 'menuitem',
-                          },
-                        ];
+                          ];
 
-                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                        // @ts-ignore ts error from tinymce, nested menus !== string
-                        callback(items);
-                      },
-                      text: 'Insert',
-                    });
-                  },
-                  skin: theme ? 'oxide-dark' : undefined,
-                  toolbar:
-                    ' insertMenuButton | undo redo | bold italic underline strikethrough | fontfamily fontsize blocks forecolor removeformat | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist |  pagebreak | charmap emoticons | preview print | image media link | ltr rtl',
-                  toolbar_sticky: false,
-                  toolbar_sticky_offset: 28,
-                }}
-                initialValue={initData}
-                onInit={(evt, editor) => {
-                  // eslint-disable-next-line no-param-reassign
-                  editorRef.current = editor;
-                }}
-                tinymceScriptSrc="/tinymce/tinymce.min.js"
-              />
+                          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                          // @ts-ignore ts error from tinymce, nested menus !== string
+                          callback(items);
+                        },
+                        text: 'Insert',
+                      });
+                    },
+                    skin: theme ? 'oxide-dark' : undefined,
+                    toolbar:
+                      ' insertMenuButton | undo redo | bold italic underline strikethrough | fontfamily fontsize blocks forecolor removeformat | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist |  pagebreak | charmap emoticons | preview print | image media link | ltr rtl',
+                    toolbar_sticky: false,
+                    toolbar_sticky_offset: 28,
+                  }}
+                  initialValue={initData}
+                  onInit={(evt, editor) => {
+                    // eslint-disable-next-line no-param-reassign
+                    editorRef.current = editor;
+                  }}
+                  tinymceScriptSrc="/tinymce/tinymce.min.js"
+                />
+              )}
             </div>
 
             {incidents && incidents.length > 0 && (
