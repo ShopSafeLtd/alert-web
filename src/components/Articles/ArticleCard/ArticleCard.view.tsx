@@ -117,13 +117,13 @@ const ArticleCard = ({
         model: PermissionModel.Articles,
       },
     },
-  ].filter(
-    (item) =>
-      item &&
+  ]
+    .filter((item) =>
       hasRolePermission({
         permission: item.permission,
       })
-  );
+    )
+    .map(({ permission: _permission, ...item }) => item);
 
   return (
     <div
