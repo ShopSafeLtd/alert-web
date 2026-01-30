@@ -8,7 +8,7 @@ export type ViewOffendersCompareQueryVariables = Types.Exact<{
 }>;
 
 
-export type ViewOffendersCompareQuery = { __typename?: 'Query', offenders: Array<{ __typename?: 'Offender', id: string, updatedAt: Date, age?: Types.Age | null, build?: Types.Build | null, height?: Types.Height | null, dateOfBirth?: Date | null, dateSource?: string | null, hair?: string | null, gender?: Types.Gender | null, name?: string | null, race?: Types.Race | null, peculiarities?: string | null, images: Array<{ __typename?: 'Image', id: string, optimised?: string | null, position: Types.ImagePosition, rotation: number }>, tags: Array<{ __typename?: 'Tag', id: string, name: string }>, lastActive?: { __typename?: 'Incident', id: string, dayTime: string } | null, incidents: Array<{ __typename?: 'Incident', id: string }> }> };
+export type ViewOffendersCompareQuery = { __typename?: 'Query', offenders: Array<{ __typename?: 'Offender', id: string, updatedAt: Date, age?: Types.Age | null, build?: Types.Build | null, height?: Types.Height | null, dateOfBirth?: Date | null, dateSource?: string | null, hair?: string | null, gender?: Types.Gender | null, name?: string | null, race?: Types.Race | null, peculiarities?: string | null, images: Array<{ __typename?: 'Image', id: string, optimised?: string | null, position: Types.ImagePosition, rotation: number }>, tags: Array<{ __typename?: 'Tag', id: string, name: string }>, lastActive?: { __typename?: 'Incident', id: string, dayTime: string } | null }> };
 
 
 export const ViewOffendersCompareDocument = gql`
@@ -39,9 +39,6 @@ export const ViewOffendersCompareDocument = gql`
     lastActive {
       id
       dayTime
-    }
-    incidents {
-      id
     }
   }
 }

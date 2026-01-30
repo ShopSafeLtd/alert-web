@@ -27,8 +27,5 @@ query ViewOffendersCompare($where: OffenderWhereInput!) {
       id
       dayTime
     }
-    incidents {
-      id
-    }
   }
 }

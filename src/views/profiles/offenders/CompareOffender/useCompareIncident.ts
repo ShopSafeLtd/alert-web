@@ -77,7 +77,7 @@ const compareIncident = (): Return => {
     hair: 'None',
     id: '',
     images: [],
-    incidents: [],
+    // incidents: [],
     name: '',
     peculiarities: 'None',
     race: Race.Unknown,
@@ -181,7 +181,7 @@ const compareIncident = (): Return => {
         hair: value.hair,
         id: value.id,
         images: value.images || [],
-        incidents: value.incidents,
+        // incidents: value.incidents,
         lastActive: {
           dayTime: value.lastActive?.dayTime || '',
           id: value.lastActive?.id || '',
@@ -208,9 +208,9 @@ const compareIncident = (): Return => {
       images: value.images
         ? [...preview.images, ...value.images]
         : preview.images,
-      incidents: value.incidents
-        ? [...preview.incidents, ...(<[]>value.incidents)]
-        : preview.incidents,
+      // incidents: value.incidents
+      //   ? [...preview.incidents, ...(<[]>value.incidents)]
+      //   : preview.incidents,
       peculiarities: value.peculiarities
         ? getPeculiarities()
         : preview.peculiarities,
@@ -262,7 +262,7 @@ const compareIncident = (): Return => {
 
     const imageIds = offender.images?.map(({ id }) => id);
     const tagIds = offender.tags?.map(({ id }) => id);
-    const incidentIds = offender.incidents?.map(({ id }) => id);
+    // const incidentIds = offender.incidents?.map(({ id }) => id);
 
     setPreview({
       ...preview,
@@ -273,9 +273,9 @@ const compareIncident = (): Return => {
       gender: genderSelected ? first?.gender : preview.gender,
       hair: hairSelected ? first?.hair : preview.hair,
       images: preview.images.filter(({ id }) => !imageIds.includes(id)),
-      incidents: preview.incidents.filter(
-        ({ id }) => !incidentIds.includes(id)
-      ),
+      // incidents: preview.incidents.filter(
+      //   ({ id }) => !incidentIds.includes(id)
+      // ),
       name: nameSelected ? first?.name : preview.name,
       peculiarities: offenders
         .filter((item) => item.id !== offender.id)
@@ -325,7 +325,7 @@ const compareIncident = (): Return => {
           gender: preview.gender,
           hair: preview.hair,
           imageIds: preview.images.map(({ id }) => id),
-          incidents: new Set(preview.incidents.map(({ id }) => id)),
+          // incidents: new Set(preview.incidents.map(({ id }) => id)),
           mainOffenderId: offenderId || '',
           name: preview.name,
           offenderIds: offenders
