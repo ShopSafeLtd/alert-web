@@ -47,7 +47,4 @@ fragment OffenderSearchDetails on Offender {
     id
     name
   }
-  incidents {
-    id
-  }
 }
