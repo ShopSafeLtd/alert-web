@@ -1,4 +1,5 @@
 import type { ListArticlesFeedQuery } from '#/views/article/ArticleFeed/graphql/queries/__generated__/list-articles-feed.generated';
+import type { MenuProps } from 'antd';
 import type { CarouselRef } from 'antd/lib/carousel';
 
 import hasRolePermission from '#/utils/has-role-permission';
@@ -83,7 +84,7 @@ const ArticleCard = ({
     watermarkImage,
   } = article || {};
 
-  const menuItems = [
+  const menuItems: MenuProps['items'] = [
     {
       icon: <FontAwesomeIcon icon={faEdit} />,
       key: 0,
@@ -123,7 +124,7 @@ const ArticleCard = ({
         permission: item.permission,
       })
     )
-    .map(({ permission: _permission, ...item }) => item);
+    .map(({ permission: _permission, ...item }) => item) as MenuProps['items'];
 
   return (
     <div
