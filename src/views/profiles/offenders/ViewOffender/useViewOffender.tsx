@@ -32,6 +32,7 @@ import {
 import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import hasRolePermission from '#/utils/has-role-permission';
 import publicOffenderDob from '#/utils/public-offender-dob';
+import { NetworkStatus } from '@apollo/client';
 import {
   faChartBar,
   faEdit,
@@ -331,8 +332,32 @@ const useViewOffender = (offenderId: string): Return => {
       id: offenderId,
     },
   };
-  const { data, loading } = useViewOffenderQuery({
+
+  // Reset state when offenderId changes to prevent stale data display
+  useEffect(() => {
+    // Reset lightbox state
+    setLightboxElements([]);
+    setLightBoxOpen({ index: 0, open: false });
+
+    // Reset view tracking
+    hasTrackedView.current = false;
+
+    // Reset any modals/drawers that might be open
+    setEditImageData(null);
+    setEditVehicleData(null);
+    setEditAddressData(null);
+    setEditBanData(null);
+    setViewAssociate(null);
+
+    // Reset selection states
+    setSelectedImages([]);
+    setAddImages(null);
+  }, [offenderId]);
+
+  const { data, loading, networkStatus } = useViewOffenderQuery({
     fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: 'cache-first', // First load uses cache-and-network, rest uses cache-first
+    notifyOnNetworkStatusChange: true, // Ensures loading state updates during refetch
     onCompleted: (res) => {
       setLightboxElements(
         res.offender?.images.map((image) => ({
@@ -370,7 +395,9 @@ const useViewOffender = (offenderId: string): Return => {
 
   const { data: associatesData, loading: associatesLoading } =
     useAssociatedOffendersQuery({
-      fetchPolicy: 'cache-first',
+      fetchPolicy: 'cache-and-network', // Changed from cache-first
+      nextFetchPolicy: 'cache-first', // Add for performance
+      notifyOnNetworkStatusChange: true, // Add
       skip: !data,
       variables: {
         associatedOffender: {
@@ -2004,7 +2031,9 @@ const useViewOffender = (offenderId: string): Return => {
     linkInvestigation,
     linkingInvestigation,
     loadMore,
-    loading: data?.offender ? false : loading,
+    loading:
+      networkStatus === NetworkStatus.setVariables ||
+      (!data?.offender && loading),
     onAddAddress,
     onAddBan,
     onAddCrimeGroup,

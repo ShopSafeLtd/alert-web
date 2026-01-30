@@ -36,7 +36,7 @@ const InvolvedTagsSelect: React.FC<Props> = ({
     skip: !schemeId,
     variables: {
       where: {
-        schemeId: { equals: schemeId },
+        schemes: { some: { id: { equals: schemeId } } },
         type: { equals: TagType.IncidentInvolved },
       },
     },
