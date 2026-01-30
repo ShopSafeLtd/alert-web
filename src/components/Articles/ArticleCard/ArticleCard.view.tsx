@@ -84,7 +84,7 @@ const ArticleCard = ({
     watermarkImage,
   } = article || {};
 
-  const menuItems: MenuProps['items'] = [
+  const menuItems = [
     {
       icon: <FontAwesomeIcon icon={faEdit} />,
       key: 0,
