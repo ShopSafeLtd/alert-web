@@ -4,7 +4,7 @@ import type { FormInstance } from 'antd';
 
 import IncidentTypesSelect from '#/components/form-components/IncidentTypesSelect/IncidentTypesSelect.view';
 import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
-import { Button, Col, Form, Input, Row, Select, Skeleton } from 'antd';
+import { Button, Col, Form, Input, Radio, Row, Select, Skeleton } from 'antd';
 import dayjs from 'dayjs';
 import { useAtomValue } from 'jotai/index';
 import React from 'react';
@@ -103,6 +103,7 @@ const EditOffender = ({
             street: data.address?.street || '',
             targetedGoods: data.targetedGoods || [],
             townCity: data.address?.townCity || '',
+            wanted: data.wanted || null,
           }}
           layout="vertical"
           onFinish={onSubmit}
@@ -179,7 +180,31 @@ const EditOffender = ({
                 </Form.Item>
               </Col>
             )}
-
+            <Row>
+              <Col>
+                <Form.Item
+                  label={intl.formatMessage({
+                    defaultMessage: 'Offender wanted?',
+                  })}
+                  name="wanted"
+                  // tooltip={intl.formatMessage({
+                  //   defaultMessage:
+                  //     'Have you confirmed the offenders ID using an accepted method?',
+                  // })}
+                >
+                  <Radio.Group disabled={saving}>
+                    <Radio.Button value>
+                      {intl.formatMessage({
+                        defaultMessage: 'Yes',
+                      })}
+                    </Radio.Button>
+                    <Radio.Button value={false}>
+                      {intl.formatMessage({ defaultMessage: 'No' })}
+                    </Radio.Button>
+                  </Radio.Group>
+                </Form.Item>
+              </Col>
+            </Row>
             {(needJustification || data.justification) && (
               <Col span={23}>
                 <Form.Item

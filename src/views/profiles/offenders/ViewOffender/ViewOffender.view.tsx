@@ -50,6 +50,7 @@ import {
   faSirenOn,
   faTrash,
   faUser,
+  faUserCheck,
   faUserClock,
   faUserHair,
   faUserTag,
@@ -832,6 +833,36 @@ const ViewOffender = ({
                                   <Descriptions.Item
                                     className={classes.descItem}
                                     label={
+                                      <span className={classes.tagLabel}>
+                                        <FontAwesomeIcon
+                                          className={classes.descIcon}
+                                          icon={faUserCheck}
+                                        />
+                                        {intl.formatMessage({
+                                          defaultMessage: 'Wanted',
+                                        })}
+                                      </span>
+                                    }
+                                  >
+                                    <Row>
+                                      {data?.offender.wanted ? (
+                                        <Tag color={'green'}>
+                                          {intl.formatMessage({
+                                            defaultMessage: 'Yes',
+                                          })}
+                                        </Tag>
+                                      ) : (
+                                        <Tag color={'red'}>
+                                          {intl.formatMessage({
+                                            defaultMessage: 'No',
+                                          })}
+                                        </Tag>
+                                      )}
+                                    </Row>
+                                  </Descriptions.Item>
+                                  <Descriptions.Item
+                                    className={classes.descItem}
+                                    label={
                                       <span>
                                         <FontAwesomeIcon
                                           className={classes.descIcon}
@@ -866,6 +897,7 @@ const ViewOffender = ({
                                       {data?.offender?.createdBy.fullName}
                                     </Row>
                                   </Descriptions.Item>
+
                                   <Descriptions.Item
                                     className={classes.descItem}
                                     label={

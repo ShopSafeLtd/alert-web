@@ -12,6 +12,7 @@ query ViewOffendersCompare($where: OffenderWhereInput!) {
     name
     race
     peculiarities
+
     images {
       id
       optimised
@@ -25,6 +26,9 @@ query ViewOffendersCompare($where: OffenderWhereInput!) {
     lastActive {
       id
       dayTime
+    }
+    incidents {
+      id
     }
   }
 }

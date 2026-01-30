@@ -4,7 +4,7 @@ import type { OffenderSettingsType } from '#/types/DataType';
 import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
 import IncidentTypesSelect from '#/components/form-components/IncidentTypesSelect/IncidentTypesSelect.view';
 import OffenderFormDetails from '#/components/form-components/offender/OffenderForm/OffenderFormDetails.view';
-import { Button, Col, Form, Input, Row, Select, Skeleton } from 'antd';
+import { Button, Col, Form, Input, Radio, Row, Select, Skeleton } from 'antd';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import React from 'react';
@@ -100,6 +100,7 @@ const EditOffender = ({
                 ? data?.offender?.tags.map(({ id }) => id)
                 : [],
             targetedGoods: data?.offender?.targetedGoods || [],
+            wanted: data?.offender?.wanted || undefined,
           }}
           layout="vertical"
           onFinish={onSubmit}
@@ -111,6 +112,31 @@ const EditOffender = ({
             offenderSettings={offenderSettings}
             saving={saving}
           />
+          <Row>
+            <Col>
+              <Form.Item
+                label={intl.formatMessage({
+                  defaultMessage: 'Offender wanted?',
+                })}
+                name="wanted"
+                // tooltip={intl.formatMessage({
+                //   defaultMessage:
+                //     'Have you confirmed the offenders ID using an accepted method?',
+                // })}
+              >
+                <Radio.Group disabled={saving}>
+                  <Radio.Button value>
+                    {intl.formatMessage({
+                      defaultMessage: 'Yes',
+                    })}
+                  </Radio.Button>
+                  <Radio.Button value={false}>
+                    {intl.formatMessage({ defaultMessage: 'No' })}
+                  </Radio.Button>
+                </Radio.Group>
+              </Form.Item>
+            </Col>
+          </Row>
 
           <Row gutter={30}>
             <Col span={12}>

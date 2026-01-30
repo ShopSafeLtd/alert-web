@@ -49,6 +49,7 @@ export interface FormData {
   sourceDetails?: string;
   tags: string[];
   targetedGoods: string[];
+  wanted?: boolean;
 }
 
 interface Return {
@@ -223,6 +224,7 @@ const useEditOffender = ({ offenderId, onClose }: Props): Return => {
           race: formData.race,
           sourceDetails: formData.sourceDetails,
           tagIds: formData.tags,
+          wanted: formData.wanted,
           // NOTE: knownFor and targetedGoods are updated separately
           // via the updateOffenderAdditionalFields mutation after this completes
         },

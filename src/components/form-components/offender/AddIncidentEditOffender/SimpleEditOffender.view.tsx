@@ -93,6 +93,7 @@ const EditOffender = ({
           race: data.race || null,
           sourceDetails: data.sourceDetails || null,
           targetedGoods: data.targetedGoods || [],
+          wanted: data.wanted || null,
         }}
         layout="vertical"
         onFinish={onSubmit}
@@ -254,6 +255,7 @@ const EditOffender = ({
                 >
                   <DatePicker
                     disabledDate={(current) =>
+                      // eslint-disable-next-line @typescript-eslint/no-unsafe-return,  @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
                       current && current.valueOf() > Date.now()
                     }
                   />
@@ -408,6 +410,31 @@ const EditOffender = ({
               </Col>
             </>
           )}
+        </Row>
+        <Row>
+          <Col>
+            <Form.Item
+              label={intl.formatMessage({
+                defaultMessage: 'Offender wanted?',
+              })}
+              name="wanted"
+              // tooltip={intl.formatMessage({
+              //   defaultMessage:
+              //     'Have you confirmed the offenders ID using an accepted method?',
+              // })}
+            >
+              <Radio.Group>
+                <Radio.Button value>
+                  {intl.formatMessage({
+                    defaultMessage: 'Yes',
+                  })}
+                </Radio.Button>
+                <Radio.Button value={false}>
+                  {intl.formatMessage({ defaultMessage: 'No' })}
+                </Radio.Button>
+              </Radio.Group>
+            </Form.Item>
+          </Col>
         </Row>
         <Row>
           <Col span={24}>

@@ -369,6 +369,7 @@ const useAddExistingOffender = ({
                 rotation,
               })
             ) || null,
+          incidents: [],
           lastActive: selectedOffender.lastActive || null,
           name: selectedOffender.name,
           peculiarities: selectedOffender.peculiarities,

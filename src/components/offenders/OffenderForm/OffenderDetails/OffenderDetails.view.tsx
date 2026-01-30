@@ -405,6 +405,7 @@ const OffenderDetails = ({
                   <DatePicker
                     disabled={saving}
                     disabledDate={(current) =>
+                      // eslint-disable-next-line @typescript-eslint/no-unsafe-return,  @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
                       current && current.valueOf() > Date.now()
                     }
                     style={{ width: 200 }}
@@ -570,6 +571,31 @@ const OffenderDetails = ({
           )}
         </Row>
       )}
+      <Row>
+        <Col>
+          <Form.Item
+            label={intl.formatMessage({
+              defaultMessage: 'Offender wanted?',
+            })}
+            name="wanted"
+            // tooltip={intl.formatMessage({
+            //   defaultMessage:
+            //     'Have you confirmed the offenders ID using an accepted method?',
+            // })}
+          >
+            <Radio.Group>
+              <Radio.Button value>
+                {intl.formatMessage({
+                  defaultMessage: 'Yes',
+                })}
+              </Radio.Button>
+              <Radio.Button value={false}>
+                {intl.formatMessage({ defaultMessage: 'No' })}
+              </Radio.Button>
+            </Radio.Group>
+          </Form.Item>
+        </Col>
+      </Row>
       <Drawer
         onClose={toggleAddOffenderTag}
         open={addOffenderTag}

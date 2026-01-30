@@ -56,6 +56,7 @@ export interface OffenderData {
   race?: Race | null;
   sourceDetails?: null | string;
   targetedGoods?: null | string[];
+  wanted?: boolean;
 }
 
 interface Props {
@@ -99,6 +100,7 @@ export interface FormData {
   street?: string;
   targetedGoods: string[];
   townCity?: string;
+  wanted?: boolean;
 }
 
 interface Return {
@@ -217,6 +219,7 @@ const useEditOffender = ({
         race: value.race || null,
         sourceDetails: value.sourceDetails || null,
         targetedGoods: value.targetedGoods,
+        wanted: value.wanted,
       });
     } else {
       void updateOffender({
@@ -273,6 +276,8 @@ const useEditOffender = ({
             name: { set: value.name },
             peculiarities: { set: value.peculiarities || '' },
             race: { set: value.race || null },
+            //     }
+            targetedGoods: { set: value.targetedGoods },
             // addresses: value.knowAddress
             //   ? {
             //       upsert: [
@@ -297,8 +302,7 @@ const useEditOffender = ({
             //           },
             //         },
             //       ],
-            //     }
-            targetedGoods: { set: value.targetedGoods },
+            wanted: { set: value.wanted },
           },
           where: {
             id: data.id,
