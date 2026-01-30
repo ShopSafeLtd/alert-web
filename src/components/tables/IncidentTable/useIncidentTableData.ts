@@ -104,10 +104,26 @@ export const useIncidentTableData = ({
     }
 
     if (filters.hasCrimeReference !== undefined) {
-      // Filter by whether policeRef exists or not
-      where.policeRef = filters.hasCrimeReference
-        ? { not: { equals: null } }
-        : { equals: null };
+      if (filters.hasCrimeReference) {
+        // "Crime Ref" - has a non-empty value
+        // Must not be null AND must not be empty string
+        where.AND = [
+          ...(Array.isArray(where.AND)
+            ? where.AND
+            : where.AND
+              ? [where.AND]
+              : []),
+          { policeRef: { not: { equals: null } } },
+          { policeRef: { not: { equals: '' } } },
+        ];
+      } else {
+        // "No crime ref" - is null OR empty string
+        where.OR = [
+          ...(Array.isArray(where.OR) ? where.OR : where.OR ? [where.OR] : []),
+          { policeRef: { equals: null } },
+          { policeRef: { equals: '' } },
+        ];
+      }
     }
 
     if (filters.offenderId) {
