@@ -27,10 +27,10 @@ export interface Props {
   ) => void;
   form: FormInstance<FormData>;
   id?: string;
-  imagesUploadHandler(
+  imagesUploadHandler: (
     blobInfo: { blob: () => Blob | string; filename: () => string | undefined },
     progress: (arg0: number) => void
-  ): Promise<string>;
+  ) => Promise<string>;
   incidents: Incident[];
   initData: string | undefined;
   insertIncident: (value: Incident) => void;

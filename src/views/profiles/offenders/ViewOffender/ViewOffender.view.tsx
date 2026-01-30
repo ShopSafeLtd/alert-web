@@ -496,7 +496,7 @@ const ViewOffender = ({
                                   ? undefined
                                   : 'danger'
                               }
-                              disabled={saving}
+                              disabled={saving || loading}
                               loading={saving}
                               onClick={toggleSubscribe}
                               style={{
@@ -527,6 +527,7 @@ const ViewOffender = ({
                               })}
                             >
                               <Button
+                                disabled={loading}
                                 onClick={toggleShareOpen}
                                 style={{
                                   borderLeft: 'none',
@@ -552,6 +553,7 @@ const ViewOffender = ({
                               })}
                             >
                               <Button
+                                disabled={loading}
                                 onClick={() =>
                                   navigate(
                                     `/app/offenders/compare/${
@@ -581,6 +583,7 @@ const ViewOffender = ({
                           <Col>
                             <Dropdown
                               arrow={{ pointAtCenter: true }}
+                              disabled={loading}
                               overlay={
                                 <Menu
                                   items={[
@@ -612,6 +615,7 @@ const ViewOffender = ({
                               placement="bottomRight"
                             >
                               <Button
+                                disabled={loading}
                                 style={{
                                   borderLeft: 'none',
                                   borderRadius: 0,
@@ -632,6 +636,7 @@ const ViewOffender = ({
                               })}
                             >
                               <Button
+                                disabled={loading}
                                 loading={isPrinting}
                                 onClick={handlePrint}
                                 style={{
@@ -656,6 +661,7 @@ const ViewOffender = ({
                               })}
                             >
                               <Button
+                                disabled={loading}
                                 onClick={() => onDelete(offenderId)}
                                 style={{
                                   borderBottomLeftRadius: 0,
