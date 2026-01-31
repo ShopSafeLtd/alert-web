@@ -1,6 +1,8 @@
 import type { FormData } from '#/views/incidents/AddIncident/types/formData';
 import type { FormInstance } from 'antd';
 
+import { useListGoodsTypesQuery } from '#/graphql/goods-types/queries/__generated__/list-goods-types.generated';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { useUserContactQuery } from '#/views/incidents/AddIncident/components/IncidentPolice/graphql/queries/__generated__/get-contact.generated';
 import { useBusinessDetailsLazyQuery } from '#/views/incidents/AddIncident/graphql/queries/__generated__/business-details.generated';
 import {
@@ -11,6 +13,7 @@ import {
   generateInPersonWitnessStatement,
 } from '#/views/incidents/AddIncident/helpers/mg11-templates';
 import { Form } from 'antd';
+import { useAtomValue } from 'jotai/index';
 import { debounce } from 'lodash-es';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
@@ -41,6 +44,20 @@ export const useGenerateMG11Statement = ({
   // Get witness occupation from user contact query
   const { data: userContactData } = useUserContactQuery();
 
+  // Get current scheme ID
+  const schemeId = useAtomValue(currentSchemeIdAtom);
+
+  // Get goods types for mapping IDs to names (filtered by current scheme)
+  const { data: goodsTypesData } = useListGoodsTypesQuery({
+    variables: {
+      where: {
+        schemes: {
+          id: { equals: schemeId },
+        },
+      },
+    },
+  });
+
   // Watch form fields that affect statement generation
   const business = Form.useWatch('business', form);
   const date = Form.useWatch('date', form);
@@ -64,11 +81,17 @@ export const useGenerateMG11Statement = ({
   );
   const policeKnownBefore = Form.useWatch('policeKnownBefore', form);
   const policeReasonRemember = Form.useWatch('policeReasonRemember', form);
-  const policeCCTVReviewDate = Form.useWatch('policeCCTVReviewDate', form);
-  const policeCCTVReviewTime = Form.useWatch('policeCCTVReviewTime', form);
+  const policeCCTVReviewDateTime = Form.useWatch(
+    'policeCCTVReviewDateTime',
+    form
+  );
   const policeCCTVTimeCorrect = Form.useWatch('policeCCTVTimeCorrect', form);
   const policeCCTVAheadBehind = Form.useWatch('policeCCTVAheadBehind', form);
   const policeCCTVIncorrectBy = Form.useWatch('policeCCTVIncorrectBy', form);
+  const policeScreenshotDateTime = Form.useWatch(
+    'policeScreenshotDateTime',
+    form
+  );
 
   /**
    * Map form data to template data structure
@@ -149,11 +172,11 @@ export const useGenerateMG11Statement = ({
           | undefined;
       } else if (!cctvAvailable && policeWitnessAtTime === false) {
         // Use police fields when CCTV section is not available
-        cctvReviewTime = policeCCTVReviewTime
-          ? formatTime(policeCCTVReviewTime)
+        cctvReviewTime = policeCCTVReviewDateTime
+          ? formatTime(policeCCTVReviewDateTime)
           : undefined;
-        cctvReviewDate = policeCCTVReviewDate
-          ? formatDate(policeCCTVReviewDate)
+        cctvReviewDate = policeCCTVReviewDateTime
+          ? formatDate(policeCCTVReviewDateTime)
           : undefined;
         cctvTimeCorrect = policeCCTVTimeCorrect;
         cctvIncorrectBy = policeCCTVIncorrectBy;
@@ -184,14 +207,30 @@ export const useGenerateMG11Statement = ({
       const offenderDescription: string | undefined =
         firstOffender?.comment ?? undefined;
 
-      // Get screenshot details from first image
-      const firstImage = images?.[0];
-      // Note: timestamp field might not exist on StateImageData, handle safely
-      const timestamp = (firstImage as { timestamp?: Date | string })
-        ?.timestamp;
-      const screenshotTime = timestamp ? formatTime(timestamp) : undefined;
-      const screenshotDate = timestamp ? formatDate(timestamp) : undefined;
-      const imageRef = firstImage?.position?.toString() || '1';
+      // Get screenshot details from manual entry
+      const screenshotTime = policeScreenshotDateTime
+        ? formatTime(policeScreenshotDateTime)
+        : undefined;
+      const screenshotDate = policeScreenshotDateTime
+        ? formatDate(policeScreenshotDateTime)
+        : undefined;
+
+      // Get author initials from witness name
+      const witnessName = userContactData?.userContact?.user?.fullName || '';
+      const authorInitials = witnessName
+        .split(' ')
+        .filter((part) => part.length > 0) // Remove empty strings
+        .map((part) => part[0])
+        .join('')
+        .toUpperCase()
+        .slice(0, 3); // Limit to 3 characters max
+
+      // Build array of exhibit references for all images
+      const exhibitRefs =
+        images?.map((image, index) => {
+          const position = image.position?.toString() || (index + 1).toString();
+          return authorInitials ? `${authorInitials}-${position}` : position;
+        }) || [];
 
       // Get witness observation details (in-person only)
       const incidentDuration = policeIncidentDuration;
@@ -204,12 +243,42 @@ export const useGenerateMG11Statement = ({
           : 'obstructed';
       }
 
-      // Map goods to items
-      const items = (goods || []).map((item) => ({
-        loss: item.value || 0, // Loss is same as value for individual items
-        name: item.name || item.description || 'Unknown item',
-        value: item.value || 0,
-      }));
+      // Create goods type ID to name mapping
+      const goodsTypeMap = new Map<string, string>();
+      if (goodsTypesData?.listGoodsTypes?.goodsTypes) {
+        for (const goodsType of goodsTypesData.listGoodsTypes.goodsTypes) {
+          goodsTypeMap.set(goodsType.id, goodsType.name);
+        }
+      }
+
+      // Map goods to items and filter out items with no value
+      const items = (goods || [])
+        .filter((item) => item.value && item.value > 0) // Only include items with a value
+        .map((item) => {
+          let itemName = 'Unknown item';
+
+          // Get goods type name from ID
+          const goodsTypeName = item.goodsType
+            ? goodsTypeMap.get(item.goodsType)
+            : undefined;
+
+          // Build name from goodsType name and/or description
+          if (goodsTypeName && item.description) {
+            itemName = `${goodsTypeName} - ${item.description}`;
+          } else if (goodsTypeName) {
+            itemName = goodsTypeName;
+          } else if (item.description) {
+            itemName = item.description;
+          } else if (item.name) {
+            itemName = item.name;
+          }
+
+          return {
+            loss: item.value || 0, // Loss is same as value for individual items
+            name: itemName,
+            value: item.value || 0,
+          };
+        });
 
       return {
         businessAddress,
@@ -220,7 +289,7 @@ export const useGenerateMG11Statement = ({
         cctvReviewTime,
         cctvTimeCorrect,
         distanceFromIncident,
-        imageRef,
+        imageRefs: exhibitRefs,
         incidentDate,
         incidentDuration,
         incidentTime,
@@ -241,6 +310,7 @@ export const useGenerateMG11Statement = ({
       businessId,
       business,
       userContactData,
+      goodsTypesData,
       tags,
       date,
       cctv,
@@ -255,11 +325,11 @@ export const useGenerateMG11Statement = ({
       policeObstructionsDetails,
       policeKnownBefore,
       policeReasonRemember,
-      policeCCTVReviewDate,
-      policeCCTVReviewTime,
+      policeCCTVReviewDateTime,
       policeCCTVTimeCorrect,
       policeCCTVAheadBehind,
       policeCCTVIncorrectBy,
+      policeScreenshotDateTime,
     ]);
 
   /**
@@ -350,11 +420,11 @@ export const useGenerateMG11Statement = ({
     policeObstructionsDetails,
     policeKnownBefore,
     policeReasonRemember,
-    policeCCTVReviewDate,
-    policeCCTVReviewTime,
+    policeCCTVReviewDateTime,
     policeCCTVTimeCorrect,
     policeCCTVAheadBehind,
     policeCCTVIncorrectBy,
+    policeScreenshotDateTime,
     debouncedGenerateStatement,
   ]);
 

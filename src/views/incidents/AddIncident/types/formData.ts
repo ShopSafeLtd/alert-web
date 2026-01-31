@@ -51,8 +51,7 @@ export interface FormData {
   policeCCTVAheadBehind?: string;
   policeCCTVEmail?: string;
   policeCCTVIncorrectBy?: number;
-  policeCCTVReviewDate?: Date;
-  policeCCTVReviewTime?: Date;
+  policeCCTVReviewDateTime?: Date;
   policeCCTVTimeCorrect?: boolean;
   policeDay?: boolean;
   policeDepartment?: string;
@@ -71,6 +70,7 @@ export interface FormData {
   policeRef?: string;
   policeReported?: boolean;
   policeResponse?: PoliceResponseTime;
+  policeScreenshotDateTime?: Date;
   policeSign?: string;
   policeStatement?: string;
   policeWillingCourt?: boolean;

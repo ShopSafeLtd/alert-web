@@ -12,7 +12,7 @@ export interface MG11TemplateData {
   cctvReviewTime?: string;
   cctvTimeCorrect?: boolean;
   distanceFromIncident?: string;
-  imageRef?: string;
+  imageRefs?: string[];
   incidentDate: string;
   incidentDuration?: string;
   incidentTime: string;
@@ -120,14 +120,25 @@ const generateCCTVReviewParagraph = (data: MG11TemplateData): string => {
 };
 
 /**
- * Generate screenshot paragraph
+ * Generate screenshot paragraph(s) - one for each image/exhibit
  */
 const generateScreenshotParagraph = (data: MG11TemplateData): string => {
-  if (!data.screenshotTime || !data.screenshotDate || !data.imageRef) {
+  if (
+    !data.screenshotTime ||
+    !data.screenshotDate ||
+    !data.imageRefs ||
+    data.imageRefs.length === 0
+  ) {
     return '';
   }
 
-  return `\n\nAt ${data.screenshotTime} hours on ${data.screenshotDate} I took a screenshot from the CCTV of the suspect that I refer to as police exhibit ${data.imageRef}.`;
+  // Generate a paragraph for each exhibit
+  const paragraphs = data.imageRefs.map(
+    (ref) =>
+      `At ${data.screenshotTime} hours on ${data.screenshotDate} I took a screenshot from the CCTV of the suspect that I refer to as police exhibit ${ref}.`
+  );
+
+  return `\n\n${paragraphs.join('\n\n')}`;
 };
 
 /**
