@@ -6,9 +6,15 @@ import {
   UserContactDocument,
   useUserContactQuery,
 } from '#/views/incidents/AddIncident/components/IncidentPolice/graphql/queries/__generated__/get-contact.generated';
-import { UserOutlined } from '@ant-design/icons';
 import {
+  CheckCircleFilled,
+  UserOutlined,
+  WarningFilled,
+} from '@ant-design/icons';
+import {
+  Alert,
   Avatar,
+  Badge,
   Button,
   Card,
   Col,
@@ -40,6 +46,40 @@ interface FormData {
   workTel?: string;
 }
 
+const isWitnessDataComplete = (
+  contact: UserContactQuery['userContact']
+): boolean => {
+  if (!contact) return false;
+
+  // Check all required fields
+  const requiredFields = [
+    contact.gender,
+    contact.mobileTel,
+    contact.dobPlace,
+    contact.address,
+    contact.postcode,
+  ];
+
+  return requiredFields.every((field) => field && field.trim().length > 0);
+};
+
+const getMissingFieldsCount = (
+  contact: UserContactQuery['userContact']
+): number => {
+  if (!contact) return 5; // All required fields missing (gender, mobileTel, dobPlace, address, postcode)
+
+  const requiredFields = [
+    contact.gender,
+    contact.mobileTel,
+    contact.dobPlace,
+    contact.address,
+    contact.postcode,
+  ];
+
+  return requiredFields.filter((field) => !field || field.trim().length === 0)
+    .length;
+};
+
 const WitnessAuthorView = ({ detailsExist }: { detailsExist: () => void }) => {
   const [saving, setSaving] = useState(false);
   const [creatingWitness, setCreatingWitness] = useState(false);
@@ -67,6 +107,11 @@ const WitnessAuthorView = ({ detailsExist }: { detailsExist: () => void }) => {
     },
   });
 
+  const isComplete = data?.userContact
+    ? isWitnessDataComplete(data.userContact)
+    : false;
+  const missingFieldsCount = getMissingFieldsCount(data?.userContact);
+
   const onFinish = (values: FormData) => {
     setSaving(true);
     const { email: __, name: _, ...rest } = values;
@@ -88,78 +133,121 @@ const WitnessAuthorView = ({ detailsExist }: { detailsExist: () => void }) => {
     });
   };
   useEffect(() => {
-    if (data?.userContact) {
+    if (data?.userContact && isWitnessDataComplete(data.userContact)) {
       detailsExist();
     }
-  }, [data]);
+  }, [data, detailsExist]);
 
   return (
     <>
-      <Card
-        bodyStyle={{ padding: 10 }}
-        onClick={() => {
-          if (!loading) setCreatingWitness(true);
-        }}
-        style={{
-          borderColor: 'lightgray',
-          cursor: 'pointer',
-          width: 200,
-        }}
-      >
-        {data?.userContact ? (
-          <Row align="middle" gutter={8}>
-            <Col>
-              <Avatar>
-                {data.userContact.user?.fullName
-                  ? data.userContact.user?.fullName[0]
-                  : ''}
-              </Avatar>
-            </Col>
-            <Col>
-              <Typography.Text
-                style={{
-                  fontSize: 16,
-                }}
-              >
-                {data.userContact.user?.fullName}
-              </Typography.Text>
-            </Col>
-          </Row>
-        ) : (
-          <Row align="middle" gutter={8}>
-            <Col>
-              <Avatar icon={<UserOutlined />} />
-            </Col>
-            <Col>
-              {loading ? (
+      <div>
+        <Card
+          bodyStyle={{ padding: 10 }}
+          onClick={() => {
+            if (!loading) setCreatingWitness(true);
+          }}
+          style={{
+            borderColor:
+              data?.userContact && !isComplete ? '#faad14' : 'lightgray',
+            borderWidth: 2,
+            cursor: 'pointer',
+            width: 200,
+          }}
+        >
+          {data?.userContact ? (
+            <Row align="middle" gutter={8}>
+              <Col>
+                <Avatar>
+                  {data.userContact.user?.fullName
+                    ? data.userContact.user?.fullName[0]
+                    : ''}
+                </Avatar>
+              </Col>
+              <Col flex="auto">
                 <Typography.Text
                   style={{
                     fontSize: 16,
                   }}
                 >
-                  {intl.formatMessage({ defaultMessage: 'Loading...' })}
+                  {data.userContact.user?.fullName}
                 </Typography.Text>
-              ) : (
-                <Typography.Text
-                  style={{
-                    fontSize: 16,
-                  }}
-                >
-                  {intl.formatMessage({ defaultMessage: 'Create Witness' })}
-                </Typography.Text>
-              )}
-            </Col>
-          </Row>
+              </Col>
+              <Col>
+                {isComplete ? (
+                  <CheckCircleFilled
+                    style={{ color: '#52c41a', fontSize: 20 }}
+                  />
+                ) : (
+                  <Badge
+                    count={missingFieldsCount}
+                    style={{ backgroundColor: '#faad14' }}
+                  >
+                    <WarningFilled style={{ color: '#faad14', fontSize: 20 }} />
+                  </Badge>
+                )}
+              </Col>
+            </Row>
+          ) : (
+            <Row align="middle" gutter={8}>
+              <Col>
+                <Avatar icon={<UserOutlined />} />
+              </Col>
+              <Col>
+                {loading ? (
+                  <Typography.Text
+                    style={{
+                      fontSize: 16,
+                    }}
+                  >
+                    {intl.formatMessage({ defaultMessage: 'Loading...' })}
+                  </Typography.Text>
+                ) : (
+                  <Typography.Text
+                    style={{
+                      fontSize: 16,
+                    }}
+                  >
+                    {intl.formatMessage({ defaultMessage: 'Create Witness' })}
+                  </Typography.Text>
+                )}
+              </Col>
+            </Row>
+          )}
+        </Card>
+
+        {/* Warning Alert for Incomplete Data */}
+        {data?.userContact && !isComplete && (
+          <Alert
+            banner
+            message={intl.formatMessage(
+              {
+                defaultMessage:
+                  'Incomplete details - {count} required {count, plural, one {field} other {fields}} missing',
+              },
+              { count: missingFieldsCount }
+            )}
+            showIcon
+            style={{ marginTop: 8, width: 200 }}
+            type="warning"
+          />
         )}
-      </Card>
+      </div>
       <Drawer
         destroyOnClose
         onClose={() => setCreatingWitness(false)}
         open={creatingWitness}
         title={
           data?.userContact
-            ? intl.formatMessage({ defaultMessage: 'Update Witness' })
-            : intl.formatMessage({ defaultMessage: 'Create Witness' })
+            ? isComplete
+              ? intl.formatMessage({ defaultMessage: 'Update Witness Details' })
+              : intl.formatMessage(
+                  {
+                    defaultMessage:
+                      'Complete Witness Details ({count} required {count, plural, one {field} other {fields}} missing)',
+                  },
+                  { count: missingFieldsCount }
+                )
+            : intl.formatMessage({ defaultMessage: 'Create Witness Details' })
         }
         width="900"
       >
