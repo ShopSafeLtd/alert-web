@@ -12,7 +12,7 @@ export interface MG11TemplateData {
   cctvReviewTime?: string;
   cctvTimeCorrect?: boolean;
   distanceFromIncident?: string;
-  imageRef?: string;
+  imageRefs?: string[];
   incidentDate: string;
   incidentDuration?: string;
   incidentTime: string;
@@ -25,6 +25,8 @@ export interface MG11TemplateData {
   jobTitle: string;
   offenderDescription?: string;
   offenderName: string;
+  policeKnownBefore?: string;
+  policeReasonRemember?: string;
   policeWitnessAtTime: boolean;
   screenshotDate?: string;
   screenshotTime?: string;
@@ -118,14 +120,25 @@ const generateCCTVReviewParagraph = (data: MG11TemplateData): string => {
 };
 
 /**
- * Generate screenshot paragraph
+ * Generate screenshot paragraph(s) - one for each image/exhibit
  */
 const generateScreenshotParagraph = (data: MG11TemplateData): string => {
-  if (!data.screenshotTime || !data.screenshotDate || !data.imageRef) {
+  if (
+    !data.screenshotTime ||
+    !data.screenshotDate ||
+    !data.imageRefs ||
+    data.imageRefs.length === 0
+  ) {
     return '';
   }
 
-  return `\n\nAt ${data.screenshotTime} hours on ${data.screenshotDate} I took a screenshot from the CCTV of the suspect that I refer to as police exhibit ${data.imageRef}.`;
+  // Generate a paragraph for each exhibit
+  const paragraphs = data.imageRefs.map(
+    (ref) =>
+      `At ${data.screenshotTime} hours on ${data.screenshotDate} I took a screenshot from the CCTV of the suspect that I refer to as police exhibit ${ref}.`
+  );
+
+  return `\n\n${paragraphs.join('\n\n')}`;
 };
 
 /**
@@ -146,8 +159,15 @@ export const generateCCTVReviewStatement = (data: MG11TemplateData): string => {
     parts.push(cctvParagraph);
   }
 
-  // Offender identification
-  parts.push(`\n\nThe Suspect is ${data.offenderName}.`);
+  // Offender identification and how they know them
+  const offenderLine =
+    data.policeKnownBefore &&
+    data.policeKnownBefore !== 'NOT_KNOWN' &&
+    data.policeReasonRemember
+      ? `\n\nThe subject is ${data.offenderName} and I know them as ${data.policeReasonRemember}.`
+      : `\n\nThe Suspect is ${data.offenderName}.`;
+
+  parts.push(offenderLine);
 
   // Screenshot paragraph
   const screenshotParagraph = generateScreenshotParagraph(data);
@@ -163,7 +183,7 @@ export const generateCCTVReviewStatement = (data: MG11TemplateData): string => {
 
   // Authorization statement
   parts.push(
-    `\n\nI am authorised to act on behalf of ${data.businessName} and that no person has the right to remove items from our store without making payment.`
+    `\n\nI am authorised to act on behalf of ${data.businessName} and confirm that no person has the right to remove items from our store without making payment.`
   );
 
   return parts.join('');
@@ -190,15 +210,23 @@ export const generateInPersonWitnessStatement = (
     data.viewObstructed
   ) {
     parts.push(
-      `\n\nI witnessed this incident in person, over ${data.incidentDuration} from a distance of ${data.distanceFromIncident} my view of the incident was ${data.viewObstructed}.`
+      `\n\nI witnessed this incident in person over a period of ${data.incidentDuration.toLowerCase()} from a distance of ${data.distanceFromIncident.toLowerCase()}. My view of the incident was ${data.viewObstructed}.`
     );
   }
 
-  // Offender identification with description
-  let offenderLine = `\n\nThe Suspect is ${data.offenderName}`;
-  if (data.offenderDescription) {
-    offenderLine += `, How I would describe them as ${data.offenderDescription}`;
-  }
+  // Offender identification with description and how they know them
+  const baseOffenderLine =
+    data.policeKnownBefore &&
+    data.policeKnownBefore !== 'NOT_KNOWN' &&
+    data.policeReasonRemember
+      ? `\n\nThe subject is ${data.offenderName} and I know them as ${data.policeReasonRemember}.`
+      : `\n\nThe Suspect is ${data.offenderName}.`;
+
+  // Add description if provided
+  const offenderLine = data.offenderDescription
+    ? `${baseOffenderLine} I would describe them as ${data.offenderDescription}.`
+    : baseOffenderLine;
+
   parts.push(offenderLine);
 
   // CCTV review paragraph
@@ -221,7 +249,7 @@ export const generateInPersonWitnessStatement = (
 
   // Authorization statement
   parts.push(
-    `\n\nI am authorised to act on behalf of ${data.businessName} and that no person has the right to remove items from our store without making payment.`
+    `\n\nI am authorised to act on behalf of ${data.businessName} and confirm that no person has the right to remove items from our store without making payment.`
   );
 
   return parts.join('');

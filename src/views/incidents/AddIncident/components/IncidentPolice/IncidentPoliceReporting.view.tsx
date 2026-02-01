@@ -2,14 +2,18 @@ import type { FormData } from '#/views/incidents/AddIncident/types/formData';
 import type { FormInstance } from 'antd';
 
 import MG11Sign from '#/components/form-components/MG11Sign/MG11Sign';
-import CheckTags from '#/components/form-components/check-tags/CheckTags.view';
+import PoliceReportingRequirements from '#/views/incidents/AddIncident/components/IncidentPolice/PoliceReportingRequirements.view';
 import WitnessAuthorView from '#/views/incidents/AddIncident/components/IncidentPolice/WitnessAuthor.view';
+import { usePoliceReportingValidation } from '#/views/incidents/AddIncident/hooks/usePoliceReportingValidation';
 import {
+  Alert,
   Card,
   Col,
+  DatePicker,
   Divider,
   Form,
   Input,
+  InputNumber,
   Radio,
   Row,
   Select,
@@ -40,12 +44,19 @@ const IncidentPolice = ({
   const intl = useIntl();
 
   const reported = Form.useWatch('policeReported', form);
-  const policeMG11 = Form.useWatch('policeMG11', form);
   const reportToPolice = Form.useWatch('reportToPolice', form);
   const policeWitnessName = Form.useWatch('policeWitnessName', form);
   const policeKnownBefore = Form.useWatch('policeKnownBefore', form);
   const policeWitnessAtTime = Form.useWatch('policeWitnessAtTime', form);
-  const obstructed = Form.useWatch('policeObstructions', form) === 'true';
+  const obstructed = Form.useWatch('policeObstructions', form) === 'false';
+  const cctvAvailable = Form.useWatch('cctvAvailable', form);
+  const policeCCTVTimeCorrect = Form.useWatch('policeCCTVTimeCorrect', form);
+  const images = Form.useWatch('images', form);
+
+  // Police reporting validation
+  const { allRequirementsMet, completedCount, requirements, totalCount } =
+    usePoliceReportingValidation(form);
+
   return (
     <Card className={classes.card}>
       <Row align="bottom" style={{ marginBottom: 20 }}>
@@ -128,6 +139,15 @@ const IncidentPolice = ({
         {reported === false && (
           <Col span={24}>
             <Divider style={{ marginTop: 0 }} />
+
+            {/* Requirements Checklist */}
+            <PoliceReportingRequirements
+              allRequirementsMet={allRequirementsMet}
+              completedCount={completedCount}
+              requirements={requirements}
+              totalCount={totalCount}
+            />
+
             <Form.Item
               label={intl.formatMessage({
                 defaultMessage:
@@ -152,6 +172,7 @@ const IncidentPolice = ({
                 optionType="button"
                 options={[
                   {
+                    disabled: !allRequirementsMet,
                     label: intl.formatMessage({
                       defaultMessage: 'Yes',
                     }),
@@ -166,9 +187,23 @@ const IncidentPolice = ({
                 ]}
               />
             </Form.Item>
+
+            {/* Helper text when disabled */}
+            {!allRequirementsMet && (
+              <Alert
+                message={intl.formatMessage({
+                  defaultMessage:
+                    'Complete the requirements above to enable police reporting',
+                })}
+                showIcon
+                style={{ marginBottom: 16, marginTop: -8 }}
+                type="warning"
+              />
+            )}
+
             {reportToPolice && (
               <>
-                <Form.Item
+                {/* <Form.Item
                   label={intl.formatMessage({
                     defaultMessage:
                       'Where in the store the item was taken from?',
@@ -241,8 +276,8 @@ const IncidentPolice = ({
                       },
                     ]}
                   />
-                </Form.Item>
-                <Form.Item
+                </Form.Item> */}
+                {/* <Form.Item
                   label={intl.formatMessage({
                     defaultMessage: 'What was the method used?',
                   })}
@@ -308,9 +343,10 @@ const IncidentPolice = ({
                       },
                     ]}
                   />
-                </Form.Item>
+                </Form.Item> */}
                 <Divider />
-                <Form.Item
+                {/* MG11 is now required for direct police reporting, so this question is no longer needed */}
+                {/* <Form.Item
                   label={intl.formatMessage({
                     defaultMessage:
                       'Are you willing to complete an MG11 witness statement?',
@@ -347,73 +383,186 @@ const IncidentPolice = ({
                       },
                     ]}
                   />
-                </Form.Item>
-                {policeMG11 && (
-                  <>
-                    <Form.Item
-                      label={intl.formatMessage({
-                        defaultMessage:
-                          'Was this witnessed at the time of the offence, or are you viewing the incident on CCTV?',
-                      })}
-                      name="policeWitnessAtTime"
-                      rules={[
+                </Form.Item> */}
+                <>
+                  <Form.Item
+                    label={intl.formatMessage({
+                      defaultMessage:
+                        'Was this witnessed at the time of the offence, or are you viewing the incident on CCTV?',
+                    })}
+                    name="policeWitnessAtTime"
+                    rules={[
+                      {
+                        message: intl.formatMessage({
+                          defaultMessage: 'Please answer this question.',
+                        }),
+                        required: true,
+                      },
+                    ]}
+                  >
+                    <Radio.Group
+                      disabled={saving}
+                      optionType="button"
+                      options={[
                         {
-                          message: intl.formatMessage({
-                            defaultMessage: 'Please answer this question.',
+                          label: intl.formatMessage({
+                            defaultMessage: 'Witnessed In-person',
                           }),
-                          required: true,
+                          value: true,
+                        },
+                        {
+                          label: intl.formatMessage({
+                            defaultMessage: 'Viewing CCTV',
+                          }),
+                          value: false,
                         },
                       ]}
-                    >
-                      <Radio.Group
-                        disabled={saving}
-                        optionType="button"
-                        options={[
-                          {
-                            label: intl.formatMessage({
-                              defaultMessage: 'Witnessed In-person',
-                            }),
-                            value: true,
-                          },
-                          {
-                            label: intl.formatMessage({
-                              defaultMessage: 'Viewing CCTV',
-                            }),
-                            value: false,
-                          },
-                        ]}
-                      />
-                    </Form.Item>
-                    {policeWitnessAtTime && (
-                      <>
-                        <Row gutter={16}>
-                          <Col span={8}>
-                            <Form.Item
-                              label={intl.formatMessage({
-                                defaultMessage:
-                                  'How long did the incident last?',
-                              })}
-                              name="policeIncidentDuration"
-                              rules={[
+                    />
+                  </Form.Item>
+                  {policeWitnessAtTime && (
+                    <>
+                      <Divider />
+                      <Title level={5} style={{ marginBottom: 16 }}>
+                        {intl.formatMessage({
+                          defaultMessage: 'Witness Observation Details',
+                        })}
+                      </Title>
+                      <Row gutter={16}>
+                        <Col md={6} sm={12} xs={24}>
+                          <Form.Item
+                            label={intl.formatMessage({
+                              defaultMessage: 'How long did the incident last?',
+                            })}
+                            name="policeIncidentDuration"
+                            rules={[
+                              {
+                                message: intl.formatMessage({
+                                  defaultMessage:
+                                    'Please answer this question.',
+                                }),
+                                required: true,
+                              },
+                            ]}
+                          >
+                            <Input />
+                          </Form.Item>
+                        </Col>
+                        <Col md={6} sm={12} xs={24}>
+                          <Form.Item
+                            label={intl.formatMessage({
+                              defaultMessage:
+                                'How long did you witness the event?',
+                            })}
+                            name="policeWitnessLength"
+                            rules={[
+                              {
+                                message: intl.formatMessage({
+                                  defaultMessage:
+                                    'Please answer this question.',
+                                }),
+                                required: true,
+                              },
+                            ]}
+                          >
+                            <Input />
+                          </Form.Item>
+                        </Col>
+                      </Row>
+                      <Row gutter={16}>
+                        <Col md={6} sm={12} xs={24}>
+                          <Form.Item
+                            label={intl.formatMessage({
+                              defaultMessage:
+                                'How far away were you from the incident?',
+                            })}
+                            name="policeDistanceFromIncident"
+                            rules={[
+                              {
+                                message: intl.formatMessage({
+                                  defaultMessage:
+                                    'Please answer this question.',
+                                }),
+                                required: true,
+                              },
+                            ]}
+                          >
+                            <Select
+                              options={[
                                 {
-                                  message: intl.formatMessage({
-                                    defaultMessage:
-                                      'Please answer this question.',
+                                  label: intl.formatMessage({
+                                    defaultMessage: 'Less than 1m',
                                   }),
-                                  required: true,
+                                  value: 'Less than 1m',
+                                },
+                                {
+                                  label: intl.formatMessage({
+                                    defaultMessage: '1m',
+                                  }),
+                                  value: '1m',
+                                },
+                                {
+                                  label: intl.formatMessage({
+                                    defaultMessage: '2m',
+                                  }),
+                                  value: '2m',
+                                },
+                                {
+                                  label: intl.formatMessage({
+                                    defaultMessage: 'Further than 2m',
+                                  }),
+                                  value: 'Further than 2m',
                                 },
                               ]}
-                            >
-                              <Input />
-                            </Form.Item>
-                          </Col>
-                          <Col span={8}>
+                            />
+                          </Form.Item>
+                        </Col>
+                      </Row>
+                      <Row gutter={16}>
+                        <Col md={6} sm={12} xs={24}>
+                          <Form.Item
+                            label={intl.formatMessage({
+                              defaultMessage:
+                                'Did you have a clear and unobstructed view of the incident?',
+                            })}
+                            name="policeObstructions"
+                            rules={[
+                              {
+                                message: intl.formatMessage({
+                                  defaultMessage:
+                                    'Please answer this question.',
+                                }),
+                                required: true,
+                              },
+                            ]}
+                          >
+                            <Radio.Group
+                              disabled={saving}
+                              optionType="button"
+                              options={[
+                                {
+                                  label: intl.formatMessage({
+                                    defaultMessage: 'Yes',
+                                  }),
+                                  value: 'true',
+                                },
+                                {
+                                  label: intl.formatMessage({
+                                    defaultMessage: 'No',
+                                  }),
+                                  value: 'false',
+                                },
+                              ]}
+                            />
+                          </Form.Item>
+                        </Col>
+                        {obstructed && (
+                          <Col md={6} sm={12} xs={24}>
                             <Form.Item
                               label={intl.formatMessage({
                                 defaultMessage:
-                                  'How far away were you from the incident?',
+                                  'What was obstructing your view?',
                               })}
-                              name="policeDistanceFromIncident"
+                              name="policeObstructionsDetails"
                               rules={[
                                 {
                                   message: intl.formatMessage({
@@ -428,202 +577,272 @@ const IncidentPolice = ({
                                 options={[
                                   {
                                     label: intl.formatMessage({
-                                      defaultMessage: 'Less than 1m',
+                                      defaultMessage: 'Bad Light',
                                     }),
-                                    value: 'Less than 1m',
+                                    value: 'Bad Light',
                                   },
                                   {
                                     label: intl.formatMessage({
-                                      defaultMessage: '1m',
-                                    }),
-                                    value: '1m',
-                                  },
-                                  {
-                                    label: intl.formatMessage({
-                                      defaultMessage: '2m',
-                                    }),
-                                    value: '2m',
-                                  },
-                                  {
-                                    label: intl.formatMessage({
-                                      defaultMessage: 'Further than 2m',
-                                    }),
-                                    value: 'Further than 2m',
-                                  },
-                                ]}
-                              />
-                            </Form.Item>
-                          </Col>
-                          <Col span={8}>
-                            <Form.Item
-                              label={intl.formatMessage({
-                                defaultMessage:
-                                  'Did you have a clear and unobstructed view of the incident?',
-                              })}
-                              name="policeObstructions"
-                              rules={[
-                                {
-                                  message: intl.formatMessage({
-                                    defaultMessage:
-                                      'Please answer this question.',
-                                  }),
-                                  required: true,
-                                },
-                              ]}
-                            >
-                              <Radio.Group
-                                disabled={saving}
-                                optionType="button"
-                                options={[
-                                  {
-                                    label: intl.formatMessage({
-                                      defaultMessage: 'Yes',
-                                    }),
-                                    value: 'true',
-                                  },
-                                  {
-                                    label: intl.formatMessage({
-                                      defaultMessage: 'No',
-                                    }),
-                                    value: 'false',
-                                  },
-                                ]}
-                              />
-                            </Form.Item>
-                          </Col>
-                          {!obstructed && (
-                            <Col span={8}>
-                              <Form.Item
-                                label={intl.formatMessage({
-                                  defaultMessage:
-                                    'What was obstructing your view?',
-                                })}
-                                name="policeObstructionsDetails"
-                                rules={[
-                                  {
-                                    message: intl.formatMessage({
                                       defaultMessage:
-                                        'Please answer this question.',
+                                        'Obscured by Other People',
                                     }),
-                                    required: true,
+                                    value: 'Obscured by Other People',
+                                  },
+                                  {
+                                    label: intl.formatMessage({
+                                      defaultMessage: 'Obscured by Shelving',
+                                    }),
+                                    value: 'Obscured by Shelving',
                                   },
                                 ]}
-                              >
-                                <Select
-                                  options={[
-                                    {
-                                      label: intl.formatMessage({
-                                        defaultMessage: 'Bad Light',
-                                      }),
-                                      value: 'Bad Light',
-                                    },
-                                    {
-                                      label: intl.formatMessage({
-                                        defaultMessage:
-                                          'Obscured by Other People',
-                                      }),
-                                      value: 'Obscured by Other People',
-                                    },
-                                    {
-                                      label: intl.formatMessage({
-                                        defaultMessage: 'Obscured by Shelving',
-                                      }),
-                                      value: 'Obscured by Shelving',
-                                    },
-                                  ]}
-                                />
-                              </Form.Item>
-                            </Col>
-                          )}
+                              />
+                            </Form.Item>
+                          </Col>
+                        )}
+                      </Row>
+                    </>
+                  )}
 
+                  {policeWitnessAtTime === false && !cctvAvailable && (
+                    <>
+                      <Divider />
+                      <Title level={5} style={{ marginBottom: 16 }}>
+                        {intl.formatMessage({
+                          defaultMessage: 'CCTV Review Details',
+                        })}
+                      </Title>
+                      <Row gutter={16}>
+                        <Col span={8}>
+                          <Form.Item
+                            label={intl.formatMessage({
+                              defaultMessage: 'CCTV Review Date & Time',
+                            })}
+                            name="policeCCTVReviewDateTime"
+                            rules={[
+                              {
+                                message: intl.formatMessage({
+                                  defaultMessage:
+                                    'Please provide the date and time you reviewed CCTV.',
+                                }),
+                                required: true,
+                              },
+                            ]}
+                            tooltip={intl.formatMessage({
+                              defaultMessage:
+                                'The date and time when you reviewed the CCTV footage.',
+                            })}
+                          >
+                            <DatePicker
+                              format="DD/MM/YYYY HH:mm"
+                              showTime={{ format: 'HH:mm' }}
+                              style={{ width: '100%' }}
+                            />
+                          </Form.Item>
+                        </Col>
+                        <Col span={8}>
+                          <Form.Item
+                            label={intl.formatMessage({
+                              defaultMessage: 'CCTV Time Correct',
+                            })}
+                            name="policeCCTVTimeCorrect"
+                            rules={[
+                              {
+                                message: intl.formatMessage({
+                                  defaultMessage:
+                                    'Please answer this question.',
+                                }),
+                                required: true,
+                              },
+                            ]}
+                            tooltip={intl.formatMessage({
+                              defaultMessage:
+                                'Does the CCTV system display the correct time and date?',
+                            })}
+                          >
+                            <Radio.Group
+                              disabled={saving}
+                              optionType="button"
+                              options={[
+                                {
+                                  label: intl.formatMessage({
+                                    defaultMessage: 'Yes',
+                                  }),
+                                  value: true,
+                                },
+                                {
+                                  label: intl.formatMessage({
+                                    defaultMessage: 'No',
+                                  }),
+                                  value: false,
+                                },
+                              ]}
+                            />
+                          </Form.Item>
+                        </Col>
+                      </Row>
+                      {policeCCTVTimeCorrect === false && (
+                        <Row gutter={16}>
                           <Col span={8}>
                             <Form.Item
                               label={intl.formatMessage({
-                                defaultMessage:
-                                  'How long did you witness the event?',
+                                defaultMessage: 'Ahead/Behind',
                               })}
-                              name="policeWitnessLength"
+                              name="policeCCTVAheadBehind"
                               rules={[
                                 {
                                   message: intl.formatMessage({
                                     defaultMessage:
-                                      'Please answer this question.',
+                                      'Please select Ahead or Behind',
                                   }),
                                   required: true,
                                 },
                               ]}
+                              tooltip={intl.formatMessage({
+                                defaultMessage:
+                                  'Is the CCTV time ahead of or behind actual time?',
+                              })}
                             >
-                              <Input />
+                              <Select>
+                                <Select.Option value="ahead">
+                                  {intl.formatMessage({
+                                    defaultMessage: 'Ahead',
+                                  })}
+                                </Select.Option>
+                                <Select.Option value="behind">
+                                  {intl.formatMessage({
+                                    defaultMessage: 'Behind',
+                                  })}
+                                </Select.Option>
+                              </Select>
+                            </Form.Item>
+                          </Col>
+                          <Col span={8}>
+                            <Form.Item
+                              label={intl.formatMessage({
+                                defaultMessage: 'Incorrect By (minutes)',
+                              })}
+                              name="policeCCTVIncorrectBy"
+                              rules={[
+                                {
+                                  message: intl.formatMessage({
+                                    defaultMessage:
+                                      'Please input the number of minutes',
+                                  }),
+                                  required: true,
+                                },
+                                {
+                                  validator: (_, value) => {
+                                    if (value === undefined || value === null) {
+                                      return Promise.resolve();
+                                    }
+                                    return Number.isInteger(value)
+                                      ? Promise.resolve()
+                                      : Promise.reject(
+                                          new Error(
+                                            intl.formatMessage({
+                                              defaultMessage:
+                                                'Please enter a whole number',
+                                            })
+                                          )
+                                        );
+                                  },
+                                },
+                              ]}
+                              tooltip={intl.formatMessage({
+                                defaultMessage:
+                                  'How many minutes is the CCTV time off by?',
+                              })}
+                            >
+                              <InputNumber
+                                min={0}
+                                step={1}
+                                style={{ width: '100%' }}
+                              />
                             </Form.Item>
                           </Col>
                         </Row>
-                      </>
-                    )}
+                      )}
+                      <Divider />
+                    </>
+                  )}
 
-                    <Form.Item
-                      label={intl.formatMessage({
-                        defaultMessage:
-                          'Do you know the subjects from before the incident?',
-                      })}
-                      name="policeKnownBefore"
-                      rules={[
-                        {
-                          message: intl.formatMessage({
-                            defaultMessage: 'Please answer this question.',
-                          }),
-                          required: true,
-                        },
-                      ]}
-                    >
-                      <Radio.Group
-                        disabled={saving}
-                        optionType="button"
-                        options={[
-                          {
-                            label: intl.formatMessage({
-                              defaultMessage: 'Not Known',
-                            }),
-                            value: 'NOT_KNOWN',
-                          },
-                          {
-                            label: intl.formatMessage({
-                              defaultMessage: 'Known Personally',
-                            }),
-                            value: 'KNOWN_PERSONALLY',
-                          },
-                          {
-                            label: intl.formatMessage({
-                              defaultMessage: 'Known From Previous Incidents',
-                            }),
-                            value: 'KNOWN_FROM_PREVIOUS_INCIDENTS',
-                          },
-                        ]}
-                      />
-                    </Form.Item>
-                    {policeKnownBefore !== 'NOT_KNOWN' && (
-                      <Form.Item
-                        label={intl.formatMessage({
-                          defaultMessage: 'How do you know the offender?',
+                  {images && images.length > 0 && (
+                    <>
+                      <Title level={5} style={{ marginBottom: 16 }}>
+                        {intl.formatMessage({
+                          defaultMessage: 'Screenshot Details',
                         })}
-                        name="policeReasonRemember"
-                        rules={[
-                          {
-                            message: intl.formatMessage({
-                              defaultMessage: 'Please answer this question.',
-                            }),
-                            required: true,
-                          },
-                        ]}
-                      >
-                        <Input.TextArea />
-                      </Form.Item>
-                    )}
+                      </Title>
+                      <Row gutter={16}>
+                        <Col span={8}>
+                          <Form.Item
+                            label={intl.formatMessage({
+                              defaultMessage: 'Screenshot Date & Time',
+                            })}
+                            name="policeScreenshotDateTime"
+                            tooltip={intl.formatMessage({
+                              defaultMessage:
+                                'The date and time shown on the CCTV screenshot of the suspect',
+                            })}
+                          >
+                            <DatePicker
+                              format="DD/MM/YYYY HH:mm"
+                              showTime={{ format: 'HH:mm' }}
+                              style={{ width: '100%' }}
+                            />
+                          </Form.Item>
+                        </Col>
+                      </Row>
+                      <Divider />
+                    </>
+                  )}
 
+                  <Form.Item
+                    label={intl.formatMessage({
+                      defaultMessage:
+                        'Do you know the subjects from before the incident?',
+                    })}
+                    name="policeKnownBefore"
+                    rules={[
+                      {
+                        message: intl.formatMessage({
+                          defaultMessage: 'Please answer this question.',
+                        }),
+                        required: true,
+                      },
+                    ]}
+                  >
+                    <Radio.Group
+                      disabled={saving}
+                      optionType="button"
+                      options={[
+                        {
+                          label: intl.formatMessage({
+                            defaultMessage: 'Not Known',
+                          }),
+                          value: 'NOT_KNOWN',
+                        },
+                        {
+                          label: intl.formatMessage({
+                            defaultMessage: 'Known Personally',
+                          }),
+                          value: 'KNOWN_PERSONALLY',
+                        },
+                        {
+                          label: intl.formatMessage({
+                            defaultMessage: 'Known From Previous Incidents',
+                          }),
+                          value: 'KNOWN_FROM_PREVIOUS_INCIDENTS',
+                        },
+                      ]}
+                    />
+                  </Form.Item>
+                  {policeKnownBefore === 'KNOWN_PERSONALLY' && (
                     <Form.Item
                       label={intl.formatMessage({
-                        defaultMessage: 'Would you be willing to attend court?',
+                        defaultMessage: 'How do you know the offender?',
                       })}
-                      name="policeWillingCourt"
+                      name="policeReasonRemember"
                       rules={[
                         {
                           message: intl.formatMessage({
@@ -633,342 +852,356 @@ const IncidentPolice = ({
                         },
                       ]}
                     >
-                      <Radio.Group
-                        disabled={saving}
-                        optionType="button"
-                        options={[
-                          {
-                            label: intl.formatMessage({
-                              defaultMessage: 'Yes',
-                            }),
-                            value: true,
-                          },
-                          {
-                            label: intl.formatMessage({
-                              defaultMessage: 'No',
-                            }),
-                            value: false,
-                          },
-                        ]}
-                      />
+                      <Input.TextArea />
                     </Form.Item>
-                    {/* <Row gutter={16}>*/}
-                    {/*  <Col span={6}>*/}
-                    {/*    <Form.Item*/}
-                    {/*      label={intl.formatMessage({*/}
-                    {/*        defaultMessage: 'Witness Name',*/}
-                    {/*      })}*/}
-                    {/*      name="policeWitnessName"*/}
-                    {/*      rules={[*/}
-                    {/*        {*/}
-                    {/*          message: intl.formatMessage({*/}
-                    {/*            defaultMessage: 'Please provide a name.',*/}
-                    {/*          }),*/}
-                    {/*          required: true,*/}
-                    {/*        },*/}
-                    {/*      ]}*/}
-                    {/*    >*/}
-                    {/*      <Input defaultValue={userName} />*/}
-                    {/*    </Form.Item>*/}
-                    {/*  </Col>*/}
-                    {/*  <Col span={6}>*/}
-                    {/*    <Form.Item*/}
-                    {/*      label={intl.formatMessage({*/}
-                    {/*        defaultMessage: 'Witness Email',*/}
-                    {/*      })}*/}
-                    {/*      name="policeWitnessEmail"*/}
-                    {/*      rules={[*/}
-                    {/*        {*/}
-                    {/*          message: intl.formatMessage({*/}
-                    {/*            defaultMessage: 'Please provide an email.',*/}
-                    {/*          }),*/}
-                    {/*          required: true,*/}
-                    {/*        },*/}
-                    {/*      ]}*/}
-                    {/*    >*/}
-                    {/*      <Input defaultValue={userEmail} />*/}
-                    {/*    </Form.Item>*/}
-                    {/*  </Col>*/}
-                    {/*  <Col span={6}>*/}
-                    {/*    <Form.Item*/}
-                    {/*      label={intl.formatMessage({*/}
-                    {/*        defaultMessage: 'Work Phone No.',*/}
-                    {/*      })}*/}
-                    {/*      name="policeWitnessWorkNo"*/}
-                    {/*      rules={[*/}
-                    {/*        {*/}
-                    {/*          message: intl.formatMessage({*/}
-                    {/*            defaultMessage:*/}
-                    {/*              'Please provide a phone number.',*/}
-                    {/*          }),*/}
-                    {/*          required: true,*/}
-                    {/*        },*/}
-                    {/*      ]}*/}
-                    {/*    >*/}
-                    {/*      <Input defaultValue="07548106855" />*/}
-                    {/*    </Form.Item>*/}
-                    {/*  </Col>*/}
-                    {/*  <Col span={6}>*/}
-                    {/*    <Form.Item*/}
-                    {/*      label={intl.formatMessage({*/}
-                    {/*        defaultMessage: 'Mobile No.',*/}
-                    {/*      })}*/}
-                    {/*      name="policeWitnessMobileNo"*/}
-                    {/*      rules={[*/}
-                    {/*        {*/}
-                    {/*          message: intl.formatMessage({*/}
-                    {/*            defaultMessage:*/}
-                    {/*              'Please provide a mobile phone number.',*/}
-                    {/*          }),*/}
-                    {/*          required: true,*/}
-                    {/*        },*/}
-                    {/*      ]}*/}
-                    {/*    >*/}
-                    {/*      <Input defaultValue="07548106855" />*/}
-                    {/*    </Form.Item>*/}
-                    {/*  </Col>*/}
-                    {/*  <Col span={6}>*/}
-                    {/*    <Form.Item*/}
-                    {/*      label={intl.formatMessage({*/}
-                    {/*        defaultMessage: 'Date & Place of Birth',*/}
-                    {/*      })}*/}
-                    {/*      name="policeWitnessPlaceOfBirth"*/}
-                    {/*      rules={[*/}
-                    {/*        {*/}
-                    {/*          message: intl.formatMessage({*/}
-                    {/*            defaultMessage: 'Please complete this field.',*/}
-                    {/*          }),*/}
-                    {/*          required: true,*/}
-                    {/*        },*/}
-                    {/*      ]}*/}
-                    {/*    >*/}
-                    {/*      <Input defaultValue="14/02/1995 Bury St Edmunds" />*/}
-                    {/*    </Form.Item>*/}
-                    {/*  </Col>*/}
-                    {/*  <Col span={4}>*/}
-                    {/*    <Form.Item*/}
-                    {/*      label={intl.formatMessage({*/}
-                    {/*        defaultMessage: 'Ethnicity Code',*/}
-                    {/*      })}*/}
-                    {/*      name="policeWitnessEthnicity"*/}
-                    {/*      rules={[*/}
-                    {/*        {*/}
-                    {/*          message: intl.formatMessage({*/}
-                    {/*            defaultMessage: 'Please complete this field.',*/}
-                    {/*          }),*/}
-                    {/*          required: true,*/}
-                    {/*        },*/}
-                    {/*      ]}*/}
-                    {/*    >*/}
-                    {/*      <Select*/}
-                    {/*        defaultValue="W1"*/}
-                    {/*        options={[*/}
-                    {/*          {*/}
-                    {/*            label: 'Asian or Asian British',*/}
-                    {/*            options: [*/}
-                    {/*              { label: 'Indian', value: 'A1' },*/}
-                    {/*              { label: 'Pakistani', value: 'A2' },*/}
-                    {/*              { label: 'Bangladeshi', value: 'A3' },*/}
-                    {/*              {*/}
-                    {/*                label: 'Any other Asian background',*/}
-                    {/*                value: 'A9',*/}
-                    {/*              },*/}
-                    {/*            ],*/}
-                    {/*          },*/}
-                    {/*          {*/}
-                    {/*            label: 'Black or Black British',*/}
-                    {/*            options: [*/}
-                    {/*              { label: 'Caribbean', value: 'B1' },*/}
-                    {/*              { label: 'African', value: 'B2' },*/}
-                    {/*              {*/}
-                    {/*                label: 'Any other Black background',*/}
-                    {/*                value: 'B9',*/}
-                    {/*              },*/}
-                    {/*            ],*/}
-                    {/*          },*/}
-                    {/*          {*/}
-                    {/*            label: 'Mixed',*/}
-                    {/*            options: [*/}
-                    {/*              {*/}
-                    {/*                label: 'White and Black Caribbean',*/}
-                    {/*                value: 'M1',*/}
-                    {/*              },*/}
-                    {/*              {*/}
-                    {/*                label: 'White and Black African',*/}
-                    {/*                value: 'M2',*/}
-                    {/*              },*/}
-                    {/*              { label: 'White and Asian', value: 'M3' },*/}
-                    {/*              {*/}
-                    {/*                label: 'Any other mixed background',*/}
-                    {/*                value: 'M9',*/}
-                    {/*              },*/}
-                    {/*            ],*/}
-                    {/*          },*/}
-                    {/*          {*/}
-                    {/*            label: 'Chinese or any other ethnic group',*/}
-                    {/*            options: [*/}
-                    {/*              { label: 'Chinese', value: 'O1' },*/}
-                    {/*              {*/}
-                    {/*                label: 'Any other ethnic group',*/}
-                    {/*                value: 'O9',*/}
-                    {/*              },*/}
-                    {/*            ],*/}
-                    {/*          },*/}
-                    {/*          {*/}
-                    {/*            label: 'White',*/}
-                    {/*            options: [*/}
-                    {/*              { label: 'British', value: 'W1' },*/}
-                    {/*              { label: 'Irish', value: 'W2' },*/}
-                    {/*              {*/}
-                    {/*                label: 'Any other White background',*/}
-                    {/*                value: 'W9',*/}
-                    {/*              },*/}
-                    {/*            ],*/}
-                    {/*          },*/}
-                    {/*          {*/}
-                    {/*            label: '+1 Codes',*/}
-                    {/*            options: [*/}
-                    {/*              {*/}
-                    {/*                label:*/}
-                    {/*                  'The officer’s presence is urgently required elsewhere',*/}
-                    {/*                value: 'N1',*/}
-                    {/*              },*/}
-                    {/*              {*/}
-                    {/*                label:*/}
-                    {/*                  'The situation involves public disorder',*/}
-                    {/*                value: 'N2',*/}
-                    {/*              },*/}
-                    {/*              {*/}
-                    {/*                label:*/}
-                    {/*                  'The person did not understand what is required',*/}
-                    {/*                value: 'N3',*/}
-                    {/*              },*/}
-                    {/*              {*/}
-                    {/*                label:*/}
-                    {/*                  'The person declined to define their ethnicity',*/}
-                    {/*                value: 'N4',*/}
-                    {/*              },*/}
-                    {/*            ],*/}
-                    {/*          },*/}
-                    {/*          {*/}
-                    {/*            label: 'Other',*/}
-                    {/*            options: [{ label: 'Other', value: 'other' }],*/}
-                    {/*          },*/}
-                    {/*        ]}*/}
-                    {/*      />*/}
-                    {/*    </Form.Item>*/}
-                    {/*  </Col>*/}
-                    {/*  <Col span={4}>*/}
-                    {/*    <Form.Item*/}
-                    {/*      label={intl.formatMessage({*/}
-                    {/*        defaultMessage: 'Gender',*/}
-                    {/*      })}*/}
-                    {/*      name="policeWitnessGender"*/}
-                    {/*      rules={[*/}
-                    {/*        {*/}
-                    {/*          message: intl.formatMessage({*/}
-                    {/*            defaultMessage: 'Please complete this field.',*/}
-                    {/*          }),*/}
-                    {/*          required: true,*/}
-                    {/*        },*/}
-                    {/*      ]}*/}
-                    {/*    >*/}
-                    {/*      <Input defaultValue="Male" />*/}
-                    {/*    </Form.Item>*/}
-                    {/*  </Col>*/}
-                    {/*  <Col span={6}>*/}
-                    {/*    <Form.Item*/}
-                    {/*      label={intl.formatMessage({*/}
-                    {/*        defaultMessage: 'Address',*/}
-                    {/*      })}*/}
-                    {/*      name="policeWitnessAddress"*/}
-                    {/*      rules={[*/}
-                    {/*        {*/}
-                    {/*          message: intl.formatMessage({*/}
-                    {/*            defaultMessage: 'Please complete this field.',*/}
-                    {/*          }),*/}
-                    {/*          required: true,*/}
-                    {/*        },*/}
-                    {/*      ]}*/}
-                    {/*      style={{ marginBottom: 5 }}*/}
-                    {/*    >*/}
-                    {/*      <Input.TextArea defaultValue="1 Post Office House, Bury St Edmunds, Suffolk" />*/}
-                    {/*    </Form.Item>*/}
-                    {/*    <Form.Item*/}
-                    {/*      name="policeWitnessPostcode"*/}
-                    {/*      rules={[*/}
-                    {/*        {*/}
-                    {/*          message: intl.formatMessage({*/}
-                    {/*            defaultMessage: 'Please complete this field.',*/}
-                    {/*          }),*/}
-                    {/*          required: true,*/}
-                    {/*        },*/}
-                    {/*      ]}*/}
-                    {/*    >*/}
-                    {/*      <Input*/}
-                    {/*        defaultValue="IP29 4SP"*/}
-                    {/*        placeholder={intl.formatMessage({*/}
-                    {/*          defaultMessage: 'Postcode',*/}
-                    {/*        })}*/}
-                    {/*      />*/}
-                    {/*    </Form.Item>*/}
-                    {/*  </Col>*/}
-                    {/* </Row>*/}
-                    <Form.Item
-                      label={intl.formatMessage({
-                        defaultMessage: 'Witness Author',
-                      })}
-                      name="witnessAuthor"
-                      rules={[
-                        {
-                          message: intl.formatMessage({
-                            defaultMessage: 'Please update your details',
-                          }),
-                          required: true,
-                        },
-                      ]}
-                    >
-                      <WitnessAuthorView
-                        detailsExist={() =>
-                          form.setFieldValue('witnessAuthor', true)
-                        }
-                      />
-                    </Form.Item>
+                  )}
 
-                    <Form.Item
-                      label={intl.formatMessage({
-                        defaultMessage: 'Statement',
-                      })}
-                      name="policeStatement"
-                      rules={[
+                  <Form.Item
+                    label={intl.formatMessage({
+                      defaultMessage: 'Would you be willing to attend court?',
+                    })}
+                    name="policeWillingCourt"
+                    rules={[
+                      {
+                        message: intl.formatMessage({
+                          defaultMessage: 'Please answer this question.',
+                        }),
+                        required: true,
+                      },
+                    ]}
+                  >
+                    <Radio.Group
+                      disabled={saving}
+                      optionType="button"
+                      options={[
                         {
-                          message: intl.formatMessage({
-                            defaultMessage: 'Please provide a statement.',
+                          label: intl.formatMessage({
+                            defaultMessage: 'Yes',
                           }),
-                          required: true,
+                          value: true,
+                        },
+                        {
+                          label: intl.formatMessage({
+                            defaultMessage: 'No',
+                          }),
+                          value: false,
                         },
                       ]}
-                    >
-                      <Input.TextArea
-                        disabled={generatingStatement}
-                        rows={10}
-                      />
-                    </Form.Item>
-                    <Form.Item
-                      name="policeSign"
-                      rules={[
-                        {
-                          message: intl.formatMessage({
-                            defaultMessage: 'Please sign the statement.',
-                          }),
-                          required: true,
-                        },
-                      ]}
-                    >
-                      <MG11Sign name={policeWitnessName} />
-                    </Form.Item>
-                  </>
-                )}
+                    />
+                  </Form.Item>
+                  {/* <Row gutter={16}>*/}
+                  {/*  <Col span={6}>*/}
+                  {/*    <Form.Item*/}
+                  {/*      label={intl.formatMessage({*/}
+                  {/*        defaultMessage: 'Witness Name',*/}
+                  {/*      })}*/}
+                  {/*      name="policeWitnessName"*/}
+                  {/*      rules={[*/}
+                  {/*        {*/}
+                  {/*          message: intl.formatMessage({*/}
+                  {/*            defaultMessage: 'Please provide a name.',*/}
+                  {/*          }),*/}
+                  {/*          required: true,*/}
+                  {/*        },*/}
+                  {/*      ]}*/}
+                  {/*    >*/}
+                  {/*      <Input defaultValue={userName} />*/}
+                  {/*    </Form.Item>*/}
+                  {/*  </Col>*/}
+                  {/*  <Col span={6}>*/}
+                  {/*    <Form.Item*/}
+                  {/*      label={intl.formatMessage({*/}
+                  {/*        defaultMessage: 'Witness Email',*/}
+                  {/*      })}*/}
+                  {/*      name="policeWitnessEmail"*/}
+                  {/*      rules={[*/}
+                  {/*        {*/}
+                  {/*          message: intl.formatMessage({*/}
+                  {/*            defaultMessage: 'Please provide an email.',*/}
+                  {/*          }),*/}
+                  {/*          required: true,*/}
+                  {/*        },*/}
+                  {/*      ]}*/}
+                  {/*    >*/}
+                  {/*      <Input defaultValue={userEmail} />*/}
+                  {/*    </Form.Item>*/}
+                  {/*  </Col>*/}
+                  {/*  <Col span={6}>*/}
+                  {/*    <Form.Item*/}
+                  {/*      label={intl.formatMessage({*/}
+                  {/*        defaultMessage: 'Work Phone No.',*/}
+                  {/*      })}*/}
+                  {/*      name="policeWitnessWorkNo"*/}
+                  {/*      rules={[*/}
+                  {/*        {*/}
+                  {/*          message: intl.formatMessage({*/}
+                  {/*            defaultMessage:*/}
+                  {/*              'Please provide a phone number.',*/}
+                  {/*          }),*/}
+                  {/*          required: true,*/}
+                  {/*        },*/}
+                  {/*      ]}*/}
+                  {/*    >*/}
+                  {/*      <Input defaultValue="07548106855" />*/}
+                  {/*    </Form.Item>*/}
+                  {/*  </Col>*/}
+                  {/*  <Col span={6}>*/}
+                  {/*    <Form.Item*/}
+                  {/*      label={intl.formatMessage({*/}
+                  {/*        defaultMessage: 'Mobile No.',*/}
+                  {/*      })}*/}
+                  {/*      name="policeWitnessMobileNo"*/}
+                  {/*      rules={[*/}
+                  {/*        {*/}
+                  {/*          message: intl.formatMessage({*/}
+                  {/*            defaultMessage:*/}
+                  {/*              'Please provide a mobile phone number.',*/}
+                  {/*          }),*/}
+                  {/*          required: true,*/}
+                  {/*        },*/}
+                  {/*      ]}*/}
+                  {/*    >*/}
+                  {/*      <Input defaultValue="07548106855" />*/}
+                  {/*    </Form.Item>*/}
+                  {/*  </Col>*/}
+                  {/*  <Col span={6}>*/}
+                  {/*    <Form.Item*/}
+                  {/*      label={intl.formatMessage({*/}
+                  {/*        defaultMessage: 'Date & Place of Birth',*/}
+                  {/*      })}*/}
+                  {/*      name="policeWitnessPlaceOfBirth"*/}
+                  {/*      rules={[*/}
+                  {/*        {*/}
+                  {/*          message: intl.formatMessage({*/}
+                  {/*            defaultMessage: 'Please complete this field.',*/}
+                  {/*          }),*/}
+                  {/*          required: true,*/}
+                  {/*        },*/}
+                  {/*      ]}*/}
+                  {/*    >*/}
+                  {/*      <Input defaultValue="14/02/1995 Bury St Edmunds" />*/}
+                  {/*    </Form.Item>*/}
+                  {/*  </Col>*/}
+                  {/*  <Col span={4}>*/}
+                  {/*    <Form.Item*/}
+                  {/*      label={intl.formatMessage({*/}
+                  {/*        defaultMessage: 'Ethnicity Code',*/}
+                  {/*      })}*/}
+                  {/*      name="policeWitnessEthnicity"*/}
+                  {/*      rules={[*/}
+                  {/*        {*/}
+                  {/*          message: intl.formatMessage({*/}
+                  {/*            defaultMessage: 'Please complete this field.',*/}
+                  {/*          }),*/}
+                  {/*          required: true,*/}
+                  {/*        },*/}
+                  {/*      ]}*/}
+                  {/*    >*/}
+                  {/*      <Select*/}
+                  {/*        defaultValue="W1"*/}
+                  {/*        options={[*/}
+                  {/*          {*/}
+                  {/*            label: 'Asian or Asian British',*/}
+                  {/*            options: [*/}
+                  {/*              { label: 'Indian', value: 'A1' },*/}
+                  {/*              { label: 'Pakistani', value: 'A2' },*/}
+                  {/*              { label: 'Bangladeshi', value: 'A3' },*/}
+                  {/*              {*/}
+                  {/*                label: 'Any other Asian background',*/}
+                  {/*                value: 'A9',*/}
+                  {/*              },*/}
+                  {/*            ],*/}
+                  {/*          },*/}
+                  {/*          {*/}
+                  {/*            label: 'Black or Black British',*/}
+                  {/*            options: [*/}
+                  {/*              { label: 'Caribbean', value: 'B1' },*/}
+                  {/*              { label: 'African', value: 'B2' },*/}
+                  {/*              {*/}
+                  {/*                label: 'Any other Black background',*/}
+                  {/*                value: 'B9',*/}
+                  {/*              },*/}
+                  {/*            ],*/}
+                  {/*          },*/}
+                  {/*          {*/}
+                  {/*            label: 'Mixed',*/}
+                  {/*            options: [*/}
+                  {/*              {*/}
+                  {/*                label: 'White and Black Caribbean',*/}
+                  {/*                value: 'M1',*/}
+                  {/*              },*/}
+                  {/*              {*/}
+                  {/*                label: 'White and Black African',*/}
+                  {/*                value: 'M2',*/}
+                  {/*              },*/}
+                  {/*              { label: 'White and Asian', value: 'M3' },*/}
+                  {/*              {*/}
+                  {/*                label: 'Any other mixed background',*/}
+                  {/*                value: 'M9',*/}
+                  {/*              },*/}
+                  {/*            ],*/}
+                  {/*          },*/}
+                  {/*          {*/}
+                  {/*            label: 'Chinese or any other ethnic group',*/}
+                  {/*            options: [*/}
+                  {/*              { label: 'Chinese', value: 'O1' },*/}
+                  {/*              {*/}
+                  {/*                label: 'Any other ethnic group',*/}
+                  {/*                value: 'O9',*/}
+                  {/*              },*/}
+                  {/*            ],*/}
+                  {/*          },*/}
+                  {/*          {*/}
+                  {/*            label: 'White',*/}
+                  {/*            options: [*/}
+                  {/*              { label: 'British', value: 'W1' },*/}
+                  {/*              { label: 'Irish', value: 'W2' },*/}
+                  {/*              {*/}
+                  {/*                label: 'Any other White background',*/}
+                  {/*                value: 'W9',*/}
+                  {/*              },*/}
+                  {/*            ],*/}
+                  {/*          },*/}
+                  {/*          {*/}
+                  {/*            label: '+1 Codes',*/}
+                  {/*            options: [*/}
+                  {/*              {*/}
+                  {/*                label:*/}
+                  {/*                  'The officer’s presence is urgently required elsewhere',*/}
+                  {/*                value: 'N1',*/}
+                  {/*              },*/}
+                  {/*              {*/}
+                  {/*                label:*/}
+                  {/*                  'The situation involves public disorder',*/}
+                  {/*                value: 'N2',*/}
+                  {/*              },*/}
+                  {/*              {*/}
+                  {/*                label:*/}
+                  {/*                  'The person did not understand what is required',*/}
+                  {/*                value: 'N3',*/}
+                  {/*              },*/}
+                  {/*              {*/}
+                  {/*                label:*/}
+                  {/*                  'The person declined to define their ethnicity',*/}
+                  {/*                value: 'N4',*/}
+                  {/*              },*/}
+                  {/*            ],*/}
+                  {/*          },*/}
+                  {/*          {*/}
+                  {/*            label: 'Other',*/}
+                  {/*            options: [{ label: 'Other', value: 'other' }],*/}
+                  {/*          },*/}
+                  {/*        ]}*/}
+                  {/*      />*/}
+                  {/*    </Form.Item>*/}
+                  {/*  </Col>*/}
+                  {/*  <Col span={4}>*/}
+                  {/*    <Form.Item*/}
+                  {/*      label={intl.formatMessage({*/}
+                  {/*        defaultMessage: 'Gender',*/}
+                  {/*      })}*/}
+                  {/*      name="policeWitnessGender"*/}
+                  {/*      rules={[*/}
+                  {/*        {*/}
+                  {/*          message: intl.formatMessage({*/}
+                  {/*            defaultMessage: 'Please complete this field.',*/}
+                  {/*          }),*/}
+                  {/*          required: true,*/}
+                  {/*        },*/}
+                  {/*      ]}*/}
+                  {/*    >*/}
+                  {/*      <Input defaultValue="Male" />*/}
+                  {/*    </Form.Item>*/}
+                  {/*  </Col>*/}
+                  {/*  <Col span={6}>*/}
+                  {/*    <Form.Item*/}
+                  {/*      label={intl.formatMessage({*/}
+                  {/*        defaultMessage: 'Address',*/}
+                  {/*      })}*/}
+                  {/*      name="policeWitnessAddress"*/}
+                  {/*      rules={[*/}
+                  {/*        {*/}
+                  {/*          message: intl.formatMessage({*/}
+                  {/*            defaultMessage: 'Please complete this field.',*/}
+                  {/*          }),*/}
+                  {/*          required: true,*/}
+                  {/*        },*/}
+                  {/*      ]}*/}
+                  {/*      style={{ marginBottom: 5 }}*/}
+                  {/*    >*/}
+                  {/*      <Input.TextArea defaultValue="1 Post Office House, Bury St Edmunds, Suffolk" />*/}
+                  {/*    </Form.Item>*/}
+                  {/*    <Form.Item*/}
+                  {/*      name="policeWitnessPostcode"*/}
+                  {/*      rules={[*/}
+                  {/*        {*/}
+                  {/*          message: intl.formatMessage({*/}
+                  {/*            defaultMessage: 'Please complete this field.',*/}
+                  {/*          }),*/}
+                  {/*          required: true,*/}
+                  {/*        },*/}
+                  {/*      ]}*/}
+                  {/*    >*/}
+                  {/*      <Input*/}
+                  {/*        defaultValue="IP29 4SP"*/}
+                  {/*        placeholder={intl.formatMessage({*/}
+                  {/*          defaultMessage: 'Postcode',*/}
+                  {/*        })}*/}
+                  {/*      />*/}
+                  {/*    </Form.Item>*/}
+                  {/*  </Col>*/}
+                  {/* </Row>*/}
+                  <Form.Item
+                    label={intl.formatMessage({
+                      defaultMessage: 'Witness Author',
+                    })}
+                    name="witnessAuthor"
+                    rules={[
+                      {
+                        message: intl.formatMessage({
+                          defaultMessage: 'Please update your details',
+                        }),
+                        required: true,
+                      },
+                    ]}
+                  >
+                    <WitnessAuthorView
+                      detailsExist={() =>
+                        form.setFieldValue('witnessAuthor', true)
+                      }
+                    />
+                  </Form.Item>
+
+                  <Form.Item
+                    label={intl.formatMessage({
+                      defaultMessage: 'Statement',
+                    })}
+                    name="policeStatement"
+                    rules={[
+                      {
+                        message: intl.formatMessage({
+                          defaultMessage: 'Please provide a statement.',
+                        }),
+                        required: true,
+                      },
+                    ]}
+                  >
+                    <Input.TextArea disabled={generatingStatement} rows={10} />
+                  </Form.Item>
+                  <Form.Item
+                    name="policeSign"
+                    rules={[
+                      {
+                        message: intl.formatMessage({
+                          defaultMessage: 'Please sign the statement.',
+                        }),
+                        required: true,
+                      },
+                    ]}
+                  >
+                    <MG11Sign name={policeWitnessName} />
+                  </Form.Item>
+                </>
               </>
             )}
           </Col>
