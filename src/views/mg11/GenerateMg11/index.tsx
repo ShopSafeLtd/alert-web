@@ -42,6 +42,16 @@ interface Mg11Data {
   workTel: string;
 }
 
+// Split on double newlines for paragraphs, single newlines become <br />
+const formatTextWithParagraphs = (text: string): string =>
+  text
+    .split('\n\n')
+    .map((para) => {
+      const paraWithBreaks = para.trim().replaceAll('\n', '<br />');
+      return `<p style="margin: 0 0 1em 0; line-height: 1.6;">${paraWithBreaks}</p>`;
+    })
+    .join('');
+
 const generateMg11 = () => {
   const rawdata = localStorage.getItem('data') || '{}';
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -77,9 +87,8 @@ const generateMg11 = () => {
   const text1 = statementText.slice(0, Math.max(0, actualSplitPoint)).trim();
   const text2 = statementText.slice(Math.max(0, actualSplitPoint)).trim();
 
-  // Convert newlines to HTML br tags for reliable PDF rendering
-  const text1Html = text1.replaceAll('\n', '<br />');
-  const text2Html = text2.replaceAll('\n', '<br />');
+  const text1Html = formatTextWithParagraphs(text1);
+  const text2Html = formatTextWithParagraphs(text2);
 
   return (
     <div>
