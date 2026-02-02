@@ -48,19 +48,34 @@ const generateMg11 = () => {
   const data: Partial<Mg11Data> = JSON.parse(rawdata);
 
   const statementText = data.statement || '';
-  const wordsPerPage = 250;
+
+  // Count words for page estimation, but preserve original formatting
   const wordCount = statementText
     .split(/\s+/)
     .filter((word) => word.length > 0).length;
+  const wordsPerPage = 250;
   const estimatedPages = Math.ceil(wordCount / wordsPerPage);
   const noPages = Math.max(2, estimatedPages + 1);
 
-  const words = statementText.split(/\s+/);
-  const text1Words = words.slice(0, Math.floor(words.length * 0.6));
-  const text2Words = words.slice(Math.floor(words.length * 0.6));
+  // Split into sentences/paragraphs at natural break points while preserving newlines
+  // Use character-based splitting as a fallback to maintain formatting
+  const splitPoint = Math.floor(statementText.length * 0.6);
 
-  const text1 = text1Words.join(' ');
-  const text2 = text2Words.join(' ');
+  // Find the nearest newline or space to split at (look within 50 chars of split point)
+  let actualSplitPoint = splitPoint;
+  for (
+    let i = splitPoint;
+    i < Math.min(splitPoint + 50, statementText.length);
+    i++
+  ) {
+    if (statementText[i] === '\n' || statementText[i] === ' ') {
+      actualSplitPoint = i;
+      break;
+    }
+  }
+
+  const text1 = statementText.slice(0, Math.max(0, actualSplitPoint)).trim();
+  const text2 = statementText.slice(Math.max(0, actualSplitPoint)).trim();
 
   return (
     <div>
@@ -144,6 +159,7 @@ const generateMg11 = () => {
                   lineHeight: 1.6, // Added better line spacing
                   marginBottom: 10,
                   marginTop: 10,
+                  whiteSpace: 'pre-wrap', // Preserve line breaks
                 }}
               >
                 {text1}
@@ -192,6 +208,7 @@ const generateMg11 = () => {
                     lineHeight: 1.6, // Added better line spacing
                     marginBottom: 15,
                     marginTop: 15,
+                    whiteSpace: 'pre-wrap', // Preserve line breaks
                   }}
                 >
                   {text2}
