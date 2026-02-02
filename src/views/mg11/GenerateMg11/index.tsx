@@ -77,6 +77,10 @@ const generateMg11 = () => {
   const text1 = statementText.slice(0, Math.max(0, actualSplitPoint)).trim();
   const text2 = statementText.slice(Math.max(0, actualSplitPoint)).trim();
 
+  // Convert newlines to HTML br tags for reliable PDF rendering
+  const text1Html = text1.replaceAll('\n', '<br />');
+  const text2Html = text2.replaceAll('\n', '<br />');
+
   return (
     <div>
       <div className="page">
@@ -153,6 +157,7 @@ const generateMg11 = () => {
                 </div>
               </div>
               <div
+                dangerouslySetInnerHTML={{ __html: text1Html }}
                 style={{
                   fontSize: 12,
                   hyphens: 'auto',
@@ -161,9 +166,7 @@ const generateMg11 = () => {
                   marginTop: 10,
                   whiteSpace: 'pre-wrap', // Preserve line breaks
                 }}
-              >
-                {text1}
-              </div>
+              />
             </div>
           </section>
         </div>
@@ -202,6 +205,7 @@ const generateMg11 = () => {
             <section>
               <div className="fields">
                 <div
+                  dangerouslySetInnerHTML={{ __html: text2Html }}
                   style={{
                     fontSize: 12,
                     hyphens: 'auto',
@@ -210,9 +214,7 @@ const generateMg11 = () => {
                     marginTop: 15,
                     whiteSpace: 'pre-wrap', // Preserve line breaks
                   }}
-                >
-                  {text2}
-                </div>
+                />
               </div>
             </section>
           </div>
