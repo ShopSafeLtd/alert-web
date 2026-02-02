@@ -1,160 +1,161 @@
 query ViewOffender(
-    $where: OffenderWhereUniqueInput!
-    $banWhere: BanWhereInput
+  $where: OffenderWhereUniqueInput!
+  $banWhere: BanWhereInput
 ) {
-    offender(where: $where) {
-        id
-        alias
-        aiImprovements
-        aiKeyObservations
-        aiMO
-        aiMethods
-        aiQualityScore
-        aiImpactScore
-        aiSummary
-        createdAt
-        scheme {
-            mg11Available
-        }
-        sourceDetails
-        updatedAt
-        justification
-        infoSource
-        origOffenderId
-        knownFor
-        targetedGoods
-        age
-        build
-        height
-        dateOfBirth
-        dateSource
-        hair
-        gender
-        comment
-        name
-        reference
-        race
-        peculiarities
-        subscribed
-        approved
-        active
-        idVerified
-        idSource
-        totalImages
-        totalIncidents
-        incidents {
-            id
-            dayTime
-            reference
-            subject
-        }
-        customGalleries {
-            id
-            name
-        }
-        images {
-            ...Images
-            faces {
-                id
-                confidence
-                boundingHeight
-                boundingLeft
-                boundingTop
-                boundingWidth
-                offender {
-                    id
-                    name
-                }
-                rekMatchedSearches {
-                    id
-                }
-            }
-        }
-        addresses {
-            ...Locations
-        }
-        groups {
-            id
-            name
-        }
-        tags {
-            id
-            name
-        }
-        bans(orderBy: { startDate: desc }, where: $banWhere) {
-            id
-            title
-            location
-            description
-            startDate
-            endDate
-            type
-            months
-            fineValue
-            duration
-        }
-        createdBy {
-            ...CreatedBy
-        }
-        images {
-            ...Images
-        }
-        crimeGroups {
-            ...CrimeGroups
-        }
-        vehicles {
-            ...Vehicles
-        }
-
-        evidence {
-            ...Documents
-        }
-        investigations {
-            ...Investigations
-        }
-        updates(orderBy: { createdAt: desc }) {
-            ...Updates
-        }
-        actions {
-            id
-            createdAt
-            dataType
-            description
-            reason
-            type
-            reference
-            workflowResults
-            byUser {
-                id
-                fullName
-                businesses {
-                    id
-                    name
-                }
-            }
-        }
-        todos {
-            ...Todos
-        }
-        searchedMatches {
-            id
-        }
-        updates(orderBy: { createdAt: desc }) {
-            ...Updates
-        }
-        articles {
-            id
-            title
-            createdAt
-            updatedAt
-            priority
-            status
-            previewImage
-            previewText
-            createdBy {
-                id
-                fullName
-            }
-        }
+  offender(where: $where) {
+    id
+    alias
+    aiImprovements
+    aiKeyObservations
+    aiMO
+    aiMethods
+    aiQualityScore
+    aiImpactScore
+    aiSummary
+    createdAt
+    wanted
+    scheme {
+      mg11Available
     }
+    sourceDetails
+    updatedAt
+    justification
+    infoSource
+    origOffenderId
+    knownFor
+    targetedGoods
+    age
+    build
+    height
+    dateOfBirth
+    dateSource
+    hair
+    gender
+    comment
+    name
+    reference
+    race
+    peculiarities
+    subscribed
+    approved
+    active
+    idVerified
+    idSource
+    totalImages
+    totalIncidents
+    incidents {
+      id
+      dayTime
+      reference
+      subject
+    }
+    customGalleries {
+      id
+      name
+    }
+    images {
+      ...Images
+      faces {
+        id
+        confidence
+        boundingHeight
+        boundingLeft
+        boundingTop
+        boundingWidth
+        offender {
+          id
+          name
+        }
+        rekMatchedSearches {
+          id
+        }
+      }
+    }
+    addresses {
+      ...Locations
+    }
+    groups {
+      id
+      name
+    }
+    tags {
+      id
+      name
+    }
+    bans(orderBy: { startDate: desc }, where: $banWhere) {
+      id
+      title
+      location
+      description
+      startDate
+      endDate
+      type
+      months
+      fineValue
+      duration
+    }
+    createdBy {
+      ...CreatedBy
+    }
+    images {
+      ...Images
+    }
+    crimeGroups {
+      ...CrimeGroups
+    }
+    vehicles {
+      ...Vehicles
+    }
+
+    evidence {
+      ...Documents
+    }
+    investigations {
+      ...Investigations
+    }
+    updates(orderBy: { createdAt: desc }) {
+      ...Updates
+    }
+    actions {
+      id
+      createdAt
+      dataType
+      description
+      reason
+      type
+      reference
+      workflowResults
+      byUser {
+        id
+        fullName
+        businesses {
+          id
+          name
+        }
+      }
+    }
+    todos {
+      ...Todos
+    }
+    searchedMatches {
+      id
+    }
+    updates(orderBy: { createdAt: desc }) {
+      ...Updates
+    }
+    articles {
+      id
+      title
+      createdAt
+      updatedAt
+      priority
+      status
+      previewImage
+      previewText
+      createdBy {
+        id
+        fullName
+      }
+    }
+  }
 }

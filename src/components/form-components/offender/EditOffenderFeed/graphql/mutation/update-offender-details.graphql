@@ -1,4 +1,7 @@
-mutation UpdateOffenderDetails($data: OffenderUpdateDetailsInput!, $where: String!) {
+mutation UpdateOffenderDetails(
+  $data: OffenderUpdateDetailsInput!
+  $where: String!
+) {
   updateOffenderDetails(data: $data, where: $where) {
     age
     alias
@@ -19,6 +22,7 @@ mutation UpdateOffenderDetails($data: OffenderUpdateDetailsInput!, $where: Strin
     height
     idSource
     idVerified
+    wanted
     infoSource
     justification
     knownFor

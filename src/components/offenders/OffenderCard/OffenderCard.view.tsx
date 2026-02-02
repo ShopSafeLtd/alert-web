@@ -666,6 +666,16 @@ const OffenderCard = ({
                         </Tooltip>
                       </Col>
                     )}
+                    <Col flex={1} />
+                    {offender?.wanted && (
+                      <Col>
+                        <Tag color={'green'}>
+                          {intl.formatMessage({
+                            defaultMessage: 'Wanted',
+                          })}
+                        </Tag>
+                      </Col>
+                    )}
                   </Row>
 
                   <Text type="secondary">

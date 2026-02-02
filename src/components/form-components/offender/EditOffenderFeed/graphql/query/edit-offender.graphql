@@ -20,6 +20,7 @@ query EditOffender($where: OffenderWhereUniqueInput!) {
     peculiarities
     approved
     idVerified
+    wanted
     totalIncidents
     idSource
     sourceDetails

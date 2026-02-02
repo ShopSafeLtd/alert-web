@@ -40,6 +40,7 @@ export interface OffenderData {
   race?: Race | null;
   sourceDetails?: null | string;
   targetedGoods?: null | string[];
+  wanted?: boolean;
 }
 
 interface Props {
@@ -74,6 +75,7 @@ export interface FormData {
   race: Race;
   sourceDetails: string;
   targetedGoods: string[];
+  wanted?: boolean;
   // addressAlias?: string;
   // building?: string;
   // street?: string;
@@ -194,6 +196,7 @@ const useEditOffender = ({
         race: value.race || null,
         sourceDetails: value.sourceDetails || null,
         targetedGoods: value.targetedGoods,
+        wanted: value.wanted,
       });
     } else {
       void updateOffender({
@@ -250,6 +253,8 @@ const useEditOffender = ({
             peculiarities: { set: value.peculiarities || '' },
             race: { set: value.race || null },
             sourceDetails: { set: value.sourceDetails || null },
+            //   ],
+            targetedGoods: { set: value.targetedGoods },
             // addresses: {
             //   update: [
             //     {
@@ -265,8 +270,7 @@ const useEditOffender = ({
             //         county: { set: value.county },
             //       },
             //     },
-            //   ],
-            targetedGoods: { set: value.targetedGoods },
+            wanted: { set: value.wanted },
           },
           where: {
             id: data.id,
