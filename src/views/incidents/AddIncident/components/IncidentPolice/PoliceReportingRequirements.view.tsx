@@ -1,5 +1,5 @@
 import { CheckCircleFilled, ExclamationCircleFilled } from '@ant-design/icons';
-import { Alert, List, Typography } from 'antd';
+import { Alert, Col, Row, Typography } from 'antd';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
@@ -24,39 +24,24 @@ const PoliceReportingRequirements = ({
     <Alert
       description={
         <>
-          <List
-            dataSource={requirements}
-            renderItem={(req) => (
-              <List.Item>
-                {req.completed ? (
-                  <CheckCircleFilled
-                    style={{ color: '#52c41a', marginRight: 8 }}
-                  />
-                ) : (
-                  <ExclamationCircleFilled
-                    style={{ color: '#faad14', marginRight: 8 }}
-                  />
-                )}
-                <Typography.Text>{req.label}</Typography.Text>
-                {req.completed ? (
-                  <Typography.Text
-                    style={{ marginLeft: 'auto' }}
-                    type="success"
-                  >
-                    {intl.formatMessage({ defaultMessage: 'Complete' })}
-                  </Typography.Text>
-                ) : (
-                  <Typography.Text
-                    style={{ marginLeft: 'auto' }}
-                    type="warning"
-                  >
-                    {intl.formatMessage({ defaultMessage: 'Required' })}
-                  </Typography.Text>
-                )}
-              </List.Item>
-            )}
-            size="small"
-          />
+          <Row gutter={[16, 12]}>
+            {requirements.map((req) => (
+              <Col key={req.id} md={6} sm={12} xs={24}>
+                <div style={{ alignItems: 'center', display: 'flex' }}>
+                  {req.completed ? (
+                    <CheckCircleFilled
+                      style={{ color: '#52c41a', marginRight: 8 }}
+                    />
+                  ) : (
+                    <ExclamationCircleFilled
+                      style={{ color: '#faad14', marginRight: 8 }}
+                    />
+                  )}
+                  <Typography.Text>{req.label}</Typography.Text>
+                </div>
+              </Col>
+            ))}
+          </Row>
           <Typography.Text style={{ display: 'block', marginTop: 8 }}>
             {intl.formatMessage(
               {
