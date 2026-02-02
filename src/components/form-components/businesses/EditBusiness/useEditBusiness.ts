@@ -11,6 +11,7 @@ import type {
   BusinessUpdateInput,
   Currency,
   GroupSyncStrategy,
+  PoliceForce,
 } from 'graphql/types';
 import type { LocationData, TagData } from 'types/DataType';
 
@@ -42,6 +43,7 @@ export interface OnSubmitValues {
     label: string;
     value: string;
   };
+  policeArea?: PoliceForce[];
   postcode: string;
   publicName: boolean;
   siteNumber: string;
@@ -134,6 +136,7 @@ const useEditBusiness = ({ businessId, onClose }: Props): Return => {
               value: res.business?.parent?.id,
             }
           : undefined,
+        policeArea: res.business?.policeArea || [],
         postcode: res.business?.locations[0]?.postcode || '',
         publicName: res.business?.publicName,
         siteNumber: res.business?.siteNumber || '',
@@ -580,6 +583,9 @@ const useEditBusiness = ({ businessId, onClose }: Props): Return => {
           },
           name: { set: values.name },
           parent: getParent(),
+          policeArea: values.policeArea
+            ? { set: values.policeArea }
+            : undefined,
           publicName: values.publicName,
           siteNumber: values.siteNumber,
           tags: getTags(),

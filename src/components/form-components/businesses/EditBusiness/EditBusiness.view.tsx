@@ -20,7 +20,7 @@ import {
 import DebounceSelect from 'components/form-components/DebounceSelect';
 import AddTag from 'components/form-components/tags/AddTag';
 import LocatingCard from 'components/map/LocatingCard';
-import { Currency } from 'graphql/types';
+import { Currency, PoliceForce } from 'graphql/types';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
@@ -80,6 +80,56 @@ const EditBusiness = ({
   updateNewTagData,
 }: Props) => {
   const intl = useIntl();
+
+  // Police Force display names
+  const policeForceLabels: Record<PoliceForce, string> = {
+    [PoliceForce.AvonAndSomerset]: 'Avon and Somerset',
+    [PoliceForce.Bedfordshire]: 'Bedfordshire',
+    [PoliceForce.BritishTransportPolice]: 'British Transport Police',
+    [PoliceForce.Cambridgeshire]: 'Cambridgeshire',
+    [PoliceForce.Cheshire]: 'Cheshire',
+    [PoliceForce.CityOfLondon]: 'City of London',
+    [PoliceForce.Cleveland]: 'Cleveland',
+    [PoliceForce.Cumbria]: 'Cumbria',
+    [PoliceForce.Derbyshire]: 'Derbyshire',
+    [PoliceForce.DevonAndCornwall]: 'Devon and Cornwall',
+    [PoliceForce.Dorset]: 'Dorset',
+    [PoliceForce.Durham]: 'Durham',
+    [PoliceForce.DyfedPowys]: 'Dyfed-Powys',
+    [PoliceForce.Essex]: 'Essex',
+    [PoliceForce.Gloucestershire]: 'Gloucestershire',
+    [PoliceForce.GreaterManchester]: 'Greater Manchester',
+    [PoliceForce.Gwent]: 'Gwent',
+    [PoliceForce.Hampshire]: 'Hampshire',
+    [PoliceForce.Hertfordshire]: 'Hertfordshire',
+    [PoliceForce.Humberside]: 'Humberside',
+    [PoliceForce.Kent]: 'Kent',
+    [PoliceForce.Lancashire]: 'Lancashire',
+    [PoliceForce.Leicestershire]: 'Leicestershire',
+    [PoliceForce.Lincolnshire]: 'Lincolnshire',
+    [PoliceForce.Merseyside]: 'Merseyside',
+    [PoliceForce.Metropolitan]: 'Metropolitan Police',
+    [PoliceForce.Norfolk]: 'Norfolk',
+    [PoliceForce.NorthWales]: 'North Wales',
+    [PoliceForce.NorthYorkshire]: 'North Yorkshire',
+    [PoliceForce.Northamptonshire]: 'Northamptonshire',
+    [PoliceForce.Northumbria]: 'Northumbria',
+    [PoliceForce.Nottinghamshire]: 'Nottinghamshire',
+    [PoliceForce.PoliceScotland]: 'Police Scotland',
+    [PoliceForce.Psni]: 'PSNI (Northern Ireland)',
+    [PoliceForce.SouthWales]: 'South Wales',
+    [PoliceForce.SouthYorkshire]: 'South Yorkshire',
+    [PoliceForce.Staffordshire]: 'Staffordshire',
+    [PoliceForce.Suffolk]: 'Suffolk',
+    [PoliceForce.Surrey]: 'Surrey',
+    [PoliceForce.Sussex]: 'Sussex',
+    [PoliceForce.ThamesValley]: 'Thames Valley',
+    [PoliceForce.Warwickshire]: 'Warwickshire',
+    [PoliceForce.WestMercia]: 'West Mercia',
+    [PoliceForce.WestMidlands]: 'West Midlands',
+    [PoliceForce.WestYorkshire]: 'West Yorkshire',
+    [PoliceForce.Wiltshire]: 'Wiltshire',
+  };
 
   return (
     <Form<OnSubmitValues> form={form} layout="vertical" onFinish={onSubmit}>
@@ -202,6 +252,42 @@ const EditBusiness = ({
                   value={curr}
                 >
                   {CurrencyCodeMap[curr]}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+        </Col>
+      </Row>
+      <Row gutter={16}>
+        <Col span={18}>
+          <Form.Item
+            label={intl.formatMessage({
+              defaultMessage: 'Police Force(s)',
+            })}
+            name="policeArea"
+            tooltip={intl.formatMessage({
+              defaultMessage:
+                'Select the police force(s) that cover this business location.',
+            })}
+          >
+            <Select
+              allowClear
+              disabled={saving}
+              maxTagCount={3}
+              mode="multiple"
+              optionFilterProp="label"
+              placeholder={intl.formatMessage({
+                defaultMessage: 'Select Police Force(s)',
+              })}
+              showSearch
+            >
+              {Object.values(PoliceForce).map((force) => (
+                <Select.Option
+                  key={force}
+                  label={policeForceLabels[force]}
+                  value={force}
+                >
+                  {policeForceLabels[force]}
                 </Select.Option>
               ))}
             </Select>

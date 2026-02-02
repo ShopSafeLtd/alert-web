@@ -1891,6 +1891,7 @@ export type BusinessUpdateInput = {
   locations?: InputMaybe<LocationUpdateInputField>;
   name?: InputMaybe<SetStringHelper>;
   parent?: InputMaybe<BusinessParentInput>;
+  policeArea?: InputMaybe<PoliceAreaSet>;
   publicName?: InputMaybe<Scalars['Boolean']>;
   schemes?: InputMaybe<NullableConnectArrayHelper>;
   siteNumber?: InputMaybe<Scalars['String']>;
@@ -16202,6 +16203,10 @@ export type PlatformUsageBreakdown = {
   totalActions: Scalars['Int'];
   /** Number of unique users on this platform */
   uniqueUsers: Scalars['Int'];
+};
+
+export type PoliceAreaSet = {
+  set?: InputMaybe<Array<PoliceForce>>;
 };
 
 export type PoliceEngagementStats = {
