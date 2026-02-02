@@ -3221,6 +3221,7 @@ export type CreateIncidentOffender = {
   race?: InputMaybe<Race>;
   scheme: ConnectHelper;
   targetedGoods?: InputMaybe<SetStringArrayHelper>;
+  wanted?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type CreateIncidentOffenderAddress = {
@@ -3336,6 +3337,7 @@ export type CreateOffenderData = {
   tags?: InputMaybe<TagCreateNestedManyWithoutOffenders>;
   targetedGoods?: InputMaybe<Array<Scalars['String']>>;
   vehicles?: InputMaybe<CreateOffenderVehicles>;
+  wanted?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type CreateOffenderUpdateVehicles = {
@@ -11168,6 +11170,7 @@ export type MergeOffendersInput = {
   gender?: InputMaybe<Gender>;
   hair?: InputMaybe<Scalars['String']>;
   imageIds?: InputMaybe<Array<Scalars['String']>>;
+  incidents?: InputMaybe<Array<Scalars['String']>>;
   mainOffenderId: Scalars['String'];
   name?: InputMaybe<Scalars['String']>;
   offenderIds: Array<Scalars['String']>;
@@ -14705,6 +14708,7 @@ export type Offender = {
   updates: Array<Update>;
   uploaded?: Maybe<Scalars['Boolean']>;
   vehicles: Array<Vehicle>;
+  wanted: Scalars['Boolean'];
 };
 
 
@@ -15063,6 +15067,7 @@ export type OffenderCreateWithoutIncidentsInput = {
   race?: InputMaybe<Race>;
   scheme: ConnectHelper;
   sourceDetails?: InputMaybe<Scalars['String']>;
+  wanted?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type OffenderEngagement = {
@@ -15262,7 +15267,8 @@ export enum OffenderScalarFieldEnum {
   TargetedGoods = 'targetedGoods',
   TempId = 'tempId',
   UpdatedAt = 'updatedAt',
-  Uploaded = 'uploaded'
+  Uploaded = 'uploaded',
+  Wanted = 'wanted'
 }
 
 export type OffenderScalarWhereInput = {
@@ -15430,6 +15436,7 @@ export type OffenderUpdateDetailsInput = {
   race?: InputMaybe<Race>;
   sourceDetails?: InputMaybe<Scalars['String']>;
   tagIds?: InputMaybe<Array<Scalars['String']>>;
+  wanted?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type OffenderUpdateInput = {
@@ -15467,6 +15474,7 @@ export type OffenderUpdateInput = {
   tempId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<NullableSetDateHelper>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutOffenderNestedInput>;
+  wanted?: InputMaybe<NullableSetBooleanHelper>;
 };
 
 export type OffenderUpdateManyWithoutIncidentsNested = {
@@ -15497,6 +15505,7 @@ export type OffenderUpdateWithoutIncidents = {
   race?: InputMaybe<NullableEnumRaceFieldUpdateOperationsInput>;
   sourceDetails?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   targetedGoods?: InputMaybe<Array<Scalars['String']>>;
+  wanted?: InputMaybe<BoolFieldUpdateOperationsInput>;
 };
 
 export type OffenderUpdatealiasInput = {
@@ -15592,6 +15601,7 @@ export type OffenderWhereInput = {
   updates?: InputMaybe<UpdateListRelationFilter>;
   uploaded?: InputMaybe<BoolNullableFilter>;
   vehicles?: InputMaybe<VehicleListRelationFilter>;
+  wanted?: InputMaybe<BoolFilter>;
 };
 
 export type OffenderWhereUniqueInput = {
@@ -26169,6 +26179,7 @@ export type UpsertIncidentOffender = {
   name?: InputMaybe<Scalars['String']>;
   peculiarities?: InputMaybe<Scalars['String']>;
   race?: InputMaybe<Race>;
+  wanted?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type UpsertRole = {

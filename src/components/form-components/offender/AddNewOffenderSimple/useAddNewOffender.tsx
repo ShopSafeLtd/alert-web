@@ -97,6 +97,7 @@ export interface FormData {
   sourceDetails: string;
   street?: string;
   townCity?: string;
+  wanted?: boolean;
 }
 
 interface Props {
@@ -221,6 +222,7 @@ const useAddNewOffender = ({
         peculiarities: data.peculiarities || null,
         race: data.race || null,
         sourceDetails: data.sourceDetails || null,
+        wanted: data.wanted,
         // groupIds: data.groups || [],
       });
     } else {
@@ -260,7 +262,6 @@ const useAddNewOffender = ({
             height: data.height || null,
             idSource: data.idSource,
             idVerified: data.idVerified,
-
             image:
               data.images && data.images.length > 0
                 ? {
@@ -288,6 +289,7 @@ const useAddNewOffender = ({
                       .filter((obj) => obj.url !== undefined),
                   }
                 : {},
+
             incidentId: incidentId || null,
             investigationId: investigationId || null,
             name: data.name,
@@ -296,6 +298,7 @@ const useAddNewOffender = ({
             scheme: schemeId,
             sourceDetails: data.sourceDetails || null,
             vehicles: vehicleId ? { connect: [{ id: vehicleId }] } : undefined,
+            wanted: data.wanted,
           },
         },
       });
