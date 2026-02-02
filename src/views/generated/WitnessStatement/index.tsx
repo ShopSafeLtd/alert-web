@@ -83,12 +83,26 @@ function processText(text: string) {
   return result;
 }
 
+// Split on double newlines for paragraphs, single newlines become <br />
+const formatTextWithParagraphs = (text: string): string =>
+  text
+    .split('\n\n')
+    .map((para) => {
+      const paraWithBreaks = para.trim().replaceAll('\n', '<br />');
+      return `<p style="margin: 0 0 1em 0; line-height: 1.6;">${paraWithBreaks}</p>`;
+    })
+    .join('');
+
 export const GenWitness = () => {
   const rawdata = localStorage.getItem('data') || '{}';
 
   const data = JSON.parse(rawdata) as Mg11Data;
 
   const { noPages, text1, text2 } = processText(data.statement || ``);
+
+  // Convert text to HTML with paragraph formatting
+  const text1Html = formatTextWithParagraphs(text1);
+  const text2Html = formatTextWithParagraphs(text2);
   return (
     <div>
       <div className="page-witness">
@@ -176,13 +190,14 @@ export const GenWitness = () => {
             <div className="fields-witness">
               <div className="field-witness">
                 <div
+                  dangerouslySetInnerHTML={{ __html: text1Html }}
                   style={{
                     fontSize: 12,
                     hyphens: 'auto',
+                    lineHeight: 1.6,
+                    whiteSpace: 'pre-wrap',
                   }}
-                >
-                  {text1}
-                </div>
+                />
               </div>
             </div>
           </section>
@@ -231,14 +246,15 @@ export const GenWitness = () => {
                     <div className="fields-witness">
                       <div className="field-witness">
                         <div
+                          dangerouslySetInnerHTML={{ __html: text2Html }}
                           style={{
                             fontSize: 12,
                             hyphens: 'auto',
+                            lineHeight: 1.6,
                             marginTop: 15,
+                            whiteSpace: 'pre-wrap',
                           }}
-                        >
-                          {text2}
-                        </div>
+                        />
                       </div>
                     </div>
                   </section>
