@@ -238,9 +238,17 @@ export const useGenerateMG11Statement = ({
 
       let viewObstructed = 'unobstructed';
       if (policeObstructions === 'false') {
-        viewObstructed = policeObstructionsDetails
-          ? `obstructed by ${policeObstructionsDetails}`
-          : 'obstructed';
+        if (policeObstructionsDetails) {
+          // If the value already starts with "Obscured", use it directly (lowercase first letter)
+          viewObstructed = policeObstructionsDetails
+            .toLowerCase()
+            .startsWith('obscured')
+            ? policeObstructionsDetails.charAt(0).toLowerCase() +
+              policeObstructionsDetails.slice(1)
+            : `obstructed by ${policeObstructionsDetails.toLowerCase()}`;
+        } else {
+          viewObstructed = 'obstructed';
+        }
       }
 
       // Create goods type ID to name mapping
