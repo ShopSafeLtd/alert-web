@@ -168,6 +168,7 @@ const generateMg11 = () => {
               <div
                 dangerouslySetInnerHTML={{ __html: text1Html }}
                 style={{
+                  color: 'black',
                   fontSize: 12,
                   hyphens: 'auto',
                   lineHeight: 1.6, // Added better line spacing
@@ -216,6 +217,7 @@ const generateMg11 = () => {
                 <div
                   dangerouslySetInnerHTML={{ __html: text2Html }}
                   style={{
+                    color: 'black',
                     fontSize: 12,
                     hyphens: 'auto',
                     lineHeight: 1.6, // Added better line spacing

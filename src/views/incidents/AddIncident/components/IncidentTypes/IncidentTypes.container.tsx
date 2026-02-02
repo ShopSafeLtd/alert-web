@@ -4,6 +4,7 @@ import type { FormInstance } from 'antd';
 import type { ListIncidentTagsQuery } from 'graphql/tags/queries/__generated__/list-incident-tags.generated';
 import type { TagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
 
+import { Form } from 'antd';
 import React from 'react';
 
 import View from './IncidentTypes.view';
@@ -30,6 +31,9 @@ const IncidentTypes = ({
   setPoliceReporting,
   tagsData,
 }: Props) => {
+  const formBusiness = Form.useWatch('business', form);
+  const businessId = formBusiness?.value;
+
   const {
     incidentTagsData,
     incidentTypeTooltip,
@@ -37,6 +41,7 @@ const IncidentTypes = ({
     tags,
     tagsLoading,
   } = useIncidentTypes({
+    businessId,
     form,
     incidentTagsData: initIncidentTagsData,
     setPoliceReporting,

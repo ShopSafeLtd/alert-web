@@ -5,11 +5,14 @@ import type { TagsQuery } from 'graphql/tags/queries/__generated__/tags.generate
 import type { TagType } from 'graphql/types';
 
 import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import { useBusinessPoliceAreaQuery } from '#/views/incidents/AddIncident/graphql/queries/__generated__/business-police-area.generated';
 import { Form } from 'antd';
+import { PoliceForce } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
 import { useEffect, useMemo } from 'react';
 
 interface Props {
+  businessId?: string;
   form: FormInstance<FormData>;
   incidentTagsData: ListIncidentTagsQuery | undefined;
   setPoliceReporting: (value: boolean) => void;
@@ -25,6 +28,7 @@ interface Return {
 }
 
 const useIncidentTypes = ({
+  businessId,
   form,
   incidentTagsData,
   setPoliceReporting,
@@ -37,14 +41,34 @@ const useIncidentTypes = ({
 
   const selectedTag = Form.useWatch('tags', form);
 
+  const { data: businessData } = useBusinessPoliceAreaQuery({
+    skip: !businessId,
+    variables: {
+      where: { id: businessId },
+    },
+  });
+
   useEffect(() => {
     if (selectedTag && selectedTag[0]) {
       const tag = incidentTagsData?.listIncidentTags.find(
         ({ value }) => value === selectedTag[0]
       );
-      if (tag) setPoliceReporting(tag.policeReporting);
+
+      if (tag) {
+        const hasNottsPoliceArea =
+          businessData?.business?.policeArea?.includes(
+            PoliceForce.Nottinghamshire
+          ) ?? false;
+
+        const shouldShowPoliceReporting =
+          tag.policeReporting && hasNottsPoliceArea;
+
+        setPoliceReporting(shouldShowPoliceReporting);
+      }
+    } else {
+      setPoliceReporting(false);
     }
-  }, [selectedTag]);
+  }, [selectedTag, businessData, incidentTagsData, setPoliceReporting]);
 
   return {
     incidentTagsData,

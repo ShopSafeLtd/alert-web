@@ -20,6 +20,7 @@ query EditBusiness($where: BusinessWhereUniqueInput!) {
       name
     }
     brands
+    policeArea
     locations {
       id
       building
