@@ -1,4 +1,5 @@
 import type { UserContactQuery } from '#/views/incidents/AddIncident/components/IncidentPolice/graphql/queries/__generated__/get-contact.generated';
+import type { Dayjs } from 'dayjs';
 
 import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import { useUpsertContactMutation } from '#/views/incidents/AddIncident/components/IncidentPolice/graphql/mutations/__generated__/upsert-contact.generated';
@@ -18,6 +19,7 @@ import {
   Button,
   Card,
   Col,
+  DatePicker,
   Drawer,
   Form,
   Input,
@@ -26,13 +28,18 @@ import {
   Typography,
 } from 'antd';
 import { useForm } from 'antd/lib/form/Form';
+import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { useAtomValue } from 'jotai/index';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 
+dayjs.extend(customParseFormat);
+
 interface FormData {
   address: string;
-  dobPlace: string;
+  dob?: Dayjs;
+  dobPlace?: string;
   email: string;
   formerName?: string;
   gender: string;
@@ -41,6 +48,7 @@ interface FormData {
   mobileTel: string;
   name: string;
   occupation?: string;
+  placeOfBirth?: string;
   postcode: string;
   prefContact?: string;
   workTel?: string;
@@ -80,6 +88,31 @@ const getMissingFieldsCount = (
     .length;
 };
 
+const parseDobPlace = (
+  dobPlace: null | string | undefined
+): { dob: Dayjs | null; placeOfBirth: string } => {
+  if (!dobPlace) return { dob: null, placeOfBirth: '' };
+
+  // Expected format: "DD/MM/YYYY - Place" or "DD/MM/YYYY Place"
+  const match = dobPlace.match(/^((?:\d{2}\/){2}\d{4})\s*-?\s*(.*)$/);
+  if (match) {
+    const [, dateStr, place] = match;
+    try {
+      // Parse DD/MM/YYYY format using dayjs
+      const date = dayjs(dateStr, 'DD/MM/YYYY');
+      if (date.isValid()) {
+        return { dob: date, placeOfBirth: place.trim() };
+      }
+      return { dob: null, placeOfBirth: dobPlace };
+    } catch {
+      return { dob: null, placeOfBirth: dobPlace };
+    }
+  }
+
+  // Fallback: treat entire string as place
+  return { dob: null, placeOfBirth: dobPlace };
+};
+
 const WitnessAuthorView = ({ detailsExist }: { detailsExist: () => void }) => {
   const [saving, setSaving] = useState(false);
   const [creatingWitness, setCreatingWitness] = useState(false);
@@ -114,7 +147,17 @@ const WitnessAuthorView = ({ detailsExist }: { detailsExist: () => void }) => {
 
   const onFinish = (values: FormData) => {
     setSaving(true);
-    const { email: __, name: _, ...rest } = values;
+    const { dob, email: __, name: _, placeOfBirth, ...rest } = values;
+
+    // Combine dob and placeOfBirth into dobPlace format
+    let dobPlace = '';
+    if (dob && placeOfBirth) {
+      const formattedDate = dob.format('DD/MM/YYYY');
+      dobPlace = `${formattedDate} - ${placeOfBirth}`;
+    } else if (placeOfBirth) {
+      dobPlace = placeOfBirth;
+    }
+
     void upsertContact({
       onCompleted: () => {
         setSaving(false);
@@ -126,6 +169,7 @@ const WitnessAuthorView = ({ detailsExist }: { detailsExist: () => void }) => {
       variables: {
         data: {
           ...rest,
+          dobPlace,
           id: data?.userContact?.id || undefined,
           userId,
         },
@@ -255,7 +299,7 @@ const WitnessAuthorView = ({ detailsExist }: { detailsExist: () => void }) => {
           form={form}
           initialValues={{
             address: data?.userContact?.address,
-            dobPlace: data?.userContact?.dobPlace,
+            ...parseDobPlace(data?.userContact?.dobPlace),
             email,
             formerName: data?.userContact?.formerName,
             gender: data?.userContact?.gender,
@@ -356,22 +400,49 @@ const WitnessAuthorView = ({ detailsExist }: { detailsExist: () => void }) => {
             </Col>
           </Row>
           <Row gutter={16}>
-            <Col span={12}>
+            <Col span={6}>
               <Form.Item
                 label={intl.formatMessage({
-                  defaultMessage: 'Date and Place of Birth',
+                  defaultMessage: 'Date of Birth',
                 })}
-                name="dobPlace"
+                name="dob"
                 rules={[
                   {
                     message: intl.formatMessage({
-                      defaultMessage: 'Please enter a DOB and place of birth.',
+                      defaultMessage: 'Please enter your date of birth.',
                     }),
                     required: true,
                   },
                 ]}
               >
-                <Input disabled={saving} />
+                <DatePicker
+                  disabled={saving}
+                  format="DD/MM/YYYY"
+                  style={{ width: '100%' }}
+                />
+              </Form.Item>
+            </Col>
+            <Col span={6}>
+              <Form.Item
+                label={intl.formatMessage({
+                  defaultMessage: 'Place of Birth',
+                })}
+                name="placeOfBirth"
+                rules={[
+                  {
+                    message: intl.formatMessage({
+                      defaultMessage: 'Please enter your place of birth.',
+                    }),
+                    required: true,
+                  },
+                ]}
+              >
+                <Input
+                  disabled={saving}
+                  placeholder={intl.formatMessage({
+                    defaultMessage: 'e.g., London, UK',
+                  })}
+                />
               </Form.Item>
             </Col>
           </Row>
