@@ -8,7 +8,7 @@ export type EditBusinessQueryVariables = Types.Exact<{
 }>;
 
 
-export type EditBusinessQuery = { __typename?: 'Query', business: { __typename?: 'Business', id: string, name: string, fullName: string, publicName: boolean, siteNumber?: string | null, currency?: Types.Currency | null, brands: Array<string>, parent?: { __typename?: 'Business', id: string, name: string, fullName: string } | null, groups: Array<{ __typename?: 'Group', id: string, name: string }>, tags: Array<{ __typename?: 'Tag', id: string, name: string }>, locations: Array<{ __typename?: 'Address', id: string, building?: string | null, street?: string | null, townCity?: string | null, county?: string | null, postcode?: string | null, geoLng?: number | null, geoLat?: number | null }> } };
+export type EditBusinessQuery = { __typename?: 'Query', business: { __typename?: 'Business', id: string, name: string, fullName: string, publicName: boolean, siteNumber?: string | null, currency?: Types.Currency | null, brands: Array<string>, policeArea: Array<Types.PoliceForce>, parent?: { __typename?: 'Business', id: string, name: string, fullName: string } | null, groups: Array<{ __typename?: 'Group', id: string, name: string }>, tags: Array<{ __typename?: 'Tag', id: string, name: string }>, locations: Array<{ __typename?: 'Address', id: string, building?: string | null, street?: string | null, townCity?: string | null, county?: string | null, postcode?: string | null, geoLng?: number | null, geoLat?: number | null }> } };
 
 
 export const EditBusinessDocument = gql`
@@ -34,6 +34,7 @@ export const EditBusinessDocument = gql`
       name
     }
     brands
+    policeArea
     locations {
       id
       building

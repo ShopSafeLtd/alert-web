@@ -192,6 +192,7 @@ export const GenWitness = () => {
                 <div
                   dangerouslySetInnerHTML={{ __html: text1Html }}
                   style={{
+                    color: 'black',
                     fontSize: 12,
                     hyphens: 'auto',
                     lineHeight: 1.6,
@@ -248,6 +249,7 @@ export const GenWitness = () => {
                         <div
                           dangerouslySetInnerHTML={{ __html: text2Html }}
                           style={{
+                            color: 'black',
                             fontSize: 12,
                             hyphens: 'auto',
                             lineHeight: 1.6,

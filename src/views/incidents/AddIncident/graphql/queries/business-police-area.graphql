@@ -1,0 +1,6 @@
+query BusinessPoliceArea($where: BusinessWhereUniqueInput!) {
+  business(where: $where) {
+    id
+    policeArea
+  }
+}

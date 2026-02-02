@@ -960,6 +960,21 @@ export enum AnyAll {
   Any = 'any'
 }
 
+export enum ApiTokenScope {
+  BusinessesRead = 'BUSINESSES_READ',
+  FormQuestionsRead = 'FORM_QUESTIONS_READ',
+  GoodsTypesRead = 'GOODS_TYPES_READ',
+  GroupsRead = 'GROUPS_READ',
+  IncidentsCreate = 'INCIDENTS_CREATE',
+  IncidentsRead = 'INCIDENTS_READ',
+  IncidentStatusesRead = 'INCIDENT_STATUSES_READ',
+  IncidentTypesRead = 'INCIDENT_TYPES_READ',
+  OffendersCreate = 'OFFENDERS_CREATE',
+  OffendersRead = 'OFFENDERS_READ',
+  VehiclesCreate = 'VEHICLES_CREATE',
+  VehiclesRead = 'VEHICLES_READ'
+}
+
 export enum AppType {
   Native = 'NATIVE',
   Web = 'WEB'
@@ -1876,6 +1891,7 @@ export type BusinessUpdateInput = {
   locations?: InputMaybe<LocationUpdateInputField>;
   name?: InputMaybe<SetStringHelper>;
   parent?: InputMaybe<BusinessParentInput>;
+  policeArea?: InputMaybe<PoliceAreaSet>;
   publicName?: InputMaybe<Scalars['Boolean']>;
   schemes?: InputMaybe<NullableConnectArrayHelper>;
   siteNumber?: InputMaybe<Scalars['String']>;
@@ -11600,6 +11616,7 @@ export type Mutation = {
   approveIncident: Incident;
   approveOffender: Offender;
   approvePAPStockRemovalRequest: StockRemovalRequest;
+  approvePoliceMatch: PoliceMatch;
   approveStockRemovalRequest: StockRemovalRequestApproval;
   bulkVerifyAiVisionMatches: Scalars['Int'];
   centralCoopImportData: SystemTask;
@@ -11731,6 +11748,7 @@ export type Mutation = {
   dismissAiMatch: AiVisionMatch;
   dismissAiSuggestion: AiSuggestion;
   dismissMatch: RekMatch;
+  dismissPoliceMatch: PoliceMatch;
   dismissTrainingVideoPrompt: Scalars['Boolean'];
   dunelmImportData: SystemTask;
   editArticle: Article;
@@ -12012,6 +12030,11 @@ export type MutationApproveOffenderArgs = {
 
 export type MutationApprovePapStockRemovalRequestArgs = {
   where: UniqueId;
+};
+
+
+export type MutationApprovePoliceMatchArgs = {
+  where: PoliceMatchWhereUniqueInput;
 };
 
 
@@ -12683,6 +12706,12 @@ export type MutationDismissAiSuggestionArgs = {
 
 export type MutationDismissMatchArgs = {
   where: RekMatchWhereUniqueInput;
+};
+
+
+export type MutationDismissPoliceMatchArgs = {
+  dismissReason?: InputMaybe<Scalars['String']>;
+  where: PoliceMatchWhereUniqueInput;
 };
 
 
@@ -16176,6 +16205,10 @@ export type PlatformUsageBreakdown = {
   uniqueUsers: Scalars['Int'];
 };
 
+export type PoliceAreaSet = {
+  set?: InputMaybe<Array<PoliceForce>>;
+};
+
 export type PoliceEngagementStats = {
   __typename?: 'PoliceEngagementStats';
   /** Most recent view timestamp */
@@ -16485,6 +16518,97 @@ export type PoliceHubView = {
   totalStats: SharedEntityTotals;
 };
 
+export type PoliceMatch = {
+  __typename?: 'PoliceMatch';
+  collectionId?: Maybe<Scalars['String']>;
+  confidenceScore: Scalars['Float'];
+  cosineDistance?: Maybe<Scalars['Float']>;
+  cosineSimilarity?: Maybe<Scalars['Float']>;
+  createdAt: Scalars['Date'];
+  dismissReason?: Maybe<Scalars['String']>;
+  dismissed: Scalars['Boolean'];
+  dismissedAt?: Maybe<Scalars['Date']>;
+  dismissedBy?: Maybe<User>;
+  enhanced: Scalars['Boolean'];
+  euclideanDistance?: Maybe<Scalars['Float']>;
+  euclideanSimilarity?: Maybe<Scalars['Float']>;
+  faceId?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  imageId?: Maybe<Scalars['String']>;
+  matchMetadata?: Maybe<Scalars['JSON']>;
+  matchType: PoliceMatchType;
+  matchedSharedOffender: SharedOffender;
+  qualityPassed: Scalars['Boolean'];
+  qualityScore?: Maybe<Scalars['Float']>;
+  sourceImage?: Maybe<Image>;
+  sourceImageId?: Maybe<Scalars['String']>;
+  sourceSharedOffender: SharedOffender;
+  ttaUsed: Scalars['Boolean'];
+  updatedAt: Scalars['Date'];
+  verified: Scalars['Boolean'];
+  verifiedAt?: Maybe<Scalars['Date']>;
+  verifiedBy?: Maybe<User>;
+};
+
+export type PoliceMatchRelayOrderInput = {
+  /** Sort by confidence score */
+  confidenceScore?: InputMaybe<SortOrder>;
+  /** Sort by creation date */
+  createdAt?: InputMaybe<SortOrder>;
+  /** Sort by match type */
+  matchType?: InputMaybe<SortOrder>;
+  /** Sort by last update date */
+  updatedAt?: InputMaybe<SortOrder>;
+  /** Sort by verification status */
+  verified?: InputMaybe<SortOrder>;
+  /** Sort by verification date */
+  verifiedAt?: InputMaybe<SortOrder>;
+};
+
+export type PoliceMatchRelayWhereInput = {
+  /** Maximum confidence score (0-100) */
+  confidenceScoreMax?: InputMaybe<Scalars['Float']>;
+  /** Minimum confidence score (0-100) */
+  confidenceScoreMin?: InputMaybe<Scalars['Float']>;
+  /** Filter matches created after this date */
+  createdAfter?: InputMaybe<Scalars['DateTime']>;
+  /** Filter matches created before this date */
+  createdBefore?: InputMaybe<Scalars['DateTime']>;
+  /** Filter by dismissed status */
+  dismissed?: InputMaybe<Scalars['Boolean']>;
+  /** Filter by match type (FACE, NAME, PATTERN, etc.) */
+  matchType?: InputMaybe<PoliceMatchType>;
+  /** Filter by specific matched SharedOffender ID */
+  matchedSharedOffenderId?: InputMaybe<Scalars['String']>;
+  /** Filter by quality check status (face matches only) */
+  qualityPassed?: InputMaybe<Scalars['Boolean']>;
+  /** Filter by scheme ID of the source SharedOffender */
+  schemeId?: InputMaybe<Scalars['String']>;
+  /** Search in source or matched SharedOffender names */
+  search?: InputMaybe<Scalars['String']>;
+  /** Filter by specific source SharedOffender ID */
+  sourceSharedOffenderId?: InputMaybe<Scalars['String']>;
+  /** Filter by verification status */
+  verified?: InputMaybe<Scalars['Boolean']>;
+  /** Filter matches verified after this date */
+  verifiedAfter?: InputMaybe<Scalars['DateTime']>;
+  /** Filter matches verified before this date */
+  verifiedBefore?: InputMaybe<Scalars['DateTime']>;
+};
+
+export enum PoliceMatchType {
+  Face = 'FACE',
+  Geographic = 'GEOGRAPHIC',
+  Mo = 'MO',
+  Name = 'NAME',
+  Pattern = 'PATTERN',
+  Temporal = 'TEMPORAL'
+}
+
+export type PoliceMatchWhereUniqueInput = {
+  id: Scalars['String'];
+};
+
 export enum PoliceResponseTime {
   NoResponse = 'NO_RESPONSE',
   Over_24Hours = 'OVER_24_HOURS',
@@ -16765,6 +16889,8 @@ export type Query = {
   policeHubDashboard: PoliceHubDashboard;
   policeHubSchemesRelay: QueryPoliceHubSchemesRelayConnection;
   policeHubView: PoliceHubView;
+  policeMatch: PoliceMatch;
+  policeMatchesRelay: QueryPoliceMatchesRelayConnection;
   policeTriageByStore: Array<StoreTriageStatistics>;
   policeTriageStatistics: PoliceTriageStatistics;
   previewIncidentExport: IncidentExport;
@@ -18280,6 +18406,23 @@ export type QueryPoliceHubViewArgs = {
 };
 
 
+export type QueryPoliceMatchArgs = {
+  where: PoliceMatchWhereUniqueInput;
+};
+
+
+export type QueryPoliceMatchesRelayArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<PoliceMatchRelayOrderInput>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<PoliceMatchRelayWhereInput>;
+};
+
+
 export type QueryPoliceTriageByStoreArgs = {
   endDate?: InputMaybe<Scalars['Date']>;
   schemeId: Scalars['String'];
@@ -19393,6 +19536,19 @@ export type QueryPoliceHubSchemesRelayConnectionEdge = {
   __typename?: 'QueryPoliceHubSchemesRelayConnectionEdge';
   cursor: Scalars['String'];
   node: Scheme;
+};
+
+export type QueryPoliceMatchesRelayConnection = {
+  __typename?: 'QueryPoliceMatchesRelayConnection';
+  edges: Array<QueryPoliceMatchesRelayConnectionEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type QueryPoliceMatchesRelayConnectionEdge = {
+  __typename?: 'QueryPoliceMatchesRelayConnectionEdge';
+  cursor: Scalars['String'];
+  node: PoliceMatch;
 };
 
 export type QueryQuestionsConnection = {
