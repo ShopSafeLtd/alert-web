@@ -1,5 +1,5 @@
 mutation MergeOffenders($data: MergeOffendersInput!) {
-    mergeOffender(data: $data) {
-        id
-    }
+  mergeOffender(data: $data) {
+    id
+  }
 }

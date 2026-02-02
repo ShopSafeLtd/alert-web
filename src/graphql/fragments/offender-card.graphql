@@ -12,6 +12,7 @@ fragment OffenderCard on Offender {
   createdByUser
   idVerified
   updatedAt
+  wanted
   latestIncident {
     id
     dateAgo

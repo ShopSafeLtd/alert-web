@@ -95,6 +95,7 @@ export interface FormData {
   street?: string;
   tags: (SelectOptions | string)[];
   townCity?: string;
+  wanted?: boolean;
 }
 
 interface VehicleType extends VehicleData {
@@ -723,6 +724,7 @@ const useAddOffender = (): Return => {
           sourceDetails: data.sourceDetails || null,
           tags: getOffenderTags(),
           vehicles: getVehicles(),
+          wanted: data.wanted,
         },
       },
     });
