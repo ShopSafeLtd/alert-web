@@ -448,7 +448,7 @@ const Content = ({
         <div>
           {articles.map((article) => (
             <div className={classes.entityCard} key={article.id}>
-              <Link to={`/app/bulletins/${article.id}`}>
+              <Link to={`/app/article/view/${article.id}`}>
                 <ArticleMessageCard
                   article={article}
                   triggerLightbox={triggerLightbox}

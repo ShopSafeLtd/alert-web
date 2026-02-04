@@ -264,7 +264,7 @@ const AddStockRemovalRequest = ({ onClose }: Props) => {
           </Form.Item>
         </Col>
       </Row>
-      <Row>
+      <Row gutter={16}>
         <Col span={12}>
           <Form.Item
             label={intl.formatMessage({
