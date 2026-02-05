@@ -92,6 +92,10 @@ export const useGenerateMG11Statement = ({
     'policeScreenshotDateTime',
     form
   );
+  const policeAdditionalEvidence = Form.useWatch(
+    'policeAdditionalEvidence',
+    form
+  );
 
   /**
    * Map form data to template data structure
@@ -289,6 +293,7 @@ export const useGenerateMG11Statement = ({
         });
 
       return {
+        additionalEvidence: policeAdditionalEvidence,
         businessAddress,
         businessName,
         cctvAheadBehind,
@@ -338,6 +343,7 @@ export const useGenerateMG11Statement = ({
       policeCCTVAheadBehind,
       policeCCTVIncorrectBy,
       policeScreenshotDateTime,
+      policeAdditionalEvidence,
     ]);
 
   /**
@@ -433,6 +439,7 @@ export const useGenerateMG11Statement = ({
     policeCCTVAheadBehind,
     policeCCTVIncorrectBy,
     policeScreenshotDateTime,
+    policeAdditionalEvidence,
     debouncedGenerateStatement,
   ]);
 

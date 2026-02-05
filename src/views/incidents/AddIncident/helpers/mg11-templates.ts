@@ -4,6 +4,7 @@ import { format } from 'date-fns';
  * Data structure for MG11 statement template variables
  */
 export interface MG11TemplateData {
+  additionalEvidence?: string;
   businessAddress: string;
   businessName: string;
   cctvAheadBehind?: 'ahead' | 'behind';
@@ -135,7 +136,7 @@ const generateScreenshotParagraph = (data: MG11TemplateData): string => {
   // Generate a paragraph for each exhibit
   const paragraphs = data.imageRefs.map(
     (ref) =>
-      `At ${data.screenshotTime} hours on ${data.screenshotDate} I took a screenshot from the CCTV of the suspect that I refer to as police exhibit ${ref}.`
+      `At ${data.screenshotTime} hours on ${data.screenshotDate} I took a screenshot from the original CCTV of the incident showing the suspect that I refer to as police exhibit ${ref}.`
   );
 
   return `\n\n${paragraphs.join('\n\n')}`;
@@ -160,12 +161,22 @@ export const generateCCTVReviewStatement = (data: MG11TemplateData): string => {
   }
 
   // Offender identification and how they know them
-  const offenderLine =
-    data.policeKnownBefore &&
-    data.policeKnownBefore !== 'NOT_KNOWN' &&
-    data.policeReasonRemember
-      ? `\n\nThe subject is ${data.offenderName} and I know them as ${data.policeReasonRemember}.`
-      : `\n\nThe Suspect is ${data.offenderName}.`;
+  const offenderLine = (() => {
+    switch (data.policeKnownBefore) {
+      case 'KNOWN_VERIFIED_ID': {
+        return `\n\nThe subject is ${data.offenderName}. I know them as I have previously dealt with them and on that occasion I verified their identity using official identification documents.`;
+      }
+      case 'KNOWN_PERSONALLY': {
+        return `\n\nThe subject is ${data.offenderName}. I know them personally, having had previous face-to-face dealings with them.`;
+      }
+      case 'KNOWN_FROM_PREVIOUS_INCIDENTS': {
+        return `\n\nThe subject is ${data.offenderName}. I know them as I have previously dealt with them in relation to incidents at this store, during which their identity was confirmed by police officers or courts.`;
+      }
+      default: {
+        return `\n\nThe Suspect is ${data.offenderName}.`;
+      }
+    }
+  })();
 
   parts.push(offenderLine);
 
@@ -179,6 +190,13 @@ export const generateCCTVReviewStatement = (data: MG11TemplateData): string => {
   const itemsList = generateItemsList(data.items);
   if (itemsList) {
     parts.push(itemsList);
+  }
+
+  // Additional evidence paragraph
+  if (data.additionalEvidence && data.additionalEvidence.trim()) {
+    parts.push(
+      `\n\nAdditional information and evidence available: ${data.additionalEvidence.trim()}`
+    );
   }
 
   // Authorization statement
@@ -215,12 +233,22 @@ export const generateInPersonWitnessStatement = (
   }
 
   // Offender identification with description and how they know them
-  const baseOffenderLine =
-    data.policeKnownBefore &&
-    data.policeKnownBefore !== 'NOT_KNOWN' &&
-    data.policeReasonRemember
-      ? `\n\nThe subject is ${data.offenderName} and I know them as ${data.policeReasonRemember}.`
-      : `\n\nThe Suspect is ${data.offenderName}.`;
+  const baseOffenderLine = (() => {
+    switch (data.policeKnownBefore) {
+      case 'KNOWN_VERIFIED_ID': {
+        return `\n\nThe subject is ${data.offenderName}. I know them as I have previously dealt with them and on that occasion I verified their identity using official identification documents.`;
+      }
+      case 'KNOWN_PERSONALLY': {
+        return `\n\nThe subject is ${data.offenderName}. I know them personally, having had previous face-to-face dealings with them.`;
+      }
+      case 'KNOWN_FROM_PREVIOUS_INCIDENTS': {
+        return `\n\nThe subject is ${data.offenderName}. I know them as I have previously dealt with them in relation to incidents at this store, during which their identity was confirmed by police officers or courts.`;
+      }
+      default: {
+        return `\n\nThe Suspect is ${data.offenderName}.`;
+      }
+    }
+  })();
 
   // Add description if provided
   const offenderLine = data.offenderDescription
@@ -245,6 +273,13 @@ export const generateInPersonWitnessStatement = (
   const itemsList = generateItemsList(data.items);
   if (itemsList) {
     parts.push(itemsList);
+  }
+
+  // Additional evidence paragraph
+  if (data.additionalEvidence && data.additionalEvidence.trim()) {
+    parts.push(
+      `\n\nAdditional information and evidence available: ${data.additionalEvidence.trim()}`
+    );
   }
 
   // Authorization statement

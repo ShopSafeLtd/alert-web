@@ -29,6 +29,7 @@ export const usePoliceReportingValidation = (
   const date = Form.useWatch('date', form);
   const offenders = Form.useWatch('offenders', form);
   const goods = Form.useWatch('goods', form);
+  const images = Form.useWatch('images', form);
 
   // Validation checks
   const hasDescription = Boolean(description && description.trim().length > 0);
@@ -37,6 +38,7 @@ export const usePoliceReportingValidation = (
   const hasGoodsWithValue = Boolean(
     goods && goods.some((item) => item.value && item.value > 0)
   );
+  const hasImages = Boolean(images && images.length > 0);
 
   // Build requirements array
   const requirements: PoliceReportingRequirement[] = [
@@ -64,6 +66,14 @@ export const usePoliceReportingValidation = (
       id: 'goods',
       label: intl.formatMessage({
         defaultMessage: 'At least one item with value',
+      }),
+    },
+    {
+      completed: hasImages,
+      fieldName: 'images',
+      id: 'images',
+      label: intl.formatMessage({
+        defaultMessage: 'At least one image on the incident',
       }),
     },
   ];

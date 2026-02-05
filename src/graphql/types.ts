@@ -3141,7 +3141,9 @@ export type CreateIncidentData = {
   items?: InputMaybe<Array<CreateIncidentItemInput>>;
   location?: InputMaybe<CreateIncidentLocation>;
   offenders: CreateIncidentOffenders;
+  policeAdditionalEvidence?: InputMaybe<Scalars['String']>;
   policeCCTVEmail?: InputMaybe<Scalars['String']>;
+  policeCCTVReviewed?: InputMaybe<Scalars['Boolean']>;
   policeDay?: InputMaybe<Scalars['Boolean']>;
   policeDepartment?: InputMaybe<Scalars['String']>;
   policeDistanceFromIncident?: InputMaybe<Scalars['String']>;
@@ -8134,6 +8136,8 @@ export type Incident = {
   offenderIdentityScore?: Maybe<Scalars['Int']>;
   offenders: Array<Offender>;
   originalDescription: Scalars['String'];
+  policeAdditionalEvidence?: Maybe<Scalars['String']>;
+  policeCCTVReviewed?: Maybe<Scalars['Boolean']>;
   policeDay?: Maybe<Scalars['Boolean']>;
   policeDepartment?: Maybe<Scalars['String']>;
   policeDistanceFromIncident?: Maybe<Scalars['String']>;
@@ -9252,6 +9256,8 @@ export type IncidentUpdateInput = {
   incidentItems?: InputMaybe<IncidentItemUpdateManyWithoutIncidentInput>;
   location?: InputMaybe<UpdateSimpleLocation>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutIncidentsNested>;
+  policeAdditionalEvidence?: InputMaybe<NullableSetStringHelper>;
+  policeCCTVReviewed?: InputMaybe<NullableSetBooleanHelper>;
   policeDepartment?: InputMaybe<NullableSetStringHelper>;
   policeInvolved?: InputMaybe<NullableSetBooleanHelper>;
   policeNo?: InputMaybe<NullableSetStringHelper>;
