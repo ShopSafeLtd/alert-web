@@ -675,6 +675,32 @@ const IncidentPolice = ({
                       </>
                     )}
 
+                    <Row gutter={16}>
+                      <Col span={12}>
+                        <Form.Item
+                          label={intl.formatMessage({
+                            defaultMessage:
+                              'Email address police can use to obtain CCTV',
+                          })}
+                          name="policeCCTVEmail"
+                          rules={[
+                            {
+                              message: intl.formatMessage({
+                                defaultMessage: 'Please answer this question.',
+                              }),
+                              required: true,
+                            },
+                          ]}
+                          tooltip={intl.formatMessage({
+                            defaultMessage:
+                              'The email address that the police can use to obtain CCTV evidence from the business, this will normally be your store address or the address for your SOC.',
+                          })}
+                        >
+                          <Input />
+                        </Form.Item>
+                      </Col>
+                    </Row>
+
                     {images && images.length > 0 && (
                       <>
                         <Title level={5} style={{ marginBottom: 16 }}>

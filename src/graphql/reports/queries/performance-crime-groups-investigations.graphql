@@ -1,0 +1,29 @@
+query PerformanceCrimeGroupsInvestigations($where: UserContributionWhereInput!) {
+  crimeGroupPerformance(where: $where) {
+    crimeGroupPerformance {
+      totalSuccessRate
+      totalRecoveredValue
+      totalOffenders
+      totalLostValue
+      totalIncidents
+      lastIncident
+      alias
+      alertId
+    }
+    total
+  }
+  investigationPerformance(where: $where) {
+    total
+    investigationPerformance {
+      id
+      alertId
+      name
+      status
+      totalIncidents
+      totalOffenders
+      totalValue
+      createdAt
+      closedAt
+    }
+  }
+}

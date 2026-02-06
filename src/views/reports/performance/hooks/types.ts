@@ -1,4 +1,5 @@
 import type { DateSelectModeType } from '#/components/reports/DateSelect/DateSelect.view';
+import type { ApolloError } from '@apollo/client';
 import type { PerformanceReportQuery } from 'graphql/reports/queries/__generated__/performance-report.generated';
 import type { RefObject } from 'react';
 
@@ -35,6 +36,14 @@ export interface Props {
   data: PerformanceReportQuery | undefined;
   dateRange: { endDate: Date; startDate: Date };
   editMode: boolean;
+  errors: {
+    businessContribution?: ApolloError;
+    coreSummaries?: ApolloError;
+    crimeGroupsInvestigations?: ApolloError;
+    heatMap?: ApolloError;
+    offenders?: ApolloError;
+    targetedGoods?: ApolloError;
+  };
   filterCount: number;
   filtersOpen: boolean;
   getBusinessContributionSortIndicator: (columnField: string) => string;
@@ -60,6 +69,14 @@ export interface Props {
   isPrinting: boolean;
   layout: ExtendedLayout[];
   loading: boolean;
+  loadingStates: {
+    businessContribution: boolean;
+    coreSummaries: boolean;
+    crimeGroupsInvestigations: boolean;
+    heatMap: boolean;
+    offenders: boolean;
+    targetedGoods: boolean;
+  };
   logos: string[];
   metadata: MetaData[];
   minDrawer: boolean;
@@ -92,18 +109,18 @@ export interface Props {
   setRedactOnPrint: (arg0: boolean) => void;
   setSaveAsDrawer: (arg0: boolean) => void;
   setSelectedBrands: (brands: string[]) => void;
+
   setSelectedBusiness: (businesses: string[]) => void;
   setSelectedGroups: (groups: string[]) => void;
-
   setSelectedIndustries: (brands: string[]) => void;
   setSelectedRoles: (roles: string[]) => void;
   sortDirection: 'asc' | 'desc';
   sortField: string;
   targetedBusinessCurrentPage: number;
   targetedBusinessData: [] | TargetedBusinessTableData[];
+
   targetedBusinessPageSize: number;
   targetedBusinessSortDirection: 'asc' | 'desc';
-
   targetedBusinessSortField: string;
   // Targeted Business Table pagination/sorting
   targetedBusinessTotal: number;

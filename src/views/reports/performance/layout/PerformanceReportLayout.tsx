@@ -142,10 +142,18 @@ interface Props {
   isPrinting: boolean;
   layout: RGL.Layout[];
   loading: boolean;
+  loadingStates: {
+    businessContribution: boolean;
+    coreSummaries: boolean;
+    crimeGroupsInvestigations: boolean;
+    heatMap: boolean;
+    offenders: boolean;
+    targetedGoods: boolean;
+  };
   margin: [number, number];
   metadata: MetaData[];
-  offendersTableData: [] | OffenderTableData[];
 
+  offendersTableData: [] | OffenderTableData[];
   pageSize: number;
   removeItem: (arg0: string) => void;
   rowHeight: number;
@@ -153,8 +161,8 @@ interface Props {
   sortDirection: 'asc' | 'desc';
   sortField: string;
   targetedBusinessCurrentPage: number;
-  targetedBusinessData: [] | TargetedBusinessTableData[];
 
+  targetedBusinessData: [] | TargetedBusinessTableData[];
   targetedBusinessPageSize: number;
   targetedBusinessSortDirection: 'asc' | 'desc';
   targetedBusinessSortField: string;
@@ -207,6 +215,7 @@ const PerformanceReportLayout = ({
   isPrinting,
   layout,
   loading,
+  loadingStates,
   margin,
   metadata,
   offendersTableData,
@@ -228,6 +237,65 @@ const PerformanceReportLayout = ({
   userEngagementLoading,
 }: Props) => {
   const classes = useStyles();
+
+  // Helper function to map section keys to their appropriate loading state
+  const getSectionLoading = (key: string): boolean => {
+    // Core summary sections
+    if (
+      [
+        'basicPoliceSummary',
+        'createdSummary',
+        'crimeTypesDonut',
+        'goodsTypeDonut',
+        'goodsTypeValueDonut',
+        'incidentsDayOfWeekGraph',
+        'incidentsSummary',
+        'investigationSummary',
+        'involvedTagsDonut',
+        'lossSummary',
+        'outcomeSummary',
+        'policeSummary',
+        'priorityGraph',
+        'timeHeatMap',
+      ].includes(key)
+    ) {
+      return loadingStates.coreSummaries;
+    }
+
+    // Offenders
+    if (key === 'offendersTable') {
+      return loadingStates.offenders;
+    }
+
+    // Crime groups & investigations
+    if (['crimeGroupTable', 'investigationsTable'].includes(key)) {
+      return loadingStates.crimeGroupsInvestigations;
+    }
+
+    // Targeted goods
+    if (key === 'targetedGoodsTable') {
+      return loadingStates.targetedGoods;
+    }
+
+    // Heat map
+    if (key === 'incidentsHeatMap') {
+      return loadingStates.heatMap;
+    }
+
+    // Business contribution
+    if (['businessContributionTable', 'targetedBusinessTable'].includes(key)) {
+      return loadingStates.businessContribution;
+    }
+
+    // User engagement (uses existing userEngagementLoading)
+    if (['activitiesTable', 'topContributors'].includes(key)) {
+      return userEngagementLoading;
+    }
+
+    // Graphs/sections with no external data (always ready)
+    return false;
+  };
+
   const calculateHeight = (key: string, offset?: number) => {
     const targetElement = layout.find((element) => element.i === key);
     const targetH = targetElement ? targetElement.h : 0;
@@ -518,7 +586,7 @@ const PerformanceReportLayout = ({
             bodyStyle={{ height: '90%' }}
             className="no-break"
             key={key}
-            loading={loading}
+            loading={getSectionLoading(key)}
             style={{ height: calculateHeight(key) }}
           >
             <ActivitiesGraphView
@@ -549,7 +617,7 @@ const PerformanceReportLayout = ({
           <Card
             bodyStyle={{ width: '100%' }}
             key="activitySummary"
-            loading={loading}
+            loading={getSectionLoading('topContributors')}
             style={{ width: '100%' }}
           >
             <ActivitySummary
@@ -566,7 +634,7 @@ const PerformanceReportLayout = ({
             bodyStyle={{ overflow: 'auto' }}
             className="no-break"
             key="activitiesTable"
-            loading={loading}
+            loading={getSectionLoading('activitiesTable')}
             style={{ height: calculateHeight('activitiesTable') }}
           >
             <Button
@@ -610,7 +678,7 @@ const PerformanceReportLayout = ({
           <Card
             bodyStyle={{ width: '100%' }}
             key="createdSummary"
-            loading={loading}
+            loading={getSectionLoading('createdSummary')}
             style={{ width: '100%' }}
           >
             <Button
@@ -753,7 +821,7 @@ const PerformanceReportLayout = ({
           <Card
             bodyStyle={{ width: '100%' }}
             key="incidentsSummary"
-            loading={loading}
+            loading={getSectionLoading('incidentsSummary')}
             style={{ width: '100%' }}
           >
             <Button
@@ -850,7 +918,7 @@ const PerformanceReportLayout = ({
           <Card
             bodyStyle={{ width: '100%' }}
             key="basicPoliceSummary"
-            loading={loading}
+            loading={getSectionLoading('basicPoliceSummary')}
             style={{ width: '100%' }}
           >
             <Button
@@ -914,7 +982,7 @@ const PerformanceReportLayout = ({
           <Card
             bodyStyle={{ width: '100%' }}
             key="policeSummary"
-            loading={loading}
+            loading={getSectionLoading('policeSummary')}
             style={{ width: '100%' }}
           >
             <Button
@@ -995,7 +1063,7 @@ const PerformanceReportLayout = ({
           <Card
             bodyStyle={{ width: '100%' }}
             key="investigationSummary"
-            loading={loading}
+            loading={getSectionLoading('investigationSummary')}
             style={{ width: '100%' }}
           >
             <Button
@@ -1073,7 +1141,7 @@ const PerformanceReportLayout = ({
           <Card
             bodyStyle={{ width: '100%' }}
             key="outcomeSummary"
-            loading={loading}
+            loading={getSectionLoading('outcomeSummary')}
             style={{ width: '100%' }}
           >
             <Button
@@ -1231,8 +1299,15 @@ const PerformanceReportLayout = ({
                     defaultMessage: 'Fines Value',
                   })}
                   value={
-                    data?.performanceReport?.outcomeSummary?.totalFinesValue ||
-                    0
+                    data?.performanceReport?.outcomeSummary?.totalFinesValue
+                      ? intl.formatNumber(
+                          data?.performanceReport?.outcomeSummary
+                            ?.totalFinesValue || 0,
+                          { currency, style: 'currency' }
+                        )
+                      : intl.formatMessage({
+                          defaultMessage: '--',
+                        })
                   }
                 />
               </Row>
@@ -1245,7 +1320,7 @@ const PerformanceReportLayout = ({
           <Card
             bodyStyle={{ width: '100%' }}
             key="lossSummary"
-            loading={loading}
+            loading={getSectionLoading('lossSummary')}
             style={{ width: '100%' }}
           >
             <Button
@@ -1407,7 +1482,7 @@ const PerformanceReportLayout = ({
             bodyStyle={{ height: '90%' }}
             className="no-break"
             key="crimeTypesDonut"
-            loading={loading}
+            loading={getSectionLoading('crimeTypesDonut')}
             style={{ height: calculateHeight('crimeTypesDonut') }}
           >
             <Button
@@ -1566,7 +1641,7 @@ const PerformanceReportLayout = ({
             bodyStyle={{ height: '90%' }}
             className="no-break"
             key="involvedTagsDonut"
-            loading={loading}
+            loading={getSectionLoading('involvedTagsDonut')}
             style={{ height: calculateHeight('involvedTagsDonut') }}
           >
             <Button
@@ -1730,7 +1805,7 @@ const PerformanceReportLayout = ({
             bodyStyle={{ height: '90%' }}
             className="no-break"
             key="goodsTypeDonut"
-            loading={loading}
+            loading={getSectionLoading('goodsTypeDonut')}
             style={{ height: calculateHeight('goodsTypeDonut') }}
           >
             <Button
@@ -1893,7 +1968,7 @@ const PerformanceReportLayout = ({
             bodyStyle={{ height: '90%' }}
             className="no-break"
             key="goodsValueDonut"
-            loading={loading}
+            loading={getSectionLoading('goodsTypeValueDonut')}
             style={{ height: calculateHeight('goodsValueDonut') }}
           >
             <Button
@@ -2074,7 +2149,7 @@ const PerformanceReportLayout = ({
             bodyStyle={{ height: '90%' }}
             className="no-break"
             key="incidentsDayOfWeekGraph"
-            loading={loading}
+            loading={getSectionLoading('incidentsDayOfWeekGraph')}
             style={{ height: calculateHeight('incidentsDayOfWeekGraph') }}
           >
             <Button
@@ -2107,7 +2182,7 @@ const PerformanceReportLayout = ({
               data?.incidentHeatPerformance?.incidents[0]?.location?.geoLat
             )} no-break`}
             key="incidentsHeatMap"
-            loading={loading}
+            loading={getSectionLoading('incidentsHeatMap')}
             style={{ overflow: 'hidden' }}
           >
             <Button
@@ -2149,7 +2224,7 @@ const PerformanceReportLayout = ({
             bodyStyle={{ overflow: 'auto' }}
             className="no-break"
             key="businessContributionTable"
-            loading={loading}
+            loading={getSectionLoading('businessContributionTable')}
             style={{ height: calculateHeight('businessContributionTable') }}
           >
             <Button
@@ -2237,7 +2312,7 @@ const PerformanceReportLayout = ({
             bodyStyle={{ overflow: 'auto' }}
             className="no-break"
             key="offendersTable"
-            loading={loading}
+            loading={getSectionLoading('offendersTable')}
             style={{ height: calculateHeight('offendersTable') }}
           >
             <Button
@@ -2280,7 +2355,7 @@ const PerformanceReportLayout = ({
             bodyStyle={{ overflow: 'auto' }}
             className="no-break"
             key="crimeGroupTable"
-            loading={loading}
+            loading={getSectionLoading('crimeGroupTable')}
             style={{ height: calculateHeight('crimeGroupTable') }}
           >
             <Button
@@ -2323,7 +2398,7 @@ const PerformanceReportLayout = ({
             bodyStyle={{ overflow: 'auto' }}
             className="no-break"
             key="targetedBusinessTable"
-            loading={loading}
+            loading={getSectionLoading('targetedBusinessTable')}
             style={{ height: calculateHeight('targetedBusinessTable') }}
           >
             <TargetedBusinessTable
@@ -2363,7 +2438,7 @@ const PerformanceReportLayout = ({
             bodyStyle={{ overflow: 'auto' }}
             className="no-break"
             key="targetedGoodsTable"
-            loading={loading}
+            loading={getSectionLoading('targetedGoodsTable')}
             style={{ height: calculateHeight('targetedGoodsTable') }}
           >
             <Button
@@ -2409,7 +2484,7 @@ const PerformanceReportLayout = ({
             bodyStyle={{ overflow: 'auto' }}
             className="no-break"
             key="investigationsTable"
-            loading={loading}
+            loading={getSectionLoading('investigationsTable')}
             style={{ height: calculateHeight('investigationsTable') }}
           >
             <Button
@@ -2528,7 +2603,7 @@ const PerformanceReportLayout = ({
             bodyStyle={{ height: '90%' }}
             className="no-break"
             key="timeHeatMap"
-            loading={loading}
+            loading={getSectionLoading('timeHeatMap')}
             style={{ height: calculateHeight('timeHeatMap') }}
             title={intl.formatMessage({
               defaultMessage: 'Incidents By Time',
@@ -2561,7 +2636,7 @@ const PerformanceReportLayout = ({
             bodyStyle={{ height: '90%' }}
             className="no-break"
             key="priorityGraph"
-            loading={loading}
+            loading={getSectionLoading('priorityGraph')}
             style={{ height: calculateHeight('priorityGraph') }}
             title={intl.formatMessage({
               defaultMessage: 'Priorty Graph',
@@ -2595,7 +2670,7 @@ const PerformanceReportLayout = ({
             bodyStyle={{ height: '90%' }}
             className="no-break"
             key={key}
-            loading={loading}
+            loading={getSectionLoading(key)}
             style={{ height: calculateHeight(key) }}
           >
             <CustomQuestionsCountGraph
@@ -2678,7 +2753,7 @@ const PerformanceReportLayout = ({
             bodyStyle={{ height: '90%' }}
             className="no-break"
             key={key}
-            loading={loading}
+            loading={getSectionLoading(key)}
             style={{ height: calculateHeight(key) }}
           >
             <TotalUserSessionsGraph
@@ -2707,7 +2782,7 @@ const PerformanceReportLayout = ({
             bodyStyle={{ height: '90%' }}
             className="no-break"
             key={key}
-            loading={loading}
+            loading={getSectionLoading(key)}
             style={{ height: calculateHeight(key) }}
           >
             <UserIncidentCountGraph
@@ -2748,7 +2823,7 @@ const PerformanceReportLayout = ({
             bodyStyle={{ height: '90%' }}
             className="no-break"
             key={key}
-            loading={loading}
+            loading={getSectionLoading(key)}
             style={{ height: calculateHeight(key) }}
           >
             <BusinessIncidentCountGraph
@@ -2781,7 +2856,7 @@ const PerformanceReportLayout = ({
             bodyStyle={{ height: '90%' }}
             className="no-break"
             key={key}
-            loading={loading}
+            loading={getSectionLoading(key)}
             style={{ height: calculateHeight(key) }}
           >
             <BusinessCrimeTypeGraph
@@ -2810,7 +2885,7 @@ const PerformanceReportLayout = ({
             bodyStyle={{ height: '90%' }}
             className="no-break"
             key={key}
-            loading={loading}
+            loading={getSectionLoading(key)}
             style={{ height: calculateHeight(key) }}
           >
             <BusinessLossRecoveredGraph

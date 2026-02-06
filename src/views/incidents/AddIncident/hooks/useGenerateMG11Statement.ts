@@ -10,7 +10,6 @@ import {
   formatDate,
   formatTime,
   generateCCTVReviewStatement,
-  generateInPersonWitnessStatement,
 } from '#/views/incidents/AddIncident/helpers/mg11-templates';
 import { Form } from 'antd';
 import { useAtomValue } from 'jotai/index';
@@ -67,7 +66,6 @@ export const useGenerateMG11Statement = ({
   const offenders = Form.useWatch('offenders', form);
   const goods = Form.useWatch('goods', form);
   const images = Form.useWatch('images', form);
-  const policeWitnessAtTime = Form.useWatch('policeWitnessAtTime', form);
   const policeCCTVReviewed = Form.useWatch('policeCCTVReviewed', form);
   const description = Form.useWatch('description', form);
   const policeIncidentDuration = Form.useWatch('policeIncidentDuration', form);
@@ -314,7 +312,7 @@ export const useGenerateMG11Statement = ({
         offenderName,
         policeKnownBefore,
         policeReasonRemember,
-        policeWitnessAtTime: policeWitnessAtTime || false,
+        policeWitnessAtTime: false, // Always CCTV review now
         screenshotDate,
         screenshotTime,
         viewObstructed,
@@ -332,7 +330,6 @@ export const useGenerateMG11Statement = ({
       offenders,
       images,
       goods,
-      policeWitnessAtTime,
       policeIncidentDuration,
       policeDistanceFromIncident,
       policeObstructions,
@@ -352,14 +349,14 @@ export const useGenerateMG11Statement = ({
    */
   const generateStatement = useCallback(async () => {
     console.log('[MG11] Attempting to generate statement', {
+      policeCCTVReviewed,
       policeReporting,
-      policeWitnessAtTime,
     });
 
-    if (!policeReporting || policeWitnessAtTime === undefined) {
+    if (!policeReporting || policeCCTVReviewed !== true) {
       console.log('[MG11] Skipping generation - conditions not met', {
+        policeCCTVReviewed,
         policeReporting,
-        policeWitnessAtTime,
       });
       return;
     }
@@ -383,10 +380,8 @@ export const useGenerateMG11Statement = ({
 
       console.log('[MG11] Template data:', templateData);
 
-      // Generate statement based on witness type
-      const statement = policeWitnessAtTime
-        ? generateInPersonWitnessStatement(templateData)
-        : generateCCTVReviewStatement(templateData);
+      // Always generate CCTV review statement (all reports now require CCTV review)
+      const statement = generateCCTVReviewStatement(templateData);
 
       console.log('[MG11] Generated statement:', statement);
 
@@ -398,7 +393,7 @@ export const useGenerateMG11Statement = ({
     } finally {
       setGenerating(false);
     }
-  }, [policeReporting, policeWitnessAtTime, form, mapFormDataToTemplateData]);
+  }, [policeReporting, policeCCTVReviewed, form, mapFormDataToTemplateData]);
 
   /**
    * Debounced version of generateStatement (1000ms delay)
@@ -419,7 +414,6 @@ export const useGenerateMG11Statement = ({
     return () => debouncedGenerateStatement.cancel();
   }, [
     policeReporting,
-    policeWitnessAtTime,
     policeCCTVReviewed,
     business,
     date,

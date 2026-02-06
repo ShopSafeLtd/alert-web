@@ -1,0 +1,13 @@
+query PerformanceHeatMap($where: UserContributionWhereInput!) {
+  incidentHeatPerformance(where: $where) {
+    total
+    incidents {
+      id
+      location {
+        id
+        geoLat
+        geoLng
+      }
+    }
+  }
+}

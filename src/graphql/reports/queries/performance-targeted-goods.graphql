@@ -1,0 +1,15 @@
+query PerformanceTargetedGoods($where: UserContributionWhereInput!) {
+  targetedGoods(where: $where) {
+    targetedGoods {
+      alertId
+      name
+      totalIncidents
+      totalOffenders
+      totalLostValue
+      totalRecoveredValue
+      totalSuccessRate
+      averageLossValue
+    }
+    total
+  }
+}
