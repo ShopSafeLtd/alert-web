@@ -793,13 +793,17 @@ const IncidentPolice = ({
                                   className={classes.knownBeforeCardIcon}
                                   icon={option.icon}
                                 />
-                                <div className={classes.knownBeforeCardTitle}>
-                                  {option.title}
-                                </div>
-                                <div
-                                  className={classes.knownBeforeCardDescription}
-                                >
-                                  {option.description}
+                                <div className={classes.knownBeforeCardContent}>
+                                  <div className={classes.knownBeforeCardTitle}>
+                                    {option.title}
+                                  </div>
+                                  <div
+                                    className={
+                                      classes.knownBeforeCardDescription
+                                    }
+                                  >
+                                    {option.description}
+                                  </div>
                                 </div>
                               </div>
                             </Col>
