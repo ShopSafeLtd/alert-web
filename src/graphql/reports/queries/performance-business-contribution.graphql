@@ -1,0 +1,30 @@
+query PerformanceBusinessContribution(
+  $where: UserContributionWhereInput!
+  $businessContributionSkip: Int
+  $businessContributionTake: Int
+  $businessContributionOrderBy: BusinessContributionOrderByInput
+) {
+  businessContribution(
+    where: $where
+    skip: $businessContributionSkip
+    take: $businessContributionTake
+    orderBy: $businessContributionOrderBy
+  ) {
+    businessContributions {
+      name
+      totalUsers
+      totalIncidents
+      totalOffenders
+      totalUpdates
+      totalMessages
+      totalLogins
+      totalSuccessRate
+      totalRecoveredValue
+      totalLostValue
+      mostCommonGoodLost
+      highestTotalValueGoodLost
+      averageLossValue
+    }
+    total
+  }
+}

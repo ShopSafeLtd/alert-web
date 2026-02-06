@@ -1,0 +1,17 @@
+query PerformanceOffenders($where: UserContributionWhereInput!) {
+  offendersPerformance(where: $where) {
+    total
+    offenderPerformance {
+      primaryPhoto
+      alertId
+      name
+      totalIncidents
+      totalLostValue
+      totalRecoveredValue
+      totalSuccessRate
+      lastIncidentDate
+      id
+      totalBulletins
+    }
+  }
+}

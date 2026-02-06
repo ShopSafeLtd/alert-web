@@ -4,7 +4,12 @@ import type { DateRangeInput } from 'graphql/types';
 
 import arrangeTemplates from '#/utils/reports/setTemplates';
 import { useUserEngagementQuery } from 'graphql/reports/queries/__generated__/list-user-engagement.generated';
-import { usePerformanceReportQuery } from 'graphql/reports/queries/__generated__/performance-report.generated';
+import { usePerformanceBusinessContributionQuery } from 'graphql/reports/queries/__generated__/performance-business-contribution.generated';
+import { usePerformanceCoreSummariesQuery } from 'graphql/reports/queries/__generated__/performance-core-summaries.generated';
+import { usePerformanceCrimeGroupsInvestigationsQuery } from 'graphql/reports/queries/__generated__/performance-crime-groups-investigations.generated';
+import { usePerformanceHeatMapQuery } from 'graphql/reports/queries/__generated__/performance-heat-map.generated';
+import { usePerformanceOffendersQuery } from 'graphql/reports/queries/__generated__/performance-offenders.generated';
+import { usePerformanceTargetedGoodsQuery } from 'graphql/reports/queries/__generated__/performance-targeted-goods.generated';
 import { useSchemeReportDetailsQuery } from 'graphql/reports/queries/__generated__/scheme-details.generated';
 import { ReportType, SortOrder } from 'graphql/types';
 import { useEffect, useState } from 'react';
@@ -290,7 +295,74 @@ const usePerformanceReport = (): Return => {
     saveTemplateState(name, method, idsToDelete);
   };
 
-  const { data, loading } = usePerformanceReportQuery({
+  // Common query configuration
+  const queryConfig = {
+    fetchPolicy: 'cache-and-network' as const,
+    skip: !currentScheme || !groups || groupsLoading || !selectedGroups,
+    variables: {
+      where: {
+        brandsIds: selectedBrands.length > 0 ? selectedBrands : undefined,
+        businessesIds:
+          selectedBusiness.length > 0 ? selectedBusiness : undefined,
+        dateRange: {
+          endDate: dateRange.endDate,
+          startDate: dateRange.startDate,
+        },
+        groupIds:
+          selectedGroups.length > 0
+            ? selectedGroups
+            : groups.map(({ value }) => value),
+        incidentTypeIds:
+          incidentTypeIds.length > 0 ? incidentTypeIds : undefined,
+        industryIds:
+          selectedIndustries.length > 0 ? selectedIndustries : undefined,
+        rolesIds: selectedRoles.length > 0 ? selectedRoles : undefined,
+        schemeIds: [currentScheme],
+      },
+    },
+  };
+
+  // Query 1: Core summaries (highest priority)
+  const {
+    data: coreSummariesData,
+    error: coreSummariesError,
+    loading: coreSummariesLoading,
+  } = usePerformanceCoreSummariesQuery(queryConfig);
+
+  // Query 2: Offenders table
+  const {
+    data: offendersData,
+    error: offendersError,
+    loading: offendersLoading,
+  } = usePerformanceOffendersQuery(queryConfig);
+
+  // Query 3: Crime groups and investigations
+  const {
+    data: crimeGroupsInvestigationsData,
+    error: crimeGroupsInvestigationsError,
+    loading: crimeGroupsInvestigationsLoading,
+  } = usePerformanceCrimeGroupsInvestigationsQuery(queryConfig);
+
+  // Query 4: Targeted goods
+  const {
+    data: targetedGoodsQueryData,
+    error: targetedGoodsError,
+    loading: targetedGoodsLoading,
+  } = usePerformanceTargetedGoodsQuery(queryConfig);
+
+  // Query 5: Heat map
+  const {
+    data: heatMapData,
+    error: heatMapError,
+    loading: heatMapLoading,
+  } = usePerformanceHeatMapQuery(queryConfig);
+
+  // Query 6: Business contribution (with pagination)
+  const {
+    data: businessContributionData,
+    error: businessContributionError,
+    loading: businessContributionLoading,
+  } = usePerformanceBusinessContributionQuery({
     fetchPolicy: 'cache-and-network',
     skip: !currentScheme || !groups || groupsLoading || !selectedGroups,
     variables: {
@@ -318,6 +390,49 @@ const usePerformanceReport = (): Return => {
       },
     },
   });
+
+  // Combine loading states
+  const loading =
+    coreSummariesLoading ||
+    offendersLoading ||
+    crimeGroupsInvestigationsLoading ||
+    targetedGoodsLoading ||
+    heatMapLoading ||
+    businessContributionLoading;
+
+  // Combine data for backward compatibility
+  const data = coreSummariesData
+    ? {
+        businessContribution:
+          businessContributionData?.businessContribution ?? {
+            businessContributions: [],
+            total: 0,
+          },
+        crimeGroupPerformance:
+          crimeGroupsInvestigationsData?.crimeGroupPerformance ?? {
+            crimeGroupPerformance: [],
+            total: 0,
+          },
+        incidentHeatPerformance: heatMapData?.incidentHeatPerformance ?? {
+          incidents: [],
+          total: 0,
+        },
+        investigationPerformance:
+          crimeGroupsInvestigationsData?.investigationPerformance ?? {
+            investigationPerformance: [],
+            total: 0,
+          },
+        offendersPerformance: offendersData?.offendersPerformance ?? {
+          offenderPerformance: [],
+          total: 0,
+        },
+        performanceReport: coreSummariesData.performanceReport,
+        targetedGoods: targetedGoodsQueryData?.targetedGoods ?? {
+          targetedGoods: [],
+          total: 0,
+        },
+      }
+    : undefined;
 
   const { data: userEngagementData, loading: userEngagementLoading } =
     useUserEngagementQuery({
@@ -585,6 +700,14 @@ const usePerformanceReport = (): Return => {
     data,
     dateRange,
     editMode,
+    errors: {
+      businessContribution: businessContributionError,
+      coreSummaries: coreSummariesError,
+      crimeGroupsInvestigations: crimeGroupsInvestigationsError,
+      heatMap: heatMapError,
+      offenders: offendersError,
+      targetedGoods: targetedGoodsError,
+    },
     filterCount,
     filtersOpen,
     getBusinessContributionSortIndicator,
@@ -604,6 +727,14 @@ const usePerformanceReport = (): Return => {
     isPrinting,
     layout,
     loading,
+    loadingStates: {
+      businessContribution: businessContributionLoading,
+      coreSummaries: coreSummariesLoading,
+      crimeGroupsInvestigations: crimeGroupsInvestigationsLoading,
+      heatMap: heatMapLoading,
+      offenders: offendersLoading,
+      targetedGoods: targetedGoodsLoading,
+    },
     logos,
     metadata,
     minDrawer,
@@ -633,18 +764,18 @@ const usePerformanceReport = (): Return => {
     setRedactOnPrint,
     setSaveAsDrawer,
     setSelectedBrands,
+
     setSelectedBusiness,
     setSelectedGroups,
-
     setSelectedIndustries,
     setSelectedRoles,
     sortDirection,
     sortField,
     targetedBusinessCurrentPage,
     targetedBusinessData,
+
     targetedBusinessPageSize,
     targetedBusinessSortDirection,
-
     targetedBusinessSortField,
     // Targeted Business Table pagination/sorting
     targetedBusinessTotal: data?.businessContribution?.total || 0,

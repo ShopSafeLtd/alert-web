@@ -1,0 +1,80 @@
+query PerformanceCoreSummaries($where: UserContributionWhereInput!) {
+  performanceReport(where: $where) {
+    createdDataCounts {
+      crimeGroups
+      incidents
+      messages
+      offenders
+      updates
+      vehicles
+      bulletins
+    }
+    incidentSummary {
+      totalIncidents
+      lastIncidentDate
+      incidentsReportedToPolice
+      incidentsWherePoliceAttended
+      mostCommonCrimeType
+    }
+    outcomeSummary {
+      totalArrests
+      totalCBOYears
+      totalCBOCount
+      totalFinesCount
+      totalFinesValue
+      totalPrisonSentenceCount
+      totalPrisonSentenceMonths
+      totalRehabOrders
+    }
+    crimeTypeDonut {
+      label
+      value
+    }
+    involvedTagCountDonut {
+      label
+      value
+    }
+    incidentDayOfWeekLine {
+      label
+      value
+    }
+    lossTotals {
+      totalIncidents
+      totalLostValue
+      totalRecoveredValue
+      averagePerIncident
+      averageSuccessRate
+      averageLossPerIncident
+    }
+    goodsTypeCountDonut {
+      label
+      value
+    }
+    goodsTypeValueDonut {
+      label
+      value
+    }
+    policeSummary {
+      totalAttendedIncidents
+      totalReportedIncidents
+      totalPoliceImages
+      totalVerifiedOffenders
+    }
+    investigationSummary {
+      closed
+      open
+      opened
+    }
+    timeHeatMap {
+      id
+      data {
+        x
+        y
+      }
+    }
+    priorityGraph {
+      value
+      label
+    }
+  }
+}

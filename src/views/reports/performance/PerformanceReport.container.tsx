@@ -20,6 +20,7 @@ const PerformanceReport = (): JSX.Element => {
     data,
     dateRange,
     editMode,
+    errors,
     filterCount,
     filtersOpen,
     getBusinessContributionSortIndicator,
@@ -39,6 +40,7 @@ const PerformanceReport = (): JSX.Element => {
     isPrinting,
     layout,
     loading,
+    loadingStates,
     logos,
     metadata,
     minDrawer,
@@ -104,6 +106,7 @@ const PerformanceReport = (): JSX.Element => {
       data={data}
       dateRange={dateRange}
       editMode={editMode}
+      errors={errors}
       filterCount={filterCount}
       filtersOpen={filtersOpen}
       getBusinessContributionSortIndicator={
@@ -127,6 +130,7 @@ const PerformanceReport = (): JSX.Element => {
       isPrinting={isPrinting}
       layout={layout}
       loading={loading}
+      loadingStates={loadingStates}
       logos={logos}
       metadata={metadata}
       minDrawer={minDrawer}
