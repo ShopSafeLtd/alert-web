@@ -1,3 +1,5 @@
+import type { Moment } from 'moment';
+
 import { format } from 'date-fns';
 
 /**
@@ -37,10 +39,21 @@ export interface MG11TemplateData {
 /**
  * Format date as "22/01/2026"
  */
-export const formatDate = (date: Date | null | string | undefined): string => {
+export const formatDate = (
+  date: Date | Moment | null | string | undefined
+): string => {
   if (!date) return '';
   try {
-    const dateObj = typeof date === 'string' ? new Date(date) : date;
+    // Handle Moment objects (from Ant Design DatePicker)
+    if (
+      typeof date === 'object' &&
+      'toDate' in date &&
+      typeof date.toDate === 'function'
+    ) {
+      return format(date.toDate(), 'dd/MM/yyyy');
+    }
+    // Handle strings and Date objects
+    const dateObj = typeof date === 'string' ? new Date(date) : (date as Date);
     return format(dateObj, 'dd/MM/yyyy');
   } catch {
     return '';
@@ -50,10 +63,21 @@ export const formatDate = (date: Date | null | string | undefined): string => {
 /**
  * Format time as "14:30"
  */
-export const formatTime = (date: Date | null | string | undefined): string => {
+export const formatTime = (
+  date: Date | Moment | null | string | undefined
+): string => {
   if (!date) return '';
   try {
-    const dateObj = typeof date === 'string' ? new Date(date) : date;
+    // Handle Moment objects (from Ant Design DatePicker)
+    if (
+      typeof date === 'object' &&
+      'toDate' in date &&
+      typeof date.toDate === 'function'
+    ) {
+      return format(date.toDate(), 'HH:mm');
+    }
+    // Handle strings and Date objects
+    const dateObj = typeof date === 'string' ? new Date(date) : (date as Date);
     return format(dateObj, 'HH:mm');
   } catch {
     return '';

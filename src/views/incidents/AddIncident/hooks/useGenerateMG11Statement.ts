@@ -61,8 +61,6 @@ export const useGenerateMG11Statement = ({
   const business = Form.useWatch('business', form);
   const date = Form.useWatch('date', form);
   const tags = Form.useWatch('tags', form);
-  const cctv = Form.useWatch('cctv', form);
-  const cctvAvailable = Form.useWatch('cctvAvailable', form);
   const offenders = Form.useWatch('offenders', form);
   const goods = Form.useWatch('goods', form);
   const images = Form.useWatch('images', form);
@@ -80,7 +78,6 @@ export const useGenerateMG11Statement = ({
   );
   const policeKnownBefore = Form.useWatch('policeKnownBefore', form);
   const policeReasonRemember = Form.useWatch('policeReasonRemember', form);
-  const policeWitnessAtTime = Form.useWatch('policeWitnessAtTime', form);
   const policeCCTVReviewDateTime = Form.useWatch(
     'policeCCTVReviewDateTime',
     form
@@ -155,40 +152,29 @@ export const useGenerateMG11Statement = ({
       const incidentDate = formatDate(date);
       const incidentTime = formatTime(date);
 
-      // Get CCTV details from CCTV section or police fields
-      // Prefer CCTV section data if available, otherwise use police fields
-      let cctvReviewTime: string | undefined;
-      let cctvReviewDate: string | undefined;
-      let cctvTimeCorrect: boolean | undefined;
-      let cctvIncorrectBy: number | undefined;
-      let cctvAheadBehind: 'ahead' | 'behind' | undefined;
+      // Get CCTV details from police fields only
+      // Note: CCTV Evidence section is not used for MG11 statement generation
+      // Always collect CCTV data from police fields for CCTV review statements
+      const cctvReviewTime = policeCCTVReviewDateTime
+        ? formatTime(policeCCTVReviewDateTime)
+        : undefined;
+      const cctvReviewDate = policeCCTVReviewDateTime
+        ? formatDate(policeCCTVReviewDateTime)
+        : undefined;
+      const cctvTimeCorrect = policeCCTVTimeCorrect;
+      const cctvIncorrectBy = policeCCTVIncorrectBy;
+      const cctvAheadBehind = policeCCTVAheadBehind?.toLowerCase() as
+        | 'ahead'
+        | 'behind'
+        | undefined;
 
-      if (cctvAvailable && cctv?.[0]) {
-        // Use CCTV section data
-        const firstCCTV = cctv[0];
-        cctvReviewTime = formatTime(firstCCTV.startTime);
-        cctvReviewDate = formatDate(firstCCTV.startTime);
-        cctvTimeCorrect = firstCCTV.correctTime;
-        cctvIncorrectBy = firstCCTV.incorrectBy;
-        cctvAheadBehind = firstCCTV.aheadBehind?.toLowerCase() as
-          | 'ahead'
-          | 'behind'
-          | undefined;
-      } else if (!cctvAvailable && policeWitnessAtTime === false) {
-        // Use police fields when CCTV section is not available
-        cctvReviewTime = policeCCTVReviewDateTime
-          ? formatTime(policeCCTVReviewDateTime)
-          : undefined;
-        cctvReviewDate = policeCCTVReviewDateTime
-          ? formatDate(policeCCTVReviewDateTime)
-          : undefined;
-        cctvTimeCorrect = policeCCTVTimeCorrect;
-        cctvIncorrectBy = policeCCTVIncorrectBy;
-        cctvAheadBehind = policeCCTVAheadBehind?.toLowerCase() as
-          | 'ahead'
-          | 'behind'
-          | undefined;
-      }
+      console.log('[MG11] CCTV data collected:', {
+        cctvAheadBehind,
+        cctvIncorrectBy,
+        cctvReviewDate,
+        cctvReviewTime,
+        cctvTimeCorrect,
+      });
 
       // Get offender details
       const firstOffender = offenders?.[0];
@@ -219,6 +205,13 @@ export const useGenerateMG11Statement = ({
         ? formatDate(policeScreenshotDateTime)
         : undefined;
 
+      console.log('[MG11] Screenshot data check:', {
+        imagesCount: images?.length || 0,
+        policeScreenshotDateTime,
+        screenshotDate,
+        screenshotTime,
+      });
+
       // Get author initials from witness name
       const witnessName = userContactData?.userContact?.user?.fullName || '';
       const authorInitials = witnessName
@@ -232,8 +225,11 @@ export const useGenerateMG11Statement = ({
       // Build array of exhibit references for all images
       const exhibitRefs =
         images?.map((image, index) => {
-          const position = image.position?.toString() || (index + 1).toString();
-          return authorInitials ? `${authorInitials}-${position}` : position;
+          // Use sequential index (1-based), zero-padded to 3 digits
+          const sequentialNumber = (index + 1).toString().padStart(3, '0');
+          return authorInitials
+            ? `*${authorInitials}-${sequentialNumber}`
+            : `*${sequentialNumber}`;
         }) || [];
 
       // Get witness observation details (in-person only)
@@ -326,8 +322,6 @@ export const useGenerateMG11Statement = ({
       goodsTypesData,
       tags,
       date,
-      cctv,
-      cctvAvailable,
       offenders,
       images,
       goods,
@@ -419,8 +413,6 @@ export const useGenerateMG11Statement = ({
     business,
     date,
     tags,
-    cctv,
-    cctvAvailable,
     offenders,
     goods,
     images,
