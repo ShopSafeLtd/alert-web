@@ -48,10 +48,12 @@ export interface FormData {
   images?: StateImageData[];
   involvedTags?: string[];
   offenders?: StateOffenderData[];
+  policeAdditionalEvidence?: string;
   policeCCTVAheadBehind?: string;
   policeCCTVEmail?: string;
   policeCCTVIncorrectBy?: number;
   policeCCTVReviewDateTime?: Date;
+  policeCCTVReviewed?: boolean;
   policeCCTVTimeCorrect?: boolean;
   policeDay?: boolean;
   policeDepartment?: string;
@@ -60,7 +62,11 @@ export interface FormData {
   policeInvolved?: boolean;
   policeItemsLocation?: string[];
   policeItemsMO?: string[];
-  policeKnownBefore?: string;
+  policeKnownBefore?:
+    | 'KNOWN_FROM_PREVIOUS_INCIDENTS'
+    | 'KNOWN_PERSONALLY'
+    | 'KNOWN_VERIFIED_ID'
+    | 'NOT_KNOWN';
   policeMG11: boolean;
   policeNo?: string;
   policeObstructions?: string;

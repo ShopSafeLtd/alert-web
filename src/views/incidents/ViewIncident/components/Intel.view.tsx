@@ -75,8 +75,42 @@ const Intel = ({
 
   const [deleteUpdate] = useDeleteUpdateMutation();
   const [updateUpdate] = useUpdateUpdateMutation();
-  const [addImagesToOffender] = useAddImagesToOffenderMutation();
-  const [addImagesToIncident] = useAddImagesToIncidentMutation();
+  const [addImagesToOffender] = useAddImagesToOffenderMutation({
+    onCompleted: () => {
+      setShowOffenderOptions(false);
+      setSelectedImages([]);
+      setSelectedOffenderId('');
+      notification.success({
+        description: intl.formatMessage({
+          defaultMessage: 'The images have been added to the offender!',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Added!',
+        }),
+        placement: 'bottomRight',
+      });
+    },
+    onError: () => {
+      errorNotification();
+    },
+  });
+  const [addImagesToIncident] = useAddImagesToIncidentMutation({
+    onCompleted: () => {
+      setSelectedImages([]);
+      notification.success({
+        description: intl.formatMessage({
+          defaultMessage: 'The images have been added to this incident!',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Added!',
+        }),
+        placement: 'bottomRight',
+      });
+    },
+    onError: () => {
+      errorNotification();
+    },
+  });
   const [updateIncident] = useUpdateIncidentMutation({
     onCompleted: () => {
       setSaving(false);
@@ -125,7 +159,6 @@ const Intel = ({
         },
       },
     });
-    setSelectedImages([]);
   };
   const onAddUpdateImagesToOffender = (offenderId: string) => {
     void addImagesToOffender({
@@ -136,9 +169,6 @@ const Intel = ({
         },
       },
     });
-    setShowOffenderOptions(false);
-    setSelectedImages([]);
-    setSelectedOffenderId('');
   };
   const onSelectUpdateImages = () => {
     if (selectedImages) {

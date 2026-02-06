@@ -407,7 +407,10 @@ const upsertIncident = (
     images: imagesFormatted,
     items,
     offenders: offendersFormatted,
+    // TODO: Uncomment when backend schema is updated with these fields
+    // policeAdditionalEvidence: formData.policeAdditionalEvidence,
     policeCCTVEmail: formData.policeCCTVEmail,
+    // policeCCTVReviewed: formData.policeCCTVReviewed,
     policeDay: formData.policeDay,
     policeDistanceFromIncident: formData.policeDistanceFromIncident,
     policeIncidentDuration: formData.policeIncidentDuration,

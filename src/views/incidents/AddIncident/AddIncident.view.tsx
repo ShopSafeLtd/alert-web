@@ -350,13 +350,7 @@ const AddIncident = ({
               );
             }
             case IncidentFormField.Cctv: {
-              return (
-                <IncidentCCTV
-                  form={form}
-                  policeReporting={policeReporting}
-                  saving={saving}
-                />
-              );
+              return <IncidentCCTV form={form} saving={saving} />;
             }
             default: {
               return <div />;

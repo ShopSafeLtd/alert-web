@@ -1,12 +1,12 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return,@typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-call,  @typescript-eslint/no-unsafe-member-access, no-return-assign */
+/* eslint-disable @typescript-eslint/no-unsafe-return,@typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-call,  @typescript-eslint/no-unsafe-member-access */
 import type { FormInstance } from 'antd';
 
+import { PlusOutlined } from '@ant-design/icons';
 import BusinessesSelect from '#/components/form-components/BusinessesSelect/BusinessesSelect.view';
 import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
 import RoleSelect from '#/components/form-components/Roles/RoleSelect';
 import UsersSelect from '#/components/form-components/UsersSelect/UsersSelectFetchMore.view';
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
-import { PlusOutlined } from '@ant-design/icons';
 import {
   Button,
   Card,
@@ -755,7 +755,6 @@ const CreateChecklistView: React.FC<Props> = ({
                                                     prevValues,
                                                     currentValues
                                                   ) => {
-                                                    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
                                                     const prevQuestion =
                                                       prevValues.sections?.[
                                                         name
@@ -764,7 +763,7 @@ const CreateChecklistView: React.FC<Props> = ({
                                                       ]?.questions?.[
                                                         questionField.name
                                                       ];
-                                                    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+
                                                     const currentQuestion =
                                                       currentValues.sections?.[
                                                         name
@@ -782,11 +781,9 @@ const CreateChecklistView: React.FC<Props> = ({
                                                       return true;
                                                     }
 
-                                                    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
                                                     return (
                                                       prevQuestion.weighted !==
                                                         currentQuestion.weighted ||
-                                                      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
                                                       prevQuestion.type !==
                                                         currentQuestion.type
                                                     );
@@ -827,9 +824,6 @@ const CreateChecklistView: React.FC<Props> = ({
                                                               <Space>
                                                                 <Row>
                                                                   <Form.Item
-                                                                    initialValue={
-                                                                      5
-                                                                    }
                                                                     label={intl.formatMessage(
                                                                       {
                                                                         defaultMessage:
@@ -842,8 +836,7 @@ const CreateChecklistView: React.FC<Props> = ({
                                                                     ]}
                                                                     rules={[
                                                                       {
-                                                                        required:
-                                                                          true,
+                                                                        required: true,
                                                                       },
                                                                     ]}
                                                                     style={{
@@ -867,9 +860,6 @@ const CreateChecklistView: React.FC<Props> = ({
                                                                   </Form.Item>
 
                                                                   <Form.Item
-                                                                    initialValue={
-                                                                      0
-                                                                    }
                                                                     label={intl.formatMessage(
                                                                       {
                                                                         defaultMessage:
@@ -882,8 +872,7 @@ const CreateChecklistView: React.FC<Props> = ({
                                                                     ]}
                                                                     rules={[
                                                                       {
-                                                                        required:
-                                                                          true,
+                                                                        required: true,
                                                                       },
                                                                     ]}
                                                                     style={{
@@ -915,9 +904,6 @@ const CreateChecklistView: React.FC<Props> = ({
                                                               <Space>
                                                                 <Row>
                                                                   <Form.Item
-                                                                    initialValue={
-                                                                      5
-                                                                    }
                                                                     label={intl.formatMessage(
                                                                       {
                                                                         defaultMessage:
@@ -930,8 +916,7 @@ const CreateChecklistView: React.FC<Props> = ({
                                                                     ]}
                                                                     rules={[
                                                                       {
-                                                                        required:
-                                                                          true,
+                                                                        required: true,
                                                                       },
                                                                     ]}
                                                                     style={{
@@ -955,9 +940,6 @@ const CreateChecklistView: React.FC<Props> = ({
                                                                   </Form.Item>
 
                                                                   <Form.Item
-                                                                    initialValue={
-                                                                      0
-                                                                    }
                                                                     label={intl.formatMessage(
                                                                       {
                                                                         defaultMessage:
@@ -970,8 +952,7 @@ const CreateChecklistView: React.FC<Props> = ({
                                                                     ]}
                                                                     rules={[
                                                                       {
-                                                                        required:
-                                                                          true,
+                                                                        required: true,
                                                                       },
                                                                     ]}
                                                                     style={{
@@ -1003,9 +984,6 @@ const CreateChecklistView: React.FC<Props> = ({
                                                               <Space>
                                                                 <Row>
                                                                   <Form.Item
-                                                                    initialValue={
-                                                                      5
-                                                                    }
                                                                     label={intl.formatMessage(
                                                                       {
                                                                         defaultMessage:
@@ -1018,8 +996,7 @@ const CreateChecklistView: React.FC<Props> = ({
                                                                     ]}
                                                                     rules={[
                                                                       {
-                                                                        required:
-                                                                          true,
+                                                                        required: true,
                                                                       },
                                                                     ]}
                                                                     style={{
@@ -1043,9 +1020,6 @@ const CreateChecklistView: React.FC<Props> = ({
                                                                   </Form.Item>
 
                                                                   <Form.Item
-                                                                    initialValue={
-                                                                      0
-                                                                    }
                                                                     label={intl.formatMessage(
                                                                       {
                                                                         defaultMessage:
@@ -1058,8 +1032,7 @@ const CreateChecklistView: React.FC<Props> = ({
                                                                     ]}
                                                                     rules={[
                                                                       {
-                                                                        required:
-                                                                          true,
+                                                                        required: true,
                                                                       },
                                                                     ]}
                                                                     style={{
@@ -1090,9 +1063,6 @@ const CreateChecklistView: React.FC<Props> = ({
                                                               <Space>
                                                                 <Row>
                                                                   <Form.Item
-                                                                    initialValue={
-                                                                      5
-                                                                    }
                                                                     label={intl.formatMessage(
                                                                       {
                                                                         defaultMessage:
@@ -1105,8 +1075,7 @@ const CreateChecklistView: React.FC<Props> = ({
                                                                     ]}
                                                                     rules={[
                                                                       {
-                                                                        required:
-                                                                          true,
+                                                                        required: true,
                                                                       },
                                                                     ]}
                                                                     style={{
@@ -1137,9 +1106,6 @@ const CreateChecklistView: React.FC<Props> = ({
                                                               <Space>
                                                                 <Row>
                                                                   <Form.Item
-                                                                    initialValue={
-                                                                      5
-                                                                    }
                                                                     label={intl.formatMessage(
                                                                       {
                                                                         defaultMessage:
@@ -1152,8 +1118,7 @@ const CreateChecklistView: React.FC<Props> = ({
                                                                     ]}
                                                                     rules={[
                                                                       {
-                                                                        required:
-                                                                          true,
+                                                                        required: true,
                                                                       },
                                                                     ]}
                                                                     style={{
@@ -1260,40 +1225,36 @@ const CreateChecklistView: React.FC<Props> = ({
                                                     return true;
 
                                                   return (
-                                                    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
                                                     prevValues.sections[name]
                                                       .subsections[
                                                       subsectionField.name
                                                     ].questions[
                                                       questionField.name
                                                     ].dependentCheck !==
-                                                      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
                                                       currentValues.sections[
                                                         name
                                                       ].subsections[
                                                         subsectionField.name
                                                       ].questions[
                                                         questionField.name
-                                                      ].dependentCheck || // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+                                                      ].dependentCheck ||
                                                     prevValues.sections[name]
                                                       .subsections[
                                                       subsectionField.name
                                                     ].questions[
                                                       questionField.name
                                                     ].dependentQuestion !==
-                                                      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
                                                       currentValues.sections[
                                                         name
                                                       ].subsections[
                                                         subsectionField.name
                                                       ].questions[
                                                         questionField.name
-                                                      ].dependentQuestion || // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+                                                      ].dependentQuestion ||
                                                     prevValues.sections[name]
                                                       .subsections[
                                                       subsectionField.name
                                                     ].questions.length !==
-                                                      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
                                                       currentValues.sections[
                                                         name
                                                       ].subsections[

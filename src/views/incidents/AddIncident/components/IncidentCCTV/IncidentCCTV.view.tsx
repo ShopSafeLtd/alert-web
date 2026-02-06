@@ -26,7 +26,6 @@ const { Title } = Typography;
 
 interface Props {
   form: FormInstance<FormData>;
-  policeReporting: boolean;
   saving: boolean;
 }
 interface CCTVRecord {
@@ -44,7 +43,7 @@ interface CCTVRecord {
 interface FormValues {
   cctv?: CCTVRecord[];
 }
-const IncidentCCTV = ({ form, policeReporting, saving }: Props) => {
+const IncidentCCTV = ({ form, saving }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
 
@@ -94,30 +93,6 @@ const IncidentCCTV = ({ form, policeReporting, saving }: Props) => {
             />
           </Form.Item>
         </Col>
-        {cctvAvailable && policeReporting && (
-          <Col>
-            <Form.Item
-              label={intl.formatMessage({
-                defaultMessage: 'Email address police can use to obtain CCTV',
-              })}
-              name="policeCCTVEmail"
-              rules={[
-                {
-                  message: intl.formatMessage({
-                    defaultMessage: 'Please answer this question.',
-                  }),
-                  required: policeReporting,
-                },
-              ]}
-              tooltip={intl.formatMessage({
-                defaultMessage:
-                  'The email address that the police can use to obtain CCTV evidence from the business, this will normally be you store address or the address for your SOC.',
-              })}
-            >
-              <Input style={{ width: 350 }} />
-            </Form.Item>
-          </Col>
-        )}
       </Row>
       {cctvAvailable && (
         <Form.List name="cctv">
