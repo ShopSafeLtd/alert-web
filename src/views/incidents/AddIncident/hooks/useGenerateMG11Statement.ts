@@ -80,6 +80,7 @@ export const useGenerateMG11Statement = ({
   );
   const policeKnownBefore = Form.useWatch('policeKnownBefore', form);
   const policeReasonRemember = Form.useWatch('policeReasonRemember', form);
+  const policeWitnessAtTime = Form.useWatch('policeWitnessAtTime', form);
   const policeCCTVReviewDateTime = Form.useWatch(
     'policeCCTVReviewDateTime',
     form
