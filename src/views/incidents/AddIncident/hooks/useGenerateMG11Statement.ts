@@ -10,7 +10,6 @@ import {
   formatDate,
   formatTime,
   generateCCTVReviewStatement,
-  generateInPersonWitnessStatement,
 } from '#/views/incidents/AddIncident/helpers/mg11-templates';
 import { Form } from 'antd';
 import { useAtomValue } from 'jotai/index';
@@ -62,12 +61,10 @@ export const useGenerateMG11Statement = ({
   const business = Form.useWatch('business', form);
   const date = Form.useWatch('date', form);
   const tags = Form.useWatch('tags', form);
-  const cctv = Form.useWatch('cctv', form);
-  const cctvAvailable = Form.useWatch('cctvAvailable', form);
   const offenders = Form.useWatch('offenders', form);
   const goods = Form.useWatch('goods', form);
   const images = Form.useWatch('images', form);
-  const policeWitnessAtTime = Form.useWatch('policeWitnessAtTime', form);
+  const policeCCTVReviewed = Form.useWatch('policeCCTVReviewed', form);
   const description = Form.useWatch('description', form);
   const policeIncidentDuration = Form.useWatch('policeIncidentDuration', form);
   const policeDistanceFromIncident = Form.useWatch(
@@ -90,6 +87,10 @@ export const useGenerateMG11Statement = ({
   const policeCCTVIncorrectBy = Form.useWatch('policeCCTVIncorrectBy', form);
   const policeScreenshotDateTime = Form.useWatch(
     'policeScreenshotDateTime',
+    form
+  );
+  const policeAdditionalEvidence = Form.useWatch(
+    'policeAdditionalEvidence',
     form
   );
 
@@ -151,40 +152,29 @@ export const useGenerateMG11Statement = ({
       const incidentDate = formatDate(date);
       const incidentTime = formatTime(date);
 
-      // Get CCTV details from CCTV section or police fields
-      // Prefer CCTV section data if available, otherwise use police fields
-      let cctvReviewTime: string | undefined;
-      let cctvReviewDate: string | undefined;
-      let cctvTimeCorrect: boolean | undefined;
-      let cctvIncorrectBy: number | undefined;
-      let cctvAheadBehind: 'ahead' | 'behind' | undefined;
+      // Get CCTV details from police fields only
+      // Note: CCTV Evidence section is not used for MG11 statement generation
+      // Always collect CCTV data from police fields for CCTV review statements
+      const cctvReviewTime = policeCCTVReviewDateTime
+        ? formatTime(policeCCTVReviewDateTime)
+        : undefined;
+      const cctvReviewDate = policeCCTVReviewDateTime
+        ? formatDate(policeCCTVReviewDateTime)
+        : undefined;
+      const cctvTimeCorrect = policeCCTVTimeCorrect;
+      const cctvIncorrectBy = policeCCTVIncorrectBy;
+      const cctvAheadBehind = policeCCTVAheadBehind?.toLowerCase() as
+        | 'ahead'
+        | 'behind'
+        | undefined;
 
-      if (cctvAvailable && cctv?.[0]) {
-        // Use CCTV section data
-        const firstCCTV = cctv[0];
-        cctvReviewTime = formatTime(firstCCTV.startTime);
-        cctvReviewDate = formatDate(firstCCTV.startTime);
-        cctvTimeCorrect = firstCCTV.correctTime;
-        cctvIncorrectBy = firstCCTV.incorrectBy;
-        cctvAheadBehind = firstCCTV.aheadBehind?.toLowerCase() as
-          | 'ahead'
-          | 'behind'
-          | undefined;
-      } else if (!cctvAvailable && policeWitnessAtTime === false) {
-        // Use police fields when CCTV section is not available
-        cctvReviewTime = policeCCTVReviewDateTime
-          ? formatTime(policeCCTVReviewDateTime)
-          : undefined;
-        cctvReviewDate = policeCCTVReviewDateTime
-          ? formatDate(policeCCTVReviewDateTime)
-          : undefined;
-        cctvTimeCorrect = policeCCTVTimeCorrect;
-        cctvIncorrectBy = policeCCTVIncorrectBy;
-        cctvAheadBehind = policeCCTVAheadBehind?.toLowerCase() as
-          | 'ahead'
-          | 'behind'
-          | undefined;
-      }
+      console.log('[MG11] CCTV data collected:', {
+        cctvAheadBehind,
+        cctvIncorrectBy,
+        cctvReviewDate,
+        cctvReviewTime,
+        cctvTimeCorrect,
+      });
 
       // Get offender details
       const firstOffender = offenders?.[0];
@@ -215,6 +205,13 @@ export const useGenerateMG11Statement = ({
         ? formatDate(policeScreenshotDateTime)
         : undefined;
 
+      console.log('[MG11] Screenshot data check:', {
+        imagesCount: images?.length || 0,
+        policeScreenshotDateTime,
+        screenshotDate,
+        screenshotTime,
+      });
+
       // Get author initials from witness name
       const witnessName = userContactData?.userContact?.user?.fullName || '';
       const authorInitials = witnessName
@@ -228,8 +225,11 @@ export const useGenerateMG11Statement = ({
       // Build array of exhibit references for all images
       const exhibitRefs =
         images?.map((image, index) => {
-          const position = image.position?.toString() || (index + 1).toString();
-          return authorInitials ? `${authorInitials}-${position}` : position;
+          // Use sequential index (1-based), zero-padded to 3 digits
+          const sequentialNumber = (index + 1).toString().padStart(3, '0');
+          return authorInitials
+            ? `*${authorInitials}-${sequentialNumber}`
+            : `*${sequentialNumber}`;
         }) || [];
 
       // Get witness observation details (in-person only)
@@ -289,6 +289,7 @@ export const useGenerateMG11Statement = ({
         });
 
       return {
+        additionalEvidence: policeAdditionalEvidence,
         businessAddress,
         businessName,
         cctvAheadBehind,
@@ -308,7 +309,7 @@ export const useGenerateMG11Statement = ({
         offenderName,
         policeKnownBefore,
         policeReasonRemember,
-        policeWitnessAtTime: policeWitnessAtTime || false,
+        policeWitnessAtTime: false, // Always CCTV review now
         screenshotDate,
         screenshotTime,
         viewObstructed,
@@ -321,12 +322,9 @@ export const useGenerateMG11Statement = ({
       goodsTypesData,
       tags,
       date,
-      cctv,
-      cctvAvailable,
       offenders,
       images,
       goods,
-      policeWitnessAtTime,
       policeIncidentDuration,
       policeDistanceFromIncident,
       policeObstructions,
@@ -338,6 +336,7 @@ export const useGenerateMG11Statement = ({
       policeCCTVAheadBehind,
       policeCCTVIncorrectBy,
       policeScreenshotDateTime,
+      policeAdditionalEvidence,
     ]);
 
   /**
@@ -345,14 +344,14 @@ export const useGenerateMG11Statement = ({
    */
   const generateStatement = useCallback(async () => {
     console.log('[MG11] Attempting to generate statement', {
+      policeCCTVReviewed,
       policeReporting,
-      policeWitnessAtTime,
     });
 
-    if (!policeReporting || policeWitnessAtTime === undefined) {
+    if (!policeReporting || policeCCTVReviewed !== true) {
       console.log('[MG11] Skipping generation - conditions not met', {
+        policeCCTVReviewed,
         policeReporting,
-        policeWitnessAtTime,
       });
       return;
     }
@@ -376,10 +375,8 @@ export const useGenerateMG11Statement = ({
 
       console.log('[MG11] Template data:', templateData);
 
-      // Generate statement based on witness type
-      const statement = policeWitnessAtTime
-        ? generateInPersonWitnessStatement(templateData)
-        : generateCCTVReviewStatement(templateData);
+      // Always generate CCTV review statement (all reports now require CCTV review)
+      const statement = generateCCTVReviewStatement(templateData);
 
       console.log('[MG11] Generated statement:', statement);
 
@@ -391,7 +388,7 @@ export const useGenerateMG11Statement = ({
     } finally {
       setGenerating(false);
     }
-  }, [policeReporting, policeWitnessAtTime, form, mapFormDataToTemplateData]);
+  }, [policeReporting, policeCCTVReviewed, form, mapFormDataToTemplateData]);
 
   /**
    * Debounced version of generateStatement (1000ms delay)
@@ -412,12 +409,10 @@ export const useGenerateMG11Statement = ({
     return () => debouncedGenerateStatement.cancel();
   }, [
     policeReporting,
-    policeWitnessAtTime,
+    policeCCTVReviewed,
     business,
     date,
     tags,
-    cctv,
-    cctvAvailable,
     offenders,
     goods,
     images,
@@ -433,6 +428,7 @@ export const useGenerateMG11Statement = ({
     policeCCTVAheadBehind,
     policeCCTVIncorrectBy,
     policeScreenshotDateTime,
+    policeAdditionalEvidence,
     debouncedGenerateStatement,
   ]);
 

@@ -302,7 +302,7 @@ const OffenderSidebar: React.FC<Props> = ({
                     break;
                   }
                   case 'Article': {
-                    navigate(`/app/articles/view/${entityId}`);
+                    navigate(`/app/article/view/${entityId}`);
                     break;
                   }
                   case 'User': {
