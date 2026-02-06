@@ -6,6 +6,14 @@ import PoliceReportingRequirements from '#/views/incidents/AddIncident/component
 import WitnessAuthorView from '#/views/incidents/AddIncident/components/IncidentPolice/WitnessAuthor.view';
 import { usePoliceReportingValidation } from '#/views/incidents/AddIncident/hooks/usePoliceReportingValidation';
 import {
+  faCheckCircle,
+  faFileAlt,
+  faHandshake,
+  faIdCard,
+  faQuestionCircle,
+} from '@fortawesome/pro-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
   Alert,
   Card,
   Col,
@@ -60,9 +68,78 @@ const IncidentPolice = ({
     return 'this person';
   }, [offenders]);
 
+  const knownBeforeOptions = React.useMemo(
+    () => [
+      {
+        description: intl.formatMessage(
+          {
+            defaultMessage:
+              "I verified {name}'s identity using official ID documents",
+          },
+          { name: firstOffenderName }
+        ),
+        icon: faIdCard,
+        title: intl.formatMessage({
+          defaultMessage: 'Verified Identity',
+        }),
+        value: 'KNOWN_VERIFIED_ID',
+      },
+      {
+        description: intl.formatMessage(
+          {
+            defaultMessage:
+              'I know {name} personally from face-to-face dealings',
+          },
+          { name: firstOffenderName }
+        ),
+        icon: faHandshake,
+        title: intl.formatMessage({
+          defaultMessage: 'Know Personally',
+        }),
+        value: 'KNOWN_PERSONALLY',
+      },
+      {
+        description: intl.formatMessage({
+          defaultMessage:
+            'Their identity was confirmed by police or courts at this store',
+        }),
+        icon: faFileAlt,
+        title: intl.formatMessage({
+          defaultMessage: 'Previous Incidents',
+        }),
+        value: 'KNOWN_FROM_PREVIOUS_INCIDENTS',
+      },
+      {
+        description: intl.formatMessage({
+          defaultMessage: "I don't know this person from before",
+        }),
+        icon: faQuestionCircle,
+        title: intl.formatMessage({
+          defaultMessage: "Don't Know Them",
+        }),
+        value: 'NOT_KNOWN',
+      },
+    ],
+    [intl, firstOffenderName]
+  );
+
   // Police reporting validation
   const { allRequirementsMet, completedCount, requirements, totalCount } =
     usePoliceReportingValidation(form);
+
+  // Map policeCCTVReviewed to policeWitnessAtTime for MG11 generation
+  React.useEffect(() => {
+    if (policeCCTVReviewed !== undefined) {
+      // If reviewed on CCTV, witness was NOT at the time (false)
+      // If NOT reviewed on CCTV, witness WAS at the time (true)
+      const wasPresent = !policeCCTVReviewed;
+
+      // Use setFieldsValue to ensure proper form change event triggering
+      form.setFieldsValue({
+        policeWitnessAtTime: wasPresent,
+      });
+    }
+  }, [policeCCTVReviewed, form]);
 
   return (
     <Card className={classes.card}>
@@ -644,40 +721,65 @@ const IncidentPolice = ({
                         },
                       ]}
                     >
-                      <Radio.Group disabled={saving} optionType="default">
-                        <Radio value="KNOWN_VERIFIED_ID">
-                          {intl.formatMessage(
-                            {
-                              defaultMessage:
-                                'I know {name} as I have previously dealt with them and on that occasion I verified their identity using official identification documents.',
-                            },
-                            { name: firstOffenderName }
-                          )}
-                        </Radio>
-                        <Radio value="KNOWN_PERSONALLY">
-                          {intl.formatMessage(
-                            {
-                              defaultMessage:
-                                'I know {name} personally, having had previous face‑to‑face dealings with them.',
-                            },
-                            { name: firstOffenderName }
-                          )}
-                        </Radio>
-                        <Radio value="KNOWN_FROM_PREVIOUS_INCIDENTS">
-                          {intl.formatMessage(
-                            {
-                              defaultMessage:
-                                'I know {name} as I have previously dealt with them in relation to incidents at this store, during which their identity was confirmed by police officers or courts.',
-                            },
-                            { name: firstOffenderName }
-                          )}
-                        </Radio>
-                        <Radio value="NOT_KNOWN">
-                          {intl.formatMessage({
-                            defaultMessage: "Don't know them",
-                          })}
-                        </Radio>
-                      </Radio.Group>
+                      <Row gutter={[16, 16]}>
+                        {knownBeforeOptions.map((option) => {
+                          const isSelected =
+                            form.getFieldValue('policeKnownBefore') ===
+                            option.value;
+
+                          return (
+                            <Col key={option.value} sm={12} xs={24}>
+                              <div
+                                className={`${classes.knownBeforeCard} ${
+                                  isSelected
+                                    ? classes.knownBeforeCardSelected
+                                    : ''
+                                } ${saving ? classes.knownBeforeCardDisabled : ''}`}
+                                onClick={() => {
+                                  if (!saving) {
+                                    form.setFieldValue(
+                                      'policeKnownBefore',
+                                      option.value
+                                    );
+                                  }
+                                }}
+                                onKeyPress={(e) => {
+                                  if (
+                                    !saving &&
+                                    (e.key === 'Enter' || e.key === ' ')
+                                  ) {
+                                    form.setFieldValue(
+                                      'policeKnownBefore',
+                                      option.value
+                                    );
+                                  }
+                                }}
+                                role="button"
+                                tabIndex={saving ? -1 : 0}
+                              >
+                                {isSelected && (
+                                  <FontAwesomeIcon
+                                    className={classes.knownBeforeCardCheckmark}
+                                    icon={faCheckCircle}
+                                  />
+                                )}
+                                <FontAwesomeIcon
+                                  className={classes.knownBeforeCardIcon}
+                                  icon={option.icon}
+                                />
+                                <div className={classes.knownBeforeCardTitle}>
+                                  {option.title}
+                                </div>
+                                <div
+                                  className={classes.knownBeforeCardDescription}
+                                >
+                                  {option.description}
+                                </div>
+                              </div>
+                            </Col>
+                          );
+                        })}
+                      </Row>
                     </Form.Item>
 
                     <Form.Item

@@ -68,6 +68,7 @@ export const useGenerateMG11Statement = ({
   const goods = Form.useWatch('goods', form);
   const images = Form.useWatch('images', form);
   const policeWitnessAtTime = Form.useWatch('policeWitnessAtTime', form);
+  const policeCCTVReviewed = Form.useWatch('policeCCTVReviewed', form);
   const description = Form.useWatch('description', form);
   const policeIncidentDuration = Form.useWatch('policeIncidentDuration', form);
   const policeDistanceFromIncident = Form.useWatch(
@@ -419,6 +420,7 @@ export const useGenerateMG11Statement = ({
   }, [
     policeReporting,
     policeWitnessAtTime,
+    policeCCTVReviewed,
     business,
     date,
     tags,
