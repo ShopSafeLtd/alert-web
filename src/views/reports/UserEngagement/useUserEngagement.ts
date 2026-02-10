@@ -68,11 +68,7 @@ const useUserEngagement = (): Return => {
     endDate: new Date(new Date().setHours(23, 59, 59)),
     // new date 1 month ago at 00:00:00
     startDate: new Date(
-      new Date(new Date().setMonth(new Date().getMonth() - 1)).setHours(
-        0,
-        0,
-        59
-      )
+      new Date(new Date().setMonth(new Date().getMonth() - 1)).setHours(0, 0, 0)
     ),
   });
   const { groups, groupsLoading } = useGroupsContext();
@@ -124,9 +120,7 @@ const useUserEngagement = (): Return => {
   }): void => {
     setDateRangeState({
       endDate: new Date(new Date(dateRangeInput.endDate).setHours(23, 59, 59)),
-      startDate: new Date(
-        new Date(dateRangeInput.startDate).setHours(0, 0, 59)
-      ),
+      startDate: new Date(new Date(dateRangeInput.startDate).setHours(0, 0, 0)),
     });
   };
 
@@ -217,7 +211,7 @@ const useUserEngagement = (): Return => {
           new Date(new Date().setMonth(new Date().getMonth() - 1)).setHours(
             0,
             0,
-            59
+            0
           )
         ),
       }

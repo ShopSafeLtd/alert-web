@@ -2,7 +2,6 @@ import type { FilterProps } from '#/views/reports/performance/layout/Performance
 import type { MetaData } from '#/views/reports/types';
 
 import UsersSelect from '#/components/form-components/UsersSelect/UsersSelect.view';
-import Gauge from '#/components/reports/graphs/gauge';
 import Graph from '#/components/reports/graphs/graph';
 import { useActivityGraphQuery } from '#/views/reports/performance/ActivitesGraph/graphql/queries/__generated__/activities-graph.generated';
 import {
@@ -44,7 +43,8 @@ const ActivitiesGraphView = ({
 
   const toggleSettingsOpen = () => setSettingsOpen(!settingOpen);
 
-  const { data } = useActivityGraphQuery({
+  const { data, loading: queryLoading } = useActivityGraphQuery({
+    fetchPolicy: 'cache-and-network',
     variables: {
       where: {
         createdAt: filters.dateRange,
@@ -84,6 +84,8 @@ const ActivitiesGraphView = ({
 
     return (completed / total) * 100;
   };
+
+  console.log(calcCompletedPercentage());
 
   return (
     <>
@@ -206,61 +208,11 @@ const ActivitiesGraphView = ({
               defaultMessage: 'Activity Status',
             })
           }
-          loading={!!data?.activityGraph}
-        />
-      ) : metaData?.type === 'linear-gauge' ? (
-        <Gauge
-          emptyLabel={intl.formatMessage({
-            defaultMessage: 'No Activities',
-          })}
-          graphOptions={{
-            direction: 'horizontal',
-            label: {
-              enabled: true,
-              formatter: (value: { value: number }) =>
-                `${value.value.toFixed(0)}%`,
-              placement: 'inside-center',
-            },
-            scale: {
-              label: {
-                enabled: true,
-                formatter: (value: { value: number }) =>
-                  `${value.value.toFixed(0)}%`,
-              },
-              max: 100,
-              min: 0,
-            },
-            tooltip: {
-              enabled: true,
-              renderer: (value) => ({
-                content: `${value.value}%`,
-              }),
-            },
-            type: 'linear-gauge',
-            value: calcCompletedPercentage(),
-          }}
-          gridOptions={{
-            columnDefs: [
-              {
-                field: 'type',
-              },
-              {
-                field: 'count',
-              },
-            ],
-            rowData: data?.activityGraph.map((item) => ({
-              count: item.value,
-              type: item.label,
-            })),
-          }}
-          isPrinting={isPrinting}
-          label={
-            metaData?.label ??
-            intl.formatMessage({
-              defaultMessage: 'Activity Status',
-            })
+          loading={
+            !queryLoading &&
+            !!data?.activityGraph &&
+            data.activityGraph.length > 0
           }
-          loading={!!data?.activityGraph}
         />
       ) : (
         <Graph
@@ -312,7 +264,11 @@ const ActivitiesGraphView = ({
               defaultMessage: 'Activity Status',
             })
           }
-          loading={!!data?.activityGraph}
+          loading={
+            !queryLoading &&
+            !!data?.activityGraph &&
+            data.activityGraph.length > 0
+          }
         />
       )}
 
