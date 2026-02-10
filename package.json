@@ -11,7 +11,7 @@
     "postinstall": "node ./postInstall.js",
     "extract": "formatjs extract 'src/**/*.ts*' --ignore='**/*.d.ts' --out-file en/lang.json",
     "compile": "formatjs compile",
-    "extract-compile": "formatjs extract 'src/**/*.ts*' --ignore='**/*.d.ts' --out-file temp.json --flatten --id-interpolation-pattern '[sha512:contenthash:base64:6]' && formatjs compile 'temp.json' --out-file en/lang.json && rm temp.json",
+    "extract-compile": "formatjs extract 'src/**/*.{ts,tsx}' --ignore='**/*.d.ts' --ignore='**/*.graphql' --ignore='**/vite-env.d.ts' --out-file temp.json --flatten --id-interpolation-pattern '[sha512:contenthash:base64:6]' && formatjs compile 'temp.json' --out-file en/lang.json && rm temp.json",
     "ex-i18n": "formatjs extract 'src/**/*.ts*' --ignore='**/*.d.ts' --out-file en/lang.json",
     "upload-i18n": "formatjs extract 'src/**/*.ts*' --ignore='**/*.d.ts' --out-file en/lang.json && simplelocalize upload --apiKey e79c3F36e902c75AD5dDdddc9c4FaCF48804d6fd8Dc25Ba5  --uploadPath en/lang.json --uploadFormat simplelocalize-json --languageKey en_US",
     "upload-i18n-jds": "npx simplelocalize upload --apiKey 8eaa9D27853EED17270e6aa36041A237AD59da934f0cd75b  --uploadPath lang-brands-updated.json --uploadFormat simplelocalize-json --languageKey en_US",
