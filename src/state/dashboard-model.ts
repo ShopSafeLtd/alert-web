@@ -148,7 +148,7 @@ const dashboardModel: DashboardModel = {
     state.startDate = payload;
   }),
   startDate: new Date(
-    new Date(new Date().setMonth(new Date().getMonth() - 1)).setHours(0, 0, 59)
+    new Date(new Date().setMonth(new Date().getMonth() - 1)).setHours(0, 0, 0)
   ),
 };
 

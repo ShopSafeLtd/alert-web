@@ -586,7 +586,6 @@ const PerformanceReportLayout = ({
             bodyStyle={{ height: '90%' }}
             className="no-break"
             key={key}
-            loading={getSectionLoading(key)}
             style={{ height: calculateHeight(key) }}
           >
             <ActivitiesGraphView
@@ -617,7 +616,6 @@ const PerformanceReportLayout = ({
           <Card
             bodyStyle={{ width: '100%' }}
             key="activitySummary"
-            loading={getSectionLoading('topContributors')}
             style={{ width: '100%' }}
           >
             <ActivitySummary
@@ -634,7 +632,6 @@ const PerformanceReportLayout = ({
             bodyStyle={{ overflow: 'auto' }}
             className="no-break"
             key="activitiesTable"
-            loading={getSectionLoading('activitiesTable')}
             style={{ height: calculateHeight('activitiesTable') }}
           >
             <Button

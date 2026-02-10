@@ -71,14 +71,14 @@ const ExportChecklistsView = ({
           <Col span={6}>
             <DatePicker.RangePicker
               defaultValue={[state.startDate, state.endDate]}
-              onChange={(value) => {
+              onChange={(value: [Date | null, Date | null] | null) => {
                 dispatch({
                   payload:
                     value?.[0] ||
                     new Date(
                       new Date(
                         new Date().setMonth(new Date().getMonth() - 1)
-                      ).setHours(0, 0, 59)
+                      ).setHours(0, 0, 0)
                     ),
                   type: 'UPDATE_START_DATE',
                 });

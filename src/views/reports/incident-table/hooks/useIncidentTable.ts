@@ -89,7 +89,7 @@ const useIncidentTable = (): Return => {
     new Date(new Date().setFullYear(new Date().getFullYear() - 2)).setHours(
       0,
       0,
-      59
+      0
     )
   );
 
@@ -99,7 +99,7 @@ const useIncidentTable = (): Return => {
         new Date(new Date().setMonth(new Date().getMonth() - 1)).setHours(
           0,
           0,
-          59
+          0
         )
       );
   const [createdAtMode, setCreatedAtMode] = useState<
@@ -133,7 +133,7 @@ const useIncidentTable = (): Return => {
           new Date(createdAtInput.endDate).setHours(23, 59, 59)
         ),
         startDate: new Date(
-          new Date(createdAtInput.startDate).setHours(0, 0, 59)
+          new Date(createdAtInput.startDate).setHours(0, 0, 0)
         ),
       });
     } else {
