@@ -46,11 +46,7 @@ const useBusinessEngagement = (): Return => {
     endDate: new Date(new Date().setHours(23, 59, 59)),
     // new date 1 month ago at 00:00:00
     startDate: new Date(
-      new Date(new Date().setMonth(new Date().getMonth() - 1)).setHours(
-        0,
-        0,
-        59
-      )
+      new Date(new Date().setMonth(new Date().getMonth() - 1)).setHours(0, 0, 0)
     ),
   });
   const [currentPage, setCurrentPage] = useState(1);
@@ -92,9 +88,7 @@ const useBusinessEngagement = (): Return => {
   }): void => {
     setDateRangeState({
       endDate: new Date(new Date(dateRangeInput.endDate).setHours(23, 59, 59)),
-      startDate: new Date(
-        new Date(dateRangeInput.startDate).setHours(0, 0, 59)
-      ),
+      startDate: new Date(new Date(dateRangeInput.startDate).setHours(0, 0, 0)),
     });
   };
 
@@ -136,7 +130,7 @@ const useBusinessEngagement = (): Return => {
           new Date(new Date().setMonth(new Date().getMonth() - 1)).setHours(
             0,
             0,
-            59
+            0
           )
         ),
       }

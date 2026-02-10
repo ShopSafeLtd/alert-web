@@ -127,7 +127,7 @@ const useOffenderReport = (): Return => {
             new Date(new Date().setMonth(new Date().getMonth() - 1)).setHours(
               0,
               0,
-              59
+              0
             )
           ),
         },
@@ -146,7 +146,7 @@ const useOffenderReport = (): Return => {
             new Date(new Date().setMonth(new Date().getMonth() - 1)).setHours(
               0,
               0,
-              59
+              0
             )
           ),
         },
