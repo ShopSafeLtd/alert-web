@@ -18,7 +18,7 @@ import { AgGridReact } from 'ag-grid-react';
 import { Button, Col, Row } from 'antd';
 import dayjs from 'dayjs';
 import { TodoStatusInput, TodoUserModeInput } from 'graphql/types';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 interface TData {
   assignedUsers: string;
@@ -48,6 +48,9 @@ const ActivitiesTable = ({
   const [settingOpen, setSettingsOpen] = useState(false);
   const [pageSize, setPageSize] = useState(100);
   const [page, setPage] = useState(1);
+  const [gridApi, setGridApi] = useState<GridReadyEvent<TData>['api'] | null>(
+    null
+  );
 
   const toggleSettingsOpen = () => setSettingsOpen(!settingOpen);
   const onPaginationChanged = (event: PaginationChangedEvent<TData>) => {
@@ -73,6 +76,7 @@ const ActivitiesTable = ({
   });
 
   const onGridReady = (params: GridReadyEvent<TData>) => {
+    setGridApi(params.api);
     params.api.setGridOption('serverSideDatasource', {
       getRows: (rowParams) => {
         getData()
@@ -101,6 +105,15 @@ const ActivitiesTable = ({
       },
     });
   };
+
+  // Refresh grid when filters change
+  useEffect(() => {
+    if (gridApi) {
+      setTimeout(() => {
+        gridApi.refreshServerSide({ purge: true });
+      }, 0);
+    }
+  }, [filters.dateRange, filters.selectedGroups, filters.schemeId, gridApi]);
 
   return (
     <>

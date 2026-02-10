@@ -117,7 +117,7 @@ const useReportState = ({
     new Date(new Date().setFullYear(new Date().getFullYear() - 2)).setHours(
       0,
       0,
-      59
+      0
     )
   );
 
@@ -127,7 +127,7 @@ const useReportState = ({
         new Date(new Date().setMonth(new Date().getMonth() - 1)).setHours(
           0,
           0,
-          59
+          0
         )
       );
   // const fixedPages = [
@@ -258,7 +258,7 @@ const useReportState = ({
           new Date(dateRangeInput.endDate).setHours(23, 59, 59)
         ),
         startDate: new Date(
-          new Date(dateRangeInput.startDate).setHours(0, 0, 59)
+          new Date(dateRangeInput.startDate).setHours(0, 0, 0)
         ),
       });
     } else {
