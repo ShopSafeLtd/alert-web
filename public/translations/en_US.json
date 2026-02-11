@@ -4371,5 +4371,15 @@
   "835oG/": "No known associates found",
   "867MhM": "Please enter street name.",
   "5988Gb": "Please enter a name for the offender warning.",
-  "9858wC": "Incident Date"
+  "9858wC": "Incident Date",
+  "police-settings": "Settings",
+  "police-dashboard": "Dashboard",
+  "police-heatmap": "Heatmap",
+  "police-offenders": "Offenders",
+  "police-crime-groups": "Crime Groups",
+  "police-incidents": "Incidents",
+  "police-vehicles": "Vehicles",
+  "police-settings-users": "Users",
+  "police-settings-roles": "Roles",
+  "police-settings-reporting-areas": "Reporting Areas"
 }
