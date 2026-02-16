@@ -73,6 +73,18 @@ const useUserEngagement = (): Return => {
   });
   const { groups, groupsLoading } = useGroupsContext();
 
+  // Auto-select groups if user has less than 3
+  useEffect(() => {
+    if (
+      !groupsLoading &&
+      groups.length > 0 &&
+      groups.length < 3 &&
+      selectedGroups.length === 0
+    ) {
+      setSelectedGroups(groups.map(({ value }) => value));
+    }
+  }, [groups, groupsLoading, selectedGroups.length]);
+
   // Pagination and sorting state
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(30);
@@ -89,13 +101,14 @@ const useUserEngagement = (): Return => {
 
   const { data, loading } = useUserEngagementQuery({
     fetchPolicy: 'cache-and-network',
-    skip: !currentScheme || groupsLoading || !selectedGroups,
+    skip: !currentScheme || groupsLoading || selectedGroups.length === 0,
     variables: {
       orderBy,
       skip,
       take: pageSize,
       where: {
-        businessesIds: selectedBusinesses ?? [],
+        businessesIds:
+          selectedBusinesses.length > 0 ? selectedBusinesses : undefined,
         dataBusinessBrandsIds:
           selectedDataBrands.length > 0 ? selectedDataBrands : undefined,
         dataBusinessGroupIds:
@@ -103,13 +116,10 @@ const useUserEngagement = (): Return => {
             ? selectedBusinessGroups
             : undefined,
         dateRange,
-        groupIds:
-          selectedGroups.length > 0
-            ? selectedGroups
-            : groups.map(({ value: id }) => id),
-        rolesIds: selectedRoles ?? [],
+        groupIds: selectedGroups,
+        rolesIds: selectedRoles.length > 0 ? selectedRoles : undefined,
         schemeIds: [currentScheme],
-        search,
+        search: search.length > 0 ? search : undefined,
       },
     },
   });

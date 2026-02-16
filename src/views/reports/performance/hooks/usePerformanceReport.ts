@@ -437,7 +437,7 @@ const usePerformanceReport = (): Return => {
   const { data: userEngagementData, loading: userEngagementLoading } =
     useUserEngagementQuery({
       fetchPolicy: 'cache-and-network',
-      skip: !currentScheme || !groups || groupsLoading || !selectedGroups,
+      skip: !currentScheme || !groups || groupsLoading,
       variables: {
         orderBy,
         skip,
