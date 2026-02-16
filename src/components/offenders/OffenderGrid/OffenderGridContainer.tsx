@@ -93,9 +93,10 @@ export const OffenderGridContainer: React.FC<OffenderGridContainerProps> = ({
         />
       </div>
 
-      {!loading && totalCount > pageSize && (
+      {totalCount > pageSize && (
         <Pagination
           current={page}
+          disabled={loading}
           onChange={handlePageChange}
           pageSize={pageSize}
           pageSizeOptions={[12, 24, 48, 96]}

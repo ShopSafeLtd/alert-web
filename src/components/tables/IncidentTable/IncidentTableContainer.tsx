@@ -6,6 +6,7 @@ import { useIncidentTableDataRelay } from './useIncidentTableDataRelay';
 
 interface IncidentTableContainerProps {
   // Context filters (passed from parent) - ONE of these can be provided
+  businessId?: string;
   crimeGroupId?: string;
   defaultSortOrder?: 'ascend' | 'descend';
   deleteRights?: boolean;
@@ -19,6 +20,7 @@ interface IncidentTableContainerProps {
 }
 
 export const IncidentTableContainer: React.FC<IncidentTableContainerProps> = ({
+  businessId,
   crimeGroupId,
   defaultSortOrder = 'descend',
   deleteRights,
@@ -44,6 +46,7 @@ export const IncidentTableContainer: React.FC<IncidentTableContainerProps> = ({
     sortOrder,
     totalCount,
   } = useIncidentTableDataRelay({
+    businessId,
     crimeGroupId,
     defaultSortOrder,
     investigationId,
@@ -101,6 +104,7 @@ export const IncidentTableContainer: React.FC<IncidentTableContainerProps> = ({
     <div>
       {showFilters && (
         <IncidentTableFilters
+          businessId={businessId}
           filters={filters}
           investigationId={investigationId}
           offenderId={offenderId}

@@ -56,7 +56,7 @@ import AddUser from 'components/form-components/user/AddUser';
 import AddUserToBusiness from 'components/form-components/user/AddUserToBusiness';
 import LocatingCard from 'components/map/LocatingCard';
 import ActivityTable from 'components/tables/ActivityTable';
-import IncidentTable from 'components/tables/IncidentTable';
+import { IncidentTableContainer } from 'components/tables/IncidentTable/IncidentTableContainer';
 import dayjs from 'dayjs';
 import { PermissionMethod, PermissionModel } from 'graphql/types';
 import React from 'react';
@@ -756,9 +756,10 @@ const ViewBusiness = ({
                     defaultMessage: 'Incidents',
                   })}
                 </Typography.Title>
-                <IncidentTable
+                <IncidentTableContainer
+                  businessId={data?.business?.id}
                   hasNavigation
-                  incidents={data?.business?.incidents || []}
+                  pageSize={5}
                 />
               </Card>
             </PermissionCheckWrapper>

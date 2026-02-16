@@ -25545,6 +25545,7 @@ export type UnlinkedImage = {
 
 export type UnrestrictedIncidentRelayInput = {
   approved?: InputMaybe<Scalars['Boolean']>;
+  businessIds?: InputMaybe<Array<Scalars['String']>>;
   crimeGroupIds?: InputMaybe<Array<Scalars['String']>>;
   crimeTypes?: InputMaybe<Array<Scalars['String']>>;
   dateRange?: InputMaybe<DateTimeFilter>;

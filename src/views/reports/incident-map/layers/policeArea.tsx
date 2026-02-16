@@ -81,10 +81,7 @@ const PoliceLayer = ({
 
         let count = 0;
         for (const { lat: ilat, lng: ilng } of incidents) {
-          const incidentPoint = point([
-            ilng,
-            ilat,
-          ]) as GeoJSON.Feature<GeoJSON.Point>;
+          const incidentPoint = point([ilng, ilat]);
           if (booleanPointInPolygon(incidentPoint, areaFeature)) {
             count += 1;
           }

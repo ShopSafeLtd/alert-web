@@ -901,7 +901,7 @@ const useDiscImport = (): Return => {
                 (offender) => offender.discId === incident.subjectID4
               ) || null
             : null,
-        ].filter((item) => item !== null) as NewOffender[];
+        ].filter((item) => item !== null);
 
         console.log(
           `Matched ${offenders.length} offenders for incident ${incident.id}`
@@ -1807,7 +1807,7 @@ const useDiscImport = (): Return => {
               (offender) => offender.discId === originalIncident.subjectID4
             ) || null
           : null,
-      ].filter((item) => item !== null) as NewOffender[];
+      ].filter((item) => item !== null);
 
       const offendersIds = [
         ...new Set(offenders.map((offender) => offender.id)),

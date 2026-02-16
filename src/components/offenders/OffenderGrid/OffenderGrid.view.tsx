@@ -458,8 +458,15 @@ const OffenderGrid = ({
   const [offendersData, setOffendersData] = useState<Offender[]>([]);
   const [columns, setColumns] = useState(6);
 
-  const sortOffenders = (offendersList: Offender[], sortKey: string) =>
-    [...offendersList].sort((a, b) => {
+  const sortOffenders = (offendersList: Offender[], sortKey: string) => {
+    // Backend-sorted fields: preserve the server-side ordering
+    // These are already sorted across the full dataset by the GraphQL query
+    if (['incidents', 'incidentsAsc', 'value', 'valueAsc'].includes(sortKey)) {
+      return offendersList;
+    }
+
+    // Client-side sorting for fields that cannot be sorted server-side
+    return [...offendersList].sort((a, b) => {
       switch (sortKey) {
         case 'name': {
           return (a.name || '').localeCompare(b.name || '');
@@ -467,19 +474,9 @@ const OffenderGrid = ({
         case 'nameDesc': {
           return (b.name || '').localeCompare(a.name || '');
         }
-        case 'incidents': {
-          return b.totalIncidents - a.totalIncidents;
-        }
-        case 'incidentsAsc': {
-          return a.totalIncidents - b.totalIncidents;
-        }
-        case 'value': {
-          return b.totalValue - a.totalValue;
-        }
-        case 'valueAsc': {
-          return a.totalValue - b.totalValue;
-        }
         case 'lastSeen': {
+          // lastSeen requires client-side sorting because it depends on
+          // latestIncident.date, a computed relationship field
           if (!a.latestIncident?.date) return 1;
           if (!b.latestIncident?.date) return -1;
           return (
@@ -500,6 +497,7 @@ const OffenderGrid = ({
         }
       }
     });
+  };
 
   const calcOffenders = () => {
     if (offenders) {

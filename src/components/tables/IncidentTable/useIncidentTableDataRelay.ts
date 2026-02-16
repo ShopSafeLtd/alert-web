@@ -18,6 +18,7 @@ export interface IncidentFilters {
 }
 
 interface UseIncidentTableDataRelayProps {
+  businessId?: string;
   crimeGroupId?: string;
   defaultSortField?: 'date';
   defaultSortOrder?: 'ascend' | 'descend';
@@ -60,6 +61,7 @@ export interface UseIncidentTableDataRelayReturn {
  * Note: All filtering is server-side, so totalCount accurately reflects filtered results.
  */
 export const useIncidentTableDataRelay = ({
+  businessId,
   crimeGroupId,
   defaultSortField = 'date',
   defaultSortOrder = 'descend',
@@ -101,6 +103,10 @@ export const useIncidentTableDataRelay = ({
     };
 
     // Context filters (required - at least one should be present)
+    if (businessId) {
+      whereClause.businessIds = [businessId];
+    }
+
     if (investigationId) {
       whereClause.investigationIds = [investigationId];
     }
@@ -134,7 +140,7 @@ export const useIncidentTableDataRelay = ({
     }
 
     return whereClause;
-  }, [crimeGroupId, investigationId, offenderId, filters]);
+  }, [businessId, crimeGroupId, investigationId, offenderId, filters]);
 
   // Build orderBy clause
   const orderBy = useMemo(
