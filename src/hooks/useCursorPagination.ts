@@ -100,6 +100,7 @@ export const useCursorPagination = ({
    * - For page 1: Reset cursor
    * - For sequential navigation (page + 1 or page - 1): Use cached cursor
    * - For non-sequential jumps: Reset to page 1 if cursor not available
+   * - Validates page boundaries to prevent navigation beyond available pages
    */
   const handlePageChange = useCallback(
     (newPage: number, newPageSize?: number) => {
@@ -108,6 +109,14 @@ export const useCursorPagination = ({
         setCurrentPage(1);
         cursorCache.current.clear();
         return;
+      }
+
+      // Validate page boundaries - prevent navigation beyond total pages
+      if (newPage > totalPages) {
+        console.warn(
+          `Cannot navigate to page ${newPage}. Only ${totalPages} pages available.`
+        );
+        return; // Stay on current page
       }
 
       // Navigate to page 1
@@ -119,20 +128,17 @@ export const useCursorPagination = ({
       // Check if we can navigate to the requested page
       const cursorForNewPage = getCursorForPage(newPage);
 
-      // If we don't have the cursor for the previous page, reset to page 1
+      // If cursor is unavailable for a valid page beyond page 1
       if (cursorForNewPage === undefined && newPage > 1) {
-        // For non-sequential jumps without cached cursor, reset to page 1
         console.warn(
-          `Cursor not available for page ${newPage}. Resetting to page 1.`
+          `Cursor not available for page ${newPage}. Cannot navigate to non-sequential page without cached cursor.`
         );
-        setCurrentPage(1);
-        cursorCache.current.clear();
-        return;
+        return; // Stay on current page instead of silently resetting
       }
 
       setCurrentPage(newPage);
     },
-    [pageSize, getCursorForPage]
+    [pageSize, getCursorForPage, totalPages]
   );
 
   // Get fetch variables for GraphQL query

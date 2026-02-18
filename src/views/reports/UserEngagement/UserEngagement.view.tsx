@@ -8,9 +8,11 @@ import RolesSelect from '#/components/form-components/RolesSelect/RolesSelect.vi
 import DateSelect from '#/components/reports/DateSelect/DateSelect.view';
 import ReportsSideMenu from '#/components/reports/ReportsSideMenu/ReportsSideMenu.view';
 import Page from '#/components/shared-components/AntD/Page/Page';
+import { useGroupsContext } from '#/context/groups-context';
 import { faFileDownload, faFilters } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
+  Alert,
   Button,
   Card,
   Col,
@@ -97,6 +99,7 @@ const PerformanceReport = ({
   const logo = localStorage.getItem('logo');
   const intl = useIntl();
   const [collapsed, setCollapsed] = useState(false);
+  const { groups } = useGroupsContext();
 
   // Helper function to show sort indicator
   const getSortIndicator = (columnField: string) => {
@@ -160,56 +163,91 @@ const PerformanceReport = ({
                 }
               )}
             </Title>
-            <Row
-              className="no-print"
-              gutter={6}
-              style={{ left: 20, position: 'absolute', right: 20, top: 20 }}
-            >
-              <Col>
-                <Input
-                  onChange={(e) => setSearch(e.target.value)}
-                  placeholder={intl.formatMessage({
-                    defaultMessage: 'Search for users...',
-                  })}
-                  style={{ width: 350 }}
-                  value={search}
-                />
-              </Col>
-              <Col>
-                <DateSelect defaultRange="last30Days" onChange={setDateRange} />
-              </Col>
-              <Col>
-                <Button onClick={toggleFiltersOpen}>
-                  <FontAwesomeIcon
-                    icon={faFilters}
-                    style={{ marginRight: 10 }}
-                  />
-                  {intl.formatMessage({
-                    defaultMessage: 'More Filters',
-                  })}
-                </Button>
-              </Col>
-              <Col flex={1} />
-              <Col>
-                <CSVLink data={csvData} filename="User Engagement">
-                  <Button>
-                    <FormattedMessage defaultMessage="Download CSV" />
+            <Form layout="vertical">
+              <Row
+                className="no-print"
+                gutter={8}
+                style={{ left: 20, position: 'absolute', right: 20, top: 20 }}
+                wrap={false}
+              >
+                <Col span={8}>
+                  <Form.Item
+                    label={intl.formatMessage({ defaultMessage: 'Groups' })}
+                    style={{ marginBottom: 0 }}
+                  >
+                    <GroupsSelect
+                      allowClear
+                      maxTagCount="responsive"
+                      mode="multiple"
+                      onChange={(value) => setSelectedGroups(value || [])}
+                      placeholder={intl.formatMessage({
+                        defaultMessage: 'Select Groups',
+                      })}
+                      style={{ width: '100%' }}
+                      value={selectedGroups}
+                    />
+                  </Form.Item>
+                </Col>
+                <Col span={6}>
+                  <Form.Item
+                    label={intl.formatMessage({ defaultMessage: 'Search' })}
+                    style={{ marginBottom: 0 }}
+                  >
+                    <Input
+                      onChange={(e) => setSearch(e.target.value)}
+                      placeholder={intl.formatMessage({
+                        defaultMessage: 'Search for users...',
+                      })}
+                      value={search}
+                    />
+                  </Form.Item>
+                </Col>
+                <Col span={6}>
+                  <Form.Item
+                    label={intl.formatMessage({
+                      defaultMessage: 'Date Range',
+                    })}
+                    style={{ marginBottom: 0 }}
+                  >
+                    <DateSelect
+                      defaultRange="last30Days"
+                      onChange={setDateRange}
+                    />
+                  </Form.Item>
+                </Col>
+                <Col flex={1} />
+                <Col style={{ alignSelf: 'flex-end' }}>
+                  <Button onClick={toggleFiltersOpen}>
+                    <FontAwesomeIcon
+                      icon={faFilters}
+                      style={{ marginRight: 10 }}
+                    />
+                    {intl.formatMessage({
+                      defaultMessage: 'More Filters',
+                    })}
                   </Button>
-                </CSVLink>
-              </Col>
-              <Col>
-                <Button onClick={handlePrint}>
-                  <FontAwesomeIcon
-                    icon={faFileDownload}
-                    size="lg"
-                    style={{ marginRight: 10 }}
-                  />
-                  {intl.formatMessage({
-                    defaultMessage: 'Download',
-                  })}
-                </Button>
-              </Col>
-            </Row>
+                </Col>
+                <Col style={{ alignSelf: 'flex-end' }}>
+                  <CSVLink data={csvData} filename="User Engagement">
+                    <Button>
+                      <FormattedMessage defaultMessage="Download CSV" />
+                    </Button>
+                  </CSVLink>
+                </Col>
+                <Col style={{ alignSelf: 'flex-end' }}>
+                  <Button onClick={handlePrint}>
+                    <FontAwesomeIcon
+                      icon={faFileDownload}
+                      size="lg"
+                      style={{ marginRight: 10 }}
+                    />
+                    {intl.formatMessage({
+                      defaultMessage: 'Download',
+                    })}
+                  </Button>
+                </Col>
+              </Row>
+            </Form>
             <Row gutter={16}>
               <Col span={24}>
                 <Card loading={loading} style={{ height: '100%' }}>
@@ -218,149 +256,183 @@ const PerformanceReport = ({
                       defaultMessage: 'User Contributions',
                     })}
                   </Title>
-                  <Table
-                    columns={[
-                      {
-                        dataIndex: 'name',
-                        key: 'name',
-                        title: intl.formatMessage({
-                          defaultMessage: 'Name',
-                        }),
-                      },
-                      {
-                        dataIndex: 'businesses',
-                        key: 'businesses',
-                        render: (value: string[]) => {
-                          if (isPrinting) {
-                            if (value.length > 2) {
-                              return `${value.slice(0, 2).join(', ')} + ${value.length - 1} more`;
-                            }
-                            return value.join(', ');
-                          }
-                          if (value.length > 2) {
-                            return (
-                              <>
-                                {value?.slice(0, 2).map((el) => (
-                                  <Tag key={el}>{el}</Tag>
-                                ))}
-                                <Tag>
-                                  {intl.formatMessage(
-                                    {
-                                      defaultMessage: '+ {num} more',
-                                    },
-                                    {
-                                      num: value.length - 1,
-                                    }
-                                  )}
-                                </Tag>
-                              </>
-                            );
-                          }
-                          return value?.map((el) => <Tag key={el}>{el}</Tag>);
+                  {selectedGroups.length === 0 &&
+                  groups.length >= 3 &&
+                  !loading ? (
+                    <Alert
+                      description={
+                        <>
+                          <Typography.Text>
+                            {intl.formatMessage({
+                              defaultMessage: 'Quick select:',
+                            })}
+                          </Typography.Text>
+                          <div style={{ marginTop: 8 }}>
+                            {groups.slice(0, 10).map((group) => (
+                              <Tag
+                                key={group.value}
+                                onClick={() => setSelectedGroups([group.value])}
+                                style={{ cursor: 'pointer', marginBottom: 8 }}
+                              >
+                                {group.label}
+                              </Tag>
+                            ))}
+                          </div>
+                        </>
+                      }
+                      message={intl.formatMessage({
+                        defaultMessage:
+                          'Please select one or more groups to view data',
+                      })}
+                      showIcon
+                      style={{ marginBottom: 16 }}
+                      type="info"
+                    />
+                  ) : (
+                    <Table
+                      columns={[
+                        {
+                          dataIndex: 'name',
+                          key: 'name',
+                          title: intl.formatMessage({
+                            defaultMessage: 'Name',
+                          }),
                         },
-                        title: intl.formatMessage({
-                          defaultMessage: 'Businesses',
-                        }),
-                      },
-                      {
-                        dataIndex: 'incidentsCreated',
-                        key: 'incidentsCreated',
-                        onHeaderCell: () => ({
-                          onClick: () => handleSort('totalIncidents'),
-                          style: { cursor: 'pointer' },
-                        }),
-                        title:
-                          intl.formatMessage({
-                            defaultMessage: 'Incidents',
-                          }) + getSortIndicator('totalIncidents'),
-                      },
-                      {
-                        dataIndex: 'offendersCreated',
-                        key: 'offendersCreated',
-                        onHeaderCell: () => ({
-                          onClick: () => handleSort('totalOffenders'),
-                          style: { cursor: 'pointer' },
-                        }),
-                        title:
-                          intl.formatMessage({
-                            defaultMessage: 'Offenders',
-                          }) + getSortIndicator('totalOffenders'),
-                      },
-                      {
-                        dataIndex: 'updatesCreated',
-                        key: 'updatesCreated',
-                        onHeaderCell: () => ({
-                          onClick: () => handleSort('totalUpdates'),
-                          style: { cursor: 'pointer' },
-                        }),
-                        title:
-                          intl.formatMessage({
-                            defaultMessage: 'Updates',
-                          }) + getSortIndicator('totalUpdates'),
-                      },
-                      {
-                        dataIndex: 'messagesSent',
-                        key: 'messagesSent',
-                        onHeaderCell: () => ({
-                          onClick: () => handleSort('totalMessages'),
-                          style: { cursor: 'pointer' },
-                        }),
-                        title:
-                          intl.formatMessage({
-                            defaultMessage: 'Messages',
-                          }) + getSortIndicator('totalMessages'),
-                      },
-                      {
-                        dataIndex: 'logins',
-                        key: 'logins',
-                        onHeaderCell: () => ({
-                          onClick: () => handleSort('totalLogins'),
-                          style: { cursor: 'pointer' },
-                        }),
-                        title:
-                          intl.formatMessage({
-                            defaultMessage: 'Logins',
-                          }) + getSortIndicator('totalLogins'),
-                      },
-                      {
-                        dataIndex: 'lastLogin',
-                        key: 'lastLogin',
-                        onHeaderCell: () => ({
-                          onClick: () => handleSort('lastLogin'),
-                          style: { cursor: 'pointer' },
-                        }),
-                        title:
-                          intl.formatMessage({
-                            defaultMessage: 'Last Login',
-                          }) + getSortIndicator('lastLogin'),
-                      },
-                    ]}
-                    dataSource={data?.userContributions.map((user, i) => ({
-                      businesses: user.businesses,
-                      incidentsCreated: user.totalIncidents,
-                      key: user.name + i.toString(),
-                      lastLogin: user.lastLogin,
-                      logins: user.totalLogins,
-                      messagesSent: user.totalMessages,
-                      name: user.name,
-                      offendersCreated: user.totalOffenders,
-                      updatesCreated: user.totalUpdates,
-                    }))}
-                    pagination={{
-                      current: currentPage,
-                      defaultPageSize: 30,
-                      hideOnSinglePage: true,
-                      onChange: handlePageChange,
-                      onShowSizeChange: handlePageChange,
-                      pageSize:
-                        isPrinting && data?.total ? data.total : pageSize,
-                      showSizeChanger: true,
-                      showTotal: (total, range) =>
-                        `${range[0]}-${range[1]} of ${total}`,
-                      total: data?.total || 0,
-                    }}
-                    size="small"
-                  />
+                        {
+                          dataIndex: 'businesses',
+                          key: 'businesses',
+                          render: (value: string[]) => {
+                            if (isPrinting) {
+                              if (value.length > 2) {
+                                return `${value.slice(0, 2).join(', ')} + ${value.length - 1} more`;
+                              }
+                              return value.join(', ');
+                            }
+                            if (value.length > 2) {
+                              return (
+                                <>
+                                  {value?.slice(0, 2).map((el) => (
+                                    <Tag key={el}>{el}</Tag>
+                                  ))}
+                                  <Tag>
+                                    {intl.formatMessage(
+                                      {
+                                        defaultMessage: '+ {num} more',
+                                      },
+                                      {
+                                        num: value.length - 1,
+                                      }
+                                    )}
+                                  </Tag>
+                                </>
+                              );
+                            }
+                            return value?.map((el) => <Tag key={el}>{el}</Tag>);
+                          },
+                          title: intl.formatMessage({
+                            defaultMessage: 'Businesses',
+                          }),
+                        },
+                        {
+                          dataIndex: 'incidentsCreated',
+                          key: 'incidentsCreated',
+                          onHeaderCell: () => ({
+                            onClick: () => handleSort('totalIncidents'),
+                            style: { cursor: 'pointer' },
+                          }),
+                          title:
+                            intl.formatMessage({
+                              defaultMessage: 'Incidents',
+                            }) + getSortIndicator('totalIncidents'),
+                        },
+                        {
+                          dataIndex: 'offendersCreated',
+                          key: 'offendersCreated',
+                          onHeaderCell: () => ({
+                            onClick: () => handleSort('totalOffenders'),
+                            style: { cursor: 'pointer' },
+                          }),
+                          title:
+                            intl.formatMessage({
+                              defaultMessage: 'Offenders',
+                            }) + getSortIndicator('totalOffenders'),
+                        },
+                        {
+                          dataIndex: 'updatesCreated',
+                          key: 'updatesCreated',
+                          onHeaderCell: () => ({
+                            onClick: () => handleSort('totalUpdates'),
+                            style: { cursor: 'pointer' },
+                          }),
+                          title:
+                            intl.formatMessage({
+                              defaultMessage: 'Updates',
+                            }) + getSortIndicator('totalUpdates'),
+                        },
+                        {
+                          dataIndex: 'messagesSent',
+                          key: 'messagesSent',
+                          onHeaderCell: () => ({
+                            onClick: () => handleSort('totalMessages'),
+                            style: { cursor: 'pointer' },
+                          }),
+                          title:
+                            intl.formatMessage({
+                              defaultMessage: 'Messages',
+                            }) + getSortIndicator('totalMessages'),
+                        },
+                        {
+                          dataIndex: 'logins',
+                          key: 'logins',
+                          onHeaderCell: () => ({
+                            onClick: () => handleSort('totalLogins'),
+                            style: { cursor: 'pointer' },
+                          }),
+                          title:
+                            intl.formatMessage({
+                              defaultMessage: 'Logins',
+                            }) + getSortIndicator('totalLogins'),
+                        },
+                        {
+                          dataIndex: 'lastLogin',
+                          key: 'lastLogin',
+                          onHeaderCell: () => ({
+                            onClick: () => handleSort('lastLogin'),
+                            style: { cursor: 'pointer' },
+                          }),
+                          title:
+                            intl.formatMessage({
+                              defaultMessage: 'Last Login',
+                            }) + getSortIndicator('lastLogin'),
+                        },
+                      ]}
+                      dataSource={data?.userContributions.map((user, i) => ({
+                        businesses: user.businesses,
+                        incidentsCreated: user.totalIncidents,
+                        key: user.name + i.toString(),
+                        lastLogin: user.lastLogin,
+                        logins: user.totalLogins,
+                        messagesSent: user.totalMessages,
+                        name: user.name,
+                        offendersCreated: user.totalOffenders,
+                        updatesCreated: user.totalUpdates,
+                      }))}
+                      pagination={{
+                        current: currentPage,
+                        defaultPageSize: 30,
+                        hideOnSinglePage: true,
+                        onChange: handlePageChange,
+                        onShowSizeChange: handlePageChange,
+                        pageSize:
+                          isPrinting && data?.total ? data.total : pageSize,
+                        showSizeChanger: true,
+                        showTotal: (total, range) =>
+                          `${range[0]}-${range[1]} of ${total}`,
+                        total: data?.total || 0,
+                      }}
+                      size="small"
+                    />
+                  )}
                 </Card>
               </Col>
             </Row>
@@ -378,21 +450,6 @@ const PerformanceReport = ({
             <Typography.Title level={4}>
               {intl.formatMessage({ defaultMessage: 'User Filters' })}
             </Typography.Title>
-            <Form.Item
-              label={intl.formatMessage({
-                defaultMessage: 'Groups',
-              })}
-            >
-              <GroupsSelect
-                maxTagCount="responsive"
-                mode="multiple"
-                onChange={(value) => {
-                  setSelectedGroups(value || []);
-                }}
-                style={{ width: '100%' }}
-                value={selectedGroups}
-              />
-            </Form.Item>
             <Form.Item
               label={intl.formatMessage({
                 defaultMessage: 'Businesses',

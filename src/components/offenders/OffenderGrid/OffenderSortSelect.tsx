@@ -20,12 +20,6 @@ export const OffenderSortSelect: React.FC<OffenderSortSelectProps> = ({
       style={{ width: 200 }}
       value={value}
     >
-      <Select.Option value="lastSeen">
-        {intl.formatMessage({ defaultMessage: 'Last Seen (Newest)' })}
-      </Select.Option>
-      <Select.Option value="lastSeenAsc">
-        {intl.formatMessage({ defaultMessage: 'Last Seen (Oldest)' })}
-      </Select.Option>
       <Select.Option value="name">
         {intl.formatMessage({ defaultMessage: 'Name (A-Z)' })}
       </Select.Option>

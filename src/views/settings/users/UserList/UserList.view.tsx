@@ -254,13 +254,25 @@ const UserList = ({
               record: { groups: { id: string; name: string }[] }
             ) => record.groups.some(({ id }) => id === value),
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            render: (value: { id: string; name: string }[]) => (
-              <Typography.Text>
-                {value
-                  .map(({ name }, index) => (index === 0 ? name : ` ${name}`))
-                  .toString()}
-              </Typography.Text>
-            ),
+            render: (value: { id: string; name: string }[]) => {
+              const visible = value.slice(0, 5);
+              const remaining = value.length - 5;
+              return (
+                <div style={{ display: 'flex', flexWrap: 'nowrap', gap: 4 }}>
+                  {visible.map(({ id, name }) => (
+                    <Tag key={id}>{name}</Tag>
+                  ))}
+                  {remaining > 0 && (
+                    <Tag>
+                      {intl.formatMessage(
+                        { defaultMessage: '+{remaining} more' },
+                        { remaining }
+                      )}
+                    </Tag>
+                  )}
+                </div>
+              );
+            },
             title: intl.formatMessage({
               defaultMessage: 'Groups',
             }),

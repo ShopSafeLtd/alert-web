@@ -282,7 +282,7 @@ const useViewTag = (): Return => {
     .reduce((acc, field) => {
       acc[field] =
         typeof providedDefaults[field] === 'boolean'
-          ? providedDefaults[field]!
+          ? providedDefaults[field]
           : false;
       return acc;
     }, {} as IncidentFormFieldState);

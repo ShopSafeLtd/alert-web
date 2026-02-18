@@ -242,8 +242,7 @@ const Offenders = ({
             data={updateOpen}
             images={images?.map((el) => ({
               ...el,
-              id:
-                (el.isExisting && el.id) || el.id ? el.id : `${Math.random()}`,
+              id: el.id || el.uid,
             }))}
             incidentBusinessId={incidentBusinessId}
             onClose={() => setUpdateOpen(null)}
