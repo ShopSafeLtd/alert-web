@@ -1,7 +1,7 @@
 import type { OffenderData } from 'types/DataType';
 
 import { Empty, Pagination } from 'antd';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useIntl } from 'react-intl';
 
 import type { OffenderNode } from './useOffenderGridDataRelay';
@@ -26,7 +26,7 @@ interface OffenderGridContainerProps {
 export const OffenderGridContainer: React.FC<OffenderGridContainerProps> = ({
   canDisconnect,
   crimeGroupId,
-  defaultSortBy = 'lastSeen',
+  defaultSortBy = 'incidents',
   disconnectLabel,
   editRights,
   incidentId,
@@ -40,6 +40,7 @@ export const OffenderGridContainer: React.FC<OffenderGridContainerProps> = ({
 
   const {
     handlePageChange,
+    handleSortChange,
     loading,
     offenders,
     page,
@@ -53,6 +54,18 @@ export const OffenderGridContainer: React.FC<OffenderGridContainerProps> = ({
     investigationId,
     pageSize: initialPageSize,
   });
+
+  // Sync external sort changes into the relay hook so they trigger a server refetch
+  const isMounted = useRef(false);
+  useEffect(() => {
+    if (!isMounted.current) {
+      isMounted.current = true;
+      return;
+    }
+    if (externalSortBy) {
+      handleSortChange(externalSortBy);
+    }
+  }, [externalSortBy]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const currentSortBy = externalSortBy || internalSortBy || defaultSortBy;
 

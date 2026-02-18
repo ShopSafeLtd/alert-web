@@ -2,7 +2,7 @@ import { Select } from 'antd';
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 
-export const useOffenderSort = (defaultSort = 'lastSeen') => {
+export const useOffenderSort = (defaultSort = 'incidents') => {
   const [sortBy, setSortBy] = useState<string>(defaultSort);
   return { setSortBy, sortBy };
 };
@@ -22,10 +22,6 @@ export const OffenderSortSelect: React.FC<OffenderSortSelectProps> = ({
 
   const options = [
     {
-      label: intl.formatMessage({ defaultMessage: 'Name (A-Z)' }),
-      value: 'name',
-    },
-    {
       label: intl.formatMessage({ defaultMessage: 'Name (Z-A)' }),
       value: 'nameDesc',
     },
@@ -44,14 +40,6 @@ export const OffenderSortSelect: React.FC<OffenderSortSelectProps> = ({
     {
       label: intl.formatMessage({ defaultMessage: 'Lowest Value' }),
       value: 'valueAsc',
-    },
-    {
-      label: intl.formatMessage({ defaultMessage: 'Recently Seen' }),
-      value: 'lastSeen',
-    },
-    {
-      label: intl.formatMessage({ defaultMessage: 'Oldest Activity' }),
-      value: 'lastSeenAsc',
     },
   ];
 

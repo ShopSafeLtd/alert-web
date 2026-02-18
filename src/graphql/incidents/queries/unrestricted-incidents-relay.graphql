@@ -1,17 +1,16 @@
 query unrestrictedIncidentsRelay(
-  $first: Int
-  $after: String
+  $take: Int
+  $skip: Int
   $orderBy: IncidentOrderByWithRelationInput
   $where: UnrestrictedIncidentRelayInput!
 ) {
   unrestrictedIncidentsRelay(
-    first: $first
-    after: $after
+    take: $take
+    skip: $skip
     orderBy: $orderBy
     where: $where
   ) {
     edges {
-      cursor
       node {
         id
         subject
@@ -39,12 +38,6 @@ query unrestrictedIncidentsRelay(
           }
         }
       }
-    }
-    pageInfo {
-      hasNextPage
-      hasPreviousPage
-      startCursor
-      endCursor
     }
     totalCount
   }

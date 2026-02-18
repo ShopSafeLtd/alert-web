@@ -258,7 +258,7 @@ const ViewInvestigation = ({
   const { setSortBy: setVehicleSortBy, sortBy: vehicleSortBy } =
     useVehicleSort('registration');
   const { setSortBy: setOffenderSortBy, sortBy: offenderSortBy } =
-    useOffenderSort('lastSeen');
+    useOffenderSort('incidents');
   const [sidebarSection, setSidebarSection] = useState<
     'activities' | 'history' | 'intel' | 'suggestions'
   >('intel');
@@ -708,7 +708,7 @@ const ViewInvestigation = ({
 
                 <OffenderGridContainer
                   canDisconnect={editRights}
-                  defaultSortBy="lastSeen"
+                  defaultSortBy="incidents"
                   disconnectLabel={intl.formatMessage({
                     defaultMessage: 'Disconnect from Investigation',
                   })}

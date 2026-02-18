@@ -451,59 +451,16 @@ const OffenderGrid = ({
   offenders,
   onDisconnectOffender,
   setEditOffenderData,
-  sortBy = 'lastSeen',
+  sortBy = 'incidents',
 }: Props): JSX.Element => {
   const rowRef = useRef<HTMLDivElement>(null);
 
   const [offendersData, setOffendersData] = useState<Offender[]>([]);
   const [columns, setColumns] = useState(6);
 
-  const sortOffenders = (offendersList: Offender[], sortKey: string) => {
-    // Backend-sorted fields: preserve the server-side ordering
-    // These are already sorted across the full dataset by the GraphQL query
-    if (['incidents', 'incidentsAsc', 'value', 'valueAsc'].includes(sortKey)) {
-      return offendersList;
-    }
-
-    // Client-side sorting for fields that cannot be sorted server-side
-    return [...offendersList].sort((a, b) => {
-      switch (sortKey) {
-        case 'name': {
-          return (a.name || '').localeCompare(b.name || '');
-        }
-        case 'nameDesc': {
-          return (b.name || '').localeCompare(a.name || '');
-        }
-        case 'lastSeen': {
-          // lastSeen requires client-side sorting because it depends on
-          // latestIncident.date, a computed relationship field
-          if (!a.latestIncident?.date) return 1;
-          if (!b.latestIncident?.date) return -1;
-          return (
-            new Date(b.latestIncident.date).getTime() -
-            new Date(a.latestIncident.date).getTime()
-          );
-        }
-        case 'lastSeenAsc': {
-          if (!a.latestIncident?.date) return -1;
-          if (!b.latestIncident?.date) return 1;
-          return (
-            new Date(a.latestIncident.date).getTime() -
-            new Date(b.latestIncident.date).getTime()
-          );
-        }
-        default: {
-          return 0;
-        }
-      }
-    });
-  };
-
   const calcOffenders = () => {
     if (offenders) {
-      // Apply sorting and display all offenders (pagination is server-side)
-      const toDisplay = sortOffenders(offenders, sortBy);
-      setOffendersData(toDisplay);
+      setOffendersData(offenders);
     }
   };
 
