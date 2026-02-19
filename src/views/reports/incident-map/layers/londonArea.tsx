@@ -89,10 +89,7 @@ const LondonPoliceLayer = ({
           type: 'Feature',
         } as GeoJSON.Feature<GeoJSON.MultiPolygon | GeoJSON.Polygon>;
         for (const { lat: ilat, lng: ilng } of incidents) {
-          const incidentPoint = point([
-            ilng,
-            ilat,
-          ]) as GeoJSON.Feature<GeoJSON.Point>;
+          const incidentPoint = point([ilng, ilat]);
           if (booleanPointInPolygon(incidentPoint, boroughFeature)) {
             count += 1;
           }

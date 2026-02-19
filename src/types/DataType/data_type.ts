@@ -440,6 +440,7 @@ export interface CustomQuestion {
   dependentOnAnswerValueArray?: string[];
   dependentOnBrandIds?: string[];
   dependentOnQuestionId?: null | string;
+  dependentOnTagIds?: string[];
   label: string;
   options: {
     label: string;

@@ -8,9 +8,11 @@ import { FormattedMessage, useIntl } from 'react-intl';
 
 import type { IncidentFilters } from './useIncidentTableData';
 
-const { RangePicker } = DatePicker;
+// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+const RangePicker = DatePicker.RangePicker;
 
 interface IncidentTableFiltersProps {
+  businessId?: string;
   filters: IncidentFilters;
   investigationId?: string;
   offenderId?: string;
@@ -19,6 +21,7 @@ interface IncidentTableFiltersProps {
 }
 
 export const IncidentTableFilters: React.FC<IncidentTableFiltersProps> = ({
+  businessId: _businessId,
   filters,
   investigationId: _investigationId,
   offenderId: _offenderId,
