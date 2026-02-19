@@ -166,17 +166,18 @@ const PerformanceReport = ({
             <Form layout="vertical">
               <Row
                 className="no-print"
-                gutter={8}
+                gutter={4}
                 style={{ left: 20, position: 'absolute', right: 20, top: 20 }}
                 wrap={false}
               >
-                <Col span={8}>
+                <Col span={4}>
                   <Form.Item
                     label={intl.formatMessage({ defaultMessage: 'Groups' })}
                     style={{ marginBottom: 0 }}
                   >
                     <GroupsSelect
                       allowClear
+                      allowSelectAll
                       maxTagCount="responsive"
                       mode="multiple"
                       onChange={(value) => setSelectedGroups(value || [])}
@@ -188,7 +189,7 @@ const PerformanceReport = ({
                     />
                   </Form.Item>
                 </Col>
-                <Col span={6}>
+                <Col span={4}>
                   <Form.Item
                     label={intl.formatMessage({ defaultMessage: 'Search' })}
                     style={{ marginBottom: 0 }}
