@@ -1,17 +1,17 @@
-import type { UnrestrictedOffendersRelayQuery } from 'graphql/offenders/queries/__generated__/unrestricted-offenders-relay.generated';
-import type { UnrestrictedOffenderRelayInput } from 'graphql/types';
+import type { ListOffendersForGridQuery } from 'graphql/offenders/queries/__generated__/list-offenders-for-grid.generated';
+import type {
+  OffenderOrderByWithRelationInput,
+  OffenderWhereInput,
+} from 'graphql/types';
 
-import { useUnrestrictedOffendersRelayQuery } from 'graphql/offenders/queries/__generated__/unrestricted-offenders-relay.generated';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import { useListOffendersForGridQuery } from 'graphql/offenders/queries/__generated__/list-offenders-for-grid.generated';
 import { SortOrder } from 'graphql/types';
-import { useCursorPagination } from 'hooks/useCursorPagination';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useAtomValue } from 'jotai';
+import { useCallback, useMemo, useState } from 'react';
 
 export interface OffenderFilters {
   // Empty for MVP - structure ready for future filtering
-  // nameSearch?: string;
-  // tags?: string[];
-  // gender?: Gender;
-  // race?: Race;
 }
 
 interface UseOffenderGridDataRelayProps {
@@ -23,7 +23,7 @@ interface UseOffenderGridDataRelayProps {
 }
 
 export type OffenderNode =
-  UnrestrictedOffendersRelayQuery['unrestrictedOffendersRelay']['edges'][number]['node'];
+  ListOffendersForGridQuery['listOffenders']['offenders'][number];
 
 export interface UseOffenderGridDataRelayReturn {
   error?: Error;
@@ -41,52 +41,41 @@ export interface UseOffenderGridDataRelayReturn {
   totalCount: number;
 }
 
-/**
- * Relay pagination version of useOffenderGridData.
- *
- * Key differences from the original:
- * 1. Uses unrestrictedOffendersRelay query instead of listOffendersForGrid
- * 2. Uses cursor-based pagination (first/after) instead of offset (skip/take)
- * 3. Extracts nodes from edges structure
- * 4. Uses useCursorPagination for page management
- * 5. Uses simplified UnrestrictedOffenderRelayInput for filtering
- */
 export const useOffenderGridDataRelay = ({
   crimeGroupId,
-  defaultSortBy = 'lastSeen',
+  defaultSortBy = 'incidents',
   incidentId,
   investigationId,
   pageSize: initialPageSize = 12,
 }: UseOffenderGridDataRelayProps): UseOffenderGridDataRelayReturn => {
-  // State management
+  const schemeId = useAtomValue(currentSchemeIdAtom);
+
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(initialPageSize);
   const [sortBy, setSortBy] = useState<string>(defaultSortBy);
   const [filters, setFilters] = useState<OffenderFilters>({});
 
-  // Build where clause for filtering using simplified input structure
-  const where: UnrestrictedOffenderRelayInput = useMemo(() => {
-    const whereClause: UnrestrictedOffenderRelayInput = {};
+  const where: OffenderWhereInput = useMemo(() => {
+    const whereClause: OffenderWhereInput = {};
 
-    // Context filters (at least one should be present)
     if (crimeGroupId) {
-      whereClause.crimeGroupIds = [crimeGroupId];
+      whereClause.crimeGroups = { some: { id: { equals: crimeGroupId } } };
     }
 
     if (incidentId) {
-      whereClause.incidentIds = [incidentId];
+      whereClause.incidents = { some: { id: { equals: incidentId } } };
     }
 
     if (investigationId) {
-      whereClause.investigationIds = [investigationId];
+      whereClause.investigations = {
+        some: { id: { equals: investigationId } },
+      };
     }
-
-    // User filters (empty for MVP)
-    // Future: add search, approved filter here
 
     return whereClause;
   }, [crimeGroupId, incidentId, investigationId]);
 
-  // Build orderBy clause from sortBy key
-  const orderBy = useMemo(() => {
+  const order: OffenderOrderByWithRelationInput = useMemo(() => {
     switch (sortBy) {
       case 'name': {
         return { name: SortOrder.Asc };
@@ -107,102 +96,53 @@ export const useOffenderGridDataRelay = ({
         return { totalValueCount: SortOrder.Asc };
       }
       default: {
-        // Note: "lastSeen" requires client-side sorting as it depends on latestIncident.date
-        // which is not a direct field. For now, we'll use createdAt as a proxy
-        // and still allow client-side sorting in the view
-        return undefined;
+        return { totalIncidentsCount: SortOrder.Desc };
       }
     }
   }, [sortBy]);
 
-  // Execute query (initial load to get totalCount)
-  const { data, error, loading, refetch } = useUnrestrictedOffendersRelayQuery({
+  const { data, error, loading, refetch } = useListOffendersForGridQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
-      first: initialPageSize,
+      order,
+      scheme: { id: schemeId },
+      skip: (page - 1) * pageSize,
+      take: pageSize,
       where,
-      ...(orderBy && { orderBy }),
     },
   });
 
-  // Extract pagination info from response
-  const totalCount = data?.unrestrictedOffendersRelay?.totalCount || 0;
-  const pageInfo = data?.unrestrictedOffendersRelay?.pageInfo;
-  const currentCursor = pageInfo?.endCursor;
-  const hasNextPage = pageInfo?.hasNextPage || false;
+  const offenders = useMemo(() => data?.listOffenders?.offenders || [], [data]);
 
-  // Use cursor pagination hook
-  const {
-    currentPage,
-    fetchVariables,
-    handlePageChange: handleCursorPageChange,
-    resetPagination,
-    updateCursorCache,
-  } = useCursorPagination({
-    currentCursor,
-    hasNextPage,
-    pageSize: initialPageSize,
-    totalCount,
-  });
-
-  // Update cursor cache when data changes
-  useEffect(() => {
-    if (currentCursor && currentPage > 0) {
-      updateCursorCache(currentPage, currentCursor);
-    }
-  }, [currentCursor, currentPage, updateCursorCache]);
-
-  // Extract offenders from edges
-  const offenders = useMemo((): OffenderNode[] => {
-    if (!data?.unrestrictedOffendersRelay?.edges) {
-      return [];
-    }
-    return data.unrestrictedOffendersRelay.edges.map((edge) => edge.node);
-  }, [data]);
-
-  // Handlers
   const handlePageChange = useCallback(
     (newPage: number, newPageSize?: number) => {
-      handleCursorPageChange(newPage, newPageSize);
-
-      // Refetch with new pagination variables
-      void refetch({
-        ...fetchVariables,
-        first: newPageSize || initialPageSize,
-        where,
-        ...(orderBy && { orderBy }),
-      });
+      if (newPageSize && newPageSize !== pageSize) {
+        setPageSize(newPageSize);
+        setPage(1);
+      } else {
+        setPage(newPage);
+      }
     },
-    [
-      handleCursorPageChange,
-      refetch,
-      fetchVariables,
-      initialPageSize,
-      where,
-      orderBy,
-    ]
+    [pageSize]
   );
 
   const handleFiltersChange = useCallback(
     (newFilters: Partial<OffenderFilters>) => {
       setFilters((prev) => ({ ...prev, ...newFilters }));
-      resetPagination(); // Reset to first page on filter change
+      setPage(1);
     },
-    [resetPagination]
+    []
   );
 
   const handleClearFilters = useCallback(() => {
     setFilters({});
-    resetPagination();
-  }, [resetPagination]);
+    setPage(1);
+  }, []);
 
-  const handleSortChange = useCallback(
-    (newSortBy: string) => {
-      setSortBy(newSortBy);
-      resetPagination(); // Reset to first page on sort change
-    },
-    [resetPagination]
-  );
+  const handleSortChange = useCallback((newSortBy: string) => {
+    setSortBy(newSortBy);
+    setPage(1);
+  }, []);
 
   const handleRefetch = useCallback(() => {
     void refetch();
@@ -217,10 +157,10 @@ export const useOffenderGridDataRelay = ({
     handleSortChange,
     loading,
     offenders,
-    page: currentPage,
-    pageSize: initialPageSize,
+    page,
+    pageSize,
     refetch: handleRefetch,
     sortBy,
-    totalCount,
+    totalCount: data?.listOffenders?.total || 0,
   };
 };

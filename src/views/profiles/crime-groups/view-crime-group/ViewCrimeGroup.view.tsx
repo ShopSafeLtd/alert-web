@@ -80,7 +80,11 @@ dayjs.extend(relativeTime);
 import { ProfileUpdatedModel } from 'types/enums/profile-update-type';
 
 import { CrimeGroupFlowContainer as CrimeGroupFlow } from '../../../../components/crime-groups/CrimeGroupFlow';
-import { OffenderGridContainer } from '../../../../components/offenders/OffenderGrid';
+import {
+  OffenderGridContainer,
+  OffenderSortSelect,
+  useOffenderSort,
+} from '../../../../components/offenders/OffenderGrid';
 import './ViewCrimeGroup.print.v2.styles.css';
 import useStyles from './ViewCrimeGroup.styles';
 
@@ -210,6 +214,8 @@ const ViewCrimeGroup = ({
   const intl = useIntl();
   const { componentRef, handlePrint, isPrinting } = useReportPrint();
   const currency = useAtomValue(currencyAtom);
+  const { setSortBy: setOffenderSortBy, sortBy: offenderSortBy } =
+    useOffenderSort('incidents');
   const { setSortBy: setVehicleSortBy, sortBy: vehicleSortBy } =
     useVehicleSort('registration');
 
@@ -679,6 +685,12 @@ const ViewCrimeGroup = ({
                       )}
                     </Title>
                   </Col>
+                  <Col>
+                    <OffenderSortSelect
+                      onChange={setOffenderSortBy}
+                      value={offenderSortBy}
+                    />
+                  </Col>
                   {suggestedData?.crimeGroup?.suggestedMembers &&
                     suggestedData.crimeGroup.suggestedMembers.length > 0 && (
                       <Col>
@@ -750,9 +762,10 @@ const ViewCrimeGroup = ({
                 <OffenderGridContainer
                   canDisconnect={editRights}
                   crimeGroupId={crimeGroupId}
-                  defaultSortBy="lastSeen"
+                  defaultSortBy="incidents"
                   onDisconnectOffender={onDisconnectOffender}
                   pageSize={12}
+                  sortBy={offenderSortBy}
                 />
               </Card>
 

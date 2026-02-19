@@ -960,6 +960,40 @@ export enum AnyAll {
   Any = 'any'
 }
 
+export type ApiToken = {
+  __typename?: 'ApiToken';
+  clerkApiKeyId: Scalars['String'];
+  /** API Key secret - ONLY returned on creation, store securely */
+  clerkSecret?: Maybe<Scalars['String']>;
+  createdAt: Scalars['DateTime'];
+  createdBy?: Maybe<User>;
+  createdByUserId?: Maybe<Scalars['ID']>;
+  description?: Maybe<Scalars['String']>;
+  enabled: Scalars['Boolean'];
+  expiresAt?: Maybe<Scalars['DateTime']>;
+  id: Scalars['ID'];
+  ipWhitelist: Array<Scalars['String']>;
+  lastUsedAt?: Maybe<Scalars['DateTime']>;
+  name: Scalars['String'];
+  rateLimit?: Maybe<Scalars['Int']>;
+  requestCount: Scalars['Int'];
+  scheme: Scheme;
+  schemeId: Scalars['ID'];
+  scopes: Array<ApiTokenScope>;
+  updatedAt: Scalars['DateTime'];
+};
+
+export type ApiTokenCreateInput = {
+  description?: InputMaybe<Scalars['String']>;
+  enabled?: InputMaybe<Scalars['Boolean']>;
+  expiresAt?: InputMaybe<Scalars['DateTime']>;
+  ipWhitelist?: InputMaybe<Array<Scalars['String']>>;
+  name: Scalars['String'];
+  rateLimit?: InputMaybe<Scalars['Int']>;
+  scheme: ConnectHelper;
+  scopes: Array<ApiTokenScope>;
+};
+
 export enum ApiTokenScope {
   BusinessesRead = 'BUSINESSES_READ',
   FormQuestionsRead = 'FORM_QUESTIONS_READ',
@@ -974,6 +1008,33 @@ export enum ApiTokenScope {
   VehiclesCreate = 'VEHICLES_CREATE',
   VehiclesRead = 'VEHICLES_READ'
 }
+
+export type ApiTokenStats = {
+  __typename?: 'ApiTokenStats';
+  enabled: Scalars['Boolean'];
+  lastUsedAt?: Maybe<Scalars['DateTime']>;
+  requestCount: Scalars['Int'];
+  schemeName: Scalars['String'];
+  tokenId: Scalars['String'];
+  tokenName: Scalars['String'];
+  totalRequests: Scalars['Int'];
+};
+
+export type ApiTokenUpdateInput = {
+  description?: InputMaybe<Scalars['String']>;
+  enabled?: InputMaybe<Scalars['Boolean']>;
+  expiresAt?: InputMaybe<Scalars['DateTime']>;
+  ipWhitelist?: InputMaybe<Array<Scalars['String']>>;
+  name?: InputMaybe<Scalars['String']>;
+  rateLimit?: InputMaybe<Scalars['Int']>;
+  scopes?: InputMaybe<Array<ApiTokenScope>>;
+};
+
+export type ApiTokenWhereInput = {
+  enabled?: InputMaybe<Scalars['Boolean']>;
+  schemeId?: InputMaybe<Scalars['String']>;
+  scopes?: InputMaybe<Array<ApiTokenScope>>;
+};
 
 export enum AppType {
   Native = 'NATIVE',
@@ -11637,6 +11698,7 @@ export type Mutation = {
   createActionEvidence?: Maybe<Scalars['String']>;
   createActiveChecklist: ActiveChecklist;
   createActivityCsvZip: Scalars['String'];
+  createApiToken: ApiToken;
   createArticle: Article;
   createBatchPoliceSharingConfigs: BatchPoliceSharingConfigResult;
   createBillingCustomer: BillingCustomer;
@@ -11702,6 +11764,7 @@ export type Mutation = {
   createUserInAuth0?: Maybe<UserNewAuth0>;
   createUserInDatabase: User;
   createVehicle: Vehicle;
+  deleteApiToken: ApiToken;
   deleteArticle: Article;
   deleteBan: Ban;
   deleteBillingCustomer: BillingCustomer;
@@ -11875,6 +11938,7 @@ export type Mutation = {
   unsubscribeToCrimeGroup: CrimeGroup;
   unsubscribeToInvestigation: Investigation;
   unsubscribeToVehicle: Vehicle;
+  updateApiToken: ApiToken;
   updateBillingCustomer: BillingCustomer;
   updateBusiness: Business;
   updateBusinessQuestion: BusinessQuestion;
@@ -12116,6 +12180,11 @@ export type MutationCreateActiveChecklistArgs = {
 
 export type MutationCreateActivityCsvZipArgs = {
   where: ActivityExportWhere;
+};
+
+
+export type MutationCreateApiTokenArgs = {
+  data: ApiTokenCreateInput;
 };
 
 
@@ -12454,6 +12523,11 @@ export type MutationCreateUserInDatabaseArgs = {
 
 export type MutationCreateVehicleArgs = {
   data: CreateVehicleDataInput;
+};
+
+
+export type MutationDeleteApiTokenArgs = {
+  id: Scalars['String'];
 };
 
 
@@ -13276,6 +13350,12 @@ export type MutationUnsubscribeToInvestigationArgs = {
 
 export type MutationUnsubscribeToVehicleArgs = {
   where: UniqueId;
+};
+
+
+export type MutationUpdateApiTokenArgs = {
+  data: ApiTokenUpdateInput;
+  id: Scalars['String'];
 };
 
 
@@ -16706,6 +16786,9 @@ export type Query = {
   aiVisionMatch: AiVisionMatch;
   aiVisionMatches: QueryAiVisionMatchesConnection;
   aiVisionStats: Array<Count>;
+  apiToken?: Maybe<ApiToken>;
+  apiTokenStats: Array<ApiTokenStats>;
+  apiTokens: Array<ApiToken>;
   article: Article;
   articles: Array<Article>;
   audioAnalyticsReport: AudioAnalyticsReport;
@@ -17136,6 +17219,23 @@ export type QueryAiVisionMatchesArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where: AiVisionMatchWhereInput;
+};
+
+
+export type QueryApiTokenArgs = {
+  id: Scalars['String'];
+};
+
+
+export type QueryApiTokenStatsArgs = {
+  schemeId?: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryApiTokensArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<ApiTokenWhereInput>;
 };
 
 
@@ -18931,6 +19031,8 @@ export type QueryUnrestrictedIncidentsRelayArgs = {
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<IncidentOrderByWithRelationInput>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
   where: UnrestrictedIncidentRelayInput;
 };
 
@@ -18941,6 +19043,8 @@ export type QueryUnrestrictedOffendersRelayArgs = {
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<OffenderOrderByWithRelationInput>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
   where: UnrestrictedOffenderRelayInput;
 };
 
@@ -21191,6 +21295,7 @@ export type Scheme = {
   activityAllowAllGroups: Scalars['Boolean'];
   activityAssignToUser: Scalars['Boolean'];
   allowTodoTemplateOverride: Scalars['Boolean'];
+  apiTokens: Array<ApiToken>;
   approvalDueDays?: Maybe<Scalars['Int']>;
   articles: Array<Article>;
   autoApproveActivities: Scalars['Boolean'];
@@ -25545,6 +25650,7 @@ export type UnlinkedImage = {
 
 export type UnrestrictedIncidentRelayInput = {
   approved?: InputMaybe<Scalars['Boolean']>;
+  businessIds?: InputMaybe<Array<Scalars['String']>>;
   crimeGroupIds?: InputMaybe<Array<Scalars['String']>>;
   crimeTypes?: InputMaybe<Array<Scalars['String']>>;
   dateRange?: InputMaybe<DateTimeFilter>;
@@ -26381,6 +26487,7 @@ export type User = {
   activityEmail: Scalars['Boolean'];
   activityPush: Scalars['Boolean'];
   addresses: Array<Address>;
+  apiTokensCreated: Array<ApiToken>;
   approverGroups: Array<Group>;
   articles: Array<Article>;
   assignedTodos: Array<Todo>;
