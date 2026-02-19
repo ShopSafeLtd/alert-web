@@ -177,6 +177,7 @@ const PerformanceReport = ({
                   >
                     <GroupsSelect
                       allowClear
+                      allowSelectAll
                       maxTagCount="responsive"
                       mode="multiple"
                       onChange={(value) => setSelectedGroups(value || [])}
