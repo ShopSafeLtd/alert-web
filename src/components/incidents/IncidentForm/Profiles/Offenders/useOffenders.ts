@@ -459,7 +459,7 @@ const useOffenders = ({ form, onChange, value }: Props): Return => {
                 },
                 gender: face.Gender,
                 id: Math.floor(Math.random() * 1000).toString(),
-                mustache: face.Beard,
+                mustache: face.Mustache,
               })),
               id: info.file.uid,
               offenderId,
