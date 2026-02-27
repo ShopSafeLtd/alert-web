@@ -335,7 +335,7 @@ const useOffenders = ({ form, onChange, value }: Props): Return => {
                 nameUpdated,
               existing: true,
               gender: genderUpdated ? matchExistingOpen.gender : data.gender,
-              hair: hairUpdated ? matchExistingOpen.build : data.hair,
+              hair: hairUpdated ? matchExistingOpen.hair : data.hair,
               id: data.id,
               images: [...newImages, ...existingImages],
               name: nameUpdated ? matchExistingOpen.name : data.name,
