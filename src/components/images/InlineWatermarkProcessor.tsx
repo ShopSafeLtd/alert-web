@@ -1,6 +1,6 @@
 import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import { useAtomValue } from 'jotai';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 
 interface Props {
   className?: string;
@@ -15,6 +15,41 @@ const InlineWatermarkProcessor: React.FC<Props> = ({
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const userReference = useAtomValue(currentUserAtom)?.reference || '';
+
+  const processedHtml = useMemo(() => {
+    if (!htmlContent) return htmlContent;
+    const doc = new DOMParser().parseFromString(htmlContent, 'text/html');
+
+    // Convert data-align attributes to inline styles (new articles post-backend-fix).
+    // Keep the attribute so CSS attribute-selector rules in ViewArticle can also apply.
+    const aligned = doc.body.querySelectorAll<HTMLElement>('[data-align]');
+    for (const el of aligned) {
+      const align = el.dataset.align;
+      if (align) {
+        const existing = el.getAttribute('style') || '';
+        const existingSuffix = existing ? ` ${existing}` : '';
+        el.setAttribute('style', `text-align: ${align};${existingSuffix}`);
+      }
+    }
+
+    // Also convert legacy mce-align-* classes to inline styles (old articles where
+    // the backend preserved the class rather than stripping it).
+    const alignClassMap: Record<string, string> = {
+      'mce-align-center': 'center',
+      'mce-align-justify': 'justify',
+      'mce-align-left': 'left',
+      'mce-align-right': 'right',
+    };
+    for (const [cls, value] of Object.entries(alignClassMap)) {
+      for (const el of doc.body.querySelectorAll<HTMLElement>(`.${cls}`)) {
+        const existing = el.getAttribute('style') || '';
+        const existingSuffix = existing ? ` ${existing}` : '';
+        el.setAttribute('style', `text-align: ${value};${existingSuffix}`);
+      }
+    }
+
+    return doc.body.innerHTML;
+  }, [htmlContent]);
 
   useEffect(() => {
     console.log('InlineWatermarkProcessor: userReference =', userReference);
@@ -125,7 +160,7 @@ const InlineWatermarkProcessor: React.FC<Props> = ({
   return (
     <div
       className={className}
-      dangerouslySetInnerHTML={{ __html: htmlContent }}
+      dangerouslySetInnerHTML={{ __html: processedHtml }}
       ref={containerRef}
     />
   );
