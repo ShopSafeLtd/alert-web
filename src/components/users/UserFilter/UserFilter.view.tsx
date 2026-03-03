@@ -142,6 +142,7 @@ const UserFilter = ({
             maxTagCount={2}
             mode="multiple"
             onChange={setGroupsFilter}
+            optionFilterProp="children"
             placeholder={intl.formatMessage({
               defaultMessage: 'Groups',
             })}

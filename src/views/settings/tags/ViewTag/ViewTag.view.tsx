@@ -437,6 +437,34 @@ const ViewTag = ({
               </Col>
               <Col flex={1}>
                 <FormattedMessage defaultMessage="Save as draft" />
+                {getConditionCount(IncidentFormField.Draft) > 0 && (
+                  <Badge
+                    count={getConditionCount(IncidentFormField.Draft)}
+                    style={{ marginLeft: 12 }}
+                    title={intl.formatMessage(
+                      { defaultMessage: '{count} condition(s) active' },
+                      { count: getConditionCount(IncidentFormField.Draft) }
+                    )}
+                  />
+                )}
+              </Col>
+              <Col>
+                <Button
+                  className="cancelDrag"
+                  icon={<FontAwesomeIcon icon={faFilter} />}
+                  onClick={() => {
+                    setSelectedModule(IncidentFormField.Draft);
+                    setConditionsModalOpen(true);
+                  }}
+                  size="small"
+                  type={
+                    getConditionCount(IncidentFormField.Draft) > 0
+                      ? 'primary'
+                      : 'default'
+                  }
+                >
+                  Conditions
+                </Button>
               </Col>
               <Col>
                 <Switch

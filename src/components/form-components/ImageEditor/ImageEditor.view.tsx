@@ -20,8 +20,8 @@ interface BaseImage extends UploadFile {
   }[];
   policeImage?: boolean;
   position?: ImagePosition;
-  positionX?: number;
-  positionY?: number;
+  positionX?: null | number;
+  positionY?: null | number;
   primary?: boolean;
   rotation?: number;
 }

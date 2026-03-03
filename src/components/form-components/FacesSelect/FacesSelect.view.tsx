@@ -4,7 +4,7 @@ import { faCheckCircle as faCheckedCircle } from '@fortawesome/pro-solid-svg-ico
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Col, Modal, Row } from 'antd';
 import WatermarkImage from 'components/images/WatermarkImage.view';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 
 import useStyles from './FacesSelect.styles';
@@ -21,9 +21,14 @@ const FacesSelect = ({ faces, onClose, open, submitFace }: Props) => {
   const classes = useStyles();
   const [selected, setSelected] = useState<ImageFaceType>();
 
+  useEffect(() => {
+    if (!open) setSelected(undefined);
+  }, [open]);
+
   const handleSubmit = () => {
     if (selected) {
       submitFace(selected);
+      onClose();
     }
   };
 

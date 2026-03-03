@@ -27,7 +27,9 @@ import { useNavigate, useParams } from 'react-router';
 import type { Incident } from '../../../../components/form-components/linkOptions/LinkIncident/useLinkIncident';
 import type { Props } from '../types/CreateArticle';
 
-import extracted from '../../../../utils/add-default-to-article';
+import extracted, {
+  prepareHtmlForEditor,
+} from '../../../../utils/add-default-to-article';
 import customRequest from '../../../../utils/custom-request';
 
 interface FormData {
@@ -243,7 +245,9 @@ const useCreateEditArticle = (): Props => {
         title: result?.article?.title || '',
         watermarkImage: !!result?.article?.watermarkImage,
       });
-      setInitialValue(result?.article?.rows[0].columns[0].text || '');
+      setInitialValue(
+        prepareHtmlForEditor(result?.article?.rows[0].columns[0].text || '')
+      );
     },
     skip: !articleId,
     variables: {

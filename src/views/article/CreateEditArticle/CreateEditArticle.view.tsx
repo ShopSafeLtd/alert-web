@@ -392,12 +392,46 @@ const CreateEditArticleView = ({
                     branding: false,
                     content_css: theme ? 'dark' : undefined,
                     content_style:
-                      'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+                      'body { font-family:Helvetica,Arial,sans-serif; font-size:14px } .mce-align-center { text-align: center; } .mce-align-left { text-align: left; } .mce-align-right { text-align: right; } .mce-align-justify { text-align: justify; }',
                     contextmenu: false,
                     default_link_target: '_blank',
                     elementpath: false,
                     file_picker_callback: filePickerCallback,
                     file_picker_types: 'file, image, media',
+                    formats: {
+                      aligncenter: [
+                        {
+                          classes: 'mce-align-center',
+                          exact: true,
+                          selector:
+                            'p,h1,h2,h3,h4,h5,h6,td,th,div,ul,ol,li,table,img,figure',
+                        },
+                      ],
+                      alignjustify: [
+                        {
+                          classes: 'mce-align-justify',
+                          exact: true,
+                          selector:
+                            'p,h1,h2,h3,h4,h5,h6,td,th,div,ul,ol,li,table,img,figure',
+                        },
+                      ],
+                      alignleft: [
+                        {
+                          classes: 'mce-align-left',
+                          exact: true,
+                          selector:
+                            'p,h1,h2,h3,h4,h5,h6,td,th,div,ul,ol,li,table,img,figure',
+                        },
+                      ],
+                      alignright: [
+                        {
+                          classes: 'mce-align-right',
+                          exact: true,
+                          selector:
+                            'p,h1,h2,h3,h4,h5,h6,td,th,div,ul,ol,li,table,img,figure',
+                        },
+                      ],
+                    },
                     images_upload_handler: imagesUploadHandler,
                     // @ts-expect-error prop issue
                     license_key: 'gpl',

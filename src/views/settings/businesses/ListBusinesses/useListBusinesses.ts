@@ -90,7 +90,7 @@ const useListBusinesses = (): Return => {
   const [linkVisible, setLinkVisible] = useState(false);
   const [saving, setSaving] = useState(false);
   const [filtersOpen, setFiltersOpen] = useState(false);
-  const [pagination, setPagination] = useState({ page: 1, pageSize: 24 });
+  const [pagination, setPagination] = useState({ page: 1, pageSize: 20 });
   const [parentFilter, setParentFilter] = useState<string[]>([]);
   const [groupFilter, setGroupFilter] = useState<string[]>([]);
   const [tagFilter, setTagFilter] = useState<string[]>([]);

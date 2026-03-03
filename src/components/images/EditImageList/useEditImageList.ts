@@ -71,6 +71,8 @@ const useEditImagesList = ({
           optimised: `${image.optimised || image.url}`,
           policeImage: image.policeImage || false,
           position: image.position,
+          positionX: image.positionX ?? null,
+          positionY: image.positionY ?? null,
           primary: image.primary || false,
           rotation: image.rotation || 0,
           status: 'done',
@@ -115,7 +117,8 @@ const useEditImagesList = ({
           new: item.new,
           policeImage: item.policeImage || false,
           position: item.position,
-
+          positionX: item.positionX ?? null,
+          positionY: item.positionY ?? null,
           primary: item.uid === primaryImage,
           rotation: item.rotation,
           url: item.url || '',

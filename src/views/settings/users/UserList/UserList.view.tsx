@@ -305,7 +305,9 @@ const UserList = ({
           status: user.status || UserStatus.Inactive,
         }))}
         loading={loading}
-        onChange={(pagination, filters) => {
+        onChange={(pagination, filters, sorter, extra) => {
+          if (extra.action !== 'filter') return;
+
           if (filters) {
             if (filters.status) setUserStatus(filters.status as UserStatus[]);
             if (filters.groups) setSelectedGroups(filters.groups as string[]);
