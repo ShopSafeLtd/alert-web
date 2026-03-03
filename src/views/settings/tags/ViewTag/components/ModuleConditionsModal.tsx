@@ -224,6 +224,7 @@ const ModuleConditionsModal: React.FC<Props> = ({
                   <Select
                     mode="multiple"
                     onChange={(values) => updateConditionValues(index, values)}
+                    optionFilterProp="children"
                     placeholder={intl.formatMessage({
                       defaultMessage: 'Select business groups',
                     })}

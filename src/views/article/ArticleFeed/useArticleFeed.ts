@@ -13,10 +13,7 @@ import {
   currentUserAtom,
 } from '#/providers/UserProvider/UserProvider';
 import hasRolePermission from '#/utils/has-role-permission';
-import {
-  ListArticlesFeedDocument,
-  useListArticlesFeedQuery,
-} from '#/views/article/ArticleFeed/graphql/queries/__generated__/list-articles-feed.generated';
+import { useListArticlesFeedQuery } from '#/views/article/ArticleFeed/graphql/queries/__generated__/list-articles-feed.generated';
 import { PermissionMethod, PermissionModel, QueryMode } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
@@ -49,6 +46,18 @@ interface Return {
   toggleSortFilter: () => void;
   updateArticleList: MutationUpdaterFn<DeleteArticleMutation>;
 }
+
+// update Article list after deleting an item
+const updateArticleList: MutationUpdaterFn<DeleteArticleMutation> = (
+  store,
+  { data: res }
+) => {
+  if (!res?.deleteArticle?.id) return;
+  store.evict({
+    id: store.identify({ __typename: 'Article', id: res.deleteArticle.id }),
+  });
+  store.gc();
+};
 
 const useArticleFeed = (): Return => {
   const navigate = useNavigate();
@@ -176,36 +185,6 @@ const useArticleFeed = (): Return => {
     fetchPolicy: 'cache-and-network',
     variables,
   });
-  // update Article list after deleting an item
-  const updateArticleList: MutationUpdaterFn<DeleteArticleMutation> = (
-    store,
-    { data: res }
-  ) => {
-    if (res === null || res === undefined) return;
-
-    const existingData = store.readQuery<ListArticlesFeedQuery>({
-      query: ListArticlesFeedDocument,
-      variables,
-    });
-
-    if (existingData === null) return;
-    if (existingData?.listArticlesRelay?.edges === undefined) return;
-
-    store.writeQuery<ListArticlesFeedQuery>({
-      data: {
-        __typename: 'Query',
-        listArticlesRelay: {
-          ...existingData.listArticlesRelay,
-          edges: existingData.listArticlesRelay?.edges.filter(
-            (article) => article?.node?.id !== res?.deleteArticle?.id
-          ),
-        },
-      },
-      query: ListArticlesFeedDocument,
-      variables,
-    });
-  };
-
   const { groups, groupsLoading } = useGroupsContext();
 
   // Functions

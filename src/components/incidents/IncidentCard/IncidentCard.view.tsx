@@ -619,7 +619,10 @@ const IncidentCard = ({
             )}
           </div>
           <div className="incident-card-content">
-            <Space direction="vertical">
+            <Space
+              direction="vertical"
+              style={{ flex: 1, minHeight: 0, overflow: 'hidden' }}
+            >
               <Row align="middle" gutter={8}>
                 <Col>
                   <Title ellipsis level={4} style={{ marginBottom: 0 }}>
@@ -827,10 +830,7 @@ const IncidentCard = ({
                 </Paragraph>
               </Link>
             </Space>
-            <Row
-              justify="center"
-              style={{ alignContent: 'flex-end', flexGrow: 1, marginTop: 0 }}
-            >
+            <Row justify="center" style={{ flexShrink: 0, marginTop: 0 }}>
               <Col>
                 <Link to={`/app/incidents/view/${incident?.id}`}>
                   <Button size="small" type="text">

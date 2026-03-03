@@ -132,25 +132,17 @@ const TodoView = ({
   const classes = useStyles();
   const navigate = useNavigate();
 
-  const questions = todo?.todo?.questions.map(({ id, question, req }) => {
-    form.setFieldValue(
-      question.id,
-      todo?.todo?.answers?.find((answer) => answer?.taskQuestion?.id === id)
-        ?.answer
-    );
-
-    return {
-      answerType: question?.type,
-      label: question.questionFormatted,
-      options: question.optionsFormFormatted || [],
-      questionId: question.id,
-      required: req,
-      tagQuestionId: id,
-      value: todo?.todo?.answers?.find(
-        (answer) => answer?.taskQuestion?.id === id
-      )?.answer,
-    };
-  }) as CustomQuestion[];
+  const questions = todo?.todo?.questions.map(({ id, question, req }) => ({
+    answerType: question?.type,
+    label: question.questionFormatted,
+    options: question.optionsFormFormatted || [],
+    questionId: question.id,
+    required: req,
+    tagQuestionId: id,
+    value: todo?.todo?.answers?.find(
+      (answer) => answer?.taskQuestion?.id === id
+    )?.answer,
+  })) as CustomQuestion[];
 
   // Loading state with better skeleton
   if (loading) {

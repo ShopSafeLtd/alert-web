@@ -222,6 +222,8 @@ export interface ImageCardData {
   optimised?: null | string | undefined;
   policeImage?: boolean | null | undefined;
   position?: ImagePosition;
+  positionX?: null | number;
+  positionY?: null | number;
   primary?: boolean | null | undefined;
   rotation?: number;
   totalFaces?: number;
@@ -239,6 +241,8 @@ export interface Image extends UploadFile {
   optimised?: null | string;
   policeImage?: boolean;
   position?: ImagePosition;
+  positionX?: null | number;
+  positionY?: null | number;
   primary?: boolean;
   rotation?: number;
   totalFaces?: number;

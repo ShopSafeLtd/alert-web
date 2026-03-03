@@ -102,6 +102,7 @@ const EditOffender = ({
             targetedGoods: data?.offender?.targetedGoods || [],
             wanted: data?.offender?.wanted || undefined,
           }}
+          key={data?.offender?.id}
           layout="vertical"
           onFinish={onSubmit}
         >
