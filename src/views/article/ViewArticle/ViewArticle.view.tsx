@@ -43,11 +43,20 @@ const { Text, Title } = Typography;
 const useStyles = createUseStyles((theme: Theme) => ({
   articleContent: {
     '& .article-content': {
+      '& .mce-align-center': { textAlign: 'center' },
+      '& .mce-align-justify': { textAlign: 'justify' },
+      '& .mce-align-left': { textAlign: 'left' },
+      '& .mce-align-right': { textAlign: 'right' },
+      '& [data-align="center"]': { textAlign: 'center' },
+      '& [data-align="justify"]': { textAlign: 'justify' },
+      '& [data-align="left"]': { textAlign: 'left' },
+      '& [data-align="right"]': { textAlign: 'right' },
       '& img': {
         height: 'auto',
         maxWidth: '100%',
       },
       marginTop: 20,
+      maxWidth: '90vw',
       width: '100%',
     },
     '@media print': {
@@ -281,7 +290,7 @@ const ViewArticleView = ({
                 </Col>
               </Row>
               <Row gutter={60} style={{ marginBottom: 5 }}>
-                <Col className={classes.articleContent}>
+                <Col className={classes.articleContent} span={24}>
                   <div ref={componentRef}>
                     <InlineWatermarkProcessor
                       className="article-content"

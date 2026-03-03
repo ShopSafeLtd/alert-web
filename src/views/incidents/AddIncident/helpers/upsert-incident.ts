@@ -389,18 +389,25 @@ const upsertIncident = (
     documents: documentsFormatted,
     groups: {
       connect:
-        groups
-          ?.filter(
-            (group) =>
-              !initIncident?.groups?.some(
-                (initGroup) => initGroup.id === group.value
+        groups && groups.length === 1
+          ? groups
+              .filter(
+                (group) =>
+                  !initIncident?.groups?.some(
+                    (initGroup) => initGroup.id === group.value
+                  )
               )
-          )
-          ?.map(({ value }) => value) || [],
+              .map(({ value }) => value)
+          : dataGroups?.filter(
+              (id) =>
+                !initIncident?.groups?.some((initGroup) => initGroup.id === id)
+            ) || [],
       remove:
         initIncident?.groups
-          ?.filter(
-            (group) => !groups?.some((newGroup) => newGroup.value === group.id)
+          ?.filter((group) =>
+            groups && groups.length === 1
+              ? !groups.some((g) => g.value === group.id)
+              : !dataGroups?.includes(group.id)
           )
           ?.map(({ id: removeId }) => removeId) || [],
     },

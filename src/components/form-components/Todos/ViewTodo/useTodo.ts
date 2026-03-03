@@ -241,6 +241,19 @@ const useTodo = ({
     }
   }, [todo]);
 
+  useEffect(() => {
+    if (todo?.todo?.questions) {
+      const questionValues = Object.fromEntries(
+        todo.todo.questions.map(({ id, question }) => [
+          question.id,
+          todo.todo?.answers?.find((answer) => answer?.taskQuestion?.id === id)
+            ?.answer,
+        ])
+      );
+      form.setFieldsValue(questionValues);
+    }
+  }, [todo]);
+
   const { data: usersData, loading: usersLoading } = useAddTodoUsersQuery({
     fetchPolicy: 'cache-and-network',
     skip: !todo,

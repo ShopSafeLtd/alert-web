@@ -43,17 +43,73 @@ function extracted(html: string | undefined): string {
     }
   }
 
+  // Normalise alignment for server round-trip.
+  // The server strips both style= and class= attributes (XSS protection),
+  // but preserves data-* attributes. Encode alignment in data-align so it
+  // survives the sanitiser, then decode it client-side for display/editing.
+  const alignClasses = [
+    'mce-align-center',
+    'mce-align-left',
+    'mce-align-right',
+    'mce-align-justify',
+  ] as const;
+  const alignClassToValue: Record<string, string> = {
+    'mce-align-center': 'center',
+    'mce-align-justify': 'justify',
+    'mce-align-left': 'left',
+    'mce-align-right': 'right',
+  };
+
+  // Class-based alignment (TinyMCE formats override working correctly)
+  for (const cls of alignClasses) {
+    const elements = doc.body.querySelectorAll<HTMLElement>(`.${cls}`);
+    for (const el of elements) {
+      el.dataset.align = alignClassToValue[cls];
+      el.classList.remove(...alignClasses);
+    }
+  }
+
+  // Style-based alignment (TinyMCE fallback in some edge cases)
+  const allStyleEls = doc.body.querySelectorAll<HTMLElement>('[style]');
+  for (const el of allStyleEls) {
+    const style = el.getAttribute('style') || '';
+    const match = /text-align\s*:\s*(center|left|right|justify)/i.exec(style);
+    if (match) {
+      el.dataset.align = match[1].toLowerCase();
+      const newStyle = style
+        .replaceAll(/text-align\s*:\s*\w+\s*;?\s*/gi, '')
+        .trim();
+      if (newStyle) {
+        el.setAttribute('style', newStyle);
+      } else {
+        el.removeAttribute('style');
+      }
+    }
+  }
+
   // Remove head.
   const head = doc.getElementsByTagName('head');
   if (head.length > 0) {
     head[0].remove();
   }
-  // Add style to body tag giving it a max-width.
-  const body = doc.getElementsByTagName('body');
-  if (body.length > 0) {
-    body[0].setAttribute('style', 'max-width: 90vw;');
-  }
 
-  return doc.documentElement.innerHTML;
+  return doc.body.innerHTML;
 }
 export default extracted;
+
+/**
+ * Converts data-align attributes back to mce-align-* classes so TinyMCE
+ * can show the correct alignment state when re-opening an article for editing.
+ */
+export function prepareHtmlForEditor(html: string): string {
+  const doc = new DOMParser().parseFromString(html || '', 'text/html');
+  const elements = doc.body.querySelectorAll<HTMLElement>('[data-align]');
+  for (const el of elements) {
+    const align = el.dataset.align;
+    if (align && ['center', 'justify', 'left', 'right'].includes(align)) {
+      el.classList.add(`mce-align-${align}`);
+      delete el.dataset.align;
+    }
+  }
+  return doc.body.innerHTML;
+}

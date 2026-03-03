@@ -1,16 +1,7 @@
-import type {
-  ListArticlesQuery,
-  ListArticlesQueryVariables,
-} from 'graphql/article/queries/__generated__/list_articles.generated';
-
-import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import useReportPrint from '#/utils/reportPrint/usePrintReports';
 import { Modal } from 'antd';
 import { useDeleteArticleMutation } from 'graphql/article/mutations/__generated__/delete_article.generated';
-import { ListArticlesDocument } from 'graphql/article/queries/__generated__/list_articles.generated';
 import { useArticleQuery } from 'graphql/article/queries/__generated__/view-article.generated';
-import { QueryMode, SortOrder } from 'graphql/types';
-import { useAtomValue } from 'jotai/index';
 import { useEffect, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router';
@@ -24,7 +15,6 @@ const useViewArticle = ({ id }: Props): ReturnProps => {
 
   const intl = useIntl();
   const navigation = useNavigate();
-  const schemeId = useAtomValue(currentSchemeIdAtom);
   const hasTrackedView = useRef(false);
 
   const editArticle = () => {
@@ -38,6 +28,7 @@ const useViewArticle = ({ id }: Props): ReturnProps => {
     open: false,
   });
   const { data, loading } = useArticleQuery({
+    fetchPolicy: 'cache-and-network',
     variables: {
       where: { id },
     },
@@ -61,49 +52,16 @@ const useViewArticle = ({ id }: Props): ReturnProps => {
     }
   }, [id, loading, data, markBulletinViewed]);
 
-  const listArticlesVars = {
-    order: { updatedAt: SortOrder.Desc },
-    scheme: {
-      id: schemeId,
-    },
-    skip: 0,
-    take: 12,
-    where: {
-      OR: [
-        {
-          title: {
-            contains: '',
-            mode: QueryMode.Insensitive,
-          },
-        },
-      ],
-    },
-  };
-
   const [deleteArticle] = useDeleteArticleMutation({
     update: (store, result) => {
-      const existingData = store.readQuery<
-        ListArticlesQuery,
-        ListArticlesQueryVariables
-      >({
-        query: ListArticlesDocument,
-        variables: listArticlesVars,
+      if (!result.data?.deleteArticle?.id) return;
+      store.evict({
+        id: store.identify({
+          __typename: 'Article',
+          id: result.data.deleteArticle.id,
+        }),
       });
-
-      if (existingData && result.data) {
-        store.writeQuery<ListArticlesQuery, ListArticlesQueryVariables>({
-          data: {
-            listArticles: {
-              articles: existingData.listArticles.articles.filter(
-                (item) => item.id !== result.data?.deleteArticle?.id
-              ),
-              total: (existingData?.listArticles.total || 1) - 1,
-            },
-          },
-          query: ListArticlesDocument,
-          variables: listArticlesVars,
-        });
-      }
+      store.gc();
     },
   });
 

@@ -89,8 +89,7 @@ const ArticleCard = ({
       icon: <FontAwesomeIcon icon={faEdit} />,
       key: 0,
       label: <FormattedMessage defaultMessage="Edit Article" />,
-      onClick: (info: { domEvent: React.MouseEvent }) => {
-        info.domEvent.stopPropagation();
+      onClick: () => {
         onNavigate(id || '');
       },
       permission: {
@@ -102,15 +101,15 @@ const ArticleCard = ({
       icon: <FontAwesomeIcon icon={faTrash} />,
       key: 1,
       label: <FormattedMessage defaultMessage="Delete Article" />,
-      onClick: (info: { domEvent: React.MouseEvent }) => {
-        info.domEvent.stopPropagation();
+      onClick: () => {
         confirm({
-          content: (
-            <FormattedMessage defaultMessage="Click delete if you wish to delete this article. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted." />
-          ),
-          okText: <FormattedMessage defaultMessage="Delete" />,
+          content: intl.formatMessage({
+            defaultMessage:
+              'Click delete if you wish to delete this article. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
+          }),
+          okText: intl.formatMessage({ defaultMessage: 'Delete' }),
           onOk: () => onDelete(id || ''),
-          title: <FormattedMessage defaultMessage="Are you sure?" />,
+          title: intl.formatMessage({ defaultMessage: 'Are you sure?' }),
         });
       },
       permission: {
@@ -137,7 +136,12 @@ const ArticleCard = ({
       {menuItems.length > 0 && (
         <Dropdown
           arrow={{ pointAtCenter: true }}
-          overlay={<Menu items={menuItems as MenuProps['items']} />}
+          overlay={
+            <Menu
+              items={menuItems as MenuProps['items']}
+              onClick={({ domEvent }) => domEvent.stopPropagation()}
+            />
+          }
           placement="bottomRight"
           trigger={['click']}
         >
