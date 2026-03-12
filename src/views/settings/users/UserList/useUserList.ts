@@ -1,4 +1,7 @@
-import type { UserListQuery } from '#/views/settings/users/UserList/__generated__/UserList.generated';
+import type {
+  UserListQuery,
+  UserListQueryVariables,
+} from '#/views/settings/users/UserList/__generated__/UserList.generated';
 import type { MutationUpdaterFn } from '@apollo/client';
 import type { UserStatus } from 'graphql/types';
 import type { CreateUserInDatabaseMutation } from 'graphql/users/mutations/__generated__/create-user-in-databse.generated';
@@ -84,7 +87,7 @@ const useUserList = (): Return => {
     },
   };
 
-  const variables = {
+  const variables: UserListQueryVariables = {
     groupWhere: {
       scheme: {
         id: {
@@ -124,6 +127,18 @@ const useUserList = (): Return => {
                     contains: search,
                     mode: QueryMode.Insensitive,
                   },
+                },
+              },
+            },
+            {
+              schemes: {
+                some: {
+                  fullName: search
+                    ? {
+                        contains: search,
+                        mode: QueryMode.Insensitive,
+                      }
+                    : undefined,
                 },
               },
             },

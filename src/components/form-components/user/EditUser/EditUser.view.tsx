@@ -187,10 +187,27 @@ const EditUser = ({
             name="mobileNumber"
             rules={[
               ({ getFieldValue }) => ({
-                validator(_, { valid }) {
-                  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-                  const email = getFieldValue('email');
-                  if (!valid && !email) {
+                validator(_, value) {
+                  const email = getFieldValue('email') as string | undefined;
+                  const { areaCode, phoneNumber, valid } =
+                    (value as {
+                      areaCode?: string;
+                      phoneNumber?: string;
+                      valid: () => boolean;
+                    }) ?? {};
+                  const hasInput = !!(phoneNumber || areaCode);
+
+                  if (hasInput && !valid()) {
+                    return Promise.reject(
+                      new Error(
+                        intl.formatMessage({
+                          defaultMessage:
+                            'Invalid mobile number. Please include a valid country code such as +44.',
+                        })
+                      )
+                    );
+                  }
+                  if (!hasInput && !email) {
                     return Promise.reject(
                       new Error(
                         intl.formatMessage({
@@ -200,15 +217,6 @@ const EditUser = ({
                       )
                     );
                   }
-                  // if (valid) {
-                  //   return Promise.reject(
-                  //     new Error(
-                  //       intl.formatMessage({
-                  //         defaultMessage: `Invalid mobile number. Please include a valid country code such as +44.`,
-                  //       })
-                  //     )
-                  //   );
-                  // }
                   return Promise.resolve();
                 },
               }),
