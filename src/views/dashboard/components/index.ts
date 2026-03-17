@@ -13,6 +13,24 @@ export { default as LatestIncident } from './LatestIncident/LatestIncident.conta
 export { default as LatestIncidents } from './LatestIncidents/LatestIncidents.container';
 export { default as Marquee } from './Marquee/Marquee';
 export { default as MyStockRequests } from './MyStockRequests/MyStockRequests.container';
+// Retail Admin widgets
+export { default as AdminSummaryWidget } from './RetailAdmin/AdminSummaryWidget';
+export { default as BusinessIntelligenceWidget } from './RetailAdmin/BusinessIntelligenceWidget';
+export { default as CrimeTypeDistributionWidget } from './RetailAdmin/CrimeTypeDistributionWidget';
+export { default as OperationalQueueWidget } from './RetailAdmin/OperationalQueueWidget';
+export { default as RetailCrimePatternsWidget } from './RetailAdmin/RetailCrimePatternsWidget';
+export { default as RetailRepeatOffendersWidget } from './RetailAdmin/RetailRepeatOffendersWidget';
+export { default as RetailTargetedGoodsWidget } from './RetailAdmin/RetailTargetedGoodsWidget';
+export { default as RetailTopOffendersWidget } from './RetailAdmin/RetailTopOffendersWidget';
 export { default as SearchRow } from './SearchRow/SearchRow';
+export { default as LocalAreaContextWidget } from './StoreColleague/LocalAreaContextWidget';
+export { default as OffenderWatchlistWidget } from './StoreColleague/OffenderWatchlistWidget';
+export { default as StoreActionItemsWidget } from './StoreColleague/StoreActionItemsWidget';
+export { default as StoreActiveBansWidget } from './StoreColleague/StoreActiveBansWidget';
+export { default as StoreCrimePatternsWidget } from './StoreColleague/StoreCrimePatternsWidget';
+export { default as StoreRecentIncidentsWidget } from './StoreColleague/StoreRecentIncidentsWidget';
+// Store Colleague widgets
+export { default as StoreSummaryWidget } from './StoreColleague/StoreSummaryWidget';
+export { default as WatchlistInsightsWidget } from './StoreColleague/WatchlistInsightsWidget';
 export { default as TargetedGoodsContainer } from './TargetedGoods/TargetedGoods.container';
 export { default as TimeOfDay } from './TimeOfDay/TimeOfDay.container';

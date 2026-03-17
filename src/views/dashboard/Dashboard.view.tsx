@@ -15,8 +15,11 @@ import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import { generateHeight, useDashboardContext } from './Dashboard.context';
 import {
   ActiveOffenders,
+  AdminSummaryWidget,
   AdminTodos,
   ArticlesSection,
+  BusinessIntelligenceWidget,
+  CrimeTypeDistributionWidget,
   DayOfWeek,
   DraftIncidents,
   FeedItemCol,
@@ -24,11 +27,24 @@ import {
   IncidentValues,
   LatestIncident,
   LatestIncidents,
+  LocalAreaContextWidget,
   Marquee,
   MyStockRequests,
+  OffenderWatchlistWidget,
+  OperationalQueueWidget,
+  RetailCrimePatternsWidget,
+  RetailRepeatOffendersWidget,
+  RetailTargetedGoodsWidget,
+  RetailTopOffendersWidget,
   SearchRow,
+  StoreActionItemsWidget,
+  StoreActiveBansWidget,
+  StoreCrimePatternsWidget,
+  StoreRecentIncidentsWidget,
+  StoreSummaryWidget,
   TargetedGoodsContainer,
   TimeOfDay,
+  WatchlistInsightsWidget,
 } from './components';
 import DashboardGraphWrapper from './components/DashboardGraph/DashboardGraphWrapper';
 
@@ -46,6 +62,7 @@ const createElement = (
   metadata?: DashboardGraphMetadata,
   gridHeight?: number
 ) => {
+  // eslint-disable-next-line sonarjs/max-switch-cases
   switch (elementType) {
     case 'activeOffender': {
       return <ActiveOffenders />;
@@ -98,6 +115,56 @@ const createElement = (
     }
     case 'timeOfDayBar': {
       return <TimeOfDay />;
+    }
+    // Store Colleague widgets
+    case 'storeSummary': {
+      return <StoreSummaryWidget />;
+    }
+    case 'offenderWatchlist': {
+      return <OffenderWatchlistWidget />;
+    }
+    case 'watchlistInsights': {
+      return <WatchlistInsightsWidget />;
+    }
+    case 'storeActiveBans': {
+      return <StoreActiveBansWidget />;
+    }
+    case 'storeRecentIncidents': {
+      return <StoreRecentIncidentsWidget />;
+    }
+    case 'storeCrimePatterns': {
+      return <StoreCrimePatternsWidget />;
+    }
+    case 'localAreaContext': {
+      return <LocalAreaContextWidget />;
+    }
+    case 'storeActionItems': {
+      return <StoreActionItemsWidget />;
+    }
+    // Retail Admin widgets
+    case 'adminSummary': {
+      return <AdminSummaryWidget />;
+    }
+    case 'retailTopOffenders': {
+      return <RetailTopOffendersWidget />;
+    }
+    case 'retailRepeatOffenders': {
+      return <RetailRepeatOffendersWidget />;
+    }
+    case 'crimeTypeDistribution': {
+      return <CrimeTypeDistributionWidget />;
+    }
+    case 'businessIntelligence': {
+      return <BusinessIntelligenceWidget />;
+    }
+    case 'retailCrimePatterns': {
+      return <RetailCrimePatternsWidget />;
+    }
+    case 'retailTargetedGoods': {
+      return <RetailTargetedGoodsWidget />;
+    }
+    case 'operationalQueue': {
+      return <OperationalQueueWidget />;
     }
     default: {
       return null;

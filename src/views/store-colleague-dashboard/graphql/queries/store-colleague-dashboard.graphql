@@ -1,0 +1,109 @@
+query StoreColleagueDashboard(
+  $businessId: String!
+  $schemeId: String
+  $watchlistRadiusMeters: Float
+  $sections: [StoreColleagueDashboardSection!]
+) {
+  storeColleagueDashboard(
+    businessId: $businessId
+    schemeId: $schemeId
+    watchlistRadiusMeters: $watchlistRadiusMeters
+    sections: $sections
+  ) {
+    summary {
+      todayCount
+      thisWeekCount
+      thisMonthCount
+      activeBansCount
+      pendingApprovalCount
+      weeklyChange
+      watchlistGeoBounded
+      watchlistRadiusMeters
+    }
+    offenderWatchlist {
+      id
+      reference
+      name
+      incidentCount
+      totalValue
+      lastIncidentDate
+      images
+      isCurrentlyBanned
+    }
+    watchlistInsights {
+      totalRepeatOffenders
+      averageDaysBetweenIncidents
+      recidivismDistribution
+      topByFrequency {
+        id
+        reference
+        name
+        incidentCount
+        totalValue
+        lastIncidentDate
+        images
+        isCurrentlyBanned
+      }
+    }
+    activeBans {
+      expiringWithin30Days {
+        id
+        offenderId
+        offenderName
+        offenderImages
+        endDate
+        daysRemaining
+        location
+      }
+      longerTerm {
+        id
+        offenderId
+        offenderName
+        offenderImages
+        endDate
+        daysRemaining
+        location
+      }
+    }
+    recentIncidents {
+      id
+      reference
+      date
+      value
+      approved
+      offenderCount
+      crimeTypes
+    }
+    crimePatterns {
+      peakHours {
+        hour
+        count
+      }
+      peakDay
+      topStolenGoods {
+        name
+        count
+      }
+    }
+    localAreaContext {
+      schemeIncidentsThisWeek
+      schemeActiveOffenders
+      topSchemeOffenders {
+        name
+        incidentCount
+      }
+    }
+    actionItems {
+      incidentsPendingApproval {
+        id
+        reference
+        date
+      }
+      bansExpiringSoon {
+        id
+        offenderName
+        endDate
+      }
+    }
+  }
+}

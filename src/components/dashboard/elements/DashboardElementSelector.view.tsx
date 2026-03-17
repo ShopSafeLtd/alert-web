@@ -4,17 +4,24 @@ import type { Dispatch, SetStateAction } from 'react';
 import type RGL from 'react-grid-layout';
 
 import {
+  faBan,
   faBoxCheck,
   faBoxes,
+  faBuilding,
   faCalendarAlt,
   faChartBar,
+  faChartPie,
   faClock,
   faDollarSign,
   faExclamationTriangle,
+  faEye,
   faGripVertical,
   faHashtag,
+  faLightbulb,
   faListAlt,
+  faMapMarkerAlt,
   faNewspaper,
+  faStore,
   faTasks,
   faUsers,
 } from '@fortawesome/pro-light-svg-icons';
@@ -32,7 +39,18 @@ const DashboardSelectorDrawer = ({
   layout: RGL.Layout[];
   open: boolean;
   setDroppingItem: Dispatch<
-    SetStateAction<{ h: number; i: string; w: number } | undefined>
+    SetStateAction<
+      | {
+          h: number;
+          i: string;
+          maxH?: number;
+          maxW?: number;
+          minH: number;
+          minW: number;
+          w: number;
+        }
+      | undefined
+    >
   >;
   setOpen: (open: boolean) => void;
 }) => {
@@ -79,6 +97,10 @@ const DashboardSelectorDrawer = ({
     description: string;
     icon: typeof faChartBar;
     id: AvailableDashboardElements;
+    maxH?: number;
+    maxW?: number;
+    minH: number;
+    minW: number;
     name: string;
   }> = [
     {
@@ -89,6 +111,8 @@ const DashboardSelectorDrawer = ({
       }),
       icon: faChartBar,
       id: 'dashboardGraph',
+      minH: 3,
+      minW: 2,
       name: intl.formatMessage({ defaultMessage: 'Custom Graph' }),
     },
     {
@@ -99,6 +123,8 @@ const DashboardSelectorDrawer = ({
       }),
       icon: faHashtag,
       id: 'incidentCount',
+      minH: 3,
+      minW: 2,
       name: intl.formatMessage({ defaultMessage: 'Incident Count' }),
     },
     {
@@ -109,6 +135,8 @@ const DashboardSelectorDrawer = ({
       }),
       icon: faDollarSign,
       id: 'incidentValue',
+      minH: 3,
+      minW: 2,
       name: intl.formatMessage({ defaultMessage: 'Incident Value' }),
     },
     {
@@ -119,6 +147,8 @@ const DashboardSelectorDrawer = ({
       }),
       icon: faCalendarAlt,
       id: 'dayOfWeekBar',
+      minH: 3,
+      minW: 2,
       name: intl.formatMessage({ defaultMessage: 'Day of Week' }),
     },
     {
@@ -127,6 +157,8 @@ const DashboardSelectorDrawer = ({
       description: intl.formatMessage({ defaultMessage: 'Incidents by hour' }),
       icon: faClock,
       id: 'timeOfDayBar',
+      minH: 3,
+      minW: 2,
       name: intl.formatMessage({ defaultMessage: 'Time of Day' }),
     },
     {
@@ -137,6 +169,8 @@ const DashboardSelectorDrawer = ({
       }),
       icon: faBoxes,
       id: 'targetedGoods',
+      minH: 3,
+      minW: 2,
       name: intl.formatMessage({ defaultMessage: 'Targeted Goods' }),
     },
     {
@@ -147,6 +181,8 @@ const DashboardSelectorDrawer = ({
       }),
       icon: faUsers,
       id: 'activeOffender',
+      minH: 3,
+      minW: 2,
       name: intl.formatMessage({ defaultMessage: 'Active Offenders' }),
     },
     {
@@ -157,6 +193,8 @@ const DashboardSelectorDrawer = ({
       }),
       icon: faExclamationTriangle,
       id: 'latestIncident',
+      minH: 3,
+      minW: 2,
       name: intl.formatMessage({ defaultMessage: 'Latest Incident' }),
     },
     {
@@ -167,6 +205,8 @@ const DashboardSelectorDrawer = ({
       }),
       icon: faListAlt,
       id: 'latestIncidents',
+      minH: 3,
+      minW: 2,
       name: intl.formatMessage({ defaultMessage: 'Latest Incidents' }),
     },
     {
@@ -177,6 +217,8 @@ const DashboardSelectorDrawer = ({
       }),
       icon: faExclamationTriangle,
       id: 'draftIncidents',
+      minH: 3,
+      minW: 2,
       name: intl.formatMessage({ defaultMessage: 'Draft Incidents' }),
     },
     {
@@ -187,6 +229,8 @@ const DashboardSelectorDrawer = ({
       }),
       icon: faNewspaper,
       id: 'articlesSection',
+      minH: 3,
+      minW: 2,
       name: intl.formatMessage({ defaultMessage: 'Articles' }),
     },
     {
@@ -197,6 +241,8 @@ const DashboardSelectorDrawer = ({
       }),
       icon: faListAlt,
       id: 'feedItemCol',
+      minH: 3,
+      minW: 2,
       name: intl.formatMessage({ defaultMessage: 'Activity Feed' }),
     },
     {
@@ -207,6 +253,8 @@ const DashboardSelectorDrawer = ({
       }),
       icon: faTasks,
       id: 'adminTodos',
+      minH: 3,
+      minW: 2,
       name: intl.formatMessage({ defaultMessage: 'Admin Tasks' }),
     },
     {
@@ -217,7 +265,207 @@ const DashboardSelectorDrawer = ({
       }),
       icon: faBoxCheck,
       id: 'myStockRequests',
+      minH: 3,
+      minW: 2,
       name: intl.formatMessage({ defaultMessage: 'My Stock Requests' }),
+    },
+    // Store Dashboard widgets
+    {
+      category: 'Store Dashboard',
+      defaultSize: { h: 3, w: 12 },
+      description: intl.formatMessage({
+        defaultMessage: 'KPI summary for your store',
+      }),
+      icon: faStore,
+      id: 'storeSummary',
+      maxH: 4,
+      maxW: 12,
+      minH: 3,
+      minW: 6,
+      name: intl.formatMessage({ defaultMessage: 'Store Summary' }),
+    },
+    {
+      category: 'Store Dashboard',
+      defaultSize: { h: 7, w: 6 },
+      description: intl.formatMessage({
+        defaultMessage: 'Offenders on the watchlist for your store',
+      }),
+      icon: faEye,
+      id: 'offenderWatchlist',
+      minH: 5,
+      minW: 3,
+      name: intl.formatMessage({ defaultMessage: 'Offender Watchlist' }),
+    },
+    {
+      category: 'Store Dashboard',
+      defaultSize: { h: 7, w: 4 },
+      description: intl.formatMessage({
+        defaultMessage: 'Insights and trends from the watchlist',
+      }),
+      icon: faChartBar,
+      id: 'watchlistInsights',
+      minH: 5,
+      minW: 3,
+      name: intl.formatMessage({ defaultMessage: 'Watchlist Insights' }),
+    },
+    {
+      category: 'Store Dashboard',
+      defaultSize: { h: 6, w: 6 },
+      description: intl.formatMessage({
+        defaultMessage: 'Currently active bans at your store',
+      }),
+      icon: faBan,
+      id: 'storeActiveBans',
+      minH: 4,
+      minW: 3,
+      name: intl.formatMessage({ defaultMessage: 'Active Bans' }),
+    },
+    {
+      category: 'Store Dashboard',
+      defaultSize: { h: 6, w: 6 },
+      description: intl.formatMessage({
+        defaultMessage: 'Recent incidents at your store',
+      }),
+      icon: faExclamationTriangle,
+      id: 'storeRecentIncidents',
+      minH: 4,
+      minW: 3,
+      name: intl.formatMessage({ defaultMessage: 'Recent Incidents' }),
+    },
+    {
+      category: 'Store Dashboard',
+      defaultSize: { h: 6, w: 6 },
+      description: intl.formatMessage({
+        defaultMessage: 'Crime pattern analysis for your store',
+      }),
+      icon: faChartPie,
+      id: 'storeCrimePatterns',
+      minH: 5,
+      minW: 4,
+      name: intl.formatMessage({ defaultMessage: 'Crime Patterns' }),
+    },
+    {
+      category: 'Store Dashboard',
+      defaultSize: { h: 6, w: 4 },
+      description: intl.formatMessage({
+        defaultMessage: 'Crime and incident context for the local area',
+      }),
+      icon: faMapMarkerAlt,
+      id: 'localAreaContext',
+      minH: 4,
+      minW: 3,
+      name: intl.formatMessage({ defaultMessage: 'Local Area Context' }),
+    },
+    {
+      category: 'Store Dashboard',
+      defaultSize: { h: 5, w: 12 },
+      description: intl.formatMessage({
+        defaultMessage: 'Recommended actions and outstanding tasks',
+      }),
+      icon: faTasks,
+      id: 'storeActionItems',
+      minH: 4,
+      minW: 6,
+      name: intl.formatMessage({ defaultMessage: 'Action Items' }),
+    },
+    // Retail Dashboard widgets
+    {
+      category: 'Retail Dashboard',
+      defaultSize: { h: 3, w: 12 },
+      description: intl.formatMessage({
+        defaultMessage: 'KPI summary across all stores',
+      }),
+      icon: faBuilding,
+      id: 'adminSummary',
+      maxH: 4,
+      maxW: 12,
+      minH: 3,
+      minW: 8,
+      name: intl.formatMessage({ defaultMessage: 'Admin Summary' }),
+    },
+    {
+      category: 'Retail Dashboard',
+      defaultSize: { h: 7, w: 7 },
+      description: intl.formatMessage({
+        defaultMessage: 'Most active offenders across the estate',
+      }),
+      icon: faUsers,
+      id: 'retailTopOffenders',
+      minH: 5,
+      minW: 4,
+      name: intl.formatMessage({ defaultMessage: 'Top Offenders' }),
+    },
+    {
+      category: 'Retail Dashboard',
+      defaultSize: { h: 7, w: 5 },
+      description: intl.formatMessage({
+        defaultMessage: 'Repeat offender recidivism insights',
+      }),
+      icon: faEye,
+      id: 'retailRepeatOffenders',
+      minH: 5,
+      minW: 3,
+      name: intl.formatMessage({ defaultMessage: 'Repeat Offender Insights' }),
+    },
+    {
+      category: 'Retail Dashboard',
+      defaultSize: { h: 6, w: 6 },
+      description: intl.formatMessage({
+        defaultMessage: 'Breakdown of incidents by crime type',
+      }),
+      icon: faChartPie,
+      id: 'crimeTypeDistribution',
+      minH: 5,
+      minW: 4,
+      name: intl.formatMessage({ defaultMessage: 'Crime Type Distribution' }),
+    },
+    {
+      category: 'Retail Dashboard',
+      defaultSize: { h: 6, w: 6 },
+      description: intl.formatMessage({
+        defaultMessage: 'Business-level intelligence and loss metrics',
+      }),
+      icon: faLightbulb,
+      id: 'businessIntelligence',
+      minH: 5,
+      minW: 4,
+      name: intl.formatMessage({ defaultMessage: 'Business Intelligence' }),
+    },
+    {
+      category: 'Retail Dashboard',
+      defaultSize: { h: 6, w: 8 },
+      description: intl.formatMessage({
+        defaultMessage: 'Crime pattern analysis across the estate',
+      }),
+      icon: faChartBar,
+      id: 'retailCrimePatterns',
+      minH: 5,
+      minW: 4,
+      name: intl.formatMessage({ defaultMessage: 'Crime Patterns' }),
+    },
+    {
+      category: 'Retail Dashboard',
+      defaultSize: { h: 6, w: 6 },
+      description: intl.formatMessage({
+        defaultMessage: 'Most frequently targeted goods',
+      }),
+      icon: faBoxes,
+      id: 'retailTargetedGoods',
+      minH: 4,
+      minW: 3,
+      name: intl.formatMessage({ defaultMessage: 'Targeted Goods' }),
+    },
+    {
+      category: 'Retail Dashboard',
+      defaultSize: { h: 6, w: 6 },
+      description: intl.formatMessage({
+        defaultMessage: 'Incidents and tasks requiring operational attention',
+      }),
+      icon: faListAlt,
+      id: 'operationalQueue',
+      minH: 4,
+      minW: 3,
+      name: intl.formatMessage({ defaultMessage: 'Operational Queue' }),
     },
   ];
 
@@ -238,6 +486,8 @@ const DashboardSelectorDrawer = ({
     Management: { color: '#13c2c2', order: 6 },
     Metrics: { color: '#1890ff', order: 1 },
     Offenders: { color: '#f5222d', order: 4 },
+    'Retail Dashboard': { color: '#faad14', order: 8 },
+    'Store Dashboard': { color: '#eb2f96', order: 7 },
   };
 
   const sortedCategories = Object.keys(groupedComponents).sort(
@@ -311,6 +561,10 @@ const DashboardSelectorDrawer = ({
                     setDroppingItem({
                       h: component.defaultSize.h,
                       i: uniqueId,
+                      maxH: component.maxH,
+                      maxW: component.maxW,
+                      minH: component.minH,
+                      minW: component.minW,
                       w: component.defaultSize.w,
                     });
                   }}
