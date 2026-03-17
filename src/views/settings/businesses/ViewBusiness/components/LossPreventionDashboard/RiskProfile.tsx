@@ -60,16 +60,18 @@ const RiskProfile: React.FC<RiskProfileProps> = ({ loading, riskProfile }) => {
                 </Tag>
               </Col>
             )}
-            {riskProfile?.aiRiskScore !== null && (
-              <Col>
-                <Typography.Text type="secondary">
-                  {intl.formatMessage(
-                    { defaultMessage: 'Risk Score: {score}' },
-                    { score: riskProfile.aiRiskScore }
-                  )}
-                </Typography.Text>
-              </Col>
-            )}
+            {riskProfile !== null &&
+              riskProfile !== undefined &&
+              riskProfile.aiRiskScore !== null && (
+                <Col>
+                  <Typography.Text type="secondary">
+                    {intl.formatMessage(
+                      { defaultMessage: 'Risk Score: {score}' },
+                      { score: riskProfile.aiRiskScore }
+                    )}
+                  </Typography.Text>
+                </Col>
+              )}
           </Row>
         </Col>
       </Row>

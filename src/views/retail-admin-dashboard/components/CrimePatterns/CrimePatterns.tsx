@@ -190,7 +190,6 @@ const CrimePatterns: React.FC<CrimePatternsProps> = ({ data, loading }) => {
         { label: { enabled: false }, position: 'left', type: 'category' },
       ],
       data: heatmapData,
-      // @ts-expect-error heatmap is an enterprise series type
       series: [
         {
           colorKey: 'count',

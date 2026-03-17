@@ -267,14 +267,15 @@ const RepeatOffenderInsights: React.FC<RepeatOffenderInsightsProps> = ({
                   <Typography.Text
                     style={{
                       color:
-                        getLastSeenColor(offender.daysSinceLastIncident) ??
-                        undefined,
+                        getLastSeenColor(
+                          offender.daysSinceLastIncident ?? null
+                        ) ?? undefined,
                       fontSize: 12,
                       fontWeight: 500,
                     }}
                   >
                     <ClockCircleOutlined style={{ marginRight: 3 }} />
-                    {formatLastSeen(offender.daysSinceLastIncident)}
+                    {formatLastSeen(offender.daysSinceLastIncident ?? null)}
                   </Typography.Text>
                   {offender.affectedSchemes &&
                     offender.affectedSchemes.length > 0 && (

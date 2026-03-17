@@ -32,7 +32,10 @@ const AdminSummary: React.FC<AdminSummaryProps> = ({ loading, summary }) => {
   }
 
   const repeatFraction =
-    summary?.repeatOffenders !== null && summary?.activeOffenders !== null
+    summary !== null &&
+    summary !== undefined &&
+    summary.repeatOffenders !== null &&
+    summary.activeOffenders !== null
       ? `${summary.repeatOffenders} of ${summary.activeOffenders}`
       : null;
 
@@ -72,7 +75,8 @@ const AdminSummary: React.FC<AdminSummaryProps> = ({ loading, summary }) => {
               : null
           }
           value={
-            summary?.totalValueLost === null
+            summary?.totalValueLost === null ||
+            summary?.totalValueLost === undefined
               ? null
               : intl.formatNumber(summary.totalValueLost, {
                   currency,

@@ -65,38 +65,39 @@ const CrimeTypeDistribution: React.FC<CrimeTypeDistributionProps> = ({
     useStoreState((state) => state.theme.currentTheme) === 'dark';
   const [modalOpen, setModalOpen] = useState(false);
 
-  const chartOptions: AgChartOptions = useMemo(
-    () => ({
-      series: [
-        {
-          colorRange: ['#bae0ff', '#0958d9'],
-          data: [
-            {
-              children: [...data]
-                .sort((a, b) => b.count - a.count)
-                .slice(0, 15),
-              tagName: intl.formatMessage({ defaultMessage: 'Crime Types' }),
+  const chartOptions = useMemo(
+    () =>
+      ({
+        series: [
+          {
+            colorRange: ['#bae0ff', '#0958d9'],
+            data: [
+              {
+                children: [...data]
+                  .sort((a, b) => b.count - a.count)
+                  .slice(0, 15),
+                tagName: intl.formatMessage({ defaultMessage: 'Crime Types' }),
+              },
+            ],
+            labelKey: 'tagName',
+            sizeKey: 'count',
+            sizeName: intl.formatMessage({ defaultMessage: 'Incidents' }),
+            tooltip: {
+              renderer: ({
+                datum,
+                sizeName,
+              }: {
+                datum: CrimeTypeItem;
+                sizeName: string;
+              }) => ({
+                content: `${datum.tagName}: ${datum.count} ${sizeName}`,
+              }),
             },
-          ],
-          labelKey: 'tagName',
-          sizeKey: 'count',
-          sizeName: intl.formatMessage({ defaultMessage: 'Incidents' }),
-          tooltip: {
-            renderer: ({
-              datum,
-              sizeName,
-            }: {
-              datum: CrimeTypeItem;
-              sizeName: string;
-            }) => ({
-              content: `${datum.tagName}: ${datum.count} ${sizeName}`,
-            }),
+            type: 'treemap',
           },
-          type: 'treemap',
-        },
-      ],
-      theme: darkMode ? 'ag-default-dark' : 'ag-default',
-    }),
+        ],
+        theme: darkMode ? 'ag-default-dark' : 'ag-default',
+      }) as AgChartOptions,
     [data, darkMode, intl]
   );
 

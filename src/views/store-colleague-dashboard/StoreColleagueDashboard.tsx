@@ -5,6 +5,7 @@ import {
 } from '#/providers/SchemeProvider/SchemeProvider';
 import { SwapOutlined } from '@ant-design/icons';
 import { Col, Result, Row, Select, Space, Typography } from 'antd';
+import { SortOrder } from 'graphql/types';
 import { useAtomValue } from 'jotai';
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -61,7 +62,7 @@ const StoreColleagueDashboard: React.FC = () => {
       fetchPolicy: 'cache-and-network',
       skip: !isAdminMode,
       variables: {
-        orderBy: [{ name: 'asc' }],
+        orderBy: [{ name: SortOrder.Asc }],
         take: 200,
         where: { schemes: { some: { id: { equals: schemeId } } } },
       },
