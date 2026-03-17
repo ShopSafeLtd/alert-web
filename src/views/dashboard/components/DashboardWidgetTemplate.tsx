@@ -9,12 +9,17 @@ interface Props {
 }
 
 const DashboardWidgetTemplate: React.FC<Props> = ({ removeItem, title }) => (
-  <Card style={{ height: '100%', position: 'relative' }} title={title}>
-    <Button
-      icon={<FontAwesomeIcon icon={faTrash} />}
-      onClick={removeItem}
-      style={{ position: 'absolute', right: 10, top: 10, zIndex: 10 }}
-    />
+  <Card
+    extra={
+      <Button
+        icon={<FontAwesomeIcon icon={faTrash} />}
+        onClick={removeItem}
+        size="small"
+      />
+    }
+    style={{ height: '100%' }}
+    title={title}
+  >
     <Skeleton active />
   </Card>
 );

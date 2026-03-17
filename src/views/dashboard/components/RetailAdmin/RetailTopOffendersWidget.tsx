@@ -5,7 +5,7 @@ import { useRetailAdminDashboard } from 'views/retail-admin-dashboard/hooks/useR
 
 const RetailTopOffendersWidget: React.FC = () => {
   const dateRange = useMemo(
-    () => ({ endDate: new Date(), startDate: subDays(new Date(), 30) }),
+    () => ({ endDate: new Date(), startDate: subDays(new Date(), 90) }),
     []
   );
   const { loading, topOffenders } = useRetailAdminDashboard(dateRange);
