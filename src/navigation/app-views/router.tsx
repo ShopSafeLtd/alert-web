@@ -39,6 +39,12 @@ const StockRemovalRequests = lazy(
   () => import('./stock-removal-requests/router')
 );
 const PoliceDashboard = lazy(() => import('./police-dashboard/router'));
+const StoreColleagueDashboard = lazy(
+  () => import('./store-colleague-dashboard/router')
+);
+const RetailAdminDashboard = lazy(
+  () => import('./retail-admin-dashboard/router')
+);
 const PoliceIncidents = lazy(() => import('./police-incidents/router'));
 const PoliceOffenders = lazy(() => import('./police-offenders/router'));
 const PoliceVehicles = lazy(() => import('./police-vehicles/router'));
@@ -47,6 +53,7 @@ const PoliceSettings = lazy(() => import('./police-settings/router'));
 const PoliceHeatmap = lazy(() => import('./police-heatmap/router'));
 
 export const AppViews = (): JSX.Element => {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
   const { isLoaded } = useAuthClerk();
 
   useManageSession();
@@ -187,6 +194,16 @@ export const AppViews = (): JSX.Element => {
             element={<PoliceSettings />}
             key="police-settings"
             path="police-settings/*"
+          />
+          <Route
+            element={<StoreColleagueDashboard />}
+            key="store-colleague-dashboard"
+            path="store-colleague-dashboard/*"
+          />
+          <Route
+            element={<RetailAdminDashboard />}
+            key="retail-admin-dashboard"
+            path="retail-admin-dashboard/*"
           />
         </Routes>
       )}

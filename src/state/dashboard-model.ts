@@ -156,8 +156,11 @@ export default dashboardModel;
 
 export type AvailableDashboardElements =
   | 'activeOffender'
+  | 'adminSummary'
   | 'adminTodos'
   | 'articlesSection'
+  | 'businessIntelligence'
+  | 'crimeTypeDistribution'
   | 'dashboardGraph'
   | 'dayOfWeekBar'
   | 'draftIncidents'
@@ -166,7 +169,20 @@ export type AvailableDashboardElements =
   | 'incidentValue'
   | 'latestIncident'
   | 'latestIncidents'
+  | 'localAreaContext'
   | 'myStockRequests'
+  | 'offenderWatchlist'
+  | 'operationalQueue'
+  | 'retailCrimePatterns'
+  | 'retailRepeatOffenders'
+  | 'retailTargetedGoods'
+  | 'retailTopOffenders'
   | 'searchRow'
+  | 'storeActionItems'
+  | 'storeActiveBans'
+  | 'storeCrimePatterns'
+  | 'storeRecentIncidents'
+  | 'storeSummary'
   | 'targetedGoods'
-  | 'timeOfDayBar';
+  | 'timeOfDayBar'
+  | 'watchlistInsights';
