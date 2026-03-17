@@ -470,6 +470,44 @@ const navigationConfig: NavItem[] = [
     submenu: [],
   },
   {
+    key: 'store-colleague-dashboard',
+    path: `${APP_PREFIX_PATH}/store-colleague-dashboard`,
+    title: 'Store Dashboard',
+    icon: faHome,
+    breadcrumb: false,
+    submenu: [],
+    permission: [
+      {
+        // TODO: swap to PermissionModel.StoreDashboard once codegen emits it
+        model: PermissionModel.Dashboard,
+        method: PermissionMethod.Read,
+      },
+    ],
+    intl: defineMessage({
+      id: 'store-colleague-dashboard',
+      defaultMessage: 'Store Dashboard',
+    }),
+  },
+  {
+    key: 'retail-admin-dashboard',
+    path: `${APP_PREFIX_PATH}/retail-admin-dashboard`,
+    title: 'Admin Dashboard',
+    icon: faLineChart,
+    breadcrumb: false,
+    submenu: [],
+    permission: [
+      {
+        // TODO: swap to PermissionModel.RetailAdminDashboard once codegen emits it
+        model: PermissionModel.Dashboard,
+        method: PermissionMethod.Read,
+      },
+    ],
+    intl: defineMessage({
+      id: 'retail-admin-dashboard',
+      defaultMessage: 'Admin Dashboard',
+    }),
+  },
+  {
     key: 'police-dashboard',
     path: `${APP_PREFIX_PATH}/police-dashboard`,
     title: 'Dashboard',

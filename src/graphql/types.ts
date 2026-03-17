@@ -907,6 +907,7 @@ export enum AnswerTypeInput {
 }
 
 export type AnswerUpdateManyWithoutIncidentInput = {
+  create?: InputMaybe<Array<AnswerCreateWithoutIncidentInput>>;
   update?: InputMaybe<Array<AnswerUpdateWithWhereUniqueWithoutIncidentInput>>;
 };
 
@@ -960,40 +961,6 @@ export enum AnyAll {
   Any = 'any'
 }
 
-export type ApiToken = {
-  __typename?: 'ApiToken';
-  clerkApiKeyId: Scalars['String'];
-  /** API Key secret - ONLY returned on creation, store securely */
-  clerkSecret?: Maybe<Scalars['String']>;
-  createdAt: Scalars['DateTime'];
-  createdBy?: Maybe<User>;
-  createdByUserId?: Maybe<Scalars['ID']>;
-  description?: Maybe<Scalars['String']>;
-  enabled: Scalars['Boolean'];
-  expiresAt?: Maybe<Scalars['DateTime']>;
-  id: Scalars['ID'];
-  ipWhitelist: Array<Scalars['String']>;
-  lastUsedAt?: Maybe<Scalars['DateTime']>;
-  name: Scalars['String'];
-  rateLimit?: Maybe<Scalars['Int']>;
-  requestCount: Scalars['Int'];
-  scheme: Scheme;
-  schemeId: Scalars['ID'];
-  scopes: Array<ApiTokenScope>;
-  updatedAt: Scalars['DateTime'];
-};
-
-export type ApiTokenCreateInput = {
-  description?: InputMaybe<Scalars['String']>;
-  enabled?: InputMaybe<Scalars['Boolean']>;
-  expiresAt?: InputMaybe<Scalars['DateTime']>;
-  ipWhitelist?: InputMaybe<Array<Scalars['String']>>;
-  name: Scalars['String'];
-  rateLimit?: InputMaybe<Scalars['Int']>;
-  scheme: ConnectHelper;
-  scopes: Array<ApiTokenScope>;
-};
-
 export enum ApiTokenScope {
   BusinessesRead = 'BUSINESSES_READ',
   FormQuestionsRead = 'FORM_QUESTIONS_READ',
@@ -1008,33 +975,6 @@ export enum ApiTokenScope {
   VehiclesCreate = 'VEHICLES_CREATE',
   VehiclesRead = 'VEHICLES_READ'
 }
-
-export type ApiTokenStats = {
-  __typename?: 'ApiTokenStats';
-  enabled: Scalars['Boolean'];
-  lastUsedAt?: Maybe<Scalars['DateTime']>;
-  requestCount: Scalars['Int'];
-  schemeName: Scalars['String'];
-  tokenId: Scalars['String'];
-  tokenName: Scalars['String'];
-  totalRequests: Scalars['Int'];
-};
-
-export type ApiTokenUpdateInput = {
-  description?: InputMaybe<Scalars['String']>;
-  enabled?: InputMaybe<Scalars['Boolean']>;
-  expiresAt?: InputMaybe<Scalars['DateTime']>;
-  ipWhitelist?: InputMaybe<Array<Scalars['String']>>;
-  name?: InputMaybe<Scalars['String']>;
-  rateLimit?: InputMaybe<Scalars['Int']>;
-  scopes?: InputMaybe<Array<ApiTokenScope>>;
-};
-
-export type ApiTokenWhereInput = {
-  enabled?: InputMaybe<Scalars['Boolean']>;
-  schemeId?: InputMaybe<Scalars['String']>;
-  scopes?: InputMaybe<Array<ApiTokenScope>>;
-};
 
 export enum AppType {
   Native = 'NATIVE',
@@ -1818,11 +1758,225 @@ export type BusinessIncidentsCountGraphInput = {
   schemeIds: Array<Scalars['String']>;
 };
 
+export type BusinessLpActionItems = {
+  __typename?: 'BusinessLPActionItems';
+  /** Bans for business offenders expiring within 7 days */
+  bansExpiringSoon: Array<BusinessLpExpiringBan>;
+  /** Incidents at this business awaiting approval */
+  incidentsPendingApproval: Array<BusinessLpPendingIncident>;
+};
+
+export type BusinessLpActiveBans = {
+  __typename?: 'BusinessLPActiveBans';
+  /** Bans expiring within 30 days — urgent awareness */
+  expiringWithin30Days: Array<BusinessLpBanItem>;
+  /** Bans valid for more than 30 days — general awareness */
+  longerTerm: Array<BusinessLpBanItem>;
+};
+
+export type BusinessLpBanItem = {
+  __typename?: 'BusinessLPBanItem';
+  daysRemaining: Scalars['Int'];
+  endDate: Scalars['DateTime'];
+  id: Scalars['String'];
+  location?: Maybe<Scalars['String']>;
+  offenderId: Scalars['String'];
+  /** Images associated with this offender */
+  offenderImages: Scalars['JSON'];
+  offenderName?: Maybe<Scalars['String']>;
+};
+
+export type BusinessLpCrimePatterns = {
+  __typename?: 'BusinessLPCrimePatterns';
+  /** Day of week (0=Sunday) with most incidents, or null */
+  peakDay?: Maybe<Scalars['Int']>;
+  /** Top 3 hours by incident count (last 90 days) */
+  peakHours: Array<BusinessLpPeakHour>;
+  /** Top 5 most stolen goods with value (last 90 days) */
+  topStolenGoods: Array<BusinessLpTopGood>;
+};
+
+export type BusinessLpExpiringBan = {
+  __typename?: 'BusinessLPExpiringBan';
+  endDate: Scalars['DateTime'];
+  id: Scalars['String'];
+  offenderName?: Maybe<Scalars['String']>;
+};
+
+export type BusinessLpLinkedInvestigation = {
+  __typename?: 'BusinessLPLinkedInvestigation';
+  id: Scalars['String'];
+  /** Number of this business's incidents in the investigation */
+  incidentCount: Scalars['Int'];
+  name: Scalars['String'];
+  reference?: Maybe<Scalars['Int']>;
+  status: Scalars['String'];
+};
+
+export type BusinessLpPeakHour = {
+  __typename?: 'BusinessLPPeakHour';
+  count: Scalars['Int'];
+  /** Hour of day (0-23) */
+  hour: Scalars['Int'];
+};
+
+export type BusinessLpPendingIncident = {
+  __typename?: 'BusinessLPPendingIncident';
+  date: Scalars['DateTime'];
+  id: Scalars['String'];
+  reference?: Maybe<Scalars['Int']>;
+};
+
+export type BusinessLpRecentIncident = {
+  __typename?: 'BusinessLPRecentIncident';
+  approved?: Maybe<Scalars['Boolean']>;
+  /** INCIDENT_CRIME_TYPE tag names */
+  crimeTypes: Array<Scalars['String']>;
+  date: Scalars['DateTime'];
+  id: Scalars['String'];
+  offenderCount: Scalars['Int'];
+  reference?: Maybe<Scalars['Int']>;
+  value?: Maybe<Scalars['Float']>;
+};
+
+export type BusinessLpRiskProfile = {
+  __typename?: 'BusinessLPRiskProfile';
+  /** Quality score of submitted data */
+  aiDataQualityScore?: Maybe<Scalars['Float']>;
+  /** How actively the business uses the platform */
+  aiEngagementScore?: Maybe<Scalars['Float']>;
+  /** Key AI-generated insights for this business */
+  aiKeyInsights: Array<Scalars['String']>;
+  /** Enum label: LOW / MEDIUM / HIGH / CRITICAL */
+  aiRiskLevel?: Maybe<Scalars['String']>;
+  /** Computed risk score (null if not yet analysed) */
+  aiRiskScore?: Maybe<Scalars['Float']>;
+  /** Urgent actions flagged by AI analysis */
+  aiUrgentActions: Array<Scalars['String']>;
+};
+
+export type BusinessLpSchemeComparison = {
+  __typename?: 'BusinessLPSchemeComparison';
+  /** % of scheme businesses with fewer incidents (0-100) */
+  incidentCountPercentile: Scalars['Float'];
+  /** This business rank by incident count (1 = highest) */
+  incidentCountRank: Scalars['Int'];
+  /** Mean incident count across scheme businesses */
+  schemeAvgIncidentCount: Scalars['Float'];
+  /** Mean value lost across scheme businesses */
+  schemeAvgValueLost: Scalars['Float'];
+  /** Total businesses in the scheme */
+  schemeBusinessCount: Scalars['Int'];
+  /** % of scheme businesses with lower value lost (0-100) */
+  valuePercentile: Scalars['Float'];
+  /** This business rank by value lost (1 = highest) */
+  valueRank: Scalars['Int'];
+};
+
+export type BusinessLpSummary = {
+  __typename?: 'BusinessLPSummary';
+  /** Active bans for offenders who have targeted this business */
+  activeBansCount: Scalars['Int'];
+  /** Most recent incident date (null if no incidents) */
+  lastIncidentDate?: Maybe<Scalars['DateTime']>;
+  /** Incidents at this business awaiting approval */
+  pendingApprovalCount: Scalars['Int'];
+  /** totalRecoveredValue / totalValueLost (0 if no losses) */
+  recoveryRate: Scalars['Float'];
+  /** Incidents at this business in the last 30 days */
+  thisMonthCount: Scalars['Int'];
+  /** Incidents at this business in the last 7 days */
+  thisWeekCount: Scalars['Int'];
+  /** Incidents at this business today */
+  todayCount: Scalars['Int'];
+  /** Sum of recovered values in last 30 days */
+  totalRecoveredValue: Scalars['Float'];
+  /** Sum of incident values in last 30 days */
+  totalValueLost: Scalars['Float'];
+  /** % change in incidents vs previous week (null if no prior data) */
+  weeklyChange?: Maybe<Scalars['Float']>;
+};
+
+export type BusinessLpTopGood = {
+  __typename?: 'BusinessLPTopGood';
+  count: Scalars['Int'];
+  name: Scalars['String'];
+  totalValue: Scalars['Float'];
+};
+
+export type BusinessLpWatchlistInsights = {
+  __typename?: 'BusinessLPWatchlistInsights';
+  /** Average days between incidents for repeat offenders */
+  averageDaysBetweenIncidents: Scalars['Float'];
+  /** Distribution: period0to30, period31to90, period91to180, period180plus */
+  recidivismDistribution: Scalars['JSON'];
+  /** Top 3 highest-frequency offenders at this business */
+  topByFrequency: Array<BusinessLpWatchlistOffender>;
+  /** Offenders with 3+ incidents at this business in 90 days */
+  totalRepeatOffenders: Scalars['Int'];
+};
+
+export type BusinessLpWatchlistOffender = {
+  __typename?: 'BusinessLPWatchlistOffender';
+  id: Scalars['String'];
+  /** Images associated with this offender */
+  images: Scalars['JSON'];
+  incidentCount: Scalars['Int'];
+  /** Whether this offender has an active ban right now */
+  isCurrentlyBanned: Scalars['Boolean'];
+  lastIncidentDate?: Maybe<Scalars['DateTime']>;
+  name?: Maybe<Scalars['String']>;
+  reference?: Maybe<Scalars['Int']>;
+  totalValue: Scalars['Float'];
+};
+
 export type BusinessListRelationFilter = {
   every?: InputMaybe<BusinessWhereInput>;
   none?: InputMaybe<BusinessWhereInput>;
   some?: InputMaybe<BusinessWhereInput>;
 };
+
+export type BusinessLossPreventionData = {
+  __typename?: 'BusinessLossPreventionData';
+  /** Items requiring immediate attention */
+  actionItems?: Maybe<BusinessLpActionItems>;
+  /** Active bans partitioned by urgency */
+  activeBans?: Maybe<BusinessLpActiveBans>;
+  /** Peak hours, peak day, and top stolen goods (last 90 days) */
+  crimePatterns?: Maybe<BusinessLpCrimePatterns>;
+  /** Open investigations containing incidents from this business */
+  linkedInvestigations?: Maybe<Array<BusinessLpLinkedInvestigation>>;
+  /** Top 10 offenders by recency (last 90 days) */
+  offenderWatchlist?: Maybe<Array<BusinessLpWatchlistOffender>>;
+  /** Last 10 incidents at this business */
+  recentIncidents?: Maybe<Array<BusinessLpRecentIncident>>;
+  /** AI-derived risk and engagement scores for this business */
+  riskProfile?: Maybe<BusinessLpRiskProfile>;
+  /** How this business ranks vs others in the scheme (requires schemeId) */
+  schemeComparison?: Maybe<BusinessLpSchemeComparison>;
+  /** Multi-period pulse metrics for this business */
+  summary: BusinessLpSummary;
+  /** Repeat offender patterns for this business */
+  watchlistInsights?: Maybe<BusinessLpWatchlistInsights>;
+};
+
+export enum BusinessLossPreventionSection {
+  ActionItems = 'ACTION_ITEMS',
+  ActiveBans = 'ACTIVE_BANS',
+  CrimePatterns = 'CRIME_PATTERNS',
+  LinkedInvestigations = 'LINKED_INVESTIGATIONS',
+  OffenderWatchlist = 'OFFENDER_WATCHLIST',
+  RecentIncidents = 'RECENT_INCIDENTS',
+  RiskProfile = 'RISK_PROFILE',
+  SchemeComparison = 'SCHEME_COMPARISON',
+  Summary = 'SUMMARY',
+  WatchlistInsights = 'WATCHLIST_INSIGHTS'
+}
+
+export enum BusinessLPWatchlistOrderBy {
+  IncidentCount = 'INCIDENT_COUNT',
+  TotalValue = 'TOTAL_VALUE'
+}
 
 export type BusinessOrderBy = {
   name?: InputMaybe<SortOrder>;
@@ -11698,7 +11852,6 @@ export type Mutation = {
   createActionEvidence?: Maybe<Scalars['String']>;
   createActiveChecklist: ActiveChecklist;
   createActivityCsvZip: Scalars['String'];
-  createApiToken: ApiToken;
   createArticle: Article;
   createBatchPoliceSharingConfigs: BatchPoliceSharingConfigResult;
   createBillingCustomer: BillingCustomer;
@@ -11764,7 +11917,6 @@ export type Mutation = {
   createUserInAuth0?: Maybe<UserNewAuth0>;
   createUserInDatabase: User;
   createVehicle: Vehicle;
-  deleteApiToken: ApiToken;
   deleteArticle: Article;
   deleteBan: Ban;
   deleteBillingCustomer: BillingCustomer;
@@ -11938,7 +12090,6 @@ export type Mutation = {
   unsubscribeToCrimeGroup: CrimeGroup;
   unsubscribeToInvestigation: Investigation;
   unsubscribeToVehicle: Vehicle;
-  updateApiToken: ApiToken;
   updateBillingCustomer: BillingCustomer;
   updateBusiness: Business;
   updateBusinessQuestion: BusinessQuestion;
@@ -12180,11 +12331,6 @@ export type MutationCreateActiveChecklistArgs = {
 
 export type MutationCreateActivityCsvZipArgs = {
   where: ActivityExportWhere;
-};
-
-
-export type MutationCreateApiTokenArgs = {
-  data: ApiTokenCreateInput;
 };
 
 
@@ -12523,11 +12669,6 @@ export type MutationCreateUserInDatabaseArgs = {
 
 export type MutationCreateVehicleArgs = {
   data: CreateVehicleDataInput;
-};
-
-
-export type MutationDeleteApiTokenArgs = {
-  id: Scalars['String'];
 };
 
 
@@ -13350,12 +13491,6 @@ export type MutationUnsubscribeToInvestigationArgs = {
 
 export type MutationUnsubscribeToVehicleArgs = {
   where: UniqueId;
-};
-
-
-export type MutationUpdateApiTokenArgs = {
-  data: ApiTokenUpdateInput;
-  id: Scalars['String'];
 };
 
 
@@ -16786,9 +16921,6 @@ export type Query = {
   aiVisionMatch: AiVisionMatch;
   aiVisionMatches: QueryAiVisionMatchesConnection;
   aiVisionStats: Array<Count>;
-  apiToken?: Maybe<ApiToken>;
-  apiTokenStats: Array<ApiTokenStats>;
-  apiTokens: Array<ApiToken>;
   article: Article;
   articles: Array<Article>;
   audioAnalyticsReport: AudioAnalyticsReport;
@@ -16814,6 +16946,7 @@ export type Query = {
   businessCrimeTypeGraph: Array<RadialValueGraph>;
   businessImpact: BusinessImpact;
   businessIncidentCountGraph: Array<Graph>;
+  businessLossPreventionDashboard: BusinessLossPreventionData;
   businessLossRecoveredGraph: Array<RadialGraph>;
   businessQuestion: BusinessQuestion;
   businessQuestionRelay: QueryBusinessQuestionRelayConnection;
@@ -16998,6 +17131,7 @@ export type Query = {
   reportTemplates: Array<ReportTemplate>;
   reportUserLogin: User;
   reportsCentre: Array<ReportGroup>;
+  retailAdminDashboard: RetailAdminDashboardData;
   role: CustomRole;
   roles: QueryRolesConnection;
   scheme: Scheme;
@@ -17026,6 +17160,7 @@ export type Query = {
   stockItemsSearch: StockItemSearchResult;
   stockRemovalRequest: StockRemovalRequest;
   stockRemovalRequests: QueryStockRemovalRequestsConnection;
+  storeColleagueDashboard: StoreColleagueDashboardData;
   tableReport: ReportTemplate;
   tag: Tag;
   tags: Array<Tag>;
@@ -17222,23 +17357,6 @@ export type QueryAiVisionMatchesArgs = {
 };
 
 
-export type QueryApiTokenArgs = {
-  id: Scalars['String'];
-};
-
-
-export type QueryApiTokenStatsArgs = {
-  schemeId?: InputMaybe<Scalars['String']>;
-};
-
-
-export type QueryApiTokensArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  take?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<ApiTokenWhereInput>;
-};
-
-
 export type QueryArticleArgs = {
   where: ArticleWhereUniqueInput;
 };
@@ -17370,6 +17488,14 @@ export type QueryBusinessImpactArgs = {
 export type QueryBusinessIncidentCountGraphArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where: BusinessIncidentsCountGraphInput;
+};
+
+
+export type QueryBusinessLossPreventionDashboardArgs = {
+  businessId: Scalars['String'];
+  schemeId?: InputMaybe<Scalars['String']>;
+  sections?: InputMaybe<Array<BusinessLossPreventionSection>>;
+  watchlistOrderBy?: InputMaybe<BusinessLPWatchlistOrderBy>;
 };
 
 
@@ -18668,6 +18794,15 @@ export type QueryReportsCentreArgs = {
 };
 
 
+export type QueryRetailAdminDashboardArgs = {
+  endDate?: InputMaybe<Scalars['DateTime']>;
+  groupIds?: InputMaybe<Array<Scalars['String']>>;
+  schemeId?: InputMaybe<Scalars['String']>;
+  sections?: InputMaybe<Array<RetailAdminDashboardSection>>;
+  startDate?: InputMaybe<Scalars['DateTime']>;
+};
+
+
 export type QueryRoleArgs = {
   where: CustomRoleWhereUniqueInput;
 };
@@ -18896,6 +19031,14 @@ export type QueryStockRemovalRequestsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where: StockRemovalRequestsWhere;
+};
+
+
+export type QueryStoreColleagueDashboardArgs = {
+  businessId: Scalars['String'];
+  schemeId?: InputMaybe<Scalars['String']>;
+  sections?: InputMaybe<Array<StoreColleagueDashboardSection>>;
+  watchlistRadiusMeters?: InputMaybe<Scalars['Float']>;
 };
 
 
@@ -21235,6 +21378,165 @@ export type ResetPassword = {
   message: Scalars['String'];
 };
 
+export type RetailAdminDashboardData = {
+  __typename?: 'RetailAdminDashboardData';
+  /** Business-level impact analysis */
+  businessIntelligence?: Maybe<RetailDashboardBusinessIntelligence>;
+  /** Temporal crime patterns (hour, day, month) */
+  crimePatterns?: Maybe<RetailDashboardCrimePatterns>;
+  /** Incident counts by INCIDENT_CRIME_TYPE tag */
+  crimeTypeDistribution?: Maybe<Array<RetailDashboardCrimeTypeItem>>;
+  /** Actionable items requiring attention */
+  operationalQueue?: Maybe<RetailDashboardOperationalQueue>;
+  /** Recidivism patterns and high-frequency offenders */
+  repeatOffenderInsights?: Maybe<RetailDashboardRepeatOffenderInsights>;
+  /** Headline KPIs for the period */
+  summary: RetailDashboardSummary;
+  /** Top 5 most stolen goods in period */
+  targetedGoods?: Maybe<Array<RetailDashboardTargetedGoodsItem>>;
+  /** Top 10 offenders by total value caused in period */
+  topOffenders?: Maybe<Array<RetailDashboardTopOffender>>;
+};
+
+export enum RetailAdminDashboardSection {
+  BusinessIntelligence = 'BUSINESS_INTELLIGENCE',
+  CrimePatterns = 'CRIME_PATTERNS',
+  CrimeTypeDistribution = 'CRIME_TYPE_DISTRIBUTION',
+  OperationalQueue = 'OPERATIONAL_QUEUE',
+  RepeatOffenderInsights = 'REPEAT_OFFENDER_INSIGHTS',
+  Summary = 'SUMMARY',
+  TargetedGoods = 'TARGETED_GOODS',
+  TopOffenders = 'TOP_OFFENDERS'
+}
+
+export type RetailDashboardBusinessIntelligence = {
+  __typename?: 'RetailDashboardBusinessIntelligence';
+  /** Businesses in scheme with zero incidents in last 30 days */
+  goingDarkCount: Scalars['Int'];
+  /** Names of businesses with no recent activity */
+  goingDarkNames: Array<Scalars['String']>;
+  /** Top 5 businesses by incident count in period */
+  topByCount: Array<RetailDashboardBusinessItem>;
+  /** Top 5 businesses by value lost in period */
+  topByValue: Array<RetailDashboardBusinessItem>;
+};
+
+export type RetailDashboardBusinessItem = {
+  __typename?: 'RetailDashboardBusinessItem';
+  id: Scalars['String'];
+  incidentCount: Scalars['Int'];
+  name: Scalars['String'];
+  totalValue: Scalars['Float'];
+};
+
+export type RetailDashboardCrimePatterns = {
+  __typename?: 'RetailDashboardCrimePatterns';
+  /** Incident distribution by day of week */
+  byDayOfWeek: Array<RetailDashboardDailyItem>;
+  /** Incident distribution by hour of day */
+  byHour: Array<RetailDashboardHourlyItem>;
+  /** 12-month rolling incident and value trend */
+  monthlyTrend: Array<RetailDashboardMonthlyItem>;
+};
+
+export type RetailDashboardCrimeTypeItem = {
+  __typename?: 'RetailDashboardCrimeTypeItem';
+  count: Scalars['Int'];
+  crimeType?: Maybe<Scalars['String']>;
+  tagId: Scalars['String'];
+  tagName: Scalars['String'];
+};
+
+export type RetailDashboardDailyItem = {
+  __typename?: 'RetailDashboardDailyItem';
+  count: Scalars['Int'];
+  /** Day of week (0=Sunday, 6=Saturday) */
+  dayOfWeek: Scalars['Int'];
+};
+
+export type RetailDashboardExpiringBanItem = {
+  __typename?: 'RetailDashboardExpiringBanItem';
+  endDate: Scalars['DateTime'];
+  id: Scalars['String'];
+  offenderName?: Maybe<Scalars['String']>;
+};
+
+export type RetailDashboardHourlyItem = {
+  __typename?: 'RetailDashboardHourlyItem';
+  count: Scalars['Int'];
+  /** Hour of day (0-23) */
+  hour: Scalars['Int'];
+};
+
+export type RetailDashboardMonthlyItem = {
+  __typename?: 'RetailDashboardMonthlyItem';
+  count: Scalars['Int'];
+  /** YYYY-MM format */
+  month: Scalars['String'];
+  totalValue: Scalars['Float'];
+};
+
+export type RetailDashboardOperationalQueue = {
+  __typename?: 'RetailDashboardOperationalQueue';
+  expiringBans: Array<RetailDashboardExpiringBanItem>;
+  /** Bans expiring within 30 days */
+  expiringBansCount: Scalars['Int'];
+  openInvestigations: Scalars['Int'];
+  /** Incidents where approved=false, draft=false */
+  pendingApproval: Scalars['Int'];
+};
+
+export type RetailDashboardRepeatOffenderInsights = {
+  __typename?: 'RetailDashboardRepeatOffenderInsights';
+  /** Average recidivism rate in days */
+  averageDaysBetweenIncidents: Scalars['Float'];
+  /** Distribution: period0to30, period31to90, period91to180, period180plus */
+  recidivismDistribution: Scalars['JSON'];
+  /** Top 5 highest frequency offenders */
+  topByFrequency: Array<RetailDashboardTopOffender>;
+  /** Offenders with 3+ incidents in period */
+  totalRepeatOffenders: Scalars['Int'];
+};
+
+export type RetailDashboardSummary = {
+  __typename?: 'RetailDashboardSummary';
+  /** Offenders with incidents in period */
+  activeOffenders: Scalars['Int'];
+  /** Investigations with OPEN status */
+  openInvestigations: Scalars['Int'];
+  /** Incidents awaiting approval (action required) */
+  pendingApproval: Scalars['Int'];
+  /** % change in incidents vs previous equivalent period */
+  periodIncidentChange?: Maybe<Scalars['Float']>;
+  /** % change in value lost vs previous equivalent period */
+  periodValueChange?: Maybe<Scalars['Float']>;
+  /** Offenders with 3+ incidents in period */
+  repeatOffenders: Scalars['Int'];
+  /** Total incidents in period */
+  totalIncidents: Scalars['Int'];
+  /** Sum of incident values in period */
+  totalValueLost: Scalars['Float'];
+};
+
+export type RetailDashboardTargetedGoodsItem = {
+  __typename?: 'RetailDashboardTargetedGoodsItem';
+  count: Scalars['Int'];
+  name: Scalars['String'];
+  totalValue: Scalars['Float'];
+};
+
+export type RetailDashboardTopOffender = {
+  __typename?: 'RetailDashboardTopOffender';
+  id: Scalars['String'];
+  /** Images associated with this offender */
+  images: Scalars['JSON'];
+  incidentCount: Scalars['Int'];
+  lastIncidentDate?: Maybe<Scalars['DateTime']>;
+  name?: Maybe<Scalars['String']>;
+  reference?: Maybe<Scalars['Int']>;
+  totalValue: Scalars['Float'];
+};
+
 export enum RiskLevel {
   Critical = 'CRITICAL',
   High = 'HIGH',
@@ -21295,7 +21597,6 @@ export type Scheme = {
   activityAllowAllGroups: Scalars['Boolean'];
   activityAssignToUser: Scalars['Boolean'];
   allowTodoTemplateOverride: Scalars['Boolean'];
-  apiTokens: Array<ApiToken>;
   approvalDueDays?: Maybe<Scalars['Int']>;
   articles: Array<Article>;
   autoApproveActivities: Scalars['Boolean'];
@@ -23755,6 +24056,176 @@ export type StoreAgeBreakdown = {
   __typename?: 'StoreAgeBreakdown';
   nonYouth: Scalars['Int'];
   youth: Scalars['Int'];
+};
+
+export type StoreColleagueActionItems = {
+  __typename?: 'StoreColleagueActionItems';
+  /** Bans for business offenders expiring within 7 days */
+  bansExpiringSoon: Array<StoreColleagueExpiringBan>;
+  /** Incidents at this business awaiting approval */
+  incidentsPendingApproval: Array<StoreColleaguePendingIncident>;
+};
+
+export type StoreColleagueActiveBans = {
+  __typename?: 'StoreColleagueActiveBans';
+  /** Bans expiring within 30 days — urgent awareness */
+  expiringWithin30Days: Array<StoreColleagueBanItem>;
+  /** Bans valid for more than 30 days — general awareness */
+  longerTerm: Array<StoreColleagueBanItem>;
+};
+
+export type StoreColleagueBanItem = {
+  __typename?: 'StoreColleagueBanItem';
+  daysRemaining: Scalars['Int'];
+  endDate: Scalars['DateTime'];
+  id: Scalars['String'];
+  location?: Maybe<Scalars['String']>;
+  offenderId: Scalars['String'];
+  /** Images associated with this offender */
+  offenderImages: Scalars['JSON'];
+  offenderName?: Maybe<Scalars['String']>;
+};
+
+export type StoreColleagueCrimePatterns = {
+  __typename?: 'StoreColleagueCrimePatterns';
+  /** Day of week (0=Sunday) with most incidents, or null */
+  peakDay?: Maybe<Scalars['Int']>;
+  /** Top 3 hours by incident count (last 90 days) */
+  peakHours: Array<StoreColleaguePeakHour>;
+  /** Top 3 most stolen goods in last 90 days */
+  topStolenGoods: Array<StoreColleagueTopGood>;
+};
+
+export type StoreColleagueDashboardData = {
+  __typename?: 'StoreColleagueDashboardData';
+  /** Items requiring immediate attention */
+  actionItems?: Maybe<StoreColleagueActionItems>;
+  /** Active bans partitioned by urgency */
+  activeBans?: Maybe<StoreColleagueActiveBans>;
+  /** Peak hours, peak day, and top stolen goods (last 90 days) */
+  crimePatterns?: Maybe<StoreColleagueCrimePatterns>;
+  /** Scheme-wide context, only returned when schemeId is provided */
+  localAreaContext?: Maybe<StoreColleagueLocalAreaContext>;
+  /** Top 10 offenders by recency (last 90 days) */
+  offenderWatchlist?: Maybe<Array<StoreColleagueWatchlistOffender>>;
+  /** Last 10 incidents at this business */
+  recentIncidents?: Maybe<Array<StoreColleagueRecentIncident>>;
+  /** Multi-period pulse metrics for this business */
+  summary: StoreColleagueSummary;
+  /** Repeat offender patterns for this business */
+  watchlistInsights?: Maybe<StoreColleagueWatchlistInsights>;
+};
+
+export enum StoreColleagueDashboardSection {
+  ActionItems = 'ACTION_ITEMS',
+  ActiveBans = 'ACTIVE_BANS',
+  CrimePatterns = 'CRIME_PATTERNS',
+  LocalAreaContext = 'LOCAL_AREA_CONTEXT',
+  OffenderWatchlist = 'OFFENDER_WATCHLIST',
+  RecentIncidents = 'RECENT_INCIDENTS',
+  Summary = 'SUMMARY',
+  WatchlistInsights = 'WATCHLIST_INSIGHTS'
+}
+
+export type StoreColleagueExpiringBan = {
+  __typename?: 'StoreColleagueExpiringBan';
+  endDate: Scalars['DateTime'];
+  id: Scalars['String'];
+  offenderName?: Maybe<Scalars['String']>;
+};
+
+export type StoreColleagueLocalAreaContext = {
+  __typename?: 'StoreColleagueLocalAreaContext';
+  /** Distinct offenders active across scheme this week */
+  schemeActiveOffenders: Scalars['Int'];
+  /** Total incidents across scheme this week */
+  schemeIncidentsThisWeek: Scalars['Int'];
+  /** Top 3 offenders by incident count across scheme this week */
+  topSchemeOffenders: Array<StoreColleagueSchemeOffender>;
+};
+
+export type StoreColleaguePeakHour = {
+  __typename?: 'StoreColleaguePeakHour';
+  count: Scalars['Int'];
+  /** Hour of day (0-23) */
+  hour: Scalars['Int'];
+};
+
+export type StoreColleaguePendingIncident = {
+  __typename?: 'StoreColleaguePendingIncident';
+  date: Scalars['DateTime'];
+  id: Scalars['String'];
+  reference?: Maybe<Scalars['Int']>;
+};
+
+export type StoreColleagueRecentIncident = {
+  __typename?: 'StoreColleagueRecentIncident';
+  approved?: Maybe<Scalars['Boolean']>;
+  /** INCIDENT_CRIME_TYPE tag names */
+  crimeTypes: Array<Scalars['String']>;
+  date: Scalars['DateTime'];
+  id: Scalars['String'];
+  offenderCount: Scalars['Int'];
+  reference?: Maybe<Scalars['Int']>;
+  value?: Maybe<Scalars['Float']>;
+};
+
+export type StoreColleagueSchemeOffender = {
+  __typename?: 'StoreColleagueSchemeOffender';
+  incidentCount: Scalars['Int'];
+  name?: Maybe<Scalars['String']>;
+};
+
+export type StoreColleagueSummary = {
+  __typename?: 'StoreColleagueSummary';
+  /** Active bans for offenders who have targeted this business */
+  activeBansCount: Scalars['Int'];
+  /** Incidents at this business awaiting approval */
+  pendingApprovalCount: Scalars['Int'];
+  /** Incidents at this business in the last 30 days */
+  thisMonthCount: Scalars['Int'];
+  /** Incidents at this business in the last 7 days */
+  thisWeekCount: Scalars['Int'];
+  /** Incidents at this business today */
+  todayCount: Scalars['Int'];
+  /** true when the offender watchlist is geo-radius filtered rather than business-scoped */
+  watchlistGeoBounded: Scalars['Boolean'];
+  /** The radius used for geo-bounded watchlist filtering (null when not geo-filtered) */
+  watchlistRadiusMeters?: Maybe<Scalars['Float']>;
+  /** % change in incidents vs previous week (null if no prior data) */
+  weeklyChange?: Maybe<Scalars['Float']>;
+};
+
+export type StoreColleagueTopGood = {
+  __typename?: 'StoreColleagueTopGood';
+  count: Scalars['Int'];
+  name: Scalars['String'];
+};
+
+export type StoreColleagueWatchlistInsights = {
+  __typename?: 'StoreColleagueWatchlistInsights';
+  /** Average days between incidents for repeat offenders */
+  averageDaysBetweenIncidents: Scalars['Float'];
+  /** Distribution: period0to30, period31to90, period91to180, period180plus */
+  recidivismDistribution: Scalars['JSON'];
+  /** Top 3 highest-frequency offenders at this business */
+  topByFrequency: Array<StoreColleagueWatchlistOffender>;
+  /** Offenders with 3+ incidents at this business in 90 days */
+  totalRepeatOffenders: Scalars['Int'];
+};
+
+export type StoreColleagueWatchlistOffender = {
+  __typename?: 'StoreColleagueWatchlistOffender';
+  id: Scalars['String'];
+  /** Images associated with this offender */
+  images: Scalars['JSON'];
+  incidentCount: Scalars['Int'];
+  /** Whether this offender has an active ban right now */
+  isCurrentlyBanned: Scalars['Boolean'];
+  lastIncidentDate?: Maybe<Scalars['DateTime']>;
+  name?: Maybe<Scalars['String']>;
+  reference?: Maybe<Scalars['Int']>;
+  totalValue: Scalars['Float'];
 };
 
 export type StoreIncidentMetrics = {
@@ -26487,7 +26958,6 @@ export type User = {
   activityEmail: Scalars['Boolean'];
   activityPush: Scalars['Boolean'];
   addresses: Array<Address>;
-  apiTokensCreated: Array<ApiToken>;
   approverGroups: Array<Group>;
   articles: Array<Article>;
   assignedTodos: Array<Todo>;

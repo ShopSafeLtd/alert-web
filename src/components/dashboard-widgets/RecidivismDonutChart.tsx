@@ -12,11 +12,13 @@ interface RecidivismDistribution {
   period180plus?: number;
 }
 
-interface RecidivismChartProps {
+interface RecidivismDonutChartProps {
   distribution: RecidivismDistribution | null | undefined;
 }
 
-const RecidivismChart: React.FC<RecidivismChartProps> = ({ distribution }) => {
+const RecidivismDonutChart: React.FC<RecidivismDonutChartProps> = ({
+  distribution,
+}) => {
   const intl = useIntl();
   const darkMode =
     useStoreState((state) => state.theme.currentTheme) === 'dark';
@@ -27,23 +29,23 @@ const RecidivismChart: React.FC<RecidivismChartProps> = ({ distribution }) => {
     return [
       {
         category: intl.formatMessage({ defaultMessage: '0-30 days' }),
-        color: '#f5222d', // Red - High risk
-        count: distribution.period0to30 || 0,
+        color: '#f5222d',
+        count: distribution.period0to30 ?? 0,
       },
       {
         category: intl.formatMessage({ defaultMessage: '31-90 days' }),
-        color: '#fa8c16', // Orange
-        count: distribution.period31to90 || 0,
+        color: '#fa8c16',
+        count: distribution.period31to90 ?? 0,
       },
       {
         category: intl.formatMessage({ defaultMessage: '91-180 days' }),
-        color: '#faad14', // Yellow
-        count: distribution.period91to180 || 0,
+        color: '#faad14',
+        count: distribution.period91to180 ?? 0,
       },
       {
         category: intl.formatMessage({ defaultMessage: '180+ days' }),
-        color: '#52c41a', // Green - Lower risk
-        count: distribution.period180plus || 0,
+        color: '#52c41a',
+        count: distribution.period180plus ?? 0,
       },
     ];
   }, [distribution, intl]);
@@ -93,4 +95,4 @@ const RecidivismChart: React.FC<RecidivismChartProps> = ({ distribution }) => {
   );
 };
 
-export default RecidivismChart;
+export default RecidivismDonutChart;

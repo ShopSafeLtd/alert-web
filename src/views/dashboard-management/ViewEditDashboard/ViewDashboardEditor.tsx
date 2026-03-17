@@ -10,6 +10,7 @@ import ActiveOffendersTemplate from '#/views/dashboard/components/ActiveOffender
 import AdminTodosTemplate from '#/views/dashboard/components/AdminTodos/AdminTodosTemplate';
 import ArticlesSection from '#/views/dashboard/components/ArticlesSection/ArticlesSectionTemplate';
 import DashboardGraphTemplate from '#/views/dashboard/components/DashboardGraph/DashboardGraphTemplate';
+import DashboardWidgetTemplate from '#/views/dashboard/components/DashboardWidgetTemplate';
 import DayOfWeekBar from '#/views/dashboard/components/DayOfWeek/DayOfWeekGraphTemplate';
 import DraftIncidentsTemplate from '#/views/dashboard/components/DraftIncidents/DraftIncidentsTemplate';
 import FeedItemCol from '#/views/dashboard/components/FeedItems/FeedItemColTemplate';
@@ -98,31 +99,38 @@ const ViewDashboardEditor = () => {
     if (initData) {
       const Ids: string[] = [];
       const metadataObj: ComponentMetadata = {};
-      const initLayout = initData.dashboard.layout.map((item) => {
-        Ids.push(item.id);
-        // Load metadata if it exists
-        if (item.metadata) {
-          try {
-            // Parse metadata if it's a string, otherwise use as-is
-            metadataObj[item.i] = item.metadata as DashboardGraphMetadata;
-          } catch (error) {
-            console.error('Failed to parse metadata for item', item.i, error);
+      const seenIds = new Set<string>();
+      const initLayout = initData.dashboard.layout
+        .filter((item) => {
+          if (seenIds.has(item.i)) return false;
+          seenIds.add(item.i);
+          return true;
+        })
+        .map((item) => {
+          Ids.push(item.id);
+          // Load metadata if it exists
+          if (item.metadata) {
+            try {
+              // Parse metadata if it's a string, otherwise use as-is
+              metadataObj[item.i] = item.metadata as DashboardGraphMetadata;
+            } catch (error) {
+              console.error('Failed to parse metadata for item', item.i, error);
+            }
           }
-        }
-        return {
-          h: item.h,
-          i: item.i,
-          maxH: item.maxH ?? undefined,
-          maxW: item.maxW ?? undefined,
-          minH: item.minH ?? 2,
-          minW: item.minW ?? 2,
-          moved: false,
-          static: false,
-          w: item.w,
-          x: item.x,
-          y: item.y,
-        };
-      });
+          return {
+            h: item.h,
+            i: item.i,
+            maxH: item.maxH ?? undefined,
+            maxW: item.maxW ?? undefined,
+            minH: item.minH ?? 2,
+            minW: item.minW ?? 2,
+            moved: false,
+            static: false,
+            w: item.w,
+            x: item.x,
+            y: item.y,
+          };
+        });
       setComponentMetadata(metadataObj);
       if (initLayout.some(({ i }) => i === 'searchRow')) {
         setLayout([
@@ -331,6 +339,135 @@ const ViewDashboardEditor = () => {
           />
         );
       }
+      // Store Colleague templates
+      case 'storeSummary': {
+        return (
+          <DashboardWidgetTemplate
+            removeItem={removeItemHandler}
+            title={intl.formatMessage({ defaultMessage: 'Store Summary' })}
+          />
+        );
+      }
+      case 'offenderWatchlist': {
+        return (
+          <DashboardWidgetTemplate
+            removeItem={removeItemHandler}
+            title={intl.formatMessage({ defaultMessage: 'Offender Watchlist' })}
+          />
+        );
+      }
+      case 'watchlistInsights': {
+        return (
+          <DashboardWidgetTemplate
+            removeItem={removeItemHandler}
+            title={intl.formatMessage({ defaultMessage: 'Watchlist Insights' })}
+          />
+        );
+      }
+      case 'storeActiveBans': {
+        return (
+          <DashboardWidgetTemplate
+            removeItem={removeItemHandler}
+            title={intl.formatMessage({ defaultMessage: 'Active Bans' })}
+          />
+        );
+      }
+      case 'storeRecentIncidents': {
+        return (
+          <DashboardWidgetTemplate
+            removeItem={removeItemHandler}
+            title={intl.formatMessage({ defaultMessage: 'Recent Incidents' })}
+          />
+        );
+      }
+      case 'storeCrimePatterns':
+      case 'retailCrimePatterns': {
+        return (
+          <DashboardWidgetTemplate
+            removeItem={removeItemHandler}
+            title={intl.formatMessage({ defaultMessage: 'Crime Patterns' })}
+          />
+        );
+      }
+      case 'localAreaContext': {
+        return (
+          <DashboardWidgetTemplate
+            removeItem={removeItemHandler}
+            title={intl.formatMessage({ defaultMessage: 'Local Area Context' })}
+          />
+        );
+      }
+      case 'storeActionItems': {
+        return (
+          <DashboardWidgetTemplate
+            removeItem={removeItemHandler}
+            title={intl.formatMessage({ defaultMessage: 'Action Items' })}
+          />
+        );
+      }
+      // Retail Admin templates
+      case 'adminSummary': {
+        return (
+          <DashboardWidgetTemplate
+            removeItem={removeItemHandler}
+            title={intl.formatMessage({ defaultMessage: 'Admin Summary' })}
+          />
+        );
+      }
+      case 'retailTopOffenders': {
+        return (
+          <DashboardWidgetTemplate
+            removeItem={removeItemHandler}
+            title={intl.formatMessage({ defaultMessage: 'Top Offenders' })}
+          />
+        );
+      }
+      case 'retailRepeatOffenders': {
+        return (
+          <DashboardWidgetTemplate
+            removeItem={removeItemHandler}
+            title={intl.formatMessage({
+              defaultMessage: 'Repeat Offender Insights',
+            })}
+          />
+        );
+      }
+      case 'crimeTypeDistribution': {
+        return (
+          <DashboardWidgetTemplate
+            removeItem={removeItemHandler}
+            title={intl.formatMessage({
+              defaultMessage: 'Crime Type Distribution',
+            })}
+          />
+        );
+      }
+      case 'businessIntelligence': {
+        return (
+          <DashboardWidgetTemplate
+            removeItem={removeItemHandler}
+            title={intl.formatMessage({
+              defaultMessage: 'Business Intelligence',
+            })}
+          />
+        );
+      }
+      case 'retailTargetedGoods': {
+        return (
+          <DashboardWidgetTemplate
+            removeItem={removeItemHandler}
+            title={intl.formatMessage({ defaultMessage: 'Targeted Goods' })}
+          />
+        );
+      }
+      case 'operationalQueue': {
+        return (
+          <DashboardWidgetTemplate
+            removeItem={removeItemHandler}
+            title={intl.formatMessage({ defaultMessage: 'Operational Queue' })}
+          />
+        );
+      }
       default: {
         return null;
       }
@@ -343,6 +480,10 @@ const ViewDashboardEditor = () => {
     | {
         h: number;
         i: string;
+        maxH?: number;
+        maxW?: number;
+        minH: number;
+        minW: number;
         w: number;
       }
     | undefined
@@ -356,7 +497,20 @@ const ViewDashboardEditor = () => {
     } & RGL.Layout,
     _event: never
   ) => {
-    setLayout(lay.map((i) => ({ ...i, minH: 2, minW: 2 })));
+    setLayout(
+      lay.map((item) => {
+        if (droppingItem && item.i === droppingItem.i) {
+          return {
+            ...item,
+            minH: droppingItem.minH,
+            minW: droppingItem.minW,
+            ...(droppingItem.maxH !== undefined && { maxH: droppingItem.maxH }),
+            ...(droppingItem.maxW !== undefined && { maxW: droppingItem.maxW }),
+          };
+        }
+        return { ...item, minH: item.minH ?? 2, minW: item.minW ?? 2 };
+      })
+    );
     setDroppingItem(undefined);
   };
 
@@ -445,46 +599,64 @@ const ViewDashboardEditor = () => {
           setDroppingItem={setDroppingItem}
           setOpen={setComponentDrawerOpen}
         />
-        <ReactGridLayout
-          autoSize={true}
-          containerPadding={[0, 0]}
-          droppingItem={droppingItem}
-          isBounded={true}
-          isDraggable
-          isDroppable
-          isResizable
-          layout={layout}
-          margin={[0, 0]}
-          onDrop={onDrop}
-          onLayoutChange={(e) =>
-            setLayout(
-              e as ({
-                i: string;
-              } & RGL.Layout)[]
-            )
-          }
-          rowHeight={generateHeight()}
-          style={{ minHeight: '100vh' }}
-        >
-          {layout.map((layoutItem) => {
-            const elementType = getElementType(layoutItem.i);
-            const element = createElement(layoutItem.i, elementType);
-
-            if (!element) return null;
-
-            return (
-              <div
-                key={layoutItem.i}
-                style={{
-                  overflow: 'hidden',
-                  padding: elementType === 'searchRow' ? 0 : 15,
-                }}
-              >
-                {element}
-              </div>
+        {(() => {
+          // Compute renderable items once so layout prop and children are always in sync.
+          // When createElement returns null for unknown types, RGL's synchronizeLayoutWithChildren
+          // skips those children but they remain in the layout prop, causing compact() to produce
+          // undefined slots and crash during resize.
+          const renderableItems = layout
+            .map((layoutItem) => {
+              const elementType = getElementType(layoutItem.i);
+              const element = createElement(layoutItem.i, elementType);
+              return element ? { element, elementType, layoutItem } : null;
+            })
+            .filter(
+              (
+                item
+              ): item is {
+                element: JSX.Element;
+                elementType: AvailableDashboardElements;
+                layoutItem: (typeof layout)[0];
+              } => item !== null
             );
-          })}
-        </ReactGridLayout>
+
+          return (
+            <ReactGridLayout
+              autoSize={true}
+              containerPadding={[0, 0]}
+              droppingItem={
+                droppingItem
+                  ? { h: droppingItem.h, i: droppingItem.i, w: droppingItem.w }
+                  : undefined
+              }
+              isBounded={true}
+              isDraggable
+              isDroppable
+              isResizable
+              layout={renderableItems.map(({ layoutItem }) => layoutItem)}
+              margin={[0, 0]}
+              onDragStop={(e) => setLayout(e as ({ i: string } & RGL.Layout)[])}
+              onDrop={onDrop}
+              onResizeStop={(e) =>
+                setLayout(e as ({ i: string } & RGL.Layout)[])
+              }
+              rowHeight={generateHeight()}
+              style={{ minHeight: '100vh' }}
+            >
+              {renderableItems.map(({ element, elementType, layoutItem }) => (
+                <div
+                  key={layoutItem.i}
+                  style={{
+                    overflow: 'hidden',
+                    padding: elementType === 'searchRow' ? 0 : 15,
+                  }}
+                >
+                  {element}
+                </div>
+              ))}
+            </ReactGridLayout>
+          );
+        })()}
 
         <Drawer
           closeIcon={null}

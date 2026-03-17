@@ -1,4 +1,8 @@
+import type { FormData as AddIncidentFormData } from '#/views/incidents/AddIncident/types/formData';
+import type { FormInstance } from 'antd';
+import type { Dayjs } from 'dayjs';
 import type { EditIncidentFeedQuery } from 'graphql/incidents/queries/__generated__/edit-incident-feed.generated';
+import type { CustomQuestion } from 'types/DataType/data_type';
 
 import BusinessesSelect from '#/components/form-components/BusinessesSelect/BusinessesSelect.view';
 import IncidentTypesSelect from '#/components/form-components/IncidentTypesSelect/IncidentTypesSelect.view';
@@ -7,12 +11,14 @@ import DatePicker from 'components/util-components/DatePicker';
 import { IncidentPriority } from 'graphql/types';
 import React, { useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
+import IncidentCustom from 'views/incidents/AddIncident/components/IncidentCustom/IncidentCustom.view';
 
 import type { FormData } from './useEditIncidentFeed';
 
 import IncidentTypeChangeModal from './IncidentTypeChangeModal';
 
 interface Props {
+  customQuestions: CustomQuestion[];
   data:
     | Exclude<EditIncidentFeedQuery['incident'], null | undefined>
     | null
@@ -24,6 +30,7 @@ interface Props {
   loading: boolean;
   onClose: () => void;
   onSubmit: (value: FormData) => void;
+  onTypesChanged: (typeIds: string[]) => void;
   saving: boolean;
   tagsLoading: boolean;
   usPoliceData?: boolean;
@@ -33,6 +40,7 @@ interface Props {
 }
 
 const EditGroup = ({
+  customQuestions,
   data,
   groups,
   groupsLoading,
@@ -41,6 +49,7 @@ const EditGroup = ({
   loading,
   onClose,
   onSubmit,
+  onTypesChanged,
   saving,
   tagsLoading,
   usPoliceData,
@@ -77,6 +86,7 @@ Props): JSX.Element => {
     } else {
       // No existing types, no change, or modal already shown - apply directly
       form.setFieldsValue({ tagsCrimeTypes: newValuesArray });
+      onTypesChanged(newValuesArray);
     }
   };
 
@@ -85,6 +95,7 @@ Props): JSX.Element => {
     setShowModal(false);
     setPendingIncidentTypes([]);
     setHasShownModal(true);
+    onTypesChanged(pendingIncidentTypes);
   };
 
   const handleModalCancel = () => {
@@ -255,8 +266,8 @@ Props): JSX.Element => {
             >
               <DatePicker
                 disabled={saving}
-                disabledDate={(current) =>
-                  current && current.getTime() > Date.now()
+                disabledDate={(current: Dayjs) =>
+                  current && current.toDate().getTime() > Date.now()
                 }
                 format="HH:mm - DD/MM/YY"
                 placeholder={intl.formatMessage({
@@ -535,6 +546,13 @@ Props): JSX.Element => {
             </Form.Item>
           </Col>
         </Row>
+        {customQuestions.length > 0 && (
+          <IncidentCustom
+            form={form as unknown as FormInstance<AddIncidentFormData>}
+            questions={customQuestions}
+            saving={saving}
+          />
+        )}
         <Form.Item>
           <Row gutter={16} justify="end" style={{ marginTop: 30 }}>
             <Col>

@@ -1,4 +1,5 @@
 import type { ViewIncidentQuery } from '#/views/incidents/ViewIncident/__generated__/view-incident.generated';
+import type { Dayjs } from 'dayjs';
 import type { UpdateIncidentMutationVariables } from 'graphql/incidents/mutations/__generated__/update-incident.generated';
 
 import DatePicker from '#/components/util-components/DatePicker';
@@ -18,7 +19,6 @@ import {
   Typography,
   notification,
 } from 'antd';
-import dayjs from 'dayjs';
 import { useUpdateIncidentMutation } from 'graphql/incidents/mutations/__generated__/update-incident.generated';
 import { useListIncidentTagsQuery } from 'graphql/tags/queries/__generated__/list-incident-tags.generated';
 import { AnswerType } from 'graphql/types';
@@ -105,6 +105,7 @@ const Answers = ({
       }> = [];
       const creates: Array<{
         answer: string;
+        tagId: string;
         tagQuestionId: string;
         type: AnswerType;
       }> = [];
@@ -122,6 +123,7 @@ const Answers = ({
           if (newAnswer && newAnswer.trim() !== '' && question.tagQuestionId) {
             creates.push({
               answer: newAnswer,
+              tagId: question.tagId,
               tagQuestionId: question.tagQuestionId,
               type: question.type,
             });
@@ -213,6 +215,7 @@ const Answers = ({
     isUnanswered?: boolean;
     key: string;
     question: string;
+    tagId: string;
     tagQuestion?: {
       question?: {
         options?: unknown[];
@@ -254,10 +257,10 @@ const Answers = ({
             <DatePicker
               disabled={isDisabled}
               format="DD/MM/YYYY"
-              onChange={(date) =>
+              onChange={(date: Dayjs | null) =>
                 handleAnswerChange(
                   answer.id,
-                  date ? dayjs(date).format('YYYY-MM-DD') : ''
+                  date ? date.format('YYYY-MM-DD') : ''
                 )
               }
               style={{ width: '100%' }}
@@ -405,6 +408,7 @@ const Answers = ({
       }>;
       priority: number;
       question: string;
+      tagId: string;
       tagQuestion: (typeof data.incident.answers)[0]['tagQuestion'];
       tagQuestionId: string;
       type: AnswerType;
@@ -414,6 +418,18 @@ const Answers = ({
     const businessId = incident.business?.id;
     const involvedTagIds = incident.involvedTags?.map((tag) => tag.id) || [];
     const crimeTypeIds = incident.crimeTypes?.map((ct) => ct.id) || [];
+
+    // Build a map from tagQuestionId → parent tagId (crime type tag value)
+    const tagIdByTagQuestionId = new Map<string, string>(
+      incidentTagsData.listIncidentTags
+        .filter((tag) => crimeTypeIds.includes(tag.value))
+        .flatMap((tag) =>
+          (tag.questions || []).map((q): [string, string] => [
+            q.tagQuestionId,
+            tag.value,
+          ])
+        )
+    );
 
     // Get all questions from the current incident types
     const allQuestionsFromTypes = incidentTagsData.listIncidentTags
@@ -444,6 +460,7 @@ const Answers = ({
           options: question.options || [],
           priority: question.priority,
           question: question.label,
+          tagId: tagIdByTagQuestionId.get(question.tagQuestionId) ?? '',
           tagQuestion: existingAnswer?.tagQuestion,
           tagQuestionId: question.tagQuestionId,
           type: question.answerType,
@@ -549,6 +566,7 @@ const Answers = ({
       isUnanswered: q.isUnanswered,
       key: q.answerRecordId || `temp-${q.tagQuestionId}`,
       question: q.question,
+      tagId: q.tagId,
       tagQuestion: {
         question: {
           options: q.options,

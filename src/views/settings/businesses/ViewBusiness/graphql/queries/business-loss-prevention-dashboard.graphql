@@ -1,0 +1,128 @@
+query BusinessLossPreventionDashboard(
+  $businessId: String!
+  $schemeId: String
+  $watchlistOrderBy: BusinessLPWatchlistOrderBy
+  $sections: [BusinessLossPreventionSection!]
+) {
+  businessLossPreventionDashboard(
+    businessId: $businessId
+    schemeId: $schemeId
+    watchlistOrderBy: $watchlistOrderBy
+    sections: $sections
+  ) {
+    summary {
+      todayCount
+      thisWeekCount
+      thisMonthCount
+      totalValueLost
+      totalRecoveredValue
+      recoveryRate
+      activeBansCount
+      pendingApprovalCount
+      weeklyChange
+      lastIncidentDate
+    }
+    riskProfile {
+      aiRiskScore
+      aiRiskLevel
+      aiEngagementScore
+      aiDataQualityScore
+      aiKeyInsights
+      aiUrgentActions
+    }
+    offenderWatchlist {
+      id
+      reference
+      name
+      incidentCount
+      totalValue
+      lastIncidentDate
+      images
+      isCurrentlyBanned
+    }
+    watchlistInsights {
+      totalRepeatOffenders
+      averageDaysBetweenIncidents
+      recidivismDistribution
+      topByFrequency {
+        id
+        reference
+        name
+        incidentCount
+        totalValue
+        lastIncidentDate
+        images
+        isCurrentlyBanned
+      }
+    }
+    activeBans {
+      expiringWithin30Days {
+        id
+        offenderId
+        offenderName
+        offenderImages
+        endDate
+        daysRemaining
+        location
+      }
+      longerTerm {
+        id
+        offenderId
+        offenderName
+        offenderImages
+        endDate
+        daysRemaining
+        location
+      }
+    }
+    recentIncidents {
+      id
+      reference
+      date
+      value
+      approved
+      offenderCount
+      crimeTypes
+    }
+    crimePatterns {
+      peakHours {
+        hour
+        count
+      }
+      peakDay
+      topStolenGoods {
+        name
+        count
+        totalValue
+      }
+    }
+    linkedInvestigations {
+      id
+      reference
+      name
+      status
+      incidentCount
+    }
+    schemeComparison {
+      schemeBusinessCount
+      incidentCountRank
+      valueRank
+      incidentCountPercentile
+      valuePercentile
+      schemeAvgIncidentCount
+      schemeAvgValueLost
+    }
+    actionItems {
+      incidentsPendingApproval {
+        id
+        reference
+        date
+      }
+      bansExpiringSoon {
+        id
+        offenderName
+        endDate
+      }
+    }
+  }
+}
