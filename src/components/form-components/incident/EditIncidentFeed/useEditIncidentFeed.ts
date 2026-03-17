@@ -5,6 +5,10 @@ import type {
 } from 'graphql/businesses/queries/__generated__/search-businesses.generated';
 import type { EditIncidentFeedQuery } from 'graphql/incidents/queries/__generated__/edit-incident-feed.generated';
 import type { IncidentPriority } from 'graphql/types';
+import type {
+  CustomQuestion,
+  CustomQuestionAction,
+} from 'types/DataType/data_type';
 
 import { businessSelectValueFormatter } from '#/components/form-components/BusinessesSelect/BusinessesSelect.view';
 import { useGroupsContext } from '#/context/groups-context';
@@ -15,10 +19,11 @@ import { SearchBusinessesDocument } from 'graphql/businesses/queries/__generated
 import { useUpdateIncidentMutation } from 'graphql/incidents/mutations/__generated__/update-incident.generated';
 import { useUpdateIncidentBusinessMutation } from 'graphql/incidents/mutations/update/__generated__/update-incident-business.generated';
 import { useEditIncidentFeedQuery } from 'graphql/incidents/queries/__generated__/edit-incident-feed.generated';
+import { useListIncidentTagsQuery } from 'graphql/tags/queries/__generated__/list-incident-tags.generated';
 import { useTagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
-import { Model, QueryMode, TagType } from 'graphql/types';
+import { AnswerType, Model, QueryMode, TagType } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import errorNotification from 'types/mutation_notifications/error_notification';
 
@@ -56,6 +61,7 @@ interface Props {
 }
 
 interface Return {
+  customQuestions: CustomQuestion[];
   data:
     | Exclude<EditIncidentFeedQuery['incident'], null | undefined>
     | null
@@ -69,6 +75,7 @@ interface Return {
     value: string
   ) => Promise<{ label: React.ReactNode; value: string }[]>;
   onSubmit: (value: FormData) => void;
+  onTypesChanged: (typeIds: string[]) => void;
   saving: boolean;
   tagsLoading: boolean;
   usPoliceData?: boolean;
@@ -79,6 +86,8 @@ const useEditIncidentFeed = ({ incidentId, onClose }: Props): Return => {
   const client = useApolloClient();
   const schemeId = useAtomValue(currentSchemeIdAtom);
   const [saving, setSaving] = useState(false);
+  const [selectedTypeIds, setSelectedTypeIds] = useState<null | string[]>(null);
+  const [customQuestions, setCustomQuestions] = useState<CustomQuestion[]>([]);
 
   const { data: incidentData, loading } = useEditIncidentFeedQuery({
     fetchPolicy: 'cache-and-network',
@@ -106,6 +115,52 @@ const useEditIncidentFeed = ({ incidentId, onClose }: Props): Return => {
       },
     },
   });
+  const { data: incidentTagsData } = useListIncidentTagsQuery({
+    skip: selectedTypeIds === null,
+    variables: { where: { schemeId } },
+  });
+
+  useEffect(() => {
+    if (selectedTypeIds === null || !incidentTagsData) return;
+
+    if (selectedTypeIds.length === 0) {
+      setCustomQuestions([]);
+      return;
+    }
+
+    const allQuestions: CustomQuestion[] = selectedTypeIds.flatMap((typeId) => {
+      const tag = incidentTagsData.listIncidentTags.find(
+        (item) => item.value === typeId
+      );
+      if (!tag?.questions) return [];
+
+      return tag.questions.map((question) => ({
+        actions: (question.actions as CustomQuestionAction[]) ?? [],
+        answerType: question.answerType || AnswerType.String,
+        dependentMode: (question.dependentMode || null) as 'all' | 'any' | null,
+        dependentOnAnswerValue: question.dependentOnAnswerValue || null,
+        dependentOnAnswerValueArray: question.dependentOnAnswerValueArray || [],
+        dependentOnBrandIds: question.dependentOnBrandIds || [],
+        dependentOnQuestionId: question.dependentOnQuestionId || null,
+        dependentOnTagIds: question.dependentOnTagIds || [],
+        label: question.label || '',
+        options: question.options || [],
+        questionId: question.questionId || '',
+        required: question.required || false,
+        tagQuestionId: question.tagQuestionId || '',
+        tooltip: question.tooltip ?? undefined,
+        value: '',
+      }));
+    });
+
+    setCustomQuestions(allQuestions);
+  }, [selectedTypeIds, incidentTagsData]);
+
+  const onTypesChanged = (typeIds: string[]) => {
+    setSelectedTypeIds(typeIds);
+    setCustomQuestions([]);
+  };
+
   const onSearchBusiness = async (value: string) =>
     // if (value.length < 2) {
     //   return [];
@@ -184,6 +239,18 @@ const useEditIncidentFeed = ({ incidentId, onClose }: Props): Return => {
                       disconnect: true,
                     }
                   : undefined,
+            ...(customQuestions.length > 0 && {
+              answers: {
+                create: customQuestions.map((question) => ({
+                  answer:
+                    ((data as unknown as Record<string, unknown>)[
+                      question.questionId
+                    ] as string) || '',
+                  tagId: question.tagQuestionId,
+                  type: question.answerType,
+                })),
+              },
+            }),
             crimeTypes: {
               set: [
                 ...data.tagsCrimeTypes.map((id) => ({ id })),
@@ -245,6 +312,7 @@ const useEditIncidentFeed = ({ incidentId, onClose }: Props): Return => {
   };
 
   return {
+    customQuestions,
     data: incidentData?.incident,
     groups,
     groupsLoading,
@@ -259,6 +327,7 @@ const useEditIncidentFeed = ({ incidentId, onClose }: Props): Return => {
     loading,
     onSearchBusiness,
     onSubmit,
+    onTypesChanged,
     saving,
     tagsLoading,
     usPoliceData: incidentData?.incident?.scheme?.usPoliceData,

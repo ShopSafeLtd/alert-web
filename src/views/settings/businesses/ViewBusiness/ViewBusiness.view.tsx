@@ -8,6 +8,7 @@ import type { ListActionsQuery } from 'graphql/actions/queries/__generated__/lis
 import type { AddUsersToBusinessMutation } from 'graphql/businesses/mutations/__generated__/add-users-to-business.generated';
 import type { BusinessQuery } from 'graphql/businesses/queries/__generated__/business.generated';
 import type { CreateTodoMutation } from 'graphql/todos/mutations/__generated__/create-todo.generated';
+import type { BusinessLPWatchlistOrderBy } from 'graphql/types';
 import type { CreateUserInDatabaseMutation } from 'graphql/users/mutations/__generated__/create-user-in-databse.generated';
 import type { InviteExistingUserMutation } from 'graphql/users/mutations/__generated__/invite-exiting-user.generated';
 import type { ListBusinessUsersQuery } from 'graphql/users/queries/__generated__/list-business-users.generated';
@@ -20,8 +21,6 @@ import DemEvidenceTable from '#/components/tables/DemEvidenceTable';
 // import { ProfileUpdatedModel } from '#/types/enums/profile-update-type';
 import { GetUserStatusValues } from '#/types/enums/user_status';
 import {
-  faBolt,
-  faCircle,
   faEdit,
   faEnvelope,
   faMagnifyingGlass,
@@ -64,10 +63,18 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { formatPoliceAreas } from 'utils/formatPoliceAreas';
 
+import type { BusinessLossPreventionDashboardQuery } from './graphql/queries/__generated__/business-loss-prevention-dashboard.generated';
 import type { ListDemBusinessEvidenceQuery } from './graphql/queries/__generated__/list-business-dem-evidence.generated';
 
 import LinkDem from '../../../../components/form-components/businesses/LinkDem';
 import useStyles from './ViewBusiness.styles';
+import LinkedInvestigations from './components/LossPreventionDashboard/LinkedInvestigations';
+import LossPreventionSummary from './components/LossPreventionDashboard/LossPreventionSummary';
+import LpCrimePatterns from './components/LossPreventionDashboard/LpCrimePatterns';
+import LpOffenderWatchlist from './components/LossPreventionDashboard/LpOffenderWatchlist';
+import LpWatchlistInsights from './components/LossPreventionDashboard/LpWatchlistInsights';
+import RiskProfile from './components/LossPreventionDashboard/RiskProfile';
+import SchemeComparison from './components/LossPreventionDashboard/SchemeComparison';
 
 interface UserTable {
   groups: { id: string; name: string }[];
@@ -76,6 +83,9 @@ interface UserTable {
   name: string;
   status: string;
 }
+
+type LpDashboard =
+  BusinessLossPreventionDashboardQuery['businessLossPreventionDashboard'];
 
 interface Props {
   actionsData: ListActionsQuery | undefined;
@@ -94,16 +104,26 @@ interface Props {
   evidenceLoading: boolean;
   inviteUserVisible: boolean;
   linkDemVisible: boolean;
+  linkedInvestigations: LpDashboard['linkedInvestigations'] | null;
   loading: boolean;
+  lpCrimePatterns: LpDashboard['crimePatterns'] | null;
+  lpLoading: boolean;
+  lpOffenderWatchlist: LpDashboard['offenderWatchlist'] | null;
+  lpSummary: LpDashboard['summary'] | null;
+  lpWatchlistInsights: LpDashboard['watchlistInsights'] | null;
   onEditAddress: (value: LocationData) => void;
   onRemoveBusiness: (value: string) => void;
   onRemoveDevice: (value: string) => void;
+  riskProfile: LpDashboard['riskProfile'] | null;
   saving: boolean;
+  schemeComparison: LpDashboard['schemeComparison'] | null;
+  schemeId: null | string | undefined;
   selectedUserIds: string[];
   setCompleteTodoVisible: (value: null | string) => void;
   setEditDeviceData: (value: DemDeviceData | undefined) => void;
   setSelectedUserIds: (value: string[]) => void;
   setViewTodoVisible: (value: null | string) => void;
+  setWatchlistOrderBy: (value: BusinessLPWatchlistOrderBy | undefined) => void;
   templatesData: QuestionGroupOnSchemeQuery | undefined;
   templatesLoading: boolean;
   toggleAddDemDevice: () => void;
@@ -122,6 +142,7 @@ interface Props {
   usersData: ListBusinessUsersQuery | undefined;
   usersLoading: boolean;
   viewTodoVisible: null | string;
+  watchlistOrderBy: BusinessLPWatchlistOrderBy | undefined;
 }
 
 const ViewBusiness = ({
@@ -141,16 +162,26 @@ const ViewBusiness = ({
   evidenceLoading,
   inviteUserVisible,
   linkDemVisible,
+  linkedInvestigations,
   loading,
+  lpCrimePatterns,
+  lpLoading,
+  lpOffenderWatchlist,
+  lpSummary,
+  lpWatchlistInsights,
   onEditAddress,
   onRemoveBusiness,
   onRemoveDevice,
+  riskProfile,
   saving,
+  schemeComparison,
+  schemeId,
   selectedUserIds,
   setCompleteTodoVisible,
   setEditDeviceData,
   setSelectedUserIds,
   setViewTodoVisible,
+  setWatchlistOrderBy,
   templatesData,
   templatesLoading,
   toggleAddDemDevice,
@@ -169,6 +200,7 @@ const ViewBusiness = ({
   usersData,
   usersLoading,
   viewTodoVisible,
+  watchlistOrderBy,
 }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
@@ -403,54 +435,51 @@ const ViewBusiness = ({
                 unauthorizedElement={<div />}
               >
                 <Col span={24}>
-                  <Card loading={loading} style={{ marginBottom: 0 }}>
-                    <Row gutter={16}>
-                      <Col>
-                        <FontAwesomeIcon
-                          icon={faBolt}
-                          style={{ height: 24, width: 24 }}
-                        />
-                      </Col>
-                      <Col>
-                        <Typography.Title
-                          className={classes.headerTitle}
-                          level={4}
-                        >
-                          <FormattedMessage defaultMessage="AI Analysis" />
-                        </Typography.Title>
-                      </Col>
-                    </Row>
-
-                    <Typography.Paragraph style={{ marginTop: 10 }}>
-                      <FormattedMessage defaultMessage="ST-001 is a business experiencing a significant amount of theft, primarily through walkout thefts (grab and go) and self-checkout theft. They also have incidents of concealment and some instances of fraudulent returns and fake payments. Some repeat offenders have been identified, with some displaying aggressive behaviors." />
-                    </Typography.Paragraph>
-
-                    {[
-                      "The business is experiencing a high volume of 'grab and go' or 'walkout theft' incidents.",
-                      'Self-checkout areas are a significant point of loss.',
-                      'A small group of individuals contribute to a disproportionate amount of theft (Ethan Reynolds, Olivia Carter).',
-                      'There are instances of verbal abuse towards staff',
-                    ].map((item) => (
-                      <Row
-                        align="middle"
-                        gutter={8}
-                        style={{ marginBottom: 12, paddingLeft: 10 }}
-                        wrap={false}
-                      >
-                        <Col>
-                          <FontAwesomeIcon icon={faCircle} size="2xs" />
-                        </Col>
-                        <Col flex={1}>
-                          <Typography.Paragraph style={{ marginBottom: 0 }}>
-                            {item}
-                          </Typography.Paragraph>
-                        </Col>
-                      </Row>
-                    ))}
-                  </Card>
+                  <RiskProfile loading={lpLoading} riskProfile={riskProfile} />
                 </Col>
               </PermissionCheckWrapper>
             </Row>
+
+            <div style={{ marginTop: 16 }}>
+              <LossPreventionSummary loading={lpLoading} summary={lpSummary} />
+            </div>
+
+            <div style={{ marginBottom: 16 }}>
+              <LpOffenderWatchlist
+                loading={lpLoading}
+                offenders={lpOffenderWatchlist}
+                onOrderByChange={setWatchlistOrderBy}
+                orderBy={watchlistOrderBy}
+              />
+            </div>
+
+            <div style={{ marginBottom: 16 }}>
+              <LpWatchlistInsights
+                insights={lpWatchlistInsights}
+                loading={lpLoading}
+              />
+            </div>
+
+            <Row gutter={[16, 16]} style={{ marginBottom: 16 }}>
+              <Col md={14} xs={24}>
+                <LpCrimePatterns data={lpCrimePatterns} loading={lpLoading} />
+              </Col>
+              <Col md={10} xs={24}>
+                <SchemeComparison
+                  comparison={schemeComparison}
+                  loading={lpLoading}
+                  schemeId={schemeId}
+                />
+              </Col>
+            </Row>
+
+            <div style={{ marginBottom: 16 }}>
+              <LinkedInvestigations
+                investigations={linkedInvestigations}
+                loading={lpLoading}
+              />
+            </div>
+
             <Card>
               <Row align="middle" className={classes.cardHeader}>
                 <Col flex={1}>

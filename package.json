@@ -52,6 +52,7 @@
     "@nivo/pie": "^0.81.0",
     "@nivo/radar": "^0.85.1",
     "@nivo/radial-bar": "^0.85.1",
+    "@nivo/treemap": "^0.85.1",
     "@react-google-maps/api": "^2.18.1",
     "@reactflow/node-resizer": "^2.0.1",
     "@sentry/integrations": "^7.48.0",

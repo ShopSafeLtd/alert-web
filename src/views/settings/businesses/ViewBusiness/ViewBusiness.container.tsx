@@ -1,6 +1,11 @@
-import React from 'react';
+import type { BusinessLPWatchlistOrderBy } from 'graphql/types';
+
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import { useAtomValue } from 'jotai';
+import React, { useState } from 'react';
 
 import View from './ViewBusiness.view';
+import { useBusinessLossPreventionDashboard } from './useBusinessLossPreventionDashboard';
 import useViewBusiness from './useViewBusiness';
 
 const ViewBusiness = () => {
@@ -51,6 +56,23 @@ const ViewBusiness = () => {
     viewTodoVisible,
   } = useViewBusiness();
 
+  const schemeId = useAtomValue(currentSchemeIdAtom);
+
+  const [watchlistOrderBy, setWatchlistOrderBy] = useState<
+    BusinessLPWatchlistOrderBy | undefined
+  >(undefined);
+
+  const {
+    crimePatterns: lpCrimePatterns,
+    linkedInvestigations,
+    loading: lpLoading,
+    offenderWatchlist: lpOffenderWatchlist,
+    riskProfile,
+    schemeComparison,
+    summary: lpSummary,
+    watchlistInsights: lpWatchlistInsights,
+  } = useBusinessLossPreventionDashboard(businessId);
+
   return (
     <View
       actionsData={actionsData}
@@ -69,16 +91,26 @@ const ViewBusiness = () => {
       evidenceLoading={evidenceLoading}
       inviteUserVisible={inviteUserVisible}
       linkDemVisible={linkDemVisible}
+      linkedInvestigations={linkedInvestigations}
       loading={loading}
+      lpCrimePatterns={lpCrimePatterns}
+      lpLoading={lpLoading}
+      lpOffenderWatchlist={lpOffenderWatchlist}
+      lpSummary={lpSummary}
+      lpWatchlistInsights={lpWatchlistInsights}
       onEditAddress={onEditAddress}
       onRemoveBusiness={onRemoveBusiness}
       onRemoveDevice={onRemoveDevice}
+      riskProfile={riskProfile}
       saving={saving}
+      schemeComparison={schemeComparison}
+      schemeId={schemeId}
       selectedUserIds={selectedUserIds}
       setCompleteTodoVisible={setCompleteTodoVisible}
       setEditDeviceData={setEditDeviceData}
       setSelectedUserIds={setSelectedUserIds}
       setViewTodoVisible={setViewTodoVisible}
+      setWatchlistOrderBy={setWatchlistOrderBy}
       templatesData={templatesData}
       templatesLoading={templatesLoading}
       toggleAddDemDevice={toggleAddDemDevice}
@@ -97,6 +129,7 @@ const ViewBusiness = () => {
       usersData={usersData}
       usersLoading={usersLoading}
       viewTodoVisible={viewTodoVisible}
+      watchlistOrderBy={watchlistOrderBy}
     />
   );
 };

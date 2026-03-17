@@ -10,6 +10,7 @@ interface Props {
 
 const EditIncidentFeed = ({ incidentId, onClose }: Props): JSX.Element => {
   const {
+    customQuestions,
     data,
     groups,
     groupsLoading,
@@ -17,6 +18,7 @@ const EditIncidentFeed = ({ incidentId, onClose }: Props): JSX.Element => {
     involvedTags,
     loading,
     onSubmit,
+    onTypesChanged,
     saving,
     tagsLoading,
     usPoliceData,
@@ -28,6 +30,7 @@ const EditIncidentFeed = ({ incidentId, onClose }: Props): JSX.Element => {
 
   return (
     <View
+      customQuestions={customQuestions}
       data={data}
       groups={groups}
       groupsLoading={groupsLoading}
@@ -36,6 +39,7 @@ const EditIncidentFeed = ({ incidentId, onClose }: Props): JSX.Element => {
       loading={loading}
       onClose={onClose}
       onSubmit={onSubmit}
+      onTypesChanged={onTypesChanged}
       saving={saving}
       tagsLoading={tagsLoading}
       usPoliceData={usPoliceData}

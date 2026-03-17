@@ -1,0 +1,101 @@
+query RetailAdminDashboard(
+  $schemeId: String
+  $startDate: DateTime
+  $endDate: DateTime
+  $groupIds: [String!]
+  $sections: [RetailAdminDashboardSection!]
+) {
+  retailAdminDashboard(
+    schemeId: $schemeId
+    startDate: $startDate
+    endDate: $endDate
+    groupIds: $groupIds
+    sections: $sections
+  ) {
+    summary {
+      totalIncidents
+      totalValueLost
+      activeOffenders
+      repeatOffenders
+      pendingApproval
+      openInvestigations
+      periodIncidentChange
+      periodValueChange
+    }
+    topOffenders {
+      id
+      reference
+      name
+      incidentCount
+      totalValue
+      lastIncidentDate
+      images
+    }
+    repeatOffenderInsights {
+      totalRepeatOffenders
+      averageDaysBetweenIncidents
+      recidivismDistribution
+      topByFrequency {
+        id
+        reference
+        name
+        incidentCount
+        totalValue
+        lastIncidentDate
+        images
+      }
+    }
+    crimeTypeDistribution {
+      tagId
+      tagName
+      crimeType
+      count
+    }
+    businessIntelligence {
+      topByValue {
+        id
+        name
+        totalValue
+        incidentCount
+      }
+      topByCount {
+        id
+        name
+        totalValue
+        incidentCount
+      }
+      goingDarkCount
+      goingDarkNames
+    }
+    crimePatterns {
+      byHour {
+        hour
+        count
+      }
+      byDayOfWeek {
+        dayOfWeek
+        count
+      }
+      monthlyTrend {
+        month
+        count
+        totalValue
+      }
+    }
+    targetedGoods {
+      name
+      count
+      totalValue
+    }
+    operationalQueue {
+      pendingApproval
+      expiringBansCount
+      expiringBans {
+        id
+        offenderName
+        endDate
+      }
+      openInvestigations
+    }
+  }
+}

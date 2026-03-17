@@ -215,6 +215,13 @@ const IncidentImport = () => {
         'DD-MM-YYYY HH:mm:ss',
         'DD-MM-YYYY HH:mm',
         'DD-MM-YYYY',
+        // 2-digit year variants (dd/MM/yy uses correct date-fns v2 tokens)
+        'dd/MM/yy HH:mm:ss',
+        'dd/MM/yy HH:mm',
+        'dd/MM/yy',
+        'dd-MM-yy HH:mm:ss',
+        'dd-MM-yy HH:mm',
+        'dd-MM-yy',
       ];
       for (const f of formats) {
         const d = parse(s, f, new Date());
@@ -259,6 +266,12 @@ const IncidentImport = () => {
         'DD-MM-YYYY HH:mm:ss',
         'DD-MM-YYYY HH:mm',
         'DD-MM-YYYY',
+        'dd/MM/yy HH:mm:ss',
+        'dd/MM/yy HH:mm',
+        'dd/MM/yy',
+        'dd-MM-yy HH:mm:ss',
+        'dd-MM-yy HH:mm',
+        'dd-MM-yy',
       ];
 
       const s = String(value).trim();
@@ -299,7 +312,7 @@ const IncidentImport = () => {
         }
       }
 
-      return 'Date must be in one of these formats: DD/MM/YYYY, DD/MM/YYYY HH:mm, DD/MM/YYYY HH:mm:ss, DD-MM-YYYY, DD-MM-YYYY HH:mm, or DD-MM-YYYY HH:mm:ss';
+      return 'Date must be in one of these formats: DD/MM/YYYY, DD/MM/YYYY HH:mm, DD/MM/YYYY HH:mm:ss, DD/MM/YY, DD/MM/YY HH:mm, DD/MM/YY HH:mm:ss, DD-MM-YYYY, DD-MM-YYYY HH:mm, DD-MM-YYYY HH:mm:ss, DD-MM-YY, DD-MM-YY HH:mm, or DD-MM-YY HH:mm:ss';
     },
   };
 
