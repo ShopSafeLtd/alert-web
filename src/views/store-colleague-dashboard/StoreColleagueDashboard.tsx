@@ -192,10 +192,10 @@ const StoreColleagueDashboard: React.FC = () => {
 
       {/* Watchlist + Insights */}
       <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
-        <Col lg={14} xs={24}>
+        <Col lg={14} xs={24} xxl={16}>
           <OffenderWatchlist loading={loading} offenders={offenderWatchlist} />
         </Col>
-        <Col lg={10} xs={24}>
+        <Col lg={10} xs={24} xxl={8}>
           <WatchlistInsights insights={watchlistInsights} loading={loading} />
         </Col>
       </Row>

@@ -2,7 +2,7 @@ import {
   KpiStatCard,
   RecidivismDonutChart,
 } from '#/components/dashboard-widgets';
-import { Card, Empty, List, Skeleton, Typography } from 'antd';
+import { Card, Col, Empty, List, Row, Skeleton, Typography } from 'antd';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
@@ -31,18 +31,26 @@ const WatchlistInsights: React.FC<WatchlistInsightsProps> = ({
         <Skeleton active paragraph={{ rows: 6 }} />
       ) : insights ? (
         <>
-          <div style={{ display: 'flex', gap: 16, marginBottom: 16 }}>
-            <KpiStatCard
-              loading={false}
-              title={intl.formatMessage({ defaultMessage: 'Repeat Offenders' })}
-              value={insights.totalRepeatOffenders}
-            />
-            <KpiStatCard
-              loading={false}
-              title={intl.formatMessage({ defaultMessage: 'Avg Days Between' })}
-              value={Math.round(insights.averageDaysBetweenIncidents)}
-            />
-          </div>
+          <Row gutter={[16, 16]} style={{ marginBottom: 16 }}>
+            <Col xs={12}>
+              <KpiStatCard
+                loading={false}
+                title={intl.formatMessage({
+                  defaultMessage: 'Repeat Offenders',
+                })}
+                value={insights.totalRepeatOffenders}
+              />
+            </Col>
+            <Col xs={12}>
+              <KpiStatCard
+                loading={false}
+                title={intl.formatMessage({
+                  defaultMessage: 'Avg Days Between',
+                })}
+                value={Math.round(insights.averageDaysBetweenIncidents)}
+              />
+            </Col>
+          </Row>
 
           {insights.recidivismDistribution && (
             <RecidivismDonutChart

@@ -77,7 +77,7 @@ const TopOffenders: React.FC<TopOffendersProps> = ({ loading, offenders }) => {
           style={{
             display: 'grid',
             gap: 8,
-            gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
           }}
         >
           {offenders.map((offender, index) => {

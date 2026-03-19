@@ -8,13 +8,16 @@ import { FormattedMessage, useIntl } from 'react-intl';
 
 export type DateSelectModeType =
   | 'last1Years'
+  | 'last3Months'
   | 'last7Days'
   | 'last30Days'
   | 'lastDay'
+  | 'lastQuarter'
   | 'monthToDate'
   | 'none'
   | 'prev1Years'
   | 'prevMonth'
+  | 'quarterToDate'
   | 'yearToDate';
 
 const selectedToText = (value: DateSelectModeType | undefined) => {
@@ -42,6 +45,15 @@ const selectedToText = (value: DateSelectModeType | undefined) => {
     }
     case 'last30Days': {
       return <FormattedMessage defaultMessage="Last 30 Days" />;
+    }
+    case 'last3Months': {
+      return <FormattedMessage defaultMessage="Last 3 Months" />;
+    }
+    case 'quarterToDate': {
+      return <FormattedMessage defaultMessage="This Quarter (to date)" />;
+    }
+    case 'lastQuarter': {
+      return <FormattedMessage defaultMessage="Last Quarter" />;
     }
     default: {
       return <FormattedMessage defaultMessage="None" />;
@@ -151,6 +163,54 @@ export const selectedModeToDate = (value: DateSelectModeType | undefined) => {
           .toDate(),
       };
     }
+    case 'last3Months': {
+      return {
+        endDate: dayjs().hour(23).minute(59).second(59).toDate(),
+        startDate: dayjs()
+          .hour(0)
+          .minute(0)
+          .second(1)
+          .subtract(3, 'months')
+          .toDate(),
+      };
+    }
+    case 'quarterToDate': {
+      const qStartMonth = Math.floor(dayjs().month() / 3) * 3;
+      const quarterStart = dayjs()
+        .month(qStartMonth)
+        .date(1)
+        .hour(0)
+        .minute(0)
+        .second(1);
+      return {
+        endDate: dayjs().hour(23).minute(59).second(59).toDate(),
+        startDate: quarterStart.toDate(),
+      };
+    }
+    case 'lastQuarter': {
+      const currentQStartMonth = Math.floor(dayjs().month() / 3) * 3;
+      const lastQStartMonth =
+        currentQStartMonth === 0 ? 9 : currentQStartMonth - 3;
+      const lastQYear =
+        currentQStartMonth === 0 ? dayjs().year() - 1 : dayjs().year();
+      const lastQStart = dayjs()
+        .year(lastQYear)
+        .month(lastQStartMonth)
+        .date(1)
+        .hour(0)
+        .minute(0)
+        .second(1);
+      const lastQEnd = lastQStart
+        .add(3, 'months')
+        .subtract(1, 'day')
+        .hour(23)
+        .minute(59)
+        .second(59);
+      return {
+        endDate: lastQEnd.toDate(),
+        startDate: lastQStart.toDate(),
+      };
+    }
     default: {
       return undefined;
     }
@@ -218,10 +278,12 @@ const DateSelect = ({ defaultRange, onChange }: Props) => {
               value
                 ? {
                     endDate:
-                      formatEndDate(value?.[1]) ??
+                      formatEndDate((value as [Date | null, Date | null])[1]) ??
                       dayjs().hour(23).minute(59).minute(59).toDate(),
                     startDate:
-                      formatStartDate(value?.[0]) ??
+                      formatStartDate(
+                        (value as [Date | null, Date | null])[0]
+                      ) ??
                       dayjs()
                         .hour(0)
                         .minute(0)
@@ -292,6 +354,21 @@ const DateSelect = ({ defaultRange, onChange }: Props) => {
             key: 'last30Days',
             label: selectedToText('last30Days'),
             onClick: () => setSelected('last30Days'),
+          },
+          {
+            key: 'last3Months',
+            label: selectedToText('last3Months'),
+            onClick: () => setSelected('last3Months'),
+          },
+          {
+            key: 'quarterToDate',
+            label: selectedToText('quarterToDate'),
+            onClick: () => setSelected('quarterToDate'),
+          },
+          {
+            key: 'lastQuarter',
+            label: selectedToText('lastQuarter'),
+            onClick: () => setSelected('lastQuarter'),
           },
           {
             key: 'monthToDate',

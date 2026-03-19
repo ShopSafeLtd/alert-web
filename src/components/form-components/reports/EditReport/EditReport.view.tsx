@@ -1,10 +1,16 @@
+import type { ReportType } from 'graphql/types';
+
 import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
 import ReportGroupSelect from '#/components/form-components/ReportGroupSelect/ReportGroupSelect.view';
 import { useEditReportTemplateQuery } from '#/components/form-components/reports/EditReport/__generated__/edit-report-query.generated';
-import { Button, Col, Form, Input, Row } from 'antd';
+import AIGenerateButton, {
+  getGradientFormItemClassName,
+} from '#/components/ui/AIGenerateButton';
+import { Button, Col, Form, Input, Row, notification } from 'antd';
 import { useForm } from 'antd/lib/form/Form';
+import { useGenerateReportTemplateDescriptionMutation } from 'graphql/reports/mutations/__generated__/generate-report-template-description.generated';
 import { useUpdateReportTemplateMutation } from 'graphql/reports/mutations/__generated__/update-report-template.generated';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 interface FormData {
@@ -24,9 +30,12 @@ const EditReport = ({ onClose, reportId }: Props) => {
   const [form] = useForm<FormData>();
 
   const [saving, setSaving] = useState(false);
+  const [generatingDescription, setGeneratingDescription] = useState(false);
+  const reportTypeRef = useRef<ReportType | undefined>(undefined);
 
   useEditReportTemplateQuery({
     onCompleted: (data) => {
+      reportTypeRef.current = data.reportTemplate.type;
       form.setFieldsValue({
         description: data.reportTemplate.description ?? '',
         groups: data.reportTemplate.groups.map(({ id }) => id),
@@ -47,6 +56,42 @@ const EditReport = ({ onClose, reportId }: Props) => {
       onClose();
     },
   });
+
+  const [generateDescription] = useGenerateReportTemplateDescriptionMutation();
+
+  const handleGenerateDescription = async () => {
+    const name = form.getFieldValue('name') as string;
+    const currentDescription = form.getFieldValue('description') as string;
+
+    if (!name) return;
+
+    setGeneratingDescription(true);
+    try {
+      const result = await generateDescription({
+        variables: {
+          reportTemplateName: name,
+          reportType: reportTypeRef.current ?? undefined,
+          userDescription: currentDescription || undefined,
+        },
+      });
+
+      if (result.data?.generateReportTemplateDescription) {
+        form.setFieldsValue({
+          description: result.data.generateReportTemplateDescription,
+        });
+      }
+    } catch {
+      notification.error({
+        description: intl.formatMessage({
+          defaultMessage: 'Failed to generate description. Please try again.',
+        }),
+        message: intl.formatMessage({ defaultMessage: 'Generation Failed' }),
+        placement: 'bottomRight',
+      });
+    } finally {
+      setGeneratingDescription(false);
+    }
+  };
 
   const onSubmit = (values: FormData) => {
     setSaving(true);
@@ -81,22 +126,42 @@ const EditReport = ({ onClose, reportId }: Props) => {
       >
         <Input />
       </Form.Item>
-      <Form.Item
-        label={intl.formatMessage({
-          defaultMessage: 'Description',
-        })}
-        name="description"
-        rules={[
-          {
-            message: intl.formatMessage({
-              defaultMessage: 'Description is required',
-            }),
-            required: true,
-          },
-        ]}
-      >
-        <Input.TextArea />
-      </Form.Item>
+      <div style={{ position: 'relative' }}>
+        <Form.Item
+          className={getGradientFormItemClassName(
+            generatingDescription,
+            'redOrange'
+          )}
+          label={intl.formatMessage({
+            defaultMessage: 'Description',
+          })}
+          name="description"
+          rules={[
+            {
+              message: intl.formatMessage({
+                defaultMessage: 'Description is required',
+              }),
+              required: true,
+            },
+          ]}
+        >
+          <Input.TextArea
+            className="ai-generate-textarea"
+            rows={4}
+            style={{ paddingRight: '60px' }}
+          />
+        </Form.Item>
+        <AIGenerateButton
+          disabled={saving}
+          form={form}
+          generating={generatingDescription}
+          gradientVariant="redOrange"
+          nameFieldName="name"
+          onClick={() => {
+            void handleGenerateDescription();
+          }}
+        />
+      </div>
       <Form.Item
         label={intl.formatMessage({
           defaultMessage: 'Groups',

@@ -778,6 +778,9 @@ const IncidentMap = ({
               <Source
                 cluster={cluster}
                 clusterMaxZoom={14}
+                clusterProperties={{
+                  incidentCount: ['+', ['get', 'incidentCount']],
+                }}
                 clusterRadius={50}
                 data={{
                   features: (() => {

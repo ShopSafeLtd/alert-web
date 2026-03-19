@@ -116,7 +116,7 @@ export const incidentClusterLayer: CircleLayer = {
   paint: {
     'circle-color': [
       'step',
-      ['get', 'point_count'],
+      ['get', 'incidentCount'],
       '#60a5fa', // Light blue for small clusters
       10,
       '#3b82f6', // Medium blue
@@ -130,7 +130,7 @@ export const incidentClusterLayer: CircleLayer = {
     'circle-opacity': 0.95,
     'circle-radius': [
       'step',
-      ['get', 'point_count'],
+      ['get', 'incidentCount'],
       14, // Small clusters
       10,
       18, // 10-49 incidents
@@ -144,7 +144,7 @@ export const incidentClusterLayer: CircleLayer = {
     'circle-stroke-color': '#ffffff',
     'circle-stroke-width': [
       'step',
-      ['get', 'point_count'],
+      ['get', 'incidentCount'],
       1.5,
       50,
       2,
@@ -164,7 +164,7 @@ export const clusterRingLayer: CircleLayer = {
     'circle-color': 'transparent',
     'circle-radius': [
       'step',
-      ['get', 'point_count'],
+      ['get', 'incidentCount'],
       20, // Small clusters
       10,
       26, // 10-49 incidents
@@ -177,7 +177,7 @@ export const clusterRingLayer: CircleLayer = {
     ],
     'circle-stroke-color': [
       'step',
-      ['get', 'point_count'],
+      ['get', 'incidentCount'],
       '#60a5fa',
       10,
       '#3b82f6',
@@ -200,11 +200,11 @@ export const incidentClusterCountLayer: SymbolLayer = {
   filter: ['has', 'point_count'],
   id: 'cluster-count',
   layout: {
-    'text-field': '{point_count_abbreviated}',
+    'text-field': ['to-string', ['get', 'incidentCount']],
     'text-font': ['DIN Offc Pro Bold', 'Arial Unicode MS Bold'],
     'text-size': [
       'step',
-      ['get', 'point_count'],
+      ['get', 'incidentCount'],
       12, // Small text for small clusters
       50,
       13,
@@ -219,7 +219,7 @@ export const incidentClusterCountLayer: SymbolLayer = {
     'text-halo-blur': 0.5,
     'text-halo-color': [
       'step',
-      ['get', 'point_count'],
+      ['get', 'incidentCount'],
       '#60a5fa',
       10,
       '#3b82f6',

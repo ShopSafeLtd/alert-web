@@ -1930,6 +1930,14 @@ export type BusinessLpWatchlistOffender = {
   totalValue: Scalars['Float'];
 };
 
+export enum BusinessLpWatchlistOrderBy {
+  IncidentCount = 'INCIDENT_COUNT',
+  TotalValue = 'TOTAL_VALUE'
+}
+
+// Alias for capitalization variant used across the codebase
+export { BusinessLpWatchlistOrderBy as BusinessLPWatchlistOrderBy };
+
 export type BusinessListRelationFilter = {
   every?: InputMaybe<BusinessWhereInput>;
   none?: InputMaybe<BusinessWhereInput>;
@@ -1946,7 +1954,7 @@ export type BusinessLossPreventionData = {
   crimePatterns?: Maybe<BusinessLpCrimePatterns>;
   /** Open investigations containing incidents from this business */
   linkedInvestigations?: Maybe<Array<BusinessLpLinkedInvestigation>>;
-  /** Top 10 offenders by recency (last 90 days) */
+  /** Top 10 offenders by incident count (last 90 days) */
   offenderWatchlist?: Maybe<Array<BusinessLpWatchlistOffender>>;
   /** Last 10 incidents at this business */
   recentIncidents?: Maybe<Array<BusinessLpRecentIncident>>;
@@ -1971,11 +1979,6 @@ export enum BusinessLossPreventionSection {
   SchemeComparison = 'SCHEME_COMPARISON',
   Summary = 'SUMMARY',
   WatchlistInsights = 'WATCHLIST_INSIGHTS'
-}
-
-export enum BusinessLPWatchlistOrderBy {
-  IncidentCount = 'INCIDENT_COUNT',
-  TotalValue = 'TOTAL_VALUE'
 }
 
 export type BusinessOrderBy = {
@@ -3645,6 +3648,26 @@ export type CreateStockRemovalRequestInput = {
   storeOrDC?: InputMaybe<Scalars['String']>;
   title: Scalars['String'];
   willStockBeReturned?: InputMaybe<Scalars['String']>;
+};
+
+export type CreateStockRemovalReturnInput = {
+  businessId?: InputMaybe<Scalars['String']>;
+  costCentreCode?: InputMaybe<Scalars['String']>;
+  dateofReturn?: InputMaybe<Scalars['DateTime']>;
+  imageIds?: InputMaybe<Array<Scalars['String']>>;
+  items: Array<CreateStockRemovalReturnItemInput>;
+  originalAlertId?: InputMaybe<Scalars['String']>;
+  rechargeBrand?: InputMaybe<Scalars['String']>;
+  rechargeReference?: InputMaybe<Scalars['String']>;
+  schemeId: Scalars['String'];
+  storeOrDC: Scalars['String'];
+  tracking?: InputMaybe<Scalars['String']>;
+};
+
+export type CreateStockRemovalReturnItemInput = {
+  damaged?: InputMaybe<Scalars['Boolean']>;
+  itemId: Scalars['String'];
+  quantity: Scalars['Int'];
 };
 
 export type CreateTermsInput = {
@@ -10437,6 +10460,195 @@ export type KeyValuePair = {
   value: Scalars['Int'];
 };
 
+export type LpStockLossApprovalBreakdown = {
+  __typename?: 'LPStockLossApprovalBreakdown';
+  approved: Scalars['Int'];
+  pending: Scalars['Int'];
+};
+
+export type LpStockLossBusinessRef = {
+  __typename?: 'LPStockLossBusinessRef';
+  id: Scalars['String'];
+  name: Scalars['String'];
+};
+
+export type LpStockLossBusinessRow = {
+  __typename?: 'LPStockLossBusinessRow';
+  id: Scalars['String'];
+  incidentCount: Scalars['Int'];
+  name: Scalars['String'];
+  recoveryRate: Scalars['Float'];
+  /** Top 3 item names targeted at this business */
+  topTargetedItems: Array<Scalars['String']>;
+  totalValueLost: Scalars['Float'];
+};
+
+export type LpStockLossBusinessValueItem = {
+  __typename?: 'LPStockLossBusinessValueItem';
+  id: Scalars['String'];
+  incidentCount: Scalars['Int'];
+  name: Scalars['String'];
+  totalValueLost: Scalars['Float'];
+};
+
+export type LpStockLossDailyItem = {
+  __typename?: 'LPStockLossDailyItem';
+  count: Scalars['Int'];
+  /** Day of week (0=Sun … 6=Sat) */
+  dayOfWeek: Scalars['Int'];
+};
+
+export type LpStockLossGoodsTypeMonthItem = {
+  __typename?: 'LPStockLossGoodsTypeMonthItem';
+  count: Scalars['Int'];
+  /** YYYY-MM */
+  month: Scalars['String'];
+};
+
+export type LpStockLossGoodsTypeRow = {
+  __typename?: 'LPStockLossGoodsTypeRow';
+  goodsTypeId: Scalars['String'];
+  goodsTypeName: Scalars['String'];
+  incidentCount: Scalars['Int'];
+  /** Monthly incident count trend */
+  monthlyTrend: Array<LpStockLossGoodsTypeMonthItem>;
+  recoveryRate: Scalars['Float'];
+  /** Top 3 items by incident count in this category */
+  topItems: Array<LpStockLossGoodsTypeTopItem>;
+  totalValueLost: Scalars['Float'];
+  totalValueRecovered: Scalars['Float'];
+};
+
+export type LpStockLossGoodsTypeTopItem = {
+  __typename?: 'LPStockLossGoodsTypeTopItem';
+  incidentCount: Scalars['Int'];
+  name?: Maybe<Scalars['String']>;
+};
+
+export type LpStockLossHourlyItem = {
+  __typename?: 'LPStockLossHourlyItem';
+  count: Scalars['Int'];
+  /** Hour of day (0-23) */
+  hour: Scalars['Int'];
+};
+
+export type LpStockLossIncidentAnalysis = {
+  __typename?: 'LPStockLossIncidentAnalysis';
+  approvalBreakdown: LpStockLossApprovalBreakdown;
+  /** Top 10 businesses by total value lost */
+  byBusiness: Array<LpStockLossBusinessValueItem>;
+  /** Incident distribution by day of week */
+  byDayOfWeek: Array<LpStockLossDailyItem>;
+  /** Incident distribution by hour of day */
+  byHour: Array<LpStockLossHourlyItem>;
+};
+
+export type LpStockLossOffenderRow = {
+  __typename?: 'LPStockLossOffenderRow';
+  /** Business names */
+  businessesTargeted: Array<Scalars['String']>;
+  id: Scalars['String'];
+  incidentCount: Scalars['Int'];
+  /** Stock item names from their incident items */
+  itemsTargeted: Array<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  totalValueAssociated: Scalars['Float'];
+};
+
+export type LpStockLossRecoveryAnalysis = {
+  __typename?: 'LPStockLossRecoveryAnalysis';
+  byBusiness: Array<LpStockLossRecoveryRateRow>;
+  byGoodsType: Array<LpStockLossRecoveryRateRow>;
+  /** Items with highest absolute recovered value */
+  highestAbsoluteRecoveryItems: Array<LpStockLossZeroRecoveryItem>;
+  overallRecoveryRate: Scalars['Float'];
+  /** Items with loss but zero recovery */
+  zeroRecoveryItems: Array<LpStockLossZeroRecoveryItem>;
+};
+
+export type LpStockLossRecoveryRateRow = {
+  __typename?: 'LPStockLossRecoveryRateRow';
+  id: Scalars['String'];
+  name: Scalars['String'];
+  recoveryRate: Scalars['Float'];
+  totalValueLost: Scalars['Float'];
+  totalValueRecovered: Scalars['Float'];
+};
+
+export type LpStockLossReportData = {
+  __typename?: 'LPStockLossReportData';
+  /** Businesses ranked by total stock value lost */
+  businessHotspots?: Maybe<Array<LpStockLossBusinessRow>>;
+  /** Loss breakdown by goods category (12-month window) */
+  goodsTypeBreakdown?: Maybe<Array<LpStockLossGoodsTypeRow>>;
+  /** Incident patterns: approval status, business, time */
+  incidentAnalysis?: Maybe<LpStockLossIncidentAnalysis>;
+  /** Top 20 offenders associated with stock loss incidents */
+  offenderAssociations?: Maybe<Array<LpStockLossOffenderRow>>;
+  /** Recovery rate analysis by goods type, business, and item */
+  recoveryAnalysis?: Maybe<LpStockLossRecoveryAnalysis>;
+  /** Headline KPIs for the period */
+  summary: LpStockLossSummary;
+  /** Top 20 most targeted stock items in period */
+  topTargetedItems?: Maybe<Array<LpStockLossTargetedItem>>;
+};
+
+export enum LpStockLossSection {
+  BusinessHotspots = 'BUSINESS_HOTSPOTS',
+  GoodsTypeBreakdown = 'GOODS_TYPE_BREAKDOWN',
+  IncidentAnalysis = 'INCIDENT_ANALYSIS',
+  OffenderAssociations = 'OFFENDER_ASSOCIATIONS',
+  RecoveryAnalysis = 'RECOVERY_ANALYSIS',
+  Summary = 'SUMMARY',
+  TopTargetedItems = 'TOP_TARGETED_ITEMS'
+}
+
+export type LpStockLossSummary = {
+  __typename?: 'LPStockLossSummary';
+  /** Distinct businessIds across incidents */
+  businessesAffected: Scalars['Int'];
+  /** % change in incidents vs previous equivalent period */
+  periodIncidentChange?: Maybe<Scalars['Float']>;
+  /** % change in value lost vs previous equivalent period */
+  periodValueChange?: Maybe<Scalars['Float']>;
+  /** totalValueRecovered / totalValueLost, 0 if no loss */
+  recoveryRate: Scalars['Float'];
+  /** Total distinct incidents containing stock items in period */
+  totalIncidents: Scalars['Int'];
+  /** Sum of item loss values in period */
+  totalValueLost: Scalars['Float'];
+  /** Sum of recovered item values in period */
+  totalValueRecovered: Scalars['Float'];
+  /** Distinct stockItemIds in IncidentItems */
+  uniqueItemsStolen: Scalars['Int'];
+  /** Distinct offender IDs across incidents */
+  uniqueOffenders: Scalars['Int'];
+};
+
+export type LpStockLossTargetedItem = {
+  __typename?: 'LPStockLossTargetedItem';
+  barcode?: Maybe<Scalars['String']>;
+  brand?: Maybe<Scalars['String']>;
+  goodsTypeName?: Maybe<Scalars['String']>;
+  incidentCount: Scalars['Int'];
+  name?: Maybe<Scalars['String']>;
+  recoveryRate: Scalars['Float'];
+  sku?: Maybe<Scalars['String']>;
+  stockItemId: Scalars['String'];
+  /** Top businesses where this item was targeted */
+  topBusinesses: Array<LpStockLossBusinessRef>;
+  totalQuantityLost: Scalars['Int'];
+  totalValueLost: Scalars['Float'];
+};
+
+export type LpStockLossZeroRecoveryItem = {
+  __typename?: 'LPStockLossZeroRecoveryItem';
+  name?: Maybe<Scalars['String']>;
+  sku?: Maybe<Scalars['String']>;
+  stockItemId: Scalars['String'];
+  totalValueLost: Scalars['Float'];
+};
+
 export type Language = {
   __typename?: 'Language';
   code: LanguageCode;
@@ -11834,6 +12046,7 @@ export type Mutation = {
   aiIncidentImport: SystemTask;
   analyzeIncidentsByRadius: IncidentRadiusStats;
   approveAiSuggestion: AiSuggestion;
+  approveCancelStockRemovalRequest: StockRemovalRequest;
   approveIncident: Incident;
   approveOffender: Offender;
   approvePAPStockRemovalRequest: StockRemovalRequest;
@@ -11901,6 +12114,7 @@ export type Mutation = {
   createSharingConfig: SharingConfig;
   createStockRemovalRequest: StockRemovalRequest;
   createStockRemovalRequestApprover: StockRemovalRequest;
+  createStockRemovalReturn: StockRemovalRequest;
   createTag: Tag;
   createTermsAndConditions: TermsAndCondition;
   createTimes: Array<Incident>;
@@ -11958,6 +12172,7 @@ export type Mutation = {
   deleteShoe: Shoe;
   deleteStockRemovalRequest: StockRemovalRequest;
   deleteStockRemovalRequestApproval: StockRemovalRequestApproval;
+  deleteStockRemovalReturn: StockRemovalRequest;
   deleteTag: Tag;
   deleteTodo: Todo;
   deleteTrainingVideo: Scalars['Boolean'];
@@ -12044,6 +12259,7 @@ export type Mutation = {
   removeQuestionFromTag: TagQuestion;
   removeUserFromBusiness: Business;
   reopenInvestigation: Investigation;
+  requestCancelStockRemovalRequest: StockRemovalRequest;
   restoreAllRecycledItems: SystemTask;
   restoreDemEvidence?: Maybe<Scalars['String']>;
   restoreIncident: Incident;
@@ -12132,6 +12348,7 @@ export type Mutation = {
   updateShoe: Shoe;
   updateStockItem: StockItem;
   updateStockRemovalRequest: StockRemovalRequest;
+  updateStockRemovalReturn: StockRemovalRequest;
   updateTag: Tag;
   updateTagPoliceSharing: Tag;
   updateTagQs: Array<TagQuestion>;
@@ -12233,6 +12450,11 @@ export type MutationAnalyzeIncidentsByRadiusArgs = {
 
 
 export type MutationApproveAiSuggestionArgs = {
+  where: UniqueId;
+};
+
+
+export type MutationApproveCancelStockRemovalRequestArgs = {
   where: UniqueId;
 };
 
@@ -12588,6 +12810,11 @@ export type MutationCreateStockRemovalRequestApproverArgs = {
 };
 
 
+export type MutationCreateStockRemovalReturnArgs = {
+  data: CreateStockRemovalReturnInput;
+};
+
+
 export type MutationCreateTagArgs = {
   data: TagCreateInput;
 };
@@ -12868,6 +13095,11 @@ export type MutationDeleteStockRemovalRequestArgs = {
 
 
 export type MutationDeleteStockRemovalRequestApprovalArgs = {
+  where: UniqueId;
+};
+
+
+export type MutationDeleteStockRemovalReturnArgs = {
   where: UniqueId;
 };
 
@@ -13289,6 +13521,11 @@ export type MutationRemoveUserFromBusinessArgs = {
 
 
 export type MutationReopenInvestigationArgs = {
+  where: UniqueId;
+};
+
+
+export type MutationRequestCancelStockRemovalRequestArgs = {
   where: UniqueId;
 };
 
@@ -13730,6 +13967,12 @@ export type MutationUpdateStockItemArgs = {
 
 export type MutationUpdateStockRemovalRequestArgs = {
   data: UpdateStockRemovalRequestInput;
+  where: UniqueId;
+};
+
+
+export type MutationUpdateStockRemovalReturnArgs = {
+  data: UpdateStockRemovalReturnInput;
   where: UniqueId;
 };
 
@@ -17080,6 +17323,7 @@ export type Query = {
   listVehicles: ListVehicles;
   loginEvent: LoginEvent;
   loginEvents: Array<LoginEvent>;
+  lpStockLossReport: LpStockLossReportData;
   mentionableUsers: Array<MentionableUser>;
   message: Message;
   messages: Array<Message>;
@@ -17495,7 +17739,7 @@ export type QueryBusinessLossPreventionDashboardArgs = {
   businessId: Scalars['String'];
   schemeId?: InputMaybe<Scalars['String']>;
   sections?: InputMaybe<Array<BusinessLossPreventionSection>>;
-  watchlistOrderBy?: InputMaybe<BusinessLPWatchlistOrderBy>;
+  watchlistOrderBy?: InputMaybe<BusinessLpWatchlistOrderBy>;
 };
 
 
@@ -18436,6 +18680,17 @@ export type QueryLoginEventsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<LoginEventWhereInput>;
+};
+
+
+export type QueryLpStockLossReportArgs = {
+  businessId?: InputMaybe<Scalars['String']>;
+  endDate?: InputMaybe<Scalars['DateTime']>;
+  goodsTypeId?: InputMaybe<Scalars['String']>;
+  schemeId?: InputMaybe<Scalars['String']>;
+  sections?: InputMaybe<Array<LpStockLossSection>>;
+  startDate?: InputMaybe<Scalars['DateTime']>;
+  stockItemId?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -21357,6 +21612,7 @@ export enum ReportType {
   GroupTable = 'GROUP_TABLE',
   IncidentItemsTable = 'INCIDENT_ITEMS_TABLE',
   IncidentMap = 'INCIDENT_MAP',
+  LpStockLossReport = 'LP_STOCK_LOSS_REPORT',
   IncidentTable = 'INCIDENT_TABLE',
   InvestigationsTable = 'INVESTIGATIONS_TABLE',
   Offender = 'OFFENDER',
@@ -24031,12 +24287,14 @@ export enum StockRemovalRequestApprovalStatus {
 export enum StockRemovalRequestStatus {
   AwaitingPapApproval = 'AWAITING_PAP_APPROVAL',
   AwaitingReturn = 'AWAITING_RETURN',
+  Cancelled = 'CANCELLED',
   Closed = 'CLOSED',
   Collected = 'COLLECTED',
   Open = 'OPEN',
   PendingApproval = 'PENDING_APPROVAL',
   Picked = 'PICKED',
   Picking = 'PICKING',
+  RequestedCancel = 'REQUESTED_CANCEL',
   Returned = 'RETURNED'
 }
 
@@ -24047,6 +24305,7 @@ export type StockRemovalRequestsOrderBy = {
 export type StockRemovalRequestsWhere = {
   businessIds?: InputMaybe<Array<Scalars['String']>>;
   createdAt?: InputMaybe<DateTimeFilter>;
+  isReturn?: InputMaybe<Scalars['Boolean']>;
   schemeId: Scalars['String'];
   search?: InputMaybe<Scalars['String']>;
   status?: InputMaybe<Array<StockRemovalRequestStatus>>;
@@ -26598,6 +26857,26 @@ export type UpdateStockRemovalRequestInput = {
   title?: InputMaybe<Scalars['String']>;
   updateItems?: InputMaybe<Array<UpdateStockRemovalItemInput>>;
   willStockBeReturned?: InputMaybe<Scalars['String']>;
+};
+
+export type UpdateStockRemovalReturnInput = {
+  businessId?: InputMaybe<Scalars['String']>;
+  costCentreCode?: InputMaybe<Scalars['String']>;
+  createItems?: InputMaybe<Array<CreateStockRemovalReturnItemInput>>;
+  dateofReturn?: InputMaybe<Scalars['DateTime']>;
+  deleteItems?: InputMaybe<Array<Scalars['String']>>;
+  imageIds?: InputMaybe<Array<Scalars['String']>>;
+  rechargeBrand?: InputMaybe<Scalars['String']>;
+  rechargeReference?: InputMaybe<Scalars['String']>;
+  storeOrDC?: InputMaybe<Scalars['String']>;
+  tracking?: InputMaybe<Scalars['String']>;
+  updateItems?: InputMaybe<Array<UpdateStockRemovalReturnItemInput>>;
+};
+
+export type UpdateStockRemovalReturnItemInput = {
+  damaged?: InputMaybe<Scalars['Boolean']>;
+  id: Scalars['String'];
+  quantity: Scalars['Int'];
 };
 
 export type UpdateTagQuestionInput = {

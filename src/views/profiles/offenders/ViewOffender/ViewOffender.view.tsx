@@ -108,7 +108,7 @@ import VehicleTable from 'components/tables/VehicleTable';
 import dayjs from 'dayjs';
 import { BanType, PermissionMethod, PermissionModel } from 'graphql/types';
 import { useAtomValue } from 'jotai';
-import React from 'react';
+import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router';
 import { ProfileUpdatedModel } from 'types/enums/profile-update-type';
@@ -131,6 +131,57 @@ import TranslateButton from '../../../../components/util-components/TranslateBut
 import useStyles from './ViewOffender.styles';
 
 const { Paragraph, Text, Title } = Typography;
+
+const COLLAPSED_LIMIT = 10;
+
+const CollapsibleTagList = ({
+  items,
+  tagClassName,
+  title,
+}: {
+  items: string[];
+  tagClassName?: string;
+  title?: string;
+}) => {
+  const [modalOpen, setModalOpen] = useState(false);
+  const intl = useIntl();
+  const visible = items.slice(0, COLLAPSED_LIMIT);
+  const remaining = items.length - COLLAPSED_LIMIT;
+
+  return (
+    <>
+      <Row>
+        {visible.map((el) => (
+          <Tag className={tagClassName} key={el}>
+            {el}
+          </Tag>
+        ))}
+        {items.length > COLLAPSED_LIMIT && (
+          <Tag onClick={() => setModalOpen(true)} style={{ cursor: 'pointer' }}>
+            {intl.formatMessage(
+              { defaultMessage: '+{n} more' },
+              { n: remaining }
+            )}
+          </Tag>
+        )}
+      </Row>
+      <Modal
+        footer={null}
+        onCancel={() => setModalOpen(false)}
+        open={modalOpen}
+        title={title}
+      >
+        <Row style={{ paddingTop: 8 }}>
+          {items.map((el) => (
+            <Tag className={tagClassName} key={el} style={{ marginBottom: 6 }}>
+              {el}
+            </Tag>
+          ))}
+        </Row>
+      </Modal>
+    </>
+  );
+};
 
 interface TableItem {
   activeDay?: string | undefined;
@@ -947,18 +998,15 @@ const ViewOffender = ({
                                           </span>
                                         }
                                       >
-                                        <Row>
-                                          {data?.offender?.targetedGoods?.map(
-                                            (el) => (
-                                              <Tag
-                                                className={classes.tag}
-                                                key={el}
-                                              >
-                                                {el}
-                                              </Tag>
-                                            )
-                                          )}
-                                        </Row>
+                                        <CollapsibleTagList
+                                          items={
+                                            data?.offender?.targetedGoods ?? []
+                                          }
+                                          tagClassName={classes.tag}
+                                          title={intl.formatMessage({
+                                            defaultMessage: 'Targeted Goods',
+                                          })}
+                                        />
                                       </Descriptions.Item>
                                     )}
                                   {data?.offender?.knownFor &&
@@ -977,18 +1025,13 @@ const ViewOffender = ({
                                           </span>
                                         }
                                       >
-                                        <Row>
-                                          {data?.offender?.knownFor?.map(
-                                            (el) => (
-                                              <Tag
-                                                className={classes.tag}
-                                                key={el}
-                                              >
-                                                {el}
-                                              </Tag>
-                                            )
-                                          )}
-                                        </Row>
+                                        <CollapsibleTagList
+                                          items={data?.offender?.knownFor ?? []}
+                                          tagClassName={classes.tag}
+                                          title={intl.formatMessage({
+                                            defaultMessage: 'Known For',
+                                          })}
+                                        />
                                       </Descriptions.Item>
                                     )}
                                   <Descriptions column={1}>

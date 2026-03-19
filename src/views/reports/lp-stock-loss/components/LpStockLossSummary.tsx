@@ -5,17 +5,17 @@ import { useAtomValue } from 'jotai';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
-import type { BusinessLossPreventionDashboardQuery } from '../../graphql/queries/__generated__/business-loss-prevention-dashboard.generated';
+import type { LpStockLossReportQuery } from '../graphql/__generated__/lp-stock-loss-report.generated';
 
-interface LossPreventionSummaryProps {
+interface LpStockLossSummaryProps {
   loading: boolean;
   summary:
-    | BusinessLossPreventionDashboardQuery['businessLossPreventionDashboard']['summary']
+    | LpStockLossReportQuery['lpStockLossReport']['summary']
     | null
     | undefined;
 }
 
-const LossPreventionSummary: React.FC<LossPreventionSummaryProps> = ({
+const LpStockLossSummary: React.FC<LpStockLossSummaryProps> = ({
   loading,
   summary,
 }) => {
@@ -24,7 +24,7 @@ const LossPreventionSummary: React.FC<LossPreventionSummaryProps> = ({
 
   if (loading && !summary) {
     return (
-      <Row gutter={[16, 16]} style={{ marginBottom: 16 }}>
+      <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
         {Array.from({ length: 7 }).map((_, i) => (
           <Col key={i} lg={6} sm={12} xs={24} xxl={3}>
             <Skeleton active paragraph={{ rows: 1 }} />
@@ -34,44 +34,28 @@ const LossPreventionSummary: React.FC<LossPreventionSummaryProps> = ({
     );
   }
 
-  const recoveryRateDisplay =
+  const recoveryRatePct =
     summary?.recoveryRate !== null && summary?.recoveryRate !== undefined
-      ? `${(summary.recoveryRate * 100).toFixed(1)}%`
+      ? summary.recoveryRate * 100
       : null;
 
   return (
-    <Row gutter={[16, 16]} style={{ marginBottom: 16 }}>
+    <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
       <Col lg={6} sm={12} style={{ display: 'flex' }} xs={24} xxl={3}>
         <KpiStatCard
+          invertTrend
           loading={loading}
-          title={intl.formatMessage({ defaultMessage: "Today's Incidents" })}
-          value={summary?.todayCount ?? null}
+          title={intl.formatMessage({ defaultMessage: 'Total Incidents' })}
+          trend={summary?.periodIncidentChange ?? null}
+          value={summary?.totalIncidents ?? null}
         />
       </Col>
       <Col lg={6} sm={12} style={{ display: 'flex' }} xs={24} xxl={3}>
         <KpiStatCard
-          loading={loading}
-          title={intl.formatMessage({ defaultMessage: 'This Week' })}
-          trend={
-            summary?.weeklyChange !== null &&
-            summary?.weeklyChange !== undefined
-              ? summary.weeklyChange
-              : null
-          }
-          value={summary?.thisWeekCount ?? null}
-        />
-      </Col>
-      <Col lg={6} sm={12} style={{ display: 'flex' }} xs={24} xxl={3}>
-        <KpiStatCard
-          loading={loading}
-          title={intl.formatMessage({ defaultMessage: 'This Month' })}
-          value={summary?.thisMonthCount ?? null}
-        />
-      </Col>
-      <Col lg={6} sm={12} style={{ display: 'flex' }} xs={24} xxl={3}>
-        <KpiStatCard
+          invertTrend
           loading={loading}
           title={intl.formatMessage({ defaultMessage: 'Value Lost' })}
+          trend={summary?.periodValueChange ?? null}
           value={
             summary?.totalValueLost !== null &&
             summary?.totalValueLost !== undefined
@@ -86,11 +70,11 @@ const LossPreventionSummary: React.FC<LossPreventionSummaryProps> = ({
       <Col lg={6} sm={12} style={{ display: 'flex' }} xs={24} xxl={3}>
         <KpiStatCard
           loading={loading}
-          title={intl.formatMessage({ defaultMessage: 'Recovered' })}
+          title={intl.formatMessage({ defaultMessage: 'Value Recovered' })}
           value={
-            summary?.totalRecoveredValue !== null &&
-            summary?.totalRecoveredValue !== undefined
-              ? intl.formatNumber(summary.totalRecoveredValue, {
+            summary?.totalValueRecovered !== null &&
+            summary?.totalValueRecovered !== undefined
+              ? intl.formatNumber(summary.totalValueRecovered, {
                   currency,
                   style: 'currency',
                 })
@@ -102,18 +86,34 @@ const LossPreventionSummary: React.FC<LossPreventionSummaryProps> = ({
         <KpiStatCard
           loading={loading}
           title={intl.formatMessage({ defaultMessage: 'Recovery Rate' })}
-          value={recoveryRateDisplay}
+          value={
+            recoveryRatePct === null ? null : `${recoveryRatePct.toFixed(1)}%`
+          }
         />
       </Col>
       <Col lg={6} sm={12} style={{ display: 'flex' }} xs={24} xxl={3}>
         <KpiStatCard
           loading={loading}
-          title={intl.formatMessage({ defaultMessage: 'Active Bans' })}
-          value={summary?.activeBansCount ?? null}
+          title={intl.formatMessage({ defaultMessage: 'Unique Items Stolen' })}
+          value={summary?.uniqueItemsStolen ?? null}
+        />
+      </Col>
+      <Col lg={6} sm={12} style={{ display: 'flex' }} xs={24} xxl={3}>
+        <KpiStatCard
+          loading={loading}
+          title={intl.formatMessage({ defaultMessage: 'Unique Offenders' })}
+          value={summary?.uniqueOffenders ?? null}
+        />
+      </Col>
+      <Col lg={6} sm={12} style={{ display: 'flex' }} xs={24} xxl={3}>
+        <KpiStatCard
+          loading={loading}
+          title={intl.formatMessage({ defaultMessage: 'Businesses Affected' })}
+          value={summary?.businessesAffected ?? null}
         />
       </Col>
     </Row>
   );
 };
 
-export default LossPreventionSummary;
+export default LpStockLossSummary;

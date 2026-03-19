@@ -5,10 +5,23 @@ import type {
 
 import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
 import ReportGroupSelect from '#/components/form-components/ReportGroupSelect/ReportGroupSelect.view';
+import AIGenerateButton, {
+  getGradientFormItemClassName,
+} from '#/components/ui/AIGenerateButton';
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { ReportsCentreDocument } from '#/views/reports/reports-centre/__generated__/reports-centre.generated';
-import { Button, Col, Form, Input, Row, Select, Typography } from 'antd';
+import {
+  Button,
+  Col,
+  Form,
+  Input,
+  Row,
+  Select,
+  Typography,
+  notification,
+} from 'antd';
 import { useCreateReportTemplateMutation } from 'graphql/reports/mutations/__generated__/create-report-template.generated';
+import { useGenerateReportTemplateDescriptionMutation } from 'graphql/reports/mutations/__generated__/generate-report-template-description.generated';
 import { ReportType } from 'graphql/types';
 import update from 'immutability-helper';
 import { useAtomValue } from 'jotai/index';
@@ -29,9 +42,11 @@ interface Props {
 
 const CreateReport = ({ onClose }: Props) => {
   const intl = useIntl();
+  const [form] = Form.useForm<FormData>();
 
   const schemeId = useAtomValue(currentSchemeIdAtom);
   const [saving, setSaving] = useState(false);
+  const [generatingDescription, setGeneratingDescription] = useState(false);
   const options = [
     {
       description: intl.formatMessage({
@@ -135,6 +150,16 @@ const CreateReport = ({ onClose }: Props) => {
       }),
       value: ReportType.IncidentMap,
     },
+    {
+      description: intl.formatMessage({
+        defaultMessage:
+          'Analyse stock loss incidents, recovery rates, goods type breakdowns, and offender associations.',
+      }),
+      name: intl.formatMessage({
+        defaultMessage: 'LP Stock Loss Report',
+      }),
+      value: ReportType.LpStockLossReport,
+    },
   ];
 
   const [createReport] = useCreateReportTemplateMutation({
@@ -188,6 +213,43 @@ const CreateReport = ({ onClose }: Props) => {
     },
   });
 
+  const [generateDescription] = useGenerateReportTemplateDescriptionMutation();
+
+  const handleGenerateDescription = async () => {
+    const name = form.getFieldValue('name') as string;
+    const currentDescription = form.getFieldValue('description') as string;
+    const type = form.getFieldValue('type') as ReportType | undefined;
+
+    if (!name) return;
+
+    setGeneratingDescription(true);
+    try {
+      const result = await generateDescription({
+        variables: {
+          reportTemplateName: name,
+          reportType: type ?? undefined,
+          userDescription: currentDescription || undefined,
+        },
+      });
+
+      if (result.data?.generateReportTemplateDescription) {
+        form.setFieldsValue({
+          description: result.data.generateReportTemplateDescription,
+        });
+      }
+    } catch {
+      notification.error({
+        description: intl.formatMessage({
+          defaultMessage: 'Failed to generate description. Please try again.',
+        }),
+        message: intl.formatMessage({ defaultMessage: 'Generation Failed' }),
+        placement: 'bottomRight',
+      });
+    } finally {
+      setGeneratingDescription(false);
+    }
+  };
+
   const onSubmit = (values: FormData) => {
     setSaving(true);
     void createReport({
@@ -219,7 +281,7 @@ const CreateReport = ({ onClose }: Props) => {
   };
 
   return (
-    <Form<FormData> layout="vertical" onFinish={onSubmit}>
+    <Form<FormData> form={form} layout="vertical" onFinish={onSubmit}>
       <Form.Item
         label={intl.formatMessage({ defaultMessage: 'Name' })}
         name="name"
@@ -234,22 +296,42 @@ const CreateReport = ({ onClose }: Props) => {
       >
         <Input />
       </Form.Item>
-      <Form.Item
-        label={intl.formatMessage({
-          defaultMessage: 'Description',
-        })}
-        name="description"
-        rules={[
-          {
-            message: intl.formatMessage({
-              defaultMessage: 'Description is required',
-            }),
-            required: true,
-          },
-        ]}
-      >
-        <Input.TextArea />
-      </Form.Item>
+      <div style={{ position: 'relative' }}>
+        <Form.Item
+          className={getGradientFormItemClassName(
+            generatingDescription,
+            'redOrange'
+          )}
+          label={intl.formatMessage({
+            defaultMessage: 'Description',
+          })}
+          name="description"
+          rules={[
+            {
+              message: intl.formatMessage({
+                defaultMessage: 'Description is required',
+              }),
+              required: true,
+            },
+          ]}
+        >
+          <Input.TextArea
+            className="ai-generate-textarea"
+            rows={4}
+            style={{ paddingRight: '60px' }}
+          />
+        </Form.Item>
+        <AIGenerateButton
+          disabled={saving}
+          form={form}
+          generating={generatingDescription}
+          gradientVariant="redOrange"
+          nameFieldName="name"
+          onClick={() => {
+            void handleGenerateDescription();
+          }}
+        />
+      </div>
       <Form.Item
         label={intl.formatMessage({
           defaultMessage: 'Report Type',

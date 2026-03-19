@@ -440,45 +440,96 @@ const ViewBusiness = ({
               </PermissionCheckWrapper>
             </Row>
 
-            <div style={{ marginTop: 16 }}>
-              <LossPreventionSummary loading={lpLoading} summary={lpSummary} />
-            </div>
+            <PermissionCheckWrapper
+              permission={{
+                method: PermissionMethod.Read,
+                model: PermissionModel.Dashboard,
+              }}
+              unauthorizedElement={<div />}
+            >
+              <div style={{ marginTop: 16 }}>
+                <LossPreventionSummary
+                  loading={lpLoading}
+                  summary={lpSummary}
+                />
+              </div>
+            </PermissionCheckWrapper>
 
-            <div style={{ marginBottom: 16 }}>
-              <LpOffenderWatchlist
-                loading={lpLoading}
-                offenders={lpOffenderWatchlist}
-                onOrderByChange={setWatchlistOrderBy}
-                orderBy={watchlistOrderBy}
-              />
-            </div>
+            <PermissionCheckWrapper
+              permission={{
+                method: PermissionMethod.Read,
+                model: PermissionModel.Offenders,
+              }}
+              unauthorizedElement={<div />}
+            >
+              <div style={{ marginBottom: 16 }}>
+                <LpOffenderWatchlist
+                  loading={lpLoading}
+                  offenders={lpOffenderWatchlist}
+                  onOrderByChange={setWatchlistOrderBy}
+                  orderBy={watchlistOrderBy}
+                />
+              </div>
+            </PermissionCheckWrapper>
 
-            <div style={{ marginBottom: 16 }}>
-              <LpWatchlistInsights
-                insights={lpWatchlistInsights}
-                loading={lpLoading}
-              />
-            </div>
+            <PermissionCheckWrapper
+              permission={{
+                method: PermissionMethod.Read,
+                model: PermissionModel.Offenders,
+              }}
+              unauthorizedElement={<div />}
+            >
+              <div style={{ marginBottom: 16 }}>
+                <LpWatchlistInsights
+                  insights={lpWatchlistInsights}
+                  loading={lpLoading}
+                />
+              </div>
+            </PermissionCheckWrapper>
 
             <Row gutter={[16, 16]} style={{ marginBottom: 16 }}>
-              <Col md={14} xs={24}>
-                <LpCrimePatterns data={lpCrimePatterns} loading={lpLoading} />
-              </Col>
-              <Col md={10} xs={24}>
-                <SchemeComparison
-                  comparison={schemeComparison}
-                  loading={lpLoading}
-                  schemeId={schemeId}
-                />
-              </Col>
+              <PermissionCheckWrapper
+                permission={{
+                  method: PermissionMethod.Read,
+                  model: PermissionModel.Dashboard,
+                }}
+                unauthorizedElement={<div />}
+              >
+                <Col md={14} xs={24}>
+                  <LpCrimePatterns data={lpCrimePatterns} loading={lpLoading} />
+                </Col>
+              </PermissionCheckWrapper>
+              <PermissionCheckWrapper
+                permission={{
+                  method: PermissionMethod.Read,
+                  model: PermissionModel.Dashboard,
+                }}
+                unauthorizedElement={<div />}
+              >
+                <Col md={10} xs={24}>
+                  <SchemeComparison
+                    comparison={schemeComparison}
+                    loading={lpLoading}
+                    schemeId={schemeId}
+                  />
+                </Col>
+              </PermissionCheckWrapper>
             </Row>
 
-            <div style={{ marginBottom: 16 }}>
-              <LinkedInvestigations
-                investigations={linkedInvestigations}
-                loading={lpLoading}
-              />
-            </div>
+            <PermissionCheckWrapper
+              permission={{
+                method: PermissionMethod.Read,
+                model: PermissionModel.Investigations,
+              }}
+              unauthorizedElement={<div />}
+            >
+              <div style={{ marginBottom: 16 }}>
+                <LinkedInvestigations
+                  investigations={linkedInvestigations}
+                  loading={lpLoading}
+                />
+              </div>
+            </PermissionCheckWrapper>
 
             <Card>
               <Row align="middle" className={classes.cardHeader}>
