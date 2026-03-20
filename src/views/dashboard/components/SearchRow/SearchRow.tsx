@@ -1,6 +1,5 @@
 import PermissionCheckWrapper from '#/components/PermissionCheck/PermissionCheckWrapper';
 import CheckTags from '#/components/form-components/check-tags/CheckTags.view';
-import DebouncedInput from '#/utils/debounced-input';
 import { useDashboardContext } from '#/views/dashboard/Dashboard.context';
 import {
   faExclamationCircle,
@@ -19,24 +18,12 @@ const SearchRow = () => {
     adminRights,
     intl,
     setGallery,
-    setSearch,
     toggleSortFilter,
     variables: { gallery },
   } = useDashboardContext();
   return (
     <Card bodyStyle={{ padding: 10 }}>
       <Row align="middle" gutter={12}>
-        <Col span={4} xxl={6}>
-          <DebouncedInput
-            allowClear
-            // value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder={intl.formatMessage({
-              defaultMessage: 'Search for anything in alert...',
-            })}
-            size="small"
-          />
-        </Col>
         <Col flex={1}>
           <CheckTags
             mode="check"

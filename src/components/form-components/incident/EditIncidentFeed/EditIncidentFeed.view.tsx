@@ -1,6 +1,5 @@
 import type { FormData as AddIncidentFormData } from '#/views/incidents/AddIncident/types/formData';
 import type { FormInstance } from 'antd';
-import type { Dayjs } from 'dayjs';
 import type { EditIncidentFeedQuery } from 'graphql/incidents/queries/__generated__/edit-incident-feed.generated';
 import type { CustomQuestion } from 'types/DataType/data_type';
 
@@ -266,8 +265,8 @@ Props): JSX.Element => {
             >
               <DatePicker
                 disabled={saving}
-                disabledDate={(current: Dayjs) =>
-                  current && current.toDate().getTime() > Date.now()
+                disabledDate={(current: { valueOf: () => number } | null) =>
+                  !!current && current.valueOf() > Date.now()
                 }
                 format="HH:mm - DD/MM/YY"
                 placeholder={intl.formatMessage({

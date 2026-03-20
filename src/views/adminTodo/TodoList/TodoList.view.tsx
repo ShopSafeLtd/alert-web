@@ -390,9 +390,21 @@ const AdminTodos = ({
             {
               dataIndex: 'name',
               key: 'name',
-              render: (value, record) => (
-                <Link to={`${getTodoUrl(record.todo.node)}`}>{value}</Link>
-              ),
+              render: (value, record) => {
+                const url = getTodoUrl(record.todo.node);
+                if (url === '/app/tasks') {
+                  return (
+                    <Button
+                      onClick={() => setSelectedTodo(record.todo.node.id)}
+                      style={{ padding: 0 }}
+                      type="link"
+                    >
+                      {value}
+                    </Button>
+                  );
+                }
+                return <Link to={url}>{value}</Link>;
+              },
               title: intl.formatMessage({
                 defaultMessage: 'Name',
               }),
@@ -411,9 +423,21 @@ const AdminTodos = ({
             {
               dataIndex: 'reference',
               key: 'reference',
-              render: (value, record) => (
-                <Link to={`${getTodoUrl(record.todo.node)}`}>{value}</Link>
-              ),
+              render: (value, record) => {
+                const url = getTodoUrl(record.todo.node);
+                if (url === '/app/tasks') {
+                  return (
+                    <Button
+                      onClick={() => setSelectedTodo(record.todo.node.id)}
+                      style={{ padding: 0 }}
+                      type="link"
+                    >
+                      {value}
+                    </Button>
+                  );
+                }
+                return <Link to={url}>{value}</Link>;
+              },
               title: intl.formatMessage({
                 defaultMessage: 'Alert ID',
               }),
@@ -571,7 +595,9 @@ const AdminTodos = ({
                     ) : (
                       <Button
                         onClick={() => {
-                          if (shouldOpen) {
+                          const hasQuestions =
+                            record.todo.node.questions.length > 0;
+                          if (shouldOpen || hasQuestions) {
                             setSelectedTodo(record.todo.node.id);
                           } else {
                             onCompletedTodo(record.todo.node.id);
