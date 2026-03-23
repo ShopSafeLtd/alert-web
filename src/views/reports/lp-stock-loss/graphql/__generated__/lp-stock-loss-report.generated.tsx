@@ -20,6 +20,7 @@ export type LpStockLossReportQueryVariables = Types.Exact<{
   offenderOrderBy?: Types.InputMaybe<Types.LpStockLossOffenderOrderBy>;
   goodsTypeOrderBy?: Types.InputMaybe<Types.LpStockLossGoodsTypeOrderBy>;
   businessHotspotsOrderBy?: Types.InputMaybe<Types.LpStockLossBusinessHotspotsOrderBy>;
+  groupIds?: Types.InputMaybe<Array<Types.Scalars['String']>>;
 }>;
 
 
@@ -27,7 +28,7 @@ export type LpStockLossReportQuery = { __typename?: 'Query', lpStockLossReport: 
 
 
 export const LpStockLossReportDocument = gql`
-    query LpStockLossReport($startDate: DateTime, $endDate: DateTime, $schemeId: String, $goodsTypeId: String, $stockItemId: String, $businessId: String, $topItemsOrderBy: LPStockLossTopItemsOrderBy, $offenderOrderBy: LPStockLossOffenderOrderBy, $goodsTypeOrderBy: LPStockLossGoodsTypeOrderBy, $businessHotspotsOrderBy: LPStockLossBusinessHotspotsOrderBy) {
+    query LpStockLossReport($startDate: DateTime, $endDate: DateTime, $schemeId: String, $goodsTypeId: String, $stockItemId: String, $businessId: String, $topItemsOrderBy: LPStockLossTopItemsOrderBy, $offenderOrderBy: LPStockLossOffenderOrderBy, $goodsTypeOrderBy: LPStockLossGoodsTypeOrderBy, $businessHotspotsOrderBy: LPStockLossBusinessHotspotsOrderBy, $groupIds: [String!]) {
   lpStockLossReport(
     startDate: $startDate
     endDate: $endDate
@@ -39,6 +40,7 @@ export const LpStockLossReportDocument = gql`
     offenderOrderBy: $offenderOrderBy
     goodsTypeOrderBy: $goodsTypeOrderBy
     businessHotspotsOrderBy: $businessHotspotsOrderBy
+    groupIds: $groupIds
   ) {
     summary {
       totalIncidents

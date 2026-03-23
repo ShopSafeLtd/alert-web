@@ -1,5 +1,5 @@
-query LpStockLossReport($startDate: DateTime, $endDate: DateTime, $schemeId: String, $goodsTypeId: String, $stockItemId: String, $businessId: String, $topItemsOrderBy: LPStockLossTopItemsOrderBy, $offenderOrderBy: LPStockLossOffenderOrderBy, $goodsTypeOrderBy: LPStockLossGoodsTypeOrderBy, $businessHotspotsOrderBy: LPStockLossBusinessHotspotsOrderBy) {
-  lpStockLossReport(startDate: $startDate, endDate: $endDate, schemeId: $schemeId, goodsTypeId: $goodsTypeId, stockItemId: $stockItemId, businessId: $businessId, topItemsOrderBy: $topItemsOrderBy, offenderOrderBy: $offenderOrderBy, goodsTypeOrderBy: $goodsTypeOrderBy, businessHotspotsOrderBy: $businessHotspotsOrderBy) {
+query LpStockLossReport($startDate: DateTime, $endDate: DateTime, $schemeId: String, $goodsTypeId: String, $stockItemId: String, $businessId: String, $topItemsOrderBy: LPStockLossTopItemsOrderBy, $offenderOrderBy: LPStockLossOffenderOrderBy, $goodsTypeOrderBy: LPStockLossGoodsTypeOrderBy, $businessHotspotsOrderBy: LPStockLossBusinessHotspotsOrderBy, $groupIds: [String!]) {
+  lpStockLossReport(startDate: $startDate, endDate: $endDate, schemeId: $schemeId, goodsTypeId: $goodsTypeId, stockItemId: $stockItemId, businessId: $businessId, topItemsOrderBy: $topItemsOrderBy, offenderOrderBy: $offenderOrderBy, goodsTypeOrderBy: $goodsTypeOrderBy, businessHotspotsOrderBy: $businessHotspotsOrderBy, groupIds: $groupIds) {
     summary {
       totalIncidents
       totalValueLost

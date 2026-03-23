@@ -216,7 +216,10 @@ const useAdminTodos = ({
         __typename: 'Query',
         todoRelay: {
           ...existingData.todoRelay,
-          edges: [{ node: res.createTodo }, ...existingData.todoRelay.edges],
+          edges: [
+            { node: { ...res.createTodo, questions: [] } },
+            ...existingData.todoRelay.edges,
+          ],
         },
       },
       query: TodoListDocument,
