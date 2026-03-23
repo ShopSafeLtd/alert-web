@@ -27,6 +27,7 @@ const LinkCrimeGroup = ({
     onSubmit,
     saving,
     search,
+    selected,
     setSearch,
   } = useLinkCrimeGroup({
     crimeGroupIds,
@@ -46,6 +47,7 @@ const LinkCrimeGroup = ({
       onSubmit={onSubmit}
       saving={saving}
       search={search}
+      selected={selected}
       setSearch={setSearch}
     />
   );

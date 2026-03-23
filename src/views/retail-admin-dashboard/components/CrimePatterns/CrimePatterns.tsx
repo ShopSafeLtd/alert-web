@@ -312,6 +312,7 @@ const CrimePatterns: React.FC<CrimePatternsProps> = ({ data, loading }) => {
           height: '100%',
           padding: 16,
         }}
+        style={{ height: '100%' }}
       >
         {loading && !data ? (
           <Skeleton active paragraph={{ rows: 8 }} />

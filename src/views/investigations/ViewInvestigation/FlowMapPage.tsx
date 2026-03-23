@@ -31,8 +31,13 @@ const FlowMapPage = () => {
               })}
             >
               <Button
-                icon={<FontAwesomeIcon icon={faArrowLeft} />}
-                onClick={() => navigate(`/investigations/view/${id}`)}
+                icon={
+                  <FontAwesomeIcon
+                    icon={faArrowLeft}
+                    style={{ marginRight: 8 }}
+                  />
+                }
+                onClick={() => navigate(`/app/investigations/view/${id}`)}
               >
                 {intl.formatMessage({ defaultMessage: 'Back' })}
               </Button>

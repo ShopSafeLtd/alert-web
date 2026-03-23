@@ -19,10 +19,12 @@ import PermissionCheckWrapper from '#/components/PermissionCheck/PermissionCheck
 import ShareData from '#/components/form-components/ShareData/ShareData';
 import AddDocuments from '#/components/form-components/documents/AddDocuments';
 import { IncidentTableContainer } from '#/components/tables/IncidentTable';
+import AIGenerateButton from '#/components/ui/AIGenerateButton/AIGenerateButton';
 import { currencyAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import useReportPrint from '#/utils/reportPrint/usePrintReports';
 import AiDetailsView from '#/views/profiles/offenders/ViewOffender/components/AiDetails.view';
 import OffenderAiDrawer from '#/views/profiles/offenders/ViewOffender/components/AiDrawer/AiDrawer.view';
+import GenerateBulletinModal from '#/views/profiles/offenders/ViewOffender/components/GenerateBulletinModal';
 import OffenderSidebar from '#/views/profiles/offenders/ViewOffender/components/OffenderSidebar';
 import OffenderVision from '#/views/profiles/offenders/ViewOffender/components/OffenderVision/OffenderVision.view';
 import {
@@ -223,6 +225,7 @@ interface Props {
 
   editUpdateInput: string;
   editVehicleData: VehicleData | null;
+  generateBulletin: boolean;
   handleCreateInvestigation: (investigationId: string) => Promise<void>;
   handleEditUpdate: () => void;
   handleLinkInvestigation: (investigation: InvestigationData) => Promise<void>;
@@ -307,6 +310,7 @@ interface Props {
   toggleCopyOffender: () => void;
   toggleEditImages: () => void;
   toggleEditOffender: () => void;
+  toggleGenerateBulletin: () => void;
   toggleKnowOffender: () => void;
   toggleLinkIncident: () => void;
   toggleLinkInvestigation: () => void;
@@ -353,6 +357,7 @@ const ViewOffender = ({
   editUpdate,
   editUpdateInput,
   editVehicleData,
+  generateBulletin,
   handleEditUpdate,
   handleLinkInvestigation,
   handleUnlinkInvestigation,
@@ -418,6 +423,7 @@ const ViewOffender = ({
   toggleCopyOffender,
   toggleEditImages,
   toggleEditOffender,
+  toggleGenerateBulletin,
   toggleKnowOffender,
   toggleLinkIncident,
   toggleLinkInvestigation,
@@ -526,6 +532,18 @@ const ViewOffender = ({
                           </Col>
                         </PermissionCheckWrapper>
                       )}
+                    {editRights && (
+                      <Col style={{ alignItems: 'center', display: 'flex' }}>
+                        <AIGenerateButton
+                          disabled={loading}
+                          label={intl.formatMessage({
+                            defaultMessage: 'Generate Bulletin',
+                          })}
+                          onClick={toggleGenerateBulletin}
+                          standalone
+                        />
+                      </Col>
+                    )}
                     <Col>
                       <Row>
                         <Col>
@@ -2802,6 +2820,13 @@ const ViewOffender = ({
           <ShareData offenderId={offenderId} onClose={toggleShareOpen} />
         )}
       </Drawer>
+
+      <GenerateBulletinModal
+        offenderId={offenderId}
+        offenderName={data?.offender?.name ?? ''}
+        onClose={toggleGenerateBulletin}
+        open={generateBulletin}
+      />
 
       <OffenderAiDrawer
         offenderId={offenderId}

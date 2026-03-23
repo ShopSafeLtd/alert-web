@@ -1935,8 +1935,9 @@ export enum BusinessLpWatchlistOrderBy {
   TotalValue = 'TOTAL_VALUE'
 }
 
-// Alias for capitalization variant used across the codebase
-export { BusinessLpWatchlistOrderBy as BusinessLPWatchlistOrderBy };
+// Alias for codegen casing inconsistency
+export const BusinessLPWatchlistOrderBy = BusinessLpWatchlistOrderBy;
+export type BusinessLPWatchlistOrderBy = BusinessLpWatchlistOrderBy;
 
 export type BusinessListRelationFilter = {
   every?: InputMaybe<BusinessWhereInput>;
@@ -3520,8 +3521,10 @@ export type CreateInvestigationInput = {
   incidentId?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
   offenderId?: InputMaybe<Scalars['String']>;
+  priority?: InputMaybe<InvestigationPriority>;
   schemeId: Scalars['String'];
   status?: InputMaybe<InvestigationStatus>;
+  type?: InputMaybe<InvestigationType>;
   vehicleId?: InputMaybe<Scalars['String']>;
 };
 
@@ -7334,6 +7337,14 @@ export enum Gender {
   Unknown = 'UNKNOWN'
 }
 
+export type GenerateOffenderBulletinData = {
+  context?: InputMaybe<Scalars['String']>;
+};
+
+export type GenerateOffenderBulletinWhere = {
+  id: Scalars['String'];
+};
+
 export type GenerateStatementCctv = {
   aheadBehind?: InputMaybe<Scalars['String']>;
   correctTime?: InputMaybe<Scalars['Boolean']>;
@@ -7397,6 +7408,12 @@ export type GenerateStatementVehicles = {
   make?: InputMaybe<Scalars['String']>;
   model?: InputMaybe<Scalars['String']>;
   registrationPlate?: InputMaybe<Scalars['String']>;
+};
+
+export type GeneratedReportLayoutResult = {
+  __typename?: 'GeneratedReportLayoutResult';
+  layout: Array<Scalars['JSON']>;
+  metaData: Array<Scalars['JSON']>;
 };
 
 export type GeneratedStatementBody = {
@@ -9133,6 +9150,21 @@ export type IncidentItemsWhereInput = {
   schemeId: Scalars['String'];
 };
 
+export enum IncidentLinkStrength {
+  Moderate = 'MODERATE',
+  Strong = 'STRONG',
+  Weak = 'WEAK'
+}
+
+export enum IncidentLinkType {
+  EscalationSequence = 'ESCALATION_SEQUENCE',
+  GeographicCluster = 'GEOGRAPHIC_CLUSTER',
+  SameGroup = 'SAME_GROUP',
+  SameOffender = 'SAME_OFFENDER',
+  SimilarMo = 'SIMILAR_MO',
+  TemporalPattern = 'TEMPORAL_PATTERN'
+}
+
 export type IncidentListRelationFilter = {
   every?: InputMaybe<IncidentWhereInput>;
   none?: InputMaybe<IncidentWhereInput>;
@@ -9950,6 +9982,7 @@ export type Investigation = {
   name: Scalars['String'];
   notifications: Array<Notification>;
   offenders: Array<Offender>;
+  priority: InvestigationPriority;
   ref: Scalars['String'];
   reference?: Maybe<Scalars['Int']>;
   referenceStr?: Maybe<Scalars['String']>;
@@ -9969,6 +10002,7 @@ export type Investigation = {
   totalUpdates: Scalars['Int'];
   totalValue: Scalars['Float'];
   totalVehicles: Scalars['Int'];
+  type: InvestigationType;
   updatedAt: Scalars['Date'];
   updates: Array<Update>;
   vehicles: Array<Vehicle>;
@@ -10187,6 +10221,13 @@ export type InvestigationPerformance = {
   totalValue: Scalars['Float'];
 };
 
+export enum InvestigationPriority {
+  High = 'HIGH',
+  Low = 'LOW',
+  Medium = 'MEDIUM',
+  Normal = 'NORMAL'
+}
+
 export enum InvestigationScalarFieldEnum {
   CreatedAt = 'createdAt',
   CreatedById = 'createdById',
@@ -10294,6 +10335,19 @@ export type InvestigationTimeline = {
   /** Success rate for the month */
   successRate: Scalars['Float'];
 };
+
+export enum InvestigationType {
+  CriminalDamage = 'CRIMINAL_DAMAGE',
+  CyberFraud = 'CYBER_FRAUD',
+  EmployeeTheft = 'EMPLOYEE_THEFT',
+  Fraud = 'FRAUD',
+  General = 'GENERAL',
+  OrganisedRetailCrime = 'ORGANISED_RETAIL_CRIME',
+  Robbery = 'ROBBERY',
+  Shoplifting = 'SHOPLIFTING',
+  StockLoss = 'STOCK_LOSS',
+  VendorFraud = 'VENDOR_FRAUD'
+}
 
 export type InvestigationWhereInput = {
   AND?: InputMaybe<Array<InvestigationWhereInput>>;
@@ -10466,6 +10520,13 @@ export type LpStockLossApprovalBreakdown = {
   pending: Scalars['Int'];
 };
 
+export enum LpStockLossBusinessHotspotsOrderBy {
+  IncidentCount = 'INCIDENT_COUNT',
+  NetValue = 'NET_VALUE',
+  TotalValue = 'TOTAL_VALUE',
+  TotalValueRecovered = 'TOTAL_VALUE_RECOVERED'
+}
+
 export type LpStockLossBusinessRef = {
   __typename?: 'LPStockLossBusinessRef';
   id: Scalars['String'];
@@ -10477,10 +10538,14 @@ export type LpStockLossBusinessRow = {
   id: Scalars['String'];
   incidentCount: Scalars['Int'];
   name: Scalars['String'];
+  /** totalValueLost minus totalValueRecovered */
+  netValueLost: Scalars['Float'];
   recoveryRate: Scalars['Float'];
   /** Top 3 item names targeted at this business */
   topTargetedItems: Array<Scalars['String']>;
+  /** Gross value stolen (before recovery) */
   totalValueLost: Scalars['Float'];
+  totalValueRecovered: Scalars['Float'];
 };
 
 export type LpStockLossBusinessValueItem = {
@@ -10505,6 +10570,13 @@ export type LpStockLossGoodsTypeMonthItem = {
   month: Scalars['String'];
 };
 
+export enum LpStockLossGoodsTypeOrderBy {
+  IncidentCount = 'INCIDENT_COUNT',
+  NetValue = 'NET_VALUE',
+  TotalValue = 'TOTAL_VALUE',
+  TotalValueRecovered = 'TOTAL_VALUE_RECOVERED'
+}
+
 export type LpStockLossGoodsTypeRow = {
   __typename?: 'LPStockLossGoodsTypeRow';
   goodsTypeId: Scalars['String'];
@@ -10512,9 +10584,12 @@ export type LpStockLossGoodsTypeRow = {
   incidentCount: Scalars['Int'];
   /** Monthly incident count trend */
   monthlyTrend: Array<LpStockLossGoodsTypeMonthItem>;
+  /** totalValueLost minus totalValueRecovered */
+  netValueLost: Scalars['Float'];
   recoveryRate: Scalars['Float'];
   /** Top 3 items by incident count in this category */
   topItems: Array<LpStockLossGoodsTypeTopItem>;
+  /** Gross value stolen (before recovery) */
   totalValueLost: Scalars['Float'];
   totalValueRecovered: Scalars['Float'];
 };
@@ -10543,6 +10618,13 @@ export type LpStockLossIncidentAnalysis = {
   byHour: Array<LpStockLossHourlyItem>;
 };
 
+export enum LpStockLossOffenderOrderBy {
+  IncidentCount = 'INCIDENT_COUNT',
+  NetValue = 'NET_VALUE',
+  TotalValue = 'TOTAL_VALUE',
+  TotalValueRecovered = 'TOTAL_VALUE_RECOVERED'
+}
+
 export type LpStockLossOffenderRow = {
   __typename?: 'LPStockLossOffenderRow';
   /** Business names */
@@ -10552,7 +10634,11 @@ export type LpStockLossOffenderRow = {
   /** Stock item names from their incident items */
   itemsTargeted: Array<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
+  /** totalValueAssociated minus totalValueRecovered */
+  netValueLost: Scalars['Float'];
+  /** Gross value across associated incidents */
   totalValueAssociated: Scalars['Float'];
+  totalValueRecovered: Scalars['Float'];
 };
 
 export type LpStockLossRecoveryAnalysis = {
@@ -10632,14 +10718,25 @@ export type LpStockLossTargetedItem = {
   goodsTypeName?: Maybe<Scalars['String']>;
   incidentCount: Scalars['Int'];
   name?: Maybe<Scalars['String']>;
+  /** totalValueLost minus totalValueRecovered */
+  netValueLost: Scalars['Float'];
   recoveryRate: Scalars['Float'];
   sku?: Maybe<Scalars['String']>;
   stockItemId: Scalars['String'];
   /** Top businesses where this item was targeted */
   topBusinesses: Array<LpStockLossBusinessRef>;
   totalQuantityLost: Scalars['Int'];
+  /** Gross value stolen (before recovery) */
   totalValueLost: Scalars['Float'];
+  totalValueRecovered: Scalars['Float'];
 };
+
+export enum LpStockLossTopItemsOrderBy {
+  IncidentCount = 'INCIDENT_COUNT',
+  NetValue = 'NET_VALUE',
+  TotalValue = 'TOTAL_VALUE',
+  TotalValueRecovered = 'TOTAL_VALUE_RECOVERED'
+}
 
 export type LpStockLossZeroRecoveryItem = {
   __typename?: 'LPStockLossZeroRecoveryItem';
@@ -12200,7 +12297,10 @@ export type Mutation = {
   generateDemoStockItems: Scalars['Int'];
   generateFeedItems: SystemTask;
   generateIncidentTypeDescription: Scalars['String'];
+  generateOffenderBulletin: OffenderBulletinResult;
   generatePatrolTokenBatch: Array<PatrolCheckpointToken>;
+  generateReportLayout: GeneratedReportLayoutResult;
+  generateReportTemplateDescription: Scalars['String'];
   generateStatementBody: GeneratedStatementBody;
   generateTrainingVideoUploadUrl: Scalars['String'];
   icelandImportData: SystemTask;
@@ -13250,8 +13350,27 @@ export type MutationGenerateIncidentTypeDescriptionArgs = {
 };
 
 
+export type MutationGenerateOffenderBulletinArgs = {
+  data?: InputMaybe<GenerateOffenderBulletinData>;
+  where: GenerateOffenderBulletinWhere;
+};
+
+
 export type MutationGeneratePatrolTokenBatchArgs = {
   count: Scalars['Int'];
+};
+
+
+export type MutationGenerateReportLayoutArgs = {
+  instructions?: InputMaybe<Scalars['String']>;
+  reportType: ReportType;
+};
+
+
+export type MutationGenerateReportTemplateDescriptionArgs = {
+  reportTemplateName: Scalars['String'];
+  reportType?: InputMaybe<Scalars['String']>;
+  userDescription?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -15512,6 +15631,12 @@ export type OffenderVehiclesArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<VehicleWhereInput>;
+};
+
+export type OffenderBulletinResult = {
+  __typename?: 'OffenderBulletinResult';
+  htmlBody: Scalars['String'];
+  title: Scalars['String'];
 };
 
 export type OffenderConnectOne = {
@@ -18684,13 +18809,18 @@ export type QueryLoginEventsArgs = {
 
 
 export type QueryLpStockLossReportArgs = {
+  businessHotspotsOrderBy?: InputMaybe<LpStockLossBusinessHotspotsOrderBy>;
   businessId?: InputMaybe<Scalars['String']>;
   endDate?: InputMaybe<Scalars['DateTime']>;
   goodsTypeId?: InputMaybe<Scalars['String']>;
+  goodsTypeOrderBy?: InputMaybe<LpStockLossGoodsTypeOrderBy>;
+  groupIds?: InputMaybe<Array<Scalars['String']>>;
+  offenderOrderBy?: InputMaybe<LpStockLossOffenderOrderBy>;
   schemeId?: InputMaybe<Scalars['String']>;
   sections?: InputMaybe<Array<LpStockLossSection>>;
   startDate?: InputMaybe<Scalars['DateTime']>;
   stockItemId?: InputMaybe<Scalars['String']>;
+  topItemsOrderBy?: InputMaybe<LpStockLossTopItemsOrderBy>;
 };
 
 
@@ -21612,9 +21742,9 @@ export enum ReportType {
   GroupTable = 'GROUP_TABLE',
   IncidentItemsTable = 'INCIDENT_ITEMS_TABLE',
   IncidentMap = 'INCIDENT_MAP',
-  LpStockLossReport = 'LP_STOCK_LOSS_REPORT',
   IncidentTable = 'INCIDENT_TABLE',
   InvestigationsTable = 'INVESTIGATIONS_TABLE',
+  LpStockLossReport = 'LP_STOCK_LOSS_REPORT',
   Offender = 'OFFENDER',
   OffenderTable = 'OFFENDER_TABLE',
   Performance = 'PERFORMANCE',
@@ -26645,8 +26775,10 @@ export type UpdateInvestigationInput = {
   incidentIds?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   name?: InputMaybe<Scalars['String']>;
   offenderIds?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  priority?: InputMaybe<InvestigationPriority>;
   schemeId?: InputMaybe<Scalars['String']>;
   status?: InputMaybe<InvestigationStatus>;
+  type?: InputMaybe<InvestigationType>;
   vehicleIds?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 

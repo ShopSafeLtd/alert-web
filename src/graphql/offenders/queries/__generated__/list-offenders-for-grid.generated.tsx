@@ -12,7 +12,7 @@ export type ListOffendersForGridQueryVariables = Types.Exact<{
 }>;
 
 
-export type ListOffendersForGridQuery = { __typename?: 'Query', listOffenders: { __typename?: 'ListOffenders', total: number, offenders: Array<{ __typename?: 'Offender', id: string, name?: string | null, reference?: number | null, gender?: Types.Gender | null, race?: Types.Race | null, age?: Types.Age | null, dateOfBirth?: Date | null, totalIncidents: number, totalValue: number, knownFor: Array<string>, latestIncident?: { __typename?: 'Incident', id: string, date: Date } | null, targetedBusinesses?: Array<{ __typename?: 'Business', id: string, name: string }> | null, images: Array<{ __typename?: 'Image', id: string, optimised?: string | null, position: Types.ImagePosition, rotation: number }> }> } };
+export type ListOffendersForGridQuery = { __typename?: 'Query', listOffenders: { __typename?: 'ListOffenders', total: number, offenders: Array<{ __typename?: 'Offender', id: string, name?: string | null, reference?: number | null, gender?: Types.Gender | null, race?: Types.Race | null, age?: Types.Age | null, dateOfBirth?: Date | null, totalIncidents: number, totalValue: number, alias: Array<string>, wanted: boolean, knownFor: Array<string>, targetedGoods: Array<string>, latestIncident?: { __typename?: 'Incident', id: string, date: Date } | null, targetedBusinesses?: Array<{ __typename?: 'Business', id: string, name: string }> | null, images: Array<{ __typename?: 'Image', id: string, optimised?: string | null, position: Types.ImagePosition, rotation: number }> }> } };
 
 
 export const ListOffendersForGridDocument = gql`
@@ -38,7 +38,10 @@ export const ListOffendersForGridDocument = gql`
         id
         date
       }
+      alias
+      wanted
       knownFor
+      targetedGoods
       targetedBusinesses {
         id
         name

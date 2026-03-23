@@ -3,35 +3,12 @@ import type * as Types from '../../../../../graphql/types';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
-
-export enum LpStockLossTopItemsOrderBy {
-  IncidentCount = 'INCIDENT_COUNT',
-  NetValue = 'NET_VALUE',
-  TotalValue = 'TOTAL_VALUE',
-  TotalValueRecovered = 'TOTAL_VALUE_RECOVERED',
-}
-
-export enum LpStockLossOffenderOrderBy {
-  IncidentCount = 'INCIDENT_COUNT',
-  NetValue = 'NET_VALUE',
-  TotalValue = 'TOTAL_VALUE',
-  TotalValueRecovered = 'TOTAL_VALUE_RECOVERED',
-}
-
-export enum LpStockLossGoodsTypeOrderBy {
-  IncidentCount = 'INCIDENT_COUNT',
-  NetValue = 'NET_VALUE',
-  TotalValue = 'TOTAL_VALUE',
-  TotalValueRecovered = 'TOTAL_VALUE_RECOVERED',
-}
-
-export enum LpStockLossBusinessHotspotsOrderBy {
-  IncidentCount = 'INCIDENT_COUNT',
-  NetValue = 'NET_VALUE',
-  TotalValue = 'TOTAL_VALUE',
-  TotalValueRecovered = 'TOTAL_VALUE_RECOVERED',
-}
-
+export {
+  LpStockLossBusinessHotspotsOrderBy,
+  LpStockLossGoodsTypeOrderBy,
+  LpStockLossOffenderOrderBy,
+  LpStockLossTopItemsOrderBy,
+} from '../../../../../graphql/types';
 export type LpStockLossReportQueryVariables = Types.Exact<{
   startDate?: Types.InputMaybe<Types.Scalars['DateTime']>;
   endDate?: Types.InputMaybe<Types.Scalars['DateTime']>;
@@ -39,19 +16,18 @@ export type LpStockLossReportQueryVariables = Types.Exact<{
   goodsTypeId?: Types.InputMaybe<Types.Scalars['String']>;
   stockItemId?: Types.InputMaybe<Types.Scalars['String']>;
   businessId?: Types.InputMaybe<Types.Scalars['String']>;
-  topItemsOrderBy?: Types.InputMaybe<LpStockLossTopItemsOrderBy>;
-  offenderOrderBy?: Types.InputMaybe<LpStockLossOffenderOrderBy>;
-  goodsTypeOrderBy?: Types.InputMaybe<LpStockLossGoodsTypeOrderBy>;
-  businessHotspotsOrderBy?: Types.InputMaybe<LpStockLossBusinessHotspotsOrderBy>;
-  groupIds?: Types.InputMaybe<Array<Types.Scalars['String']>>;
+  topItemsOrderBy?: Types.InputMaybe<Types.LpStockLossTopItemsOrderBy>;
+  offenderOrderBy?: Types.InputMaybe<Types.LpStockLossOffenderOrderBy>;
+  goodsTypeOrderBy?: Types.InputMaybe<Types.LpStockLossGoodsTypeOrderBy>;
+  businessHotspotsOrderBy?: Types.InputMaybe<Types.LpStockLossBusinessHotspotsOrderBy>;
 }>;
 
 
-export type LpStockLossReportQuery = { __typename?: 'Query', lpStockLossReport: { __typename?: 'LPStockLossReportData', summary: { __typename?: 'LPStockLossSummary', totalIncidents: number, totalValueLost: number, totalValueRecovered: number, recoveryRate: number, uniqueItemsStolen: number, uniqueOffenders: number, businessesAffected: number, periodIncidentChange?: number | null, periodValueChange?: number | null }, topTargetedItems?: Array<{ __typename?: 'LPStockLossTargetedItem', stockItemId: string, name?: string | null, brand?: string | null, goodsTypeName?: string | null, incidentCount: number, totalValueLost: number, totalValueRecovered: number, netValueLost: number, totalQuantityLost: number, recoveryRate: number, topBusinesses: Array<{ __typename?: 'LPStockLossBusinessRef', id: string, name: string }> }> | null, goodsTypeBreakdown?: Array<{ __typename?: 'LPStockLossGoodsTypeRow', goodsTypeId: string, goodsTypeName: string, totalValueLost: number, totalValueRecovered: number, netValueLost: number, incidentCount: number, recoveryRate: number, topItems: Array<{ __typename?: 'LPStockLossGoodsTypeTopItem', name?: string | null, incidentCount: number }>, monthlyTrend: Array<{ __typename?: 'LPStockLossGoodsTypeMonthItem', month: string, count: number }> }> | null, incidentAnalysis?: { __typename?: 'LPStockLossIncidentAnalysis', approvalBreakdown: { __typename?: 'LPStockLossApprovalBreakdown', approved: number, pending: number }, byBusiness: Array<{ __typename?: 'LPStockLossBusinessValueItem', id: string, name: string, incidentCount: number, totalValueLost: number }>, byHour: Array<{ __typename?: 'LPStockLossHourlyItem', hour: number, count: number }>, byDayOfWeek: Array<{ __typename?: 'LPStockLossDailyItem', dayOfWeek: number, count: number }> } | null, offenderAssociations?: Array<{ __typename?: 'LPStockLossOffenderRow', id: string, name?: string | null, incidentCount: number, itemsTargeted: Array<string>, businessesTargeted: Array<string>, totalValueAssociated: number, totalValueRecovered: number, netValueLost: number }> | null, recoveryAnalysis?: { __typename?: 'LPStockLossRecoveryAnalysis', overallRecoveryRate: number, byGoodsType: Array<{ __typename?: 'LPStockLossRecoveryRateRow', id: string, name: string, recoveryRate: number, totalValueLost: number, totalValueRecovered: number }>, byBusiness: Array<{ __typename?: 'LPStockLossRecoveryRateRow', id: string, name: string, recoveryRate: number, totalValueLost: number, totalValueRecovered: number }>, zeroRecoveryItems: Array<{ __typename?: 'LPStockLossZeroRecoveryItem', stockItemId: string, name?: string | null, sku?: string | null, totalValueLost: number }>, highestAbsoluteRecoveryItems: Array<{ __typename?: 'LPStockLossZeroRecoveryItem', stockItemId: string, name?: string | null, sku?: string | null, totalValueLost: number }> } | null, businessHotspots?: Array<{ __typename?: 'LPStockLossBusinessRow', id: string, name: string, incidentCount: number, totalValueLost: number, totalValueRecovered: number, netValueLost: number, recoveryRate: number, topTargetedItems: Array<string> }> | null } };
+export type LpStockLossReportQuery = { __typename?: 'Query', lpStockLossReport: { __typename?: 'LPStockLossReportData', summary: { __typename?: 'LPStockLossSummary', totalIncidents: number, totalValueLost: number, totalValueRecovered: number, recoveryRate: number, uniqueItemsStolen: number, uniqueOffenders: number, businessesAffected: number, periodIncidentChange?: number | null, periodValueChange?: number | null }, topTargetedItems?: Array<{ __typename?: 'LPStockLossTargetedItem', stockItemId: string, name?: string | null, brand?: string | null, goodsTypeName?: string | null, incidentCount: number, totalValueLost: number, totalValueRecovered: number, netValueLost: number, totalQuantityLost: number, recoveryRate: number, topBusinesses: Array<{ __typename?: 'LPStockLossBusinessRef', id: string, name: string }> }> | null, goodsTypeBreakdown?: Array<{ __typename?: 'LPStockLossGoodsTypeRow', goodsTypeId: string, goodsTypeName: string, totalValueLost: number, totalValueRecovered: number, netValueLost: number, incidentCount: number, recoveryRate: number, topItems: Array<{ __typename?: 'LPStockLossGoodsTypeTopItem', name?: string | null, incidentCount: number }>, monthlyTrend: Array<{ __typename?: 'LPStockLossGoodsTypeMonthItem', month: string, count: number }> }> | null, incidentAnalysis?: { __typename?: 'LPStockLossIncidentAnalysis', approvalBreakdown: { __typename?: 'LPStockLossApprovalBreakdown', approved: number, pending: number }, byBusiness: Array<{ __typename?: 'LPStockLossBusinessValueItem', id: string, name: string, incidentCount: number, totalValueLost: number }>, byHour: Array<{ __typename?: 'LPStockLossHourlyItem', hour: number, count: number }>, byDayOfWeek: Array<{ __typename?: 'LPStockLossDailyItem', dayOfWeek: number, count: number }> } | null, offenderAssociations?: Array<{ __typename?: 'LPStockLossOffenderRow', id: string, name?: string | null, incidentCount: number, itemsTargeted: Array<string>, businessesTargeted: Array<string>, totalValueAssociated: number, totalValueRecovered: number, netValueLost: number }> | null, recoveryAnalysis?: { __typename?: 'LPStockLossRecoveryAnalysis', overallRecoveryRate: number, byGoodsType: Array<{ __typename?: 'LPStockLossRecoveryRateRow', id: string, name: string, recoveryRate: number, totalValueLost: number, totalValueRecovered: number }>, byBusiness: Array<{ __typename?: 'LPStockLossRecoveryRateRow', id: string, name: string, recoveryRate: number, totalValueLost: number, totalValueRecovered: number }>, zeroRecoveryItems: Array<{ __typename?: 'LPStockLossZeroRecoveryItem', stockItemId: string, name?: string | null, sku?: string | null, totalValueLost: number }>, highestAbsoluteRecoveryItems: Array<{ __typename?: 'LPStockLossZeroRecoveryItem', stockItemId: string, name?: string | null, sku?: string | null, totalValueLost: number }> } | null, businessHotspots?: Array<{ __typename?: 'LPStockLossBusinessRow', id: string, name: string, incidentCount: number, totalValueLost: number, recoveryRate: number, topTargetedItems: Array<string> }> | null } };
 
 
 export const LpStockLossReportDocument = gql`
-    query LpStockLossReport($startDate: DateTime, $endDate: DateTime, $schemeId: String, $goodsTypeId: String, $stockItemId: String, $businessId: String, $topItemsOrderBy: LPStockLossTopItemsOrderBy, $offenderOrderBy: LPStockLossOffenderOrderBy, $goodsTypeOrderBy: LPStockLossGoodsTypeOrderBy, $businessHotspotsOrderBy: LPStockLossBusinessHotspotsOrderBy, $groupIds: [String!]) {
+    query LpStockLossReport($startDate: DateTime, $endDate: DateTime, $schemeId: String, $goodsTypeId: String, $stockItemId: String, $businessId: String, $topItemsOrderBy: LPStockLossTopItemsOrderBy, $offenderOrderBy: LPStockLossOffenderOrderBy, $goodsTypeOrderBy: LPStockLossGoodsTypeOrderBy, $businessHotspotsOrderBy: LPStockLossBusinessHotspotsOrderBy) {
   lpStockLossReport(
     startDate: $startDate
     endDate: $endDate
@@ -63,7 +39,6 @@ export const LpStockLossReportDocument = gql`
     offenderOrderBy: $offenderOrderBy
     goodsTypeOrderBy: $goodsTypeOrderBy
     businessHotspotsOrderBy: $businessHotspotsOrderBy
-    groupIds: $groupIds
   ) {
     summary {
       totalIncidents
@@ -173,8 +148,6 @@ export const LpStockLossReportDocument = gql`
       name
       incidentCount
       totalValueLost
-      totalValueRecovered
-      netValueLost
       recoveryRate
       topTargetedItems
     }

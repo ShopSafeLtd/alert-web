@@ -5,23 +5,21 @@ import type { CrimeGroupFilters } from 'state/data-model';
 import type { DateType } from 'types/DataType';
 
 import { currencyAtom } from '#/providers/SchemeProvider/SchemeProvider';
-import { faFilter, faPlus } from '@fortawesome/pro-light-svg-icons';
+import { faFilter } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Col, Drawer, Input, Row, Table, Tooltip } from 'antd';
 import CrimeGroupFilter from 'components/crimeGroups/CrimeGroupFilter';
-import AddInvestigation from 'components/form-components/Investigation/AddInvestigation';
 import CheckTags from 'components/form-components/check-tags/CheckTags.view';
 import dayjs from 'dayjs';
 import { useAtomValue } from 'jotai';
 import React from 'react';
 import { useIntl } from 'react-intl';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import FormatCalendar from 'utils/format-calendar-24h';
 
 import useStyles from './ListCrimeGroups.styles';
 
 interface Props {
-  addInvestigation: string;
   clearFilters: () => void;
   data: ListCrimeGroupsQuery | undefined;
   groups: { label: string; value: string }[];
@@ -33,13 +31,11 @@ interface Props {
   setOrder: (value: SortOrder) => void;
   setSearch: (value: string) => void;
   sortFilter: boolean;
-  toggleAddInvestigation: (value: string) => void;
   toggleSortFilter: () => void;
   variables: CrimeGroupFilters;
 }
 
 const ListCrimeGroups = ({
-  addInvestigation,
   clearFilters,
   data,
   groups,
@@ -51,12 +47,12 @@ const ListCrimeGroups = ({
   setOrder,
   setSearch,
   sortFilter,
-  toggleAddInvestigation,
   toggleSortFilter,
   variables,
 }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
+  const navigate = useNavigate();
   const { gallery, search } = variables;
   const galleryOptions = [
     {
@@ -194,31 +190,6 @@ const ListCrimeGroups = ({
               defaultMessage: 'Updated At',
             }),
           },
-          {
-            dataIndex: 'actions',
-            key: 'actions',
-            render: (_, record) => (
-              // <FontAwesomeIcon
-              //   icon={faArrowUpRightFromSquare}
-              //   onClick={() => navigate(`view/${record.key}`)}
-              // />
-              <Button
-                onClick={() => toggleAddInvestigation(record.key)}
-                type="ghost"
-              >
-                <FontAwesomeIcon
-                  icon={faPlus}
-                  size="1x"
-                  style={{ marginRight: 8 }}
-                />
-                {intl.formatMessage({
-                  defaultMessage: 'Investigation',
-                })}
-              </Button>
-            ),
-            title: '',
-            width: 120,
-          },
         ]}
         dataSource={data?.listCrimeGroups.crimeGroups.map((crimeGroup) => ({
           alias: crimeGroup.alias,
@@ -232,6 +203,10 @@ const ListCrimeGroups = ({
           updatedAt: crimeGroup.updatedAt,
         }))}
         loading={loading}
+        onRow={(record) => ({
+          onClick: () => navigate(`view/${record.key}`),
+          style: { cursor: 'pointer' },
+        })}
         pagination={{
           defaultPageSize: 20,
           hideOnSinglePage: true,
@@ -256,24 +231,6 @@ const ListCrimeGroups = ({
           setOrder={setOrder}
           variables={variables}
         />
-      </Drawer>
-      {/* investigation */}
-      <Drawer
-        onClose={() => toggleAddInvestigation('')}
-        open={!!addInvestigation}
-        title={intl.formatMessage({
-          defaultMessage: 'Add New Investigation',
-        })}
-        width="500"
-      >
-        {addInvestigation ? (
-          <AddInvestigation
-            onClose={() => toggleAddInvestigation('')}
-            vehicleId={addInvestigation}
-          />
-        ) : (
-          <div />
-        )}
       </Drawer>
     </div>
   );

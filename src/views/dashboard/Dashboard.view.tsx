@@ -12,7 +12,7 @@ import { useIntl } from 'react-intl';
 import Lightbox from 'yet-another-react-lightbox';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 
-import { generateHeight, useDashboardContext } from './Dashboard.context';
+import { useDashboardContext, useGenerateHeight } from './Dashboard.context';
 import {
   ActiveOffenders,
   AdminSummaryWidget,
@@ -192,6 +192,7 @@ const FeedItem = (): JSX.Element => {
   } = useDashboardContext();
 
   const intl = useIntl();
+  const rowHeight = useGenerateHeight();
 
   const ReactGridLayout = useMemo(() => WidthProvider(RGL), []);
 
@@ -223,12 +224,9 @@ const FeedItem = (): JSX.Element => {
         isResizable={false}
         layout={layout
           .filter((item) => item.i !== 'searchRow')
-          .map((item) => ({
-            ...item,
-            y: item.y - 2,
-          }))}
+          .map((item) => ({ ...item, y: item.y - 2 }))}
         margin={[0, 0]}
-        rowHeight={generateHeight()}
+        rowHeight={rowHeight}
         style={{
           height: marqueeString ? '90%' : '98%',
           marginTop: marqueeString ? 0 : 10,
@@ -260,7 +258,7 @@ const FeedItem = (): JSX.Element => {
             }
 
             // Calculate the actual pixel height for this grid item
-            const gridItemHeight = layoutItem.h * generateHeight();
+            const gridItemHeight = layoutItem.h * rowHeight;
             const component = createElement(
               layoutItem.i,
               elementType,
@@ -278,7 +276,8 @@ const FeedItem = (): JSX.Element => {
                   flexDirection: 'column',
                   height: '100%',
                   margin: 10,
-                  overflow: 'hidden',
+                  overflowX: 'hidden',
+                  overflowY: 'auto',
                   padding: elementType === 'searchRow' ? 0 : 10,
                 }}
               >

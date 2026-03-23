@@ -84,17 +84,17 @@ const TopOffenders: React.FC<TopOffendersProps> = ({ loading, offenders }) => {
                 onClick={() => navigate(`/app/offenders/view/${offender.id}`)}
                 onMouseEnter={(e) => {
                   const el = e.currentTarget as HTMLDivElement;
-                  el.style.borderColor = 'rgba(0,0,0,0.15)';
-                  el.style.boxShadow = '0 2px 8px rgba(0,0,0,0.06)';
+                  el.style.borderColor = 'rgba(255,255,255,0.30)';
+                  el.style.boxShadow = '0 2px 8px rgba(0,0,0,0.30)';
                 }}
                 onMouseLeave={(e) => {
                   const el = e.currentTarget as HTMLDivElement;
-                  el.style.borderColor = 'rgba(0,0,0,0.06)';
+                  el.style.borderColor = 'rgba(255,255,255,0.15)';
                   el.style.boxShadow = 'none';
                 }}
                 style={{
-                  background: 'rgba(0,0,0,0.02)',
-                  border: '1px solid rgba(0,0,0,0.06)',
+                  background: 'rgba(255,255,255,0.06)',
+                  border: '1px solid rgba(255,255,255,0.15)',
                   borderRadius: 10,
                   cursor: 'pointer',
                   display: 'flex',
@@ -166,7 +166,7 @@ const TopOffenders: React.FC<TopOffendersProps> = ({ loading, offenders }) => {
                 {/* Progress bar */}
                 <div
                   style={{
-                    background: 'rgba(0,0,0,0.06)',
+                    background: 'rgba(255,255,255,0.12)',
                     borderRadius: 2,
                     height: 4,
                     overflow: 'hidden',
@@ -186,7 +186,7 @@ const TopOffenders: React.FC<TopOffendersProps> = ({ loading, offenders }) => {
                 <div style={{ display: 'flex', gap: 8 }}>
                   <div
                     style={{
-                      background: 'rgba(0,0,0,0.03)',
+                      background: 'rgba(255,255,255,0.06)',
                       borderRadius: 6,
                       flex: 1,
                       padding: '4px 8px',
@@ -207,7 +207,7 @@ const TopOffenders: React.FC<TopOffendersProps> = ({ loading, offenders }) => {
                   </div>
                   <div
                     style={{
-                      background: 'rgba(0,0,0,0.03)',
+                      background: 'rgba(255,255,255,0.06)',
                       borderRadius: 6,
                       flex: 1,
                       padding: '4px 8px',

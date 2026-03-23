@@ -23,7 +23,7 @@ const AdminSummary: React.FC<AdminSummaryProps> = ({ loading, summary }) => {
     return (
       <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
         {Array.from({ length: 8 }).map((_, i) => (
-          <Col key={i} lg={6} sm={12} xs={24} xxl={3}>
+          <Col key={i} lg={6} sm={12} xl={3} xs={24} xxl={3}>
             <Skeleton active paragraph={{ rows: 1 }} />
           </Col>
         ))}
@@ -41,7 +41,7 @@ const AdminSummary: React.FC<AdminSummaryProps> = ({ loading, summary }) => {
 
   return (
     <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
-      <Col lg={6} sm={12} xs={24} xxl={3}>
+      <Col lg={6} sm={12} xl={3} xs={24} xxl={3}>
         <KpiStatCard
           invertTrend
           loading={loading}
@@ -59,7 +59,7 @@ const AdminSummary: React.FC<AdminSummaryProps> = ({ loading, summary }) => {
           value={summary?.totalIncidents ?? null}
         />
       </Col>
-      <Col lg={6} sm={12} xs={24} xxl={3}>
+      <Col lg={6} sm={12} xl={3} xs={24} xxl={3}>
         <KpiStatCard
           invertTrend
           loading={loading}
@@ -85,7 +85,7 @@ const AdminSummary: React.FC<AdminSummaryProps> = ({ loading, summary }) => {
           }
         />
       </Col>
-      <Col lg={6} sm={12} xs={24} xxl={3}>
+      <Col lg={6} sm={12} xl={3} xs={24} xxl={3}>
         <KpiStatCard
           loading={loading}
           title={intl.formatMessage({ defaultMessage: 'Active Offenders' })}
@@ -96,7 +96,7 @@ const AdminSummary: React.FC<AdminSummaryProps> = ({ loading, summary }) => {
           value={summary?.activeOffenders ?? null}
         />
       </Col>
-      <Col lg={6} sm={12} xs={24} xxl={3}>
+      <Col lg={6} sm={12} xl={3} xs={24} xxl={3}>
         <KpiStatCard
           loading={loading}
           title={intl.formatMessage({ defaultMessage: 'Repeat Offenders' })}
@@ -107,7 +107,7 @@ const AdminSummary: React.FC<AdminSummaryProps> = ({ loading, summary }) => {
           value={repeatFraction}
         />
       </Col>
-      <Col lg={6} sm={12} xs={24} xxl={3}>
+      <Col lg={6} sm={12} xl={3} xs={24} xxl={3}>
         <KpiStatCard
           invertTrend
           loading={loading}
@@ -130,7 +130,7 @@ const AdminSummary: React.FC<AdminSummaryProps> = ({ loading, summary }) => {
           }
         />
       </Col>
-      <Col lg={6} sm={12} xs={24} xxl={3}>
+      <Col lg={6} sm={12} xl={3} xs={24} xxl={3}>
         <KpiStatCard
           invertTrend
           loading={loading}
@@ -153,7 +153,7 @@ const AdminSummary: React.FC<AdminSummaryProps> = ({ loading, summary }) => {
           }
         />
       </Col>
-      <Col lg={6} sm={12} xs={24} xxl={3}>
+      <Col lg={6} sm={12} xl={3} xs={24} xxl={3}>
         <KpiStatCard
           loading={loading}
           title={intl.formatMessage({ defaultMessage: 'Pending Approval' })}
@@ -164,7 +164,7 @@ const AdminSummary: React.FC<AdminSummaryProps> = ({ loading, summary }) => {
           value={summary?.pendingApproval ?? null}
         />
       </Col>
-      <Col lg={6} sm={12} xs={24} xxl={3}>
+      <Col lg={6} sm={12} xl={3} xs={24} xxl={3}>
         <KpiStatCard
           loading={loading}
           title={intl.formatMessage({ defaultMessage: 'Open Investigations' })}

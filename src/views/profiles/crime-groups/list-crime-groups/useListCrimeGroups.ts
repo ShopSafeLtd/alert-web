@@ -18,7 +18,6 @@ import { useEffect, useState } from 'react';
 import { useStoreActions, useStoreState } from 'state';
 
 interface Return {
-  addInvestigation: string;
   clearFilters: () => void;
   data: ListCrimeGroupsQuery | undefined;
   groups: { label: string; value: string }[];
@@ -30,7 +29,6 @@ interface Return {
   setOrder: (value: SortOrder) => void;
   setSearch: (value: string) => void;
   sortFilter: boolean;
-  toggleAddInvestigation: (value: string) => void;
   toggleSortFilter: () => void;
   variables: CrimeGroupFilters;
 }
@@ -59,7 +57,6 @@ const useListCrimeGroups = (): Return => {
   );
 
   const [sortFilter, setSortFilter] = useState(false);
-  const [addInvestigation, setAddInvestigation] = useState('');
   const {
     createdAt: createdAtFilter,
     gallery,
@@ -252,7 +249,6 @@ const useListCrimeGroups = (): Return => {
   };
 
   return {
-    addInvestigation,
     clearFilters,
     data,
     groups,
@@ -264,7 +260,6 @@ const useListCrimeGroups = (): Return => {
     setOrder,
     setSearch,
     sortFilter,
-    toggleAddInvestigation: setAddInvestigation,
     toggleSortFilter,
     variables: filterVariables,
   };

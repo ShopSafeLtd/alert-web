@@ -8,8 +8,10 @@ import RolesSelect from '#/components/form-components/RolesSelect/RolesSelect.vi
 import IndustrySelect from '#/components/industry/IndustrySelect';
 import ComponentList from '#/components/reports/ComponentList/ComponentList.view';
 import DateSelect from '#/components/reports/DateSelect/DateSelect.view';
+import ReportEmptyState from '#/components/reports/ReportEmptyState/ReportEmptyState.view';
 import ReportToolbar from '#/components/reports/ReportToolbar/ReportToolbar.view';
 import ReportsSideMenu from '#/components/reports/ReportsSideMenu/ReportsSideMenu.view';
+import { ReportType } from '#/graphql/types';
 import GeneratePrintPage from '#/views/reports/GeneratePrintPage';
 import { faFilters, faTrash } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -184,6 +186,62 @@ const PerformanceReport = ({
 
   const intl = useIntl();
 
+  const reportLayoutElements = PerformanceReportLayout({
+    businessContributionCurrentPage,
+    businessContributionPageSize,
+    businessContributionSortDirection,
+    businessContributionSortField,
+    businessContributionTableData,
+    businessContributionTotal,
+    changeSize,
+    crimeGroupPerformanceTableData,
+    currentPage,
+    data,
+    editMode,
+    filters: {
+      dateRange,
+      schemeId,
+      selectedBrands,
+      selectedBusiness,
+      selectedGroups,
+      selectedIndustries,
+      selectedRoles,
+    },
+    getBusinessContributionSortIndicator,
+    getSortIndicator,
+    getTargetedBusinessSortIndicator,
+    handleBusinessContributionPageChange,
+    handleBusinessContributionSort,
+    handlePageChange,
+    handleSort,
+    handleTargetedBusinessPageChange,
+    handleTargetedBusinessSort,
+    investigationsData,
+    isPrinting,
+    layout,
+    loading,
+    loadingStates,
+    margin,
+    metadata,
+    offendersTableData,
+    pageSize,
+    removeItem,
+    rowHeight,
+    setMetadata,
+    sortDirection,
+    sortField,
+    targetedBusinessCurrentPage,
+    targetedBusinessData,
+    targetedBusinessPageSize,
+    targetedBusinessSortDirection,
+    targetedBusinessSortField,
+    targetedBusinessTotal,
+    targetedGoodsData,
+    userContributionTableData,
+    userContributionsTotal,
+    userEngagementLoading,
+  });
+
   return (
     <Row wrap={false}>
       <Col style={{ width: collapsed ? 0 : undefined }}>
@@ -238,7 +296,20 @@ const PerformanceReport = ({
             </Col>
           </Row>
 
-          {editMode ? (
+          {layout.length === 0 ? (
+            <ReportEmptyState
+              onAddComponent={() => {
+                setEditMode(true);
+                setMinDrawer(true);
+              }}
+              onLayoutGenerated={(newLayout, newMetadata) => {
+                setLayout(newLayout);
+                setMetadata(newMetadata);
+              }}
+              reportType={ReportType.Performance}
+              reportView="summary"
+            />
+          ) : editMode ? (
             <div className="print-page" style={{ paddingTop: 60 }}>
               <div className="logo">
                 {metadata
@@ -313,61 +384,7 @@ const PerformanceReport = ({
                     useCSSTransforms={!isPrinting}
                     width={400}
                   >
-                    {...PerformanceReportLayout({
-                      businessContributionCurrentPage,
-                      businessContributionPageSize,
-                      businessContributionSortDirection,
-                      businessContributionSortField,
-                      businessContributionTableData,
-                      businessContributionTotal,
-                      changeSize,
-                      crimeGroupPerformanceTableData,
-                      currentPage,
-                      data,
-                      editMode,
-                      filters: {
-                        dateRange,
-                        schemeId,
-                        selectedBrands,
-                        selectedBusiness,
-                        selectedGroups,
-                        selectedIndustries,
-                        selectedRoles,
-                      },
-                      getBusinessContributionSortIndicator,
-                      getSortIndicator,
-                      getTargetedBusinessSortIndicator,
-                      handleBusinessContributionPageChange,
-                      handleBusinessContributionSort,
-                      handlePageChange,
-                      handleSort,
-                      handleTargetedBusinessPageChange,
-                      handleTargetedBusinessSort,
-                      investigationsData,
-                      isPrinting,
-                      layout,
-                      loading,
-                      loadingStates,
-                      margin,
-                      metadata,
-                      offendersTableData,
-                      pageSize,
-                      removeItem,
-                      rowHeight,
-                      setMetadata,
-                      sortDirection,
-                      sortField,
-                      targetedBusinessCurrentPage,
-                      targetedBusinessData,
-                      targetedBusinessPageSize,
-                      targetedBusinessSortDirection,
-                      targetedBusinessSortField,
-                      targetedBusinessTotal,
-                      targetedGoodsData,
-                      userContributionTableData,
-                      userContributionsTotal,
-                      userEngagementLoading,
-                    })}
+                    {...reportLayoutElements}
                   </ReactGridLayout>
                 </div>
               </div>
@@ -377,61 +394,7 @@ const PerformanceReport = ({
               <div className="no-print" style={{ paddingTop: 60 }} />
               <GeneratePrintPage
                 componentRef={componentRef}
-                elements={PerformanceReportLayout({
-                  businessContributionCurrentPage,
-                  businessContributionPageSize,
-                  businessContributionSortDirection,
-                  businessContributionSortField,
-                  businessContributionTableData,
-                  businessContributionTotal,
-                  changeSize,
-                  crimeGroupPerformanceTableData,
-                  currentPage,
-                  data,
-                  editMode,
-                  filters: {
-                    dateRange,
-                    schemeId,
-                    selectedBrands,
-                    selectedBusiness,
-                    selectedGroups,
-                    selectedIndustries,
-                    selectedRoles,
-                  },
-                  getBusinessContributionSortIndicator,
-                  getSortIndicator,
-                  getTargetedBusinessSortIndicator,
-                  handleBusinessContributionPageChange,
-                  handleBusinessContributionSort,
-                  handlePageChange,
-                  handleSort,
-                  handleTargetedBusinessPageChange,
-                  handleTargetedBusinessSort,
-                  investigationsData,
-                  isPrinting,
-                  layout,
-                  loading,
-                  loadingStates,
-                  margin,
-                  metadata,
-                  offendersTableData,
-                  pageSize,
-                  removeItem,
-                  rowHeight,
-                  setMetadata,
-                  sortDirection,
-                  sortField,
-                  targetedBusinessCurrentPage,
-                  targetedBusinessData,
-                  targetedBusinessPageSize,
-                  targetedBusinessSortDirection,
-                  targetedBusinessSortField,
-                  targetedBusinessTotal,
-                  targetedGoodsData,
-                  userContributionTableData,
-                  userContributionsTotal,
-                  userEngagementLoading,
-                })}
+                elements={reportLayoutElements}
                 isPrinting={isPrinting}
                 layout={layout}
                 logo={

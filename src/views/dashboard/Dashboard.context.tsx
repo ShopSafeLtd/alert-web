@@ -79,26 +79,46 @@ export const useDashboardContext = () => {
   }
   return context;
 };
-export const generateHeight = () => {
+const getWidthMultiplier = (windowWidth: number): number => {
+  if (windowWidth <= 1024) return 0.85;
+  if (windowWidth <= 1280) return 0.92;
+  if (windowWidth <= 1440) return 1;
+  if (windowWidth <= 1600) return 1.06;
+  return 1.12;
+};
+
+export const generateHeight = (): number => {
   const windowHeight = window.innerHeight;
+  const windowWidth = window.innerWidth;
+  const multiplier = getWidthMultiplier(windowWidth);
+
+  let base: number;
   if (windowHeight <= 920) {
-    return Number.parseInt((windowHeight / 35).toFixed(0), 10) + 1;
-  }
-  if (windowHeight > 920 && windowHeight <= 1200) {
-    return Number.parseInt((windowHeight / 29).toFixed(0), 10) + 1;
-  }
-  if (windowHeight > 1200) {
-    return Number.parseInt((windowHeight / 27).toFixed(0), 10) + 1;
+    base = Number.parseInt((windowHeight / 35).toFixed(0), 10) + 1;
+  } else if (windowHeight <= 1200) {
+    base = Number.parseInt((windowHeight / 29).toFixed(0), 10) + 1;
+  } else {
+    base = Number.parseInt((windowHeight / 27).toFixed(0), 10) + 1;
   }
 
-  // Default value for any other window height
-  return 30; // Default value for small screens
+  return Math.round(base * multiplier);
+};
+
+export const useGenerateHeight = (): number => {
+  const [rowHeight, setRowHeight] = useState(() => generateHeight());
+  useEffect(() => {
+    const handleResize = () => setRowHeight(generateHeight());
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+  return rowHeight;
 };
 
 export const DashboardProvider: React.FC<{
   children?: ReactNode;
 }> = ({ children }) => {
   const adminRights = useAtomValue(isAdminAtom);
+  const rowHeight = useGenerateHeight();
   const schemeId = useAtomValue(currentSchemeIdAtom);
   const setFeedItemsState = useStoreActions(
     (actions) => actions.data.setFeedItems
@@ -116,7 +136,7 @@ export const DashboardProvider: React.FC<{
   );
 
   const dashboardLayout = useMemo(
-    () => (isSet ? schemeLayouts[schemeId] ?? initialLayout : initialLayout),
+    () => (isSet ? (schemeLayouts[schemeId] ?? initialLayout) : initialLayout),
     [isSet, schemeLayouts, schemeId, initialLayout]
   );
 
@@ -228,8 +248,8 @@ export const DashboardProvider: React.FC<{
   const getHeight = useCallback(
     (itemId: AvailableDashboardElements) =>
       (dashboardLayout.layout.find(({ i }) => i === itemId)?.h ?? 0) *
-      generateHeight(),
-    [dashboardLayout]
+      rowHeight,
+    [dashboardLayout, rowHeight]
   );
   const rowOrCol = useCallback(
     (itemId: AvailableDashboardElements) => {
