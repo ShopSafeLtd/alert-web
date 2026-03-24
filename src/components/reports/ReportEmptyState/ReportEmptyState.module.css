@@ -1,0 +1,30 @@
+.gradientWrapper {
+  background: linear-gradient(135deg, #ee2224, #f4a841, #421bff, #0db0fd);
+  border-radius: 10px;
+  display: inline-block;
+  padding: 2px;
+}
+
+.gradientButton {
+  background: #ffffff;
+  border: none !important;
+  border-radius: 8px !important;
+}
+
+.gradientButton:hover:not(:disabled) {
+  background: #fafafa !important;
+  border: none !important;
+  color: #421bff !important;
+}
+
+:global([style*='color-scheme: dark']) .gradientButton {
+  background: #141414;
+  border: none !important;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+:global([style*='color-scheme: dark']) .gradientButton:hover:not(:disabled) {
+  background: #1f1f1f !important;
+  border: none !important;
+  color: #0db0fd !important;
+}

@@ -22,7 +22,7 @@ import { useTagsQuery } from 'graphql/tags/queries/__generated__/tags.generated'
 import { ArticlePriority, Model, Role } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
 import { useEffect, useRef, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useLocation, useNavigate, useParams } from 'react-router';
 
 import type { Incident } from '../../../../components/form-components/linkOptions/LinkIncident/useLinkIncident';
 import type { Props } from '../types/CreateArticle';
@@ -67,8 +67,17 @@ export function extractFilename(url: string): null | string {
   return match ? match[1] : null;
 }
 
+interface BulletinPrefill {
+  bulletinTitle?: string;
+  htmlBody?: string;
+  offenderId?: string;
+  offenderName?: string;
+}
+
 const useCreateEditArticle = (): Props => {
   const { id: articleId } = useParams();
+  const location = useLocation();
+  const prefill = (location.state as BulletinPrefill | null) ?? null;
 
   const siteUrl = `${window.location.href.split('/app/')[0]}`;
   const schemeId = useAtomValue(currentSchemeIdAtom);
@@ -113,7 +122,26 @@ const useCreateEditArticle = (): Props => {
 
   useEffect(() => {
     if (!articleId) {
-      setInitialValue('<p>Create a new document here...</p>');
+      if (prefill?.htmlBody) {
+        setInitialValue(prefill.htmlBody);
+        setData((prev) => ({ ...prev, title: prefill.bulletinTitle ?? '' }));
+        form.setFieldValue('title', prefill.bulletinTitle ?? '');
+        if (prefill.offenderId) {
+          setOffenders([
+            {
+              id: prefill.offenderId,
+              images: [],
+              name: prefill.offenderName ?? null,
+              tags: [],
+              totalIncidents: 0,
+              totalValue: 0,
+              updatedAt: new Date(),
+            } as OffenderData,
+          ]);
+        }
+      } else {
+        setInitialValue('<p>Create a new document here...</p>');
+      }
       // For new docs, clear the baseline image set
       initialImagePathsRef.current = new Set();
     }

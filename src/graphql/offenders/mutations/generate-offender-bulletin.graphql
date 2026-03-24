@@ -1,0 +1,9 @@
+mutation GenerateOffenderBulletin($offenderId: String!, $context: String) {
+  generateOffenderBulletin(
+    where: { id: $offenderId }
+    data: { context: $context }
+  ) {
+    title
+    htmlBody
+  }
+}

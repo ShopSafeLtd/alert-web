@@ -12,7 +12,9 @@ import type {
   Height,
   IdSource,
   ImagePosition,
+  InvestigationPriority,
   InvestigationStatus,
+  InvestigationType,
   Race,
   UpdateType,
 } from 'graphql/types';
@@ -195,6 +197,8 @@ export interface InvestigationDetails {
   groupIds?: string[];
   id: string;
   name?: string;
+  priority?: InvestigationPriority;
+  type?: InvestigationType;
 }
 export interface InvestigationData {
   closedAt?: Date | null;

@@ -27,6 +27,7 @@ interface Return {
   onSubmit: () => void;
   saving: boolean;
   search: string;
+  selected: string | undefined;
   setSearch: (value: string) => void;
 }
 
@@ -105,7 +106,9 @@ const useLinkCrimeGroup = ({
         });
       }
       if (getCrimeGroup) {
-        getCrimeGroup({ crimeGroup: selectedData });
+        getCrimeGroup({
+          crimeGroup: selectedData as unknown as CrimeGroupData,
+        });
       }
     }
     setSaving(false);
@@ -129,6 +132,7 @@ const useLinkCrimeGroup = ({
     onSubmit,
     saving,
     search,
+    selected,
     setSearch,
   };
 };

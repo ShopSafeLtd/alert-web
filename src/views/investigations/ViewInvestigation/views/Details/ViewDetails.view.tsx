@@ -20,7 +20,6 @@ import {
   faDownload,
   faEdit,
   faFileDownload,
-  faHistory,
   faListAlt,
   faMagnifyingGlass,
   faPenToSquare,
@@ -56,11 +55,13 @@ import IntelSection from 'components/ViewPage/IntelSection';
 import Toolbar from 'components/common/Toolbar/Toolbar';
 import EditIncidentFeed from 'components/form-components/incident/EditIncidentFeed';
 import ConnectOffenderModal from 'components/investigations/ConnectOffenderModal';
+import InvestigationPriorityTag from 'components/investigations/InvestigationPriorityTag/InvestigationPriorityTag.view';
 import SuggestedIncidents from 'components/investigations/SuggestedIncidents';
 import SuggestedOffenders from 'components/investigations/SuggestedOffenders';
 import SuggestedVehicles from 'components/investigations/SuggestedVehicles';
 import { IncidentMapContainer } from 'components/map/IncidentMap';
 import {
+  OffenderCard,
   OffenderGridContainer,
   OffenderSortSelect,
   useOffenderSort,
@@ -78,6 +79,7 @@ import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate, useOutletContext } from 'react-router';
 import GetInvestigationStatusValues from 'types/enums/investigation-status';
+import GetInvestigationTypeValues from 'types/enums/investigation-type';
 
 import UpdateBar from '../../../../../components/MessageInput/UpdateBar';
 import TabContent from '../../../../../components/TabContent';
@@ -260,9 +262,11 @@ const ViewInvestigation = ({
   const { setSortBy: setOffenderSortBy, sortBy: offenderSortBy } =
     useOffenderSort('incidents');
   const [sidebarSection, setSidebarSection] = useState<
-    'activities' | 'history' | 'intel' | 'suggestions'
+    'activities' | 'intel' | 'suggestions'
   >('intel');
   const [sidebarExpanded, setSidebarExpanded] = useState(true);
+  const [sharingModalVisible, setSharingModalVisible] = useState(false);
+  const [viewAllActivities, setViewAllActivities] = useState(false);
 
   // Get outlet context for sidebar state management
   const outletContext = useOutletContext<{
@@ -282,7 +286,7 @@ const ViewInvestigation = ({
           <Col className={classes.detailsContainer} flex="1">
             <div ref={componentRef} style={{ padding: '0 24px' }}>
               <div style={{ padding: '20px 0' }}>
-                <Row align="middle" gutter={16}>
+                <Row align="middle" gutter={[16, 8]}>
                   <Col flex={1}>
                     <Title
                       className={classes.investigationTitle}
@@ -313,232 +317,241 @@ const ViewInvestigation = ({
                         {data.investigation.description}
                       </Paragraph>
                     )}
+                    <div style={{ marginTop: 8 }}>
+                      {data?.investigation?.type && (
+                        <Tag style={{ marginRight: 4 }}>
+                          {GetInvestigationTypeValues[data.investigation.type]}
+                        </Tag>
+                      )}
+                      {data?.investigation?.priority && (
+                        <InvestigationPriorityTag
+                          value={data.investigation.priority}
+                        />
+                      )}
+                    </div>
                   </Col>
                   <Col>
-                    <Toolbar
-                      buttons={[
-                        {
-                          children: (
-                            <Tooltip
-                              title={intl.formatMessage({
-                                defaultMessage: 'Edit investigation details',
-                              })}
-                            >
-                              <span
-                                style={{
-                                  alignItems: 'center',
-                                  display: 'flex',
-                                  height: '100%',
-                                }}
-                              >
-                                <FontAwesomeIcon icon={faPenToSquare} />
-                              </span>
-                            </Tooltip>
-                          ),
-                          disabled: saving,
-                          key: 'edit',
-                          onClick: toggleEditInvestigation,
-                          style: { padding: '4px 12px' },
-                        },
-                        {
-                          children: (
-                            <Tooltip
-                              title={
-                                data?.investigation?.subscribed
-                                  ? intl.formatMessage({
-                                      defaultMessage:
-                                        'Stop getting notified about updates.',
-                                    })
-                                  : intl.formatMessage({
-                                      defaultMessage:
-                                        'Get notified about updates.',
-                                    })
-                              }
-                            >
-                              <span
-                                style={{
-                                  alignItems: 'center',
-                                  display: 'flex',
-                                  height: '100%',
-                                }}
-                              >
-                                <FontAwesomeIcon
-                                  icon={
-                                    data?.investigation?.subscribed
-                                      ? faBellSlash
-                                      : faBell
-                                  }
-                                />
-                              </span>
-                            </Tooltip>
-                          ),
-                          key: 'subscribe',
-                          onClick: toggleSubscribe,
-                          style: { padding: '4px 12px' },
-                        },
-                        {
-                          children: (
-                            <Tooltip
-                              title={intl.formatMessage({
-                                defaultMessage: 'Download investigation as PDF',
-                              })}
-                            >
-                              <span
-                                style={{
-                                  alignItems: 'center',
-                                  display: 'flex',
-                                  height: '100%',
-                                }}
-                              >
-                                {isPrinting ? (
-                                  <Spin size="small" />
-                                ) : (
-                                  <FontAwesomeIcon icon={faFileDownload} />
-                                )}
-                              </span>
-                            </Tooltip>
-                          ),
-                          disabled: isPrinting,
-                          key: 'download',
-                          onClick: handlePrint,
-                          style: { padding: '4px 12px' },
-                        },
-                        {
-                          children: (
-                            <Tooltip
-                              title={intl.formatMessage({
-                                defaultMessage: 'Flow Map',
-                              })}
-                            >
-                              <span
-                                style={{
-                                  alignItems: 'center',
-                                  display: 'flex',
-                                  height: '100%',
-                                }}
-                              >
-                                <FontAwesomeIcon icon={faDiagramProject} />
-                              </span>
-                            </Tooltip>
-                          ),
-                          key: 'flow',
-                          onClick: () =>
+                    <Row align="middle" gutter={8} wrap={false}>
+                      <Col>
+                        <Button
+                          icon={
+                            <FontAwesomeIcon
+                              icon={faDiagramProject}
+                              style={{ marginRight: 8 }}
+                            />
+                          }
+                          onClick={() =>
                             navigate(
                               `/app/investigations/view/${data?.investigation?.id}/flow`
-                            ),
-                          style: { padding: '4px 12px' },
-                        },
-                        {
-                          children: (
-                            <Tooltip
-                              title={intl.formatMessage({
-                                defaultMessage: 'Delete investigation',
-                              })}
+                            )
+                          }
+                        >
+                          {intl.formatMessage({ defaultMessage: 'Visualise' })}
+                        </Button>
+                      </Col>
+                      <Col>
+                        <Toolbar
+                          buttons={[
+                            {
+                              children: (
+                                <Tooltip
+                                  title={intl.formatMessage({
+                                    defaultMessage:
+                                      'Edit investigation details',
+                                  })}
+                                >
+                                  <span
+                                    style={{
+                                      alignItems: 'center',
+                                      display: 'flex',
+                                      height: '100%',
+                                    }}
+                                  >
+                                    <FontAwesomeIcon icon={faPenToSquare} />
+                                  </span>
+                                </Tooltip>
+                              ),
+                              disabled: saving,
+                              key: 'edit',
+                              onClick: toggleEditInvestigation,
+                              style: { padding: '4px 12px' },
+                            },
+                            {
+                              children: (
+                                <Tooltip
+                                  title={
+                                    data?.investigation?.subscribed
+                                      ? intl.formatMessage({
+                                          defaultMessage:
+                                            'Stop getting notified about updates.',
+                                        })
+                                      : intl.formatMessage({
+                                          defaultMessage:
+                                            'Get notified about updates.',
+                                        })
+                                  }
+                                >
+                                  <span
+                                    style={{
+                                      alignItems: 'center',
+                                      display: 'flex',
+                                      height: '100%',
+                                    }}
+                                  >
+                                    <FontAwesomeIcon
+                                      icon={
+                                        data?.investigation?.subscribed
+                                          ? faBellSlash
+                                          : faBell
+                                      }
+                                    />
+                                  </span>
+                                </Tooltip>
+                              ),
+                              key: 'subscribe',
+                              onClick: toggleSubscribe,
+                              style: { padding: '4px 12px' },
+                            },
+                            {
+                              children: (
+                                <Tooltip
+                                  title={intl.formatMessage({
+                                    defaultMessage:
+                                      'Download investigation as PDF',
+                                  })}
+                                >
+                                  <span
+                                    style={{
+                                      alignItems: 'center',
+                                      display: 'flex',
+                                      height: '100%',
+                                    }}
+                                  >
+                                    {isPrinting ? (
+                                      <Spin size="small" />
+                                    ) : (
+                                      <FontAwesomeIcon icon={faFileDownload} />
+                                    )}
+                                  </span>
+                                </Tooltip>
+                              ),
+                              disabled: isPrinting,
+                              key: 'download',
+                              onClick: handlePrint,
+                              style: { padding: '4px 12px' },
+                            },
+                            {
+                              children: (
+                                <Tooltip
+                                  title={intl.formatMessage({
+                                    defaultMessage: 'Delete investigation',
+                                  })}
+                                >
+                                  <span
+                                    style={{
+                                      alignItems: 'center',
+                                      display: 'flex',
+                                      height: '100%',
+                                    }}
+                                  >
+                                    <FontAwesomeIcon icon={faTrash} />
+                                  </span>
+                                </Tooltip>
+                              ),
+                              key: 'delete',
+                              onClick: () => {
+                                confirm({
+                                  content: intl.formatMessage({
+                                    defaultMessage:
+                                      'This action cannot be undone.',
+                                  }),
+                                  onOk() {
+                                    onDeleteInvestigation();
+                                  },
+                                  title: intl.formatMessage({
+                                    defaultMessage:
+                                      'Do you want to delete the investigation?',
+                                  }),
+                                });
+                              },
+                              style: { padding: '4px 12px' },
+                            },
+                          ]}
+                        />
+                      </Col>
+                      <Col>
+                        <Button onClick={() => setSharingModalVisible(true)}>
+                          {intl.formatMessage({
+                            defaultMessage: 'Refer to OPAL',
+                          })}
+                        </Button>
+                      </Col>
+                      <Col>
+                        <Button onClick={() => setSharingModalVisible(true)}>
+                          {intl.formatMessage({
+                            defaultMessage: 'Share to Police',
+                          })}
+                        </Button>
+                      </Col>
+                      {data?.investigation?.status ===
+                        InvestigationStatus.Open && (
+                        <Col>
+                          <Popconfirm
+                            okButtonProps={{ danger: true }}
+                            okText={intl.formatMessage({
+                              defaultMessage: 'Close Investigation',
+                            })}
+                            onConfirm={onCloseInvestigation}
+                            title={intl.formatMessage({
+                              defaultMessage:
+                                'Do you want to close the investigation?',
+                            })}
+                          >
+                            <Button
+                              icon={
+                                <FontAwesomeIcon
+                                  icon={faCheckCircle}
+                                  style={{ marginRight: 8 }}
+                                />
+                              }
+                              loading={saving}
+                              style={{
+                                borderColor: '#52c41a',
+                                color: '#52c41a',
+                              }}
                             >
-                              <span
-                                style={{
-                                  alignItems: 'center',
-                                  display: 'flex',
-                                  height: '100%',
-                                }}
-                              >
-                                <FontAwesomeIcon icon={faTrash} />
-                              </span>
-                            </Tooltip>
-                          ),
-                          key: 'delete',
-                          onClick: () => {
-                            confirm({
-                              content: intl.formatMessage({
-                                defaultMessage: 'This action cannot be undone.',
-                              }),
-                              onOk() {
-                                onDeleteInvestigation();
-                              },
-                              title: intl.formatMessage({
-                                defaultMessage:
-                                  'Do you want to delete the investigation?',
-                              }),
-                            });
-                          },
-                          style: { padding: '4px 12px' },
-                        },
-                        ...(data?.investigation?.status ===
-                        InvestigationStatus.Open
-                          ? [
-                              {
-                                children: (
-                                  <Tooltip
-                                    title={intl.formatMessage({
-                                      defaultMessage: 'Close Investigation',
-                                    })}
-                                  >
-                                    <span
-                                      style={{
-                                        alignItems: 'center',
-                                        display: 'flex',
-                                        height: '100%',
-                                      }}
-                                    >
-                                      <FontAwesomeIcon icon={faCheckCircle} />
-                                    </span>
-                                  </Tooltip>
-                                ),
-                                key: 'close',
-                                onClick: () => {
-                                  confirm({
-                                    onOk() {
-                                      onCloseInvestigation();
-                                    },
-                                    title: intl.formatMessage({
-                                      defaultMessage:
-                                        'Do you want to close the investigation?',
-                                    }),
-                                  });
-                                },
-                                style: { padding: '4px 12px' },
-                              },
-                            ]
-                          : []),
-                        ...(data?.investigation?.status ===
-                        InvestigationStatus.Closed
-                          ? [
-                              {
-                                children: (
-                                  <Tooltip
-                                    title={intl.formatMessage({
-                                      defaultMessage: 'Reopen Investigation',
-                                    })}
-                                  >
-                                    <span
-                                      style={{
-                                        alignItems: 'center',
-                                        display: 'flex',
-                                        height: '100%',
-                                      }}
-                                    >
-                                      <FontAwesomeIcon icon={faCheckCircle} />
-                                    </span>
-                                  </Tooltip>
-                                ),
-                                key: 'reopen',
-                                onClick: () => {
-                                  confirm({
-                                    onOk() {
-                                      onReopenInvestigation();
-                                    },
-                                    title: intl.formatMessage({
-                                      defaultMessage:
-                                        'Do you want to reopen the investigation?',
-                                    }),
-                                  });
-                                },
-                                style: { padding: '4px 12px' },
-                              },
-                            ]
-                          : []),
-                      ]}
-                    />
+                              {intl.formatMessage({
+                                defaultMessage: 'Close Investigation',
+                              })}
+                            </Button>
+                          </Popconfirm>
+                        </Col>
+                      )}
+                      {data?.investigation?.status ===
+                        InvestigationStatus.Closed && (
+                        <Col>
+                          <Popconfirm
+                            okText={intl.formatMessage({
+                              defaultMessage: 'Reopen',
+                            })}
+                            onConfirm={onReopenInvestigation}
+                            title={intl.formatMessage({
+                              defaultMessage:
+                                'Do you want to reopen the investigation?',
+                            })}
+                          >
+                            <Button
+                              icon={<FontAwesomeIcon icon={faCheckCircle} />}
+                              loading={saving}
+                            >
+                              {intl.formatMessage({
+                                defaultMessage: 'Reopen Investigation',
+                              })}
+                            </Button>
+                          </Popconfirm>
+                        </Col>
+                      )}
+                    </Row>
                   </Col>
                 </Row>
               </div>
@@ -1295,26 +1308,6 @@ const ViewInvestigation = ({
                 </div>
 
                 <div
-                  className={`${classes.sidebarMenuItem} ${rightSidebarOpen && sidebarSection === 'history' ? classes.sidebarMenuItemActive : ''}`}
-                  onClick={() => {
-                    setRightSidebarOpen(true);
-                    setSidebarSection('history');
-                  }}
-                >
-                  <FontAwesomeIcon icon={faHistory} />
-                  <Tooltip
-                    placement="left"
-                    title={intl.formatMessage({
-                      defaultMessage: 'Activity History',
-                    })}
-                  >
-                    <span className={classes.sidebarMenuLabel}>
-                      {intl.formatMessage({ defaultMessage: 'History' })}
-                    </span>
-                  </Tooltip>
-                </div>
-
-                <div
                   className={`${classes.sidebarMenuItem} ${rightSidebarOpen && sidebarSection === 'activities' ? classes.sidebarMenuItemActive : ''}`}
                   onClick={() => {
                     setRightSidebarOpen(true);
@@ -1339,8 +1332,6 @@ const ViewInvestigation = ({
                     </span>
                   </Tooltip>
                 </div>
-
-                <div className={classes.sidebarMenuDivider} />
 
                 <div
                   className={classes.sidebarMenuItem}
@@ -1420,42 +1411,45 @@ const ViewInvestigation = ({
                         suggestedData.investigation.suggestedOffenders.length >
                           0 && (
                           <div style={{ marginBottom: 24 }}>
-                            <Row
-                              align="middle"
-                              gutter={8}
-                              style={{ marginBottom: 12 }}
+                            <Typography.Text
+                              strong
+                              style={{ display: 'block', marginBottom: 8 }}
                             >
-                              <Col flex="1">
-                                <Typography.Text strong>
-                                  {intl.formatMessage({
-                                    defaultMessage: 'Suggested Offenders',
-                                  })}
-                                </Typography.Text>
-                              </Col>
-                              <Col>
-                                <Button
-                                  onClick={toggleViewSuggestedOffenders}
-                                  size="small"
+                              {intl.formatMessage({
+                                defaultMessage: 'Suggested Offenders',
+                              })}
+                            </Typography.Text>
+                            {suggestedData.investigation.suggestedOffenders
+                              .slice(0, 3)
+                              .map((offender) => (
+                                <div
+                                  key={offender.id}
+                                  style={{ marginBottom: 8 }}
                                 >
-                                  {intl.formatMessage({
-                                    defaultMessage: 'View All',
-                                  })}
-                                </Button>
-                              </Col>
-                            </Row>
-                            <Typography.Text type="secondary">
+                                  <OffenderCard
+                                    offender={{
+                                      ...offender,
+                                      totalIncidents:
+                                        offender.totalAssociatedIncidents,
+                                      totalValue: 0,
+                                    }}
+                                  />
+                                </div>
+                              ))}
+                            <Button
+                              block
+                              onClick={toggleViewSuggestedOffenders}
+                              size="small"
+                            >
                               {intl.formatMessage(
-                                {
-                                  defaultMessage:
-                                    '{count} offenders found with similar characteristics',
-                                },
+                                { defaultMessage: 'View all {count}' },
                                 {
                                   count:
                                     suggestedData.investigation
                                       .suggestedOffenders.length,
                                 }
                               )}
-                            </Typography.Text>
+                            </Button>
                           </div>
                         )}
 
@@ -1463,42 +1457,50 @@ const ViewInvestigation = ({
                         suggestedData.investigation.suggestedVehicles.length >
                           0 && (
                           <div style={{ marginBottom: 24 }}>
-                            <Row
-                              align="middle"
-                              gutter={8}
-                              style={{ marginBottom: 12 }}
+                            <Typography.Text
+                              strong
+                              style={{ display: 'block', marginBottom: 8 }}
                             >
-                              <Col flex="1">
-                                <Typography.Text strong>
-                                  {intl.formatMessage({
-                                    defaultMessage: 'Suggested Vehicles',
-                                  })}
-                                </Typography.Text>
-                              </Col>
-                              <Col>
-                                <Button
-                                  onClick={toggleViewSuggestedVehicles}
+                              {intl.formatMessage({
+                                defaultMessage: 'Suggested Vehicles',
+                              })}
+                            </Typography.Text>
+                            {suggestedData.investigation.suggestedVehicles
+                              .slice(0, 3)
+                              .map((vehicle) => (
+                                <Card
+                                  key={vehicle.id}
                                   size="small"
+                                  style={{ marginBottom: 8 }}
                                 >
-                                  {intl.formatMessage({
-                                    defaultMessage: 'View All',
-                                  })}
-                                </Button>
-                              </Col>
-                            </Row>
-                            <Typography.Text type="secondary">
+                                  <Typography.Text strong>
+                                    {vehicle.registration}
+                                  </Typography.Text>
+                                  <br />
+                                  <Typography.Text
+                                    style={{ fontSize: 12 }}
+                                    type="secondary"
+                                  >
+                                    {[vehicle.make, vehicle.model]
+                                      .filter(Boolean)
+                                      .join(' ')}
+                                  </Typography.Text>
+                                </Card>
+                              ))}
+                            <Button
+                              block
+                              onClick={toggleViewSuggestedVehicles}
+                              size="small"
+                            >
                               {intl.formatMessage(
-                                {
-                                  defaultMessage:
-                                    '{count} vehicles found with similar details',
-                                },
+                                { defaultMessage: 'View all {count}' },
                                 {
                                   count:
                                     suggestedData.investigation
                                       .suggestedVehicles.length,
                                 }
                               )}
-                            </Typography.Text>
+                            </Button>
                           </div>
                         )}
 
@@ -1506,42 +1508,52 @@ const ViewInvestigation = ({
                         suggestedData.investigation.suggestedIncidents.length >
                           0 && (
                           <div style={{ marginBottom: 24 }}>
-                            <Row
-                              align="middle"
-                              gutter={8}
-                              style={{ marginBottom: 12 }}
+                            <Typography.Text
+                              strong
+                              style={{ display: 'block', marginBottom: 8 }}
                             >
-                              <Col flex="1">
-                                <Typography.Text strong>
-                                  {intl.formatMessage({
-                                    defaultMessage: 'Suggested Incidents',
-                                  })}
-                                </Typography.Text>
-                              </Col>
-                              <Col>
-                                <Button
-                                  onClick={toggleViewSuggestedIncidents}
+                              {intl.formatMessage({
+                                defaultMessage: 'Suggested Incidents',
+                              })}
+                            </Typography.Text>
+                            {suggestedData.investigation.suggestedIncidents
+                              .slice(0, 3)
+                              .map((incident) => (
+                                <Card
+                                  key={incident.id}
                                   size="small"
+                                  style={{ marginBottom: 8 }}
                                 >
-                                  {intl.formatMessage({
-                                    defaultMessage: 'View All',
-                                  })}
-                                </Button>
-                              </Col>
-                            </Row>
-                            <Typography.Text type="secondary">
+                                  <Typography.Text strong>
+                                    {incident.subject}
+                                  </Typography.Text>
+                                  <br />
+                                  <Typography.Text
+                                    style={{ fontSize: 12 }}
+                                    type="secondary"
+                                  >
+                                    {incident.dayTime
+                                      ? dayjs(incident.dayTime).format(
+                                          'MMM D, YYYY'
+                                        )
+                                      : ''}
+                                  </Typography.Text>
+                                </Card>
+                              ))}
+                            <Button
+                              block
+                              onClick={toggleViewSuggestedIncidents}
+                              size="small"
+                            >
                               {intl.formatMessage(
-                                {
-                                  defaultMessage:
-                                    '{count} related incidents found',
-                                },
+                                { defaultMessage: 'View all {count}' },
                                 {
                                   count:
                                     suggestedData.investigation
                                       .suggestedIncidents.length,
                                 }
                               )}
-                            </Typography.Text>
+                            </Button>
                           </div>
                         )}
 
@@ -1562,324 +1574,369 @@ const ViewInvestigation = ({
                     </div>
                   )}
 
-                  {sidebarSection === 'history' && (
-                    <div style={{ padding: '16px' }}>
-                      <Empty
-                        description={intl.formatMessage({
-                          defaultMessage: 'Activity history coming soon',
-                        })}
-                        image={Empty.PRESENTED_IMAGE_SIMPLE}
-                      />
-                    </div>
-                  )}
-
                   {sidebarSection === 'activities' && (
                     <div
                       style={{
+                        display: 'flex',
+                        flexDirection: 'column',
                         height: '100%',
-                        overflow: 'auto',
-                        padding: '16px',
                       }}
                     >
-                      {data?.investigation?.todos &&
-                      data.investigation.todos.length > 0 ? (
-                        <div className={classes.activitiesList}>
-                          {data.investigation.todos.map((todo) => (
-                            <Card
-                              className={classes.activityCard}
-                              key={todo.id}
-                              onClick={() => setViewTodoVisible(todo.id)}
-                              size="small"
-                              style={{ cursor: 'pointer' }}
-                            >
-                              <Row gutter={[12, 12]}>
-                                <Col span={24}>
-                                  <Row align="middle" gutter={8}>
-                                    <Col flex="1">
-                                      <div>
-                                        <Typography.Text
-                                          className={classes.activityName}
-                                        >
-                                          {todo.name}
-                                        </Typography.Text>
-                                        {todo.reference && (
-                                          <Typography.Text
+                      <div
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'flex-end',
+                          padding: '8px 16px 0',
+                        }}
+                      >
+                        <Button
+                          icon={
+                            <FontAwesomeIcon
+                              icon={faPlus}
+                              style={{ marginRight: 6 }}
+                            />
+                          }
+                          onClick={_toggleAddTodo}
+                        >
+                          {intl.formatMessage({
+                            defaultMessage: 'Add Activity',
+                          })}
+                        </Button>
+                      </div>
+                      <div
+                        style={{
+                          flex: 1,
+                          overflow: 'auto',
+                          padding: '16px',
+                        }}
+                      >
+                        {data?.investigation?.todos &&
+                        data.investigation.todos.length > 0 ? (
+                          <div className={classes.activitiesList}>
+                            {data.investigation.todos
+                              .slice(0, 3)
+                              .map((todo) => (
+                                <Card
+                                  className={classes.activityCard}
+                                  key={todo.id}
+                                  onClick={() => setViewTodoVisible(todo.id)}
+                                  size="small"
+                                  style={{ cursor: 'pointer' }}
+                                >
+                                  <Row gutter={[12, 12]}>
+                                    <Col span={24}>
+                                      <Row align="middle" gutter={8}>
+                                        <Col flex="1">
+                                          <div>
+                                            <Typography.Text
+                                              className={classes.activityName}
+                                            >
+                                              {todo.name}
+                                            </Typography.Text>
+                                            {todo.reference && (
+                                              <Typography.Text
+                                                className={
+                                                  classes.activityReference
+                                                }
+                                              >
+                                                {intl.formatMessage(
+                                                  {
+                                                    defaultMessage:
+                                                      '#{reference}',
+                                                  },
+                                                  { reference: todo.reference }
+                                                )}
+                                              </Typography.Text>
+                                            )}
+                                          </div>
+                                        </Col>
+                                        <Col>
+                                          {todo.completed ? (
+                                            <Tag
+                                              className={classes.activityStatus}
+                                              color="success"
+                                            >
+                                              {intl.formatMessage({
+                                                defaultMessage: 'Completed',
+                                              })}
+                                            </Tag>
+                                          ) : todo.dueDate &&
+                                            dayjs(todo.dueDate).isBefore(
+                                              dayjs()
+                                            ) ? (
+                                            <Tag
+                                              className={classes.activityStatus}
+                                              color="error"
+                                            >
+                                              {intl.formatMessage({
+                                                defaultMessage: 'Overdue',
+                                              })}
+                                            </Tag>
+                                          ) : (
+                                            <Tag
+                                              className={classes.activityStatus}
+                                              color="processing"
+                                            >
+                                              {intl.formatMessage({
+                                                defaultMessage: 'Pending',
+                                              })}
+                                            </Tag>
+                                          )}
+                                        </Col>
+                                      </Row>
+                                    </Col>
+
+                                    {todo.assignedUsers &&
+                                      todo.assignedUsers.length > 0 && (
+                                        <Col span={24}>
+                                          <div
                                             className={
-                                              classes.activityReference
+                                              classes.activityAssignees
                                             }
                                           >
-                                            {intl.formatMessage(
-                                              {
-                                                defaultMessage: '#{reference}',
-                                              },
-                                              { reference: todo.reference }
-                                            )}
-                                          </Typography.Text>
-                                        )}
-                                      </div>
-                                    </Col>
-                                    <Col>
-                                      {todo.completed ? (
-                                        <Tag
-                                          className={classes.activityStatus}
-                                          color="success"
-                                        >
-                                          {intl.formatMessage({
-                                            defaultMessage: 'Completed',
-                                          })}
-                                        </Tag>
-                                      ) : todo.dueDate &&
-                                        dayjs(todo.dueDate).isBefore(
-                                          dayjs()
-                                        ) ? (
-                                        <Tag
-                                          className={classes.activityStatus}
-                                          color="error"
-                                        >
-                                          {intl.formatMessage({
-                                            defaultMessage: 'Overdue',
-                                          })}
-                                        </Tag>
-                                      ) : (
-                                        <Tag
-                                          className={classes.activityStatus}
-                                          color="processing"
-                                        >
-                                          {intl.formatMessage({
-                                            defaultMessage: 'Pending',
-                                          })}
-                                        </Tag>
+                                            <Typography.Text
+                                              className={classes.activityLabel}
+                                            >
+                                              {intl.formatMessage({
+                                                defaultMessage: 'Assigned to:',
+                                              })}
+                                            </Typography.Text>
+                                            <Avatar.Group
+                                              maxCount={3}
+                                              maxStyle={{
+                                                backgroundColor: '#fde3cf',
+                                                color: '#f56a00',
+                                                cursor: 'pointer',
+                                              }}
+                                              size="small"
+                                            >
+                                              {todo.assignedUsers.map(
+                                                (user) => (
+                                                  <Tooltip
+                                                    key={user.id}
+                                                    title={user.fullName}
+                                                  >
+                                                    <Avatar
+                                                      className={
+                                                        classes.activityAvatar
+                                                      }
+                                                    >
+                                                      {user.fullName
+                                                        .split(' ')
+                                                        .map((n) => n[0])
+                                                        .join('')
+                                                        .toUpperCase()}
+                                                    </Avatar>
+                                                  </Tooltip>
+                                                )
+                                              )}
+                                            </Avatar.Group>
+                                          </div>
+                                        </Col>
                                       )}
+
+                                    <Col span={24}>
+                                      <div className={classes.activityDetails}>
+                                        <Row gutter={[16, 8]}>
+                                          {todo.createdAt && (
+                                            <Col>
+                                              <div
+                                                className={
+                                                  classes.activityDetailItem
+                                                }
+                                              >
+                                                <FontAwesomeIcon
+                                                  className={
+                                                    classes.activityDetailIcon
+                                                  }
+                                                  icon={faPlus}
+                                                />
+                                                <div>
+                                                  <Typography.Text
+                                                    className={
+                                                      classes.activityDetailLabel
+                                                    }
+                                                  >
+                                                    {intl.formatMessage({
+                                                      defaultMessage: 'Created',
+                                                    })}
+                                                  </Typography.Text>
+                                                  <Typography.Text
+                                                    className={
+                                                      classes.activityDetailValue
+                                                    }
+                                                  >
+                                                    {dayjs(
+                                                      todo.createdAt
+                                                    ).format('MMM D, YYYY')}
+                                                  </Typography.Text>
+                                                </div>
+                                              </div>
+                                            </Col>
+                                          )}
+
+                                          {todo.dueDate && (
+                                            <Col>
+                                              <div
+                                                className={
+                                                  classes.activityDetailItem
+                                                }
+                                              >
+                                                <FontAwesomeIcon
+                                                  className={
+                                                    classes.activityDetailIcon
+                                                  }
+                                                  icon={faUserClock}
+                                                  style={{
+                                                    color:
+                                                      todo.dueDate &&
+                                                      dayjs(
+                                                        todo.dueDate
+                                                      ).isBefore(dayjs()) &&
+                                                      !todo.completed
+                                                        ? '#ff4d4f'
+                                                        : undefined,
+                                                  }}
+                                                />
+                                                <div>
+                                                  <Typography.Text
+                                                    className={
+                                                      classes.activityDetailLabel
+                                                    }
+                                                  >
+                                                    {intl.formatMessage({
+                                                      defaultMessage:
+                                                        'Due Date',
+                                                    })}
+                                                  </Typography.Text>
+                                                  <Typography.Text
+                                                    className={
+                                                      classes.activityDetailValue
+                                                    }
+                                                  >
+                                                    {dayjs(todo.dueDate).format(
+                                                      'MMM D, YYYY'
+                                                    )}
+                                                  </Typography.Text>
+                                                </div>
+                                              </div>
+                                            </Col>
+                                          )}
+
+                                          {todo.completed &&
+                                            todo.completedDate && (
+                                              <Col>
+                                                <div
+                                                  className={
+                                                    classes.activityDetailItem
+                                                  }
+                                                >
+                                                  <FontAwesomeIcon
+                                                    className={
+                                                      classes.activityDetailIcon
+                                                    }
+                                                    icon={faEdit}
+                                                    style={{ color: '#52c41a' }}
+                                                  />
+                                                  <div>
+                                                    <Typography.Text
+                                                      className={
+                                                        classes.activityDetailLabel
+                                                      }
+                                                    >
+                                                      {intl.formatMessage({
+                                                        defaultMessage:
+                                                          'Completed',
+                                                      })}
+                                                    </Typography.Text>
+                                                    <Typography.Text
+                                                      className={
+                                                        classes.activityDetailValue
+                                                      }
+                                                    >
+                                                      {dayjs(
+                                                        todo.completedDate
+                                                      ).format('MMM D, YYYY')}
+                                                    </Typography.Text>
+                                                  </div>
+                                                </div>
+                                              </Col>
+                                            )}
+
+                                          {todo.completed && todo.createdBy && (
+                                            <Col>
+                                              <div
+                                                className={
+                                                  classes.activityDetailItem
+                                                }
+                                              >
+                                                <Avatar
+                                                  className={
+                                                    classes.activityDetailAvatar
+                                                  }
+                                                  size={20}
+                                                >
+                                                  {todo.createdBy.fullName
+                                                    ?.split(' ')
+                                                    ?.map((n: string) => n[0])
+                                                    ?.join('')
+                                                    ?.toUpperCase() || ''}
+                                                </Avatar>
+                                                <div>
+                                                  <Typography.Text
+                                                    className={
+                                                      classes.activityDetailLabel
+                                                    }
+                                                  >
+                                                    {intl.formatMessage({
+                                                      defaultMessage:
+                                                        'Completed By',
+                                                    })}
+                                                  </Typography.Text>
+                                                  <Typography.Text
+                                                    className={
+                                                      classes.activityDetailValue
+                                                    }
+                                                  >
+                                                    {todo.createdBy?.fullName ||
+                                                      ''}
+                                                  </Typography.Text>
+                                                </div>
+                                              </div>
+                                            </Col>
+                                          )}
+                                        </Row>
+                                      </div>
                                     </Col>
                                   </Row>
-                                </Col>
-
-                                {todo.assignedUsers &&
-                                  todo.assignedUsers.length > 0 && (
-                                    <Col span={24}>
-                                      <div
-                                        className={classes.activityAssignees}
-                                      >
-                                        <Typography.Text
-                                          className={classes.activityLabel}
-                                        >
-                                          {intl.formatMessage({
-                                            defaultMessage: 'Assigned to:',
-                                          })}
-                                        </Typography.Text>
-                                        <Avatar.Group
-                                          maxCount={3}
-                                          maxStyle={{
-                                            backgroundColor: '#fde3cf',
-                                            color: '#f56a00',
-                                            cursor: 'pointer',
-                                          }}
-                                          size="small"
-                                        >
-                                          {todo.assignedUsers.map((user) => (
-                                            <Tooltip
-                                              key={user.id}
-                                              title={user.fullName}
-                                            >
-                                              <Avatar
-                                                className={
-                                                  classes.activityAvatar
-                                                }
-                                              >
-                                                {user.fullName
-                                                  .split(' ')
-                                                  .map((n) => n[0])
-                                                  .join('')
-                                                  .toUpperCase()}
-                                              </Avatar>
-                                            </Tooltip>
-                                          ))}
-                                        </Avatar.Group>
-                                      </div>
-                                    </Col>
-                                  )}
-
-                                <Col span={24}>
-                                  <div className={classes.activityDetails}>
-                                    <Row gutter={[16, 8]}>
-                                      {todo.createdAt && (
-                                        <Col>
-                                          <div
-                                            className={
-                                              classes.activityDetailItem
-                                            }
-                                          >
-                                            <FontAwesomeIcon
-                                              className={
-                                                classes.activityDetailIcon
-                                              }
-                                              icon={faPlus}
-                                            />
-                                            <div>
-                                              <Typography.Text
-                                                className={
-                                                  classes.activityDetailLabel
-                                                }
-                                              >
-                                                {intl.formatMessage({
-                                                  defaultMessage: 'Created',
-                                                })}
-                                              </Typography.Text>
-                                              <Typography.Text
-                                                className={
-                                                  classes.activityDetailValue
-                                                }
-                                              >
-                                                {dayjs(todo.createdAt).format(
-                                                  'MMM D, YYYY'
-                                                )}
-                                              </Typography.Text>
-                                            </div>
-                                          </div>
-                                        </Col>
-                                      )}
-
-                                      {todo.dueDate && (
-                                        <Col>
-                                          <div
-                                            className={
-                                              classes.activityDetailItem
-                                            }
-                                          >
-                                            <FontAwesomeIcon
-                                              className={
-                                                classes.activityDetailIcon
-                                              }
-                                              icon={faUserClock}
-                                              style={{
-                                                color:
-                                                  todo.dueDate &&
-                                                  dayjs(todo.dueDate).isBefore(
-                                                    dayjs()
-                                                  ) &&
-                                                  !todo.completed
-                                                    ? '#ff4d4f'
-                                                    : undefined,
-                                              }}
-                                            />
-                                            <div>
-                                              <Typography.Text
-                                                className={
-                                                  classes.activityDetailLabel
-                                                }
-                                              >
-                                                {intl.formatMessage({
-                                                  defaultMessage: 'Due Date',
-                                                })}
-                                              </Typography.Text>
-                                              <Typography.Text
-                                                className={
-                                                  classes.activityDetailValue
-                                                }
-                                              >
-                                                {dayjs(todo.dueDate).format(
-                                                  'MMM D, YYYY'
-                                                )}
-                                              </Typography.Text>
-                                            </div>
-                                          </div>
-                                        </Col>
-                                      )}
-
-                                      {todo.completed && todo.completedDate && (
-                                        <Col>
-                                          <div
-                                            className={
-                                              classes.activityDetailItem
-                                            }
-                                          >
-                                            <FontAwesomeIcon
-                                              className={
-                                                classes.activityDetailIcon
-                                              }
-                                              icon={faEdit}
-                                              style={{ color: '#52c41a' }}
-                                            />
-                                            <div>
-                                              <Typography.Text
-                                                className={
-                                                  classes.activityDetailLabel
-                                                }
-                                              >
-                                                {intl.formatMessage({
-                                                  defaultMessage: 'Completed',
-                                                })}
-                                              </Typography.Text>
-                                              <Typography.Text
-                                                className={
-                                                  classes.activityDetailValue
-                                                }
-                                              >
-                                                {dayjs(
-                                                  todo.completedDate
-                                                ).format('MMM D, YYYY')}
-                                              </Typography.Text>
-                                            </div>
-                                          </div>
-                                        </Col>
-                                      )}
-
-                                      {todo.completed && todo.createdBy && (
-                                        <Col>
-                                          <div
-                                            className={
-                                              classes.activityDetailItem
-                                            }
-                                          >
-                                            <Avatar
-                                              className={
-                                                classes.activityDetailAvatar
-                                              }
-                                              size={20}
-                                            >
-                                              {todo.createdBy.fullName
-                                                ?.split(' ')
-                                                ?.map((n: string) => n[0])
-                                                ?.join('')
-                                                ?.toUpperCase() || ''}
-                                            </Avatar>
-                                            <div>
-                                              <Typography.Text
-                                                className={
-                                                  classes.activityDetailLabel
-                                                }
-                                              >
-                                                {intl.formatMessage({
-                                                  defaultMessage:
-                                                    'Completed By',
-                                                })}
-                                              </Typography.Text>
-                                              <Typography.Text
-                                                className={
-                                                  classes.activityDetailValue
-                                                }
-                                              >
-                                                {todo.createdBy?.fullName || ''}
-                                              </Typography.Text>
-                                            </div>
-                                          </div>
-                                        </Col>
-                                      )}
-                                    </Row>
-                                  </div>
-                                </Col>
-                              </Row>
-                            </Card>
-                          ))}
-                        </div>
-                      ) : (
-                        <Empty
-                          description={intl.formatMessage({
-                            defaultMessage: 'No activities found',
-                          })}
-                          image={Empty.PRESENTED_IMAGE_SIMPLE}
-                        />
-                      )}
+                                </Card>
+                              ))}
+                            {data.investigation.todos.length > 3 && (
+                              <Button
+                                block
+                                onClick={() => setViewAllActivities(true)}
+                                size="small"
+                                style={{ marginTop: 8 }}
+                              >
+                                {intl.formatMessage(
+                                  {
+                                    defaultMessage:
+                                      'View all {count} activities',
+                                  },
+                                  { count: data.investigation.todos.length }
+                                )}
+                              </Button>
+                            )}
+                          </div>
+                        ) : (
+                          <Empty
+                            description={intl.formatMessage({
+                              defaultMessage: 'No activities found',
+                            })}
+                            image={Empty.PRESENTED_IMAGE_SIMPLE}
+                          />
+                        )}
+                      </div>
                     </div>
                   )}
                 </div>
@@ -1966,6 +2023,226 @@ const ViewInvestigation = ({
         )}
       </Drawer>
 
+      {/* All Activities Drawer */}
+      <Drawer
+        onClose={() => setViewAllActivities(false)}
+        open={viewAllActivities}
+        title={intl.formatMessage({ defaultMessage: 'All Activities' })}
+        width={600}
+      >
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          {data?.investigation?.todos?.map((todo) => (
+            <Card
+              className={classes.activityCard}
+              key={todo.id}
+              onClick={() => {
+                setViewAllActivities(false);
+                setViewTodoVisible(todo.id);
+              }}
+              size="small"
+              style={{ cursor: 'pointer' }}
+            >
+              <Row gutter={[12, 12]}>
+                <Col span={24}>
+                  <Row align="middle" gutter={8}>
+                    <Col flex="1">
+                      <div>
+                        <Typography.Text className={classes.activityName}>
+                          {todo.name}
+                        </Typography.Text>
+                        {todo.reference && (
+                          <Typography.Text
+                            className={classes.activityReference}
+                          >
+                            {intl.formatMessage(
+                              { defaultMessage: '#{reference}' },
+                              { reference: todo.reference }
+                            )}
+                          </Typography.Text>
+                        )}
+                      </div>
+                    </Col>
+                    <Col>
+                      {todo.completed ? (
+                        <Tag className={classes.activityStatus} color="success">
+                          {intl.formatMessage({ defaultMessage: 'Completed' })}
+                        </Tag>
+                      ) : todo.dueDate &&
+                        dayjs(todo.dueDate).isBefore(dayjs()) ? (
+                        <Tag className={classes.activityStatus} color="error">
+                          {intl.formatMessage({ defaultMessage: 'Overdue' })}
+                        </Tag>
+                      ) : (
+                        <Tag
+                          className={classes.activityStatus}
+                          color="processing"
+                        >
+                          {intl.formatMessage({ defaultMessage: 'Pending' })}
+                        </Tag>
+                      )}
+                    </Col>
+                  </Row>
+                </Col>
+
+                {todo.assignedUsers && todo.assignedUsers.length > 0 && (
+                  <Col span={24}>
+                    <div className={classes.activityAssignees}>
+                      <Typography.Text className={classes.activityLabel}>
+                        {intl.formatMessage({ defaultMessage: 'Assigned to:' })}
+                      </Typography.Text>
+                      <Avatar.Group
+                        maxCount={3}
+                        maxStyle={{
+                          backgroundColor: '#fde3cf',
+                          color: '#f56a00',
+                          cursor: 'pointer',
+                        }}
+                        size="small"
+                      >
+                        {todo.assignedUsers.map((user) => (
+                          <Tooltip key={user.id} title={user.fullName}>
+                            <Avatar className={classes.activityAvatar}>
+                              {user.fullName
+                                .split(' ')
+                                .map((n) => n[0])
+                                .join('')
+                                .toUpperCase()}
+                            </Avatar>
+                          </Tooltip>
+                        ))}
+                      </Avatar.Group>
+                    </div>
+                  </Col>
+                )}
+
+                <Col span={24}>
+                  <div className={classes.activityDetails}>
+                    <Row gutter={[16, 8]}>
+                      {todo.createdAt && (
+                        <Col>
+                          <div className={classes.activityDetailItem}>
+                            <FontAwesomeIcon
+                              className={classes.activityDetailIcon}
+                              icon={faPlus}
+                            />
+                            <div>
+                              <Typography.Text
+                                className={classes.activityDetailLabel}
+                              >
+                                {intl.formatMessage({
+                                  defaultMessage: 'Created',
+                                })}
+                              </Typography.Text>
+                              <Typography.Text
+                                className={classes.activityDetailValue}
+                              >
+                                {dayjs(todo.createdAt).format('MMM D, YYYY')}
+                              </Typography.Text>
+                            </div>
+                          </div>
+                        </Col>
+                      )}
+
+                      {todo.dueDate && (
+                        <Col>
+                          <div className={classes.activityDetailItem}>
+                            <FontAwesomeIcon
+                              className={classes.activityDetailIcon}
+                              icon={faUserClock}
+                              style={{
+                                color:
+                                  todo.dueDate &&
+                                  dayjs(todo.dueDate).isBefore(dayjs()) &&
+                                  !todo.completed
+                                    ? '#ff4d4f'
+                                    : undefined,
+                              }}
+                            />
+                            <div>
+                              <Typography.Text
+                                className={classes.activityDetailLabel}
+                              >
+                                {intl.formatMessage({
+                                  defaultMessage: 'Due Date',
+                                })}
+                              </Typography.Text>
+                              <Typography.Text
+                                className={classes.activityDetailValue}
+                              >
+                                {dayjs(todo.dueDate).format('MMM D, YYYY')}
+                              </Typography.Text>
+                            </div>
+                          </div>
+                        </Col>
+                      )}
+
+                      {todo.completed && todo.completedDate && (
+                        <Col>
+                          <div className={classes.activityDetailItem}>
+                            <FontAwesomeIcon
+                              className={classes.activityDetailIcon}
+                              icon={faEdit}
+                              style={{ color: '#52c41a' }}
+                            />
+                            <div>
+                              <Typography.Text
+                                className={classes.activityDetailLabel}
+                              >
+                                {intl.formatMessage({
+                                  defaultMessage: 'Completed',
+                                })}
+                              </Typography.Text>
+                              <Typography.Text
+                                className={classes.activityDetailValue}
+                              >
+                                {dayjs(todo.completedDate).format(
+                                  'MMM D, YYYY'
+                                )}
+                              </Typography.Text>
+                            </div>
+                          </div>
+                        </Col>
+                      )}
+
+                      {todo.completed && todo.createdBy && (
+                        <Col>
+                          <div className={classes.activityDetailItem}>
+                            <Avatar
+                              className={classes.activityDetailAvatar}
+                              size={20}
+                            >
+                              {todo.createdBy.fullName
+                                ?.split(' ')
+                                ?.map((n: string) => n[0])
+                                ?.join('')
+                                ?.toUpperCase() || ''}
+                            </Avatar>
+                            <div>
+                              <Typography.Text
+                                className={classes.activityDetailLabel}
+                              >
+                                {intl.formatMessage({
+                                  defaultMessage: 'Completed By',
+                                })}
+                              </Typography.Text>
+                              <Typography.Text
+                                className={classes.activityDetailValue}
+                              >
+                                {todo.createdBy?.fullName || ''}
+                              </Typography.Text>
+                            </div>
+                          </div>
+                        </Col>
+                      )}
+                    </Row>
+                  </div>
+                </Col>
+              </Row>
+            </Card>
+          ))}
+        </div>
+      </Drawer>
+
       {/* Connect Offender Modal */}
       <ConnectOffenderModal
         loading={false}
@@ -1974,6 +2251,24 @@ const ViewInvestigation = ({
         onConfirm={confirmConnectOffender}
         visible={!!pendingOffenderConnection}
       />
+
+      <Modal
+        footer={
+          <Button onClick={() => setSharingModalVisible(false)} type="primary">
+            {intl.formatMessage({ defaultMessage: 'OK' })}
+          </Button>
+        }
+        onCancel={() => setSharingModalVisible(false)}
+        open={sharingModalVisible}
+        title={intl.formatMessage({ defaultMessage: 'Configure Sharing' })}
+      >
+        <Typography.Paragraph>
+          {intl.formatMessage({
+            defaultMessage:
+              'To configure sharing, please contact support@shopsafe.io.',
+          })}
+        </Typography.Paragraph>
+      </Modal>
     </>
   );
 };

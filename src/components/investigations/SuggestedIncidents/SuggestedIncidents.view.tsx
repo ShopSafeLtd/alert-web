@@ -1,22 +1,35 @@
 import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
 import type { InvestigationSuggestionsQuery } from 'graphql/investigations/queries/__generated__/investigation-suggestions.generated';
 
+import { currencyAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import publicOffenderDob from '#/utils/public-offender-dob';
+import { faUsers } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
-  Card,
   Col,
   Descriptions,
   Divider,
   Row,
+  Skeleton,
   Tag,
+  Tooltip,
   Typography,
 } from 'antd';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import WatermarkSlide from 'components/images/WatermartkSlide.view';
-import OffenderTable from 'components/tables/OffenderTable/OffenderTable.view';
+import IncidentPriorityTag from 'components/incidents/IncidentPriority/IncidentPriorityTag.view';
+import { useAtomValue } from 'jotai';
 import React, { useState } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
+import { calcAge } from 'utils';
+import {
+  getOffenderAge,
+  getOffenderBuild,
+  getOffenderGender,
+  getOffenderRace,
+} from 'utils/offender/get-offender-desc';
 import Lightbox from 'yet-another-react-lightbox';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 
@@ -36,6 +49,9 @@ const SuggestedIncidents = ({
   suggestedData,
 }: Props) => {
   const classes = useStyles();
+  const intl = useIntl();
+  const currency = useAtomValue(currencyAtom);
+  const publicOffenderDOB = publicOffenderDob();
   const [lightBoxOpen, setLightBoxOpen] = useState<{
     index: number;
     open: boolean;
@@ -87,63 +103,252 @@ const SuggestedIncidents = ({
               </Col>
             ))}
           </Row>
-          <Title level={3} style={{ margin: 0 }}>
-            {incident.subject}
-          </Title>
-          <Text>
+
+          {/* Header: title + priority/status badges */}
+          <Row align="middle" gutter={8} style={{ marginBottom: 4 }}>
+            <Col flex="auto">
+              <Title level={3} style={{ margin: 0 }}>
+                {incident.subject}
+              </Title>
+            </Col>
+            {incident.priority && (
+              <Col>
+                <IncidentPriorityTag value={incident.priority} />
+              </Col>
+            )}
+            {incident.status && (
+              <Col>
+                <Tooltip title={incident.status.tooltip ?? undefined}>
+                  <Tag>{incident.status.name}</Tag>
+                </Tooltip>
+              </Col>
+            )}
+          </Row>
+
+          <Text type="secondary">
             <FormattedMessage
               defaultMessage="Alert ID: {reference}"
               values={{ reference: incident.reference }}
             />
           </Text>
-          <Paragraph>{incident.description}</Paragraph>
-          <Descriptions style={{ marginBottom: 20, marginTop: 20 }}>
+          {incident.description && (
+            <Paragraph style={{ marginTop: 8 }}>
+              {incident.description}
+            </Paragraph>
+          )}
+
+          <Descriptions
+            bordered={false}
+            column={{ lg: 3, md: 2, sm: 2, xl: 3, xs: 1 }}
+            size="small"
+            style={{ marginBottom: 20, marginTop: 16 }}
+          >
             <Descriptions.Item
               label={<FormattedMessage defaultMessage="Date/Time" />}
             >
               {incident.dayTime}
             </Descriptions.Item>
+
             {incident.business && (
               <Descriptions.Item
                 label={<FormattedMessage defaultMessage="Business" />}
               >
-                {incident.business?.name}
+                <Link
+                  onClick={onClose}
+                  to={`/app/businesses/view/${incident.business.id}`}
+                >
+                  {incident.business.name}
+                </Link>
               </Descriptions.Item>
             )}
-            <Descriptions.Item
-              label={<FormattedMessage defaultMessage="Location" />}
-            >
-              {incident.location?.full}
-            </Descriptions.Item>
-            <Descriptions.Item
-              label={<FormattedMessage defaultMessage="Crime Number" />}
-            >
-              {incident.policeRef}
-            </Descriptions.Item>
-            <Descriptions.Item
-              label={<FormattedMessage defaultMessage="Incident Type" />}
-            >
-              <Row>
-                {incident.crimeTypes.map((item) => (
-                  <Col key={item.id}>
-                    <Tag>{item.name}</Tag>
-                  </Col>
-                ))}
-              </Row>
-            </Descriptions.Item>
+
+            {incident.location?.full && (
+              <Descriptions.Item
+                label={<FormattedMessage defaultMessage="Location" />}
+              >
+                {incident.location.full}
+              </Descriptions.Item>
+            )}
+
+            {incident.policeRef && (
+              <Descriptions.Item
+                label={<FormattedMessage defaultMessage="Crime Number" />}
+              >
+                {incident.policeRef}
+              </Descriptions.Item>
+            )}
+
+            {incident.crimeTypes.length > 0 && (
+              <Descriptions.Item
+                label={<FormattedMessage defaultMessage="Incident Type" />}
+              >
+                <Row gutter={[4, 4]}>
+                  {incident.crimeTypes.map((item) => (
+                    <Col key={item.id}>
+                      <Tag>{item.name}</Tag>
+                    </Col>
+                  ))}
+                </Row>
+              </Descriptions.Item>
+            )}
+
+            {incident.totalValue > 0 && (
+              <Descriptions.Item
+                label={<FormattedMessage defaultMessage="Total Loss" />}
+              >
+                <Text strong>
+                  {intl.formatNumber(incident.totalValue, {
+                    currency,
+                    style: 'currency',
+                  })}
+                </Text>
+              </Descriptions.Item>
+            )}
+
+            {incident.totalRecoveredValue > 0 && (
+              <Descriptions.Item
+                label={<FormattedMessage defaultMessage="Recovered" />}
+              >
+                {intl.formatNumber(incident.totalRecoveredValue, {
+                  currency,
+                  style: 'currency',
+                })}
+              </Descriptions.Item>
+            )}
+
+            {incident.assignedUsers.length > 0 && (
+              <Descriptions.Item
+                label={<FormattedMessage defaultMessage="Assigned To" />}
+              >
+                {incident.assignedUsers.map((u) => u.fullName).join(', ')}
+              </Descriptions.Item>
+            )}
           </Descriptions>
+
           {incident.offenders && incident.offenders.length > 0 && (
-            <Card
-              bodyStyle={{ padding: 0 }}
-              className={classes.tableContainer}
-              headStyle={{ marginTop: -5 }}
-              title={<FormattedMessage defaultMessage="Offenders" />}
-            >
-              <OffenderTable
-                hasNavigation={false}
-                offenders={incident.offenders}
-              />
-            </Card>
+            <div className={classes.offendersSection}>
+              <div className={classes.sectionHeading}>
+                <FontAwesomeIcon icon={faUsers} />
+                <span>
+                  {intl.formatMessage({ defaultMessage: 'Offenders' })}
+                </span>
+                <span className={classes.sectionCount}>
+                  {incident.offenders.length}
+                </span>
+              </div>
+              {incident.offenders.map((offender) => {
+                const gender = getOffenderGender(offender.gender);
+                const ethnicity = getOffenderRace(offender.race, true);
+                const age = publicOffenderDOB
+                  ? offender.dateOfBirth
+                    ? String(calcAge(offender.dateOfBirth))
+                    : getOffenderAge(offender.age)
+                  : undefined;
+                const build = getOffenderBuild(offender.build);
+                const demographicParts = [gender, ethnicity, age, build].filter(
+                  Boolean
+                );
+                const hasDemographics = demographicParts.length > 0;
+
+                return (
+                  <div
+                    className={classes.card}
+                    key={offender.id}
+                    style={{ marginBottom: 12 }}
+                  >
+                    {/* Primary image */}
+                    <div
+                      style={{ display: 'flex', flexShrink: 0, height: 220 }}
+                    >
+                      {offender.images.length > 0 ? (
+                        <div className={classes.offenderImage}>
+                          <WatermarkImage
+                            position={offender.images[0].position}
+                            rotation={offender.images[0].rotation}
+                            url={offender.images[0].optimised}
+                          />
+                        </div>
+                      ) : (
+                        <Skeleton.Image className={classes.imageSkeleton} />
+                      )}
+                    </div>
+
+                    {/* Content */}
+                    <div className={classes.cardContent}>
+                      {/* Name + reference */}
+                      <Typography.Text className={classes.offenderName}>
+                        <span
+                          style={{
+                            flex: 1,
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
+                          }}
+                        >
+                          {offender.name ||
+                            intl.formatMessage({ defaultMessage: 'Unknown' })}
+                        </span>
+                        {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
+                        <span
+                          className={classes.reference}
+                          style={{ flexShrink: 0 }}
+                        >
+                          #{offender.reference}
+                        </span>
+                      </Typography.Text>
+
+                      <div className={classes.infoSection}>
+                        {/* Demographics */}
+                        {hasDemographics && (
+                          <div className={classes.detailRow}>
+                            <Typography.Text className={classes.detailText}>
+                              {demographicParts.map((part, i) => (
+                                // eslint-disable-next-line react/no-array-index-key
+                                <React.Fragment key={i}>
+                                  {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
+                                  {i > 0 && ' • '}
+                                  {part}
+                                </React.Fragment>
+                              ))}
+                            </Typography.Text>
+                          </div>
+                        )}
+
+                        {/* Known for */}
+                        {offender.knownFor.length > 0 && (
+                          <div className={classes.detailRow}>
+                            <Typography.Text className={classes.detailText}>
+                              {offender.knownFor.join(', ')}
+                            </Typography.Text>
+                          </div>
+                        )}
+
+                        {/* Wanted badge */}
+                        {offender.wanted && (
+                          <Tag color="red" style={{ marginTop: 4 }}>
+                            <FormattedMessage defaultMessage="Wanted" />
+                          </Tag>
+                        )}
+                      </div>
+
+                      {/* Action */}
+                      <div className={classes.actionRow}>
+                        <Link
+                          onClick={onClose}
+                          to={`/app/offenders/view/${offender.id}`}
+                        >
+                          <Button size="small">
+                            {intl.formatMessage({
+                              defaultMessage: 'View Offender',
+                            })}
+                          </Button>
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           )}
 
           <Row gutter={8} justify="end">
@@ -156,9 +361,8 @@ const SuggestedIncidents = ({
             </Col>
             <Col>
               <Button
-                danger
                 onClick={() => handleAddSuggestion(incident.id)}
-                type="ghost"
+                type="primary"
               >
                 <FormattedMessage defaultMessage="Add To Investigation" />
               </Button>

@@ -11,7 +11,7 @@ export type InvestigationRelayQueryVariables = Types.Exact<{
 }>;
 
 
-export type InvestigationRelayQuery = { __typename?: 'Query', investigationRelay: { __typename?: 'QueryInvestigationRelayConnection', totalCount: number, edges: Array<{ __typename?: 'QueryInvestigationRelayConnectionEdge', node: { __typename?: 'Investigation', id: string, name: string, description?: string | null, status: Types.InvestigationStatus, createdAt: Date, closedAt?: Date | null, reference?: number | null, groups: Array<{ __typename?: 'Group', id: string, name: string }> } }> } };
+export type InvestigationRelayQuery = { __typename?: 'Query', investigationRelay: { __typename?: 'QueryInvestigationRelayConnection', totalCount: number, edges: Array<{ __typename?: 'QueryInvestigationRelayConnectionEdge', node: { __typename?: 'Investigation', id: string, name: string, description?: string | null, status: Types.InvestigationStatus, type: Types.InvestigationType, priority: Types.InvestigationPriority, createdAt: Date, closedAt?: Date | null, reference?: number | null, groups: Array<{ __typename?: 'Group', id: string, name: string }> } }> } };
 
 
 export const InvestigationRelayDocument = gql`
@@ -24,6 +24,8 @@ export const InvestigationRelayDocument = gql`
         name
         description
         status
+        type
+        priority
         createdAt
         closedAt
         reference

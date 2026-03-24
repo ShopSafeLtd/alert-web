@@ -33,8 +33,16 @@ fragment IncidentCard on Incident {
   reference
   policeRef
   offenders {
-    name
     id
+    name
+    reference
+    gender
+    race
+    age
+    build
+    dateOfBirth
+    knownFor
+    wanted
     images(take: 1, orderBy: { createdAt: desc }) {
       id
       low

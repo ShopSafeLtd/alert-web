@@ -28,7 +28,9 @@ const SchemeComparison: React.FC<SchemeComparisonProps> = ({
     return (
       <Card
         style={{ height: '100%' }}
-        title={intl.formatMessage({ defaultMessage: 'Scheme Comparison' })}
+        title={intl.formatMessage({
+          defaultMessage: 'Business Scheme Comparison',
+        })}
       >
         <Empty
           description={intl.formatMessage({
@@ -42,7 +44,9 @@ const SchemeComparison: React.FC<SchemeComparisonProps> = ({
   return (
     <Card
       style={{ height: '100%' }}
-      title={intl.formatMessage({ defaultMessage: 'Scheme Comparison' })}
+      title={intl.formatMessage({
+        defaultMessage: 'Business Scheme Comparison',
+      })}
     >
       {loading && !comparison ? (
         <Skeleton active paragraph={{ rows: 4 }} />
@@ -111,7 +115,7 @@ const SchemeComparison: React.FC<SchemeComparisonProps> = ({
                 <KpiStatCard
                   loading={false}
                   title={intl.formatMessage({
-                    defaultMessage: 'Scheme Avg Incidents',
+                    defaultMessage: 'Business Avg Incidents',
                   })}
                   value={comparison.schemeAvgIncidentCount.toFixed(1)}
                 />
@@ -122,7 +126,7 @@ const SchemeComparison: React.FC<SchemeComparisonProps> = ({
                 <KpiStatCard
                   loading={false}
                   title={intl.formatMessage({
-                    defaultMessage: 'Scheme Avg Value Lost',
+                    defaultMessage: 'Business Avg Value Lost',
                   })}
                   value={intl.formatNumber(comparison.schemeAvgValueLost, {
                     currency,

@@ -3,42 +3,129 @@ import type { Theme } from 'configs/ThemeConfig';
 import { createUseStyles } from 'react-jss';
 
 const useStyled = createUseStyles((theme: Theme) => ({
-  container: {
-    paddingLeft: 30,
-    paddingRight: 30,
-  },
-  descIcon: {
-    marginRight: 10,
-  },
-  explainText: {
-    fontSize: 16,
-    fontWeight: 500,
-    marginBottom: '5px !important',
-  },
-  image: {
-    '@media only screen and (min-height: 800px)': {
-      height: 230,
-      width: 170,
+  card: {
+    '&:hover': {
+      borderColor: theme.primary,
+      boxShadow:
+        theme.colorScheme === 'dark'
+          ? '0 8px 24px rgba(0, 0, 0, 0.4)'
+          : '0 8px 24px rgba(0, 0, 0, 0.12)',
+      transform: 'translateY(-2px)',
     },
-    backgroundColor: theme.imageBackgroundColor,
-    border: `2px solid ${theme.borderColor}`,
-    borderRadius: 10,
+    backgroundColor: theme.componentBackground,
+    border: `1px solid ${theme.borderColor}`,
+    borderRadius: 16,
     cursor: 'pointer',
-    height: 160,
+    display: 'flex',
+    height: 220,
     overflow: 'hidden',
-    transition: 'all 0.3s ease-in-out',
-    width: 150,
-  },
-  images: {
-    margin: '10px 0 20px',
-    overflowX: 'auto',
-    overflowY: 'hidden',
-    padding: '0px 10px',
-    transition: 'all 0.3s ease-in-out',
+    padding: 0,
+    position: 'relative',
+    transition: 'all 0.2s ease',
     width: '100%',
   },
-  tableContainer: {
-    marginBottom: 30,
+
+  cardContent: {
+    display: 'flex',
+    flex: 1,
+    flexDirection: 'column',
+    height: 220,
+    overflow: 'hidden',
+    padding: '16px 20px',
+  },
+
+  cardSelected: {
+    borderColor: theme.primary,
+    borderWidth: 2,
+    boxShadow:
+      theme.colorScheme === 'dark'
+        ? `0 0 0 3px ${theme.primary}33`
+        : `0 0 0 3px ${theme.primary}22`,
+  },
+
+  checkmark: {
+    backgroundColor: theme.componentBackground,
+    borderRadius: '50%',
+    boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+    color: theme.primary,
+    fontSize: 24,
+    position: 'absolute',
+    right: 8,
+    top: 8,
+    zIndex: 10,
+  },
+
+  detailIcon: {
+    color: theme.secondaryText,
+    flexShrink: 0,
+    fontSize: 13,
+  },
+
+  detailRow: {
+    '& svg': {
+      color: theme.secondaryText,
+      opacity: 0.7,
+      width: 14,
+    },
+    alignItems: 'center',
+    display: 'flex',
+    gap: 8,
+    marginBottom: 4,
+  },
+
+  detailText: {
+    color: theme.headerColor,
+    flex: 1,
+    fontSize: 13,
+    lineHeight: 1.4,
+    opacity: 0.85,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+
+  image: {
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'cover',
+    borderBottomLeftRadius: 16,
+    borderTopLeftRadius: 16,
+    flexShrink: 0,
+    height: 220,
+    width: 160,
+  },
+
+  imageSkeleton: {
+    '&.ant-skeleton-element .ant-skeleton-image': {
+      '& .ant-skeleton-image-svg': {
+        width: 50,
+      },
+      height: 220,
+      width: 160,
+    },
+    borderBottomLeftRadius: 16,
+    borderTopLeftRadius: 16,
+    height: '220px !important',
+    width: '160px !important',
+  },
+
+  offenderName: {
+    alignItems: 'baseline',
+    color: theme.headerColor,
+    display: 'flex',
+    fontSize: 16,
+    fontWeight: 600,
+    gap: 8,
+    lineHeight: 1.2,
+    marginBottom: 8,
+    overflow: 'hidden',
+    width: '100%',
+  },
+
+  reference: {
+    color: theme.secondaryText,
+    fontSize: 12,
+    fontWeight: 400,
   },
 }));
 

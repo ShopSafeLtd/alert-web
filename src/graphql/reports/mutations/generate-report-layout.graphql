@@ -1,0 +1,6 @@
+mutation GenerateReportLayout($reportType: ReportType!, $instructions: String) {
+  generateReportLayout(reportType: $reportType, instructions: $instructions) {
+    layout
+    metaData
+  }
+}

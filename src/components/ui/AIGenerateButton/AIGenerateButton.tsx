@@ -17,8 +17,10 @@ interface AIGenerateButtonProps {
   form?: FormInstance;
   generating?: boolean;
   gradientVariant?: GradientVariant;
+  label?: string;
   nameFieldName?: string;
   onClick?: () => void;
+  standalone?: boolean;
   tooltipTitle?: string;
   wrapperMode?: 'button' | 'content' | 'form-item';
 }
@@ -29,8 +31,10 @@ const AIGenerateButton: React.FC<AIGenerateButtonProps> = ({
   form,
   generating = false,
   gradientVariant = 'redOrange',
+  label,
   nameFieldName = 'name',
   onClick,
+  standalone = false,
   tooltipTitle,
   wrapperMode = 'button',
 }) => {
@@ -43,7 +47,7 @@ const AIGenerateButton: React.FC<AIGenerateButtonProps> = ({
     defaultMessage: 'Generate description with AI',
   });
 
-  const isDisabled = disabled || !nameValue || generating;
+  const isDisabled = disabled || (form ? !nameValue : false) || generating;
 
   if (wrapperMode === 'content') {
     return (
@@ -61,19 +65,31 @@ const AIGenerateButton: React.FC<AIGenerateButtonProps> = ({
   }
 
   return (
-    <div className={styles.aiButtonWrapper}>
+    <div
+      className={
+        standalone ? styles.aiButtonWrapperStandalone : styles.aiButtonWrapper
+      }
+    >
       <div
         className={`${styles.aiButtonGradientWrapper} ${styles[gradientVariant]} ${generating ? styles.generating : ''}`}
       >
-        <Tooltip title={tooltipTitle || defaultTooltip}>
+        <Tooltip title={label ? undefined : tooltipTitle || defaultTooltip}>
           <Button
             className={styles.aiButton}
             disabled={isDisabled}
-            icon={<FontAwesomeIcon icon={faCompass} spin={generating} />}
+            icon={
+              <FontAwesomeIcon
+                icon={faCompass}
+                spin={generating}
+                style={label ? { marginRight: 4 } : undefined}
+              />
+            }
             onClick={onClick}
-            size="small"
+            size={label ? 'middle' : 'small'}
             type="default"
-          />
+          >
+            {label}
+          </Button>
         </Tooltip>
       </div>
     </div>

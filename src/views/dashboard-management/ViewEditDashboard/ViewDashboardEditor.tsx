@@ -5,7 +5,7 @@ import type {
 } from '#/types/dashboard-metadata';
 
 import Loading from '#/components/shared-components/AntD/Loading';
-import { generateHeight } from '#/views/dashboard/Dashboard.context';
+import { useGenerateHeight } from '#/views/dashboard/Dashboard.context';
 import ActiveOffendersTemplate from '#/views/dashboard/components/ActiveOffenders/ActiveOffendersTemplate';
 import AdminTodosTemplate from '#/views/dashboard/components/AdminTodos/AdminTodosTemplate';
 import ArticlesSection from '#/views/dashboard/components/ArticlesSection/ArticlesSectionTemplate';
@@ -66,6 +66,7 @@ const ViewDashboardEditor = () => {
     setOpen(false);
   };
   const intl = useIntl();
+  const rowHeight = useGenerateHeight();
   const [marquee, setMarquee] = useState<null | string>(null);
   const [componentDrawerOpen, setComponentDrawerOpen] = useState(false);
   const [componentMetadata, setComponentMetadata] = useState<ComponentMetadata>(
@@ -640,7 +641,7 @@ const ViewDashboardEditor = () => {
               onResizeStop={(e) =>
                 setLayout(e as ({ i: string } & RGL.Layout)[])
               }
-              rowHeight={generateHeight()}
+              rowHeight={rowHeight}
               style={{ minHeight: '100vh' }}
             >
               {renderableItems.map(({ element, elementType, layoutItem }) => (

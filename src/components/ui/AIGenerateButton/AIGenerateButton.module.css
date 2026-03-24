@@ -6,6 +6,11 @@
   z-index: 1;
 }
 
+.aiButtonWrapperStandalone {
+  display: inline-flex;
+  align-items: center;
+}
+
 .aiButtonGradientWrapper {
   position: relative;
   display: inline-block;
@@ -107,7 +112,7 @@
   position: relative;
   border-radius: calc(
     0.625rem - 2px
-  ); /* 8px - accounts for 2px gradient border */
+  ) !important; /* 8px - accounts for 2px gradient border */
   transition: all 0.3s ease;
   z-index: 1;
 }

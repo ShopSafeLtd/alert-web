@@ -20,7 +20,7 @@ const StoreSummary: React.FC<StoreSummaryProps> = ({ loading, summary }) => {
     return (
       <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
         {Array.from({ length: 5 }).map((_, i) => (
-          <Col key={i} lg={5} md={8} sm={12} xs={24}>
+          <Col key={i} lg={8} sm={12} xs={24} xxl={5}>
             <Skeleton active paragraph={{ rows: 1 }} />
           </Col>
         ))}
@@ -48,14 +48,14 @@ const StoreSummary: React.FC<StoreSummaryProps> = ({ loading, summary }) => {
         />
       )}
       <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
-        <Col lg={5} md={8} sm={12} xs={24}>
+        <Col lg={8} sm={12} xs={24} xxl={5}>
           <KpiStatCard
             loading={loading}
             title={intl.formatMessage({ defaultMessage: "Today's Incidents" })}
             value={summary?.todayCount ?? null}
           />
         </Col>
-        <Col lg={5} md={8} sm={12} xs={24}>
+        <Col lg={8} sm={12} xs={24} xxl={5}>
           <KpiStatCard
             loading={loading}
             title={intl.formatMessage({ defaultMessage: 'This Week' })}
@@ -68,21 +68,21 @@ const StoreSummary: React.FC<StoreSummaryProps> = ({ loading, summary }) => {
             value={summary?.thisWeekCount ?? null}
           />
         </Col>
-        <Col lg={5} md={8} sm={12} xs={24}>
+        <Col lg={8} sm={12} xs={24} xxl={5}>
           <KpiStatCard
             loading={loading}
             title={intl.formatMessage({ defaultMessage: 'This Month' })}
             value={summary?.thisMonthCount ?? null}
           />
         </Col>
-        <Col lg={4} md={8} sm={12} xs={24}>
+        <Col lg={8} sm={12} xs={24} xxl={5}>
           <KpiStatCard
             loading={loading}
             title={intl.formatMessage({ defaultMessage: 'Active Bans' })}
             value={summary?.activeBansCount ?? null}
           />
         </Col>
-        <Col lg={5} md={8} sm={12} xs={24}>
+        <Col lg={8} sm={12} xs={24} xxl={5}>
           <KpiStatCard
             loading={loading}
             title={intl.formatMessage({ defaultMessage: 'Pending Approval' })}

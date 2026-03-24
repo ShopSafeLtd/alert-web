@@ -9,7 +9,7 @@ export type UpdateInvestigationDetailsMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateInvestigationDetailsMutation = { __typename?: 'Mutation', updateInvestigation: { __typename?: 'Investigation', id: string, description?: string | null, name: string } };
+export type UpdateInvestigationDetailsMutation = { __typename?: 'Mutation', updateInvestigation: { __typename?: 'Investigation', id: string, description?: string | null, name: string, type: Types.InvestigationType, priority: Types.InvestigationPriority } };
 
 
 export const UpdateInvestigationDetailsDocument = gql`
@@ -18,6 +18,8 @@ export const UpdateInvestigationDetailsDocument = gql`
     id
     description
     name
+    type
+    priority
   }
 }
     `;
