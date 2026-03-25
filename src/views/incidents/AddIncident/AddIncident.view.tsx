@@ -26,6 +26,7 @@ import AddLocation from 'components/form-components/addresses/AddLocation';
 import ImageSection from 'components/incidents/IncidentForm/ImageSection';
 import IncidentDetails from 'components/incidents/IncidentForm/IncidentDetails';
 import Profiles from 'components/incidents/IncidentForm/Profiles';
+import { differenceInCalendarMonths } from 'date-fns';
 import { IncidentFormField } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
 import React from 'react';
@@ -111,6 +112,9 @@ const AddIncident = ({
   const classes = useStyles();
   const intl = useIntl();
   const scheme = useAtomValue(currentSchemeAtom);
+  const [pendingSubmit, setPendingSubmit] = React.useState<FormData | null>(
+    null
+  );
   const dontSetDate = scheme?.dontAutoSetTimeDate;
   const usPoliceData = scheme?.usPoliceData;
 
@@ -180,7 +184,16 @@ const AddIncident = ({
           vehicles: null,
         }}
         layout="vertical"
-        onFinish={onSubmit}
+        onFinish={(values) => {
+          if (
+            values.date &&
+            differenceInCalendarMonths(new Date(), values.date) >= 3
+          ) {
+            setPendingSubmit(values);
+          } else {
+            onSubmit(values);
+          }
+        }}
         onFinishFailed={() => {
           Modal.error({
             content: intl.formatMessage({
@@ -385,6 +398,27 @@ const AddIncident = ({
           </Row>
         </Form.Item>
       </Form>
+
+      <Modal
+        cancelText={intl.formatMessage({ defaultMessage: 'Go Back & Check' })}
+        okText={intl.formatMessage({ defaultMessage: 'Submit Anyway' })}
+        onCancel={() => setPendingSubmit(null)}
+        onOk={() => {
+          if (pendingSubmit) {
+            onSubmit(pendingSubmit);
+            setPendingSubmit(null);
+          }
+        }}
+        open={pendingSubmit !== null}
+        title={intl.formatMessage({ defaultMessage: 'Date Over 3 Months Ago' })}
+      >
+        <p>
+          {intl.formatMessage({
+            defaultMessage:
+              'The incident date you have selected is more than 3 months ago. Please confirm this is correct before submitting.',
+          })}
+        </p>
+      </Modal>
 
       <Drawer
         onClose={toggleAddNewAddress}
