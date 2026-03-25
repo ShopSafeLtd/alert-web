@@ -1,9 +1,12 @@
 import type { InvestigationDetails } from 'types/DataType';
 
 import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
-import { Button, Col, Form, Input, Row } from 'antd';
+import { Button, Col, Form, Input, Row, Select } from 'antd';
+import { InvestigationPriority, InvestigationType } from 'graphql/types';
 import React from 'react';
 import { useIntl } from 'react-intl';
+import GetInvestigationPriorityValues from 'types/enums/investigation-priority';
+import GetInvestigationTypeValues from 'types/enums/investigation-type';
 
 import type { InvestigationData } from './useEditInvestigation';
 
@@ -50,6 +53,36 @@ const AddInvestigation = ({
               name="description"
             >
               <Input disabled={saving} />
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row gutter={16}>
+          <Col span={12}>
+            <Form.Item
+              label={intl.formatMessage({ defaultMessage: 'Type' })}
+              name="type"
+            >
+              <Select
+                disabled={saving}
+                options={Object.values(InvestigationType).map((v) => ({
+                  label: GetInvestigationTypeValues[v],
+                  value: v,
+                }))}
+              />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item
+              label={intl.formatMessage({ defaultMessage: 'Priority' })}
+              name="priority"
+            >
+              <Select
+                disabled={saving}
+                options={Object.values(InvestigationPriority).map((v) => ({
+                  label: GetInvestigationPriorityValues[v],
+                  value: v,
+                }))}
+              />
             </Form.Item>
           </Col>
         </Row>

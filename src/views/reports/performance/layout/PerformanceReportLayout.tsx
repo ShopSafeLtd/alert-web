@@ -2923,6 +2923,7 @@ const PerformanceReportLayout = ({
       layout,
       data,
       loading,
+      editMode,
       businessContributionTableData,
       userContributionTableData,
       offendersTableData,

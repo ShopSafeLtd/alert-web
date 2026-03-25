@@ -4,14 +4,14 @@ import type { InvestigationSuggestionsQuery } from 'graphql/investigations/queri
 import publicOffenderDob from '#/utils/public-offender-dob';
 import {
   faCircleInfo,
-  faEarth,
-  faMarsAndVenus,
-  faUserClock,
+  faFileLines,
+  faPeopleGroup,
+  faUser,
   faUserHair,
   faUserTag,
 } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, Col, Descriptions, Divider, Row, Typography } from 'antd';
+import { Button, Divider, Skeleton, Typography } from 'antd';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import WatermarkSlide from 'components/images/WatermartkSlide.view';
 import CrimeGroupTable from 'components/tables/CrimeGroupTable/CrimeGroupTable.view';
@@ -30,8 +30,6 @@ import Lightbox from 'yet-another-react-lightbox';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 
 import useStyles from './SuggestedOffenders.style';
-
-const { Paragraph, Text, Title } = Typography;
 
 interface Props {
   handleAddSuggestion: (id: string) => void;
@@ -70,217 +68,200 @@ const SuggestedOffenders = ({
     setLightBoxOpen({ index, open: !lightBoxOpen.open });
   };
 
+  const offenders = suggestedData?.investigation?.suggestedOffenders ?? [];
+
   return (
-    <div className={classes.container}>
-      {suggestedData?.investigation?.suggestedOffenders?.map((offender) => (
-        <div>
-          <Row
-            align="middle"
-            className={classes.images}
-            gutter={8}
-            justify="start"
-            style={{
-              height: offender.images.length > 0 ? undefined : 0,
-            }}
-            wrap={false}
-          >
-            {offender?.images.map((image, i) => (
-              <Col key={image.id} onClick={() => openLightbox(offender, i)}>
-                <div className={classes.image}>
-                  <WatermarkImage
-                    position={image.position}
-                    rotation={image.rotation}
-                    url={image.optimised}
+    <div style={{ paddingLeft: 30, paddingRight: 30 }}>
+      {offenders.map((offender) => {
+        const gender = getOffenderGender(offender.gender);
+        const ethnicity = getOffenderRace(offender.race, true);
+        const age = publicOffenderDOB
+          ? offender.dateOfBirth
+            ? String(calcAge(offender.dateOfBirth))
+            : getOffenderAge(offender.age)
+          : undefined;
+        const build = getOffenderBuild(offender.build);
+        const demographicParts = [gender, ethnicity, age, build].filter(
+          Boolean
+        );
+        const hasDemographics = demographicParts.length > 0;
+
+        return (
+          <div key={offender.id}>
+            <div className={classes.card}>
+              {/* Primary image */}
+              <div style={{ display: 'flex', flexShrink: 0, height: 220 }}>
+                {offender.images.length > 0 ? (
+                  <div
+                    className={classes.image}
+                    onClick={() => openLightbox(offender, 0)}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <WatermarkImage
+                      position={offender.images[0].position}
+                      rotation={offender.images[0].rotation}
+                      url={offender.images[0].optimised}
+                    />
+                  </div>
+                ) : (
+                  <Skeleton.Image className={classes.imageSkeleton} />
+                )}
+              </div>
+
+              {/* Content */}
+              <div className={classes.cardContent}>
+                {/* Name + reference */}
+                <Typography.Text className={classes.offenderName}>
+                  <span
+                    style={{
+                      flex: 1,
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    {offender.name ||
+                      intl.formatMessage({ defaultMessage: 'Unknown' })}
+                  </span>
+                  {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
+                  <span className={classes.reference} style={{ flexShrink: 0 }}>
+                    #{offender.reference}
+                  </span>
+                </Typography.Text>
+
+                <div className={classes.infoSection}>
+                  {/* Demographics: gender • ethnicity • age • build */}
+                  {hasDemographics && (
+                    <div className={classes.detailRow}>
+                      <FontAwesomeIcon
+                        className={classes.detailIcon}
+                        icon={faUser}
+                      />
+                      <Typography.Text className={classes.detailText}>
+                        {demographicParts.map((part, i) => (
+                          // eslint-disable-next-line react/no-array-index-key
+                          <React.Fragment key={i}>
+                            {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
+                            {i > 0 && ' • '}
+                            {part}
+                          </React.Fragment>
+                        ))}
+                      </Typography.Text>
+                    </div>
+                  )}
+
+                  {/* Alias */}
+                  {offender.alias.length > 0 && (
+                    <div className={classes.detailRow}>
+                      <FontAwesomeIcon
+                        className={classes.detailIcon}
+                        icon={faUserTag}
+                      />
+                      <Typography.Text className={classes.detailText}>
+                        {offender.alias.join(', ')}
+                      </Typography.Text>
+                    </div>
+                  )}
+
+                  {/* Hair */}
+                  {offender.hair && (
+                    <div className={classes.detailRow}>
+                      <FontAwesomeIcon
+                        className={classes.detailIcon}
+                        icon={faUserHair}
+                      />
+                      <Typography.Text className={classes.detailText}>
+                        {offender.hair}
+                      </Typography.Text>
+                    </div>
+                  )}
+
+                  {/* Peculiarities */}
+                  {offender.peculiarities && (
+                    <div className={classes.detailRow}>
+                      <FontAwesomeIcon
+                        className={classes.detailIcon}
+                        icon={faCircleInfo}
+                      />
+                      <Typography.Text className={classes.detailText}>
+                        {offender.peculiarities}
+                      </Typography.Text>
+                    </div>
+                  )}
+                </div>
+
+                {/* Action buttons */}
+                <div className={classes.actionRow}>
+                  <Link
+                    onClick={onClose}
+                    to={`/app/offenders/view/${offender.id}`}
+                  >
+                    <Button size="small">
+                      {intl.formatMessage({ defaultMessage: 'View Offender' })}
+                    </Button>
+                  </Link>
+                  <Button
+                    danger
+                    onClick={() => handleAddSuggestion(offender.id)}
+                    size="small"
+                    type="primary"
+                  >
+                    {intl.formatMessage({
+                      defaultMessage: 'Add To Investigation',
+                    })}
+                  </Button>
+                </div>
+              </div>
+            </div>
+
+            {/* Shared incidents */}
+            {offender.associatedIncidents &&
+              offender.associatedIncidents.length > 0 && (
+                <div className={classes.sharedSection}>
+                  <div className={classes.sectionHeading}>
+                    <FontAwesomeIcon icon={faFileLines} />
+                    <span>
+                      {intl.formatMessage({
+                        defaultMessage: 'Shared Incidents',
+                      })}
+                    </span>
+                    <span className={classes.sectionCount}>
+                      {offender.totalAssociatedIncidents}
+                    </span>
+                  </div>
+                  <IncidentTable
+                    hasNavigation
+                    incidents={offender.associatedIncidents}
                   />
                 </div>
-              </Col>
-            ))}
-          </Row>
-          <Title level={3} style={{ margin: 0 }}>
-            {offender.name}
-          </Title>
-          <Text>
-            {intl.formatMessage(
-              { defaultMessage: 'Alert ID: {ref}' },
-              { ref: offender.reference }
-            )}
-          </Text>
-          <Descriptions style={{ marginBottom: 20, marginTop: 20 }}>
-            {offender.alias.length > 0 ? (
-              <Descriptions.Item
-                label={intl.formatMessage({
-                  defaultMessage: 'Alias: ',
-                })}
-              >
-                {offender.alias.map((item) => (
-                  <Text>{item}</Text>
-                ))}
-              </Descriptions.Item>
-            ) : undefined}
-            {publicOffenderDOB ? (
-              <Descriptions.Item
-                label={
-                  <span>
-                    <FontAwesomeIcon
-                      className={classes.descIcon}
-                      icon={faUserClock}
-                    />
-                    {intl.formatMessage({
-                      defaultMessage: 'Age',
-                    })}
-                  </span>
-                }
-              >
-                {offender.dateOfBirth
-                  ? calcAge(offender.dateOfBirth)
-                  : getOffenderAge(offender.age)}
-              </Descriptions.Item>
-            ) : undefined}
-            <Descriptions.Item
-              label={
-                <span>
-                  <FontAwesomeIcon
-                    className={classes.descIcon}
-                    icon={faMarsAndVenus}
+              )}
+
+            {/* Shared crime groups */}
+            {offender.associatedCrimeGroups &&
+              offender.associatedCrimeGroups.length > 0 && (
+                <div className={classes.sharedSection}>
+                  <div className={classes.sectionHeading}>
+                    <FontAwesomeIcon icon={faPeopleGroup} />
+                    <span>
+                      {intl.formatMessage({
+                        defaultMessage: 'Shared Crime Groups',
+                      })}
+                    </span>
+                    <span className={classes.sectionCount}>
+                      {offender.totalAssociatedCrimeGroups}
+                    </span>
+                  </div>
+                  <CrimeGroupTable
+                    crimeGroups={offender.associatedCrimeGroups}
+                    hasNavigation
                   />
-                  {intl.formatMessage({ defaultMessage: 'Sex' })}
-                </span>
-              }
-            >
-              {getOffenderGender(offender.gender)}
-            </Descriptions.Item>
-            <Descriptions.Item
-              label={
-                <span>
-                  <FontAwesomeIcon
-                    className={classes.descIcon}
-                    icon={faUserTag}
-                  />
-                  {intl.formatMessage({
-                    defaultMessage: 'Build',
-                  })}
-                </span>
-              }
-            >
-              {getOffenderBuild(offender.build)}
-            </Descriptions.Item>
-            <Descriptions.Item
-              label={
-                <span>
-                  <FontAwesomeIcon
-                    className={classes.descIcon}
-                    icon={faEarth}
-                  />
-                  {intl.formatMessage({
-                    defaultMessage: 'Ethnicity',
-                  })}
-                </span>
-              }
-            >
-              {getOffenderRace(offender.race, false)}
-            </Descriptions.Item>
-            {offender.hair && (
-              <Descriptions.Item
-                label={
-                  <span>
-                    <FontAwesomeIcon
-                      className={classes.descIcon}
-                      icon={faUserHair}
-                    />
-                    {intl.formatMessage({
-                      defaultMessage: 'Hair',
-                    })}
-                  </span>
-                }
-              >
-                {offender.hair}
-              </Descriptions.Item>
-            )}
-          </Descriptions>
-          <Descriptions column={1}>
-            {offender.peculiarities && (
-              <Descriptions.Item
-                label={
-                  <span>
-                    <FontAwesomeIcon
-                      className={classes.descIcon}
-                      icon={faCircleInfo}
-                    />
-                    {intl.formatMessage({
-                      defaultMessage: 'Additional Information',
-                    })}
-                  </span>
-                }
-              >
-                {offender.peculiarities}
-              </Descriptions.Item>
-            )}
-          </Descriptions>
-          {offender.associatedIncidents &&
-            offender.associatedIncidents.length > 0 && (
-              <div className={classes.tableContainer}>
-                <Paragraph className={classes.explainText}>
-                  {intl.formatMessage(
-                    {
-                      defaultMessage:
-                        'This offender shares {noIncidents} incidents with offenders in this investigation',
-                    },
-                    {
-                      noIncidents: offender.totalAssociatedIncidents,
-                    }
-                  )}
-                </Paragraph>
-                <IncidentTable
-                  hasNavigation
-                  incidents={offender?.associatedIncidents || []}
-                />
-              </div>
-            )}
-          {offender.associatedCrimeGroups &&
-            offender.associatedCrimeGroups.length > 0 && (
-              <div className={classes.tableContainer}>
-                <Paragraph className={classes.explainText}>
-                  {intl.formatMessage(
-                    {
-                      defaultMessage:
-                        'This offender shares {total} crime groups with offenders in this investigation',
-                    },
-                    {
-                      total: offender.totalAssociatedCrimeGroups,
-                    }
-                  )}
-                </Paragraph>
-                <CrimeGroupTable
-                  crimeGroups={offender?.associatedCrimeGroups || []}
-                  hasNavigation
-                />
-              </div>
-            )}
-          <Row gutter={8} justify="end">
-            <Col>
-              <Link onClick={onClose} to={`/app/offenders/view/${offender.id}`}>
-                <Button>
-                  {intl.formatMessage({
-                    defaultMessage: 'View Offender',
-                  })}
-                </Button>
-              </Link>
-            </Col>
-            <Col>
-              <Button
-                danger
-                onClick={() => handleAddSuggestion(offender.id)}
-                type="ghost"
-              >
-                {intl.formatMessage({
-                  defaultMessage: 'Add To Investigation',
-                })}
-              </Button>
-            </Col>
-          </Row>
-          <Divider />
-        </div>
-      ))}
+                </div>
+              )}
+            <Divider style={{ borderWidth: 2, margin: '20px 0' }} />
+          </div>
+        );
+      })}
+
       <Lightbox
         close={() => openLightbox({ images: [] }, 0)}
         controller={{

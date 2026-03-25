@@ -71,7 +71,7 @@ const useCreateCrimeGroup = (): Return => {
                   ...oldData.listCrimeGroups,
                   crimeGroups: [
                     ...oldData.listCrimeGroups.crimeGroups,
-                    result.data.createCrimeGroup,
+                    { ...result.data.createCrimeGroup, offenders: [] },
                   ],
                 },
               },

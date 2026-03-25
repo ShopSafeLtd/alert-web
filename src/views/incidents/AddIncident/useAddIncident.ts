@@ -1168,11 +1168,6 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
             recoveredValue: 0,
             value: undefined,
           },
-          {
-            goodsType: undefined,
-            recoveredValue: 0,
-            value: undefined,
-          },
         ],
       });
   };

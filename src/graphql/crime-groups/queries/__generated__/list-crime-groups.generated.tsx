@@ -11,7 +11,7 @@ export type ListCrimeGroupsQueryVariables = Types.Exact<{
 }>;
 
 
-export type ListCrimeGroupsQuery = { __typename?: 'Query', listCrimeGroups: { __typename?: 'ListCrimeGroups', total: number, crimeGroups: Array<{ __typename?: 'CrimeGroup', id: string, reference?: number | null, totalIncidents: number, totalOffenders: number, totalRecoveredValue: number, totalTheftSuccess: number, totalValue: number, alias?: string | null, updatedAt: Date }> } };
+export type ListCrimeGroupsQuery = { __typename?: 'Query', listCrimeGroups: { __typename?: 'ListCrimeGroups', total: number, crimeGroups: Array<{ __typename?: 'CrimeGroup', id: string, reference?: number | null, totalIncidents: number, totalOffenders: number, totalRecoveredValue: number, totalTheftSuccess: number, totalValue: number, alias?: string | null, updatedAt: Date, offenders: Array<{ __typename?: 'Offender', id: string, name?: string | null, images: Array<{ __typename?: 'Image', id: string, optimised?: string | null }> }> }> } };
 
 
 export const ListCrimeGroupsDocument = gql`
@@ -27,6 +27,14 @@ export const ListCrimeGroupsDocument = gql`
       totalValue
       alias
       updatedAt
+      offenders(take: 3) {
+        id
+        name
+        images(take: 1) {
+          id
+          optimised
+        }
+      }
     }
     total
   }

@@ -2,7 +2,7 @@ import RouteWrapper from '#/navigation/utils/route-wrapper';
 import { PermissionMethod, PermissionModel } from 'graphql/types';
 import React from 'react';
 import { useIntl } from 'react-intl';
-import { Route, Routes } from 'react-router';
+import { Navigate, Route, Routes } from 'react-router';
 
 import PermissionCheckWrapper from '../../../components/PermissionCheck/PermissionCheckWrapper';
 import ListDocuments from '../../../views/resources/folders/ListFolders/ListFolders.container';
@@ -18,6 +18,7 @@ const Documents = (): JSX.Element => {
       })}
     >
       <Routes>
+        <Route element={<Navigate replace to="folders" />} index />
         <Route
           element={
             <PermissionCheckWrapper

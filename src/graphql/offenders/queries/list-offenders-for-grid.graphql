@@ -26,7 +26,10 @@ query listOffendersForGrid(
         id
         date
       }
+      alias
+      wanted
       knownFor
+      targetedGoods
       targetedBusinesses {
         id
         name

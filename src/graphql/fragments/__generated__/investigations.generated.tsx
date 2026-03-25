@@ -1,7 +1,7 @@
 import type * as Types from '../../types';
 
 import { gql } from '@apollo/client';
-export type InvestigationsFragment = { __typename?: 'Investigation', id: string, name: string, description?: string | null, status: Types.InvestigationStatus, createdAt: Date, closedAt?: Date | null, reference?: number | null };
+export type InvestigationsFragment = { __typename?: 'Investigation', id: string, name: string, description?: string | null, status: Types.InvestigationStatus, type: Types.InvestigationType, priority: Types.InvestigationPriority, createdAt: Date, closedAt?: Date | null, reference?: number | null };
 
 export const InvestigationsFragmentDoc = gql`
     fragment Investigations on Investigation {
@@ -9,6 +9,8 @@ export const InvestigationsFragmentDoc = gql`
   name
   description
   status
+  type
+  priority
   createdAt
   closedAt
   reference

@@ -3,24 +3,15 @@ import type { OffenderData } from 'types/DataType';
 
 import publicOffenderDob from '#/utils/public-offender-dob';
 import {
+  faCheckCircle,
   faCircleInfo,
-  faEarth,
-  faMarsAndVenus,
-  faUserClock,
+  faTag,
+  faUser,
   faUserHair,
   faUserTag,
 } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  Button,
-  Card,
-  Checkbox,
-  Col,
-  Descriptions,
-  // Divider,
-  Row,
-  Typography,
-} from 'antd';
+import { Button, Col, Row, Skeleton, Typography } from 'antd';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import WatermarkSlide from 'components/images/WatermartkSlide.view';
 import React, { useState } from 'react';
@@ -36,8 +27,6 @@ import Lightbox from 'yet-another-react-lightbox';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 
 import useStyles from './MultiSelectOffenders.style';
-
-const { Text, Title } = Typography;
 
 interface Props {
   handleAddSuggestion: (ids: string[]) => void;
@@ -59,6 +48,9 @@ const SuggestedOffenders = ({
     open: false,
   });
   const [selected, setSelected] = useState<string[]>([]);
+  const [lightboxElements, setLightboxElements] = useState<{ src: string }[]>(
+    []
+  );
 
   const onSelect = (id: string) => {
     if (id) {
@@ -69,9 +61,6 @@ const SuggestedOffenders = ({
       }
     }
   };
-  const [lightboxElements, setLightboxElements] = useState<{ src: string }[]>(
-    []
-  );
 
   const openLightbox = (
     offender: {
@@ -88,187 +77,157 @@ const SuggestedOffenders = ({
   };
 
   return (
-    // <div className={classes.container}>
     <div>
-      {offenders?.map((offender) => (
-        <Card onClick={() => onSelect(offender.id)}>
-          <Row
-            align="middle"
-            className={classes.images}
-            gutter={8}
-            justify="start"
-            style={{
-              height:
-                offender?.images && offender.images.length > 0 ? undefined : 0,
-            }}
-            wrap={false}
-          >
-            {offender?.images?.map((image) => (
-              <Col
-                key={image.id}
-                // onClick={() => openLightbox(offender, i)}
-              >
-                <div className={classes.image}>
-                  <WatermarkImage
-                    position={image.position}
-                    rotation={image.rotation}
-                    url={image.optimised}
-                  />
-                </div>
-              </Col>
-            ))}
-          </Row>
-          <Row gutter={10}>
-            <Col>
-              <Checkbox
-                checked={selected.includes(offender.id)}
-                onChange={() => onSelect(offender.id)}
-                value={offender.id}
-                // style={{ bord }}
-              />
-            </Col>
-            <Col>
-              <Title level={3} style={{ margin: 0 }}>
-                {offender.name}
-              </Title>
-            </Col>
-            <Col style={{ marginTop: 3 }}>
-              <Text>
-                {intl.formatMessage(
-                  { defaultMessage: 'Alert ID: {ref}' },
-                  { ref: offender.reference }
-                )}
-              </Text>
-            </Col>
-          </Row>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+        {offenders?.map((offender) => {
+          const isSelected = selected.includes(offender.id);
 
-          <Descriptions style={{ marginBottom: 20, marginTop: 20 }}>
-            {offender.alias && offender.alias.length > 0 ? (
-              <Descriptions.Item
-                label={intl.formatMessage({
-                  defaultMessage: 'Alias: ',
-                })}
-              >
-                {offender.alias.map((item) => (
-                  <Text>{item}</Text>
-                ))}
-              </Descriptions.Item>
-            ) : undefined}
-            {publicOffenderDOB ? (
-              <Descriptions.Item
-                label={
-                  <span>
-                    <FontAwesomeIcon
-                      className={classes.descIcon}
-                      icon={faUserClock}
+          const gender = getOffenderGender(offender.gender);
+          const ethnicity = getOffenderRace(offender.race, true);
+          const age = publicOffenderDOB
+            ? offender.dateOfBirth
+              ? String(calcAge(offender.dateOfBirth))
+              : getOffenderAge(offender.age)
+            : undefined;
+          const build = getOffenderBuild(offender.build);
+          const demographicParts = [gender, ethnicity, age, build].filter(
+            Boolean
+          );
+          const hasDemographics = demographicParts.length > 0;
+
+          return (
+            <div
+              className={`${classes.card} ${isSelected ? classes.cardSelected : ''}`}
+              key={offender.id}
+              onClick={() => onSelect(offender.id)}
+            >
+              {/* Selection checkmark */}
+              {isSelected && (
+                <FontAwesomeIcon
+                  className={classes.checkmark}
+                  icon={faCheckCircle}
+                />
+              )}
+
+              {/* Primary image */}
+              <div style={{ display: 'flex', flexShrink: 0, height: 220 }}>
+                {offender.images && offender.images.length > 0 ? (
+                  <div className={classes.image}>
+                    <WatermarkImage
+                      position={offender.images[0].position}
+                      rotation={offender.images[0].rotation}
+                      url={offender.images[0].optimised}
                     />
-                    {intl.formatMessage({
-                      defaultMessage: 'Age',
-                    })}
+                  </div>
+                ) : (
+                  <Skeleton.Image className={classes.imageSkeleton} />
+                )}
+              </div>
+
+              {/* Content */}
+              <div className={classes.cardContent}>
+                {/* Name + reference */}
+                <Typography.Text className={classes.offenderName}>
+                  <span
+                    style={{
+                      flex: 1,
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    {offender.name ||
+                      intl.formatMessage({ defaultMessage: 'Unknown' })}
                   </span>
-                }
-              >
-                {offender.dateOfBirth
-                  ? calcAge(offender.dateOfBirth)
-                  : getOffenderAge(offender.age)}
-              </Descriptions.Item>
-            ) : undefined}
-            <Descriptions.Item
-              label={
-                <span>
-                  <FontAwesomeIcon
-                    className={classes.descIcon}
-                    icon={faMarsAndVenus}
-                  />
-                  {intl.formatMessage({
-                    defaultMessage: 'Sex',
-                  })}
-                </span>
-              }
-            >
-              {getOffenderGender(offender.gender)}
-            </Descriptions.Item>
-            <Descriptions.Item
-              label={
-                <span>
-                  <FontAwesomeIcon
-                    className={classes.descIcon}
-                    icon={faUserTag}
-                  />
-                  {intl.formatMessage({
-                    defaultMessage: 'Build',
-                  })}
-                </span>
-              }
-            >
-              {getOffenderBuild(offender.build)}
-            </Descriptions.Item>
-            <Descriptions.Item
-              label={
-                <span>
-                  <FontAwesomeIcon
-                    className={classes.descIcon}
-                    icon={faEarth}
-                  />
-                  {intl.formatMessage({
-                    defaultMessage: 'Ethnicity',
-                  })}
-                </span>
-              }
-            >
-              {getOffenderRace(offender.race, false)}
-            </Descriptions.Item>
-            {offender.hair && (
-              <Descriptions.Item
-                label={
-                  <span>
+                  {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
+                  <span className={classes.reference} style={{ flexShrink: 0 }}>
+                    #{offender.reference}
+                  </span>
+                </Typography.Text>
+
+                {/* Demographics row */}
+                {hasDemographics && (
+                  <div className={classes.detailRow}>
                     <FontAwesomeIcon
-                      className={classes.descIcon}
+                      className={classes.detailIcon}
+                      icon={faUser}
+                    />
+                    <Typography.Text className={classes.detailText}>
+                      {demographicParts.map((part, i) => (
+                        // eslint-disable-next-line react/no-array-index-key
+                        <React.Fragment key={i}>
+                          {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
+                          {i > 0 && ' • '}
+                          {part}
+                        </React.Fragment>
+                      ))}
+                    </Typography.Text>
+                  </div>
+                )}
+
+                {/* Alias */}
+                {offender.alias && offender.alias.length > 0 && (
+                  <div className={classes.detailRow}>
+                    <FontAwesomeIcon
+                      className={classes.detailIcon}
+                      icon={faUserTag}
+                    />
+                    <Typography.Text className={classes.detailText}>
+                      {offender.alias.join(', ')}
+                    </Typography.Text>
+                  </div>
+                )}
+
+                {/* Hair */}
+                {offender.hair && (
+                  <div className={classes.detailRow}>
+                    <FontAwesomeIcon
+                      className={classes.detailIcon}
                       icon={faUserHair}
                     />
-                    {intl.formatMessage({
-                      defaultMessage: 'Hair',
-                    })}
-                  </span>
-                }
-              >
-                {offender.hair}
-              </Descriptions.Item>
-            )}
-          </Descriptions>
-          <Descriptions column={1}>
-            {offender.peculiarities && (
-              <Descriptions.Item
-                label={
-                  <span>
+                    <Typography.Text className={classes.detailText}>
+                      {offender.hair}
+                    </Typography.Text>
+                  </div>
+                )}
+
+                {/* Known for */}
+                {offender.knownFor && offender.knownFor.length > 0 && (
+                  <div className={classes.detailRow}>
                     <FontAwesomeIcon
-                      className={classes.descIcon}
+                      className={classes.detailIcon}
+                      icon={faTag}
+                    />
+                    <Typography.Text className={classes.detailText}>
+                      {offender.knownFor.slice(0, 2).join(', ')}
+                      {offender.knownFor.length > 2 &&
+                        intl.formatMessage(
+                          { defaultMessage: ' +{count}' },
+                          { count: offender.knownFor.length - 2 }
+                        )}
+                    </Typography.Text>
+                  </div>
+                )}
+
+                {/* Peculiarities */}
+                {offender.peculiarities && (
+                  <div className={classes.detailRow}>
+                    <FontAwesomeIcon
+                      className={classes.detailIcon}
                       icon={faCircleInfo}
                     />
-                    {intl.formatMessage({
-                      defaultMessage: 'Additional Information',
-                    })}
-                  </span>
-                }
-              >
-                {offender.peculiarities}
-              </Descriptions.Item>
-            )}
-          </Descriptions>
-          <Row gutter={8} justify="end">
-            <Col>
-              <Button danger onClick={() => onSelect(offender.id)} type="ghost">
-                {intl.formatMessage({
-                  defaultMessage: 'Add To Investigation',
-                })}
-              </Button>
-            </Col>
-          </Row>
+                    <Typography.Text className={classes.detailText}>
+                      {offender.peculiarities}
+                    </Typography.Text>
+                  </div>
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
 
-          {/* <Divider /> */}
-        </Card>
-      ))}
-      <Row gutter={16} justify="end" style={{ marginTop: 30 }}>
+      <Row gutter={16} justify="end" style={{ marginTop: 24 }}>
         <Col>
           <Button onClick={onClose} type="text">
             {intl.formatMessage({ defaultMessage: 'Cancel' })}
@@ -276,17 +235,18 @@ const SuggestedOffenders = ({
         </Col>
         <Col>
           <Button
-            // loading={saving}
             disabled={selected.length === 0}
             onClick={() => handleAddSuggestion(selected)}
             type="primary"
           >
-            {intl.formatMessage({
-              defaultMessage: 'Add Offedners',
-            })}
+            {intl.formatMessage(
+              { defaultMessage: 'Add {count} Offender(s)' },
+              { count: selected.length }
+            )}
           </Button>
         </Col>
       </Row>
+
       <Lightbox
         close={() => openLightbox({ images: [] }, 0)}
         controller={{

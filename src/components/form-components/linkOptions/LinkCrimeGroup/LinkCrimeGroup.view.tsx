@@ -1,9 +1,6 @@
-/* eslint-disable @typescript-eslint/restrict-template-expressions */
 import type { ListCrimeGroupsQuery } from 'graphql/crime-groups/queries/__generated__/list-crime-groups.generated';
 
-import { currencyAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { Button, Col, Input, Row, Table } from 'antd';
-import { useAtomValue } from 'jotai';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
@@ -16,6 +13,7 @@ interface Props {
   onSubmit: () => void;
   saving: boolean;
   search: string;
+  selected: string | undefined;
   setSearch: (value: string) => void;
 }
 
@@ -28,10 +26,10 @@ const LinkCrimeGroup = ({
   onSubmit,
   saving,
   search,
+  selected,
   setSearch,
 }: Props): JSX.Element => {
   const intl = useIntl();
-  const currency = useAtomValue(currencyAtom);
 
   return (
     <div className="add-existing-offender">
@@ -58,11 +56,58 @@ const LinkCrimeGroup = ({
             }),
           },
           {
-            dataIndex: 'totalOffenders',
-            key: 'totalOffenders',
-            title: intl.formatMessage({
-              defaultMessage: 'Members',
-            }),
+            dataIndex: 'alias',
+            key: 'alias',
+            title: intl.formatMessage({ defaultMessage: 'Name' }),
+          },
+          {
+            dataIndex: 'offenders',
+            key: 'offenders',
+            render: (
+              offenders: Array<{
+                id: string;
+                images: Array<{ optimised?: null | string }>;
+                name?: null | string;
+              }>
+            ) => (
+              <div style={{ display: 'flex', gap: 4 }}>
+                {offenders?.map((offender) => {
+                  const imageUrl = offender.images?.[0]?.optimised;
+                  return imageUrl ? (
+                    <img
+                      alt={offender.name || ''}
+                      key={offender.id}
+                      src={imageUrl}
+                      style={{
+                        borderRadius: '50%',
+                        height: 28,
+                        objectFit: 'cover',
+                        width: 28,
+                      }}
+                    />
+                  ) : (
+                    <div
+                      key={offender.id}
+                      style={{
+                        alignItems: 'center',
+                        background: '#f0f0f0',
+                        borderRadius: '50%',
+                        color: '#999',
+                        display: 'flex',
+                        fontSize: 10,
+                        height: 28,
+                        justifyContent: 'center',
+                        width: 28,
+                      }}
+                    >
+                      {offender.name?.slice(0, 2).toUpperCase() ||
+                        intl.formatMessage({ defaultMessage: '?' })}
+                    </div>
+                  );
+                })}
+              </div>
+            ),
+            title: intl.formatMessage({ defaultMessage: 'Members' }),
           },
           {
             dataIndex: 'totalIncidents',
@@ -71,42 +116,19 @@ const LinkCrimeGroup = ({
               defaultMessage: 'Incidents',
             }),
           },
-          {
-            dataIndex: 'totalValue',
-            key: 'totalValue',
-            render: (value) =>
-              // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-              intl.formatNumber(value || 0, {
-                currency,
-                style: 'currency',
-              }),
-            title: intl.formatMessage({
-              defaultMessage: 'Lost Value',
-            }),
-          },
-          {
-            dataIndex: 'totalRecoveredValue',
-            key: 'totalRecoveredValue',
-            render: (value) =>
-              // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-              intl.formatNumber(value || 0, {
-                currency,
-                style: 'currency',
-              }),
-            title: intl.formatMessage({
-              defaultMessage: 'Recovered Value',
-            }),
-          },
         ]}
         dataSource={data?.listCrimeGroups?.crimeGroups.map((crimeGroup) => ({
+          alias: crimeGroup.alias,
           key: crimeGroup.id,
+          offenders: crimeGroup.offenders,
           reference: crimeGroup.reference,
           totalIncidents: crimeGroup.totalIncidents,
-          totalOffenders: crimeGroup.totalOffenders,
-          totalRecoveredValue: crimeGroup.totalRecoveredValue,
-          totalValue: crimeGroup.totalValue,
         }))}
         loading={loading}
+        onRow={(record) => ({
+          onClick: () => onSelect({ key: record.key }),
+          style: { cursor: 'pointer' },
+        })}
         pagination={{
           hideOnSinglePage: true,
           onChange: onPaginationChange,
@@ -115,8 +137,12 @@ const LinkCrimeGroup = ({
           showSizeChanger: false,
           total: data?.listCrimeGroups?.total,
         }}
+        rowClassName={(record) =>
+          record.key === selected ? 'ant-table-row-selected' : ''
+        }
         rowSelection={{
           onSelect,
+          selectedRowKeys: selected ? [selected] : [],
           type: 'radio',
         }}
         size="small"

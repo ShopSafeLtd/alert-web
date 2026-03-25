@@ -700,10 +700,14 @@ const ViewCrimeGroup = ({
                           size="small"
                           type="ghost"
                         >
-                          {suggestedData.crimeGroup.suggestedMembers.length}
-                          {intl.formatMessage({
-                            defaultMessage: 'Suggested Members',
-                          })}
+                          {intl.formatMessage(
+                            { defaultMessage: '{count} Suggested Members' },
+                            {
+                              count:
+                                suggestedData.crimeGroup.suggestedMembers
+                                  .length,
+                            }
+                          )}
                         </Button>
                       </Col>
                     )}

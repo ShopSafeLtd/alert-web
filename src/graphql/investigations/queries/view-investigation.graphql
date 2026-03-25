@@ -4,6 +4,8 @@ query ViewInvestigation($where: InvestigationWhereUniqueInput!) {
     description
     name
     status
+    type
+    priority
     totalOffenders
     totalIncidents
     totalValue

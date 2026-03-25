@@ -1,5 +1,6 @@
 import type { CreateInvestigationMutation } from '#/graphql/investigations/mutations/__generated__/create-investigations.generated';
 import type { MutationUpdaterFn } from '@apollo/client';
+import type { InvestigationPriority, InvestigationType } from 'graphql/types';
 
 import { useCreateInvestigationMutation } from '#/graphql/investigations/mutations/__generated__/create-investigations.generated';
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
@@ -14,6 +15,8 @@ export interface InvestigationData {
   groupIds?: string[];
   id?: string;
   name?: string;
+  priority?: InvestigationPriority;
+  type?: InvestigationType;
 }
 
 interface Props {
@@ -73,7 +76,9 @@ const useAddInvestigation = ({
           incidentId: incidentId || null,
           name: data.name || '',
           offenderId: offenderId || null,
+          priority: data.priority,
           schemeId,
+          type: data.type,
           vehicleId: vehicleId || null,
         },
       },

@@ -17,6 +17,8 @@ query InvestigationRelay(
         name
         description
         status
+        type
+        priority
         createdAt
         closedAt
         reference
