@@ -258,6 +258,28 @@ Props): JSX.Element => {
                   }),
                   required: true,
                 },
+                {
+                  validator: (
+                    _,
+                    value: { getFullYear: () => number } | null
+                  ) => {
+                    if (value) {
+                      const year = value.getFullYear();
+                      const currentYear = new Date().getFullYear();
+                      if (year < 2000 || year > currentYear) {
+                        return Promise.reject(
+                          new Error(
+                            intl.formatMessage({
+                              defaultMessage:
+                                'Please check the year — it appears to be incorrect.',
+                            })
+                          )
+                        );
+                      }
+                    }
+                    return Promise.resolve();
+                  },
+                },
               ]}
               tooltip={intl.formatMessage({
                 defaultMessage: 'The date and time that the incident occurred.',
@@ -268,7 +290,7 @@ Props): JSX.Element => {
                 disabledDate={(current: { valueOf: () => number } | null) =>
                   !!current && current.valueOf() > Date.now()
                 }
-                format="HH:mm - DD/MM/YY"
+                format="HH:mm - DD/MM/YYYY"
                 placeholder={intl.formatMessage({
                   defaultMessage: 'Set Date & Time',
                 })}
