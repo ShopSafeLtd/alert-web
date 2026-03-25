@@ -1,3 +1,5 @@
+import type { BusinessLPWatchlistOrderBy } from 'graphql/types';
+
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { BusinessLossPreventionSection } from 'graphql/types';
 import { useAtomValue } from 'jotai';
@@ -5,7 +7,8 @@ import { useAtomValue } from 'jotai';
 import { useBusinessLossPreventionDashboardQuery } from './graphql/queries/__generated__/business-loss-prevention-dashboard.generated';
 
 export const useBusinessLossPreventionDashboard = (
-  businessId: string | undefined
+  businessId: string | undefined,
+  watchlistOrderBy?: BusinessLPWatchlistOrderBy
 ) => {
   const schemeId = useAtomValue(currentSchemeIdAtom);
 
@@ -29,6 +32,7 @@ export const useBusinessLossPreventionDashboard = (
           BusinessLossPreventionSection.SchemeComparison,
           BusinessLossPreventionSection.ActionItems,
         ],
+        watchlistOrderBy,
       },
     });
 

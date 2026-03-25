@@ -14,7 +14,7 @@ import {
   TagType,
 } from '#/graphql/types';
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
-import { Form } from 'antd';
+import { Form, notification } from 'antd';
 import dayjs from 'dayjs';
 import { useSchemeGroupsQuery } from 'graphql/groups/queries/__generated__/scheme-groups.generated';
 import { useDiscImportDataMutation } from 'graphql/imports/__generated__/disc-import.generated';
@@ -809,9 +809,8 @@ const useDiscImport = (): Return => {
         .flatMap((offender) => offender.groups);
       if (offenderGroups.length > 0) return offenderGroups;
 
-      const userGroups = newUserData
-        .filter((user) => user.groups.includes(createdBy))
-        .flatMap((user) => user.groups);
+      const userGroups =
+        newUserData.find((user) => user.id === createdBy)?.groups ?? [];
       if (userGroups.length > 0) return userGroups;
 
       const streetGroups = groupsData?.groups
@@ -1834,133 +1833,6 @@ const useDiscImport = (): Return => {
   };
 
   const onSubmit = () => {
-    console.log({
-      businesses: newBusinesses.map((business) => ({
-        connect: business.existing
-          ? {
-              id: business.existing,
-              importId: business.id,
-            }
-          : undefined,
-        create: business.existing
-          ? undefined
-          : {
-              building: business.street || '',
-              county: business.county || '',
-              importId: business.id,
-              name: business.name,
-              postcode: business.postcode || '',
-              street: business.street || '',
-              townCity: business.townCity || '',
-            },
-      })),
-      historicIncidents: newHistoricIncidents.map((incident) => ({
-        building: '',
-        business: incident.business ? { id: incident.business } : undefined,
-        county: '',
-        crimeTypes: [
-          ...incident.crimeTypes,
-          ...incident.impactTypes,
-          ...incident.involvedTypes,
-        ].map((id) => ({ id })),
-        // TODO check
-        date: dayjs(incident.date).toDate(),
-        groups: incident.groups.map((id) => ({ id })),
-        importId: incident.id,
-        lostValue: incident.lostValue,
-        policeInvolved: incident.policeInvolved,
-        policeReported: incident.policeReported,
-        postcode: incident.postcode,
-        recoveredValue: incident.recoveredValue,
-        street: incident.street,
-        // TODO check
-        time: dayjs(incident.time).toDate(),
-        townCity: '',
-      })),
-      images: images.map((image) => ({
-        fileName: image.fileName,
-        importId: image.id,
-        mimetype: 'image/png',
-        url: image.url,
-      })),
-      incidents: newIncidents
-        .map((incident) => ({
-          building: '',
-          business: incident.business ? { id: incident.business } : undefined,
-          county: '',
-          createdBy: incident.createdBy
-            ? { id: incident.createdBy }
-            : undefined,
-          crimeTypes: [
-            ...incident.crimeTypes,
-            ...incident.impactTypes,
-            ...incident.involvedTypes,
-          ].map((id) => ({ id })),
-          // TODO check
-          date: dayjs(incident.date).toDate(),
-          description: incident.description,
-          groups: incident.groups.map((id) => ({ id })),
-          images: incident.images.map(({ id }) => ({ id })),
-          importId: incident.id,
-          lostValue: incident.lostValue,
-          offenders: incident.offenders.map((id) => ({ id })),
-          policeInvolved: incident.policeInvolved,
-          policeRef: incident.policeRef,
-          policeReported: incident.policeReported,
-          postcode: incident.postcode || 'Unknown',
-          recoveredValue: incident.recoveredValue,
-          street: incident.street,
-          // TODO check
-          time: dayjs(incident.time).toDate(),
-          townCity: incident.townCity,
-        }))
-        .slice(0, 1000),
-      offenders: newOffenders
-        .map((offender) => ({
-          age: offender.age,
-          build: offender.build,
-          comment: offender.comments,
-          dateOfBirth: offender.dateOfBirth
-            ? dayjs(offender.dateOfBirth).toDate()
-            : undefined,
-          gender: offender.gender,
-          groups: offender.groups.map((id) => ({ id })),
-          height: offender.height,
-          images: offender.images.map(({ id }) => ({ id })),
-          importId: offender.id,
-          name: offender.name,
-          peculiarities: offender.peculiarities,
-          postcode: offender.postcode,
-          race: offender.race,
-          street: offender.street,
-        }))
-        .reverse(),
-      scheme: {
-        id: schemeId,
-      },
-      users: newUsers.map((user) => ({
-        connect: user.existing
-          ? {
-              groups: user.groups.map((id) => ({ id })),
-              id: user.existing,
-              importId: user.id,
-              role: user.role || Role.User,
-            }
-          : undefined,
-        create: user.existing
-          ? undefined
-          : {
-              business: {
-                id: user.business as string,
-              },
-              email: user.email,
-              fullName: user.fullName,
-              groups: user.groups.map((id) => ({ id })),
-              importId: user.id,
-              role: user.role || Role.User,
-            },
-      })),
-    });
     void importData({
       variables: {
         data: {
@@ -2093,7 +1965,22 @@ const useDiscImport = (): Return => {
           })),
         },
       },
-    }).then(() => {});
+    })
+      .then(() => {
+        notification.success({
+          description: `${newIncidents.length} incidents and ${newOffenders.length} offenders imported successfully.`,
+          message: 'Import Complete',
+          placement: 'bottomRight',
+        });
+      })
+      .catch(() => {
+        notification.error({
+          description:
+            'The import failed. Please check your data and try again.',
+          message: 'Import Failed',
+          placement: 'bottomRight',
+        });
+      });
   };
 
   return {

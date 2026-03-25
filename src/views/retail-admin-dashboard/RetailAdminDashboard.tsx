@@ -88,6 +88,7 @@ const RetailAdminDashboard: React.FC = () => {
           lg={14}
           style={{ display: 'flex', flexDirection: 'column', height: '100%' }}
           xs={24}
+          xxl={16}
         >
           <TopOffenders loading={loading} offenders={topOffenders} />
         </Col>
@@ -95,6 +96,7 @@ const RetailAdminDashboard: React.FC = () => {
           lg={10}
           style={{ display: 'flex', flexDirection: 'column', height: '100%' }}
           xs={24}
+          xxl={8}
         >
           <RepeatOffenderInsights
             insights={repeatOffenderInsights}

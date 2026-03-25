@@ -1,3 +1,4 @@
+import type { InvestigationPriority, InvestigationType } from 'graphql/types';
 import type { InvestigationDetails } from 'types/DataType';
 
 import { notification } from 'antd';
@@ -21,6 +22,8 @@ export interface InvestigationData {
   groupIds?: string[];
   id?: string;
   name?: string;
+  priority?: InvestigationPriority;
+  type?: InvestigationType;
 }
 
 const useAddInvestigation = ({ investigationData, onClose }: Props): Return => {
@@ -66,6 +69,8 @@ const useAddInvestigation = ({ investigationData, onClose }: Props): Return => {
           groupIds: addedGroupIds,
           groupIdsToRemove: removedGroupIds,
           name: data.name || '',
+          priority: data.priority,
+          type: data.type,
         },
         where: { id: investigationData.id },
       },

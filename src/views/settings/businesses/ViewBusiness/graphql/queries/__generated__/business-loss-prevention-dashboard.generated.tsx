@@ -6,6 +6,7 @@ const defaultOptions = {} as const;
 export type BusinessLossPreventionDashboardQueryVariables = Types.Exact<{
   businessId: Types.Scalars['String'];
   schemeId?: Types.InputMaybe<Types.Scalars['String']>;
+  watchlistOrderBy?: Types.InputMaybe<Types.BusinessLpWatchlistOrderBy>;
   sections?: Types.InputMaybe<Array<Types.BusinessLossPreventionSection> | Types.BusinessLossPreventionSection>;
 }>;
 
@@ -14,10 +15,11 @@ export type BusinessLossPreventionDashboardQuery = { __typename?: 'Query', busin
 
 
 export const BusinessLossPreventionDashboardDocument = gql`
-    query BusinessLossPreventionDashboard($businessId: String!, $schemeId: String, $sections: [BusinessLossPreventionSection!]) {
+    query BusinessLossPreventionDashboard($businessId: String!, $schemeId: String, $watchlistOrderBy: BusinessLPWatchlistOrderBy, $sections: [BusinessLossPreventionSection!]) {
   businessLossPreventionDashboard(
     businessId: $businessId
     schemeId: $schemeId
+    watchlistOrderBy: $watchlistOrderBy
     sections: $sections
   ) {
     summary {

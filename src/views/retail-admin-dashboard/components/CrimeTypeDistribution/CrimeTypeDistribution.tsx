@@ -65,41 +65,48 @@ const CrimeTypeDistribution: React.FC<CrimeTypeDistributionProps> = ({
     useStoreState((state) => state.theme.currentTheme) === 'dark';
   const [modalOpen, setModalOpen] = useState(false);
 
-  const chartOptions = useMemo(
-    () =>
-      ({
-        series: [
-          {
-            colorRange: ['#bae0ff', '#0958d9'],
-            data: [
-              {
-                children: [...data]
-                  .sort((a, b) => b.count - a.count)
-                  .slice(0, 15),
-                tagName: intl.formatMessage({ defaultMessage: 'Crime Types' }),
-              },
-            ],
-            labelKey: 'tagName',
-            sizeKey: 'count',
-            sizeName: intl.formatMessage({ defaultMessage: 'Incidents' }),
-            tooltip: {
-              renderer: ({
-                datum,
-                sizeName,
-              }: {
-                datum: CrimeTypeItem;
-                sizeName: string;
-              }) => ({
-                content: `${datum.tagName}: ${datum.count} ${sizeName}`,
+  const chartOptions = useMemo(() => {
+    const total = data.reduce((sum, d) => sum + d.count, 0);
+    const topItems = [...data]
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 15)
+      .map((d) => ({
+        ...d,
+        tagNameWithPercent: `${d.tagName} (${total > 0 ? ((d.count / total) * 100).toFixed(1) : 0}%)`,
+      }));
+
+    return {
+      series: [
+        {
+          colorRange: ['#bae0ff', '#0958d9'],
+          data: [
+            {
+              children: topItems,
+              tagNameWithPercent: intl.formatMessage({
+                defaultMessage: 'Crime Types',
               }),
             },
-            type: 'treemap',
+          ],
+          labelKey: 'tagNameWithPercent',
+          sizeKey: 'count',
+          sizeName: intl.formatMessage({ defaultMessage: 'Incidents' }),
+          tooltip: {
+            renderer: ({
+              datum,
+              sizeName,
+            }: {
+              datum: CrimeTypeItem;
+              sizeName: string;
+            }) => ({
+              content: `${datum.tagName}: ${datum.count} ${sizeName}`,
+            }),
           },
-        ],
-        theme: darkMode ? 'ag-default-dark' : 'ag-default',
-      }) as AgChartOptions,
-    [data, darkMode, intl]
-  );
+          type: 'treemap',
+        },
+      ],
+      theme: darkMode ? 'ag-default-dark' : 'ag-default',
+    } as AgChartOptions;
+  }, [data, darkMode, intl]);
 
   const tableData = useMemo(
     () =>

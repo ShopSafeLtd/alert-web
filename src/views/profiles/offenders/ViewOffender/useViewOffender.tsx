@@ -118,6 +118,7 @@ interface Return {
   editUpdate: { id: string; text: string } | null;
   editUpdateInput: string;
   editVehicleData: VehicleData | null;
+  generateBulletin: boolean;
   handleCreateInvestigation: (investigationId: string) => Promise<void>;
   handleEditUpdate: () => void;
   handleLinkInvestigation: (investigation: InvestigationData) => Promise<void>;
@@ -205,6 +206,7 @@ interface Return {
   toggleCopyOffender: () => void;
   toggleEditImages: () => void;
   toggleEditOffender: () => void;
+  toggleGenerateBulletin: () => void;
   toggleKnowOffender: () => void;
   toggleLinkIncident: () => void;
   toggleLinkInvestigation: () => void;
@@ -241,6 +243,7 @@ const useViewOffender = (offenderId: string): Return => {
   const [linkIncident, setLinkIncident] = useState(false);
   const [addDocument, setAddDocument] = useState(false);
   const [showAiDrawer, setShowAiDrawer] = useState(false);
+  const [generateBulletin, setGenerateBulletin] = useState(false);
   const [lightboxElements, setLightboxElements] = useState<{ src: string }[]>(
     []
   );
@@ -1986,6 +1989,7 @@ const useViewOffender = (offenderId: string): Return => {
   });
 
   const toggleAiDrawer = () => setShowAiDrawer(!showAiDrawer);
+  const toggleGenerateBulletin = () => setGenerateBulletin((prev) => !prev);
 
   return {
     addAddress,
@@ -2019,6 +2023,7 @@ const useViewOffender = (offenderId: string): Return => {
     editUpdate,
     editUpdateInput,
     editVehicleData,
+    generateBulletin,
     handleCreateInvestigation,
     handleEditUpdate,
     handleLinkInvestigation,
@@ -2088,6 +2093,7 @@ const useViewOffender = (offenderId: string): Return => {
     toggleCopyOffender,
     toggleEditImages,
     toggleEditOffender,
+    toggleGenerateBulletin,
     toggleKnowOffender,
     toggleLinkIncident,
     toggleLinkInvestigation,

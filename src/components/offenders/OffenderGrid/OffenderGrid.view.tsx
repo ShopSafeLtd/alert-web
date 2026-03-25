@@ -9,12 +9,14 @@ import {
   faCalendarAlt,
   faEdit,
   faExternalLink,
+  faMask,
+  faShoppingBag,
   faTag,
   faUnlink,
   faUser,
 } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Col, Dropdown, Menu, Row, Skeleton, Typography } from 'antd';
+import { Col, Dropdown, Menu, Row, Skeleton, Tag, Typography } from 'antd';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import dayjs from 'dayjs';
 import { useAtomValue } from 'jotai';
@@ -39,7 +41,7 @@ const useStyles = createUseStyles((theme: Theme) => ({
     display: 'flex',
     flex: 1,
     flexDirection: 'column',
-    height: 220,
+    height: 260,
     overflow: 'hidden',
     padding: '16px 20px',
   },
@@ -79,7 +81,7 @@ const useStyles = createUseStyles((theme: Theme) => ({
     borderBottomLeftRadius: 16,
     borderTopLeftRadius: 16,
     flexShrink: 0,
-    height: 220,
+    height: 260,
     width: 160,
   },
   imageSkeleton: {
@@ -87,12 +89,12 @@ const useStyles = createUseStyles((theme: Theme) => ({
       '& .ant-skeleton-image-svg': {
         width: 50,
       },
-      height: 220,
+      height: 260,
       width: 160,
     },
     borderBottomLeftRadius: 16,
     borderTopLeftRadius: 16,
-    height: '220px !important',
+    height: '260px !important',
     width: '160px !important',
   },
   infoSection: {
@@ -114,7 +116,7 @@ const useStyles = createUseStyles((theme: Theme) => ({
     borderRadius: 16,
     cursor: 'pointer',
     display: 'flex',
-    height: 220,
+    height: 260,
     overflow: 'hidden',
     padding: 0,
     transition: 'all 0.2s ease',
@@ -197,6 +199,7 @@ interface Offender {
   targetedGoods?: string[];
   totalIncidents: number;
   totalValue: number;
+  wanted?: boolean | null;
 }
 
 // Type that accepts offenders from both pagination implementations
@@ -226,7 +229,7 @@ interface OffenderCardProps {
   setEditOffenderData?: (value: OffenderData | null) => void;
 }
 
-const OffenderCard = ({
+export const OffenderCard = ({
   canDisconnect,
   disconnectLabel,
   editRights,
@@ -322,6 +325,20 @@ const OffenderCard = ({
               {offender.name ||
                 intl.formatMessage({ defaultMessage: 'Unknown' })}
             </span>
+            {offender.wanted && (
+              <Tag
+                color="red"
+                style={{
+                  flexShrink: 0,
+                  fontSize: 10,
+                  lineHeight: '16px',
+                  marginInlineEnd: 0,
+                  padding: '0 4px',
+                }}
+              >
+                {intl.formatMessage({ defaultMessage: 'Wanted' })}
+              </Tag>
+            )}
             {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
             <span className={classes.offenderRef} style={{ flexShrink: 0 }}>
               #{offender.reference}
@@ -330,6 +347,27 @@ const OffenderCard = ({
 
           {/* Demographic info */}
           <div className={classes.infoSection}>
+            {offender.alias && offender.alias.length > 0 && (
+              <div className={classes.detailRow}>
+                <FontAwesomeIcon icon={faMask} />
+                <span className={classes.detailLabel}>
+                  {intl.formatMessage({ defaultMessage: 'AKA:' })}
+                </span>
+                <Typography.Text className={classes.detailText}>
+                  {offender.alias.slice(0, 2).join(', ')}
+                  {offender.alias.length > 2 && (
+                    <>
+                      {' '}
+                      {intl.formatMessage(
+                        { defaultMessage: '+{count}' },
+                        { count: offender.alias.length - 2 }
+                      )}
+                    </>
+                  )}
+                </Typography.Text>
+              </div>
+            )}
+
             {(offender.gender || offender.race || offender.age) && (
               <div className={classes.detailRow}>
                 <FontAwesomeIcon icon={faUser} />
@@ -372,6 +410,27 @@ const OffenderCard = ({
                       {intl.formatMessage(
                         { defaultMessage: '+{count}' },
                         { count: offender.knownFor.length - 2 }
+                      )}
+                    </>
+                  )}
+                </Typography.Text>
+              </div>
+            )}
+
+            {offender.targetedGoods && offender.targetedGoods.length > 0 && (
+              <div className={classes.detailRow}>
+                <FontAwesomeIcon icon={faShoppingBag} />
+                <span className={classes.detailLabel}>
+                  {intl.formatMessage({ defaultMessage: 'Goods:' })}
+                </span>
+                <Typography.Text className={classes.detailText}>
+                  {offender.targetedGoods.slice(0, 2).join(', ')}
+                  {offender.targetedGoods.length > 2 && (
+                    <>
+                      {' '}
+                      {intl.formatMessage(
+                        { defaultMessage: '+{count}' },
+                        { count: offender.targetedGoods.length - 2 }
                       )}
                     </>
                   )}
@@ -516,7 +575,7 @@ const OffenderGrid = ({
                     border: '1px solid var(--border-color)',
                     borderRadius: 16,
                     display: 'flex',
-                    height: 220,
+                    height: 260,
                     overflow: 'hidden',
                     padding: 0,
                   }}
@@ -526,7 +585,7 @@ const OffenderGrid = ({
                     style={{
                       borderBottomLeftRadius: 16,
                       borderTopLeftRadius: 16,
-                      height: 220,
+                      height: 260,
                       width: 160,
                     }}
                   />

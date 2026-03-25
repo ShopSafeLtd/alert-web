@@ -19,10 +19,12 @@ import PermissionCheckWrapper from '#/components/PermissionCheck/PermissionCheck
 import ShareData from '#/components/form-components/ShareData/ShareData';
 import AddDocuments from '#/components/form-components/documents/AddDocuments';
 import { IncidentTableContainer } from '#/components/tables/IncidentTable';
+import AIGenerateButton from '#/components/ui/AIGenerateButton/AIGenerateButton';
 import { currencyAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import useReportPrint from '#/utils/reportPrint/usePrintReports';
 import AiDetailsView from '#/views/profiles/offenders/ViewOffender/components/AiDetails.view';
 import OffenderAiDrawer from '#/views/profiles/offenders/ViewOffender/components/AiDrawer/AiDrawer.view';
+import GenerateBulletinModal from '#/views/profiles/offenders/ViewOffender/components/GenerateBulletinModal';
 import OffenderSidebar from '#/views/profiles/offenders/ViewOffender/components/OffenderSidebar';
 import OffenderVision from '#/views/profiles/offenders/ViewOffender/components/OffenderVision/OffenderVision.view';
 import {
@@ -108,7 +110,7 @@ import VehicleTable from 'components/tables/VehicleTable';
 import dayjs from 'dayjs';
 import { BanType, PermissionMethod, PermissionModel } from 'graphql/types';
 import { useAtomValue } from 'jotai';
-import React from 'react';
+import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router';
 import { ProfileUpdatedModel } from 'types/enums/profile-update-type';
@@ -131,6 +133,57 @@ import TranslateButton from '../../../../components/util-components/TranslateBut
 import useStyles from './ViewOffender.styles';
 
 const { Paragraph, Text, Title } = Typography;
+
+const COLLAPSED_LIMIT = 10;
+
+const CollapsibleTagList = ({
+  items,
+  tagClassName,
+  title,
+}: {
+  items: string[];
+  tagClassName?: string;
+  title?: string;
+}) => {
+  const [modalOpen, setModalOpen] = useState(false);
+  const intl = useIntl();
+  const visible = items.slice(0, COLLAPSED_LIMIT);
+  const remaining = items.length - COLLAPSED_LIMIT;
+
+  return (
+    <>
+      <Row>
+        {visible.map((el) => (
+          <Tag className={tagClassName} key={el}>
+            {el}
+          </Tag>
+        ))}
+        {items.length > COLLAPSED_LIMIT && (
+          <Tag onClick={() => setModalOpen(true)} style={{ cursor: 'pointer' }}>
+            {intl.formatMessage(
+              { defaultMessage: '+{n} more' },
+              { n: remaining }
+            )}
+          </Tag>
+        )}
+      </Row>
+      <Modal
+        footer={null}
+        onCancel={() => setModalOpen(false)}
+        open={modalOpen}
+        title={title}
+      >
+        <Row style={{ paddingTop: 8 }}>
+          {items.map((el) => (
+            <Tag className={tagClassName} key={el} style={{ marginBottom: 6 }}>
+              {el}
+            </Tag>
+          ))}
+        </Row>
+      </Modal>
+    </>
+  );
+};
 
 interface TableItem {
   activeDay?: string | undefined;
@@ -172,6 +225,7 @@ interface Props {
 
   editUpdateInput: string;
   editVehicleData: VehicleData | null;
+  generateBulletin: boolean;
   handleCreateInvestigation: (investigationId: string) => Promise<void>;
   handleEditUpdate: () => void;
   handleLinkInvestigation: (investigation: InvestigationData) => Promise<void>;
@@ -256,6 +310,7 @@ interface Props {
   toggleCopyOffender: () => void;
   toggleEditImages: () => void;
   toggleEditOffender: () => void;
+  toggleGenerateBulletin: () => void;
   toggleKnowOffender: () => void;
   toggleLinkIncident: () => void;
   toggleLinkInvestigation: () => void;
@@ -302,6 +357,7 @@ const ViewOffender = ({
   editUpdate,
   editUpdateInput,
   editVehicleData,
+  generateBulletin,
   handleEditUpdate,
   handleLinkInvestigation,
   handleUnlinkInvestigation,
@@ -367,6 +423,7 @@ const ViewOffender = ({
   toggleCopyOffender,
   toggleEditImages,
   toggleEditOffender,
+  toggleGenerateBulletin,
   toggleKnowOffender,
   toggleLinkIncident,
   toggleLinkInvestigation,
@@ -475,6 +532,18 @@ const ViewOffender = ({
                           </Col>
                         </PermissionCheckWrapper>
                       )}
+                    {editRights && (
+                      <Col style={{ alignItems: 'center', display: 'flex' }}>
+                        <AIGenerateButton
+                          disabled={loading}
+                          label={intl.formatMessage({
+                            defaultMessage: 'Generate Bulletin',
+                          })}
+                          onClick={toggleGenerateBulletin}
+                          standalone
+                        />
+                      </Col>
+                    )}
                     <Col>
                       <Row>
                         <Col>
@@ -947,18 +1016,15 @@ const ViewOffender = ({
                                           </span>
                                         }
                                       >
-                                        <Row>
-                                          {data?.offender?.targetedGoods?.map(
-                                            (el) => (
-                                              <Tag
-                                                className={classes.tag}
-                                                key={el}
-                                              >
-                                                {el}
-                                              </Tag>
-                                            )
-                                          )}
-                                        </Row>
+                                        <CollapsibleTagList
+                                          items={
+                                            data?.offender?.targetedGoods ?? []
+                                          }
+                                          tagClassName={classes.tag}
+                                          title={intl.formatMessage({
+                                            defaultMessage: 'Targeted Goods',
+                                          })}
+                                        />
                                       </Descriptions.Item>
                                     )}
                                   {data?.offender?.knownFor &&
@@ -977,18 +1043,13 @@ const ViewOffender = ({
                                           </span>
                                         }
                                       >
-                                        <Row>
-                                          {data?.offender?.knownFor?.map(
-                                            (el) => (
-                                              <Tag
-                                                className={classes.tag}
-                                                key={el}
-                                              >
-                                                {el}
-                                              </Tag>
-                                            )
-                                          )}
-                                        </Row>
+                                        <CollapsibleTagList
+                                          items={data?.offender?.knownFor ?? []}
+                                          tagClassName={classes.tag}
+                                          title={intl.formatMessage({
+                                            defaultMessage: 'Known For',
+                                          })}
+                                        />
                                       </Descriptions.Item>
                                     )}
                                   <Descriptions column={1}>
@@ -2759,6 +2820,13 @@ const ViewOffender = ({
           <ShareData offenderId={offenderId} onClose={toggleShareOpen} />
         )}
       </Drawer>
+
+      <GenerateBulletinModal
+        offenderId={offenderId}
+        offenderName={data?.offender?.name ?? ''}
+        onClose={toggleGenerateBulletin}
+        open={generateBulletin}
+      />
 
       <OffenderAiDrawer
         offenderId={offenderId}

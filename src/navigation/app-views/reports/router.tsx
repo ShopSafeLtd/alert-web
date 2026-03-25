@@ -22,6 +22,7 @@ import BulletinEngagementDetail from 'views/reports/engagement/BulletinEngagemen
 import DocumentEngagementDetail from 'views/reports/engagement/DocumentEngagementDetail';
 import OffenderEngagementDetail from 'views/reports/engagement/OffenderEngagementDetail';
 import IncidentMap from 'views/reports/incident-map';
+import LpStockLossReport from 'views/reports/lp-stock-loss';
 import OffenderProfileSearch from 'views/reports/offender-profile/Search';
 import OffenderEngagement from 'views/reports/offender-report';
 import PerformanceReport from 'views/reports/performance';
@@ -309,6 +310,19 @@ const Reports = (): JSX.Element => {
             </PermissionCheckWrapper>
           }
           path="offender-engagement/:offenderId"
+        />
+        <Route
+          element={
+            <PermissionCheckWrapper
+              permission={{
+                method: PermissionMethod.Read,
+                model: PermissionModel.Reports,
+              }}
+            >
+              <LpStockLossReport />
+            </PermissionCheckWrapper>
+          }
+          path="lp-stock-loss/:reportId?"
         />
         {/*
 

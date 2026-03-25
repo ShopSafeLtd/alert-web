@@ -6,5 +6,7 @@ mutation UpdateInvestigationDetails(
     id
     description
     name
+    type
+    priority
   }
 }

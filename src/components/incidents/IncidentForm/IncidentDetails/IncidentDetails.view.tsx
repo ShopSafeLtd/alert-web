@@ -14,11 +14,11 @@ interface Props {
 
 const IncidentDetails = ({ descriptionTitle, saving }: Props): JSX.Element => {
   const intl = useIntl();
-  let dateFormat = 'HH:mm - DD/MM/YY';
+  let dateFormat = 'HH:mm - DD/MM/YYYY';
   const shouldUseUs = useAtomValue(useAmericanDateFormatAtom);
 
   if (shouldUseUs) {
-    dateFormat = 'HH:mm - MM/DD/YY';
+    dateFormat = 'HH:mm - MM/DD/YYYY';
   }
 
   return (
@@ -58,6 +58,25 @@ const IncidentDetails = ({ descriptionTitle, saving }: Props): JSX.Element => {
                 ),
                 required: true,
               },
+              {
+                validator: (_, value: { getFullYear: () => number } | null) => {
+                  if (value) {
+                    const year = value.getFullYear();
+                    const currentYear = new Date().getFullYear();
+                    if (year < 2000 || year > currentYear) {
+                      return Promise.reject(
+                        new Error(
+                          intl.formatMessage({
+                            defaultMessage:
+                              'Please check the year — it appears to be incorrect.',
+                          })
+                        )
+                      );
+                    }
+                  }
+                  return Promise.resolve();
+                },
+              },
             ]}
             tooltip={intl.formatMessage(
               {
@@ -68,8 +87,8 @@ const IncidentDetails = ({ descriptionTitle, saving }: Props): JSX.Element => {
           >
             <DatePicker
               disabled={saving}
-              disabledDate={(current) =>
-                current && current.valueOf() > Date.now()
+              disabledDate={(current: { valueOf: () => number } | null) =>
+                !!current && current.valueOf() > Date.now()
               }
               format={dateFormat}
               placeholder={intl.formatMessage(

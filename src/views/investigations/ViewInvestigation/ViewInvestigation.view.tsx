@@ -275,6 +275,8 @@ const ViewInvestigation = ({
               groupIds: [],
               id: data?.investigation?.id || '',
               name: data?.investigation?.name,
+              priority: data?.investigation?.priority,
+              type: data?.investigation?.type,
             }}
             onClose={toggleEditInvestigation}
           />

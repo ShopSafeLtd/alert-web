@@ -1,18 +1,21 @@
 import type { MutationUpdaterFn } from '@apollo/client';
 import type { CreateInvestigationMutation } from 'graphql/investigations/mutations/__generated__/create-investigations.generated';
 import type { InvestigationRelayQuery } from 'graphql/investigations/queries/__generated__/list-investigations-all-schemes.generated';
+import type { InvestigationPriority, InvestigationType } from 'graphql/types';
 
 import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
 import { useStoreActions, useStoreState } from '#/state';
 import DebouncedInput from '#/utils/debounced-input';
 import FormatCalendar from '#/utils/format-calendar-24h';
 import { Button, Col, Drawer, Row, Select, Table, Tag, Tooltip } from 'antd';
+import InvestigationPriorityTag from 'components/investigations/InvestigationPriorityTag/InvestigationPriorityTag.view';
 import { InvestigationStatus } from 'graphql/types';
 import React from 'react';
 import { FormattedList, FormattedMessage, useIntl } from 'react-intl';
 import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
 import GetInvestigationStatusValues from 'types/enums/investigation-status';
+import GetInvestigationTypeValues from 'types/enums/investigation-type';
 
 import AddInvestigation from '../../../components/form-components/Investigation/AddInvestigation';
 import useStyles from './ListInvestigations.styles';
@@ -199,6 +202,25 @@ const ListInvestigations = ({
             width: 100,
           },
           {
+            dataIndex: 'type',
+            key: 'type',
+            render: (value: InvestigationType) =>
+              value ? GetInvestigationTypeValues[value] : undefined,
+            sorter: (a, b) => (a.type || '').localeCompare(b.type || ''),
+            title: <FormattedMessage defaultMessage="Type" />,
+            width: 160,
+          },
+          {
+            dataIndex: 'priority',
+            key: 'priority',
+            render: (value: InvestigationPriority) =>
+              value ? <InvestigationPriorityTag value={value} /> : undefined,
+            sorter: (a, b) =>
+              (a.priority || '').localeCompare(b.priority || ''),
+            title: <FormattedMessage defaultMessage="Priority" />,
+            width: 100,
+          },
+          {
             dataIndex: 'createdAt',
             key: 'createdAt',
             render: (value: Date) =>
@@ -278,8 +300,10 @@ const ListInvestigations = ({
             groups: investigation.groups || [],
             key: investigation.id,
             name: investigation.name,
+            priority: investigation.priority,
             reference: investigation.reference,
             status: investigation.status || InvestigationStatus.Open,
+            type: investigation.type,
           })
         )}
         loading={loading}

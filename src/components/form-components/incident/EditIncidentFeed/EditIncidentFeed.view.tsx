@@ -1,6 +1,5 @@
 import type { FormData as AddIncidentFormData } from '#/views/incidents/AddIncident/types/formData';
 import type { FormInstance } from 'antd';
-import type { Dayjs } from 'dayjs';
 import type { EditIncidentFeedQuery } from 'graphql/incidents/queries/__generated__/edit-incident-feed.generated';
 import type { CustomQuestion } from 'types/DataType/data_type';
 
@@ -259,6 +258,28 @@ Props): JSX.Element => {
                   }),
                   required: true,
                 },
+                {
+                  validator: (
+                    _,
+                    value: { getFullYear: () => number } | null
+                  ) => {
+                    if (value) {
+                      const year = value.getFullYear();
+                      const currentYear = new Date().getFullYear();
+                      if (year < 2000 || year > currentYear) {
+                        return Promise.reject(
+                          new Error(
+                            intl.formatMessage({
+                              defaultMessage:
+                                'Please check the year — it appears to be incorrect.',
+                            })
+                          )
+                        );
+                      }
+                    }
+                    return Promise.resolve();
+                  },
+                },
               ]}
               tooltip={intl.formatMessage({
                 defaultMessage: 'The date and time that the incident occurred.',
@@ -266,10 +287,10 @@ Props): JSX.Element => {
             >
               <DatePicker
                 disabled={saving}
-                disabledDate={(current: Dayjs) =>
-                  current && current.toDate().getTime() > Date.now()
+                disabledDate={(current: { valueOf: () => number } | null) =>
+                  !!current && current.valueOf() > Date.now()
                 }
-                format="HH:mm - DD/MM/YY"
+                format="HH:mm - DD/MM/YYYY"
                 placeholder={intl.formatMessage({
                   defaultMessage: 'Set Date & Time',
                 })}

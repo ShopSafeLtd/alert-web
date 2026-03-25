@@ -507,7 +507,7 @@ const NewIncidentTable = ({
     setActiveIncidents(
       newIncidents.slice((currentPage - 1) * 10, 10 * currentPage)
     );
-  }, [currentPage]);
+  }, [currentPage, newIncidents]);
   const intl = useIntl();
   return (
     <Card
@@ -562,7 +562,7 @@ const NewIncidentTable = ({
             }
           )
         }
-        total={newOffenders.length}
+        total={newIncidents.length}
       />
     </Card>
   );

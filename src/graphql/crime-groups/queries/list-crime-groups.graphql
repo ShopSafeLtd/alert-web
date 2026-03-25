@@ -15,6 +15,14 @@ query ListCrimeGroups(
       totalValue
       alias
       updatedAt
+      offenders(take: 3) {
+        id
+        name
+        images(take: 1) {
+          id
+          optimised
+        }
+      }
     }
     total
   }

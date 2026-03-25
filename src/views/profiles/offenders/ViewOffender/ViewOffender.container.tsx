@@ -34,6 +34,7 @@ const ViewOffender = (): JSX.Element => {
     editUpdate,
     editUpdateInput,
     editVehicleData,
+    generateBulletin,
     handleCreateInvestigation,
     handleEditUpdate,
     handleLinkInvestigation,
@@ -97,6 +98,7 @@ const ViewOffender = (): JSX.Element => {
     toggleCopyOffender,
     toggleEditImages,
     toggleEditOffender,
+    toggleGenerateBulletin,
     toggleKnowOffender,
     toggleLinkIncident,
     toggleLinkInvestigation,
@@ -145,6 +147,7 @@ const ViewOffender = (): JSX.Element => {
       editUpdate={editUpdate}
       editUpdateInput={editUpdateInput}
       editVehicleData={editVehicleData}
+      generateBulletin={generateBulletin}
       handleCreateInvestigation={handleCreateInvestigation}
       handleEditUpdate={handleEditUpdate}
       handleLinkInvestigation={handleLinkInvestigation}
@@ -211,6 +214,7 @@ const ViewOffender = (): JSX.Element => {
       toggleCopyOffender={toggleCopyOffender}
       toggleEditImages={toggleEditImages}
       toggleEditOffender={toggleEditOffender}
+      toggleGenerateBulletin={toggleGenerateBulletin}
       toggleKnowOffender={toggleKnowOffender}
       toggleLinkIncident={toggleLinkIncident}
       toggleLinkInvestigation={toggleLinkInvestigation}

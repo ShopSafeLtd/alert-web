@@ -26,7 +26,7 @@ const LossPreventionSummary: React.FC<LossPreventionSummaryProps> = ({
     return (
       <Row gutter={[16, 16]} style={{ marginBottom: 16 }}>
         {Array.from({ length: 7 }).map((_, i) => (
-          <Col key={i} lg={3} md={6} sm={12} xs={24}>
+          <Col key={i} lg={6} sm={12} xs={24} xxl={3}>
             <Skeleton active paragraph={{ rows: 1 }} />
           </Col>
         ))}
@@ -41,14 +41,14 @@ const LossPreventionSummary: React.FC<LossPreventionSummaryProps> = ({
 
   return (
     <Row gutter={[16, 16]} style={{ marginBottom: 16 }}>
-      <Col lg={3} md={6} sm={12} xs={24}>
+      <Col lg={6} sm={12} style={{ display: 'flex' }} xs={24} xxl={3}>
         <KpiStatCard
           loading={loading}
           title={intl.formatMessage({ defaultMessage: "Today's Incidents" })}
           value={summary?.todayCount ?? null}
         />
       </Col>
-      <Col lg={3} md={6} sm={12} xs={24}>
+      <Col lg={6} sm={12} style={{ display: 'flex' }} xs={24} xxl={3}>
         <KpiStatCard
           loading={loading}
           title={intl.formatMessage({ defaultMessage: 'This Week' })}
@@ -61,14 +61,14 @@ const LossPreventionSummary: React.FC<LossPreventionSummaryProps> = ({
           value={summary?.thisWeekCount ?? null}
         />
       </Col>
-      <Col lg={3} md={6} sm={12} xs={24}>
+      <Col lg={6} sm={12} style={{ display: 'flex' }} xs={24} xxl={3}>
         <KpiStatCard
           loading={loading}
           title={intl.formatMessage({ defaultMessage: 'This Month' })}
           value={summary?.thisMonthCount ?? null}
         />
       </Col>
-      <Col lg={4} md={6} sm={12} xs={24}>
+      <Col lg={6} sm={12} style={{ display: 'flex' }} xs={24} xxl={3}>
         <KpiStatCard
           loading={loading}
           title={intl.formatMessage({ defaultMessage: 'Value Lost' })}
@@ -83,7 +83,7 @@ const LossPreventionSummary: React.FC<LossPreventionSummaryProps> = ({
           }
         />
       </Col>
-      <Col lg={4} md={6} sm={12} xs={24}>
+      <Col lg={6} sm={12} style={{ display: 'flex' }} xs={24} xxl={3}>
         <KpiStatCard
           loading={loading}
           title={intl.formatMessage({ defaultMessage: 'Recovered' })}
@@ -98,14 +98,14 @@ const LossPreventionSummary: React.FC<LossPreventionSummaryProps> = ({
           }
         />
       </Col>
-      <Col lg={4} md={6} sm={12} xs={24}>
+      <Col lg={6} sm={12} style={{ display: 'flex' }} xs={24} xxl={3}>
         <KpiStatCard
           loading={loading}
           title={intl.formatMessage({ defaultMessage: 'Recovery Rate' })}
           value={recoveryRateDisplay}
         />
       </Col>
-      <Col lg={3} md={6} sm={12} xs={24}>
+      <Col lg={6} sm={12} style={{ display: 'flex' }} xs={24} xxl={3}>
         <KpiStatCard
           loading={loading}
           title={intl.formatMessage({ defaultMessage: 'Active Bans' })}

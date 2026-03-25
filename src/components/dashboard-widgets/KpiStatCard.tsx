@@ -33,7 +33,7 @@ const KpiStatCard: React.FC<KpiStatCardProps> = ({
   const intl = useIntl();
   if (loading) {
     return (
-      <Card size="small">
+      <Card size="small" style={{ height: '100%' }}>
         <Skeleton active paragraph={{ rows: 1 }} title />
       </Card>
     );
@@ -71,7 +71,7 @@ const KpiStatCard: React.FC<KpiStatCardProps> = ({
   );
 
   return (
-    <Card size="small">
+    <Card size="small" style={{ flex: 1, height: '100%' }}>
       <Statistic
         prefix={icon}
         suffix={suffix}

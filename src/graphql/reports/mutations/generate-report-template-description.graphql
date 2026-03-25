@@ -1,0 +1,3 @@
+mutation GenerateReportTemplateDescription($reportTemplateName: String!, $reportType: String, $userDescription: String) {
+    generateReportTemplateDescription(reportTemplateName: $reportTemplateName, reportType: $reportType, userDescription: $userDescription)
+}

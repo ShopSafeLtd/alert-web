@@ -5,7 +5,6 @@ import useListCrimeGroups from './useListCrimeGroups';
 
 const ListCrimeGroups = () => {
   const {
-    addInvestigation,
     clearFilters,
     data,
     groups,
@@ -17,14 +16,12 @@ const ListCrimeGroups = () => {
     setOrder,
     setSearch,
     sortFilter,
-    toggleAddInvestigation,
     toggleSortFilter,
     variables,
   } = useListCrimeGroups();
 
   return (
     <View
-      addInvestigation={addInvestigation}
       clearFilters={clearFilters}
       data={data}
       groups={groups}
@@ -36,7 +33,6 @@ const ListCrimeGroups = () => {
       setOrder={setOrder}
       setSearch={setSearch}
       sortFilter={sortFilter}
-      toggleAddInvestigation={toggleAddInvestigation}
       toggleSortFilter={toggleSortFilter}
       variables={variables}
     />

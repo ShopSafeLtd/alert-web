@@ -71,7 +71,7 @@ const ViewBusiness = () => {
     schemeComparison,
     summary: lpSummary,
     watchlistInsights: lpWatchlistInsights,
-  } = useBusinessLossPreventionDashboard(businessId);
+  } = useBusinessLossPreventionDashboard(businessId, watchlistOrderBy);
 
   return (
     <View
