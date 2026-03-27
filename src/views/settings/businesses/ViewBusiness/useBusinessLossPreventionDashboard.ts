@@ -1,4 +1,4 @@
-import type { BusinessLPWatchlistOrderBy } from 'graphql/types';
+import type { BusinessLpWatchlistOrderBy } from 'graphql/types';
 
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { BusinessLossPreventionSection } from 'graphql/types';
@@ -8,7 +8,7 @@ import { useBusinessLossPreventionDashboardQuery } from './graphql/queries/__gen
 
 export const useBusinessLossPreventionDashboard = (
   businessId: string | undefined,
-  watchlistOrderBy?: BusinessLPWatchlistOrderBy
+  watchlistOrderBy?: BusinessLpWatchlistOrderBy
 ) => {
   const schemeId = useAtomValue(currentSchemeIdAtom);
 

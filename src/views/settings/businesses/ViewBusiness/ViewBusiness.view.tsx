@@ -8,7 +8,7 @@ import type { ListActionsQuery } from 'graphql/actions/queries/__generated__/lis
 import type { AddUsersToBusinessMutation } from 'graphql/businesses/mutations/__generated__/add-users-to-business.generated';
 import type { BusinessQuery } from 'graphql/businesses/queries/__generated__/business.generated';
 import type { CreateTodoMutation } from 'graphql/todos/mutations/__generated__/create-todo.generated';
-import type { BusinessLPWatchlistOrderBy } from 'graphql/types';
+import type { BusinessLpWatchlistOrderBy } from 'graphql/types';
 import type { CreateUserInDatabaseMutation } from 'graphql/users/mutations/__generated__/create-user-in-databse.generated';
 import type { InviteExistingUserMutation } from 'graphql/users/mutations/__generated__/invite-exiting-user.generated';
 import type { ListBusinessUsersQuery } from 'graphql/users/queries/__generated__/list-business-users.generated';
@@ -123,7 +123,7 @@ interface Props {
   setEditDeviceData: (value: DemDeviceData | undefined) => void;
   setSelectedUserIds: (value: string[]) => void;
   setViewTodoVisible: (value: null | string) => void;
-  setWatchlistOrderBy: (value: BusinessLPWatchlistOrderBy | undefined) => void;
+  setWatchlistOrderBy: (value: BusinessLpWatchlistOrderBy | undefined) => void;
   templatesData: QuestionGroupOnSchemeQuery | undefined;
   templatesLoading: boolean;
   toggleAddDemDevice: () => void;
@@ -142,7 +142,7 @@ interface Props {
   usersData: ListBusinessUsersQuery | undefined;
   usersLoading: boolean;
   viewTodoVisible: null | string;
-  watchlistOrderBy: BusinessLPWatchlistOrderBy | undefined;
+  watchlistOrderBy: BusinessLpWatchlistOrderBy | undefined;
 }
 
 const ViewBusiness = ({

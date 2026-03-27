@@ -1,6 +1,6 @@
 import { currencyAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { Avatar, Card, Empty, Segmented, Skeleton, Tag } from 'antd';
-import { BusinessLPWatchlistOrderBy } from 'graphql/types';
+import { BusinessLpWatchlistOrderBy } from 'graphql/types';
 import { useAtomValue } from 'jotai';
 import React from 'react';
 import { useIntl } from 'react-intl';
@@ -15,8 +15,8 @@ type WatchlistOffender = NonNullable<
 interface LpOffenderWatchlistProps {
   loading: boolean;
   offenders: WatchlistOffender[] | null | undefined;
-  onOrderByChange: (value: BusinessLPWatchlistOrderBy | undefined) => void;
-  orderBy: BusinessLPWatchlistOrderBy | undefined;
+  onOrderByChange: (value: BusinessLpWatchlistOrderBy | undefined) => void;
+  orderBy: BusinessLpWatchlistOrderBy | undefined;
 }
 
 const getImageUrl = (images: {
@@ -54,11 +54,11 @@ const LpOffenderWatchlist: React.FC<LpOffenderWatchlistProps> = ({
   const sortOptions = [
     {
       label: intl.formatMessage({ defaultMessage: 'Incidents' }),
-      value: BusinessLPWatchlistOrderBy.IncidentCount,
+      value: BusinessLpWatchlistOrderBy.IncidentCount,
     },
     {
       label: intl.formatMessage({ defaultMessage: 'Value' }),
-      value: BusinessLPWatchlistOrderBy.TotalValue,
+      value: BusinessLpWatchlistOrderBy.TotalValue,
     },
   ];
 
@@ -70,11 +70,11 @@ const LpOffenderWatchlist: React.FC<LpOffenderWatchlistProps> = ({
       extra={
         <Segmented
           onChange={(value) =>
-            onOrderByChange(value as BusinessLPWatchlistOrderBy)
+            onOrderByChange(value as BusinessLpWatchlistOrderBy)
           }
           options={sortOptions}
           size="small"
-          value={orderBy ?? BusinessLPWatchlistOrderBy.IncidentCount}
+          value={orderBy ?? BusinessLpWatchlistOrderBy.IncidentCount}
         />
       }
       style={{ height: '100%' }}
