@@ -1935,10 +1935,6 @@ export enum BusinessLpWatchlistOrderBy {
   TotalValue = 'TOTAL_VALUE'
 }
 
-// Alias for codegen casing inconsistency
-export const BusinessLPWatchlistOrderBy = BusinessLpWatchlistOrderBy;
-export type BusinessLPWatchlistOrderBy = BusinessLpWatchlistOrderBy;
-
 export type BusinessListRelationFilter = {
   every?: InputMaybe<BusinessWhereInput>;
   none?: InputMaybe<BusinessWhereInput>;
@@ -12340,6 +12336,7 @@ export type Mutation = {
   nextImportData: SystemTask;
   oneStopImportData: SystemTask;
   queueActivityCsvExport: QueuedIncidentExportResult;
+  queueBusinessEngagementCsvExport: QueuedIncidentExportResult;
   queueIncidentCsvExport: QueuedIncidentExportResult;
   queueStockRemovalCsvExport: QueuedStockRemovalExportResult;
   recordPatrolScan: PatrolEvent;
@@ -13564,6 +13561,12 @@ export type MutationOneStopImportDataArgs = {
 
 export type MutationQueueActivityCsvExportArgs = {
   where: ActivityExportWhere;
+};
+
+
+export type MutationQueueBusinessEngagementCsvExportArgs = {
+  orderBy?: InputMaybe<BusinessContributionOrderByInput>;
+  where: UserContributionWhereInput;
 };
 
 

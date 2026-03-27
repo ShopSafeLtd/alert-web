@@ -1,0 +1,10 @@
+mutation QueueBusinessEngagementCsvExport(
+  $where: UserContributionWhereInput!
+  $orderBy: BusinessContributionOrderByInput
+) {
+  queueBusinessEngagementCsvExport(where: $where, orderBy: $orderBy) {
+    jobId
+    message
+    estimatedTime
+  }
+}

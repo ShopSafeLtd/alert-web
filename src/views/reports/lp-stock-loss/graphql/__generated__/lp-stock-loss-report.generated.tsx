@@ -3,12 +3,6 @@ import type * as Types from '../../../../../graphql/types';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
-export {
-  LpStockLossBusinessHotspotsOrderBy,
-  LpStockLossGoodsTypeOrderBy,
-  LpStockLossOffenderOrderBy,
-  LpStockLossTopItemsOrderBy,
-} from '../../../../../graphql/types';
 export type LpStockLossReportQueryVariables = Types.Exact<{
   startDate?: Types.InputMaybe<Types.Scalars['DateTime']>;
   endDate?: Types.InputMaybe<Types.Scalars['DateTime']>;
@@ -20,7 +14,7 @@ export type LpStockLossReportQueryVariables = Types.Exact<{
   offenderOrderBy?: Types.InputMaybe<Types.LpStockLossOffenderOrderBy>;
   goodsTypeOrderBy?: Types.InputMaybe<Types.LpStockLossGoodsTypeOrderBy>;
   businessHotspotsOrderBy?: Types.InputMaybe<Types.LpStockLossBusinessHotspotsOrderBy>;
-  groupIds?: Types.InputMaybe<Array<Types.Scalars['String']>>;
+  groupIds?: Types.InputMaybe<Array<Types.Scalars['String']> | Types.Scalars['String']>;
 }>;
 
 

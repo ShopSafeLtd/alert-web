@@ -4,6 +4,7 @@ import type { RefObject } from 'react';
 
 import { useGroupsContext } from '#/context/groups-context';
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import { useQueueBusinessEngagementCsvExportMutation } from 'graphql/reports/mutations/__generated__/queue-business-engagement-csv-export.generated';
 import { useBusinessEngagementQuery } from 'graphql/reports/queries/__generated__/business-engagement.generated';
 import { SortOrder } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
@@ -15,8 +16,11 @@ interface Return {
   currentPage: number;
   data: BusinessEngagementQuery | undefined;
   dateRange: { endDate: Date; startDate: Date };
+  exportLoading: boolean;
+  exportMessage: string | undefined;
   groups: SelectOptions[];
   groupsLoading: boolean;
+  handleExportCsv: () => void;
   handlePageChange: (page: number, newPageSize?: number) => void;
   handlePrint: () => void;
   isPrinting: boolean;
@@ -52,6 +56,8 @@ const useBusinessEngagement = (): Return => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(30);
 
+  const [exportMessage, setExportMessage] = useState<string | undefined>();
+
   const skip = (currentPage - 1) * pageSize;
   const orderBy = { totalIncidents: SortOrder.Desc };
 
@@ -63,6 +69,32 @@ const useBusinessEngagement = (): Return => {
       setGroups(groupsFormatted);
     }
   }, [groupsData]);
+
+  const [queueExport, { loading: exportLoading }] =
+    useQueueBusinessEngagementCsvExportMutation({
+      onCompleted: (result) => {
+        setExportMessage(result.queueBusinessEngagementCsvExport?.message);
+      },
+      onError: () => {
+        setExportMessage(undefined);
+      },
+    });
+
+  const handleExportCsv = () => {
+    void queueExport({
+      variables: {
+        orderBy,
+        where: {
+          dateRange,
+          groupIds:
+            selectedGroups.length > 0
+              ? selectedGroups
+              : groups.map(({ value }) => value),
+          schemeIds: [currentScheme],
+        },
+      },
+    });
+  };
 
   const { data, loading } = useBusinessEngagementQuery({
     fetchPolicy: 'cache-first',
@@ -153,8 +185,11 @@ const useBusinessEngagement = (): Return => {
     currentPage,
     data,
     dateRange,
+    exportLoading,
+    exportMessage,
     groups,
     groupsLoading,
+    handleExportCsv,
     handlePageChange,
     handlePrint,
     isPrinting,
