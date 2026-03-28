@@ -11,6 +11,20 @@
   align-items: center;
 }
 
+/* Standalone mode: match height and background of adjacent ghost buttons */
+.aiButtonWrapperStandalone .aiButtonGradientWrapper {
+  height: 32px;
+}
+
+.aiButtonWrapperStandalone .aiButton {
+  background: #fafafb !important;
+  height: 28px !important;
+}
+
+:global([style*='color-scheme: dark']) .aiButtonWrapperStandalone .aiButton {
+  background: #1b2531 !important;
+}
+
 .aiButtonGradientWrapper {
   position: relative;
   display: inline-block;

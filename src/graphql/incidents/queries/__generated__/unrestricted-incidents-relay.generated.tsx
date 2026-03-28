@@ -11,7 +11,7 @@ export type UnrestrictedIncidentsRelayQueryVariables = Types.Exact<{
 }>;
 
 
-export type UnrestrictedIncidentsRelayQuery = { __typename?: 'Query', unrestrictedIncidentsRelay: { __typename?: 'QueryUnrestrictedIncidentsRelayConnection', totalCount: number, edges: Array<{ __typename?: 'QueryUnrestrictedIncidentsRelayConnectionEdge', node: { __typename?: 'Incident', id: string, subject: string, dayTime: string, reference?: number | null, policeRef?: string | null, business?: { __typename?: 'Business', id: string, name: string } | null, location?: { __typename?: 'Address', id: string, full: string } | null, incidentItems: Array<{ __typename?: 'IncidentItem', value?: number | null, recoveredValue?: number | null }>, offenders: Array<{ __typename?: 'Offender', id: string, name?: string | null, images: Array<{ __typename?: 'Image', id: string, optimised?: string | null }> }> } }> } };
+export type UnrestrictedIncidentsRelayQuery = { __typename?: 'Query', unrestrictedIncidentsRelay: { __typename?: 'QueryUnrestrictedIncidentsRelayConnection', totalCount: number, edges: Array<{ __typename?: 'QueryUnrestrictedIncidentsRelayConnectionEdge', node: { __typename?: 'Incident', id: string, subject: string, dayTime: string, reference?: number | null, policeRef?: string | null, business?: { __typename?: 'Business', id: string, name: string } | null, location?: { __typename?: 'Address', id: string, full: string } | null, incidentItems: Array<{ __typename?: 'IncidentItem', value?: number | null, recoveredValue?: number | null, quantity?: number | null, recoveredQuantity?: number | null }>, offenders: Array<{ __typename?: 'Offender', id: string, name?: string | null, images: Array<{ __typename?: 'Image', id: string, optimised?: string | null }> }> } }> } };
 
 
 export const UnrestrictedIncidentsRelayDocument = gql`
@@ -40,6 +40,8 @@ export const UnrestrictedIncidentsRelayDocument = gql`
         incidentItems {
           value
           recoveredValue
+          quantity
+          recoveredQuantity
         }
         offenders {
           id
