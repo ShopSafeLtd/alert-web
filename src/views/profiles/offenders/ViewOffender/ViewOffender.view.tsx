@@ -76,6 +76,7 @@ import {
   Row,
   Skeleton,
   Space,
+  Statistic,
   Table,
   Tag,
   Tooltip,
@@ -1505,6 +1506,63 @@ const ViewOffender = ({
                                   </Button>
                                 </Col>
                               )}
+                            </Row>
+                            <Row gutter={[16, 16]} style={{ marginBottom: 16 }}>
+                              <Col sm={12} xs={24}>
+                                <Card
+                                  className={classes.statsCard}
+                                  loading={loading}
+                                >
+                                  <Statistic
+                                    title={intl.formatMessage({
+                                      defaultMessage: 'Total Loss',
+                                    })}
+                                    value={intl.formatNumber(
+                                      data?.offender?.totalValue || 0,
+                                      {
+                                        currency,
+                                        maximumFractionDigits: 0,
+                                        notation: 'compact',
+                                        style: 'currency',
+                                      }
+                                    )}
+                                  />
+                                </Card>
+                              </Col>
+                              <Col sm={12} xs={24}>
+                                <Card
+                                  className={classes.statsCard}
+                                  loading={loading}
+                                >
+                                  <Statistic
+                                    title={intl.formatMessage({
+                                      defaultMessage: 'Total Recovery',
+                                    })}
+                                    value={intl.formatNumber(
+                                      data?.offender?.bans
+                                        .filter((ban) =>
+                                          [
+                                            BanType.CivilRecovery,
+                                            BanType.Compensation,
+                                            BanType.PromisaryNote,
+                                            BanType.Restitution,
+                                          ].includes(ban.type as BanType)
+                                        )
+                                        .reduce(
+                                          (sum, ban) =>
+                                            sum + (ban.fineValue || 0),
+                                          0
+                                        ) || 0,
+                                      {
+                                        currency,
+                                        maximumFractionDigits: 0,
+                                        notation: 'compact',
+                                        style: 'currency',
+                                      }
+                                    )}
+                                  />
+                                </Card>
+                              </Col>
                             </Row>
                             {data?.offender?.bans.length && !loading ? (
                               <Table

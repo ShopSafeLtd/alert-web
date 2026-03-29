@@ -43,6 +43,7 @@ query ViewOffender(
     idSource
     totalImages
     totalIncidents
+    totalValue
     incidents {
       id
       dayTime
