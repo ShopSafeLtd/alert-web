@@ -9,7 +9,7 @@ export type UpdateOffenderBansMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateOffenderBansMutation = { __typename?: 'Mutation', updateOffender: { __typename?: 'Offender', id: string, bans: Array<{ __typename?: 'Ban', id: string, startDate: Date, endDate: Date, location: string, description?: string | null, title?: string | null, months: number, fineValue: number, type?: Types.BanType | null, duration: number }> } };
+export type UpdateOffenderBansMutation = { __typename?: 'Mutation', updateOffender: { __typename?: 'Offender', id: string, bans: Array<{ __typename?: 'Ban', id: string, startDate: Date, endDate: Date, location: string, description?: string | null, checkId?: string | null, companyRef?: string | null, title?: string | null, months: number, fineValue: number, type?: Types.BanType | null, duration: number, createdAt: Date, createdBy: { __typename?: 'User', id: string, fullName: string } }> } };
 
 
 export const UpdateOffenderBansDocument = gql`
@@ -22,11 +22,18 @@ export const UpdateOffenderBansDocument = gql`
       endDate
       location
       description
+      checkId
+      companyRef
       title
       months
       fineValue
       type
       duration
+      createdAt
+      createdBy {
+        id
+        fullName
+      }
     }
   }
 }

@@ -75,6 +75,7 @@ import {
   Popconfirm,
   Row,
   Skeleton,
+  Space,
   Table,
   Tag,
   Tooltip,
@@ -187,8 +188,14 @@ const CollapsibleTagList = ({
 
 interface TableItem {
   activeDay?: string | undefined;
+  ban: BanData;
+  checkId?: null | string | undefined;
+  companyRef?: null | string | undefined;
+  createdAt?: Date | string | undefined;
+  createdBy?: { fullName: string; id: string } | null;
   description: null | string | undefined;
   endDate: Date;
+  key: string;
   location?: string | undefined;
 }
 
@@ -447,18 +454,6 @@ const ViewOffender = ({
   const navigate = useNavigate();
   const { componentRef, handlePrint, isPrinting } = useReportPrint();
   const currency = useAtomValue(currencyAtom);
-  const expandedRowRender = (record: TableItem) => (
-    <Text style={{ fontSize: 14, margin: 0, padding: 0 }}>
-      {intl.formatMessage(
-        {
-          defaultMessage: ' Description: {description}',
-        },
-        {
-          description: record.description,
-        }
-      )}
-    </Text>
-  );
   return (
     <div className="page-container">
       <Row wrap={false}>
@@ -1523,6 +1518,45 @@ const ViewOffender = ({
                                     }),
                                   },
                                   {
+                                    key: 'details',
+                                    render: (_: unknown, record: TableItem) => (
+                                      <Space direction="vertical" size={0}>
+                                        {record.description && (
+                                          <Text style={{ fontSize: 12 }}>
+                                            {record.description}
+                                          </Text>
+                                        )}
+                                        {record.checkId && (
+                                          <Text
+                                            style={{ fontSize: 12 }}
+                                            type="secondary"
+                                          >
+                                            {intl.formatMessage(
+                                              {
+                                                defaultMessage: 'Check ID: {v}',
+                                              },
+                                              { v: record.checkId }
+                                            )}
+                                          </Text>
+                                        )}
+                                        {record.companyRef && (
+                                          <Text
+                                            style={{ fontSize: 12 }}
+                                            type="secondary"
+                                          >
+                                            {intl.formatMessage(
+                                              { defaultMessage: 'Ref: {v}' },
+                                              { v: record.companyRef }
+                                            )}
+                                          </Text>
+                                        )}
+                                      </Space>
+                                    ),
+                                    title: intl.formatMessage({
+                                      defaultMessage: 'Details',
+                                    }),
+                                  },
+                                  {
                                     dataIndex: 'duration',
                                     key: 'duration',
                                     // render: (value, row) =>
@@ -1586,8 +1620,39 @@ const ViewOffender = ({
                                     ellipsis: true,
                                     key: 'fineValue',
                                     title: intl.formatMessage({
-                                      defaultMessage: 'Fine Value',
+                                      defaultMessage: 'Value',
                                     }),
+                                  },
+                                  {
+                                    dataIndex: 'createdBy',
+                                    key: 'createdBy',
+                                    render: (
+                                      value:
+                                        | { fullName: string }
+                                        | null
+                                        | undefined
+                                    ) => value?.fullName ?? '',
+                                    title: intl.formatMessage({
+                                      defaultMessage: 'Logged By',
+                                    }),
+                                  },
+                                  {
+                                    dataIndex: 'createdAt',
+                                    key: 'createdAt',
+                                    render: (
+                                      value: Date | string | undefined
+                                    ) =>
+                                      value
+                                        ? FormatCalendar(
+                                            new Date(value),
+                                            intl,
+                                            true
+                                          )
+                                        : '',
+                                    title: intl.formatMessage({
+                                      defaultMessage: 'Date Logged',
+                                    }),
+                                    width: 150,
                                   },
                                   {
                                     dataIndex: 'Options',
@@ -1670,6 +1735,10 @@ const ViewOffender = ({
                                     new Date(ban?.endDate)
                                   ),
                                   ban,
+                                  checkId: ban.checkId,
+                                  companyRef: ban.companyRef,
+                                  createdAt: ban.createdAt,
+                                  createdBy: ban.createdBy,
                                   description: ban.description,
                                   duration: ban.duration,
                                   // duration: [
@@ -1714,11 +1783,6 @@ const ViewOffender = ({
                                   type: getBanType(ban.type),
                                   typeEnum: ban.type,
                                 }))}
-                                expandable={{
-                                  expandedRowRender,
-                                  rowExpandable: (record) =>
-                                    !!record.description,
-                                }}
                                 loading={loading}
                                 pagination={
                                   data?.offender?.bans &&

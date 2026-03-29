@@ -7,11 +7,18 @@ mutation UpdateOffenderBans($id: String!, $bans: BansOnOffenderUpdate) {
       endDate
       location
       description
+      checkId
+      companyRef
       title
       months
       fineValue
       type
       duration
+      createdAt
+      createdBy {
+        id
+        fullName
+      }
     }
   }
 }

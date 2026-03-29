@@ -11,14 +11,50 @@
   align-items: center;
 }
 
-/* Standalone mode: match height and background of adjacent ghost buttons */
+/* Standalone mode: gradient border via pseudo-element so the wrapper adds no extra height */
 .aiButtonWrapperStandalone .aiButtonGradientWrapper {
-  height: 32px;
+  padding: 0;
+  background: transparent !important;
+}
+
+.aiButtonWrapperStandalone .aiButtonGradientWrapper::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: calc(0.625rem + 2px);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.aiButtonWrapperStandalone .aiButtonGradientWrapper.redOrange::before,
+.aiButtonWrapperStandalone .aiButtonGradientWrapper.blueGradient::before {
+  background: linear-gradient(135deg, #ee2224, #f4a841, #421bff, #0db0fd);
+}
+
+.aiButtonWrapperStandalone
+  .aiButtonGradientWrapper.redOrange.generating::before,
+.aiButtonWrapperStandalone
+  .aiButtonGradientWrapper.blueGradient.generating::before {
+  background: linear-gradient(
+    45deg,
+    #ee2224,
+    #f4a841,
+    #421bff,
+    #0db0fd,
+    #ee2224,
+    #f4a841,
+    #421bff,
+    #0db0fd
+  );
+  background-size: 800% 800%;
+  animation: gradientShift 4s ease infinite;
 }
 
 .aiButtonWrapperStandalone .aiButton {
   background: #fafafb !important;
-  height: 28px !important;
+  border-radius: 0.625rem !important;
+  position: relative;
+  z-index: 1;
 }
 
 :global([style*='color-scheme: dark']) .aiButtonWrapperStandalone .aiButton {
