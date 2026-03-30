@@ -21,6 +21,10 @@ import type {
 
 // BanData
 export interface BanData {
+  checkId?: null | string | undefined;
+  companyRef?: null | string | undefined;
+  createdAt?: Date | string | undefined;
+  createdBy?: { fullName: string; id: string } | null;
   description?: null | string | undefined;
   duration?: null | number | undefined;
   endDate?: Date;

@@ -1250,6 +1250,8 @@ export type AudioSessionMetrics = {
 export type Ban = {
   __typename?: 'Ban';
   active: Scalars['Boolean'];
+  checkId?: Maybe<Scalars['String']>;
+  companyRef?: Maybe<Scalars['String']>;
   createdAt: Scalars['Date'];
   createdBy: User;
   current: Scalars['Boolean'];
@@ -1270,6 +1272,8 @@ export type Ban = {
 };
 
 export type BanCreateInput = {
+  checkId?: InputMaybe<Scalars['String']>;
+  companyRef?: InputMaybe<Scalars['String']>;
   createdBy: ConnectHelper;
   description?: InputMaybe<Scalars['String']>;
   endDate: Scalars['Date'];
@@ -1315,21 +1319,27 @@ export enum BanScalarFieldEnum {
 export enum BanType {
   Arrest = 'ARREST',
   Cbo = 'CBO',
+  CivilRecovery = 'CIVIL_RECOVERY',
   CommunityBan = 'COMMUNITY_BAN',
   CompanyBanningNotice = 'COMPANY_BANNING_NOTICE',
+  Compensation = 'COMPENSATION',
   CourtData = 'COURT_DATA',
   Cpn = 'CPN',
   Cpw = 'CPW',
   Fine = 'FINE',
   Other = 'OTHER',
   PrisonSentence = 'PRISON_SENTENCE',
+  PromisaryNote = 'PROMISARY_NOTE',
   Pspo = 'PSPO',
   RehabilitationOrder = 'REHABILITATION_ORDER',
+  Restitution = 'RESTITUTION',
   SuspendedSentence = 'SUSPENDED_SENTENCE',
   Wip = 'WIP'
 }
 
 export type BanUpdateInput = {
+  checkId?: InputMaybe<NullableSetStringHelper>;
+  companyRef?: InputMaybe<NullableSetStringHelper>;
   description?: InputMaybe<NullableSetStringHelper>;
   endDate?: InputMaybe<NullableSetDateHelper>;
   fineValue?: InputMaybe<SetFloatHelper>;
@@ -1934,10 +1944,6 @@ export enum BusinessLpWatchlistOrderBy {
   IncidentCount = 'INCIDENT_COUNT',
   TotalValue = 'TOTAL_VALUE'
 }
-
-// Alias for codegen casing inconsistency
-export const BusinessLPWatchlistOrderBy = BusinessLpWatchlistOrderBy;
-export type BusinessLPWatchlistOrderBy = BusinessLpWatchlistOrderBy;
 
 export type BusinessListRelationFilter = {
   every?: InputMaybe<BusinessWhereInput>;
@@ -12340,6 +12346,7 @@ export type Mutation = {
   nextImportData: SystemTask;
   oneStopImportData: SystemTask;
   queueActivityCsvExport: QueuedIncidentExportResult;
+  queueBusinessEngagementCsvExport: QueuedIncidentExportResult;
   queueIncidentCsvExport: QueuedIncidentExportResult;
   queueStockRemovalCsvExport: QueuedStockRemovalExportResult;
   recordPatrolScan: PatrolEvent;
@@ -13564,6 +13571,12 @@ export type MutationOneStopImportDataArgs = {
 
 export type MutationQueueActivityCsvExportArgs = {
   where: ActivityExportWhere;
+};
+
+
+export type MutationQueueBusinessEngagementCsvExportArgs = {
+  orderBy?: InputMaybe<BusinessContributionOrderByInput>;
+  where: UserContributionWhereInput;
 };
 
 

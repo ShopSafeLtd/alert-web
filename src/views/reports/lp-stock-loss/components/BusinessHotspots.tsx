@@ -1,12 +1,11 @@
 import { currencyAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { Card, Empty, Segmented, Skeleton, Table, Tag } from 'antd';
+import { LpStockLossBusinessHotspotsOrderBy } from 'graphql/types';
 import { useAtomValue } from 'jotai';
 import React, { useMemo } from 'react';
 import { useIntl } from 'react-intl';
 
 import type { LpStockLossReportQuery } from '../graphql/__generated__/lp-stock-loss-report.generated';
-
-import { LpStockLossBusinessHotspotsOrderBy } from '../graphql/__generated__/lp-stock-loss-report.generated';
 
 type BusinessHotspot = NonNullable<
   LpStockLossReportQuery['lpStockLossReport']['businessHotspots']

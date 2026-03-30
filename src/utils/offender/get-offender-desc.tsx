@@ -231,5 +231,13 @@ export const getBanType = (type: BanType | null | undefined): ReactNode => {
     return <FormattedMessage defaultMessage="Rehabilitation Order" />;
   if (type === BanType.Arrest)
     return <FormattedMessage defaultMessage="Arrest" />;
+  if (type === BanType.CivilRecovery)
+    return <FormattedMessage defaultMessage="Civil Recovery" />;
+  if (type === BanType.Restitution)
+    return <FormattedMessage defaultMessage="Restitution" />;
+  if (type === BanType.PromisaryNote)
+    return <FormattedMessage defaultMessage="Promissory Note" />;
+  if (type === BanType.Compensation)
+    return <FormattedMessage defaultMessage="Compensation" />;
   return <FormattedMessage defaultMessage="Other" />;
 };

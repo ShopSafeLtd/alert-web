@@ -19,6 +19,22 @@ const BanTypeValues = [
     value: BanType.CommunityBan,
   },
   {
+    label: 'Civil Recovery',
+    value: BanType.CivilRecovery,
+  },
+  {
+    label: 'Restitution',
+    value: BanType.Restitution,
+  },
+  {
+    label: 'Promissory Note',
+    value: BanType.PromisaryNote,
+  },
+  {
+    label: 'Compensation',
+    value: BanType.Compensation,
+  },
+  {
     label: 'Other',
     value: BanType.Other,
   },

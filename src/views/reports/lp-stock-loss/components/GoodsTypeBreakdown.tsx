@@ -13,13 +13,12 @@ import {
   Table,
   Typography,
 } from 'antd';
+import { LpStockLossGoodsTypeOrderBy } from 'graphql/types';
 import { useAtomValue } from 'jotai';
 import React, { useMemo } from 'react';
 import { useIntl } from 'react-intl';
 
 import type { LpStockLossReportQuery } from '../graphql/__generated__/lp-stock-loss-report.generated';
-
-import { LpStockLossGoodsTypeOrderBy } from '../graphql/__generated__/lp-stock-loss-report.generated';
 
 type GoodsTypeBreakdownItem = NonNullable<
   LpStockLossReportQuery['lpStockLossReport']['goodsTypeBreakdown']

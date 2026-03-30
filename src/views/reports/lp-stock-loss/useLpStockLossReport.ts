@@ -1,16 +1,16 @@
+import type {
+  LpStockLossBusinessHotspotsOrderBy,
+  LpStockLossGoodsTypeOrderBy,
+  LpStockLossOffenderOrderBy,
+  LpStockLossTopItemsOrderBy,
+} from 'graphql/types';
 import type { DateRange } from 'views/police-dashboard/types';
 
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { useAtomValue } from 'jotai';
 import { useMemo } from 'react';
 
-import type {
-  LpStockLossBusinessHotspotsOrderBy,
-  LpStockLossGoodsTypeOrderBy,
-  LpStockLossOffenderOrderBy,
-  LpStockLossReportQueryVariables,
-  LpStockLossTopItemsOrderBy,
-} from './graphql/__generated__/lp-stock-loss-report.generated';
+import type { LpStockLossReportQueryVariables } from './graphql/__generated__/lp-stock-loss-report.generated';
 
 import { useLpStockLossReportQuery } from './graphql/__generated__/lp-stock-loss-report.generated';
 
@@ -86,4 +86,4 @@ export {
   LpStockLossGoodsTypeOrderBy,
   LpStockLossOffenderOrderBy,
   LpStockLossTopItemsOrderBy,
-} from './graphql/__generated__/lp-stock-loss-report.generated';
+} from 'graphql/types';
