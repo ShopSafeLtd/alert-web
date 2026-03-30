@@ -198,6 +198,7 @@ interface TableItem {
   endDate: Date;
   key: string;
   location?: string | undefined;
+  typeEnum?: BanType | null;
 }
 
 interface Props {
