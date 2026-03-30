@@ -28,6 +28,8 @@ query unrestrictedIncidentsRelay(
         incidentItems {
           value
           recoveredValue
+          quantity
+          recoveredQuantity
         }
         offenders {
           id

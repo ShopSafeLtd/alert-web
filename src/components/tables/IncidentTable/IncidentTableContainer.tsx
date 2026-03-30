@@ -66,15 +66,16 @@ export const IncidentTableContainer: React.FC<IncidentTableContainerProps> = ({
   const mappedIncidents = useMemo(
     () =>
       incidents.map((incident) => {
-        // Calculate total value from incidentItems
+        // Calculate total value from incidentItems (multiplied by quantity)
         const totalValue = incident.incidentItems.reduce(
-          (sum, item) => sum + (item.value || 0),
+          (sum, item) => sum + (item.value || 0) * (item.quantity ?? 1),
           0
         );
 
-        // Calculate total recovered value from incidentItems
+        // Calculate total recovered value from incidentItems (multiplied by recoveredQuantity)
         const totalRecoveredValue = incident.incidentItems.reduce(
-          (sum, item) => sum + (item.recoveredValue || 0),
+          (sum, item) =>
+            sum + (item.recoveredValue || 0) * (item.recoveredQuantity ?? 1),
           0
         );
 

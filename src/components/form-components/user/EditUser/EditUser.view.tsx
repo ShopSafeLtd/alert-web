@@ -4,6 +4,7 @@ import type { UserQuery } from 'graphql/user/queries/__generated__/user.generate
 import type { BusinessData, SelectOptions } from 'types/DataType';
 
 import BusinessesSelect from '#/components/form-components/BusinessesSelect/BusinessesSelect.view';
+import { normalizeMobileNumber } from '#/components/form-components/user/AddUser/useAddUser';
 import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
 // import validateMobileWithCountryCode from '#/utils/validate-contry-code';
 import { faPlus } from '@fortawesome/pro-light-svg-icons';
@@ -113,7 +114,7 @@ const EditUser = ({
         incidentEmail: data?.user?.incidentEmail,
         incidentPush: data?.user?.incidentPush,
         messagePush: data?.user?.messagePush,
-        mobileNumber: data?.user?.mobileNumber,
+        mobileNumber: normalizeMobileNumber(data?.user?.mobileNumber),
         offenderEmail: data?.user?.offenderEmail,
         offenderPush: data?.user?.offenderPush,
         publicName: data?.user?.publicName,

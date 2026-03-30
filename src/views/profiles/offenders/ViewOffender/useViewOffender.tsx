@@ -1361,6 +1361,10 @@ const useViewOffender = (offenderId: string): Return => {
             update: [
               {
                 data: {
+                  checkId: value.checkId ? { set: value.checkId } : undefined,
+                  companyRef: value.companyRef
+                    ? { set: value.companyRef }
+                    : undefined,
                   description: value.description
                     ? { set: value.description }
                     : undefined,
@@ -1410,6 +1414,8 @@ const useViewOffender = (offenderId: string): Return => {
           bans: {
             create: [
               {
+                checkId: value.checkId || undefined,
+                companyRef: value.companyRef || undefined,
                 createdBy: {
                   connect: {
                     id: currentUser?.id ?? '',

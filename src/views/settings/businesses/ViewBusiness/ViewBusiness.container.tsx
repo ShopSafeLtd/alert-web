@@ -1,4 +1,4 @@
-import type { BusinessLPWatchlistOrderBy } from 'graphql/types';
+import type { BusinessLpWatchlistOrderBy } from 'graphql/types';
 
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { useAtomValue } from 'jotai';
@@ -59,7 +59,7 @@ const ViewBusiness = () => {
   const schemeId = useAtomValue(currentSchemeIdAtom);
 
   const [watchlistOrderBy, setWatchlistOrderBy] = useState<
-    BusinessLPWatchlistOrderBy | undefined
+    BusinessLpWatchlistOrderBy | undefined
   >(undefined);
 
   const {

@@ -119,6 +119,11 @@ const useStyles = createUseStyles((theme: Theme) => ({
     position: 'relative',
   },
 
+  statsCard: {
+    '& .ant-card-body': {
+      padding: '16px 20px',
+    },
+  },
   tag: {
     marginBottom: 3,
   },

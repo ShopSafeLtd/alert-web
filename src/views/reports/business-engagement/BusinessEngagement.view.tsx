@@ -7,10 +7,9 @@ import ReportsSideMenu from '#/components/reports/ReportsSideMenu/ReportsSideMen
 import Page from '#/components/shared-components/AntD/Page/Page';
 import { faFileDownload } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, Card, Col, Row, Table, Typography } from 'antd';
+import { Alert, Button, Card, Col, Row, Table, Typography } from 'antd';
 import dayjs from 'dayjs';
 import React, { useState } from 'react';
-import { CSVLink } from 'react-csv';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import type { SelectOptions } from './useBusinessEngagement';
@@ -22,7 +21,10 @@ interface Props {
   currentPage: number;
   data: BusinessEngagementQuery | undefined;
   dateRange: { endDate: Date; startDate: Date };
+  exportLoading: boolean;
+  exportMessage: string | undefined;
   groups: SelectOptions[];
+  handleExportCsv: () => void;
   handlePageChange: (page: number, newPageSize?: number) => void;
   handlePrint: () => void;
   isPrinting: boolean;
@@ -40,7 +42,10 @@ const PerformanceReport = ({
   currentPage,
   data,
   dateRange,
+  exportLoading,
+  exportMessage,
   groups,
+  handleExportCsv,
   handlePageChange,
   handlePrint,
   isPrinting,
@@ -53,26 +58,6 @@ const PerformanceReport = ({
   const logo = localStorage.getItem('logo');
   const intl = useIntl();
   const [collapsed, setCollapsed] = useState(false);
-  const csvData = [
-    [
-      'Name',
-      'Incidents',
-      'Offenders',
-      'Updates',
-      'Messages',
-      'Logins',
-      'Users',
-    ],
-    ...(data?.businessContribution?.businessContributions?.map((business) => [
-      business.name,
-      business.totalIncidents,
-      business.totalOffenders,
-      business.totalUpdates,
-      business.totalMessages,
-      business.totalLogins,
-      business.totalUsers,
-    ]) || []),
-  ];
 
   return (
     <Row>
@@ -127,11 +112,13 @@ const PerformanceReport = ({
               </Col>
               <Col flex={1} />
               <Col>
-                <CSVLink data={csvData} filename="Business Engagement">
-                  <Button>
-                    <FormattedMessage defaultMessage="Download CSV" />
-                  </Button>
-                </CSVLink>
+                <Button
+                  disabled={exportLoading}
+                  loading={exportLoading}
+                  onClick={handleExportCsv}
+                >
+                  <FormattedMessage defaultMessage="Export CSV" />
+                </Button>
               </Col>
               <Col>
                 <Button onClick={handlePrint}>
@@ -146,6 +133,18 @@ const PerformanceReport = ({
                 </Button>
               </Col>
             </Row>
+            {exportMessage && (
+              <Alert
+                className="no-print"
+                description={exportMessage}
+                message={intl.formatMessage({
+                  defaultMessage: 'Export Request Submitted',
+                })}
+                showIcon
+                style={{ marginBottom: 10, marginTop: 10 }}
+                type="success"
+              />
+            )}
             <Row gutter={16}>
               <Col span={24}>
                 <Card loading={loading} style={{ height: '100%' }}>

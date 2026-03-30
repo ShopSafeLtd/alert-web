@@ -9,7 +9,7 @@ export type GenerateReportLayoutMutationVariables = Types.Exact<{
 }>;
 
 
-export type GenerateReportLayoutMutation = { __typename?: 'Mutation', generateReportLayout: { __typename?: 'GenerateReportLayoutResult', layout: Array<{ [key: string]: any }>, metaData: Array<{ [key: string]: any }> } };
+export type GenerateReportLayoutMutation = { __typename?: 'Mutation', generateReportLayout: { __typename?: 'GeneratedReportLayoutResult', layout: Array<{ [key: string]: any }>, metaData: Array<{ [key: string]: any }> } };
 
 
 export const GenerateReportLayoutDocument = gql`

@@ -36,6 +36,8 @@ const useEditBan = ({ banData, onClose, update }: Props): Return => {
     setSaving(true);
     update({
       ...banData,
+      checkId: data.checkId || null,
+      companyRef: data.companyRef || null,
       description: data.description || null,
       endDate: data.endDate,
       fineValue: data.fineValue,

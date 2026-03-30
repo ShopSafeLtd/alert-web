@@ -171,7 +171,7 @@ const AddExclusion = ({
               >
                 <DatePicker
                   disabled={saving}
-                  onChange={(value) =>
+                  onChange={(value: Dayjs | null) =>
                     setStartDate(value ? new Date(value.valueOf()) : null)
                   }
                 />
@@ -200,6 +200,42 @@ const AddExclusion = ({
               </Form.Item>
             </Col>
           )}
+        </Row>
+      )}
+
+      {[
+        BanType.CivilRecovery,
+        BanType.Compensation,
+        BanType.PromisaryNote,
+        BanType.Restitution,
+      ].includes(type) && (
+        <Row gutter={16}>
+          <Col span={11}>
+            <Form.Item
+              label={intl.formatMessage({ defaultMessage: 'Check ID' })}
+              name="checkId"
+            >
+              <Input disabled={saving} />
+            </Form.Item>
+          </Col>
+          <Col span={11}>
+            <Form.Item
+              label={intl.formatMessage({
+                defaultMessage: 'Company Reference',
+              })}
+              name="companyRef"
+            >
+              <Input disabled={saving} />
+            </Form.Item>
+          </Col>
+          <Col span={11}>
+            <Form.Item
+              label={intl.formatMessage({ defaultMessage: 'Value' })}
+              name="fineValue"
+            >
+              <InputNumber disabled={saving} style={{ width: 120 }} />
+            </Form.Item>
+          </Col>
         </Row>
       )}
 
