@@ -43,6 +43,7 @@ query ViewOffender(
     idSource
     totalImages
     totalIncidents
+    totalValue
     incidents {
       id
       dayTime
@@ -87,12 +88,19 @@ query ViewOffender(
       title
       location
       description
+      checkId
+      companyRef
       startDate
       endDate
       type
       months
       fineValue
       duration
+      createdAt
+      createdBy {
+        id
+        fullName
+      }
     }
     createdBy {
       ...CreatedBy

@@ -9,7 +9,10 @@ const PerformanceReport = () => {
     currentPage,
     data,
     dateRange,
+    exportLoading,
+    exportMessage,
     groups,
+    handleExportCsv,
     handlePageChange,
     handlePrint,
     isPrinting,
@@ -25,7 +28,10 @@ const PerformanceReport = () => {
       currentPage={currentPage}
       data={data}
       dateRange={dateRange}
+      exportLoading={exportLoading}
+      exportMessage={exportMessage}
       groups={groups}
+      handleExportCsv={handleExportCsv}
       handlePageChange={handlePageChange}
       handlePrint={handlePrint}
       isPrinting={isPrinting}

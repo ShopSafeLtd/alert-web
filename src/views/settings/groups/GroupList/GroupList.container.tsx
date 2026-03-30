@@ -7,8 +7,6 @@ const GroupList = (): JSX.Element => {
   const {
     addGroup,
     data,
-    fetchPage,
-    hasNextPage,
     loading,
     order,
     pageSize,
@@ -24,8 +22,6 @@ const GroupList = (): JSX.Element => {
     <View
       addGroup={addGroup}
       data={data}
-      fetchPage={fetchPage}
-      hasNextPage={hasNextPage}
       loading={loading}
       order={order}
       pageSize={pageSize}

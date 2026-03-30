@@ -32,8 +32,6 @@ import { useNavigate } from 'react-router-dom';
 interface Props {
   addGroup: boolean;
   data: SchemeGroupsQuery | undefined;
-  fetchPage: (page: number) => void;
-  hasNextPage: boolean;
   loading: boolean;
   order: GroupSort;
   pageSize: number;
@@ -56,8 +54,6 @@ interface TableData {
 const GroupList = ({
   addGroup,
   data,
-  fetchPage,
-  hasNextPage,
   loading,
   order,
   pageSize,
@@ -320,18 +316,13 @@ const GroupList = ({
           })}
           pagination={{
             hideOnSinglePage: true,
-            onChange: (page) => {
-              fetchPage(page);
-            },
             onShowSizeChange: (_current, size) => {
               setPageSize(size);
             },
             pageSize,
             pageSizeOptions: ['10', '25', '50', '100'],
             showSizeChanger: true,
-            total: data?.groups
-              ? data.groups.length + (hasNextPage ? 1 : 0)
-              : 0,
+            total: data?.groups?.length ?? 0,
           }}
           size={tableSize}
         />

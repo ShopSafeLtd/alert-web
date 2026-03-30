@@ -9,15 +9,12 @@ export type GenerateOffenderBulletinMutationVariables = Types.Exact<{
 }>;
 
 
-export type GenerateOffenderBulletinMutation = { __typename?: 'Mutation', generateOffenderBulletin: { __typename?: 'OffenderBulletin', title: string, htmlBody: string } };
+export type GenerateOffenderBulletinMutation = { __typename?: 'Mutation', generateOffenderBulletin: { __typename?: 'OffenderBulletinResult', title: string, htmlBody: string } };
 
 
 export const GenerateOffenderBulletinDocument = gql`
     mutation GenerateOffenderBulletin($offenderId: String!, $context: String) {
-  generateOffenderBulletin(
-    where: {id: $offenderId}
-    data: {context: $context}
-  ) {
+  generateOffenderBulletin(where: {id: $offenderId}, data: {context: $context}) {
     title
     htmlBody
   }
