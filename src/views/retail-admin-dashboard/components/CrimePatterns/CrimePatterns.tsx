@@ -317,7 +317,7 @@ const CrimePatterns: React.FC<CrimePatternsProps> = ({ data, loading }) => {
         {loading && !data ? (
           <Skeleton active paragraph={{ rows: 8 }} />
         ) : data ? (
-          <Row gutter={[16, 0]} style={{ flex: 1, height: 0 }}>
+          <Row gutter={[16, 0]} style={{ flex: 1, minHeight: 300 }}>
             <ChartSection
               onViewTable={() => setModalOpen('peakHours')}
               title={intl.formatMessage({ defaultMessage: 'Peak Hours' })}
