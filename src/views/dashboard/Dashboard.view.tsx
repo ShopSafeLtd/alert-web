@@ -47,6 +47,18 @@ import {
   WatchlistInsightsWidget,
 } from './components';
 import DashboardGraphWrapper from './components/DashboardGraph/DashboardGraphWrapper';
+import { useAdminWidgetAutoHeight } from './useAdminWidgetAutoHeight';
+
+const ADMIN_WIDGET_TYPES: ReadonlySet<string> = new Set([
+  'adminSummary',
+  'businessIntelligence',
+  'crimeTypeDistribution',
+  'operationalQueue',
+  'retailCrimePatterns',
+  'retailRepeatOffenders',
+  'retailTargetedGoods',
+  'retailTopOffenders',
+]);
 
 // Helper function to get the base element type from an ID
 const getElementType = (id: string): AvailableDashboardElements => {
@@ -193,6 +205,8 @@ const FeedItem = (): JSX.Element => {
 
   const intl = useIntl();
   const rowHeight = useGenerateHeight();
+  const { isAdminWidget, registerRef } =
+    useAdminWidgetAutoHeight(ADMIN_WIDGET_TYPES);
 
   const ReactGridLayout = useMemo(() => WidthProvider(RGL), []);
 
@@ -268,6 +282,8 @@ const FeedItem = (): JSX.Element => {
 
             if (!component) return null;
 
+            const adminWidget = isAdminWidget(elementType);
+
             return (
               <div
                 key={layoutItem.i}
@@ -276,12 +292,25 @@ const FeedItem = (): JSX.Element => {
                   flexDirection: 'column',
                   height: '100%',
                   margin: 10,
-                  overflowX: 'hidden',
-                  overflowY: 'auto',
+                  ...(adminWidget
+                    ? {}
+                    : {
+                        overflowX: 'hidden' as const,
+                        overflowY: 'auto' as const,
+                      }),
                   padding: elementType === 'searchRow' ? 0 : 10,
                 }}
               >
-                {component}
+                {adminWidget ? (
+                  <div
+                    ref={registerRef(layoutItem.i)}
+                    style={{ flexShrink: 0 }}
+                  >
+                    {component}
+                  </div>
+                ) : (
+                  component
+                )}
               </div>
             );
           })}
