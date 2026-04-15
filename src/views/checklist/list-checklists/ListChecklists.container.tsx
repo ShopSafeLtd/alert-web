@@ -32,11 +32,14 @@ const Checklists = (): JSX.Element => {
       data={data}
       deleteChecklist={deleteChecklist}
       loading={loading}
+      pageIndex={checklistFilter.pageIndex}
+      pageSize={checklistFilter.pageSize}
       saving={saving}
       selectedChecklist={selectedChecklist}
       setActiveChecklistSort={setActiveChecklistSort}
       setChecklistFilters={setChecklistFilters}
       toggleCreateChecklistDrawer={toggleCreateChecklistDrawer}
+      totalCount={activeChecklistsData?.activeChecklists?.totalCount ?? 0}
     />
   );
 };

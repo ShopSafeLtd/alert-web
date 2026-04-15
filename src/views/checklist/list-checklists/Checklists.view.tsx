@@ -1,15 +1,15 @@
+import type { FetchResult } from '@apollo/client';
 import type { CreateActiveChecklistMutation } from '#/views/checklist/graphql/mutations/__generated__/create-active-checklist.generated';
 import type { ActiveChecklistsQuery } from '#/views/checklist/graphql/queries/__generated__/list-active-checklists.generated';
 import type { ChecklistsQuery } from '#/views/checklist/graphql/queries/__generated__/list-checklists.generated';
-import type { FetchResult } from '@apollo/client';
 
-import PermissionCheckWrapper from '#/components/PermissionCheck/PermissionCheckWrapper';
-import BusinessesSelect from '#/components/form-components/BusinessesSelect/BusinessesSelect.view';
-import UsersSelect from '#/components/form-components/UsersSelect/UsersSelect.view';
-import DebouncedInput from '#/utils/debounced-input';
 import { DownOutlined, SettingOutlined } from '@ant-design/icons';
 import { faDownload, faEdit, faTrash } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import BusinessesSelect from '#/components/form-components/BusinessesSelect/BusinessesSelect.view';
+import UsersSelect from '#/components/form-components/UsersSelect/UsersSelect.view';
+import PermissionCheckWrapper from '#/components/PermissionCheck/PermissionCheckWrapper';
+import DebouncedInput from '#/utils/debounced-input';
 import {
   Button,
   Card,
@@ -40,8 +40,8 @@ import type {
   SetChecklistFilterModel,
 } from '../../../state/filter-model';
 
-import useStyles from './ListChcklists.styles';
 import CreateActiveChecklist from './drawer/create-active-checklist';
+import useStyles from './ListChcklists.styles';
 
 interface ActiveChecklistRecord {
   businessName: string;
@@ -80,6 +80,8 @@ interface ChecklistsViewProps {
   data: ChecklistsQuery | undefined;
   deleteChecklist: (id: string) => void;
   loading: boolean;
+  pageIndex: number;
+  pageSize: number;
   saving: boolean;
   selectedChecklist: {
     id: string;
@@ -98,6 +100,7 @@ interface ChecklistsViewProps {
       title: string;
     } | null
   ) => void;
+  totalCount: number;
 }
 
 const ChecklistsView: React.FC<ChecklistsViewProps> = ({
@@ -110,11 +113,14 @@ const ChecklistsView: React.FC<ChecklistsViewProps> = ({
   data,
   deleteChecklist,
   loading,
+  pageIndex,
+  pageSize,
   saving,
   selectedChecklist,
   setActiveChecklistSort,
   setChecklistFilters,
   toggleCreateChecklistDrawer,
+  totalCount,
 }) => {
   const classes = useStyles();
   const navigate = useNavigate();
@@ -515,8 +521,15 @@ const ChecklistsView: React.FC<ChecklistsViewProps> = ({
               console.log(sorter);
             }}
             pagination={{
-              defaultPageSize: 25,
+              current: pageIndex + 1,
               hideOnSinglePage: true,
+              onChange: (page, newPageSize) => {
+                setChecklistFilters({
+                  pageIndex: page - 1,
+                  pageSize: newPageSize,
+                });
+              },
+              pageSize,
               pageSizeOptions: ['25', '50', '100'],
               showSizeChanger: true,
               showTotal: (total, range) =>
@@ -524,6 +537,7 @@ const ChecklistsView: React.FC<ChecklistsViewProps> = ({
                   { defaultMessage: '{start}-{end} of {total} checklists' },
                   { end: range[1], start: range[0], total }
                 ),
+              total: totalCount,
             }}
             rowClassName={classes.row}
             size="small"

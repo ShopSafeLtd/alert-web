@@ -1,10 +1,10 @@
+import type { FetchResult } from '@apollo/client';
 import type { CreateActiveChecklistMutation } from '#/views/checklist/graphql/mutations/__generated__/create-active-checklist.generated';
 import type {
   ActiveChecklistsQuery,
   ActiveChecklistsQueryVariables,
 } from '#/views/checklist/graphql/queries/__generated__/list-active-checklists.generated';
 import type { ChecklistsQuery } from '#/views/checklist/graphql/queries/__generated__/list-checklists.generated';
-import type { FetchResult } from '@apollo/client';
 
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import {
@@ -173,6 +173,7 @@ const useChecklists = (): Return => {
       },
     },
   });
+
   const activeChecklistVariables: ActiveChecklistsQueryVariables = {
     order: {
       [activeChecklistSort.field]: activeChecklistSort.order,
@@ -324,6 +325,8 @@ const useChecklists = (): Return => {
         in: checklistFilter.activeStatus,
       },
     },
+    skip: checklistFilter.pageIndex * checklistFilter.pageSize,
+    take: checklistFilter.pageSize,
   };
   const {
     data: activeChecklistsData,
@@ -388,17 +391,13 @@ const useChecklists = (): Return => {
   const deleteTemplate = (templateId: string) => {
     void recycleChecklist({
       update: (cache, { data: d }) => {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         if (d?.recycleChecklist) {
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
           cache.modify({
             fields: {
-              // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/default-param-last
               checklists(existingChecklists = [], { readField }) {
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return
                 return existingChecklists.filter(
                   (checklistRef: never) =>
-                    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
                     templateId !== readField('id', checklistRef)
                 );
               },
