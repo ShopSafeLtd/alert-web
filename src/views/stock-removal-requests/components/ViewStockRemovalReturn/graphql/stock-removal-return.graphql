@@ -1,0 +1,49 @@
+#import "../../../../../graphql/fragments/updates.graphql"
+
+query stockRemovalReturn($where: UniqueId!) {
+    stockRemovalRequest(where: $where) {
+        id
+        createdAt
+        title
+        description
+        status
+        reference
+        isReturn
+        storeOrDC
+        returnOrignalId
+        rechargeReference
+        rechargeBrand
+        costCentreCode
+        tracking
+        dateofReturn
+        createdBy {
+            id
+            fullName
+        }
+        business {
+            id
+            name
+        }
+        returnImages {
+            id
+            url
+        }
+        items {
+            id
+            name
+            brand
+            sku
+            barcode
+            value
+            requestedQuantity
+            pickedQuantity
+            damaged
+            stockItem {
+                id
+            }
+        }
+        updates(orderBy: { createdAt: desc }) {
+            ...Updates
+        }
+    }
+}
