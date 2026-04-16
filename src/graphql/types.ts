@@ -12225,6 +12225,7 @@ export type Mutation = {
   createStockRemovalRequest: StockRemovalRequest;
   createStockRemovalRequestApprover: StockRemovalRequest;
   createStockRemovalReturn: StockRemovalRequest;
+  createUpdateOnStockRemovalRequest: Update;
   createTag: Tag;
   createTermsAndConditions: TermsAndCondition;
   createTimes: Array<Incident>;
@@ -12988,6 +12989,12 @@ export type MutationCreateUpdateOnInvestigationArgs = {
 export type MutationCreateUpdateOnOffenderArgs = {
   data: CreateUpdateData;
   offender: UniqueId;
+};
+
+
+export type MutationCreateUpdateOnStockRemovalRequestArgs = {
+  data: CreateUpdateData;
+  stockRemovalRequest: UniqueId;
 };
 
 
@@ -24422,6 +24429,7 @@ export type StockRemovalRequest = {
   title: Scalars['String'];
   tmid?: Maybe<Scalars['String']>;
   tracking?: Maybe<Scalars['String']>;
+  updates: Array<Update>;
   willStockBeReturned?: Maybe<Scalars['String']>;
 };
 
@@ -26585,6 +26593,8 @@ export type Update = {
   replies: Array<Update>;
   replyTo?: Maybe<Update>;
   replyToId?: Maybe<Scalars['String']>;
+  stockRemovalRequest?: Maybe<StockRemovalRequest>;
+  stockRemovalRequestId?: Maybe<Scalars['String']>;
   text?: Maybe<Scalars['String']>;
   type: UpdateType;
   updatedAt: Scalars['Date'];

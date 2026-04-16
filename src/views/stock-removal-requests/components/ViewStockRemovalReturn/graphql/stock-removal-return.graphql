@@ -1,3 +1,5 @@
+#import "../../../../../graphql/fragments/updates.graphql"
+
 query stockRemovalReturn($where: UniqueId!) {
     stockRemovalRequest(where: $where) {
         id
@@ -39,6 +41,9 @@ query stockRemovalReturn($where: UniqueId!) {
             stockItem {
                 id
             }
+        }
+        updates(orderBy: { createdAt: desc }) {
+            ...Updates
         }
     }
 }

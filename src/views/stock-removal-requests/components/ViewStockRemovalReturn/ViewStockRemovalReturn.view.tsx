@@ -1,4 +1,5 @@
 import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
+import StockRemovalComments from '#/views/stock-removal-requests/components/StockRemovalComments';
 import StockRemovalRequestStatusBadge from '#/views/stock-removal-requests/components/StockRemovalRequestStatusBadge/StockRemovalRequestStatusBadge';
 import { useMarkStockRemovalRequestAsReturnedMutation } from '#/views/stock-removal-requests/components/ViewStockRemovalRequest/graphql/__generated__/mark-returned.generated';
 import { useStockRemovalReturnQuery } from '#/views/stock-removal-requests/components/ViewStockRemovalReturn/graphql/__generated__/stock-removal-return.generated';
@@ -320,6 +321,16 @@ const ViewStockRemovalReturn = ({ requestId }: Props) => {
         pagination={false}
         rowKey="id"
         size="small"
+      />
+
+      <Divider />
+
+      <Typography.Title level={4}>
+        <FormattedMessage defaultMessage="Comments" />
+      </Typography.Title>
+      <StockRemovalComments
+        requestId={requestId}
+        updates={data?.stockRemovalRequest.updates}
       />
     </div>
   );

@@ -1,0 +1,11 @@
+mutation CreateUpdateOnStockRemovalRequest(
+  $stockRemovalRequest: UniqueId!
+  $data: CreateUpdateData!
+) {
+  createUpdateOnStockRemovalRequest(
+    stockRemovalRequest: $stockRemovalRequest
+    data: $data
+  ) {
+    ...Updates
+  }
+}
