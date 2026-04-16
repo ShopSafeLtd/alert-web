@@ -3,6 +3,7 @@ import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import hasPermission from '#/utils/has-permission';
 import useReportPrint from '#/utils/reportPrint/usePrintReports';
 import MarkAsPickedModal from '#/views/stock-removal-requests/components/MarkAsPickedModal/MarkAsPickedModal';
+import StockRemovalComments from '#/views/stock-removal-requests/components/StockRemovalComments';
 import StockRemovalRequestStatusBadge from '#/views/stock-removal-requests/components/StockRemovalRequestStatusBadge/StockRemovalRequestStatusBadge';
 import PickingListPrint from '#/views/stock-removal-requests/components/ViewStockRemovalRequest/PickingListPrint';
 import { useApprovePapStockRequestMutation } from '#/views/stock-removal-requests/components/ViewStockRemovalRequest/graphql/__generated__/approve-pap-stock-request.generated';
@@ -945,6 +946,16 @@ const ViewStockRemovalRequest = ({ requestId }: Props) => {
         );
       })}
 
+      <Divider />
+
+      <Typography.Title level={4}>
+        <FormattedMessage defaultMessage="Comments" />
+      </Typography.Title>
+      <StockRemovalComments
+        requestId={requestId}
+        updates={data?.stockRemovalRequest.updates}
+      />
+
       {/* Mark as Picked Modal */}
       {data && (
         <MarkAsPickedModal
@@ -966,16 +977,16 @@ const ViewStockRemovalRequest = ({ requestId }: Props) => {
               items={data.stockRemovalRequest.items ?? []}
               recipientInfo={{
                 address: isDC
-                  ? data.stockRemovalRequest.shippingAddress ?? ''
+                  ? (data.stockRemovalRequest.shippingAddress ?? '')
                   : undefined,
                 name: isDC
                   ? 'Distribution Center'
-                  : data.stockRemovalRequest.business?.name ?? '',
+                  : (data.stockRemovalRequest.business?.name ?? ''),
                 recipientName: isDC
-                  ? data.stockRemovalRequest.recipientName ?? undefined
+                  ? (data.stockRemovalRequest.recipientName ?? undefined)
                   : undefined,
                 recipientPhone: isDC
-                  ? data.stockRemovalRequest.recipientPhone ?? undefined
+                  ? (data.stockRemovalRequest.recipientPhone ?? undefined)
                   : undefined,
                 type: isDC ? 'DC' : 'Store',
               }}

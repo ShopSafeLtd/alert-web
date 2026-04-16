@@ -3659,11 +3659,18 @@ export type CreateStockRemovalRequestInput = {
   willStockBeReturned?: InputMaybe<Scalars['String']>;
 };
 
+export type CreateStockRemovalReturnImageInput = {
+  filename: Scalars['String'];
+  mimetype: Scalars['String'];
+  url: Scalars['String'];
+};
+
 export type CreateStockRemovalReturnInput = {
   businessId?: InputMaybe<Scalars['String']>;
   costCentreCode?: InputMaybe<Scalars['String']>;
   dateofReturn?: InputMaybe<Scalars['DateTime']>;
   imageIds?: InputMaybe<Array<Scalars['String']>>;
+  images?: InputMaybe<Array<CreateStockRemovalReturnImageInput>>;
   items: Array<CreateStockRemovalReturnItemInput>;
   originalAlertId?: InputMaybe<Scalars['String']>;
   rechargeBrand?: InputMaybe<Scalars['String']>;
@@ -12218,6 +12225,7 @@ export type Mutation = {
   createStockRemovalRequest: StockRemovalRequest;
   createStockRemovalRequestApprover: StockRemovalRequest;
   createStockRemovalReturn: StockRemovalRequest;
+  createUpdateOnStockRemovalRequest: Update;
   createTag: Tag;
   createTermsAndConditions: TermsAndCondition;
   createTimes: Array<Incident>;
@@ -12981,6 +12989,12 @@ export type MutationCreateUpdateOnInvestigationArgs = {
 export type MutationCreateUpdateOnOffenderArgs = {
   data: CreateUpdateData;
   offender: UniqueId;
+};
+
+
+export type MutationCreateUpdateOnStockRemovalRequestArgs = {
+  data: CreateUpdateData;
+  stockRemovalRequest: UniqueId;
 };
 
 
@@ -24370,6 +24384,7 @@ export type StockRemovalItem = {
   barcode?: Maybe<Scalars['String']>;
   brand?: Maybe<Scalars['String']>;
   createdAt: Scalars['Date'];
+  damaged?: Maybe<Scalars['Boolean']>;
   id: Scalars['ID'];
   name?: Maybe<Scalars['String']>;
   pickedQuantity?: Maybe<Scalars['Int']>;
@@ -24388,9 +24403,11 @@ export type StockRemovalRequest = {
   costCentreCode?: Maybe<Scalars['String']>;
   createdAt: Scalars['Date'];
   createdBy: User;
+  dateofReturn?: Maybe<Scalars['DateTime']>;
   description?: Maybe<Scalars['String']>;
   fascia?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
+  isReturn?: Maybe<Scalars['Boolean']>;
   items: Array<StockRemovalItem>;
   personalityInfluences?: Maybe<Scalars['String']>;
   reason?: Maybe<Scalars['String']>;
@@ -24401,6 +24418,8 @@ export type StockRemovalRequest = {
   recipientPhone?: Maybe<Scalars['String']>;
   reference?: Maybe<Scalars['Int']>;
   returnDate?: Maybe<Scalars['DateTime']>;
+  returnImages?: Maybe<Array<Image>>;
+  returnOrignalId?: Maybe<Scalars['String']>;
   scheme: Scheme;
   shippingAddress?: Maybe<Scalars['String']>;
   smqAccountNumber?: Maybe<Scalars['String']>;
@@ -24410,6 +24429,7 @@ export type StockRemovalRequest = {
   title: Scalars['String'];
   tmid?: Maybe<Scalars['String']>;
   tracking?: Maybe<Scalars['String']>;
+  updates: Array<Update>;
   willStockBeReturned?: Maybe<Scalars['String']>;
 };
 
@@ -26573,6 +26593,8 @@ export type Update = {
   replies: Array<Update>;
   replyTo?: Maybe<Update>;
   replyToId?: Maybe<Scalars['String']>;
+  stockRemovalRequest?: Maybe<StockRemovalRequest>;
+  stockRemovalRequestId?: Maybe<Scalars['String']>;
   text?: Maybe<Scalars['String']>;
   type: UpdateType;
   updatedAt: Scalars['Date'];

@@ -530,8 +530,6 @@ const ChecklistsView: React.FC<ChecklistsViewProps> = ({
                 });
               },
               pageSize,
-              pageSizeOptions: ['25', '50', '100'],
-              showSizeChanger: true,
               showTotal: (total, range) =>
                 intl.formatMessage(
                   { defaultMessage: '{start}-{end} of {total} checklists' },
