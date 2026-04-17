@@ -1,0 +1,5 @@
+mutation DeleteStockRemovalReasonOption($where: UniqueId!) {
+    deleteStockRemovalReasonOption(where: $where) {
+        id
+    }
+}

@@ -557,6 +557,22 @@ const StockRemovalRequestsList = () => {
                     defaultMessage: 'Closed',
                   })}
                 </Radio.Button>
+                {!isUserInDCGroup && (
+                  <>
+                    <Radio.Button
+                      value={StockRemovalRequestStatus.RequestedCancel}
+                    >
+                      {intl.formatMessage({
+                        defaultMessage: 'Cancelling',
+                      })}
+                    </Radio.Button>
+                    <Radio.Button value={StockRemovalRequestStatus.Cancelled}>
+                      {intl.formatMessage({
+                        defaultMessage: 'Cancelled',
+                      })}
+                    </Radio.Button>
+                  </>
+                )}
               </Radio.Group>
             </Col>
             <Col flex={1} />
@@ -762,6 +778,8 @@ const StockRemovalRequestsList = () => {
                     )) ||
                   (node.status ===
                     StockRemovalRequestStatus.AwaitingPapApproval &&
+                    isUserInPAPGroup) ||
+                  (node.status === StockRemovalRequestStatus.RequestedCancel &&
                     isUserInPAPGroup);
 
                 const requiresPicking = Boolean(

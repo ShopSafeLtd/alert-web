@@ -1,0 +1,11 @@
+query ListStockRemovalReasonOptions($where: SchemeWhereUniqueInput!) {
+    scheme(where: $where) {
+        id
+        stockRemovalReasonOptions {
+            id
+            label
+            position
+            active
+        }
+    }
+}

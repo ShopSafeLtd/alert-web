@@ -2,6 +2,12 @@ mutation UpdateStockRemovalRequestRestricted($where: UniqueId!, $data: UpdateSto
     updateStockRemovalRequest(where: $where, data: $data) {
         id
         shippingAddress
+        shippingAddressLine1
+        shippingAddressLine2
+        shippingCity
+        shippingCounty
+        shippingPostcode
+        shippingCountry
         approvers {
             status
             id

@@ -38,9 +38,7 @@ const OffenderWarnings = lazy(
 );
 const SentrysysImport = lazy(
   () =>
-    import(
-      'views/settings/data-import/sentrysys-import/SentrysysImport.container'
-    )
+    import('views/settings/data-import/sentrysys-import/SentrysysImport.container')
 );
 const CrimeTypes = lazy(() => import('views/settings/tags/CrimeTypes'));
 const Terms = lazy(() => import('views/settings/terms/TermList'));
@@ -98,36 +96,26 @@ const NextImport = lazy(
 );
 const DunelmImport = lazy(
   () =>
-    import(
-      '../../../views/settings/data-import/dunelm-import/DunelmImport.view'
-    )
+    import('../../../views/settings/data-import/dunelm-import/DunelmImport.view')
 );
 const TJXImport = lazy(
   () => import('../../../views/settings/data-import/tjx-import/TJXImport.view')
 );
 const CentralCoopImport = lazy(
   () =>
-    import(
-      '../../../views/settings/data-import/central-coop-import/CentralCoopImport.view'
-    )
+    import('../../../views/settings/data-import/central-coop-import/CentralCoopImport.view')
 );
 const IcelandImport = lazy(
   () =>
-    import(
-      '../../../views/settings/data-import/iceland-import/IcelandImport.view'
-    )
+    import('../../../views/settings/data-import/iceland-import/IcelandImport.view')
 );
 const RiverIslandImport = lazy(
   () =>
-    import(
-      '../../../views/settings/data-import/river-island-import/RiverIslandImport.view'
-    )
+    import('../../../views/settings/data-import/river-island-import/RiverIslandImport.view')
 );
 const JDSiteImport = lazy(
   () =>
-    import(
-      '../../../views/settings/data-import/jd-site-import/JDSiteImport.view'
-    )
+    import('../../../views/settings/data-import/jd-site-import/JDSiteImport.view')
 );
 const OneStop = lazy(
   () => import('../../../views/settings/data-import/onestop/OneStop.view')
@@ -147,11 +135,13 @@ const ListStockItems = lazy(
 const ListIncidentStatuses = lazy(
   () => import('../../../views/settings/incident-statuses/ListIncidentStatuses')
 );
+const ListStockRemovalReasons = lazy(
+  () =>
+    import('../../../views/settings/stock-removal-reasons/ListStockRemovalReasons')
+);
 const ChecklistTemplates = lazy(
   () =>
-    import(
-      '../../../views/scheme-settings/checklist-templates/ChecklistTemplates.container'
-    )
+    import('../../../views/scheme-settings/checklist-templates/ChecklistTemplates.container')
 );
 const TrainingVideos = lazy(
   () => import('../../../views/settings/training-videos/ListTrainingVideos')
@@ -515,6 +505,19 @@ const SchemeSettings = (): JSX.Element => {
                 </PermissionCheckWrapper>
               }
               path="incident-statuses"
+            />
+            <Route
+              element={
+                <PermissionCheckWrapper
+                  permission={{
+                    method: PermissionMethod.Edit,
+                    model: PermissionModel.StockRemovalRequests,
+                  }}
+                >
+                  <ListStockRemovalReasons />
+                </PermissionCheckWrapper>
+              }
+              path="stock-removal-reasons"
             />
             <Route
               element={
