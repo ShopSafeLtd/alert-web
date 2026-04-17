@@ -1,4 +1,4 @@
-mutation UpsertStockRemovalReasonOption($data: UpsertStockRemovalReasonOptionInput!) {
+mutation UpsertStockRemovalReasonOption($data: UpsertStockRemovalReasonOption!) {
     upsertStockRemovalReasonOption(data: $data) {
         id
         label

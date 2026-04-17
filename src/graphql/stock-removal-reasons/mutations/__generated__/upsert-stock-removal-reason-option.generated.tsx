@@ -4,7 +4,7 @@ import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
 export type UpsertStockRemovalReasonOptionMutationVariables = Types.Exact<{
-  data: Types.UpsertStockRemovalReasonOptionInput;
+  data: Types.UpsertStockRemovalReasonOption;
 }>;
 
 
@@ -12,7 +12,7 @@ export type UpsertStockRemovalReasonOptionMutation = { __typename?: 'Mutation', 
 
 
 export const UpsertStockRemovalReasonOptionDocument = gql`
-    mutation UpsertStockRemovalReasonOption($data: UpsertStockRemovalReasonOptionInput!) {
+    mutation UpsertStockRemovalReasonOption($data: UpsertStockRemovalReasonOption!) {
   upsertStockRemovalReasonOption(data: $data) {
     id
     label

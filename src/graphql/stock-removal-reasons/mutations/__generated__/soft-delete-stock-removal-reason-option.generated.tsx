@@ -3,26 +3,26 @@ import type * as Types from '../../../types';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
-export type SoftDeleteStockRemovalReasonOptionMutationVariables = Types.Exact<{
+export type DeleteStockRemovalReasonOptionMutationVariables = Types.Exact<{
   where: Types.UniqueId;
 }>;
 
 
-export type SoftDeleteStockRemovalReasonOptionMutation = { __typename?: 'Mutation', softDeleteStockRemovalReasonOption: { __typename?: 'StockRemovalReasonOption', id: string } };
+export type DeleteStockRemovalReasonOptionMutation = { __typename?: 'Mutation', deleteStockRemovalReasonOption: { __typename?: 'StockRemovalReasonOption', id: string } };
 
 
-export const SoftDeleteStockRemovalReasonOptionDocument = gql`
-    mutation SoftDeleteStockRemovalReasonOption($where: UniqueId!) {
-  softDeleteStockRemovalReasonOption(where: $where) {
+export const DeleteStockRemovalReasonOptionDocument = gql`
+    mutation DeleteStockRemovalReasonOption($where: UniqueId!) {
+  deleteStockRemovalReasonOption(where: $where) {
     id
   }
 }
     `;
-export type SoftDeleteStockRemovalReasonOptionMutationFn = Apollo.MutationFunction<SoftDeleteStockRemovalReasonOptionMutation, SoftDeleteStockRemovalReasonOptionMutationVariables>;
-export function useSoftDeleteStockRemovalReasonOptionMutation(baseOptions?: Apollo.MutationHookOptions<SoftDeleteStockRemovalReasonOptionMutation, SoftDeleteStockRemovalReasonOptionMutationVariables>) {
+export type DeleteStockRemovalReasonOptionMutationFn = Apollo.MutationFunction<DeleteStockRemovalReasonOptionMutation, DeleteStockRemovalReasonOptionMutationVariables>;
+export function useDeleteStockRemovalReasonOptionMutation(baseOptions?: Apollo.MutationHookOptions<DeleteStockRemovalReasonOptionMutation, DeleteStockRemovalReasonOptionMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<SoftDeleteStockRemovalReasonOptionMutation, SoftDeleteStockRemovalReasonOptionMutationVariables>(SoftDeleteStockRemovalReasonOptionDocument, options);
+        return Apollo.useMutation<DeleteStockRemovalReasonOptionMutation, DeleteStockRemovalReasonOptionMutationVariables>(DeleteStockRemovalReasonOptionDocument, options);
       }
-export type SoftDeleteStockRemovalReasonOptionMutationHookResult = ReturnType<typeof useSoftDeleteStockRemovalReasonOptionMutation>;
-export type SoftDeleteStockRemovalReasonOptionMutationResult = Apollo.MutationResult<SoftDeleteStockRemovalReasonOptionMutation>;
-export type SoftDeleteStockRemovalReasonOptionMutationOptions = Apollo.BaseMutationOptions<SoftDeleteStockRemovalReasonOptionMutation, SoftDeleteStockRemovalReasonOptionMutationVariables>;
+export type DeleteStockRemovalReasonOptionMutationHookResult = ReturnType<typeof useDeleteStockRemovalReasonOptionMutation>;
+export type DeleteStockRemovalReasonOptionMutationResult = Apollo.MutationResult<DeleteStockRemovalReasonOptionMutation>;
+export type DeleteStockRemovalReasonOptionMutationOptions = Apollo.BaseMutationOptions<DeleteStockRemovalReasonOptionMutation, DeleteStockRemovalReasonOptionMutationVariables>;

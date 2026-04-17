@@ -14277,7 +14277,7 @@ export type MutationUpsertShoeArgs = {
 
 
 export type MutationUpsertStockRemovalReasonOptionArgs = {
-  data: UpsertStockRemovalReasonOptionInput;
+  data: UpsertStockRemovalReasonOption;
 };
 
 
@@ -27457,7 +27457,7 @@ export type UpsertShoe = {
   type: ShoeType;
 };
 
-export type UpsertStockRemovalReasonOptionInput = {
+export type UpsertStockRemovalReasonOption = {
   active?: InputMaybe<Scalars['Boolean']>;
   id?: InputMaybe<Scalars['String']>;
   label: Scalars['String'];
@@ -28806,6 +28806,7 @@ export type UserUpdateInput = {
   chats?: InputMaybe<ChatMembersUpdate>;
   defaultGroups?: InputMaybe<NullableConnectArrayHelper>;
   defaultScheme?: InputMaybe<SetStringHelper>;
+  disabled?: InputMaybe<SetBooleanHelper>;
   email?: InputMaybe<SetStringHelper>;
   fullName?: InputMaybe<SetStringHelper>;
   groups?: InputMaybe<NullableConnectArrayHelper>;
@@ -28819,6 +28820,7 @@ export type UserUpdateInput = {
   publicName?: InputMaybe<SetBooleanHelper>;
   reportToAllBusinesses?: InputMaybe<SetBooleanHelper>;
   schemes?: InputMaybe<UserSchemeOnUserInput>;
+  status?: InputMaybe<NullableEnumUserStatusFieldUpdateOperationsInput>;
   subscribedIncidentOnly?: InputMaybe<SetBooleanHelper>;
   subscribedOffenderOnly?: InputMaybe<SetBooleanHelper>;
   termsExpire?: InputMaybe<SetDateHelper>;
