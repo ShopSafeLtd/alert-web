@@ -15,7 +15,10 @@ export type CreateUpdateOnStockRemovalRequestMutation = { __typename?: 'Mutation
 
 export const CreateUpdateOnStockRemovalRequestDocument = gql`
     mutation CreateUpdateOnStockRemovalRequest($stockRemovalRequest: UniqueId!, $data: CreateUpdateData!) {
-  createUpdateOnStockRemovalRequest(stockRemovalRequest: $stockRemovalRequest, data: $data) {
+  createUpdateOnStockRemovalRequest(
+    stockRemovalRequest: $stockRemovalRequest
+    data: $data
+  ) {
     ...Updates
   }
 }

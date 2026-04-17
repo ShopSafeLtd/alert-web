@@ -8,7 +8,7 @@ export type CreateStockRemovalReturnMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateStockRemovalReturnMutation = { __typename?: 'Mutation', createStockRemovalReturn: { __typename?: 'StockRemovalRequest', id: string, reference?: number | null, status: Types.StockRemovalRequestStatus, isReturn?: boolean | null, createdAt: Date, storeOrDC?: string | null, createdBy: { __typename?: 'User', id: string }, returnImages?: Array<{ __typename?: 'Image', id: string, url?: string | null }> | null } };
+export type CreateStockRemovalReturnMutation = { __typename?: 'Mutation', createStockRemovalReturn: { __typename?: 'StockRemovalRequest', id: string, reference?: number | null, status: Types.StockRemovalRequestStatus, isReturn?: boolean | null, createdAt: Date, storeOrDC?: string | null, createdBy: { __typename?: 'User', id: string }, returnImages: Array<{ __typename?: 'Image', id: string, url?: string | null }> } };
 
 
 export const CreateStockRemovalReturnDocument = gql`
