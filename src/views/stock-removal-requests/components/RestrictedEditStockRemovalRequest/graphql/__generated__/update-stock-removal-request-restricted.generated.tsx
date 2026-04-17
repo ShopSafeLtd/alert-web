@@ -9,7 +9,7 @@ export type UpdateStockRemovalRequestRestrictedMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateStockRemovalRequestRestrictedMutation = { __typename?: 'Mutation', updateStockRemovalRequest: { __typename?: 'StockRemovalRequest', id: string, shippingAddress?: string | null, approvers: Array<{ __typename?: 'StockRemovalRequestApproval', status: Types.StockRemovalRequestApprovalStatus, id: string, user: { __typename?: 'User', id: string, fullName: string } }> } };
+export type UpdateStockRemovalRequestRestrictedMutation = { __typename?: 'Mutation', updateStockRemovalRequest: { __typename?: 'StockRemovalRequest', id: string, shippingAddress?: string | null, shippingAddressLine1?: string | null, shippingAddressLine2?: string | null, shippingCity?: string | null, shippingCounty?: string | null, shippingPostcode?: string | null, shippingCountry?: string | null, approvers: Array<{ __typename?: 'StockRemovalRequestApproval', status: Types.StockRemovalRequestApprovalStatus, id: string, user: { __typename?: 'User', id: string, fullName: string } }> } };
 
 
 export const UpdateStockRemovalRequestRestrictedDocument = gql`
@@ -17,6 +17,12 @@ export const UpdateStockRemovalRequestRestrictedDocument = gql`
   updateStockRemovalRequest(where: $where, data: $data) {
     id
     shippingAddress
+    shippingAddressLine1
+    shippingAddressLine2
+    shippingCity
+    shippingCounty
+    shippingPostcode
+    shippingCountry
     approvers {
       status
       id

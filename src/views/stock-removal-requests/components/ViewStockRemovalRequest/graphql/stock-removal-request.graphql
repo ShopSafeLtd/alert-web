@@ -15,10 +15,17 @@ query stockRemovalRequest($where: UniqueId!) {
         reasonForNonReturn
         rechargeBrand
         rechargeReference
+        recipientEmail
         recipientName
         recipientPhone
         returnDate
         shippingAddress
+        shippingAddressLine1
+        shippingAddressLine2
+        shippingCity
+        shippingCounty
+        shippingPostcode
+        shippingCountry
         smqAccountNumber
         socialHandles
         storeOrDC

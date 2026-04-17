@@ -3647,11 +3647,17 @@ export type CreateStockRemovalRequestInput = {
   reasonForNonReturn?: InputMaybe<Scalars['String']>;
   rechargeBrand?: InputMaybe<Scalars['String']>;
   rechargeReference?: InputMaybe<Scalars['String']>;
+  recipientEmail?: InputMaybe<Scalars['String']>;
   recipientName?: InputMaybe<Scalars['String']>;
   recipientPhone?: InputMaybe<Scalars['String']>;
   returnDate?: InputMaybe<Scalars['DateTime']>;
   schemeId: Scalars['String'];
-  shippingAddress?: InputMaybe<Scalars['String']>;
+  shippingAddressLine1?: InputMaybe<Scalars['String']>;
+  shippingAddressLine2?: InputMaybe<Scalars['String']>;
+  shippingCity?: InputMaybe<Scalars['String']>;
+  shippingCountry?: InputMaybe<Scalars['String']>;
+  shippingCounty?: InputMaybe<Scalars['String']>;
+  shippingPostcode?: InputMaybe<Scalars['String']>;
   smqAccountNumber?: InputMaybe<Scalars['String']>;
   socialHandles?: InputMaybe<Scalars['String']>;
   storeOrDC?: InputMaybe<Scalars['String']>;
@@ -3659,18 +3665,12 @@ export type CreateStockRemovalRequestInput = {
   willStockBeReturned?: InputMaybe<Scalars['String']>;
 };
 
-export type CreateStockRemovalReturnImageInput = {
-  filename: Scalars['String'];
-  mimetype: Scalars['String'];
-  url: Scalars['String'];
-};
-
 export type CreateStockRemovalReturnInput = {
   businessId?: InputMaybe<Scalars['String']>;
   costCentreCode?: InputMaybe<Scalars['String']>;
   dateofReturn?: InputMaybe<Scalars['DateTime']>;
   imageIds?: InputMaybe<Array<Scalars['String']>>;
-  images?: InputMaybe<Array<CreateStockRemovalReturnImageInput>>;
+  images?: InputMaybe<Array<StockRemovalReturnImageInput>>;
   items: Array<CreateStockRemovalReturnItemInput>;
   originalAlertId?: InputMaybe<Scalars['String']>;
   rechargeBrand?: InputMaybe<Scalars['String']>;
@@ -12225,7 +12225,6 @@ export type Mutation = {
   createStockRemovalRequest: StockRemovalRequest;
   createStockRemovalRequestApprover: StockRemovalRequest;
   createStockRemovalReturn: StockRemovalRequest;
-  createUpdateOnStockRemovalRequest: Update;
   createTag: Tag;
   createTermsAndConditions: TermsAndCondition;
   createTimes: Array<Incident>;
@@ -12237,6 +12236,7 @@ export type Mutation = {
   createUpdateOnIncident: Update;
   createUpdateOnInvestigation: Update;
   createUpdateOnOffender: Update;
+  createUpdateOnStockRemovalRequest: Update;
   createUpdateOnVehicle: Update;
   /** @deprecated Auth0 no longer used */
   createUserInAuth0?: Maybe<UserNewAuth0>;
@@ -12281,6 +12281,7 @@ export type Mutation = {
   deleteRole: CustomRole;
   deleteSharingConfig: SharingConfig;
   deleteShoe: Shoe;
+  deleteStockRemovalReasonOption: StockRemovalReasonOption;
   deleteStockRemovalRequest: StockRemovalRequest;
   deleteStockRemovalRequestApproval: StockRemovalRequestApproval;
   deleteStockRemovalReturn: StockRemovalRequest;
@@ -12491,6 +12492,7 @@ export type Mutation = {
   upsertPatrolRoute: PatrolRoute;
   upsertPermission: CustomRole;
   upsertShoe: Shoe;
+  upsertStockRemovalReasonOption: StockRemovalReasonOption;
   verifyAiVisionMatch: AiVisionMatch;
 };
 
@@ -13207,6 +13209,11 @@ export type MutationDeleteSharingConfigArgs = {
 
 export type MutationDeleteShoeArgs = {
   where: ShoeWhereUniqueInput;
+};
+
+
+export type MutationDeleteStockRemovalReasonOptionArgs = {
+  where: UniqueId;
 };
 
 
@@ -14266,6 +14273,11 @@ export type MutationUpsertPermissionArgs = {
 
 export type MutationUpsertShoeArgs = {
   data: UpsertShoe;
+};
+
+
+export type MutationUpsertStockRemovalReasonOptionArgs = {
+  data: UpsertStockRemovalReasonOption;
 };
 
 
@@ -17554,6 +17566,7 @@ export type Query = {
   stockItemsRelay: QueryStockItemsRelayConnection;
   stockItemsRelayFast: QueryStockItemsRelayFastConnection;
   stockItemsSearch: StockItemSearchResult;
+  stockRemovalReasonOptions: Array<StockRemovalReasonOption>;
   stockRemovalRequest: StockRemovalRequest;
   stockRemovalRequests: QueryStockRemovalRequestsConnection;
   storeColleagueDashboard: StoreColleagueDashboardData;
@@ -19424,6 +19437,11 @@ export type QueryStockItemsSearchArgs = {
   orderBy?: InputMaybe<StockItemRelayOrderInput>;
   take?: InputMaybe<Scalars['Int']>;
   where: StockItemRelayWhereInput;
+};
+
+
+export type QueryStockRemovalReasonOptionsArgs = {
+  schemeId: Scalars['String'];
 };
 
 
@@ -22139,6 +22157,7 @@ export type Scheme = {
   skipLocationToAddress: Scalars['Boolean'];
   statementTemplates: Array<StatementTemplate>;
   stockItems: Array<StockItem>;
+  stockRemovalReasonOptions: Array<StockRemovalReasonOption>;
   stopApprovalActivities: Scalars['Boolean'];
   storeFaceDuration: Scalars['String'];
   tagOrders: Array<TagOrder>;
@@ -24395,6 +24414,17 @@ export type StockRemovalItem = {
   value?: Maybe<Scalars['Float']>;
 };
 
+export type StockRemovalReasonOption = {
+  __typename?: 'StockRemovalReasonOption';
+  active: Scalars['Boolean'];
+  createdAt: Scalars['Date'];
+  id: Scalars['ID'];
+  label: Scalars['String'];
+  position: Scalars['Int'];
+  scheme: Scheme;
+  schemeId: Scalars['String'];
+};
+
 export type StockRemovalRequest = {
   __typename?: 'StockRemovalRequest';
   actions: Array<Action>;
@@ -24414,14 +24444,21 @@ export type StockRemovalRequest = {
   reasonForNonReturn?: Maybe<Scalars['String']>;
   rechargeBrand?: Maybe<Scalars['String']>;
   rechargeReference?: Maybe<Scalars['String']>;
+  recipientEmail?: Maybe<Scalars['String']>;
   recipientName?: Maybe<Scalars['String']>;
   recipientPhone?: Maybe<Scalars['String']>;
   reference?: Maybe<Scalars['Int']>;
   returnDate?: Maybe<Scalars['DateTime']>;
-  returnImages?: Maybe<Array<Image>>;
+  returnImages: Array<Image>;
   returnOrignalId?: Maybe<Scalars['String']>;
   scheme: Scheme;
   shippingAddress?: Maybe<Scalars['String']>;
+  shippingAddressLine1?: Maybe<Scalars['String']>;
+  shippingAddressLine2?: Maybe<Scalars['String']>;
+  shippingCity?: Maybe<Scalars['String']>;
+  shippingCountry?: Maybe<Scalars['String']>;
+  shippingCounty?: Maybe<Scalars['String']>;
+  shippingPostcode?: Maybe<Scalars['String']>;
   smqAccountNumber?: Maybe<Scalars['String']>;
   socialHandles?: Maybe<Scalars['String']>;
   status: StockRemovalRequestStatus;
@@ -24431,6 +24468,16 @@ export type StockRemovalRequest = {
   tracking?: Maybe<Scalars['String']>;
   updates: Array<Update>;
   willStockBeReturned?: Maybe<Scalars['String']>;
+};
+
+
+export type StockRemovalRequestUpdatesArgs = {
+  cursor?: InputMaybe<UpdateWhereUniqueInput>;
+  distinct?: InputMaybe<Array<UpdateScalarFieldEnum>>;
+  orderBy?: InputMaybe<Array<UpdateOrderByWithRelationInput>>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<UpdateWhereInput>;
 };
 
 export type StockRemovalRequestApproval = {
@@ -24472,6 +24519,12 @@ export type StockRemovalRequestsWhere = {
   schemeId: Scalars['String'];
   search?: InputMaybe<Scalars['String']>;
   status?: InputMaybe<Array<StockRemovalRequestStatus>>;
+};
+
+export type StockRemovalReturnImageInput = {
+  filename: Scalars['String'];
+  mimetype: Scalars['String'];
+  url: Scalars['String'];
 };
 
 export type StoreAgeBreakdown = {
@@ -27013,11 +27066,17 @@ export type UpdateStockRemovalRequestInput = {
   reasonForNonReturn?: InputMaybe<Scalars['String']>;
   rechargeBrand?: InputMaybe<Scalars['String']>;
   rechargeReference?: InputMaybe<Scalars['String']>;
+  recipientEmail?: InputMaybe<Scalars['String']>;
   recipientName?: InputMaybe<Scalars['String']>;
   recipientPhone?: InputMaybe<Scalars['String']>;
   returnDate?: InputMaybe<Scalars['DateTime']>;
   schemeId?: InputMaybe<Scalars['String']>;
-  shippingAddress?: InputMaybe<Scalars['String']>;
+  shippingAddressLine1?: InputMaybe<Scalars['String']>;
+  shippingAddressLine2?: InputMaybe<Scalars['String']>;
+  shippingCity?: InputMaybe<Scalars['String']>;
+  shippingCountry?: InputMaybe<Scalars['String']>;
+  shippingCounty?: InputMaybe<Scalars['String']>;
+  shippingPostcode?: InputMaybe<Scalars['String']>;
   smqAccountNumber?: InputMaybe<Scalars['String']>;
   socialHandles?: InputMaybe<Scalars['String']>;
   storeOrDC?: InputMaybe<Scalars['String']>;
@@ -27033,6 +27092,7 @@ export type UpdateStockRemovalReturnInput = {
   dateofReturn?: InputMaybe<Scalars['DateTime']>;
   deleteItems?: InputMaybe<Array<Scalars['String']>>;
   imageIds?: InputMaybe<Array<Scalars['String']>>;
+  images?: InputMaybe<Array<StockRemovalReturnImageInput>>;
   rechargeBrand?: InputMaybe<Scalars['String']>;
   rechargeReference?: InputMaybe<Scalars['String']>;
   storeOrDC?: InputMaybe<Scalars['String']>;
@@ -27395,6 +27455,14 @@ export type UpsertShoe = {
   stockItemId: Scalars['String'];
   style: Scalars['String'];
   type: ShoeType;
+};
+
+export type UpsertStockRemovalReasonOption = {
+  active?: InputMaybe<Scalars['Boolean']>;
+  id?: InputMaybe<Scalars['String']>;
+  label: Scalars['String'];
+  position?: InputMaybe<Scalars['Int']>;
+  schemeId: Scalars['String'];
 };
 
 export type User = {
