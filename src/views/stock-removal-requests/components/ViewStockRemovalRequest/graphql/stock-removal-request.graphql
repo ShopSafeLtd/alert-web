@@ -1,3 +1,5 @@
+#import "../../../../../graphql/fragments/updates.graphql"
+
 query stockRemovalRequest($where: UniqueId!) {
     stockRemovalRequest (where: $where) {
         id
@@ -13,10 +15,17 @@ query stockRemovalRequest($where: UniqueId!) {
         reasonForNonReturn
         rechargeBrand
         rechargeReference
+        recipientEmail
         recipientName
         recipientPhone
         returnDate
         shippingAddress
+        shippingAddressLine1
+        shippingAddressLine2
+        shippingCity
+        shippingCounty
+        shippingPostcode
+        shippingCountry
         smqAccountNumber
         socialHandles
         storeOrDC
@@ -48,6 +57,9 @@ query stockRemovalRequest($where: UniqueId!) {
                 id
                 fullName
             }
+        }
+        updates(orderBy: { createdAt: desc }) {
+            ...Updates
         }
     }
 }

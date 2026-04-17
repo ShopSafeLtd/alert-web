@@ -27,6 +27,7 @@ import {
   Skeleton,
   notification,
 } from 'antd';
+import { useListStockRemovalReasonOptionsQuery } from 'graphql/stock-removal-reasons/queries/__generated__/list-stock-removal-reason-options.generated';
 import { PermissionMethod, PermissionModel, SortOrder } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -60,10 +61,16 @@ export interface FormData {
   reasonForNonReturn: string;
   rechargeBrand: 'No' | 'Yes';
   rechargeReference?: string;
+  recipientEmail?: string;
   recipientName?: string;
   recipientPhone?: string;
   returnDate?: Date;
-  shippingAddress?: string;
+  shippingAddressLine1?: string;
+  shippingAddressLine2?: string;
+  shippingCity?: string;
+  shippingCountry?: string;
+  shippingCounty?: string;
+  shippingPostcode?: string;
   socialHandles?: string;
   storeOrDC: 'DC' | 'Store';
   title: string;
@@ -126,6 +133,18 @@ const EditStockRemovalRequest = ({ onClose, requestId }: Props) => {
   const willStockBeReturned = Form.useWatch('willStockBeReturned', form);
   const personalityInfluences = Form.useWatch('personalityInfluences', form);
 
+  const { data: reasonOptionsData, loading: reasonOptionsLoading } =
+    useListStockRemovalReasonOptionsQuery({
+      skip: !currentScheme,
+      variables: { where: { id: currentScheme } },
+    });
+  const reasonOptions = (
+    reasonOptionsData?.scheme?.stockRemovalReasonOptions ?? []
+  )
+    .filter((o) => o.active)
+    .sort((a, b) => a.position - b.position)
+    .map((o) => ({ label: o.label, value: o.label }));
+
   // Check authorization when data loads
   useEffect(() => {
     if (requestData?.stockRemovalRequest && !canEditRequest) {
@@ -155,7 +174,9 @@ const EditStockRemovalRequest = ({ onClose, requestId }: Props) => {
         items: request.items.map((item) => ({
           name: item.name ?? undefined,
           quantity: item.requestedQuantity ?? undefined,
+          sku: item.sku ?? undefined,
           stockItem: item.id,
+          value: item.value ?? undefined,
         })),
         personalityInfluences:
           (request.personalityInfluences as 'No' | 'Yes') ?? 'No',
@@ -163,12 +184,18 @@ const EditStockRemovalRequest = ({ onClose, requestId }: Props) => {
         reasonForNonReturn: request.reasonForNonReturn ?? '',
         rechargeBrand: (request.rechargeBrand as 'No' | 'Yes') ?? 'No',
         rechargeReference: request.rechargeReference ?? undefined,
+        recipientEmail: request.recipientEmail ?? undefined,
         recipientName: request.recipientName ?? undefined,
         recipientPhone: request.recipientPhone ?? undefined,
         returnDate: request.returnDate
           ? new Date(request.returnDate)
           : undefined,
-        shippingAddress: request.shippingAddress ?? undefined,
+        shippingAddressLine1: request.shippingAddressLine1 ?? undefined,
+        shippingAddressLine2: request.shippingAddressLine2 ?? undefined,
+        shippingCity: request.shippingCity ?? undefined,
+        shippingCountry: request.shippingCountry ?? undefined,
+        shippingCounty: request.shippingCounty ?? undefined,
+        shippingPostcode: request.shippingPostcode ?? undefined,
         socialHandles: request.socialHandles ?? undefined,
         storeOrDC: (request.storeOrDC as 'DC' | 'Store') ?? 'Store',
         title: request.title,
@@ -283,11 +310,17 @@ const EditStockRemovalRequest = ({ onClose, requestId }: Props) => {
           reasonForNonReturn: values.reasonForNonReturn,
           rechargeBrand: values.rechargeBrand,
           rechargeReference: values.rechargeReference,
+          recipientEmail: values.recipientEmail,
           recipientName: values.recipientName,
           recipientPhone: values.recipientPhone,
           returnDate: values.returnDate,
           schemeId: currentScheme,
-          shippingAddress: values.shippingAddress,
+          shippingAddressLine1: values.shippingAddressLine1,
+          shippingAddressLine2: values.shippingAddressLine2,
+          shippingCity: values.shippingCity,
+          shippingCountry: values.shippingCountry,
+          shippingCounty: values.shippingCounty,
+          shippingPostcode: values.shippingPostcode,
           socialHandles: values.socialHandles,
           storeOrDC: values.storeOrDC,
           title: values.title,
@@ -351,21 +384,8 @@ const EditStockRemovalRequest = ({ onClose, requestId }: Props) => {
           >
             <Select
               disabled={saving}
-              options={[
-                { label: 'Competition', value: 'Competition' },
-                { label: 'Influencer Seeding', value: 'Influencer Seeding' },
-                {
-                  label: 'Promotional Payment - eg. Store DJs',
-                  value: 'Promotional Payment - eg. Store DJs',
-                },
-                { label: 'Photoshoot', value: 'Photoshoot' },
-                { label: 'Product testing', value: 'Product testing' },
-                { label: 'Staff Uniform', value: 'Staff Uniform' },
-                { label: 'Senior Mgmt e.g', value: 'Senior Mgmt e.g' },
-                { label: 'Directors', value: 'Directors' },
-                { label: 'Product Development', value: 'Product Development' },
-                { label: 'Activation', value: 'Activation' },
-              ]}
+              loading={reasonOptionsLoading}
+              options={reasonOptions}
               style={{ width: 350 }}
             />
           </Form.Item>
@@ -438,9 +458,27 @@ const EditStockRemovalRequest = ({ onClose, requestId }: Props) => {
             <Col span={12}>
               <Form.Item
                 label={intl.formatMessage({
-                  defaultMessage: 'Shipping Address',
+                  defaultMessage: 'Recipient Email',
                 })}
-                name="shippingAddress"
+                name="recipientEmail"
+                rules={[
+                  {
+                    message: intl.formatMessage({
+                      defaultMessage: 'Please enter a valid email',
+                    }),
+                    type: 'email',
+                  },
+                ]}
+              >
+                <Input disabled={saving} />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                label={intl.formatMessage({
+                  defaultMessage: 'Address Line 1',
+                })}
+                name="shippingAddressLine1"
                 rules={[
                   {
                     message: intl.formatMessage({
@@ -450,7 +488,65 @@ const EditStockRemovalRequest = ({ onClose, requestId }: Props) => {
                   },
                 ]}
               >
-                <Input.TextArea disabled={saving} />
+                <Input disabled={saving} />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                label={intl.formatMessage({
+                  defaultMessage: 'Address Line 2',
+                })}
+                name="shippingAddressLine2"
+              >
+                <Input disabled={saving} />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item
+                label={intl.formatMessage({ defaultMessage: 'City' })}
+                name="shippingCity"
+                rules={[
+                  {
+                    message: intl.formatMessage({
+                      defaultMessage: 'Please provide a city',
+                    }),
+                    required: true,
+                  },
+                ]}
+              >
+                <Input disabled={saving} />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item
+                label={intl.formatMessage({ defaultMessage: 'County' })}
+                name="shippingCounty"
+              >
+                <Input disabled={saving} />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item
+                label={intl.formatMessage({ defaultMessage: 'Postcode' })}
+                name="shippingPostcode"
+                rules={[
+                  {
+                    message: intl.formatMessage({
+                      defaultMessage: 'Please provide a postcode',
+                    }),
+                    required: true,
+                  },
+                ]}
+              >
+                <Input disabled={saving} />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item
+                label={intl.formatMessage({ defaultMessage: 'Country' })}
+                name="shippingCountry"
+              >
+                <Input disabled={saving} />
               </Form.Item>
             </Col>
           </>

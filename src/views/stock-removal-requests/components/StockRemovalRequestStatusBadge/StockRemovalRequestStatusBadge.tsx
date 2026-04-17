@@ -36,6 +36,12 @@ const getStatusColor = (status: StockRemovalRequestStatus): string => {
     case StockRemovalRequestStatus.Open: {
       return 'success';
     } // green - legacy status
+    case StockRemovalRequestStatus.RequestedCancel: {
+      return 'volcano';
+    } // red-orange - pending cancellation
+    case StockRemovalRequestStatus.Cancelled: {
+      return 'red';
+    } // terminal negative state
     default: {
       return 'default';
     }
@@ -70,6 +76,12 @@ const getStatusText = (status: StockRemovalRequestStatus) => {
     }
     case StockRemovalRequestStatus.Open: {
       return <FormattedMessage defaultMessage="Open" />;
+    }
+    case StockRemovalRequestStatus.RequestedCancel: {
+      return <FormattedMessage defaultMessage="Cancellation Requested" />;
+    }
+    case StockRemovalRequestStatus.Cancelled: {
+      return <FormattedMessage defaultMessage="Cancelled" />;
     }
     default: {
       return status;

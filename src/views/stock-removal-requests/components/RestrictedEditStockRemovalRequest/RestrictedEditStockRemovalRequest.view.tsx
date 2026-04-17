@@ -27,7 +27,12 @@ interface Props {
 
 export interface FormData {
   approvers: string[];
-  shippingAddress?: string;
+  shippingAddressLine1?: string;
+  shippingAddressLine2?: string;
+  shippingCity?: string;
+  shippingCountry?: string;
+  shippingCounty?: string;
+  shippingPostcode?: string;
 }
 
 const APPROVER_GROUP_ID = 'cmg9nfl260017ityalcaluw9r';
@@ -103,7 +108,12 @@ const RestrictedEditStockRemovalRequest = ({ onClose, requestId }: Props) => {
       const request = requestData.stockRemovalRequest;
       form.setFieldsValue({
         approvers: request.approvers.map((a) => a.user.id),
-        shippingAddress: request.shippingAddress ?? undefined,
+        shippingAddressLine1: request.shippingAddressLine1 ?? undefined,
+        shippingAddressLine2: request.shippingAddressLine2 ?? undefined,
+        shippingCity: request.shippingCity ?? undefined,
+        shippingCountry: request.shippingCountry ?? undefined,
+        shippingCounty: request.shippingCounty ?? undefined,
+        shippingPostcode: request.shippingPostcode ?? undefined,
       });
     }
   }, [requestData, form]);
@@ -185,6 +195,7 @@ const RestrictedEditStockRemovalRequest = ({ onClose, requestId }: Props) => {
             defaultMessage:
               'The approvers and shipping address have been updated.',
           }),
+
           message: intl.formatMessage({
             defaultMessage: 'Request Updated',
           }),
@@ -207,7 +218,12 @@ const RestrictedEditStockRemovalRequest = ({ onClose, requestId }: Props) => {
       variables: {
         data: {
           approverIds: values.approvers,
-          shippingAddress: values.shippingAddress,
+          shippingAddressLine1: values.shippingAddressLine1,
+          shippingAddressLine2: values.shippingAddressLine2,
+          shippingCity: values.shippingCity,
+          shippingCountry: values.shippingCountry,
+          shippingCounty: values.shippingCounty,
+          shippingPostcode: values.shippingPostcode,
         },
         where: {
           id: requestId,
@@ -273,13 +289,53 @@ const RestrictedEditStockRemovalRequest = ({ onClose, requestId }: Props) => {
           </Col>
         </Row>
       )}
-      <Row>
-        <Col span={24}>
+      <Row gutter={16}>
+        <Col span={12}>
           <Form.Item
-            label={intl.formatMessage({ defaultMessage: 'Shipping Address' })}
-            name="shippingAddress"
+            label={intl.formatMessage({ defaultMessage: 'Address Line 1' })}
+            name="shippingAddressLine1"
           >
-            <Input.TextArea disabled={saving} rows={4} />
+            <Input disabled={saving} />
+          </Form.Item>
+        </Col>
+        <Col span={12}>
+          <Form.Item
+            label={intl.formatMessage({ defaultMessage: 'Address Line 2' })}
+            name="shippingAddressLine2"
+          >
+            <Input disabled={saving} />
+          </Form.Item>
+        </Col>
+        <Col span={8}>
+          <Form.Item
+            label={intl.formatMessage({ defaultMessage: 'City' })}
+            name="shippingCity"
+          >
+            <Input disabled={saving} />
+          </Form.Item>
+        </Col>
+        <Col span={8}>
+          <Form.Item
+            label={intl.formatMessage({ defaultMessage: 'County' })}
+            name="shippingCounty"
+          >
+            <Input disabled={saving} />
+          </Form.Item>
+        </Col>
+        <Col span={8}>
+          <Form.Item
+            label={intl.formatMessage({ defaultMessage: 'Postcode' })}
+            name="shippingPostcode"
+          >
+            <Input disabled={saving} />
+          </Form.Item>
+        </Col>
+        <Col span={8}>
+          <Form.Item
+            label={intl.formatMessage({ defaultMessage: 'Country' })}
+            name="shippingCountry"
+          >
+            <Input disabled={saving} />
           </Form.Item>
         </Col>
       </Row>

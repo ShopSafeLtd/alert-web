@@ -177,6 +177,17 @@ const SettingsSideMenu = ({
           }),
           to: '/app/scheme-settings/stock-items',
         },
+        {
+          icon: <InboxOutlined />,
+          permissions: {
+            method: PermissionMethod.Edit,
+            model: PermissionModel.StockRemovalRequests,
+          },
+          title: intl.formatMessage({
+            defaultMessage: 'Stock Removal Reasons',
+          }),
+          to: '/app/scheme-settings/stock-removal-reasons',
+        },
       ],
     },
     {

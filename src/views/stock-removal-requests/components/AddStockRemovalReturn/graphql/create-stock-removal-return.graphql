@@ -1,0 +1,17 @@
+mutation CreateStockRemovalReturn($data: CreateStockRemovalReturnInput!) {
+    createStockRemovalReturn(data: $data) {
+        id
+        reference
+        status
+        isReturn
+        createdAt
+        storeOrDC
+        createdBy {
+            id
+        }
+        returnImages {
+            id
+            url
+        }
+    }
+}

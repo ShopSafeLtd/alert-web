@@ -3,14 +3,17 @@ import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import hasPermission from '#/utils/has-permission';
 import useReportPrint from '#/utils/reportPrint/usePrintReports';
 import MarkAsPickedModal from '#/views/stock-removal-requests/components/MarkAsPickedModal/MarkAsPickedModal';
+import StockRemovalComments from '#/views/stock-removal-requests/components/StockRemovalComments';
 import StockRemovalRequestStatusBadge from '#/views/stock-removal-requests/components/StockRemovalRequestStatusBadge/StockRemovalRequestStatusBadge';
 import PickingListPrint from '#/views/stock-removal-requests/components/ViewStockRemovalRequest/PickingListPrint';
+import { useApproveCancelStockRequestMutation } from '#/views/stock-removal-requests/components/ViewStockRemovalRequest/graphql/__generated__/approve-cancel-stock-request.generated';
 import { useApprovePapStockRequestMutation } from '#/views/stock-removal-requests/components/ViewStockRemovalRequest/graphql/__generated__/approve-pap-stock-request.generated';
 import { useApproveStockRequestMutation } from '#/views/stock-removal-requests/components/ViewStockRemovalRequest/graphql/__generated__/approve-stock-request.generated';
 import { useMarkStockRemovalRequestAsCollectedMutation } from '#/views/stock-removal-requests/components/ViewStockRemovalRequest/graphql/__generated__/mark-collected.generated';
 import { useMarkStockRemovalRequestAsReturnedMutation } from '#/views/stock-removal-requests/components/ViewStockRemovalRequest/graphql/__generated__/mark-returned.generated';
 import { useRejectPapStockRequestMutation } from '#/views/stock-removal-requests/components/ViewStockRemovalRequest/graphql/__generated__/reject-pap-stock-request.generated';
 import { useRejectStockRequestMutation } from '#/views/stock-removal-requests/components/ViewStockRemovalRequest/graphql/__generated__/reject-stock-request.generated';
+import { useRequestCancelStockRequestMutation } from '#/views/stock-removal-requests/components/ViewStockRemovalRequest/graphql/__generated__/request-cancel-stock-request.generated';
 import { useStockRemovalRequestQuery } from '#/views/stock-removal-requests/components/ViewStockRemovalRequest/graphql/__generated__/stock-removal-request.generated';
 import { faClose, faPrint } from '@fortawesome/pro-light-svg-icons';
 import { faCheck } from '@fortawesome/pro-solid-svg-icons';
@@ -89,6 +92,8 @@ const ViewStockRemovalRequest = ({ requestId }: Props) => {
     useMarkStockRemovalRequestAsCollectedMutation();
   const [markAsReturnedMutation] =
     useMarkStockRemovalRequestAsReturnedMutation();
+  const [requestCancelMutation] = useRequestCancelStockRequestMutation();
+  const [approveCancelMutation] = useApproveCancelStockRequestMutation();
 
   // eslint-disable-next-line no-underscore-dangle
   const _hasEditPermission = useMemo(
@@ -361,6 +366,73 @@ const ViewStockRemovalRequest = ({ requestId }: Props) => {
     });
   };
 
+  const handleRequestCancel = () => {
+    void requestCancelMutation({
+      onCompleted: () => {
+        notification.success({
+          description: intl.formatMessage({
+            defaultMessage:
+              'Cancellation request submitted. The PAP group will be notified.',
+          }),
+          message: intl.formatMessage({
+            defaultMessage: 'Cancellation Requested',
+          }),
+          placement: 'bottomRight',
+        });
+      },
+      onError: () => {
+        notification.error({
+          description: intl.formatMessage({
+            defaultMessage: 'Something went wrong.',
+          }),
+          message: intl.formatMessage({
+            defaultMessage: 'Error',
+          }),
+          placement: 'bottomRight',
+        });
+      },
+      refetchQueries: ['stockRemovalRequest', 'StockRemovalRequests'],
+      variables: {
+        where: {
+          id: requestId,
+        },
+      },
+    });
+  };
+
+  const handleApproveCancel = () => {
+    void approveCancelMutation({
+      onCompleted: () => {
+        notification.success({
+          description: intl.formatMessage({
+            defaultMessage: 'Request has been cancelled.',
+          }),
+          message: intl.formatMessage({
+            defaultMessage: 'Cancelled',
+          }),
+          placement: 'bottomRight',
+        });
+      },
+      onError: () => {
+        notification.error({
+          description: intl.formatMessage({
+            defaultMessage: 'Something went wrong.',
+          }),
+          message: intl.formatMessage({
+            defaultMessage: 'Error',
+          }),
+          placement: 'bottomRight',
+        });
+      },
+      refetchQueries: ['stockRemovalRequest', 'StockRemovalRequests'],
+      variables: {
+        where: {
+          id: requestId,
+        },
+      },
+    });
+  };
+
   const isDC = data?.stockRemovalRequest.storeOrDC === 'DC';
 
   // Determine which action buttons to show
@@ -380,6 +452,22 @@ const ViewStockRemovalRequest = ({ requestId }: Props) => {
   const showReturnedButton =
     data?.stockRemovalRequest.status ===
       StockRemovalRequestStatus.AwaitingReturn && hasViewPermission;
+
+  const isCreator = currentUser?.id === data?.stockRemovalRequest.createdBy.id;
+
+  const showRequestCancelButton =
+    data?.stockRemovalRequest.status !== undefined &&
+    [
+      StockRemovalRequestStatus.AwaitingPapApproval,
+      StockRemovalRequestStatus.PendingApproval,
+      StockRemovalRequestStatus.Picked,
+      StockRemovalRequestStatus.Picking,
+    ].includes(data.stockRemovalRequest.status) &&
+    isCreator;
+
+  const showApproveCancelButton =
+    data?.stockRemovalRequest.status ===
+      StockRemovalRequestStatus.RequestedCancel && isInPAPGroup;
 
   const itemColumns = [
     {
@@ -456,6 +544,32 @@ const ViewStockRemovalRequest = ({ requestId }: Props) => {
             marginBottom: 24,
           }}
           type="warning"
+        />
+      )}
+
+      {data?.stockRemovalRequest.status ===
+        StockRemovalRequestStatus.RequestedCancel && (
+        <Alert
+          description={
+            <Typography.Paragraph strong style={{ marginBottom: 0 }}>
+              {isInPAPGroup ? (
+                <FormattedMessage defaultMessage="The creator has requested cancellation of this request. Please review and approve or deny the cancellation below." />
+              ) : (
+                <FormattedMessage defaultMessage="Cancellation has been requested for this request and is awaiting PAP group approval." />
+              )}
+            </Typography.Paragraph>
+          }
+          message={
+            <Typography.Title level={4} style={{ marginBottom: 0 }}>
+              <FormattedMessage defaultMessage="Cancellation Requested" />
+            </Typography.Title>
+          }
+          showIcon={false}
+          style={{
+            border: '2px solid #ff4d4f',
+            marginBottom: 24,
+          }}
+          type="error"
         />
       )}
 
@@ -570,13 +684,79 @@ const ViewStockRemovalRequest = ({ requestId }: Props) => {
                       {data?.stockRemovalRequest.recipientPhone}
                     </Descriptions.Item>
                   )}
-                  <Descriptions.Item
-                    label={intl.formatMessage({
-                      defaultMessage: 'Shipping Address',
-                    })}
-                  >
-                    {data?.stockRemovalRequest.shippingAddress}
-                  </Descriptions.Item>
+                  {data?.stockRemovalRequest.recipientEmail && (
+                    <Descriptions.Item
+                      label={intl.formatMessage({
+                        defaultMessage: 'Recipient Email',
+                      })}
+                    >
+                      {data?.stockRemovalRequest.recipientEmail}
+                    </Descriptions.Item>
+                  )}
+                  {data?.stockRemovalRequest.shippingAddressLine1 ? (
+                    <>
+                      <Descriptions.Item
+                        label={intl.formatMessage({
+                          defaultMessage: 'Address Line 1',
+                        })}
+                      >
+                        {data.stockRemovalRequest.shippingAddressLine1}
+                      </Descriptions.Item>
+                      {data.stockRemovalRequest.shippingAddressLine2 && (
+                        <Descriptions.Item
+                          label={intl.formatMessage({
+                            defaultMessage: 'Address Line 2',
+                          })}
+                        >
+                          {data.stockRemovalRequest.shippingAddressLine2}
+                        </Descriptions.Item>
+                      )}
+                      {data.stockRemovalRequest.shippingCity && (
+                        <Descriptions.Item
+                          label={intl.formatMessage({
+                            defaultMessage: 'City',
+                          })}
+                        >
+                          {data.stockRemovalRequest.shippingCity}
+                        </Descriptions.Item>
+                      )}
+                      {data.stockRemovalRequest.shippingCounty && (
+                        <Descriptions.Item
+                          label={intl.formatMessage({
+                            defaultMessage: 'County',
+                          })}
+                        >
+                          {data.stockRemovalRequest.shippingCounty}
+                        </Descriptions.Item>
+                      )}
+                      {data.stockRemovalRequest.shippingPostcode && (
+                        <Descriptions.Item
+                          label={intl.formatMessage({
+                            defaultMessage: 'Postcode',
+                          })}
+                        >
+                          {data.stockRemovalRequest.shippingPostcode}
+                        </Descriptions.Item>
+                      )}
+                      {data.stockRemovalRequest.shippingCountry && (
+                        <Descriptions.Item
+                          label={intl.formatMessage({
+                            defaultMessage: 'Country',
+                          })}
+                        >
+                          {data.stockRemovalRequest.shippingCountry}
+                        </Descriptions.Item>
+                      )}
+                    </>
+                  ) : (
+                    <Descriptions.Item
+                      label={intl.formatMessage({
+                        defaultMessage: 'Shipping Address',
+                      })}
+                    >
+                      {data?.stockRemovalRequest.shippingAddress}
+                    </Descriptions.Item>
+                  )}
                 </>
               )}
               {data?.stockRemovalRequest.storeOrDC === 'Store' && (
@@ -754,7 +934,9 @@ const ViewStockRemovalRequest = ({ requestId }: Props) => {
       {(showPAPApprovalButtons ||
         showPickingButton ||
         showCollectedButton ||
-        showReturnedButton) && (
+        showReturnedButton ||
+        showRequestCancelButton ||
+        showApproveCancelButton) && (
         <>
           <Row justify="center" style={{ marginBottom: 24 }}>
             <Col>
@@ -803,6 +985,32 @@ const ViewStockRemovalRequest = ({ requestId }: Props) => {
                   <Button onClick={handleMarkAsReturned} type="primary">
                     <FormattedMessage defaultMessage="Mark as Returned" />
                   </Button>
+                )}
+                {showRequestCancelButton && (
+                  <Popconfirm
+                    onConfirm={handleRequestCancel}
+                    title={intl.formatMessage({
+                      defaultMessage:
+                        'Are you sure you want to request cancellation of this request?',
+                    })}
+                  >
+                    <Button danger>
+                      <FormattedMessage defaultMessage="Request Cancellation" />
+                    </Button>
+                  </Popconfirm>
+                )}
+                {showApproveCancelButton && (
+                  <Popconfirm
+                    onConfirm={handleApproveCancel}
+                    title={intl.formatMessage({
+                      defaultMessage:
+                        'Are you sure you want to approve the cancellation of this request?',
+                    })}
+                  >
+                    <Button danger type="primary">
+                      <FormattedMessage defaultMessage="Approve Cancellation" />
+                    </Button>
+                  </Popconfirm>
                 )}
               </Space>
             </Col>
@@ -945,6 +1153,16 @@ const ViewStockRemovalRequest = ({ requestId }: Props) => {
         );
       })}
 
+      <Divider />
+
+      <Typography.Title level={4}>
+        <FormattedMessage defaultMessage="Comments" />
+      </Typography.Title>
+      <StockRemovalComments
+        requestId={requestId}
+        updates={data?.stockRemovalRequest.updates}
+      />
+
       {/* Mark as Picked Modal */}
       {data && (
         <MarkAsPickedModal
@@ -966,16 +1184,16 @@ const ViewStockRemovalRequest = ({ requestId }: Props) => {
               items={data.stockRemovalRequest.items ?? []}
               recipientInfo={{
                 address: isDC
-                  ? data.stockRemovalRequest.shippingAddress ?? ''
+                  ? (data.stockRemovalRequest.shippingAddress ?? '')
                   : undefined,
                 name: isDC
                   ? 'Distribution Center'
-                  : data.stockRemovalRequest.business?.name ?? '',
+                  : (data.stockRemovalRequest.business?.name ?? ''),
                 recipientName: isDC
-                  ? data.stockRemovalRequest.recipientName ?? undefined
+                  ? (data.stockRemovalRequest.recipientName ?? undefined)
                   : undefined,
                 recipientPhone: isDC
-                  ? data.stockRemovalRequest.recipientPhone ?? undefined
+                  ? (data.stockRemovalRequest.recipientPhone ?? undefined)
                   : undefined,
                 type: isDC ? 'DC' : 'Store',
               }}

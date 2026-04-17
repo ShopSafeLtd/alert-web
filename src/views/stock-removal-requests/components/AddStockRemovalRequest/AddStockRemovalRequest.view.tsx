@@ -20,6 +20,7 @@ import {
   Select,
   notification,
 } from 'antd';
+import { useListStockRemovalReasonOptionsQuery } from 'graphql/stock-removal-reasons/queries/__generated__/list-stock-removal-reason-options.generated';
 import { SortOrder } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
 import React, { useState } from 'react';
@@ -52,10 +53,16 @@ export interface FormData {
   reasonForNonReturn: string;
   rechargeBrand: 'No' | 'Yes';
   rechargeReference?: string;
+  recipientEmail?: string;
   recipientName?: string;
   recipientPhone?: string;
   returnDate?: Date;
-  shippingAddress?: string;
+  shippingAddressLine1?: string;
+  shippingAddressLine2?: string;
+  shippingCity?: string;
+  shippingCountry?: string;
+  shippingCounty?: string;
+  shippingPostcode?: string;
   socialHandles?: string;
   storeOrDC: 'DC' | 'Store';
   title: string;
@@ -74,9 +81,20 @@ const AddStockRemovalRequest = ({ onClose }: Props) => {
 
   const storeOrDC = Form.useWatch('storeOrDC', form);
   const rechargeBrand = Form.useWatch('rechargeBrand', form);
-  console.log('rechargeBrand', rechargeBrand);
   const willStockBeReturned = Form.useWatch('willStockBeReturned', form);
   const personalityInfluences = Form.useWatch('personalityInfluences', form);
+
+  const { data: reasonOptionsData, loading: reasonOptionsLoading } =
+    useListStockRemovalReasonOptionsQuery({
+      skip: !currentScheme,
+      variables: { where: { id: currentScheme } },
+    });
+  const reasonOptions = (
+    reasonOptionsData?.scheme?.stockRemovalReasonOptions ?? []
+  )
+    .filter((o) => o.active)
+    .sort((a, b) => a.position - b.position)
+    .map((o) => ({ label: o.label, value: o.label }));
 
   const [createRemovalRequest] = useCreateStockRemovalRequestMutation({
     update: (store, { data: res }) => {
@@ -188,11 +206,17 @@ const AddStockRemovalRequest = ({ onClose }: Props) => {
           reasonForNonReturn: values.reasonForNonReturn,
           rechargeBrand: values.rechargeBrand,
           rechargeReference: values.rechargeReference,
+          recipientEmail: values.recipientEmail,
           recipientName: values.recipientName,
           recipientPhone: values.recipientPhone,
           returnDate: values.returnDate,
           schemeId: currentScheme,
-          shippingAddress: values.shippingAddress,
+          shippingAddressLine1: values.shippingAddressLine1,
+          shippingAddressLine2: values.shippingAddressLine2,
+          shippingCity: values.shippingCity,
+          shippingCountry: values.shippingCountry,
+          shippingCounty: values.shippingCounty,
+          shippingPostcode: values.shippingPostcode,
           socialHandles: values.socialHandles,
           storeOrDC: values.storeOrDC,
           title: values.title,
@@ -244,21 +268,8 @@ const AddStockRemovalRequest = ({ onClose }: Props) => {
           >
             <Select
               disabled={saving}
-              options={[
-                { label: 'Competition', value: 'Competition' },
-                { label: 'Influencer Seeding', value: 'Influencer Seeding' },
-                {
-                  label: 'Promotional Payment - eg. Store DJs',
-                  value: 'Promotional Payment - eg. Store DJs',
-                },
-                { label: 'Photoshoot', value: 'Photoshoot' },
-                { label: 'Product testing', value: 'Product testing' },
-                { label: 'Staff Uniform', value: 'Staff Uniform' },
-                { label: 'Senior Mgmt e.g', value: 'Senior Mgmt e.g' },
-                { label: 'Directors', value: 'Directors' },
-                { label: 'Product Development', value: 'Product Development' },
-                { label: 'Activation', value: 'Activation' },
-              ]}
+              loading={reasonOptionsLoading}
+              options={reasonOptions}
               style={{ width: 350 }}
             />
           </Form.Item>
@@ -331,9 +342,27 @@ const AddStockRemovalRequest = ({ onClose }: Props) => {
             <Col span={12}>
               <Form.Item
                 label={intl.formatMessage({
-                  defaultMessage: 'Shipping Address',
+                  defaultMessage: 'Recipient Email',
                 })}
-                name="shippingAddress"
+                name="recipientEmail"
+                rules={[
+                  {
+                    message: intl.formatMessage({
+                      defaultMessage: 'Please enter a valid email',
+                    }),
+                    type: 'email',
+                  },
+                ]}
+              >
+                <Input disabled={saving} />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                label={intl.formatMessage({
+                  defaultMessage: 'Address Line 1',
+                })}
+                name="shippingAddressLine1"
                 rules={[
                   {
                     message: intl.formatMessage({
@@ -343,7 +372,65 @@ const AddStockRemovalRequest = ({ onClose }: Props) => {
                   },
                 ]}
               >
-                <Input.TextArea disabled={saving} />
+                <Input disabled={saving} />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                label={intl.formatMessage({
+                  defaultMessage: 'Address Line 2',
+                })}
+                name="shippingAddressLine2"
+              >
+                <Input disabled={saving} />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item
+                label={intl.formatMessage({ defaultMessage: 'City' })}
+                name="shippingCity"
+                rules={[
+                  {
+                    message: intl.formatMessage({
+                      defaultMessage: 'Please provide a city',
+                    }),
+                    required: true,
+                  },
+                ]}
+              >
+                <Input disabled={saving} />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item
+                label={intl.formatMessage({ defaultMessage: 'County' })}
+                name="shippingCounty"
+              >
+                <Input disabled={saving} />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item
+                label={intl.formatMessage({ defaultMessage: 'Postcode' })}
+                name="shippingPostcode"
+                rules={[
+                  {
+                    message: intl.formatMessage({
+                      defaultMessage: 'Please provide a postcode',
+                    }),
+                    required: true,
+                  },
+                ]}
+              >
+                <Input disabled={saving} />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item
+                label={intl.formatMessage({ defaultMessage: 'Country' })}
+                name="shippingCountry"
+              >
+                <Input disabled={saving} />
               </Form.Item>
             </Col>
           </>
