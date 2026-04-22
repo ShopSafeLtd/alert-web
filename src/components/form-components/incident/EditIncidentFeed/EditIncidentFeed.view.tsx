@@ -112,7 +112,7 @@ Props): JSX.Element => {
           activityAuthorised: data?.activityAuthorised || false,
           business: data?.business?.id ? [data?.business?.id] : [],
           customerRef: data?.customerRef,
-          date: data?.date ? new Date(data?.date) : '',
+          date: data?.date ? new Date(data?.date) : null,
 
           description: data?.description,
           groups:
