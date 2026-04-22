@@ -311,6 +311,12 @@ const useViewOffender = (offenderId: string): Return => {
   const [editUpdateInput, setEditUpdateInput] = useState('');
 
   useEffect(() => {
+    if (editUpdate) {
+      setEditUpdateInput(editUpdate.text);
+    }
+  }, [editUpdate]);
+
+  useEffect(() => {
     const incidents =
       window.localStorage.getItem(LINKED_INCIDENTS) === 'false'
         ? undefined

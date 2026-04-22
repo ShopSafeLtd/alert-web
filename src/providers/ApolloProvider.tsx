@@ -18,6 +18,7 @@ import {
 import { setContext } from '@apollo/client/link/context';
 import { onError } from '@apollo/client/link/error';
 import { createPersistedQueryLink } from '@apollo/client/link/persisted-queries';
+import { RetryLink } from '@apollo/client/link/retry';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { useAuth } from '@clerk/clerk-react';
 import * as Sentry from '@sentry/react';
@@ -198,6 +199,23 @@ const Apollo = ({ children }: Props): JSX.Element => {
       };
     });
 
+    // Retry on 5xx/network errors with exponential backoff
+    const retryLink = new RetryLink({
+      attempts: {
+        max: 3,
+        retryIf: (error) => {
+          if (!error) return false;
+          const statusCode = (error as { statusCode?: number }).statusCode;
+          return !statusCode || statusCode >= 500;
+        },
+      },
+      delay: {
+        initial: 1000,
+        jitter: true,
+        max: 5000,
+      },
+    });
+
     // Persisted queries
     const persistedQueryLink = createPersistedQueryLink({ sha256 });
 
@@ -221,6 +239,8 @@ const Apollo = ({ children }: Props): JSX.Element => {
     const authHttp = sentryLink
       // eslint-disable-next-line unicorn/prefer-spread
       .concat(errorLink)
+      // eslint-disable-next-line unicorn/prefer-spread
+      .concat(retryLink)
       // eslint-disable-next-line unicorn/prefer-spread
       .concat(authLink)
       // eslint-disable-next-line unicorn/prefer-spread

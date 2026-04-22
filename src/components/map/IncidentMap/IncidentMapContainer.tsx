@@ -1,4 +1,4 @@
-import { Alert, Card, Empty } from 'antd';
+import { Alert, Button, Card, Empty } from 'antd';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
@@ -25,7 +25,7 @@ export const IncidentMapContainer: React.FC<IncidentMapContainerProps> = ({
   width = '100%',
 }) => {
   const intl = useIntl();
-  const { error, incidents, loading } = useIncidentMapData({
+  const { error, incidents, loading, refetch } = useIncidentMapData({
     crimeGroupId,
     investigationId,
     offenderId,
@@ -40,6 +40,11 @@ export const IncidentMapContainer: React.FC<IncidentMapContainerProps> = ({
   if (error) {
     return (
       <Alert
+        action={
+          <Button onClick={refetch} size="small">
+            {intl.formatMessage({ defaultMessage: 'Retry' })}
+          </Button>
+        }
         description={error.message}
         message={intl.formatMessage({
           defaultMessage: 'Error loading incident map',

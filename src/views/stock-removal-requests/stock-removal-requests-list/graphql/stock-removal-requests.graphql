@@ -6,6 +6,7 @@ query StockRemovalRequests($where: StockRemovalRequestsWhere!, $orderBy: [StockR
                 createdAt
                 createdBy {
                     id
+                    fullName
                 }
                 title
                 status
