@@ -38,6 +38,7 @@ const FacesSelect = ({ faces, onClose, open, submitFace }: Props) => {
       cancelText={intl.formatMessage({
         defaultMessage: 'Skip',
       })}
+      okButtonProps={{ disabled: !selected }}
       okText={intl.formatMessage({
         defaultMessage: 'Save Face',
       })}
