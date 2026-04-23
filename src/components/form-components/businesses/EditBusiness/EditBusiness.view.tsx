@@ -26,6 +26,7 @@ import { useIntl } from 'react-intl';
 
 import type { OnSubmitValues } from './useEditBusiness';
 
+import { countriesOptions } from '../../../../constants/countriesOptions';
 import GroupSyncModal from './components/GroupSyncModal';
 
 interface Props {
@@ -450,7 +451,7 @@ const EditBusiness = ({
           </Form.Item>
         </Col>
       </Row>
-      <Row>
+      <Row gutter={16}>
         <Col span={12}>
           <Form.Item
             label={intl.formatMessage({
@@ -460,6 +461,29 @@ const EditBusiness = ({
             // rules={[{ required: true }]}
           >
             {loading ? <Skeleton.Input /> : <Input disabled={saving} />}
+          </Form.Item>
+        </Col>
+        <Col span={12}>
+          <Form.Item
+            label={intl.formatMessage({
+              defaultMessage: 'Country',
+            })}
+            name="country"
+          >
+            {loading ? (
+              <Skeleton.Input />
+            ) : (
+              <Select
+                allowClear
+                disabled={saving}
+                optionFilterProp="label"
+                options={countriesOptions}
+                placeholder={intl.formatMessage({
+                  defaultMessage: 'Select Country',
+                })}
+                showSearch
+              />
+            )}
           </Form.Item>
         </Col>
       </Row>

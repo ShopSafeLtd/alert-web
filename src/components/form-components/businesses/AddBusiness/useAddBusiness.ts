@@ -11,6 +11,7 @@ import { useState } from 'react';
 
 export interface FormData {
   building: string;
+  country: string;
   county: string;
   groups: string[];
   name: string;
@@ -100,6 +101,7 @@ const useAddBusiness = ({ update }: Props): Return => {
       locations: [
         {
           building: values.building,
+          country: values.country,
           county: values.county,
           // eslint-disable-next-line sonarjs/no-nested-template-literals
           full: `${values.building ? `${values.building}, ` : ''}${

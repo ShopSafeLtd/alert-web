@@ -35,6 +35,7 @@ import errorNotification from 'types/mutation_notifications/error_notification';
 export interface OnSubmitValues {
   brands?: string[];
   building: string;
+  country: string;
   county: string;
   currency?: Currency | null;
   groups: string[];
@@ -126,6 +127,12 @@ const useEditBusiness = ({ businessId, onClose }: Props): Return => {
       form.setFieldsValue({
         brands: res.business?.brands,
         building: res.business?.locations[0]?.building || '',
+        country:
+          (
+            res.business?.locations[0] as
+              | { country?: null | string }
+              | undefined
+          )?.country ?? '',
         county: res.business?.locations[0]?.county || '',
         currency: res.business?.currency || null,
         groups: groupIds,
@@ -564,6 +571,7 @@ const useEditBusiness = ({ businessId, onClose }: Props): Return => {
               {
                 data: {
                   building: { set: values.building },
+                  country: { set: values.country },
                   county: { set: values.county },
                   geoLat: location?.geoLat
                     ? { set: location?.geoLat }
