@@ -67,6 +67,7 @@ import type { BusinessLossPreventionDashboardQuery } from './graphql/queries/__g
 import type { ListDemBusinessEvidenceQuery } from './graphql/queries/__generated__/list-business-dem-evidence.generated';
 
 import LinkDem from '../../../../components/form-components/businesses/LinkDem';
+import { countriesOptions } from '../../../../constants/countriesOptions';
 import useStyles from './ViewBusiness.styles';
 import LinkedInvestigations from './components/LossPreventionDashboard/LinkedInvestigations';
 import LossPreventionSummary from './components/LossPreventionDashboard/LossPreventionSummary';
@@ -416,6 +417,31 @@ const ViewBusiness = ({
                         ? data?.business.locations[0]?.full
                         : ''}
                     </Descriptions.Item>
+                    {(
+                      data?.business.locations[0] as
+                        | { country?: null | string }
+                        | undefined
+                    )?.country && (
+                      <Descriptions.Item
+                        label={intl.formatMessage({
+                          defaultMessage: 'Country',
+                        })}
+                      >
+                        {(() => {
+                          const countryCode =
+                            (
+                              data?.business.locations[0] as
+                                | { country?: null | string }
+                                | undefined
+                            )?.country ?? '';
+                          return (
+                            countriesOptions.find(
+                              (c) => c.value === countryCode
+                            )?.label ?? countryCode
+                          );
+                        })()}
+                      </Descriptions.Item>
+                    )}
                   </Descriptions>
                 </Card>
               </Col>

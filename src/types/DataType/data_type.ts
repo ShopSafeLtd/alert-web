@@ -297,6 +297,7 @@ export interface EditFeedImage {
 export interface LocationData {
   alias?: null | string;
   building?: null | string;
+  country?: null | string;
   county?: null | string;
   full?: null | string;
   geoLat?: null | number;

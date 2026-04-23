@@ -90,6 +90,9 @@ const EditStockRemovalRequest = ({ onClose, requestId }: Props) => {
 
   const [saving, setSaving] = useState(false);
   const [unauthorizedAccess, setUnauthorizedAccess] = useState(false);
+  const [originalItems, setOriginalItems] = useState<
+    Array<{ quantity: number; stockItem: string }>
+  >([]);
 
   const { data: requestData, loading } = useStockRemovalRequestQuery({
     variables: {
@@ -202,6 +205,12 @@ const EditStockRemovalRequest = ({ onClose, requestId }: Props) => {
         willStockBeReturned:
           (request.willStockBeReturned as 'No' | 'Yes') ?? 'No',
       });
+      setOriginalItems(
+        request.items.map((item) => ({
+          quantity: item.requestedQuantity ?? 0,
+          stockItem: item.id,
+        }))
+      );
     }
   }, [requestData, form]);
 
@@ -272,6 +281,34 @@ const EditStockRemovalRequest = ({ onClose, requestId }: Props) => {
 
   const onFinish = (values: FormData) => {
     setSaving(true);
+
+    const originalItemIds = new Set(originalItems.map((i) => i.stockItem));
+    const currentItems = values.items || [];
+
+    const createItems = currentItems
+      .filter((item) => item.stockItem && !originalItemIds.has(item.stockItem))
+      .map((item) => ({
+        itemId: item.stockItem ?? '',
+        quantity: item.quantity ?? 0,
+      }));
+
+    const currentItemIds = new Set(
+      currentItems
+        .filter((item) => item.stockItem && originalItemIds.has(item.stockItem))
+        .map((item) => item.stockItem!)
+    );
+
+    const deleteItems = originalItems
+      .filter((item) => !currentItemIds.has(item.stockItem))
+      .map((item) => item.stockItem);
+
+    const updateItems = currentItems
+      .filter((item) => item.stockItem && originalItemIds.has(item.stockItem))
+      .map((item) => ({
+        id: item.stockItem ?? '',
+        quantity: item.quantity ?? 0,
+      }));
+
     void updateRemovalRequest({
       onCompleted: (_data) => {
         setSaving(false);
@@ -303,6 +340,8 @@ const EditStockRemovalRequest = ({ onClose, requestId }: Props) => {
           approverIds: values.approvers,
           businessId: values.businessId?.at(0) ?? '',
           costCentreCode: values.costCentreCode,
+          createItems: createItems.length > 0 ? createItems : undefined,
+          deleteItems: deleteItems.length > 0 ? deleteItems : undefined,
           description: values.description,
           fascia: values.fascia,
           personalityInfluences: values.personalityInfluences,
@@ -324,6 +363,7 @@ const EditStockRemovalRequest = ({ onClose, requestId }: Props) => {
           socialHandles: values.socialHandles,
           storeOrDC: values.storeOrDC,
           title: values.title,
+          updateItems: updateItems.length > 0 ? updateItems : undefined,
           willStockBeReturned: values.willStockBeReturned,
         },
         where: {
