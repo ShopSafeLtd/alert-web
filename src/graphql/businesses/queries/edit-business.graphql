@@ -28,6 +28,7 @@ query EditBusiness($where: BusinessWhereUniqueInput!) {
       townCity
       county
       postcode
+      country
       geoLng
       geoLat
     }

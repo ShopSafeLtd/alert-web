@@ -22,6 +22,8 @@ import { useIntl } from 'react-intl';
 
 import type { FormData } from './useAddBusiness';
 
+import { countriesOptions } from '../../../../constants/countriesOptions';
+
 interface Props {
   addTag: boolean;
   form: FormInstance<FormData>;
@@ -269,7 +271,7 @@ const AddBusiness = ({
           </Form.Item>
         </Col>
       </Row>
-      <Row>
+      <Row gutter={16}>
         <Col span={12}>
           <Form.Item
             label={intl.formatMessage({
@@ -279,6 +281,25 @@ const AddBusiness = ({
             // rules={[{ required: true }]}
           >
             <Input disabled={saving} />
+          </Form.Item>
+        </Col>
+        <Col span={12}>
+          <Form.Item
+            label={intl.formatMessage({
+              defaultMessage: 'Country',
+            })}
+            name="country"
+          >
+            <Select
+              allowClear
+              disabled={saving}
+              optionFilterProp="label"
+              options={countriesOptions}
+              placeholder={intl.formatMessage({
+                defaultMessage: 'Select Country',
+              })}
+              showSearch
+            />
           </Form.Item>
         </Col>
       </Row>
