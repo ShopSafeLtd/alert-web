@@ -1,6 +1,7 @@
 import type { DateRange } from 'views/police-dashboard/types';
 
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import { currentSchemeGroups } from '#/providers/UserProvider/UserProvider';
 import { subMonths } from 'date-fns';
 import { useAtomValue } from 'jotai';
 import { useMemo, useState } from 'react';
@@ -9,13 +10,20 @@ import { useRetailAdminDashboardQuery } from '../graphql/queries/__generated__/r
 
 export const useRetailAdminDashboard = (dateRange?: DateRange) => {
   const schemeId = useAtomValue(currentSchemeIdAtom);
+  const schemeGroups = useAtomValue(currentSchemeGroups);
 
   const variables = useMemo(() => {
+    const groupIds =
+      schemeGroups && schemeGroups.length > 0
+        ? schemeGroups.map((g) => g.id)
+        : undefined;
+
     const vars: {
       endDate?: Date;
+      groupIds?: string[];
       schemeId?: null | string;
       startDate?: Date;
-    } = { schemeId };
+    } = { groupIds, schemeId };
 
     if (dateRange) {
       const startDate = new Date(dateRange.startDate);
@@ -27,7 +35,7 @@ export const useRetailAdminDashboard = (dateRange?: DateRange) => {
     }
 
     return vars;
-  }, [schemeId, dateRange]);
+  }, [schemeId, schemeGroups, dateRange]);
 
   const { data, error, loading, refetch } = useRetailAdminDashboardQuery({
     fetchPolicy: 'cache-and-network',

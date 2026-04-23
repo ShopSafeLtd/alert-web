@@ -3,12 +3,14 @@ import {
   currentSchemeBusinessesAtom,
   currentSchemeIdAtom,
 } from '#/providers/SchemeProvider/SchemeProvider';
+import { currentSchemeGroups } from '#/providers/UserProvider/UserProvider';
 import { SwapOutlined } from '@ant-design/icons';
 import { Col, Result, Row, Select, Space, Typography } from 'antd';
 import { SortOrder } from 'graphql/types';
 import { useAtomValue } from 'jotai';
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
+import { Navigate } from 'react-router-dom';
 
 import ActionItems from './components/ActionItems/ActionItems';
 import ActiveBans from './components/ActiveBans/ActiveBans';
@@ -28,6 +30,7 @@ const StoreColleagueDashboard: React.FC = () => {
   const defaultBusinessId = useAtomValue(currentSchemeBusinessesAtom)?.at(
     0
   )?.id;
+  const schemeGroups = useAtomValue(currentSchemeGroups);
 
   const [selectedBusinessId, setSelectedBusinessId] = useState<
     string | undefined
@@ -74,6 +77,16 @@ const StoreColleagueDashboard: React.FC = () => {
       value: b.id,
     })
   );
+
+  // Users with groups but no shops should see group-level data via the retail admin dashboard
+  if (
+    !defaultBusinessId &&
+    !selectedBusinessId &&
+    schemeGroups &&
+    schemeGroups.length > 0
+  ) {
+    return <Navigate replace to="/retail-admin-dashboard" />;
+  }
 
   if (error) {
     return (
