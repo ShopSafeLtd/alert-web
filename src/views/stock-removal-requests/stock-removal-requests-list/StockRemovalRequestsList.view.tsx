@@ -539,21 +539,6 @@ const StockRemovalRequestsList = () => {
                     defaultMessage: 'Picked',
                   })}
                 </Radio.Button>
-                <Radio.Button value={StockRemovalRequestStatus.Collected}>
-                  {intl.formatMessage({
-                    defaultMessage: 'Collected',
-                  })}
-                </Radio.Button>
-                <Radio.Button value={StockRemovalRequestStatus.AwaitingReturn}>
-                  {intl.formatMessage({
-                    defaultMessage: 'Returning',
-                  })}
-                </Radio.Button>
-                <Radio.Button value={StockRemovalRequestStatus.Returned}>
-                  {intl.formatMessage({
-                    defaultMessage: 'Returned',
-                  })}
-                </Radio.Button>
                 <Radio.Button value={StockRemovalRequestStatus.Closed}>
                   {intl.formatMessage({
                     defaultMessage: 'Closed',
