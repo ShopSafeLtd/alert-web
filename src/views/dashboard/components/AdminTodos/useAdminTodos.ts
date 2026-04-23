@@ -8,14 +8,22 @@ import {
 } from '#/providers/SchemeProvider/SchemeProvider';
 import { userIdAtom } from '#/providers/UserProvider/UserProvider';
 import { useStoreActions } from '#/state';
+import { useHasRolePermission } from '#/utils/has-role-permission';
+import { APP_PREFIX_PATH } from 'configs/AppConfig';
 import {
   FeedTodosDocument,
   useFeedTodosQuery,
 } from 'graphql/feedItems/queries/__generated__/feed-todos.generated';
 import { useUpdateTodoMutation } from 'graphql/todos/mutations/__generated__/update_todo.generated';
-import { QueryMode, SortOrder } from 'graphql/types';
+import {
+  PermissionMethod,
+  PermissionModel,
+  QueryMode,
+  SortOrder,
+} from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface Props {
   fullSearch: string;
@@ -42,6 +50,14 @@ const useAdminTodos = ({ fullSearch }: Props): Return => {
   const [saving, setSaving] = useState(false);
   const [addTodo, setAddTodo] = useState(false);
   const [search, setSearch] = useState('');
+  const navigate = useNavigate();
+  const hasRolePermission = useHasRolePermission();
+  const hasWritePermission = hasRolePermission({
+    permission: {
+      method: PermissionMethod.Write,
+      model: PermissionModel.Tasks,
+    },
+  });
 
   const setTodoList = useStoreActions((actions) => actions.user.setTodos);
   const userTodos = useAtomValue(userTodosAtom);
@@ -238,6 +254,10 @@ const useAdminTodos = ({ fullSearch }: Props): Return => {
     });
   };
   const toggleAddTodo = () => {
+    if (!hasWritePermission) {
+      void navigate(`${APP_PREFIX_PATH}/dashboard`);
+      return;
+    }
     setAddTodo(!addTodo);
   };
 

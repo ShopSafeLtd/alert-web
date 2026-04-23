@@ -8,6 +8,7 @@ import ArticleFeed from 'views/article/ArticleFeed';
 import CreateArticle from 'views/article/CreateEditArticle/CreateEditArticle.container';
 import ViewArticle from 'views/article/ViewArticle/ViewArticle.container';
 
+import CustomErrorBoundary from '../../../components/CustomErrorBoundary';
 import PermissionCheckWrapper from '../../../components/PermissionCheck/PermissionCheckWrapper';
 
 const RedirectOffenders = () => {
@@ -32,7 +33,9 @@ const Article = (): JSX.Element => {
                 model: PermissionModel.Articles,
               }}
             >
-              <ArticleFeed />
+              <CustomErrorBoundary>
+                <ArticleFeed />
+              </CustomErrorBoundary>
             </PermissionCheckWrapper>
           }
           index

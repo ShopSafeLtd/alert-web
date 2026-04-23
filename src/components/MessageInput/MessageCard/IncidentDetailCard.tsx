@@ -71,7 +71,11 @@ const IncidentDetailCard = ({
               defaultMessage: 'No',
             })}
             okText={intl.formatMessage({ defaultMessage: 'Yes' })}
-            onConfirm={() => onDelete(incident.id)}
+            onCancel={(e) => e?.stopPropagation()}
+            onConfirm={(e) => {
+              e?.stopPropagation();
+              onDelete(incident.id);
+            }}
             overlayInnerStyle={{ padding: 10 }}
             placement="topLeft"
             title={intl.formatMessage({
