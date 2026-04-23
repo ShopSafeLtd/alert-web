@@ -31,7 +31,7 @@ import {
 } from 'antd';
 import SkeletonImage from 'components/images/SkeletonImage.view';
 import WatermarkImage from 'components/images/WatermarkImage.view';
-import { formatDistanceToNow } from 'date-fns';
+import { formatDistanceToNow, isValid } from 'date-fns';
 import {
   ArticlePriority,
   CompleteStatus,
@@ -276,7 +276,7 @@ const ArticleCard = ({
                   fontWeight: 'bold',
                 }}
               />
-              {criticalExpiry && (
+              {criticalExpiry && isValid(new Date(criticalExpiry)) && (
                 <Text
                   style={{
                     color: '#ff4d4f',
@@ -289,7 +289,7 @@ const ArticleCard = ({
                   {intl.formatMessage(
                     { defaultMessage: 'Expires {time}' },
                     {
-                      time: formatDistanceToNow(criticalExpiry, {
+                      time: formatDistanceToNow(new Date(criticalExpiry), {
                         addSuffix: true,
                       }),
                     }

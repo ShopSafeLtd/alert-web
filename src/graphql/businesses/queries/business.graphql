@@ -78,6 +78,7 @@ query Business(
       full
       geoLat
       geoLng
+      country
     }
   }
 }
