@@ -133,6 +133,7 @@ const AddStockRemovalRequest = ({ onClose }: Props) => {
                   ...res.createStockRemovalRequest,
                   createdBy: {
                     __typename: 'User' as const,
+                    fullName: '',
                     id: currentUserId || '',
                   },
                 },

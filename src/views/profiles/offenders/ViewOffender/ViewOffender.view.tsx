@@ -1577,45 +1577,6 @@ const ViewOffender = ({
                                     }),
                                   },
                                   {
-                                    key: 'details',
-                                    render: (_: unknown, record: TableItem) => (
-                                      <Space direction="vertical" size={0}>
-                                        {record.description && (
-                                          <Text style={{ fontSize: 12 }}>
-                                            {record.description}
-                                          </Text>
-                                        )}
-                                        {record.checkId && (
-                                          <Text
-                                            style={{ fontSize: 12 }}
-                                            type="secondary"
-                                          >
-                                            {intl.formatMessage(
-                                              {
-                                                defaultMessage: 'Check ID: {v}',
-                                              },
-                                              { v: record.checkId }
-                                            )}
-                                          </Text>
-                                        )}
-                                        {record.companyRef && (
-                                          <Text
-                                            style={{ fontSize: 12 }}
-                                            type="secondary"
-                                          >
-                                            {intl.formatMessage(
-                                              { defaultMessage: 'Ref: {v}' },
-                                              { v: record.companyRef }
-                                            )}
-                                          </Text>
-                                        )}
-                                      </Space>
-                                    ),
-                                    title: intl.formatMessage({
-                                      defaultMessage: 'Details',
-                                    }),
-                                  },
-                                  {
                                     dataIndex: 'duration',
                                     key: 'duration',
                                     // render: (value, row) =>
@@ -1842,6 +1803,48 @@ const ViewOffender = ({
                                   type: getBanType(ban.type),
                                   typeEnum: ban.type,
                                 }))}
+                                defaultExpandAllRows
+                                expandable={{
+                                  expandedRowRender: (record: TableItem) => (
+                                    <Space direction="vertical" size={2}>
+                                      {record.description && (
+                                        <Text style={{ fontSize: 13 }}>
+                                          {record.description}
+                                        </Text>
+                                      )}
+                                      {record.checkId && (
+                                        <Text
+                                          style={{ fontSize: 12 }}
+                                          type="secondary"
+                                        >
+                                          {intl.formatMessage(
+                                            {
+                                              defaultMessage: 'Check ID: {v}',
+                                            },
+                                            { v: record.checkId }
+                                          )}
+                                        </Text>
+                                      )}
+                                      {record.companyRef && (
+                                        <Text
+                                          style={{ fontSize: 12 }}
+                                          type="secondary"
+                                        >
+                                          {intl.formatMessage(
+                                            { defaultMessage: 'Ref: {v}' },
+                                            { v: record.companyRef }
+                                          )}
+                                        </Text>
+                                      )}
+                                    </Space>
+                                  ),
+                                  rowExpandable: (record) =>
+                                    !!(
+                                      record.description ||
+                                      record.checkId ||
+                                      record.companyRef
+                                    ),
+                                }}
                                 loading={loading}
                                 pagination={
                                   data?.offender?.bans &&

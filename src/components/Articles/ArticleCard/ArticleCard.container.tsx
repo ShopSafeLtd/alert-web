@@ -15,7 +15,7 @@ interface Props {
 
 const ArticleCard = ({ article, openLightbox, update }: Props): JSX.Element => {
   const { onDelete, onNavigate } = useArticleCard({
-    createdById: article?.createdBy.id,
+    createdById: article?.createdBy?.id,
     update,
   });
 

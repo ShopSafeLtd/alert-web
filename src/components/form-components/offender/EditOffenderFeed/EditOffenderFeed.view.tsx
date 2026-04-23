@@ -7,7 +7,7 @@ import OffenderFormDetails from '#/components/form-components/offender/OffenderF
 import { Button, Col, Form, Input, Radio, Row, Select, Skeleton } from 'antd';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useIntl } from 'react-intl';
 
 import type { FormData } from './useEditOffenderFeed';
@@ -51,6 +51,57 @@ const EditOffender = ({
   const idVerified = Form.useWatch('idVerified', form);
   const incidentsCount = (data?.offender?.totalIncidents || 0) > 0;
   const idSource = Form.useWatch('idSource', form);
+
+  useEffect(() => {
+    if (data?.offender) {
+      form.setFieldsValue({
+        age: data.offender.age ?? undefined,
+        ageCheck: !!data.offender.dateOfBirth,
+        alias: data.offender.alias || [],
+        build: data.offender.build ?? undefined,
+        comment: data.offender.comment || '',
+        customGalleries:
+          data.offender.customGalleries &&
+          data.offender.customGalleries.length > 0
+            ? data.offender.customGalleries.map(({ id }) => id)
+            : [],
+        dateOfBirth: data.offender.dateOfBirth
+          ? dayjs
+              .utc(data.offender.dateOfBirth)
+              .set('hour', 12)
+              .set('minute', 0)
+              .set('second', 0)
+              .set('millisecond', 0)
+              .toDate()
+          : undefined,
+        dateSource: data.offender.dateSource ?? undefined,
+        gender: data.offender.gender ?? undefined,
+        groups:
+          data.offender.groups && data.offender.groups.length > 0
+            ? data.offender.groups.map(({ id }) => id)
+            : [],
+        hair: data.offender.hair ?? undefined,
+        height: data.offender.height ?? undefined,
+        idSource: data.offender.idSource ?? undefined,
+        idVerified: data.offender.idVerified || undefined,
+        infoSource: data.offender.infoSource || '',
+        justification: data.offender.justification || '',
+        knownFor: data.offender.knownFor || [],
+        name: data.offender.name ?? undefined,
+        peculiarities: data.offender.peculiarities ?? undefined,
+        race: data.offender.race ?? undefined,
+        sourceDetails: data.offender.sourceDetails || '',
+        tags:
+          data.offender.tags && data.offender.tags.length > 0
+            ? data.offender.tags.map(({ id }) => id)
+            : [],
+        targetedGoods: data.offender.targetedGoods || [],
+        wanted: data.offender.wanted ?? undefined,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data?.offender?.id]);
+
   return (
     <div className="list-view">
       {loading ? (

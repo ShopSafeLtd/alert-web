@@ -435,10 +435,14 @@ const ViewStockRemovalRequest = ({ requestId }: Props) => {
 
   const isDC = data?.stockRemovalRequest.storeOrDC === 'DC';
 
+  const isCreator = currentUser?.id === data?.stockRemovalRequest.createdBy.id;
+
   // Determine which action buttons to show
   const showPAPApprovalButtons =
     data?.stockRemovalRequest.status ===
-      StockRemovalRequestStatus.AwaitingPapApproval && isInPAPGroup;
+      StockRemovalRequestStatus.AwaitingPapApproval &&
+    isInPAPGroup &&
+    !isCreator;
 
   const showPickingButton =
     data?.stockRemovalRequest.status === StockRemovalRequestStatus.Picking &&
@@ -452,8 +456,6 @@ const ViewStockRemovalRequest = ({ requestId }: Props) => {
   const showReturnedButton =
     data?.stockRemovalRequest.status ===
       StockRemovalRequestStatus.AwaitingReturn && hasViewPermission;
-
-  const isCreator = currentUser?.id === data?.stockRemovalRequest.createdBy.id;
 
   const showRequestCancelButton =
     data?.stockRemovalRequest.status !== undefined &&
@@ -926,6 +928,41 @@ const ViewStockRemovalRequest = ({ requestId }: Props) => {
             </Card>
           </Col>
         )}
+
+        {/* Tracking Details Card */}
+        {(data?.stockRemovalRequest.tracking ||
+          data?.stockRemovalRequest.tmid) && (
+          <Col lg={12} xs={24}>
+            <Card
+              size="small"
+              style={{ height: '100%' }}
+              title={
+                <Typography.Text strong>
+                  <FormattedMessage defaultMessage="Tracking Details" />
+                </Typography.Text>
+              }
+            >
+              <Descriptions bordered column={1} size="small">
+                {data?.stockRemovalRequest.tmid && (
+                  <Descriptions.Item
+                    label={intl.formatMessage({ defaultMessage: 'TMID' })}
+                  >
+                    {data.stockRemovalRequest.tmid}
+                  </Descriptions.Item>
+                )}
+                {data?.stockRemovalRequest.tracking && (
+                  <Descriptions.Item
+                    label={intl.formatMessage({
+                      defaultMessage: 'Tracking Number',
+                    })}
+                  >
+                    {data.stockRemovalRequest.tracking}
+                  </Descriptions.Item>
+                )}
+              </Descriptions>
+            </Card>
+          </Col>
+        )}
       </Row>
 
       <Divider />
@@ -1095,6 +1132,7 @@ const ViewStockRemovalRequest = ({ requestId }: Props) => {
                   </Col>
                 )}
               {currentUser?.id === approver.user.id &&
+                !isCreator &&
                 approver.status !==
                   StockRemovalRequestApprovalStatus.Approved &&
                 data.stockRemovalRequest.status ===
