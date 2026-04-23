@@ -1,3 +1,6 @@
+import type { UploadFile } from 'antd/es/upload/interface';
+
+import customRequest from '#/utils/custom-request';
 import { useMarkStockRemovalRequestAsPickedMutation } from '#/views/stock-removal-requests/components/ViewStockRemovalRequest/graphql/__generated__/mark-picked.generated';
 import {
   Button,
@@ -8,6 +11,7 @@ import {
   Modal,
   Row,
   Table,
+  Upload,
   notification,
 } from 'antd';
 import React, { useState } from 'react';
@@ -50,6 +54,7 @@ const MarkAsPickedModal = ({
   const intl = useIntl();
   const [form] = Form.useForm();
   const [submitting, setSubmitting] = useState(false);
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
 
   const [markAsPicked] = useMarkStockRemovalRequestAsPickedMutation();
 
@@ -65,14 +70,31 @@ const MarkAsPickedModal = ({
           pickedQuantity: (values[`picked_${item.id}`] as number) || 0,
         }));
 
+        const images = fileList
+          .filter((f) => f.status === 'done' && f.response)
+          .map((f) => {
+            const response = f.response as
+              | Array<{ blobName?: string; mimetype?: string; url?: string }>
+              | undefined;
+            const data = response?.[0];
+            return {
+              filename: data?.blobName ?? f.name ?? '',
+              mimetype: data?.mimetype ?? f.type ?? 'image/jpeg',
+              url: data?.url ?? '',
+            };
+          })
+          .filter((img) => img.url);
+
         // Build mutation data
         const mutationData: {
           id: string;
+          images?: { filename: string; mimetype: string; url: string }[];
           items: PickedItemFormData[];
           tmid?: string;
           tracking?: string;
         } = {
           id: requestId,
+          images: images.length > 0 ? images : undefined,
           items: pickedItems,
         };
 
@@ -96,6 +118,7 @@ const MarkAsPickedModal = ({
               placement: 'bottomRight',
             });
             form.resetFields();
+            setFileList([]);
             onClose();
           },
           onError: (error) => {
@@ -269,6 +292,31 @@ const MarkAsPickedModal = ({
                     })}
                     rows={3}
                   />
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row gutter={16}>
+              <Col span={24}>
+                <Form.Item
+                  label={intl.formatMessage({ defaultMessage: 'Images' })}
+                >
+                  <Upload
+                    accept=".png,.jpeg,.jpg,.webp"
+                    customRequest={customRequest}
+                    fileList={fileList}
+                    listType="picture-card"
+                    multiple
+                    onChange={({ fileList: newFileList }) =>
+                      setFileList(newFileList)
+                    }
+                  >
+                    {fileList.length >= 5 ? null : (
+                      // eslint-disable-next-line formatjs/no-literal-string-in-jsx
+                      <div>
+                        + {intl.formatMessage({ defaultMessage: 'Upload' })}
+                      </div>
+                    )}
+                  </Upload>
                 </Form.Item>
               </Col>
             </Row>

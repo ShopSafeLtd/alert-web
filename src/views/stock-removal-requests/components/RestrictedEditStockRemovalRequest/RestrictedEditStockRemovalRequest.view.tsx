@@ -57,11 +57,11 @@ const RestrictedEditStockRemovalRequest = ({ onClose, requestId }: Props) => {
     },
   });
 
-  const hasDeletePermission = useMemo(
+  const hasEditPermission = useMemo(
     () =>
       hasPermission({
         permission: {
-          method: PermissionMethod.Delete,
+          method: PermissionMethod.Edit,
           model: PermissionModel.StockRemovalRequests,
         },
         permissions,
@@ -74,8 +74,8 @@ const RestrictedEditStockRemovalRequest = ({ onClose, requestId }: Props) => {
     if (!requestData?.stockRemovalRequest || !currentUserId) return false;
     const isCreator =
       requestData.stockRemovalRequest.createdBy.id === currentUserId;
-    return isCreator || hasDeletePermission;
-  }, [requestData, currentUserId, hasDeletePermission]);
+    return isCreator || hasEditPermission;
+  }, [requestData, currentUserId, hasEditPermission]);
 
   // Check if current user is in DC group
   const isUserInDCGroup = useMemo(

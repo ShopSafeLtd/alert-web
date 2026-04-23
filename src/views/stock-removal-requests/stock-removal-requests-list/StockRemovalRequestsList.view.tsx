@@ -64,13 +64,16 @@ interface StockRemovalRequestTableData {
     userId: string;
   }[];
   businessId: string | undefined;
+  businessName: string | undefined;
   createdAt: Date;
   createdById: string;
+  createdByName: string;
   key: string;
   reference: null | number | undefined;
   requiresMyApproval: boolean;
   requiresPicking: boolean;
   status: StockRemovalRequestStatus;
+  storeOrDC: null | string | undefined;
   title: string;
 }
 
@@ -144,8 +147,7 @@ const StockRemovalRequestsList = () => {
 
   // Helper function to check if user can edit a request
   const canEditRequest = (createdById: string) =>
-    // User can edit if they created the request OR have delete permission
-    currentUser?.id === createdById || hasDeletePermission;
+    currentUser?.id === createdById || hasEditPermission;
 
   // Check if current user is in PAP group
   const isUserInPAPGroup = useMemo(
@@ -537,21 +539,6 @@ const StockRemovalRequestsList = () => {
                     defaultMessage: 'Picked',
                   })}
                 </Radio.Button>
-                <Radio.Button value={StockRemovalRequestStatus.Collected}>
-                  {intl.formatMessage({
-                    defaultMessage: 'Collected',
-                  })}
-                </Radio.Button>
-                <Radio.Button value={StockRemovalRequestStatus.AwaitingReturn}>
-                  {intl.formatMessage({
-                    defaultMessage: 'Returning',
-                  })}
-                </Radio.Button>
-                <Radio.Button value={StockRemovalRequestStatus.Returned}>
-                  {intl.formatMessage({
-                    defaultMessage: 'Returned',
-                  })}
-                </Radio.Button>
                 <Radio.Button value={StockRemovalRequestStatus.Closed}>
                   {intl.formatMessage({
                     defaultMessage: 'Closed',
@@ -642,6 +629,36 @@ const StockRemovalRequestsList = () => {
                   </Row>
                 ),
                 title: intl.formatMessage({ defaultMessage: 'Approvers' }),
+              },
+              {
+                dataIndex: 'createdByName',
+                key: 'createdByName',
+                title: intl.formatMessage({ defaultMessage: 'Requested By' }),
+              },
+              {
+                dataIndex: 'storeOrDC',
+                key: 'storeOrDC',
+                render: (
+                  value: null | string | undefined,
+                  record: StockRemovalRequestTableData
+                ) => {
+                  if (!value) return null;
+                  if (value === 'DC')
+                    return (
+                      <Tag color="blue">
+                        {intl.formatMessage({ defaultMessage: 'DC' })}
+                      </Tag>
+                    );
+                  const label = record.businessName
+                    ? intl.formatMessage(
+                        { defaultMessage: 'Store ({name})' },
+                        { name: record.businessName }
+                      )
+                    : intl.formatMessage({ defaultMessage: 'Store' });
+                  return <Tag color="green">{label}</Tag>;
+                },
+                title: intl.formatMessage({ defaultMessage: 'Location' }),
+                width: 180,
               },
               {
                 dataIndex: 'createdAt',
@@ -797,13 +814,16 @@ const StockRemovalRequestsList = () => {
                     userId: approver.user.id,
                   })),
                   businessId: node.business?.id,
+                  businessName: node.business?.name,
                   createdAt: node.createdAt,
                   createdById: node.createdBy.id,
+                  createdByName: node.createdBy.fullName,
                   key: node.id,
                   reference: node.reference,
                   requiresMyApproval,
                   requiresPicking,
                   status: node.status,
+                  storeOrDC: node.storeOrDC,
                   title: node.title,
                 };
               }

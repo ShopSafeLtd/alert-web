@@ -77,8 +77,7 @@ const useEditOffender = ({ offenderId, onClose }: Props): Return => {
   const formDataRef = useRef<FormData | null>(null);
 
   const { data: offenderData, loading } = useEditOffenderQuery({
-    // TODO remove and update cache - tmp fix for quick fix
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy: 'network-only',
     variables: {
       where: {
         id: offenderId,
@@ -152,36 +151,16 @@ const useEditOffender = ({ offenderId, onClose }: Props): Return => {
 
   const [updateOffenderDetails] = useUpdateOffenderDetailsMutation({
     onCompleted: () => {
-      // After updating basic details, update knownFor and targetedGoods separately
       const formData = formDataRef.current;
-      if (formData && (formData.knownFor || formData.targetedGoods)) {
-        void updateOffenderAdditionalFields({
-          variables: {
-            data: {
-              knownFor: formData.knownFor
-                ? { set: formData.knownFor }
-                : undefined,
-              targetedGoods: formData.targetedGoods
-                ? { set: formData.targetedGoods }
-                : undefined,
-            },
-            where: { id: offenderId },
+      void updateOffenderAdditionalFields({
+        variables: {
+          data: {
+            knownFor: { set: formData?.knownFor ?? [] },
+            targetedGoods: { set: formData?.targetedGoods ?? [] },
           },
-        });
-      } else {
-        // If no additional fields to update, just finish
-        setSaving(false);
-        notification.success({
-          description: intl.formatMessage({
-            defaultMessage: 'The offender has been updated!',
-          }),
-          message: intl.formatMessage({
-            defaultMessage: 'Successfully Updated',
-          }),
-          placement: 'bottomRight',
-        });
-        onClose();
-      }
+          where: { id: offenderId },
+        },
+      });
     },
     onError: () => {
       setSaving(false);

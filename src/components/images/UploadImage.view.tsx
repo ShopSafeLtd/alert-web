@@ -145,11 +145,8 @@ const UploadImage = ({
               listType="picture-card"
               onChange={imgChange}
             >
-              {fileList.length < 6 &&
-                // eslint-disable-next-line formatjs/no-literal-string-in-jsx
-                `+ ${intl.formatMessage({
-                  defaultMessage: 'Upload',
-                })}`}
+              {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
+              {`+ ${intl.formatMessage({ defaultMessage: 'Upload' })}`}
             </Upload>
           </Form.Item>
         </Col>

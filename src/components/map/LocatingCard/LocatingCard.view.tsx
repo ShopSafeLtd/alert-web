@@ -184,22 +184,20 @@ const LocatingCard = ({
     >
       {viewport || status === 'denied' ? (
         <>
-          {uneditable && (
-            <div
-              className={classes.mapOverlay}
-              onClick={toggleLargeOpen}
-              onKeyPress={toggleLargeOpen}
-              role="button"
-              tabIndex={-100}
-            >
-              <FontAwesomeIcon color="#FFF" icon={faArrowsMaximize} size="lg" />
-              <Text className={classes.mapText}>
-                {intl.formatMessage({
-                  defaultMessage: 'View Larger Map',
-                })}
-              </Text>
-            </div>
-          )}
+          <div
+            className={classes.mapOverlay}
+            onClick={toggleLargeOpen}
+            onKeyPress={toggleLargeOpen}
+            role="button"
+            tabIndex={-100}
+          >
+            <FontAwesomeIcon color="#FFF" icon={faArrowsMaximize} size="lg" />
+            <Text className={classes.mapText}>
+              {uneditable
+                ? intl.formatMessage({ defaultMessage: 'View Larger Map' })
+                : intl.formatMessage({ defaultMessage: 'Edit Location' })}
+            </Text>
+          </div>
 
           <Map
             mapboxAccessToken={import.meta.env.VITE_MAPBOX_ACCESS_TOKEN}
@@ -248,6 +246,7 @@ const LocatingCard = ({
             handleSubmit={onSubmit}
             onClose={toggleLargeOpen}
             open={largeOpen}
+            uneditable={uneditable}
             viewportData={
               viewport || {
                 latitude: 51.6,
