@@ -214,6 +214,7 @@ const Intel = ({
     }
     if (images.length === 1) {
       if (addToOffender && data?.incident.offenders) {
+        setSelectedImages([images[0].id]);
         if (data?.incident.offenders.length > 1) {
           setShowOffenderOptions(true);
         } else {
