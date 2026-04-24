@@ -146,8 +146,8 @@ const useDashboards = (): Return => {
         const oldRolesFormatted = oldRoles.node.roles.map(
           ({ id: oldId }) => oldId
         );
-        const rolesToRemove = oldRolesFormatted.filter((i) =>
-          roles.includes(i)
+        const rolesToRemove = oldRolesFormatted.filter(
+          (i) => !roles.includes(i)
         );
         rolesFormatted = {
           connect: roles.map((i) => ({ id: i })),
