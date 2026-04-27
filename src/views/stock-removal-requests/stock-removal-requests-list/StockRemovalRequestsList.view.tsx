@@ -315,16 +315,6 @@ const StockRemovalRequestsList = () => {
     } else if (statusFilter !== 'ALL') {
       // Filter by status
       where.status = [statusFilter as StockRemovalRequestStatus];
-    } else if (isUserInDCGroup) {
-      // DC users should only see approved statuses
-      where.status = [
-        StockRemovalRequestStatus.Picking,
-        StockRemovalRequestStatus.Picked,
-        StockRemovalRequestStatus.Collected,
-        StockRemovalRequestStatus.AwaitingReturn,
-        StockRemovalRequestStatus.Returned,
-        StockRemovalRequestStatus.Closed,
-      ];
     }
 
     // Search filter
@@ -333,14 +323,7 @@ const StockRemovalRequestsList = () => {
     }
 
     return where;
-  }, [
-    schemeId,
-    viewMode,
-    statusFilter,
-    returnStatusFilter,
-    searchQuery,
-    isUserInDCGroup,
-  ]);
+  }, [schemeId, viewMode, statusFilter, returnStatusFilter, searchQuery]);
 
   const { data } = useStockRemovalRequestsQuery({
     fetchPolicy: 'cache-and-network',
