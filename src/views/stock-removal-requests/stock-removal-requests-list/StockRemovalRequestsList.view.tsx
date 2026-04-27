@@ -347,29 +347,11 @@ const StockRemovalRequestsList = () => {
     },
   });
 
-  // Filter data on frontend for "My Requests" and DC users
+  // Filter data on frontend for "My Requests"
   const filteredData = useMemo(() => {
     if (!data?.stockRemovalRequests.edges) return undefined;
 
     let filteredEdges = data.stockRemovalRequests.edges;
-
-    // DC users should ONLY see DC-type requests in approved statuses
-    if (isUserInDCGroup) {
-      const approvedStatuses = new Set([
-        StockRemovalRequestStatus.Picking,
-        StockRemovalRequestStatus.Picked,
-        StockRemovalRequestStatus.Collected,
-        StockRemovalRequestStatus.AwaitingReturn,
-        StockRemovalRequestStatus.Returned,
-        StockRemovalRequestStatus.Closed,
-      ]);
-
-      filteredEdges = filteredEdges.filter(({ node }) => {
-        const isDCType = node.storeOrDC === 'DC';
-        const isApprovedStatus = approvedStatuses.has(node.status);
-        return isDCType && isApprovedStatus;
-      });
-    }
 
     // If "My Requests" filter is active, filter to only show:
     // 1. Requests created by the current user
@@ -391,7 +373,7 @@ const StockRemovalRequestsList = () => {
         totalCount: filteredEdges.length,
       },
     };
-  }, [data, creatorFilter, currentUser, isUserInDCGroup]);
+  }, [data, creatorFilter, currentUser]);
 
   // Returns table data
   const returnsData = useMemo(() => {
