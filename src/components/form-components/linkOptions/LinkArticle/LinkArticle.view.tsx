@@ -51,6 +51,7 @@ interface Props {
   lightBoxOpen: {
     index: number;
     open: boolean;
+    watermarkImage?: boolean;
   };
   loading: boolean;
   onSubmit: () => void;
