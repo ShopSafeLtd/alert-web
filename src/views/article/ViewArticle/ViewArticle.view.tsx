@@ -309,6 +309,7 @@ const ViewArticleView = ({
                           index
                         );
                       }}
+                      watermarkImage={data?.article.watermarkImage}
                     />
                   </div>
                 </Col>
@@ -480,11 +481,15 @@ const ViewArticleView = ({
         index={lightBoxOpen.index}
         open={lightBoxOpen.open}
         plugins={[Zoom]}
-        render={{
-          slide: (slide: WatermarkSlideType) => (
-            <WatermarkSlide slide={slide} />
-          ),
-        }}
+        render={
+          data?.article.watermarkImage
+            ? {
+                slide: (slide: WatermarkSlideType) => (
+                  <WatermarkSlide slide={slide} />
+                ),
+              }
+            : undefined
+        }
         slides={lightboxElements}
       />
     </>

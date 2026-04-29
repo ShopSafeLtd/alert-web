@@ -208,7 +208,7 @@ const useEditOffender = ({
         hair: value.hair || null,
         height: value.height || null,
         idSource: value.idSource || undefined,
-        idVerified: value.idVerified,
+        idVerified: !!value.idVerified,
         images: imageData,
         infoSource: value.infoSource || null,
         justification: value.justification || null,
@@ -219,7 +219,7 @@ const useEditOffender = ({
         race: value.race || null,
         sourceDetails: value.sourceDetails || null,
         targetedGoods: value.targetedGoods,
-        wanted: value.wanted,
+        wanted: !!value.wanted,
       });
     } else {
       void updateOffender({
@@ -233,6 +233,7 @@ const useEditOffender = ({
             gender: { set: value.gender || null },
             hair: { set: value.hair || 'Unknown' },
             height: { set: value.height || null },
+            idVerified: { set: !!value.idVerified },
             //   : undefined,
             images:
               value.images && value.images.length > 0
@@ -276,8 +277,6 @@ const useEditOffender = ({
             name: { set: value.name },
             peculiarities: { set: value.peculiarities || '' },
             race: { set: value.race || null },
-            //     }
-            targetedGoods: { set: value.targetedGoods },
             // addresses: value.knowAddress
             //   ? {
             //       upsert: [
@@ -301,8 +300,10 @@ const useEditOffender = ({
             //             postcode: value.postcode,
             //           },
             //         },
+            //     }
+            targetedGoods: { set: value.targetedGoods },
             //       ],
-            wanted: { set: value.wanted },
+            wanted: { set: !!value.wanted },
           },
           where: {
             id: data.id,

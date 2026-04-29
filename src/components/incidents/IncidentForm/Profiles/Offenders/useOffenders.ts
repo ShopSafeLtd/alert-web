@@ -199,6 +199,7 @@ const useOffenders = ({ form, onChange, value }: Props): Return => {
 
   const onUpdateOffender = (newData: AddOffenderData) => {
     const currentData = offenders.find(({ id }) => id === newData.id);
+
     if (currentData)
       setOffenders(
         update<StateOffenderData[]>(offenders, {
@@ -228,6 +229,7 @@ const useOffenders = ({ form, onChange, value }: Props): Return => {
               peculiarities: newData.peculiarities,
               race: newData.race,
               targetedGoods: newData.targetedGoods,
+              wanted: newData.wanted,
             },
           },
         })
@@ -403,6 +405,7 @@ const useOffenders = ({ form, onChange, value }: Props): Return => {
                 offenderOne.peculiarities || offenderTwo.peculiarities,
               race: offenderOne.race,
               reference: offenderOne.reference,
+              wanted: offenderOne.wanted,
             },
           },
         }).filter(({ id }) => id !== offenderTwo.id)

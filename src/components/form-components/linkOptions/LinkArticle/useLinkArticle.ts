@@ -31,10 +31,11 @@ interface Return {
   lightBoxOpen: {
     index: number;
     open: boolean;
+    watermarkImage?: boolean;
   };
   loading: boolean;
   onSubmit: () => void;
-  openLightbox: (index: number) => void;
+  openLightbox: (index: number, watermarkImage?: boolean) => void;
   selectedArticle: ArticleData | undefined;
   setCreatedAtFilter: (value: DateType | undefined) => void;
   setGroupsFilter: (value: string[]) => void;
@@ -67,6 +68,7 @@ const useLinkArticle = ({ articleIds, onClose, update }: Props): Return => {
   const [lightBoxOpen, setLightBoxOpen] = useState({
     index: 0,
     open: false,
+    watermarkImage: true,
   });
   const variables = {
     order: {
@@ -162,8 +164,12 @@ const useLinkArticle = ({ articleIds, onClose, update }: Props): Return => {
     onClose();
   };
 
-  const openLightbox = (index: number) => {
-    setLightBoxOpen({ index, open: !lightBoxOpen.open });
+  const openLightbox = (index: number, watermarkImage?: boolean) => {
+    setLightBoxOpen({
+      index,
+      open: !lightBoxOpen.open,
+      watermarkImage: watermarkImage ?? true,
+    });
   };
 
   // filter function

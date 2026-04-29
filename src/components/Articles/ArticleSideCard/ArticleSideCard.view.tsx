@@ -42,6 +42,7 @@ const ArticleSideCard = ({ article }: Props): JSX.Element => {
             <div className={classes.image}>
               <WatermarkImage
                 position={images[0]?.position}
+                showWatermark={article?.watermarkImage}
                 url={images[0]?.optimised || images[0]?.url || ''}
               />
             </div>
