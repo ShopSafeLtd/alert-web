@@ -112,6 +112,7 @@ const UserProvider = ({ children }: Props) => {
   const hasFetched = useRef(false);
   const navigate = useNavigate();
   const { setScheme } = useSchemeProvider();
+  // eslint-disable-next-line   @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
   const { isLoaded, isSignedIn } = useUser();
   const { getToken, token } = useTokenContext();
   const { signOut } = useSignOut();
@@ -162,9 +163,6 @@ const UserProvider = ({ children }: Props) => {
         }
       }
       if (data.currentUser) {
-        console.log('currentUser', data.currentUser);
-        console.log('currentUserId', data.currentUser.id);
-
         Mixpanel.identify(data.currentUser.id);
         Mixpanel.people.set({
           businessId: data.currentUser.businesses[0]?.id || '',

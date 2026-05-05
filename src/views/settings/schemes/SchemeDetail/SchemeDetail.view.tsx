@@ -587,7 +587,7 @@ const SchemeDetail = ({
             <Form.Item
               label={intl.formatMessage({
                 defaultMessage:
-                  'Allow users to report(no access to view any content)',
+                  'Allow users to report (no access to view any content)',
               })}
               name="reportOnly"
               style={{ marginBottom: 0 }}
@@ -600,21 +600,6 @@ const SchemeDetail = ({
               />
             </Form.Item>
 
-            <Form.Item
-              label={intl.formatMessage({
-                defaultMessage:
-                  'Allow users to search for business by site number',
-              })}
-              name="reportOnly"
-              style={{ marginBottom: 0 }}
-              valuePropName="checked"
-            >
-              <Switch
-                className="scheme-detail-switch"
-                disabled={saving}
-                style={{ marginLeft: 5 }}
-              />
-            </Form.Item>
             <Form.Item
               label={intl.formatMessage({
                 defaultMessage: 'Allow activities to be assigned to users',

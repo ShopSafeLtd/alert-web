@@ -4,10 +4,9 @@ import type { FormInstance } from 'antd';
 
 import IncidentTypesSelect from '#/components/form-components/IncidentTypesSelect/IncidentTypesSelect.view';
 import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
-import { Button, Col, Form, Input, Radio, Row, Select, Skeleton } from 'antd';
-import dayjs from 'dayjs';
+import { Button, Col, Form, Input, Row, Select, Skeleton } from 'antd';
 import { useAtomValue } from 'jotai/index';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useIntl } from 'react-intl';
 
 import type { ImageData } from '../../ImageSelect/ImageSelectAnalyse.view';
@@ -21,6 +20,7 @@ interface Props {
   ageCheck: boolean | undefined;
   data: OffenderData;
   form: FormInstance<FormData>;
+
   idVerified: boolean | undefined;
   images?: ImageData[];
   knowAddress: boolean | undefined;
@@ -65,49 +65,45 @@ const EditOffender = ({
     : images;
   const idSource = Form.useWatch('idSource', form);
 
+  useEffect(() => {
+    form.setFieldsValue({
+      addressAlias: data.address?.alias || '',
+      age: data.age || undefined,
+      ageCheck: !!data.dateOfBirth,
+      alias: data.alias || [],
+      build: data.build || undefined,
+      building: data.address?.building || '',
+      comment: data.comment || '',
+      county: data.address?.county || '',
+      dateOfBirth: data.dateOfBirth ? new Date(data.dateOfBirth) : undefined,
+      dateSource: data.dateSource || undefined,
+      gender: data.gender || undefined,
+      hair: data.hair || undefined,
+      height: data.height || undefined,
+      idSource: data.idSource || undefined,
+      idVerified: data.idVerified ?? undefined,
+      images: data.images || undefined,
+      infoSource: data.infoSource || '',
+      justification: data.justification || '',
+      knowAddress: data.knowAddress || false,
+      knownFor: data.knownFor || [],
+      name: data.name || undefined,
+      peculiarities: data.peculiarities || undefined,
+      postcode: data.address?.postcode || '',
+      race: data.race || undefined,
+      sourceDetails: data.sourceDetails || '',
+      street: data.address?.street || '',
+      targetedGoods: data.targetedGoods || [],
+      townCity: data.address?.townCity || '',
+      wanted: data.wanted ?? false,
+    });
+  }, [data]);
   return (
     <div className="list-view">
       {loading ? (
         <Skeleton />
       ) : (
-        <Form<FormData>
-          form={form}
-          initialValues={{
-            addressAlias: data.address?.alias || '',
-            age: data.age || null,
-            ageCheck: !!data.dateOfBirth,
-            alias: data.alias || [],
-            build: data.build || null,
-            building: data.address?.building || '',
-            comment: data.comment || null,
-            county: data.address?.county || '',
-            dateOfBirth: data.dateOfBirth
-              ? dayjs(data.dateOfBirth, 'YYYY-MM-DD').toDate()
-              : null,
-            dateSource: data.dateSource || null,
-            gender: data.gender || null,
-            hair: data.hair || null,
-            height: data.height || null,
-            idSource: data.idSource || null,
-            idVerified: data.idVerified || null,
-            images: data.images || null,
-            infoSource: data.infoSource || '',
-            justification: data.justification || '',
-            knowAddress: data.knowAddress || false,
-            knownFor: data.knownFor || [],
-            name: data.name || null,
-            peculiarities: data.peculiarities || null,
-            postcode: data.address?.postcode || '',
-            race: data.race || null,
-            sourceDetails: data.sourceDetails || '',
-            street: data.address?.street || '',
-            targetedGoods: data.targetedGoods || [],
-            townCity: data.address?.townCity || '',
-            wanted: data.wanted || null,
-          }}
-          layout="vertical"
-          onFinish={onSubmit}
-        >
+        <Form form={form} layout="vertical" onFinish={onSubmit}>
           <OffenderFormDetails
             ageCheck={ageCheck}
             idSource={idSource}
@@ -180,31 +176,7 @@ const EditOffender = ({
                 </Form.Item>
               </Col>
             )}
-            <Row>
-              <Col>
-                <Form.Item
-                  label={intl.formatMessage({
-                    defaultMessage: 'Offender wanted?',
-                  })}
-                  name="wanted"
-                  // tooltip={intl.formatMessage({
-                  //   defaultMessage:
-                  //     'Have you confirmed the offenders ID using an accepted method?',
-                  // })}
-                >
-                  <Radio.Group disabled={saving}>
-                    <Radio.Button value>
-                      {intl.formatMessage({
-                        defaultMessage: 'Yes',
-                      })}
-                    </Radio.Button>
-                    <Radio.Button value={false}>
-                      {intl.formatMessage({ defaultMessage: 'No' })}
-                    </Radio.Button>
-                  </Radio.Group>
-                </Form.Item>
-              </Col>
-            </Row>
+
             {(needJustification || data.justification) && (
               <Col span={23}>
                 <Form.Item
