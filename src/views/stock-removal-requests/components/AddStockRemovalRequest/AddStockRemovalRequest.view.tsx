@@ -21,7 +21,11 @@ import {
   notification,
 } from 'antd';
 import { useListStockRemovalReasonOptionsQuery } from 'graphql/stock-removal-reasons/queries/__generated__/list-stock-removal-reason-options.generated';
-import { SortOrder } from 'graphql/types';
+import {
+  SortOrder,
+  StockRemovalPriority,
+  StockRemovalRquestDestination,
+} from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
 import React, { useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
@@ -37,9 +41,10 @@ export interface FormData {
   businessId?: string[];
   costCentreCode?: string;
   description: string;
-  fascia: string;
+  destination?: StockRemovalRquestDestination;
   items: {
     goodsType?: string;
+    location?: string;
     name?: string;
     quantity?: number;
     recoveredQuantity?: number;
@@ -48,7 +53,10 @@ export interface FormData {
     stockItem?: string;
     value?: number;
   }[];
+  nominalCode?: string;
   personalityInfluences: 'No' | 'Yes';
+  pickerId?: string;
+  priority: StockRemovalPriority;
   reason: string;
   reasonForNonReturn: string;
   rechargeBrand: 'No' | 'Yes';
@@ -68,6 +76,18 @@ export interface FormData {
   title: string;
   willStockBeReturned: 'No' | 'Yes';
 }
+
+const DESTINATION_OPTIONS = [
+  {
+    label: 'International',
+    value: StockRemovalRquestDestination.International,
+  },
+  { label: 'EU', value: StockRemovalRquestDestination.Eu },
+  { label: 'UK', value: StockRemovalRquestDestination.Uk },
+  { label: 'Outdoor', value: StockRemovalRquestDestination.Outdoor },
+  { label: 'Customer Care', value: StockRemovalRquestDestination.CustomerCare },
+  { label: 'Head Office', value: StockRemovalRquestDestination.HeadOffice },
+];
 
 const APPROVER_GROUP_ID = 'cmg9nfl260017ityalcaluw9r';
 
@@ -136,6 +156,9 @@ const AddStockRemovalRequest = ({ onClose }: Props) => {
                     fullName: '',
                     id: currentUserId || '',
                   },
+                  destination: null,
+                  picker: null,
+                  priority: StockRemovalPriority.Low,
                 },
               },
               ...existingData.stockRemovalRequests.edges,
@@ -197,12 +220,16 @@ const AddStockRemovalRequest = ({ onClose }: Props) => {
           businessId: values.businessId?.at(0) ?? '',
           costCentreCode: values.costCentreCode,
           description: values.description,
-          fascia: values.fascia,
+          destination: values.destination,
           items: values.items.map((i) => ({
             itemId: i.stockItem ?? '',
+            location: i.location,
             quantity: i.quantity ?? 0,
           })),
+          nominalCode: values.nominalCode,
           personalityInfluences: values.personalityInfluences,
+          pickerId: values.pickerId,
+          priority: values.priority,
           reason: values.reason,
           reasonForNonReturn: values.reasonForNonReturn,
           rechargeBrand: values.rechargeBrand,
@@ -228,7 +255,12 @@ const AddStockRemovalRequest = ({ onClose }: Props) => {
   };
 
   return (
-    <Form<FormData> form={form} layout="vertical" onFinish={onFinish}>
+    <Form<FormData>
+      form={form}
+      initialValues={{ priority: StockRemovalPriority.Medium }}
+      layout="vertical"
+      onFinish={onFinish}
+    >
       <Row>
         <Col span={24}>
           <Form.Item
@@ -256,6 +288,26 @@ const AddStockRemovalRequest = ({ onClose }: Props) => {
       <Row>
         <Col>
           <Form.Item
+            label={intl.formatMessage({ defaultMessage: 'Priority' })}
+            name="priority"
+          >
+            <Radio.Group disabled={saving}>
+              <Radio.Button value={StockRemovalPriority.High}>
+                <FormattedMessage defaultMessage="High" />
+              </Radio.Button>
+              <Radio.Button value={StockRemovalPriority.Medium}>
+                <FormattedMessage defaultMessage="Medium" />
+              </Radio.Button>
+              <Radio.Button value={StockRemovalPriority.Low}>
+                <FormattedMessage defaultMessage="Low" />
+              </Radio.Button>
+            </Radio.Group>
+          </Form.Item>
+        </Col>
+      </Row>
+      <Row gutter={16}>
+        <Col>
+          <Form.Item
             label={intl.formatMessage({ defaultMessage: 'Reason For Removal' })}
             name="reason"
             rules={[
@@ -272,6 +324,19 @@ const AddStockRemovalRequest = ({ onClose }: Props) => {
               loading={reasonOptionsLoading}
               options={reasonOptions}
               style={{ width: 350 }}
+            />
+          </Form.Item>
+        </Col>
+        <Col>
+          <Form.Item
+            label={intl.formatMessage({ defaultMessage: 'Destination' })}
+            name="destination"
+          >
+            <Select
+              allowClear
+              disabled={saving}
+              options={DESTINATION_OPTIONS}
+              style={{ width: 200 }}
             />
           </Form.Item>
         </Col>
@@ -336,6 +401,14 @@ const AddStockRemovalRequest = ({ onClose }: Props) => {
                   defaultMessage: 'Recipient Phone',
                 })}
                 name="recipientPhone"
+                rules={[
+                  {
+                    message: intl.formatMessage({
+                      defaultMessage: 'This is a required field.',
+                    }),
+                    required: true,
+                  },
+                ]}
               >
                 <Input disabled={saving} />
               </Form.Item>
@@ -347,6 +420,12 @@ const AddStockRemovalRequest = ({ onClose }: Props) => {
                 })}
                 name="recipientEmail"
                 rules={[
+                  {
+                    message: intl.formatMessage({
+                      defaultMessage: 'This is a required field.',
+                    }),
+                    required: true,
+                  },
                   {
                     message: intl.formatMessage({
                       defaultMessage: 'Please enter a valid email',
@@ -463,8 +542,8 @@ const AddStockRemovalRequest = ({ onClose }: Props) => {
             </Radio.Group>
           </Form.Item>
         </Col>
-        <Col span={12}>
-          {rechargeBrand === 'Yes' && (
+        {rechargeBrand === 'Yes' && (
+          <Col span={12}>
             <Form.Item
               label={intl.formatMessage({
                 defaultMessage: 'Enter Brand Recharge Reference',
@@ -481,11 +560,15 @@ const AddStockRemovalRequest = ({ onClose }: Props) => {
             >
               <Input />
             </Form.Item>
-          )}
-          {rechargeBrand === 'No' && (
+          </Col>
+        )}
+      </Row>
+      {rechargeBrand === 'No' && (
+        <Row gutter={16}>
+          <Col span={12}>
             <Form.Item
               label={intl.formatMessage({
-                defaultMessage: 'Enter Cost Centre/Nominal Budget code ',
+                defaultMessage: 'Cost Centre',
               })}
               name="costCentreCode"
               rules={[
@@ -495,21 +578,31 @@ const AddStockRemovalRequest = ({ onClose }: Props) => {
                   }),
                   required: true,
                 },
+              ]}
+            >
+              <Input disabled={saving} />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item
+              label={intl.formatMessage({
+                defaultMessage: 'Nominal Code',
+              })}
+              name="nominalCode"
+              rules={[
                 {
                   message: intl.formatMessage({
-                    defaultMessage:
-                      'Cost centre code must be in format 0000-000000 (4 digits, dash, 6 digits)',
+                    defaultMessage: 'This is a required field.',
                   }),
-                  pattern: /^\d{4}-\d{6}$/,
+                  required: true,
                 },
               ]}
             >
-              {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
-              <Input maxLength={11} placeholder="0000-000000" />
+              <Input disabled={saving} />
             </Form.Item>
-          )}
-        </Col>
-      </Row>
+          </Col>
+        </Row>
+      )}
       <Row>
         <Col span={12}>
           <Form.Item
@@ -622,67 +715,6 @@ const AddStockRemovalRequest = ({ onClose }: Props) => {
           </Col>
         )}
       </Row>
-      <Row>
-        <Col span={12}>
-          <Form.Item
-            label={intl.formatMessage({ defaultMessage: 'Fascia' })}
-            name="fascia"
-            rules={[
-              {
-                message: intl.formatMessage({
-                  defaultMessage: 'This is a required field.',
-                }),
-                required: true,
-              },
-            ]}
-          >
-            <Select
-              disabled={saving}
-              options={[
-                { label: 'Alpine Bikes', value: 'Alpine Bikes' },
-                { label: 'Bertie', value: 'Bertie' },
-                {
-                  label: 'Blacks',
-                  value: 'Blacks',
-                },
-                { label: 'Champion', value: 'Champion' },
-                { label: 'Chausport', value: 'Chausport' },
-                { label: 'City Gear', value: 'City Gear' },
-                { label: 'Cosmos', value: 'Cosmos' },
-                { label: 'DeporVillage', value: 'DeporVillage' },
-                { label: 'DTLR', value: 'DTLR' },
-                { label: 'Finish Line', value: 'Finish Line' },
-                { label: 'Fishing Republic', value: 'Fishing Republic' },
-                { label: 'Footpatrol', value: 'Footpatrol' },
-                { label: 'George Fisher', value: 'George Fisher' },
-                { label: 'Go Express', value: 'Go Express' },
-                { label: 'Go Outdoors', value: 'Go Outdoors' },
-                { label: 'Hibbett', value: 'Hibbett' },
-                { label: 'JD', value: 'JD' },
-                { label: 'JD Gym', value: 'JD Gym' },
-                { label: 'Kukri', value: 'Kukri' },
-                { label: 'Livestock', value: 'Livestock' },
-                { label: 'Macys', value: 'Macys' },
-                { label: 'Naylors', value: 'Naylors' },
-                { label: 'Nice Kicks', value: 'Nice Kicks' },
-                { label: 'Oi Polloi', value: 'Oi Polloi' },
-                { label: 'Shoe Palace', value: 'Shoe Palace' },
-                { label: 'Size', value: 'Size' },
-                { label: 'Sport Zone', value: 'Sport Zone' },
-                { label: 'Sports Factory', value: 'Sports Factory' },
-                { label: 'Sprinter', value: 'Sprinter' },
-                { label: 'The Couture Club', value: 'The Couture Club' },
-                { label: 'The HIP Store', value: 'The HIP Store' },
-                { label: 'Tiso', value: 'Tiso' },
-                { label: 'Ultimate Outdoors', value: 'Ultimate Outdoors' },
-                { label: 'WellGosh', value: 'WellGosh' },
-                { label: 'Woodhouse Clothing', value: 'Woodhouse Clothing' },
-              ]}
-              style={{ width: 350 }}
-            />
-          </Form.Item>
-        </Col>
-      </Row>
       <Row gutter={16}>
         <Col span={12}>
           <Form.Item
@@ -724,6 +756,14 @@ const AddStockRemovalRequest = ({ onClose }: Props) => {
               }}
               showSearch
             />
+          </Form.Item>
+        </Col>
+        <Col span={12}>
+          <Form.Item
+            label={intl.formatMessage({ defaultMessage: 'Picker' })}
+            name="pickerId"
+          >
+            <UsersSelect allowClear showSearch />
           </Form.Item>
         </Col>
       </Row>

@@ -14,6 +14,7 @@ interface Props {
   division: string | undefined;
   goods: {
     goodsType?: string;
+    location?: string;
     name?: string;
     quantity?: number;
     recoveredQuantity?: number;
@@ -197,6 +198,21 @@ const IncidentGoods = ({ division, goods, onAddItem }: Props) => {
                         precision={0}
                         style={{ width: 150 }}
                       />
+                    </Form.Item>
+                  </Col>
+                  <Col>
+                    <Form.Item
+                      {...restField}
+                      label={
+                        index
+                          ? ''
+                          : intl.formatMessage({
+                              defaultMessage: 'Location (Office Use Only)',
+                            })
+                      }
+                      name={[name, 'location']}
+                    >
+                      <Input style={{ width: 200 }} />
                     </Form.Item>
                   </Col>
                 </>

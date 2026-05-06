@@ -28,9 +28,15 @@ import {
   notification,
 } from 'antd';
 import { useListStockRemovalReasonOptionsQuery } from 'graphql/stock-removal-reasons/queries/__generated__/list-stock-removal-reason-options.generated';
-import { PermissionMethod, PermissionModel, SortOrder } from 'graphql/types';
+import {
+  PermissionMethod,
+  PermissionModel,
+  SortOrder,
+  StockRemovalPriority,
+  StockRemovalRquestDestination,
+} from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import StockRemovalGoods from '../StockRemovalGoods/StockRemovalGoods.container';
@@ -45,9 +51,10 @@ export interface FormData {
   businessId?: string[];
   costCentreCode?: string;
   description: string;
-  fascia: string;
+  destination?: StockRemovalRquestDestination;
   items: {
     goodsType?: string;
+    location?: string;
     name?: string;
     quantity?: number;
     recoveredQuantity?: number;
@@ -56,7 +63,10 @@ export interface FormData {
     stockItem?: string;
     value?: number;
   }[];
+  nominalCode?: string;
   personalityInfluences: 'No' | 'Yes';
+  pickerId?: string;
+  priority: StockRemovalPriority;
   reason: string;
   reasonForNonReturn: string;
   rechargeBrand: 'No' | 'Yes';
@@ -77,6 +87,18 @@ export interface FormData {
   willStockBeReturned: 'No' | 'Yes';
 }
 
+const DESTINATION_OPTIONS = [
+  {
+    label: 'International',
+    value: StockRemovalRquestDestination.International,
+  },
+  { label: 'EU', value: StockRemovalRquestDestination.Eu },
+  { label: 'UK', value: StockRemovalRquestDestination.Uk },
+  { label: 'Outdoor', value: StockRemovalRquestDestination.Outdoor },
+  { label: 'Customer Care', value: StockRemovalRquestDestination.CustomerCare },
+  { label: 'Head Office', value: StockRemovalRquestDestination.HeadOffice },
+];
+
 const APPROVER_GROUP_ID = 'cmg9nfl260017ityalcaluw9r';
 const DC_GROUP_ID = 'cmgfd4l4r0000it3n4u2eckmf';
 
@@ -93,6 +115,7 @@ const EditStockRemovalRequest = ({ onClose, requestId }: Props) => {
   const [originalItems, setOriginalItems] = useState<
     Array<{ quantity: number; stockItem: string }>
   >([]);
+  const hasInitialized = useRef(false);
 
   const { data: requestData, loading } = useStockRemovalRequestQuery({
     variables: {
@@ -166,23 +189,28 @@ const EditStockRemovalRequest = ({ onClose, requestId }: Props) => {
   }, [requestData, canEditRequest, intl]);
 
   useEffect(() => {
-    if (requestData?.stockRemovalRequest) {
+    if (requestData?.stockRemovalRequest && !hasInitialized.current) {
+      hasInitialized.current = true;
       const request = requestData.stockRemovalRequest;
       form.setFieldsValue({
         approvers: request.approvers.map((a) => a.user.id),
         businessId: request.business?.id ? [request.business.id] : undefined,
         costCentreCode: request.costCentreCode ?? undefined,
         description: request.description ?? '',
-        fascia: request.fascia ?? '',
+        destination: request.destination ?? undefined,
         items: request.items.map((item) => ({
+          location: item.location ?? undefined,
           name: item.name ?? undefined,
           quantity: item.requestedQuantity ?? undefined,
           sku: item.sku ?? undefined,
           stockItem: item.id,
           value: item.value ?? undefined,
         })),
+        nominalCode: request.nominalCode ?? undefined,
         personalityInfluences:
           (request.personalityInfluences as 'No' | 'Yes') ?? 'No',
+        pickerId: request.picker?.id ?? undefined,
+        priority: request.priority ?? StockRemovalPriority.Medium,
         reason: request.reason ?? '',
         reasonForNonReturn: request.reasonForNonReturn ?? '',
         rechargeBrand: (request.rechargeBrand as 'No' | 'Yes') ?? 'No',
@@ -289,6 +317,7 @@ const EditStockRemovalRequest = ({ onClose, requestId }: Props) => {
       .filter((item) => item.stockItem && !originalItemIds.has(item.stockItem))
       .map((item) => ({
         itemId: item.stockItem ?? '',
+        location: item.location,
         quantity: item.quantity ?? 0,
       }));
 
@@ -306,6 +335,7 @@ const EditStockRemovalRequest = ({ onClose, requestId }: Props) => {
       .filter((item) => item.stockItem && originalItemIds.has(item.stockItem))
       .map((item) => ({
         id: item.stockItem ?? '',
+        location: item.location,
         quantity: item.quantity ?? 0,
       }));
 
@@ -343,8 +373,11 @@ const EditStockRemovalRequest = ({ onClose, requestId }: Props) => {
           createItems: createItems.length > 0 ? createItems : undefined,
           deleteItems: deleteItems.length > 0 ? deleteItems : undefined,
           description: values.description,
-          fascia: values.fascia,
+          destination: values.destination,
+          nominalCode: values.nominalCode,
           personalityInfluences: values.personalityInfluences,
+          pickerId: values.pickerId,
+          priority: values.priority,
           reason: values.reason,
           reasonForNonReturn: values.reasonForNonReturn,
           rechargeBrand: values.rechargeBrand,
@@ -383,7 +416,15 @@ const EditStockRemovalRequest = ({ onClose, requestId }: Props) => {
   }
 
   return (
-    <Form<FormData> form={form} layout="vertical" onFinish={onFinish}>
+    <Form<FormData>
+      form={form}
+      initialValues={{
+        priority: StockRemovalPriority.Medium,
+        storeOrDC: 'Store',
+      }}
+      layout="vertical"
+      onFinish={onFinish}
+    >
       <Row>
         <Col span={24}>
           <Form.Item
@@ -411,6 +452,26 @@ const EditStockRemovalRequest = ({ onClose, requestId }: Props) => {
       <Row>
         <Col>
           <Form.Item
+            label={intl.formatMessage({ defaultMessage: 'Priority' })}
+            name="priority"
+          >
+            <Radio.Group disabled={saving}>
+              <Radio.Button value={StockRemovalPriority.High}>
+                <FormattedMessage defaultMessage="High" />
+              </Radio.Button>
+              <Radio.Button value={StockRemovalPriority.Medium}>
+                <FormattedMessage defaultMessage="Medium" />
+              </Radio.Button>
+              <Radio.Button value={StockRemovalPriority.Low}>
+                <FormattedMessage defaultMessage="Low" />
+              </Radio.Button>
+            </Radio.Group>
+          </Form.Item>
+        </Col>
+      </Row>
+      <Row gutter={16}>
+        <Col>
+          <Form.Item
             label={intl.formatMessage({ defaultMessage: 'Reason For Removal' })}
             name="reason"
             rules={[
@@ -427,6 +488,19 @@ const EditStockRemovalRequest = ({ onClose, requestId }: Props) => {
               loading={reasonOptionsLoading}
               options={reasonOptions}
               style={{ width: 350 }}
+            />
+          </Form.Item>
+        </Col>
+        <Col>
+          <Form.Item
+            label={intl.formatMessage({ defaultMessage: 'Destination' })}
+            name="destination"
+          >
+            <Select
+              allowClear
+              disabled={saving}
+              options={DESTINATION_OPTIONS}
+              style={{ width: 200 }}
             />
           </Form.Item>
         </Col>
@@ -457,140 +531,202 @@ const EditStockRemovalRequest = ({ onClose, requestId }: Props) => {
             </Radio.Group>
           </Form.Item>
         </Col>
-        {storeOrDC === 'Store' && (
-          <Col span={12}>
-            <Form.Item
-              label={intl.formatMessage({ defaultMessage: 'Select the store' })}
-              name="businessId"
-              rules={[
-                {
-                  message: intl.formatMessage({
-                    defaultMessage: 'Please select a business',
-                  }),
-                  required: true,
-                },
-              ]}
-            >
-              <BusinessesSelect disabled={saving} maxTagCount={1} showSearch />
-            </Form.Item>
-          </Col>
-        )}
-        {storeOrDC === 'DC' && (
-          <>
-            <Col span={12}>
-              <Form.Item
-                label={intl.formatMessage({ defaultMessage: 'Recipient Name' })}
-                name="recipientName"
-              >
-                <Input disabled={saving} />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item
-                label={intl.formatMessage({
-                  defaultMessage: 'Recipient Phone',
-                })}
-                name="recipientPhone"
-              >
-                <Input disabled={saving} />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item
-                label={intl.formatMessage({
-                  defaultMessage: 'Recipient Email',
-                })}
-                name="recipientEmail"
-                rules={[
-                  {
-                    message: intl.formatMessage({
-                      defaultMessage: 'Please enter a valid email',
-                    }),
-                    type: 'email',
-                  },
-                ]}
-              >
-                <Input disabled={saving} />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item
-                label={intl.formatMessage({
-                  defaultMessage: 'Address Line 1',
-                })}
-                name="shippingAddressLine1"
-                rules={[
-                  {
-                    message: intl.formatMessage({
-                      defaultMessage: 'Please provide an address',
-                    }),
-                    required: true,
-                  },
-                ]}
-              >
-                <Input disabled={saving} />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item
-                label={intl.formatMessage({
-                  defaultMessage: 'Address Line 2',
-                })}
-                name="shippingAddressLine2"
-              >
-                <Input disabled={saving} />
-              </Form.Item>
-            </Col>
-            <Col span={8}>
-              <Form.Item
-                label={intl.formatMessage({ defaultMessage: 'City' })}
-                name="shippingCity"
-                rules={[
-                  {
-                    message: intl.formatMessage({
-                      defaultMessage: 'Please provide a city',
-                    }),
-                    required: true,
-                  },
-                ]}
-              >
-                <Input disabled={saving} />
-              </Form.Item>
-            </Col>
-            <Col span={8}>
-              <Form.Item
-                label={intl.formatMessage({ defaultMessage: 'County' })}
-                name="shippingCounty"
-              >
-                <Input disabled={saving} />
-              </Form.Item>
-            </Col>
-            <Col span={8}>
-              <Form.Item
-                label={intl.formatMessage({ defaultMessage: 'Postcode' })}
-                name="shippingPostcode"
-                rules={[
-                  {
-                    message: intl.formatMessage({
-                      defaultMessage: 'Please provide a postcode',
-                    }),
-                    required: true,
-                  },
-                ]}
-              >
-                <Input disabled={saving} />
-              </Form.Item>
-            </Col>
-            <Col span={8}>
-              <Form.Item
-                label={intl.formatMessage({ defaultMessage: 'Country' })}
-                name="shippingCountry"
-              >
-                <Input disabled={saving} />
-              </Form.Item>
-            </Col>
-          </>
-        )}
+        <Col
+          span={12}
+          style={{ display: storeOrDC === 'Store' ? undefined : 'none' }}
+        >
+          <Form.Item
+            label={intl.formatMessage({ defaultMessage: 'Select the store' })}
+            name="businessId"
+            rules={
+              storeOrDC === 'Store'
+                ? [
+                    {
+                      message: intl.formatMessage({
+                        defaultMessage: 'Please select a business',
+                      }),
+                      required: true,
+                    },
+                  ]
+                : []
+            }
+          >
+            <BusinessesSelect disabled={saving} maxTagCount={1} showSearch />
+          </Form.Item>
+        </Col>
+        <Col
+          span={12}
+          style={{ display: storeOrDC === 'DC' ? undefined : 'none' }}
+        >
+          <Form.Item
+            label={intl.formatMessage({ defaultMessage: 'Recipient Name' })}
+            name="recipientName"
+          >
+            <Input disabled={saving} />
+          </Form.Item>
+        </Col>
+        <Col
+          span={12}
+          style={{ display: storeOrDC === 'DC' ? undefined : 'none' }}
+        >
+          <Form.Item
+            label={intl.formatMessage({
+              defaultMessage: 'Recipient Phone',
+            })}
+            name="recipientPhone"
+            rules={
+              storeOrDC === 'DC'
+                ? [
+                    {
+                      message: intl.formatMessage({
+                        defaultMessage: 'This is a required field.',
+                      }),
+                      required: true,
+                    },
+                  ]
+                : []
+            }
+          >
+            <Input disabled={saving} />
+          </Form.Item>
+        </Col>
+        <Col
+          span={12}
+          style={{ display: storeOrDC === 'DC' ? undefined : 'none' }}
+        >
+          <Form.Item
+            label={intl.formatMessage({
+              defaultMessage: 'Recipient Email',
+            })}
+            name="recipientEmail"
+            rules={
+              storeOrDC === 'DC'
+                ? [
+                    {
+                      message: intl.formatMessage({
+                        defaultMessage: 'This is a required field.',
+                      }),
+                      required: true,
+                    },
+                    {
+                      message: intl.formatMessage({
+                        defaultMessage: 'Please enter a valid email',
+                      }),
+                      type: 'email',
+                    },
+                  ]
+                : []
+            }
+          >
+            <Input disabled={saving} />
+          </Form.Item>
+        </Col>
+        <Col
+          span={12}
+          style={{ display: storeOrDC === 'DC' ? undefined : 'none' }}
+        >
+          <Form.Item
+            label={intl.formatMessage({
+              defaultMessage: 'Address Line 1',
+            })}
+            name="shippingAddressLine1"
+            rules={
+              storeOrDC === 'DC'
+                ? [
+                    {
+                      message: intl.formatMessage({
+                        defaultMessage: 'Please provide an address',
+                      }),
+                      required: true,
+                    },
+                  ]
+                : []
+            }
+          >
+            <Input disabled={saving} />
+          </Form.Item>
+        </Col>
+        <Col
+          span={12}
+          style={{ display: storeOrDC === 'DC' ? undefined : 'none' }}
+        >
+          <Form.Item
+            label={intl.formatMessage({
+              defaultMessage: 'Address Line 2',
+            })}
+            name="shippingAddressLine2"
+          >
+            <Input disabled={saving} />
+          </Form.Item>
+        </Col>
+        <Col
+          span={8}
+          style={{ display: storeOrDC === 'DC' ? undefined : 'none' }}
+        >
+          <Form.Item
+            label={intl.formatMessage({ defaultMessage: 'City' })}
+            name="shippingCity"
+            rules={
+              storeOrDC === 'DC'
+                ? [
+                    {
+                      message: intl.formatMessage({
+                        defaultMessage: 'Please provide a city',
+                      }),
+                      required: true,
+                    },
+                  ]
+                : []
+            }
+          >
+            <Input disabled={saving} />
+          </Form.Item>
+        </Col>
+        <Col
+          span={8}
+          style={{ display: storeOrDC === 'DC' ? undefined : 'none' }}
+        >
+          <Form.Item
+            label={intl.formatMessage({ defaultMessage: 'County' })}
+            name="shippingCounty"
+          >
+            <Input disabled={saving} />
+          </Form.Item>
+        </Col>
+        <Col
+          span={8}
+          style={{ display: storeOrDC === 'DC' ? undefined : 'none' }}
+        >
+          <Form.Item
+            label={intl.formatMessage({ defaultMessage: 'Postcode' })}
+            name="shippingPostcode"
+            rules={
+              storeOrDC === 'DC'
+                ? [
+                    {
+                      message: intl.formatMessage({
+                        defaultMessage: 'Please provide a postcode',
+                      }),
+                      required: true,
+                    },
+                  ]
+                : []
+            }
+          >
+            <Input disabled={saving} />
+          </Form.Item>
+        </Col>
+        <Col
+          span={8}
+          style={{ display: storeOrDC === 'DC' ? undefined : 'none' }}
+        >
+          <Form.Item
+            label={intl.formatMessage({ defaultMessage: 'Country' })}
+            name="shippingCountry"
+          >
+            <Input disabled={saving} />
+          </Form.Item>
+        </Col>
       </Row>
       <Row>
         <Col span={12}>
@@ -618,8 +754,8 @@ const EditStockRemovalRequest = ({ onClose, requestId }: Props) => {
             </Radio.Group>
           </Form.Item>
         </Col>
-        <Col span={12}>
-          {rechargeBrand === 'Yes' && (
+        {rechargeBrand === 'Yes' && (
+          <Col span={12}>
             <Form.Item
               label={intl.formatMessage({
                 defaultMessage: 'Enter Brand Recharge Reference',
@@ -636,11 +772,15 @@ const EditStockRemovalRequest = ({ onClose, requestId }: Props) => {
             >
               <Input />
             </Form.Item>
-          )}
-          {rechargeBrand === 'No' && (
+          </Col>
+        )}
+      </Row>
+      {rechargeBrand === 'No' && (
+        <Row gutter={16}>
+          <Col span={12}>
             <Form.Item
               label={intl.formatMessage({
-                defaultMessage: 'Enter Cost Centre/Nominal Budget code ',
+                defaultMessage: 'Cost Centre',
               })}
               name="costCentreCode"
               rules={[
@@ -650,21 +790,31 @@ const EditStockRemovalRequest = ({ onClose, requestId }: Props) => {
                   }),
                   required: true,
                 },
+              ]}
+            >
+              <Input disabled={saving} />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item
+              label={intl.formatMessage({
+                defaultMessage: 'Nominal Code',
+              })}
+              name="nominalCode"
+              rules={[
                 {
                   message: intl.formatMessage({
-                    defaultMessage:
-                      'Cost centre code must be in format 0000-000000 (4 digits, dash, 6 digits)',
+                    defaultMessage: 'This is a required field.',
                   }),
-                  pattern: /^\d{4}-\d{6}$/,
+                  required: true,
                 },
               ]}
             >
-              {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
-              <Input maxLength={11} placeholder="0000-000000" />
+              <Input disabled={saving} />
             </Form.Item>
-          )}
-        </Col>
-      </Row>
+          </Col>
+        </Row>
+      )}
       <Row>
         <Col span={12}>
           <Form.Item
@@ -777,67 +927,6 @@ const EditStockRemovalRequest = ({ onClose, requestId }: Props) => {
           </Col>
         )}
       </Row>
-      <Row>
-        <Col span={12}>
-          <Form.Item
-            label={intl.formatMessage({ defaultMessage: 'Fascia' })}
-            name="fascia"
-            rules={[
-              {
-                message: intl.formatMessage({
-                  defaultMessage: 'This is a required field.',
-                }),
-                required: true,
-              },
-            ]}
-          >
-            <Select
-              disabled={saving}
-              options={[
-                { label: 'Alpine Bikes', value: 'Alpine Bikes' },
-                { label: 'Bertie', value: 'Bertie' },
-                {
-                  label: 'Blacks',
-                  value: 'Blacks',
-                },
-                { label: 'Champion', value: 'Champion' },
-                { label: 'Chausport', value: 'Chausport' },
-                { label: 'City Gear', value: 'City Gear' },
-                { label: 'Cosmos', value: 'Cosmos' },
-                { label: 'DeporVillage', value: 'DeporVillage' },
-                { label: 'DTLR', value: 'DTLR' },
-                { label: 'Finish Line', value: 'Finish Line' },
-                { label: 'Fishing Republic', value: 'Fishing Republic' },
-                { label: 'Footpatrol', value: 'Footpatrol' },
-                { label: 'George Fisher', value: 'George Fisher' },
-                { label: 'Go Express', value: 'Go Express' },
-                { label: 'Go Outdoors', value: 'Go Outdoors' },
-                { label: 'Hibbett', value: 'Hibbett' },
-                { label: 'JD', value: 'JD' },
-                { label: 'JD Gym', value: 'JD Gym' },
-                { label: 'Kukri', value: 'Kukri' },
-                { label: 'Livestock', value: 'Livestock' },
-                { label: 'Macys', value: 'Macys' },
-                { label: 'Naylors', value: 'Naylors' },
-                { label: 'Nice Kicks', value: 'Nice Kicks' },
-                { label: 'Oi Polloi', value: 'Oi Polloi' },
-                { label: 'Shoe Palace', value: 'Shoe Palace' },
-                { label: 'Size', value: 'Size' },
-                { label: 'Sport Zone', value: 'Sport Zone' },
-                { label: 'Sports Factory', value: 'Sports Factory' },
-                { label: 'Sprinter', value: 'Sprinter' },
-                { label: 'The Couture Club', value: 'The Couture Club' },
-                { label: 'The HIP Store', value: 'The HIP Store' },
-                { label: 'Tiso', value: 'Tiso' },
-                { label: 'Ultimate Outdoors', value: 'Ultimate Outdoors' },
-                { label: 'WellGosh', value: 'WellGosh' },
-                { label: 'Woodhouse Clothing', value: 'Woodhouse Clothing' },
-              ]}
-              style={{ width: 350 }}
-            />
-          </Form.Item>
-        </Col>
-      </Row>
       {!isUserInDCGroup && (
         <Row gutter={16}>
           <Col span={12}>
@@ -880,6 +969,14 @@ const EditStockRemovalRequest = ({ onClose, requestId }: Props) => {
                 }}
                 showSearch
               />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item
+              label={intl.formatMessage({ defaultMessage: 'Picker' })}
+              name="pickerId"
+            >
+              <UsersSelect allowClear showSearch />
             </Form.Item>
           </Col>
         </Row>

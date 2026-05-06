@@ -9,7 +9,14 @@ query stockRemovalRequest($where: UniqueId!) {
         status
         reference
         costCentreCode
+        destination
+        nominalCode
         fascia
+        picker {
+            id
+            fullName
+        }
+        priority
         personalityInfluences
         reason
         reasonForNonReturn
@@ -38,6 +45,7 @@ query stockRemovalRequest($where: UniqueId!) {
         }
         items {
             id
+            location
             name
             brand
             sku
