@@ -7,7 +7,14 @@ mutation UpdateStockRemovalRequest($where: UniqueId!, $data: UpdateStockRemovalR
         status
         reference
         costCentreCode
+        destination
+        nominalCode
         fascia
+        picker {
+            id
+            fullName
+        }
+        priority
         personalityInfluences
         reason
         reasonForNonReturn

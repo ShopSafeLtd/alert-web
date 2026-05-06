@@ -6,7 +6,8 @@ import DashboardInfiniteScroll from '#/views/dashboard/components/DashboardInfin
 import MarkAsPickedModal from '#/views/stock-removal-requests/components/MarkAsPickedModal/MarkAsPickedModal';
 import StockRemovalRequestStatusBadge from '#/views/stock-removal-requests/components/StockRemovalRequestStatusBadge/StockRemovalRequestStatusBadge';
 import ViewStockRemovalRequest from '#/views/stock-removal-requests/components/ViewStockRemovalRequest/ViewStockRemovalRequest.view';
-import { faBoxCheck, faEye } from '@fortawesome/pro-light-svg-icons';
+import { useMarkStockRemovalRequestAsCollectedMutation } from '#/views/stock-removal-requests/components/ViewStockRemovalRequest/graphql/__generated__/mark-collected.generated';
+import { faBoxCheck, faBoxOpen, faEye } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
@@ -14,10 +15,12 @@ import {
   Col,
   Divider,
   Drawer,
+  Popconfirm,
   Row,
   Skeleton,
   Tooltip,
   Typography,
+  notification,
 } from 'antd';
 import {
   StockRemovalRequestApprovalStatus,
@@ -61,6 +64,34 @@ const MyStockRequests = ({
   const classes = useStyles();
   const intl = useIntl();
   const currentUser = useAtomValue(currentUserAtom);
+
+  const [markAsCollectedMutation] =
+    useMarkStockRemovalRequestAsCollectedMutation();
+
+  const handleMarkAsCollected = (requestId: string) => {
+    void markAsCollectedMutation({
+      onCompleted: () => {
+        notification.success({
+          description: intl.formatMessage({
+            defaultMessage: 'Request marked as collected.',
+          }),
+          message: intl.formatMessage({ defaultMessage: 'Collected' }),
+          placement: 'bottomRight',
+        });
+      },
+      onError: () => {
+        notification.error({
+          description: intl.formatMessage({
+            defaultMessage: 'Something went wrong.',
+          }),
+          message: intl.formatMessage({ defaultMessage: 'Error' }),
+          placement: 'bottomRight',
+        });
+      },
+      refetchQueries: ['stockRemovalRequest', 'StockRemovalRequests'],
+      variables: { where: { id: requestId } },
+    });
+  };
 
   return (
     <Col
@@ -156,7 +187,15 @@ const MyStockRequests = ({
                     request.business &&
                     userBusinessIds.includes(request.business.id)));
 
-              const isHighlighted = requiresMyApproval || requiresPicking;
+              const requiresCollection =
+                request.status === StockRemovalRequestStatus.Picked &&
+                request.storeOrDC !== 'DC' &&
+                isStoreUser &&
+                request.business !== null &&
+                userBusinessIds.includes(request.business.id);
+
+              const isHighlighted =
+                requiresMyApproval || requiresPicking || requiresCollection;
 
               return (
                 <>
@@ -222,6 +261,29 @@ const MyStockRequests = ({
                               >
                                 <FontAwesomeIcon icon={faBoxCheck} />
                               </Button>
+                            </Tooltip>
+                          </Col>
+                        )}
+                        {requiresCollection && (
+                          <Col>
+                            <Tooltip
+                              title={intl.formatMessage({
+                                defaultMessage: 'Mark as Collected',
+                              })}
+                            >
+                              <Popconfirm
+                                onConfirm={() =>
+                                  handleMarkAsCollected(request.id)
+                                }
+                                title={intl.formatMessage({
+                                  defaultMessage:
+                                    'Mark this request as collected?',
+                                })}
+                              >
+                                <Button size="small" type="primary">
+                                  <FontAwesomeIcon icon={faBoxOpen} />
+                                </Button>
+                              </Popconfirm>
                             </Tooltip>
                           </Col>
                         )}

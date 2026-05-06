@@ -44,6 +44,7 @@ export interface ReturnFormData {
   costCentreCode?: string;
   dateofReturn?: Date;
   items: ReturnItemFormData[];
+  nominalCode?: string;
   originalAlertId?: string;
   rechargeBrand?: string;
   rechargeReference?: string;
@@ -140,6 +141,7 @@ const AddStockRemovalReturn = ({ onClose }: Props) => {
             itemId: i.stockItem ?? '',
             quantity: i.quantity ?? 0,
           })),
+          nominalCode: values.nominalCode,
           originalAlertId: values.originalAlertId,
           rechargeBrand: values.rechargeReference ? rechargeBrand : undefined,
           rechargeReference: values.rechargeReference,
@@ -230,29 +232,26 @@ const AddStockRemovalReturn = ({ onClose }: Props) => {
             <Input disabled={saving} />
           </Form.Item>
         </Col>
+      </Row>
+      <Row gutter={16}>
         <Col span={12}>
           <Form.Item
             label={intl.formatMessage({
-              defaultMessage: 'Cost Centre / Nominal Budget code',
+              defaultMessage: 'Cost Centre',
             })}
             name="costCentreCode"
-            rules={[
-              {
-                message: intl.formatMessage({
-                  defaultMessage:
-                    'Cost centre code must be in format 0000-000000 (4 digits, dash, 6 digits)',
-                }),
-                pattern: /^\d{4}-\d{6}$/,
-              },
-            ]}
           >
-            <Input
-              disabled={saving}
-              maxLength={11}
-              placeholder={intl.formatMessage({
-                defaultMessage: '0000-000000',
-              })}
-            />
+            <Input disabled={saving} />
+          </Form.Item>
+        </Col>
+        <Col span={12}>
+          <Form.Item
+            label={intl.formatMessage({
+              defaultMessage: 'Nominal Code',
+            })}
+            name="nominalCode"
+          >
+            <Input disabled={saving} />
           </Form.Item>
         </Col>
       </Row>

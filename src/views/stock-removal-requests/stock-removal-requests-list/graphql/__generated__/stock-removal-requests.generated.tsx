@@ -11,7 +11,7 @@ export type StockRemovalRequestsQueryVariables = Types.Exact<{
 }>;
 
 
-export type StockRemovalRequestsQuery = { __typename?: 'Query', stockRemovalRequests: { __typename?: 'QueryStockRemovalRequestsConnection', totalCount: number, edges: Array<{ __typename?: 'QueryStockRemovalRequestsConnectionEdge', node: { __typename?: 'StockRemovalRequest', id: string, createdAt: Date, title: string, status: Types.StockRemovalRequestStatus, reference?: number | null, isReturn?: boolean | null, storeOrDC?: string | null, dateofReturn?: Date | null, createdBy: { __typename?: 'User', id: string, fullName: string }, business?: { __typename?: 'Business', id: string, name: string } | null, approvers: Array<{ __typename?: 'StockRemovalRequestApproval', status: Types.StockRemovalRequestApprovalStatus, user: { __typename?: 'User', id: string, fullName: string } }> } }> } };
+export type StockRemovalRequestsQuery = { __typename?: 'Query', stockRemovalRequests: { __typename?: 'QueryStockRemovalRequestsConnection', totalCount: number, edges: Array<{ __typename?: 'QueryStockRemovalRequestsConnectionEdge', node: { __typename?: 'StockRemovalRequest', id: string, createdAt: Date, title: string, status: Types.StockRemovalRequestStatus, reference?: number | null, isReturn?: boolean | null, storeOrDC?: string | null, dateofReturn?: Date | null, priority: Types.StockRemovalPriority, destination?: Types.StockRemovalRquestDestination | null, createdBy: { __typename?: 'User', id: string, fullName: string }, business?: { __typename?: 'Business', id: string, name: string } | null, approvers: Array<{ __typename?: 'StockRemovalRequestApproval', status: Types.StockRemovalRequestApprovalStatus, user: { __typename?: 'User', id: string, fullName: string } }>, picker?: { __typename?: 'User', id: string, fullName: string } | null } }> } };
 
 
 export const StockRemovalRequestsDocument = gql`
@@ -31,6 +31,12 @@ export const StockRemovalRequestsDocument = gql`
         isReturn
         storeOrDC
         dateofReturn
+        priority
+        destination
+        picker {
+          id
+          fullName
+        }
         business {
           id
           name

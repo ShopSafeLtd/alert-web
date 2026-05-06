@@ -31,6 +31,7 @@ import {
 } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
+  Avatar,
   Button,
   Col,
   Drawer,
@@ -38,6 +39,7 @@ import {
   Modal,
   Radio,
   Row,
+  Select,
   Table,
   Tag,
   Tooltip,
@@ -48,8 +50,10 @@ import {
   PermissionMethod,
   PermissionModel,
   SortOrder,
+  StockRemovalPriority,
   StockRemovalRequestApprovalStatus,
   StockRemovalRequestStatus,
+  StockRemovalRquestDestination,
 } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -68,7 +72,10 @@ interface StockRemovalRequestTableData {
   createdAt: Date;
   createdById: string;
   createdByName: string;
+  destination: StockRemovalRquestDestination | null | undefined;
   key: string;
+  picker: { fullName: string; id: string } | null | undefined;
+  priority: StockRemovalPriority | null | undefined;
   reference: null | number | undefined;
   requiresMyApproval: boolean;
   requiresPicking: boolean;
@@ -99,6 +106,7 @@ const useStyles = createUseStyles((theme: Theme) => ({
 
 const PAP_GROUP_ID = 'cmg9ni6h70018ityamnewhbvq'; // PAP group ID
 const DC_GROUP_ID = 'cmgfd4l4r0000it3n4u2eckmf'; // DC group ID
+const PAP_APPROVE_CANCELLATION_GROUP_ID = 'cmotsrpl302g9o401e52ev859'; // PAP Approve Cancellation group ID
 
 const StockRemovalRequestsList = () => {
   const intl = useIntl();
@@ -120,6 +128,13 @@ const StockRemovalRequestsList = () => {
   const [returnStatusFilter, setReturnStatusFilter] = useState<string>('ALL');
   const [creatorFilter, setCreatorFilter] = useState<'ALL' | 'MINE'>('ALL');
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [pickerFilter, setPickerFilter] = useState<string[]>([]);
+  const [destinationFilter, setDestinationFilter] = useState<
+    StockRemovalRquestDestination[]
+  >([]);
+  const [priorityFilter, setPriorityFilter] = useState<StockRemovalPriority[]>(
+    []
+  );
 
   const hasEditPermission = useMemo(
     () =>
@@ -158,6 +173,16 @@ const StockRemovalRequestsList = () => {
     [currentUser]
   );
 
+  // Check if current user is in PAP Approve Cancellation group
+  const isUserInPAPApproveCancellationGroup = useMemo(
+    () =>
+      currentUser?.groups?.some(
+        (group: { id: string }) =>
+          group.id === PAP_APPROVE_CANCELLATION_GROUP_ID
+      ) ?? false,
+    [currentUser]
+  );
+
   // Check if current user is in DC group
   const isUserInDCGroup = useMemo(
     () =>
@@ -185,13 +210,19 @@ const StockRemovalRequestsList = () => {
     }
   }, [isUserInDCGroup, statusFilter]);
 
-  // Check if current user is a store user (has businesses, not in PAP or DC groups)
+  // Check if current user is a store user (has businesses, not in PAP, PAP Cancel, or DC groups)
   const isStoreUser = useMemo(() => {
     const hasBusinesses = (currentUser?.businesses?.length ?? 0) > 0;
     const notInPAP = !isUserInPAPGroup;
+    const notInPAPCancel = !isUserInPAPApproveCancellationGroup;
     const notInDC = !isUserInDCGroup;
-    return hasBusinesses && notInPAP && notInDC;
-  }, [currentUser, isUserInPAPGroup, isUserInDCGroup]);
+    return hasBusinesses && notInPAP && notInPAPCancel && notInDC;
+  }, [
+    currentUser,
+    isUserInPAPGroup,
+    isUserInPAPApproveCancellationGroup,
+    isUserInDCGroup,
+  ]);
 
   // Get list of business IDs the user is assigned to
   const userBusinessIds = useMemo(
@@ -298,7 +329,10 @@ const StockRemovalRequestsList = () => {
   // Build query filters
   const queryWhere = useMemo(() => {
     const where: {
+      destination?: StockRemovalRquestDestination[];
       isReturn?: boolean;
+      pickerIds?: string[];
+      priority?: StockRemovalPriority[];
       schemeId: string;
       search?: string;
       status?: StockRemovalRequestStatus[];
@@ -322,8 +356,21 @@ const StockRemovalRequestsList = () => {
       where.search = searchQuery.trim();
     }
 
+    if (pickerFilter.length > 0) where.pickerIds = pickerFilter;
+    if (destinationFilter.length > 0) where.destination = destinationFilter;
+    if (priorityFilter.length > 0) where.priority = priorityFilter;
+
     return where;
-  }, [schemeId, viewMode, statusFilter, returnStatusFilter, searchQuery]);
+  }, [
+    schemeId,
+    viewMode,
+    statusFilter,
+    returnStatusFilter,
+    searchQuery,
+    pickerFilter,
+    destinationFilter,
+    priorityFilter,
+  ]);
 
   const { data } = useStockRemovalRequestsQuery({
     fetchPolicy: 'cache-and-network',
@@ -346,6 +393,15 @@ const StockRemovalRequestsList = () => {
       },
     },
   });
+
+  const pickerOptions = useMemo(() => {
+    if (!data?.stockRemovalRequests.edges) return [];
+    const seen = new Set<string>();
+    return data.stockRemovalRequests.edges
+      .flatMap(({ node }) => (node.picker ? [node.picker] : []))
+      .filter(({ id }) => (seen.has(id) ? false : seen.add(id)))
+      .map(({ fullName, id }) => ({ label: fullName, value: id }));
+  }, [data]);
 
   // Filter data on frontend for "My Requests"
   const filteredData = useMemo(() => {
@@ -527,6 +583,94 @@ const StockRemovalRequestsList = () => {
                 )}
               </Radio.Group>
             </Col>
+            <Col>
+              <Select
+                allowClear
+                maxTagCount="responsive"
+                mode="multiple"
+                onChange={(values) => setPriorityFilter(values)}
+                options={[
+                  {
+                    label: intl.formatMessage({ defaultMessage: 'High' }),
+                    value: StockRemovalPriority.High,
+                  },
+                  {
+                    label: intl.formatMessage({ defaultMessage: 'Medium' }),
+                    value: StockRemovalPriority.Medium,
+                  },
+                  {
+                    label: intl.formatMessage({ defaultMessage: 'Low' }),
+                    value: StockRemovalPriority.Low,
+                  },
+                ]}
+                placeholder={intl.formatMessage({ defaultMessage: 'Priority' })}
+                style={{ minWidth: 130 }}
+                value={priorityFilter}
+              />
+            </Col>
+            <Col>
+              <Select
+                allowClear
+                maxTagCount="responsive"
+                mode="multiple"
+                onChange={(values) => setDestinationFilter(values)}
+                options={[
+                  {
+                    label: intl.formatMessage({
+                      defaultMessage: 'International',
+                    }),
+                    value: StockRemovalRquestDestination.International,
+                  },
+                  {
+                    label: intl.formatMessage({ defaultMessage: 'EU' }),
+                    value: StockRemovalRquestDestination.Eu,
+                  },
+                  {
+                    label: intl.formatMessage({ defaultMessage: 'UK' }),
+                    value: StockRemovalRquestDestination.Uk,
+                  },
+                  {
+                    label: intl.formatMessage({ defaultMessage: 'Outdoor' }),
+                    value: StockRemovalRquestDestination.Outdoor,
+                  },
+                  {
+                    label: intl.formatMessage({
+                      defaultMessage: 'Customer Care',
+                    }),
+                    value: StockRemovalRquestDestination.CustomerCare,
+                  },
+                  {
+                    label: intl.formatMessage({
+                      defaultMessage: 'Head Office',
+                    }),
+                    value: StockRemovalRquestDestination.HeadOffice,
+                  },
+                ]}
+                placeholder={intl.formatMessage({
+                  defaultMessage: 'Destination',
+                })}
+                style={{ minWidth: 140 }}
+                value={destinationFilter}
+              />
+            </Col>
+            <Col>
+              <Select
+                allowClear
+                filterOption={(input, option) =>
+                  (option?.label ?? '')
+                    .toLowerCase()
+                    .includes(input.toLowerCase())
+                }
+                maxTagCount="responsive"
+                mode="multiple"
+                onChange={(values) => setPickerFilter(values)}
+                options={pickerOptions}
+                placeholder={intl.formatMessage({ defaultMessage: 'Picker' })}
+                showSearch
+                style={{ minWidth: 130 }}
+                value={pickerFilter}
+              />
+            </Col>
             <Col flex={1} />
             <Col>
               <Button onClick={toggleAddOpen}>
@@ -594,6 +738,47 @@ const StockRemovalRequestsList = () => {
                   </Row>
                 ),
                 title: intl.formatMessage({ defaultMessage: 'Approvers' }),
+              },
+              {
+                dataIndex: 'picker',
+                key: 'picker',
+                render: (picker: StockRemovalRequestTableData['picker']) =>
+                  picker ? (
+                    <Tooltip title={picker.fullName}>
+                      <Avatar size={36} style={{ fontSize: 15 }}>
+                        {picker.fullName.split(' ').at(0)?.charAt(0)}
+                        {picker.fullName.split(' ').at(1)?.charAt(0)}
+                      </Avatar>
+                    </Tooltip>
+                  ) : null,
+                title: intl.formatMessage({ defaultMessage: 'Picker' }),
+                width: 80,
+              },
+              {
+                dataIndex: 'priority',
+                key: 'priority',
+                render: (value: StockRemovalPriority | null | undefined) => {
+                  if (!value) return null;
+                  const colorMap: Record<StockRemovalPriority, string> = {
+                    [StockRemovalPriority.High]: 'red',
+                    [StockRemovalPriority.Low]: 'blue',
+                    [StockRemovalPriority.Medium]: 'orange',
+                  };
+                  const labelMap: Record<StockRemovalPriority, string> = {
+                    [StockRemovalPriority.High]: intl.formatMessage({
+                      defaultMessage: 'High',
+                    }),
+                    [StockRemovalPriority.Low]: intl.formatMessage({
+                      defaultMessage: 'Low',
+                    }),
+                    [StockRemovalPriority.Medium]: intl.formatMessage({
+                      defaultMessage: 'Medium',
+                    }),
+                  };
+                  return <Tag color={colorMap[value]}>{labelMap[value]}</Tag>;
+                },
+                title: intl.formatMessage({ defaultMessage: 'Priority' }),
+                width: 100,
               },
               {
                 dataIndex: 'createdByName',
@@ -762,7 +947,7 @@ const StockRemovalRequestsList = () => {
                     StockRemovalRequestStatus.AwaitingPapApproval &&
                     isUserInPAPGroup) ||
                   (node.status === StockRemovalRequestStatus.RequestedCancel &&
-                    isUserInPAPGroup);
+                    (isUserInPAPGroup || isUserInPAPApproveCancellationGroup));
 
                 const requiresPicking = Boolean(
                   node.status === StockRemovalRequestStatus.Picking &&
@@ -783,7 +968,10 @@ const StockRemovalRequestsList = () => {
                   createdAt: node.createdAt,
                   createdById: node.createdBy.id,
                   createdByName: node.createdBy.fullName,
+                  destination: node.destination,
                   key: node.id,
+                  picker: node.picker,
+                  priority: node.priority,
                   reference: node.reference,
                   requiresMyApproval,
                   requiresPicking,

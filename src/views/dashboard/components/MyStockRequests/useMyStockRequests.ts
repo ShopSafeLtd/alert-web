@@ -135,7 +135,20 @@ const useMyStockRequests = (): Return => {
                 node.business &&
                 userBusinessIds.includes(node.business.id)));
 
-          return isCreator || isApprover || requiresApproval || requiresPicking;
+          const requiresCollection =
+            node.status === StockRemovalRequestStatus.Picked &&
+            node.storeOrDC !== 'DC' &&
+            isStoreUser &&
+            node.business !== null &&
+            userBusinessIds.includes(node.business.id);
+
+          return (
+            isCreator ||
+            isApprover ||
+            requiresApproval ||
+            requiresPicking ||
+            requiresCollection
+          );
         }
       );
 

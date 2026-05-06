@@ -295,31 +295,6 @@ const MarkAsPickedModal = ({
                 </Form.Item>
               </Col>
             </Row>
-            <Row gutter={16}>
-              <Col span={24}>
-                <Form.Item
-                  label={intl.formatMessage({ defaultMessage: 'Images' })}
-                >
-                  <Upload
-                    accept=".png,.jpeg,.jpg,.webp"
-                    customRequest={customRequest}
-                    fileList={fileList}
-                    listType="picture-card"
-                    multiple
-                    onChange={({ fileList: newFileList }) =>
-                      setFileList(newFileList)
-                    }
-                  >
-                    {fileList.length >= 5 ? null : (
-                      // eslint-disable-next-line formatjs/no-literal-string-in-jsx
-                      <div>
-                        + {intl.formatMessage({ defaultMessage: 'Upload' })}
-                      </div>
-                    )}
-                  </Upload>
-                </Form.Item>
-              </Col>
-            </Row>
           </>
         )}
         {!isDC && (
@@ -329,6 +304,29 @@ const MarkAsPickedModal = ({
             </Col>
           </Row>
         )}
+        <Row gutter={16}>
+          <Col span={24}>
+            <Form.Item label={intl.formatMessage({ defaultMessage: 'Images' })}>
+              <Upload
+                accept=".png,.jpeg,.jpg,.webp"
+                customRequest={customRequest}
+                fileList={fileList}
+                listType="picture-card"
+                multiple
+                onChange={({ fileList: newFileList }) =>
+                  setFileList(newFileList)
+                }
+              >
+                {fileList.length >= 5 ? null : (
+                  // eslint-disable-next-line formatjs/no-literal-string-in-jsx
+                  <div>
+                    + {intl.formatMessage({ defaultMessage: 'Upload' })}
+                  </div>
+                )}
+              </Upload>
+            </Form.Item>
+          </Col>
+        </Row>
         <Table
           columns={columns}
           dataSource={items}

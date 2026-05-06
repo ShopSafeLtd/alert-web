@@ -36,8 +36,10 @@ import {
 import {
   PermissionMethod,
   PermissionModel,
+  StockRemovalPriority,
   StockRemovalRequestApprovalStatus,
   StockRemovalRequestStatus,
+  StockRemovalRquestDestination,
 } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
 import React, { useMemo, useState } from 'react';
@@ -49,6 +51,7 @@ interface Props {
 
 const PAP_GROUP_ID = 'cmg9ni6h70018ityamnewhbvq'; // PAP group ID
 const DC_GROUP_ID = 'cmgfd4l4r0000it3n4u2eckmf'; // DC group ID
+const PAP_APPROVE_CANCELLATION_GROUP_ID = 'cmotsrpl302g9o401e52ev859'; // PAP Approve Cancellation group ID
 
 const getStockRemovalRequestApprovalStatusText = (
   value: StockRemovalRequestApprovalStatus
@@ -66,6 +69,27 @@ const getStockRemovalRequestApprovalStatusColour = (
   if (value === StockRemovalRequestApprovalStatus.Approved) return 'success';
   if (value === StockRemovalRequestApprovalStatus.Rejected) return 'danger';
   return undefined;
+};
+
+const PRIORITY_TAG_COLOR: Record<StockRemovalPriority, string> = {
+  [StockRemovalPriority.High]: 'red',
+  [StockRemovalPriority.Low]: 'green',
+  [StockRemovalPriority.Medium]: 'orange',
+};
+
+const PRIORITY_LABEL: Record<StockRemovalPriority, string> = {
+  [StockRemovalPriority.High]: 'High',
+  [StockRemovalPriority.Low]: 'Low',
+  [StockRemovalPriority.Medium]: 'Medium',
+};
+
+const DESTINATION_LABEL: Record<StockRemovalRquestDestination, string> = {
+  [StockRemovalRquestDestination.CustomerCare]: 'Customer Care',
+  [StockRemovalRquestDestination.Eu]: 'EU',
+  [StockRemovalRquestDestination.HeadOffice]: 'Head Office',
+  [StockRemovalRquestDestination.International]: 'International',
+  [StockRemovalRquestDestination.Outdoor]: 'Outdoor',
+  [StockRemovalRquestDestination.Uk]: 'UK',
 };
 
 const ViewStockRemovalRequest = ({ requestId }: Props) => {
@@ -129,12 +153,34 @@ const ViewStockRemovalRequest = ({ requestId }: Props) => {
     [currentUser]
   );
 
+  // Check if current user is in PAP Approve Cancellation group
+  const isInPAPApproveCancellationGroup = useMemo(
+    () =>
+      currentUser?.groups?.some(
+        (group: { id: string }) =>
+          group.id === PAP_APPROVE_CANCELLATION_GROUP_ID
+      ) ?? false,
+    [currentUser]
+  );
+
   // Check if current user is in DC group
   const isInDCGroup = useMemo(
     () =>
       currentUser?.groups?.some(
         (group: { id: string }) => group.id === DC_GROUP_ID
       ) ?? false,
+    [currentUser]
+  );
+
+  const isStoreUser = useMemo(() => {
+    const hasBusinesses = (currentUser?.businesses?.length ?? 0) > 0;
+    return hasBusinesses && !isInPAPGroup && !isInDCGroup;
+  }, [currentUser, isInPAPGroup, isInDCGroup]);
+
+  const userBusinessIds = useMemo(
+    () =>
+      currentUser?.businesses?.map((business: { id: string }) => business.id) ??
+      [],
     [currentUser]
   );
 
@@ -446,7 +492,10 @@ const ViewStockRemovalRequest = ({ requestId }: Props) => {
 
   const showPickingButton =
     data?.stockRemovalRequest.status === StockRemovalRequestStatus.Picking &&
-    (hasViewPermission || isInDCGroup);
+    ((isInDCGroup && isDC) ||
+      (isStoreUser &&
+        !!data?.stockRemovalRequest.business?.id &&
+        userBusinessIds.includes(data.stockRemovalRequest.business.id)));
 
   const showCollectedButton =
     data?.stockRemovalRequest.status === StockRemovalRequestStatus.Picked &&
@@ -469,7 +518,8 @@ const ViewStockRemovalRequest = ({ requestId }: Props) => {
 
   const showApproveCancelButton =
     data?.stockRemovalRequest.status ===
-      StockRemovalRequestStatus.RequestedCancel && isInPAPGroup;
+      StockRemovalRequestStatus.RequestedCancel &&
+    (isInPAPGroup || isInPAPApproveCancellationGroup);
 
   const itemColumns = [
     {
@@ -554,10 +604,10 @@ const ViewStockRemovalRequest = ({ requestId }: Props) => {
         <Alert
           description={
             <Typography.Paragraph strong style={{ marginBottom: 0 }}>
-              {isInPAPGroup ? (
+              {isInPAPGroup || isInPAPApproveCancellationGroup ? (
                 <FormattedMessage defaultMessage="The creator has requested cancellation of this request. Please review and approve or deny the cancellation below." />
               ) : (
-                <FormattedMessage defaultMessage="Cancellation has been requested for this request and is awaiting PAP group approval." />
+                <FormattedMessage defaultMessage="Cancellation has been requested for this request and is awaiting approval." />
               )}
             </Typography.Paragraph>
           }
@@ -623,6 +673,19 @@ const ViewStockRemovalRequest = ({ requestId }: Props) => {
               >
                 {data?.stockRemovalRequest.title}
               </Descriptions.Item>
+              {data?.stockRemovalRequest.priority && (
+                <Descriptions.Item
+                  label={intl.formatMessage({ defaultMessage: 'Priority' })}
+                >
+                  <Tag
+                    color={
+                      PRIORITY_TAG_COLOR[data.stockRemovalRequest.priority]
+                    }
+                  >
+                    {PRIORITY_LABEL[data.stockRemovalRequest.priority]}
+                  </Tag>
+                </Descriptions.Item>
+              )}
               <Descriptions.Item
                 label={intl.formatMessage({ defaultMessage: 'Description' })}
               >
@@ -775,6 +838,13 @@ const ViewStockRemovalRequest = ({ requestId }: Props) => {
               >
                 {data?.stockRemovalRequest.fascia}
               </Descriptions.Item>
+              {data?.stockRemovalRequest.destination && (
+                <Descriptions.Item
+                  label={intl.formatMessage({ defaultMessage: 'Destination' })}
+                >
+                  {DESTINATION_LABEL[data.stockRemovalRequest.destination]}
+                </Descriptions.Item>
+              )}
             </Descriptions>
           </Card>
         </Col>
@@ -816,13 +886,22 @@ const ViewStockRemovalRequest = ({ requestId }: Props) => {
                 </Descriptions.Item>
               )}
               {data?.stockRemovalRequest.rechargeBrand === 'No' && (
-                <Descriptions.Item
-                  label={intl.formatMessage({
-                    defaultMessage: 'Cost Centre / Nominal Budget code',
-                  })}
-                >
-                  {data?.stockRemovalRequest.costCentreCode}
-                </Descriptions.Item>
+                <>
+                  <Descriptions.Item
+                    label={intl.formatMessage({
+                      defaultMessage: 'Cost Centre',
+                    })}
+                  >
+                    {data?.stockRemovalRequest.costCentreCode}
+                  </Descriptions.Item>
+                  <Descriptions.Item
+                    label={intl.formatMessage({
+                      defaultMessage: 'Nominal Code',
+                    })}
+                  >
+                    {data?.stockRemovalRequest.nominalCode}
+                  </Descriptions.Item>
+                </>
               )}
             </Descriptions>
           </Card>
@@ -931,7 +1010,8 @@ const ViewStockRemovalRequest = ({ requestId }: Props) => {
 
         {/* Tracking Details Card */}
         {(data?.stockRemovalRequest.tracking ||
-          data?.stockRemovalRequest.tmid) && (
+          data?.stockRemovalRequest.tmid ||
+          data?.stockRemovalRequest.picker) && (
           <Col lg={12} xs={24}>
             <Card
               size="small"
@@ -943,6 +1023,13 @@ const ViewStockRemovalRequest = ({ requestId }: Props) => {
               }
             >
               <Descriptions bordered column={1} size="small">
+                {data?.stockRemovalRequest.picker && (
+                  <Descriptions.Item
+                    label={intl.formatMessage({ defaultMessage: 'Picker' })}
+                  >
+                    {data.stockRemovalRequest.picker.fullName}
+                  </Descriptions.Item>
+                )}
                 {data?.stockRemovalRequest.tmid && (
                   <Descriptions.Item
                     label={intl.formatMessage({ defaultMessage: 'TMID' })}
