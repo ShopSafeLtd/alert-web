@@ -191,7 +191,7 @@ const MyStockRequests = ({
                 request.status === StockRemovalRequestStatus.Picked &&
                 request.storeOrDC !== 'DC' &&
                 isStoreUser &&
-                request.business !== null &&
+                !!request.business &&
                 userBusinessIds.includes(request.business.id);
 
               const isHighlighted =

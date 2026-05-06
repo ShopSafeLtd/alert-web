@@ -139,7 +139,7 @@ const useMyStockRequests = (): Return => {
             node.status === StockRemovalRequestStatus.Picked &&
             node.storeOrDC !== 'DC' &&
             isStoreUser &&
-            node.business !== null &&
+            !!node.business &&
             userBusinessIds.includes(node.business.id);
 
           return (
