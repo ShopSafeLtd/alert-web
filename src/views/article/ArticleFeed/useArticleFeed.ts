@@ -33,13 +33,18 @@ interface Return {
   lightBoxOpen: {
     index: number;
     open: boolean;
+    watermarkImage?: boolean;
   };
   lightboxElements: {
     src: string;
   }[];
   loading: boolean;
   onNavigate: () => void;
-  openLightbox: (elements: { src: string }[], index: number) => void;
+  openLightbox: (
+    elements: { src: string }[],
+    index: number,
+    watermarkImage?: boolean
+  ) => void;
   setGallery: (value: string[]) => void;
   setSearch: (value: string) => void;
   sortFilter: boolean;
@@ -91,6 +96,7 @@ const useArticleFeed = (): Return => {
   const [lightBoxOpen, setLightBoxOpen] = useState({
     index: 0,
     open: false,
+    watermarkImage: true,
   });
 
   const variables: ListArticlesFeedQueryVariables = {
@@ -188,12 +194,17 @@ const useArticleFeed = (): Return => {
   const { groups, groupsLoading } = useGroupsContext();
 
   // Functions
-  const triggerLightbox = (elements: { src: string }[], index: number) => {
+  const triggerLightbox = (
+    elements: { src: string }[],
+    index: number,
+    watermarkImage?: boolean
+  ) => {
     setLightboxElements(elements);
     if (lightBoxOpen.open) {
       setLightBoxOpen({
         index,
         open: !lightBoxOpen.open,
+        watermarkImage: watermarkImage ?? true,
       });
     } else {
       setTimeout(
@@ -201,6 +212,7 @@ const useArticleFeed = (): Return => {
           setLightBoxOpen({
             index,
             open: !lightBoxOpen.open,
+            watermarkImage: watermarkImage ?? true,
           }),
         0.3
       );

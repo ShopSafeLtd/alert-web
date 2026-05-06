@@ -222,7 +222,7 @@ const useAddNewOffender = ({
         peculiarities: data.peculiarities || null,
         race: data.race || null,
         sourceDetails: data.sourceDetails || null,
-        wanted: data.wanted,
+        wanted: !!data.wanted,
         // groupIds: data.groups || [],
       });
     } else {
@@ -298,7 +298,7 @@ const useAddNewOffender = ({
             scheme: schemeId,
             sourceDetails: data.sourceDetails || null,
             vehicles: vehicleId ? { connect: [{ id: vehicleId }] } : undefined,
-            wanted: data.wanted,
+            wanted: !!data.wanted,
           },
         },
       });

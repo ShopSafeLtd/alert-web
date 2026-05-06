@@ -31,6 +31,7 @@ interface Props {
   lightBoxOpen: {
     index: number;
     open: boolean;
+    watermarkImage?: boolean;
   };
   lightboxElements: {
     src: string;
@@ -39,7 +40,11 @@ interface Props {
   // groupsLoading: boolean;
   onNavigate: () => void;
   // groups: { value: string; label: string }[];
-  openLightbox: (elements: { src: string }[], index: number) => void;
+  openLightbox: (
+    elements: { src: string }[],
+    index: number,
+    watermarkImage?: boolean
+  ) => void;
   setGallery: (values: string[]) => void;
   setSearch: (value: string) => void;
   sortFilter: boolean;
@@ -265,11 +270,15 @@ const Article = ({
         index={lightBoxOpen.index}
         open={lightBoxOpen.open}
         plugins={[Zoom]}
-        render={{
-          slide: (slide: WatermarkSlideType) => (
-            <WatermarkSlide slide={slide} />
-          ),
-        }}
+        render={
+          lightBoxOpen.watermarkImage
+            ? {
+                slide: (slide: WatermarkSlideType) => (
+                  <WatermarkSlide slide={slide} />
+                ),
+              }
+            : undefined
+        }
         slides={lightboxElements}
       />
     </div>

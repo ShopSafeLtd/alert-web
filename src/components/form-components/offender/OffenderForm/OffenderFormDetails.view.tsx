@@ -213,6 +213,7 @@ const OffenderFormDetails = ({
                   <DatePicker
                     disabled={saving}
                     disabledDate={(current) =>
+                      // eslint-disable-next-line   @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
                       current && current.valueOf() > Date.now()
                     }
                   />
@@ -253,8 +254,8 @@ const OffenderFormDetails = ({
         </Row>
       )}
       {offenderSettings?.idVerified && (
-        <Row gutter={50}>
-          <Col>
+        <Row gutter={20} wrap>
+          <Col span={12}>
             <Form.Item
               label={intl.formatMessage({
                 defaultMessage: "Has the offender's ID been verified?",
@@ -266,7 +267,7 @@ const OffenderFormDetails = ({
               })}
             >
               <Radio.Group disabled={saving}>
-                <Radio.Button value>
+                <Radio.Button value={true}>
                   {intl.formatMessage({
                     defaultMessage: 'Yes',
                   })}
@@ -375,6 +376,31 @@ const OffenderFormDetails = ({
           )}
         </Row>
       )}
+      <Row>
+        <Col>
+          <Form.Item
+            label={intl.formatMessage({
+              defaultMessage: 'Offender wanted?',
+            })}
+            name="wanted"
+            // tooltip={intl.formatMessage({
+            //   defaultMessage:
+            //     'Is a wanted offender?',
+            // })}
+          >
+            <Radio.Group disabled={saving}>
+              <Radio.Button value>
+                {intl.formatMessage({
+                  defaultMessage: 'Yes',
+                })}
+              </Radio.Button>
+              <Radio.Button value={false}>
+                {intl.formatMessage({ defaultMessage: 'No' })}
+              </Radio.Button>
+            </Radio.Group>
+          </Form.Item>
+        </Col>
+      </Row>
     </>
   );
 };

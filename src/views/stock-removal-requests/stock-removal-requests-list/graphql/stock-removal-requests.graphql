@@ -13,6 +13,12 @@ query StockRemovalRequests($where: StockRemovalRequestsWhere!, $orderBy: [StockR
                 reference
                 isReturn
                 storeOrDC
+                priority
+                destination
+                picker {
+                    id
+                    fullName
+                }
                 dateofReturn
                 business {
                     id

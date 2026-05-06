@@ -9,7 +9,11 @@ import useArticleCard from './useArticleCard';
 
 interface Props {
   article: ArticlePreviewFragment | null | undefined;
-  openLightbox: (elements: { src: string }[], index: number) => void;
+  openLightbox: (
+    elements: { src: string }[],
+    index: number,
+    watermarkImage?: boolean
+  ) => void;
   update: MutationUpdaterFn<DeleteArticleMutation>;
 }
 

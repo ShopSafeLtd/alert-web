@@ -96,6 +96,10 @@ const useCreateEditArticle = (): Props => {
     watermarkImage: true,
   });
   const currentUserId = useAtomValue(userIdAtom);
+  const watermarkImage = Form.useWatch('watermarkImage', form);
+  useEffect(() => {
+    console.log('wa11', watermarkImage);
+  }, [watermarkImage]);
 
   const [selectedSchemes, setSelectedSchemes] = useState<string[]>([]);
   const [fileList, setFileList] = useState<UploadFile[]>([]);
@@ -718,6 +722,7 @@ const useCreateEditArticle = (): Props => {
 
   const onSubmit = async (_data?: FormData, draft?: boolean) => {
     setSaving(true);
+
     const selectedCategoryIds = selectedCategories
       .map((category) => {
         const selectedCategory = categoryIds.find(

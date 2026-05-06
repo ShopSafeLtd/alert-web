@@ -57,7 +57,11 @@ interface Props {
     | undefined;
   onDelete: (id: string) => void;
   onNavigate: (id: string) => void;
-  openLightbox: (elements: { src: string }[], index: number) => void;
+  openLightbox: (
+    elements: { src: string }[],
+    index: number,
+    watermarkImage?: boolean
+  ) => void;
 }
 
 const ArticleCard = ({
@@ -238,7 +242,8 @@ const ArticleCard = ({
               images.map((image) => ({
                 src: image.optimised || '',
               })) || [],
-              0
+              0,
+              watermarkImage
             );
           }}
           size="lg"

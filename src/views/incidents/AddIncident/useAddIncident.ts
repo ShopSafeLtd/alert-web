@@ -645,6 +645,18 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
                               townCity: offender?.address?.townCity,
                             }
                           : undefined,
+                      alias:
+                        offender.alias && offender.alias.length > 0
+                          ? {
+                              set: [
+                                ...new Set(
+                                  offender.alias.map((el) =>
+                                    el.trim().toLowerCase()
+                                  )
+                                ),
+                              ],
+                            }
+                          : { set: [] },
                       build: offender.build || null,
                       comment: offender.comment || null,
                       createdBy: { connect: { id: userId } },
@@ -682,9 +694,9 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
                       localId: offender.id,
                       name: offender.name || 'Unidentified Offender',
                       peculiarities: offender.peculiarities || null,
-
                       race: offender.race || null,
                       scheme: { connect: { id: schemeId } },
+                      wanted: !!offender.wanted,
                     }))
                   : undefined,
 
@@ -727,6 +739,7 @@ const useAddIncident = ({ id, investigationId }: Props): Return => {
                   peculiarities: { set: offender.peculiarities || '' },
                   race: { set: offender.race },
                   targetedGoods: offender.targetedGoods,
+                  wanted: { set: !!offender.wanted },
                 },
                 where: { id: offender.id },
               })),
