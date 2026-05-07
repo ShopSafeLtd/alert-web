@@ -1,6 +1,7 @@
 import type { Theme } from '#/configs/ThemeConfig';
 
 import PermissionCheckWrapper from '#/components/PermissionCheck/PermissionCheckWrapper';
+import UsersSelect from '#/components/form-components/UsersSelect/UsersSelect.view';
 import DatePicker from '#/components/util-components/DatePicker';
 import {
   currentPermissionsAtom,
@@ -441,15 +442,6 @@ const StockRemovalRequestsList = () => {
     },
   });
 
-  const pickerOptions = useMemo(() => {
-    if (!data?.stockRemovalRequests.edges) return [];
-    const seen = new Set<string>();
-    return data.stockRemovalRequests.edges
-      .flatMap(({ node }) => (node.picker ? [node.picker] : []))
-      .filter(({ id }) => (seen.has(id) ? false : seen.add(id)))
-      .map(({ fullName, id }) => ({ label: fullName, value: id }));
-  }, [data]);
-
   // Filter data on frontend for "My Requests"
   const filteredData = useMemo(() => {
     if (!data?.stockRemovalRequests.edges) return undefined;
@@ -752,19 +744,30 @@ const StockRemovalRequestsList = () => {
               />
             </Col>
             <Col>
-              <Select
+              <UsersSelect
                 allowClear
-                filterOption={(input, option) =>
-                  (option?.label ?? '')
-                    .toLowerCase()
-                    .includes(input.toLowerCase())
-                }
                 maxTagCount="responsive"
                 mode="multiple"
                 onChange={(values) => setPickerFilter(values)}
-                options={pickerOptions}
                 placeholder={intl.formatMessage({ defaultMessage: 'Picker' })}
-                showSearch
+                queryVars={{
+                  where: {
+                    groups: {
+                      some: {
+                        id: {
+                          in: [DC_GROUP_ID],
+                        },
+                      },
+                    },
+                    schemes: {
+                      some: {
+                        schemeId: {
+                          equals: schemeId || '',
+                        },
+                      },
+                    },
+                  },
+                }}
                 style={{ minWidth: 130 }}
                 value={pickerFilter}
               />

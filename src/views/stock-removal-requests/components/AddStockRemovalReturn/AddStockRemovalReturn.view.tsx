@@ -141,7 +141,6 @@ const AddStockRemovalReturn = ({ onClose }: Props) => {
             itemId: i.stockItem ?? '',
             quantity: i.quantity ?? 0,
           })),
-          nominalCode: values.nominalCode,
           originalAlertId: values.originalAlertId,
           rechargeBrand: values.rechargeReference ? rechargeBrand : undefined,
           rechargeReference: values.rechargeReference,
