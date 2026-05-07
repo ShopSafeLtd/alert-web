@@ -1251,7 +1251,7 @@ const StockRemovalRequestsList = () => {
         onClose={() => setEditOpen(null)}
         open={editOpen !== null}
         title={intl.formatMessage({ defaultMessage: 'Edit Request' })}
-        width={1000}
+        width={1300}
       >
         {editOpen && hasEditPermission && (
           <EditStockRemovalRequest

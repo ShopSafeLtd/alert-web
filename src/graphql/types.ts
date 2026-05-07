@@ -3627,7 +3627,7 @@ export type CreateSimpleLocationEnvelope = {
 
 export type CreateStockRemovalItemInput = {
   itemId: Scalars['String'];
-  location?: InputMaybe<Scalars['String']>;
+  pickLocation?: InputMaybe<Scalars['String']>;
   quantity: Scalars['Int'];
 };
 
@@ -3673,7 +3673,6 @@ export type CreateStockRemovalRequestInput = {
 export type CreateStockRemovalReturnInput = {
   businessId?: InputMaybe<Scalars['String']>;
   costCentreCode?: InputMaybe<Scalars['String']>;
-  nominalCode?: InputMaybe<Scalars['String']>;
   dateofReturn?: InputMaybe<Scalars['DateTime']>;
   imageIds?: InputMaybe<Array<Scalars['String']>>;
   images?: InputMaybe<Array<StockRemovalReturnImageInput>>;
@@ -11698,6 +11697,7 @@ export type MapMarker = {
 
 export type MarkStockRemovalRequestAsPickedInput = {
   id: Scalars['String'];
+  images?: InputMaybe<Array<StockRemovalPickImageInput>>;
   items: Array<PickedItemInput>;
   tmid?: InputMaybe<Scalars['String']>;
   tracking?: InputMaybe<Scalars['String']>;
@@ -24411,8 +24411,8 @@ export type StockRemovalItem = {
   createdAt: Scalars['Date'];
   damaged?: Maybe<Scalars['Boolean']>;
   id: Scalars['ID'];
-  location?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
+  pickLocation?: Maybe<Scalars['String']>;
   pickedQuantity?: Maybe<Scalars['Int']>;
   requestedQuantity?: Maybe<Scalars['Int']>;
   sku?: Maybe<Scalars['String']>;
@@ -24420,6 +24420,18 @@ export type StockRemovalItem = {
   updatedAt: Scalars['Date'];
   value?: Maybe<Scalars['Float']>;
 };
+
+export type StockRemovalPickImageInput = {
+  filename: Scalars['String'];
+  mimetype: Scalars['String'];
+  url: Scalars['String'];
+};
+
+export enum StockRemovalPriority {
+  High = 'HIGH',
+  Low = 'LOW',
+  Medium = 'MEDIUM'
+}
 
 export type StockRemovalReasonOption = {
   __typename?: 'StockRemovalReasonOption';
@@ -24449,6 +24461,7 @@ export type StockRemovalRequest = {
   items: Array<StockRemovalItem>;
   nominalCode?: Maybe<Scalars['String']>;
   personalityInfluences?: Maybe<Scalars['String']>;
+  pickImages: Array<Image>;
   picker?: Maybe<User>;
   pickerId?: Maybe<Scalars['String']>;
   priority: StockRemovalPriority;
@@ -24520,21 +24533,6 @@ export enum StockRemovalRequestStatus {
   Returned = 'RETURNED'
 }
 
-export enum StockRemovalPriority {
-  High = 'HIGH',
-  Medium = 'MEDIUM',
-  Low = 'LOW'
-}
-
-export enum StockRemovalRquestDestination {
-  International = 'INTERNATIONAL',
-  Eu = 'EU',
-  Uk = 'UK',
-  Outdoor = 'OUTDOOR',
-  CustomerCare = 'CUSTOMER_CARE',
-  HeadOffice = 'HEAD_OFFICE'
-}
-
 export type StockRemovalRequestsOrderBy = {
   createdAt?: InputMaybe<SortOrder>;
 };
@@ -24542,6 +24540,7 @@ export type StockRemovalRequestsOrderBy = {
 export type StockRemovalRequestsWhere = {
   businessIds?: InputMaybe<Array<Scalars['String']>>;
   createdAt?: InputMaybe<DateTimeFilter>;
+  createdByMe?: InputMaybe<Scalars['Boolean']>;
   destination?: InputMaybe<Array<StockRemovalRquestDestination>>;
   isReturn?: InputMaybe<Scalars['Boolean']>;
   pickerIds?: InputMaybe<Array<Scalars['String']>>;
@@ -24556,6 +24555,15 @@ export type StockRemovalReturnImageInput = {
   mimetype: Scalars['String'];
   url: Scalars['String'];
 };
+
+export enum StockRemovalRquestDestination {
+  CustomerCare = 'CUSTOMER_CARE',
+  Eu = 'EU',
+  HeadOffice = 'HEAD_OFFICE',
+  International = 'INTERNATIONAL',
+  Outdoor = 'OUTDOOR',
+  Uk = 'UK'
+}
 
 export type StoreAgeBreakdown = {
   __typename?: 'StoreAgeBreakdown';
@@ -27080,7 +27088,7 @@ export type UpdateStockItemInput = {
 
 export type UpdateStockRemovalItemInput = {
   id: Scalars['String'];
-  location?: InputMaybe<Scalars['String']>;
+  pickLocation?: InputMaybe<Scalars['String']>;
   quantity: Scalars['Int'];
 };
 
@@ -27123,7 +27131,6 @@ export type UpdateStockRemovalRequestInput = {
 export type UpdateStockRemovalReturnInput = {
   businessId?: InputMaybe<Scalars['String']>;
   costCentreCode?: InputMaybe<Scalars['String']>;
-  nominalCode?: InputMaybe<Scalars['String']>;
   createItems?: InputMaybe<Array<CreateStockRemovalReturnItemInput>>;
   dateofReturn?: InputMaybe<Scalars['DateTime']>;
   deleteItems?: InputMaybe<Array<Scalars['String']>>;

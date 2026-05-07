@@ -119,6 +119,10 @@
     min-width: 200px;
   }
 
+  .locationCell {
+    min-width: 120px;
+  }
+
   .quantityColumn {
     text-align: center;
     width: 100px;

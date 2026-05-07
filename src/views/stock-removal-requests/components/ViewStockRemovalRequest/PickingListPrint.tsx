@@ -8,6 +8,7 @@ interface PickingListItem {
   barcode?: null | string;
   brand?: null | string;
   id: string;
+  location?: null | string;
   name?: null | string;
   pickedQuantity?: null | number;
   requestedQuantity?: null | number;
@@ -181,6 +182,9 @@ const PickingListPrint: React.FC<PickingListPrintProps> = ({
             <th>
               <FormattedMessage defaultMessage="Item Name" />
             </th>
+            <th>
+              <FormattedMessage defaultMessage="Location" />
+            </th>
             <th className={styles.quantityColumn}>
               <FormattedMessage defaultMessage="Qty Requested" />
             </th>
@@ -202,6 +206,9 @@ const PickingListPrint: React.FC<PickingListPrintProps> = ({
               )}
               <td className={styles.nameCell}>
                 {item.name ?? <FormattedMessage defaultMessage="-" />}
+              </td>
+              <td className={styles.locationCell}>
+                {item.location ?? <FormattedMessage defaultMessage="-" />}
               </td>
               <td className={styles.quantityCell}>
                 {item.requestedQuantity ?? 0}

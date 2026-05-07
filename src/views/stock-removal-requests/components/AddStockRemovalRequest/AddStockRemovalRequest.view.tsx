@@ -203,7 +203,7 @@ const AddStockRemovalRequest = ({ onClose }: Props) => {
           description: values.description,
           items: values.items.map((i) => ({
             itemId: i.stockItem ?? '',
-            location: i.location,
+            pickLocation: i.location,
             quantity: i.quantity ?? 0,
           })),
           nominalCode: values.nominalCode,
