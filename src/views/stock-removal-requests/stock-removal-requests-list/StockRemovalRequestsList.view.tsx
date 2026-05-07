@@ -372,7 +372,7 @@ const StockRemovalRequestsList = () => {
     priorityFilter,
   ]);
 
-  const { data } = useStockRemovalRequestsQuery({
+  const { data, loading } = useStockRemovalRequestsQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
       orderBy: [
@@ -981,6 +981,7 @@ const StockRemovalRequestsList = () => {
                 };
               }
             )}
+            loading={loading}
             rowClassName={(record: StockRemovalRequestTableData) =>
               record.requiresMyApproval || record.requiresPicking
                 ? classes.highlightedRow
@@ -1149,6 +1150,7 @@ const StockRemovalRequestsList = () => {
               },
             ]}
             dataSource={returnsData}
+            loading={loading}
             size="small"
           />
         </>
