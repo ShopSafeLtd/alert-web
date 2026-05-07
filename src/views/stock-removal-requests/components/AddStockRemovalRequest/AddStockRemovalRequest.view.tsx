@@ -21,11 +21,7 @@ import {
   notification,
 } from 'antd';
 import { useListStockRemovalReasonOptionsQuery } from 'graphql/stock-removal-reasons/queries/__generated__/list-stock-removal-reason-options.generated';
-import {
-  SortOrder,
-  StockRemovalPriority,
-  StockRemovalRquestDestination,
-} from 'graphql/types';
+import { SortOrder, StockRemovalPriority } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
 import React, { useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
@@ -41,7 +37,6 @@ export interface FormData {
   businessId?: string[];
   costCentreCode?: string;
   description: string;
-  destination?: StockRemovalRquestDestination;
   items: {
     goodsType?: string;
     location?: string;
@@ -55,8 +50,6 @@ export interface FormData {
   }[];
   nominalCode?: string;
   personalityInfluences: 'No' | 'Yes';
-  pickerId?: string;
-  priority: StockRemovalPriority;
   reason: string;
   reasonForNonReturn: string;
   rechargeBrand: 'No' | 'Yes';
@@ -76,18 +69,6 @@ export interface FormData {
   title: string;
   willStockBeReturned: 'No' | 'Yes';
 }
-
-const DESTINATION_OPTIONS = [
-  {
-    label: 'International',
-    value: StockRemovalRquestDestination.International,
-  },
-  { label: 'EU', value: StockRemovalRquestDestination.Eu },
-  { label: 'UK', value: StockRemovalRquestDestination.Uk },
-  { label: 'Outdoor', value: StockRemovalRquestDestination.Outdoor },
-  { label: 'Customer Care', value: StockRemovalRquestDestination.CustomerCare },
-  { label: 'Head Office', value: StockRemovalRquestDestination.HeadOffice },
-];
 
 const APPROVER_GROUP_ID = 'cmg9nfl260017ityalcaluw9r';
 
@@ -217,10 +198,9 @@ const AddStockRemovalRequest = ({ onClose }: Props) => {
       variables: {
         data: {
           approverIds: values.approvers,
-          businessId: values.businessId?.at(0) ?? '',
+          businessId: values.businessId?.at(0) || undefined,
           costCentreCode: values.costCentreCode,
           description: values.description,
-          destination: values.destination,
           items: values.items.map((i) => ({
             itemId: i.stockItem ?? '',
             location: i.location,
@@ -228,8 +208,6 @@ const AddStockRemovalRequest = ({ onClose }: Props) => {
           })),
           nominalCode: values.nominalCode,
           personalityInfluences: values.personalityInfluences,
-          pickerId: values.pickerId,
-          priority: values.priority,
           reason: values.reason,
           reasonForNonReturn: values.reasonForNonReturn,
           rechargeBrand: values.rechargeBrand,
@@ -255,12 +233,7 @@ const AddStockRemovalRequest = ({ onClose }: Props) => {
   };
 
   return (
-    <Form<FormData>
-      form={form}
-      initialValues={{ priority: StockRemovalPriority.Medium }}
-      layout="vertical"
-      onFinish={onFinish}
-    >
+    <Form<FormData> form={form} layout="vertical" onFinish={onFinish}>
       <Row>
         <Col span={24}>
           <Form.Item
@@ -285,26 +258,6 @@ const AddStockRemovalRequest = ({ onClose }: Props) => {
           </Form.Item>
         </Col>
       </Row>
-      <Row>
-        <Col>
-          <Form.Item
-            label={intl.formatMessage({ defaultMessage: 'Priority' })}
-            name="priority"
-          >
-            <Radio.Group disabled={saving}>
-              <Radio.Button value={StockRemovalPriority.High}>
-                <FormattedMessage defaultMessage="High" />
-              </Radio.Button>
-              <Radio.Button value={StockRemovalPriority.Medium}>
-                <FormattedMessage defaultMessage="Medium" />
-              </Radio.Button>
-              <Radio.Button value={StockRemovalPriority.Low}>
-                <FormattedMessage defaultMessage="Low" />
-              </Radio.Button>
-            </Radio.Group>
-          </Form.Item>
-        </Col>
-      </Row>
       <Row gutter={16}>
         <Col>
           <Form.Item
@@ -324,19 +277,6 @@ const AddStockRemovalRequest = ({ onClose }: Props) => {
               loading={reasonOptionsLoading}
               options={reasonOptions}
               style={{ width: 350 }}
-            />
-          </Form.Item>
-        </Col>
-        <Col>
-          <Form.Item
-            label={intl.formatMessage({ defaultMessage: 'Destination' })}
-            name="destination"
-          >
-            <Select
-              allowClear
-              disabled={saving}
-              options={DESTINATION_OPTIONS}
-              style={{ width: 200 }}
             />
           </Form.Item>
         </Col>
@@ -578,9 +518,15 @@ const AddStockRemovalRequest = ({ onClose }: Props) => {
                   }),
                   required: true,
                 },
+                {
+                  message: intl.formatMessage({
+                    defaultMessage: 'Cost Centre must be exactly 4 digits.',
+                  }),
+                  pattern: /^\d{4}$/,
+                },
               ]}
             >
-              <Input disabled={saving} />
+              <Input disabled={saving} maxLength={4} />
             </Form.Item>
           </Col>
           <Col span={12}>
@@ -596,9 +542,15 @@ const AddStockRemovalRequest = ({ onClose }: Props) => {
                   }),
                   required: true,
                 },
+                {
+                  message: intl.formatMessage({
+                    defaultMessage: 'Nominal Code must be exactly 6 digits.',
+                  }),
+                  pattern: /^\d{6}$/,
+                },
               ]}
             >
-              <Input disabled={saving} />
+              <Input disabled={saving} maxLength={6} />
             </Form.Item>
           </Col>
         </Row>
@@ -756,14 +708,6 @@ const AddStockRemovalRequest = ({ onClose }: Props) => {
               }}
               showSearch
             />
-          </Form.Item>
-        </Col>
-        <Col span={12}>
-          <Form.Item
-            label={intl.formatMessage({ defaultMessage: 'Picker' })}
-            name="pickerId"
-          >
-            <UsersSelect allowClear showSearch />
           </Form.Item>
         </Col>
       </Row>

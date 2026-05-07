@@ -45,7 +45,6 @@ query stockRemovalRequest($where: UniqueId!) {
         }
         items {
             id
-            location
             name
             brand
             sku
