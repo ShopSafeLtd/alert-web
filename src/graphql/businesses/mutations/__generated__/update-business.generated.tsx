@@ -34,6 +34,7 @@ export const UpdateBusinessDocument = gql`
       townCity
       county
       postcode
+      county
       geoLng
       geoLat
       full
