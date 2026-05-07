@@ -49,8 +49,6 @@ const useAddDemGroup = ({
   const [saving, setSaving] = useState(false);
   useEffect(() => {
     if (editData) {
-      console.log('editData', editData);
-
       form.setFieldsValue({
         demDevices: editData.demDevices,
         name: editData.name,

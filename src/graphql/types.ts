@@ -3627,6 +3627,7 @@ export type CreateSimpleLocationEnvelope = {
 
 export type CreateStockRemovalItemInput = {
   itemId: Scalars['String'];
+  location?: InputMaybe<Scalars['String']>;
   quantity: Scalars['Int'];
 };
 
@@ -3640,9 +3641,13 @@ export type CreateStockRemovalRequestInput = {
   businessId?: InputMaybe<Scalars['String']>;
   costCentreCode?: InputMaybe<Scalars['String']>;
   description?: InputMaybe<Scalars['String']>;
+  destination?: InputMaybe<StockRemovalRquestDestination>;
   fascia?: InputMaybe<Scalars['String']>;
   items: Array<CreateStockRemovalItemInput>;
+  nominalCode?: InputMaybe<Scalars['String']>;
   personalityInfluences?: InputMaybe<Scalars['String']>;
+  pickerId?: InputMaybe<Scalars['String']>;
+  priority?: InputMaybe<StockRemovalPriority>;
   reason?: InputMaybe<Scalars['String']>;
   reasonForNonReturn?: InputMaybe<Scalars['String']>;
   rechargeBrand?: InputMaybe<Scalars['String']>;
@@ -3668,6 +3673,7 @@ export type CreateStockRemovalRequestInput = {
 export type CreateStockRemovalReturnInput = {
   businessId?: InputMaybe<Scalars['String']>;
   costCentreCode?: InputMaybe<Scalars['String']>;
+  nominalCode?: InputMaybe<Scalars['String']>;
   dateofReturn?: InputMaybe<Scalars['DateTime']>;
   imageIds?: InputMaybe<Array<Scalars['String']>>;
   images?: InputMaybe<Array<StockRemovalReturnImageInput>>;
@@ -24405,6 +24411,7 @@ export type StockRemovalItem = {
   createdAt: Scalars['Date'];
   damaged?: Maybe<Scalars['Boolean']>;
   id: Scalars['ID'];
+  location?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
   pickedQuantity?: Maybe<Scalars['Int']>;
   requestedQuantity?: Maybe<Scalars['Int']>;
@@ -24435,11 +24442,16 @@ export type StockRemovalRequest = {
   createdBy: User;
   dateofReturn?: Maybe<Scalars['DateTime']>;
   description?: Maybe<Scalars['String']>;
+  destination?: Maybe<StockRemovalRquestDestination>;
   fascia?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   isReturn?: Maybe<Scalars['Boolean']>;
   items: Array<StockRemovalItem>;
+  nominalCode?: Maybe<Scalars['String']>;
   personalityInfluences?: Maybe<Scalars['String']>;
+  picker?: Maybe<User>;
+  pickerId?: Maybe<Scalars['String']>;
+  priority: StockRemovalPriority;
   reason?: Maybe<Scalars['String']>;
   reasonForNonReturn?: Maybe<Scalars['String']>;
   rechargeBrand?: Maybe<Scalars['String']>;
@@ -24508,6 +24520,21 @@ export enum StockRemovalRequestStatus {
   Returned = 'RETURNED'
 }
 
+export enum StockRemovalPriority {
+  High = 'HIGH',
+  Medium = 'MEDIUM',
+  Low = 'LOW'
+}
+
+export enum StockRemovalRquestDestination {
+  International = 'INTERNATIONAL',
+  Eu = 'EU',
+  Uk = 'UK',
+  Outdoor = 'OUTDOOR',
+  CustomerCare = 'CUSTOMER_CARE',
+  HeadOffice = 'HEAD_OFFICE'
+}
+
 export type StockRemovalRequestsOrderBy = {
   createdAt?: InputMaybe<SortOrder>;
 };
@@ -24515,7 +24542,10 @@ export type StockRemovalRequestsOrderBy = {
 export type StockRemovalRequestsWhere = {
   businessIds?: InputMaybe<Array<Scalars['String']>>;
   createdAt?: InputMaybe<DateTimeFilter>;
+  destination?: InputMaybe<Array<StockRemovalRquestDestination>>;
   isReturn?: InputMaybe<Scalars['Boolean']>;
+  pickerIds?: InputMaybe<Array<Scalars['String']>>;
+  priority?: InputMaybe<Array<StockRemovalPriority>>;
   schemeId: Scalars['String'];
   search?: InputMaybe<Scalars['String']>;
   status?: InputMaybe<Array<StockRemovalRequestStatus>>;
@@ -27050,6 +27080,7 @@ export type UpdateStockItemInput = {
 
 export type UpdateStockRemovalItemInput = {
   id: Scalars['String'];
+  location?: InputMaybe<Scalars['String']>;
   quantity: Scalars['Int'];
 };
 
@@ -27060,8 +27091,12 @@ export type UpdateStockRemovalRequestInput = {
   createItems?: InputMaybe<Array<CreateStockRemovalItemInput>>;
   deleteItems?: InputMaybe<Array<Scalars['String']>>;
   description?: InputMaybe<Scalars['String']>;
+  destination?: InputMaybe<StockRemovalRquestDestination>;
   fascia?: InputMaybe<Scalars['String']>;
+  nominalCode?: InputMaybe<Scalars['String']>;
   personalityInfluences?: InputMaybe<Scalars['String']>;
+  pickerId?: InputMaybe<Scalars['String']>;
+  priority?: InputMaybe<StockRemovalPriority>;
   reason?: InputMaybe<Scalars['String']>;
   reasonForNonReturn?: InputMaybe<Scalars['String']>;
   rechargeBrand?: InputMaybe<Scalars['String']>;
@@ -27088,6 +27123,7 @@ export type UpdateStockRemovalRequestInput = {
 export type UpdateStockRemovalReturnInput = {
   businessId?: InputMaybe<Scalars['String']>;
   costCentreCode?: InputMaybe<Scalars['String']>;
+  nominalCode?: InputMaybe<Scalars['String']>;
   createItems?: InputMaybe<Array<CreateStockRemovalReturnItemInput>>;
   dateofReturn?: InputMaybe<Scalars['DateTime']>;
   deleteItems?: InputMaybe<Array<Scalars['String']>>;

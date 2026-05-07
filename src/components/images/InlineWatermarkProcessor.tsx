@@ -6,12 +6,14 @@ interface Props {
   className?: string;
   htmlContent: string;
   onImageClick?: (imageSrc: string, index: number) => void;
+  watermarkImage?: boolean;
 }
 
 const InlineWatermarkProcessor: React.FC<Props> = ({
   className,
   htmlContent,
   onImageClick,
+  watermarkImage = true,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const userReference = useAtomValue(currentUserAtom)?.reference || '';
@@ -24,7 +26,7 @@ const InlineWatermarkProcessor: React.FC<Props> = ({
     // Keep the attribute so CSS attribute-selector rules in ViewArticle can also apply.
     const aligned = doc.body.querySelectorAll<HTMLElement>('[data-align]');
     for (const el of aligned) {
-      const align = el.dataset.align;
+      const { align } = el.dataset;
       if (align) {
         const existing = el.getAttribute('style') || '';
         const existingSuffix = existing ? ` ${existing}` : '';
@@ -58,13 +60,28 @@ const InlineWatermarkProcessor: React.FC<Props> = ({
       console.log('InlineWatermarkProcessor: No container ref');
       return;
     }
+    const container = containerRef.current;
+
+    if (!watermarkImage) {
+      if (onImageClick) {
+        const images = container.querySelectorAll('img');
+
+        for (const [index, img] of images.entries()) {
+          img.style.cursor = 'pointer';
+
+          img.onclick = () => {
+            onImageClick(img.src, index);
+          };
+        }
+      }
+
+      return;
+    }
 
     if (!userReference) {
       console.log('InlineWatermarkProcessor: No user reference');
       return;
     }
-
-    const container = containerRef.current;
 
     // Use a timeout to ensure DOM is fully rendered
     const timeout = setTimeout(() => {
@@ -155,7 +172,7 @@ const InlineWatermarkProcessor: React.FC<Props> = ({
     return () => {
       clearTimeout(timeout);
     };
-  }, [htmlContent, userReference, onImageClick]);
+  }, [htmlContent, userReference, onImageClick, watermarkImage]);
 
   return (
     <div

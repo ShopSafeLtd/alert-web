@@ -245,10 +245,19 @@ const ViewStockRemovalReturn = ({ requestId }: Props) => {
               {request?.costCentreCode && (
                 <Descriptions.Item
                   label={intl.formatMessage({
-                    defaultMessage: 'Cost Centre Code',
+                    defaultMessage: 'Cost Centre',
                   })}
                 >
                   {request.costCentreCode}
+                </Descriptions.Item>
+              )}
+              {request?.nominalCode && (
+                <Descriptions.Item
+                  label={intl.formatMessage({
+                    defaultMessage: 'Nominal Code',
+                  })}
+                >
+                  {request.nominalCode}
                 </Descriptions.Item>
               )}
               {request?.tracking && (

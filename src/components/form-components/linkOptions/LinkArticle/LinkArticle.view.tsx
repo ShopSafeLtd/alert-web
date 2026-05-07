@@ -51,6 +51,7 @@ interface Props {
   lightBoxOpen: {
     index: number;
     open: boolean;
+    watermarkImage?: boolean;
   };
   loading: boolean;
   onSubmit: () => void;
@@ -229,9 +230,12 @@ const LinkArticle = ({
                   : undefined
               }
               onChange={(value) => {
+                // eslint-disable-next-line  @typescript-eslint/no-unsafe-member-access
                 if (value && value[0] && value[1])
                   setCreatedAtFilter({
+                    // eslint-disable-next-line  @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
                     endDate: new Date(value[1].valueOf()),
+                    // eslint-disable-next-line  @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
                     startDate: new Date(value[0].valueOf()),
                   });
               }}
@@ -275,6 +279,7 @@ const LinkArticle = ({
                 <WatermarkImage
                   position={selectedArticle?.images[0]?.position}
                   rotation={selectedArticle?.images[0]?.rotation}
+                  showWatermark={selectedArticle.watermarkImage}
                   url={selectedArticle?.images[0]?.optimised}
                 />
               </div>
@@ -360,11 +365,15 @@ const LinkArticle = ({
         }}
         open={lightBoxOpen.open}
         plugins={[Zoom]}
-        render={{
-          slide: (slide: WatermarkSlideType) => (
-            <WatermarkSlide slide={slide} />
-          ),
-        }}
+        render={
+          lightBoxOpen.watermarkImage
+            ? {
+                slide: (slide: WatermarkSlideType) => (
+                  <WatermarkSlide slide={slide} />
+                ),
+              }
+            : undefined
+        }
         slides={
           selectedArticle?.images?.map((image) => ({
             src: image.optimised || '',
