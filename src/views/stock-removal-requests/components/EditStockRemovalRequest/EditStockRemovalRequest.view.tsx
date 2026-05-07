@@ -199,7 +199,6 @@ const EditStockRemovalRequest = ({ onClose, requestId }: Props) => {
         description: request.description ?? '',
         destination: request.destination ?? undefined,
         items: request.items.map((item) => ({
-          location: item.location ?? undefined,
           name: item.name ?? undefined,
           quantity: item.requestedQuantity ?? undefined,
           sku: item.sku ?? undefined,
