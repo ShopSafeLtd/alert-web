@@ -65,7 +65,7 @@ export interface FormData {
   }[];
   nominalCode?: string;
   personalityInfluences: 'No' | 'Yes';
-  pickerId?: string;
+  pickerId?: string[];
   priority: StockRemovalPriority;
   reason: string;
   reasonForNonReturn: string;
@@ -208,7 +208,7 @@ const EditStockRemovalRequest = ({ onClose, requestId }: Props) => {
         nominalCode: request.nominalCode ?? undefined,
         personalityInfluences:
           (request.personalityInfluences as 'No' | 'Yes') ?? 'No',
-        pickerId: request.picker?.id ?? undefined,
+        pickerId: request.picker?.id ? [request.picker.id] : undefined,
         priority: request.priority ?? StockRemovalPriority.Medium,
         reason: request.reason ?? '',
         reasonForNonReturn: request.reasonForNonReturn ?? '',
@@ -375,7 +375,7 @@ const EditStockRemovalRequest = ({ onClose, requestId }: Props) => {
           destination: values.destination,
           nominalCode: values.nominalCode,
           personalityInfluences: values.personalityInfluences,
-          pickerId: values.pickerId,
+          pickerId: values.pickerId?.[0],
           priority: values.priority,
           reason: values.reason,
           reasonForNonReturn: values.reasonForNonReturn,
