@@ -1,6 +1,7 @@
 import type { Theme } from '#/configs/ThemeConfig';
 
 import PermissionCheckWrapper from '#/components/PermissionCheck/PermissionCheckWrapper';
+import DatePicker from '#/components/util-components/DatePicker';
 import {
   currentPermissionsAtom,
   currentSchemeIdAtom,
@@ -19,11 +20,13 @@ import { useDeleteStockRemovalRequestMutation } from '#/views/stock-removal-requ
 import { useStockRemovalRequestQuery } from '#/views/stock-removal-requests/components/ViewStockRemovalRequest/graphql/__generated__/stock-removal-request.generated';
 import ViewStockRemovalReturn from '#/views/stock-removal-requests/components/ViewStockRemovalReturn/ViewStockRemovalReturn.view';
 import { useDeleteStockRemovalReturnMutation } from '#/views/stock-removal-requests/components/ViewStockRemovalReturn/graphql/__generated__/delete-stock-removal-return.generated';
+import { useQueueStockRemovalCsvExportMutation } from '#/views/stock-removal-requests/stock-removal-requests-list/graphql/__generated__/queue-stock-removal-csv-export.generated';
 import { useStockRemovalRequestsQuery } from '#/views/stock-removal-requests/stock-removal-requests-list/graphql/__generated__/stock-removal-requests.generated';
 import {
   faBoxCheck,
   faEdit,
   faEye,
+  faFileExport,
   faPlus,
   faRotateLeft,
   faTrash,
@@ -135,6 +138,11 @@ const StockRemovalRequestsList = () => {
   const [priorityFilter, setPriorityFilter] = useState<StockRemovalPriority[]>(
     []
   );
+  const [exportModalOpen, setExportModalOpen] = useState(false);
+  const [exportDateRange, setExportDateRange] = useState<[Date, Date] | null>(
+    null
+  );
+  const [exporting, setExporting] = useState(false);
 
   const hasEditPermission = useMemo(
     () =>
@@ -237,6 +245,45 @@ const StockRemovalRequestsList = () => {
 
   const [deleteStockRemovalRequest] = useDeleteStockRemovalRequestMutation();
   const [deleteStockRemovalReturn] = useDeleteStockRemovalReturnMutation();
+  const [queueExport] = useQueueStockRemovalCsvExportMutation();
+
+  const onExport = () => {
+    if (!exportDateRange || !schemeId) return;
+    setExporting(true);
+    void queueExport({
+      onCompleted: (data) => {
+        setExporting(false);
+        setExportModalOpen(false);
+        setExportDateRange(null);
+        notification.success({
+          description:
+            data.queueStockRemovalCsvExport.estimatedTime ?? undefined,
+          duration: 0,
+          message: data.queueStockRemovalCsvExport.message,
+          placement: 'bottomRight',
+        });
+      },
+      onError: () => {
+        setExporting(false);
+        notification.error({
+          description: intl.formatMessage({
+            defaultMessage: 'Something went wrong.',
+          }),
+          message: intl.formatMessage({ defaultMessage: 'Export Failed' }),
+          placement: 'bottomRight',
+        });
+      },
+      variables: {
+        where: {
+          dateRange: {
+            endDate: dayjs(exportDateRange[1]).endOf('day').toDate(),
+            startDate: dayjs(exportDateRange[0]).startOf('day').toDate(),
+          },
+          schemeId,
+        },
+      },
+    });
+  };
 
   const onDeletePress = (requestId: string) => {
     Modal.confirm({
@@ -452,7 +499,7 @@ const StockRemovalRequestsList = () => {
   return (
     <div style={{ padding: '20px' }}>
       {/* View Mode Toggle */}
-      <Row gutter={16} style={{ paddingBottom: 15 }}>
+      <Row align="middle" gutter={16} style={{ paddingBottom: 15 }}>
         <Col>
           <Radio.Group
             onChange={(e) => {
@@ -480,6 +527,57 @@ const StockRemovalRequestsList = () => {
             </Radio.Button>
           </Radio.Group>
         </Col>
+        <Col flex={1} />
+        {viewMode === 'REMOVALS' && (
+          <>
+            <PermissionCheckWrapper
+              permission={{
+                method: PermissionMethod.ReadAll,
+                model: PermissionModel.StockRemovalRequests,
+              }}
+              unauthorizedElement={<></>}
+            >
+              <Col>
+                <Button onClick={() => setExportModalOpen(true)}>
+                  <Row gutter={8}>
+                    <Col>
+                      <FontAwesomeIcon icon={faFileExport} />
+                    </Col>
+                    <Col>
+                      <FormattedMessage defaultMessage="Export CSV" />
+                    </Col>
+                  </Row>
+                </Button>
+              </Col>
+            </PermissionCheckWrapper>
+            <Col>
+              <Button onClick={toggleAddOpen}>
+                <Row gutter={8}>
+                  <Col>
+                    <FontAwesomeIcon icon={faPlus} />
+                  </Col>
+                  <Col>
+                    <FormattedMessage defaultMessage="New Request" />
+                  </Col>
+                </Row>
+              </Button>
+            </Col>
+          </>
+        )}
+        {viewMode === 'RETURNS' && (
+          <Col>
+            <Button onClick={toggleAddReturnOpen}>
+              <Row gutter={8}>
+                <Col>
+                  <FontAwesomeIcon icon={faPlus} />
+                </Col>
+                <Col>
+                  <FormattedMessage defaultMessage="New Return Request" />
+                </Col>
+              </Row>
+            </Button>
+          </Col>
+        )}
       </Row>
 
       {/* Removals View */}
@@ -670,19 +768,6 @@ const StockRemovalRequestsList = () => {
                 style={{ minWidth: 130 }}
                 value={pickerFilter}
               />
-            </Col>
-            <Col flex={1} />
-            <Col>
-              <Button onClick={toggleAddOpen}>
-                <Row gutter={8}>
-                  <Col>
-                    <FontAwesomeIcon icon={faPlus} />
-                  </Col>
-                  <Col>
-                    <FormattedMessage defaultMessage="New Request" />
-                  </Col>
-                </Row>
-              </Button>
             </Col>
           </Row>
           <Table
@@ -1029,19 +1114,6 @@ const StockRemovalRequestsList = () => {
                 </Radio.Button>
               </Radio.Group>
             </Col>
-            <Col flex={1} />
-            <Col>
-              <Button onClick={toggleAddReturnOpen}>
-                <Row gutter={8}>
-                  <Col>
-                    <FontAwesomeIcon icon={faPlus} />
-                  </Col>
-                  <Col>
-                    <FormattedMessage defaultMessage="New Return Request" />
-                  </Col>
-                </Row>
-              </Button>
-            </Col>
           </Row>
           <Table
             columns={[
@@ -1231,6 +1303,36 @@ const StockRemovalRequestsList = () => {
           <ViewStockRemovalReturn requestId={viewReturnOpen} />
         )}
       </Drawer>
+
+      <Modal
+        okButtonProps={{ disabled: !exportDateRange, loading: exporting }}
+        okText={intl.formatMessage({ defaultMessage: 'Export' })}
+        onCancel={() => {
+          setExportModalOpen(false);
+          setExportDateRange(null);
+        }}
+        onOk={onExport}
+        open={exportModalOpen}
+        title={intl.formatMessage({
+          defaultMessage: 'Export Stock Removal Requests',
+        })}
+      >
+        <p>
+          <FormattedMessage defaultMessage="Select a date range. The export will be emailed to you as a CSV download link." />
+        </p>
+        <DatePicker.RangePicker
+          disabled={exporting}
+          onChange={(dates) => {
+            const d = dates as [Date | null, Date | null] | null;
+            if (d?.[0] && d?.[1]) {
+              setExportDateRange([d[0], d[1]]);
+            } else {
+              setExportDateRange(null);
+            }
+          }}
+          style={{ width: '100%' }}
+        />
+      </Modal>
     </div>
   );
 };
