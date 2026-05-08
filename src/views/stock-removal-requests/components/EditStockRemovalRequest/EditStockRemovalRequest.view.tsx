@@ -171,9 +171,10 @@ const EditStockRemovalRequest = ({ onClose, requestId }: Props) => {
     .sort((a, b) => a.position - b.position)
     .map((o) => ({ label: o.label, value: o.label }));
 
-  // Check authorization when data loads
+  // Check authorization when data loads — guard on currentUserId being populated,
+  // since the atom starts as '' and would cause a false-negative before user data arrives.
   useEffect(() => {
-    if (requestData?.stockRemovalRequest && !canEditRequest) {
+    if (requestData?.stockRemovalRequest && currentUserId && !canEditRequest) {
       setUnauthorizedAccess(true);
       notification.info({
         description: intl.formatMessage({
@@ -186,7 +187,7 @@ const EditStockRemovalRequest = ({ onClose, requestId }: Props) => {
         placement: 'bottomRight',
       });
     }
-  }, [requestData, canEditRequest, intl]);
+  }, [requestData, canEditRequest, currentUserId, intl]);
 
   useEffect(() => {
     if (requestData?.stockRemovalRequest && !hasInitialized.current) {
@@ -199,6 +200,7 @@ const EditStockRemovalRequest = ({ onClose, requestId }: Props) => {
         description: request.description ?? '',
         destination: request.destination ?? undefined,
         items: request.items.map((item) => ({
+          location: item.pickLocation ?? undefined,
           name: item.name ?? undefined,
           quantity: item.requestedQuantity ?? undefined,
           sku: item.sku ?? undefined,
@@ -316,7 +318,7 @@ const EditStockRemovalRequest = ({ onClose, requestId }: Props) => {
       .filter((item) => item.stockItem && !originalItemIds.has(item.stockItem))
       .map((item) => ({
         itemId: item.stockItem ?? '',
-        location: item.location,
+        pickLocation: item.location,
         quantity: item.quantity ?? 0,
       }));
 
@@ -334,7 +336,7 @@ const EditStockRemovalRequest = ({ onClose, requestId }: Props) => {
       .filter((item) => item.stockItem && originalItemIds.has(item.stockItem))
       .map((item) => ({
         id: item.stockItem ?? '',
-        location: item.location,
+        pickLocation: item.location,
         quantity: item.quantity ?? 0,
       }));
 
@@ -504,7 +506,7 @@ const EditStockRemovalRequest = ({ onClose, requestId }: Props) => {
           </Form.Item>
         </Col>
       </Row>
-      <Row>
+      <Row gutter={[16, 16]}>
         <Col span={12}>
           <Form.Item
             label={intl.formatMessage({

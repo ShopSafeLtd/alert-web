@@ -49,6 +49,7 @@ query stockRemovalRequest($where: UniqueId!) {
             brand
             sku
             barcode
+            pickLocation
             requestedQuantity
             pickedQuantity
             value

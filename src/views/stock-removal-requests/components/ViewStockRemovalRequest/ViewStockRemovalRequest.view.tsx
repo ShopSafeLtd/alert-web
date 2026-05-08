@@ -530,12 +530,6 @@ const ViewStockRemovalRequest = ({ requestId }: Props) => {
     ...(isDC
       ? [
           {
-            dataIndex: 'brand',
-            key: 'brand',
-            title: intl.formatMessage({ defaultMessage: 'Brand' }),
-            width: 150,
-          },
-          {
             dataIndex: 'sku',
             key: 'sku',
             title: intl.formatMessage({ defaultMessage: 'SKU' }),
@@ -553,6 +547,13 @@ const ViewStockRemovalRequest = ({ requestId }: Props) => {
       dataIndex: 'pickedQuantity',
       key: 'pickedQuantity',
       title: intl.formatMessage({ defaultMessage: 'Picked Quantity' }),
+      width: 150,
+    },
+    {
+      dataIndex: 'pickLocation',
+      key: 'pickLocation',
+      render: (val: null | string) => val ?? '-',
+      title: intl.formatMessage({ defaultMessage: 'Location' }),
       width: 150,
     },
     ...(isDC
