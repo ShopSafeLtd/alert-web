@@ -42,6 +42,7 @@ export const EditBusinessDocument = gql`
       townCity
       county
       postcode
+      county
       geoLng
       geoLat
     }

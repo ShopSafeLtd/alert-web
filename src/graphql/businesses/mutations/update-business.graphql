@@ -22,7 +22,7 @@ mutation UpdateBusiness(
       townCity
       county
       postcode
-      country
+      county
       geoLng
       geoLat
       full

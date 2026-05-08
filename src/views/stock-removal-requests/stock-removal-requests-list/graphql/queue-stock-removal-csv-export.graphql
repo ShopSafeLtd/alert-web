@@ -1,0 +1,7 @@
+mutation QueueStockRemovalCsvExport($where: StockRemovalCsvExportInput!) {
+  queueStockRemovalCsvExport(where: $where) {
+    jobId
+    message
+    estimatedTime
+  }
+}
