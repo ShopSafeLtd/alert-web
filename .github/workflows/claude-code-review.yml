@@ -12,7 +12,7 @@ on:
 jobs:
   review:
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 15
     permissions:
       contents: read
       id-token: write
@@ -25,6 +25,7 @@ jobs:
         id: claude
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          claude_args: "--max-turns 10"
           prompt: |
             You are a senior engineer investigating a live support ticket bug.
 
