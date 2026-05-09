@@ -1,0 +1,56 @@
+name: Claude Code Review (Claudius)
+on:
+  workflow_dispatch:
+    inputs:
+      correlation_id:
+        required: true
+        type: string
+      prompt:
+        required: true
+        type: string
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: anthropics/claude-code-action@v1
+        id: claude
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          prompt: |
+            You are a senior engineer investigating a live support ticket bug.
+
+            Bug description: ${{ inputs.prompt }}
+
+            Investigate: search for relevant files, read them, follow function calls.
+            Do NOT modify any files.
+
+            Respond with exactly:
+            ## Root Cause
+            One sentence.
+            ## Relevant Files
+            - path/to/file.ts (lines X-Y): why relevant
+            ## Suggested Fix
+            Specific code change or next step.
+
+      - name: Post result to Claudius
+        if: always()
+        run: |
+          ANALYSIS="${{ steps.claude.outputs.result }}"
+          [ -z "$ANALYSIS" ] && ANALYSIS="Claude Code step produced no output."
+          curl -sf -X POST "${{ secrets.CLAUDIUS_CALLBACK_URL }}/api/github/review-callback" \
+            -H "Content-Type: application/json" \
+            -H "Authorization: Bearer ${{ secrets.CLAUDIUS_CALLBACK_SECRET }}" \
+            --max-time 15 \
+            --data-raw "$(jq -n \
+              --arg cid "${{ inputs.correlation_id }}" \
+              --arg repo "${{ github.event.repository.name }}" \
+              --arg analysis "$ANALYSIS" \
+              '{correlation_id:$cid,repo:$repo,analysis:$analysis}')"
