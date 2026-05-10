@@ -29,13 +29,17 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           BUG_PROMPT: ${{ inputs.prompt }}
         run: |
-          claude --max-turns 20 -p "You are a senior engineer investigating a live support ticket bug.
+          claude --max-turns 30 -p "You are a senior engineer doing a focused bug investigation. You have a limited number of tool calls so be efficient.
 
-          Bug description: ${BUG_PROMPT}
+          Bug: ${BUG_PROMPT}
 
-          Investigate: search for relevant files, read them, follow function calls. Do NOT modify any files.
+          Rules:
+          - Use grep/find to locate the 2-3 most relevant files. Read only those files.
+          - Do NOT read more than 4 files total.
+          - After reading the files, immediately write your analysis. Do not do further searching.
+          - Do NOT modify any files.
 
-          Structure your response exactly as:
+          Output format (required):
           ## Root Cause
           One sentence.
           ## Relevant Files
