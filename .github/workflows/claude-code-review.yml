@@ -34,7 +34,7 @@ jobs:
             Investigate: search for relevant files, read them, follow function calls.
             Do NOT modify any files.
 
-            Respond with exactly:
+            When you have finished your investigation, write your complete analysis to the file /tmp/analysis.txt using the Bash tool with this exact format:
             ## Root Cause
             One sentence.
             ## Relevant Files
@@ -45,8 +45,11 @@ jobs:
       - name: Post result to Claudius
         if: always()
         run: |
-          ANALYSIS="${{ steps.claude.outputs.result }}"
-          [ -z "$ANALYSIS" ] && ANALYSIS="Claude Code step produced no output."
+          if [ -f /tmp/analysis.txt ]; then
+            ANALYSIS=$(cat /tmp/analysis.txt)
+          else
+            ANALYSIS="Claude Code completed but did not write analysis to /tmp/analysis.txt."
+          fi
           curl -sf -X POST "${{ secrets.CLAUDIUS_CALLBACK_URL }}/api/github/review-callback" \
             -H "Content-Type: application/json" \
             -H "Authorization: Bearer ${{ secrets.CLAUDIUS_CALLBACK_SECRET }}" \
