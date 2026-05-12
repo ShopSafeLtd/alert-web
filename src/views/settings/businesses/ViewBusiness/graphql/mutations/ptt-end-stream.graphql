@@ -1,0 +1,3 @@
+mutation PttEndStream($streamId: String!, $schemeId: String) {
+  pttEndStream(streamId: $streamId, schemeId: $schemeId)
+}

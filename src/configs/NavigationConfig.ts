@@ -20,6 +20,7 @@ import {
   faFile,
   faHome,
   faLineChart,
+  faMicrophone,
   faNewspaper,
   faPeopleGroup,
   faPlayCircle,
@@ -45,6 +46,7 @@ export interface MenuItem {
   icon: IconDefinition;
   breadcrumb: boolean;
   badge?: BadgeTypes;
+  schemeFlag?: string;
   intl: { id: string; defaultMessage: string };
   permission?: {
     model: PermissionModel;
@@ -334,6 +336,16 @@ const navigationConfig: NavItem[] = [
         method: PermissionMethod.Read,
       },
     ],
+  },
+  {
+    key: 'ptt',
+    path: `${APP_PREFIX_PATH}/ptt`,
+    title: 'Connect',
+    icon: faMicrophone,
+    breadcrumb: false,
+    submenu: [],
+    schemeFlag: 'pttEnabled',
+    intl: defineMessage({ id: 'ptt', defaultMessage: 'Connect' }),
   },
   {
     key: 'checklists',

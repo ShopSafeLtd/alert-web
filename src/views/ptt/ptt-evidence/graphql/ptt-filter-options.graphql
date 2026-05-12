@@ -1,0 +1,10 @@
+query PttFilterOptions($schemeId: String!) {
+  scheme(where: { id: $schemeId }) {
+    pttDevices {
+      id
+      name
+      groupId
+      groupName
+    }
+  }
+}
