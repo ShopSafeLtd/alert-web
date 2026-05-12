@@ -204,14 +204,12 @@ export function usePttRealtime(
           if (!belongsToBusiness) return;
 
           setRecordingStates((prev) => {
+            if (!prev.has(payload.device_id)) return prev;
             const next = new Map(prev);
-            const existing = next.get(payload.device_id);
-            if (existing && existing.sessionId === payload.session_id) {
-              next.set(payload.device_id, {
-                isComplete: true,
-                sessionId: payload.session_id,
-              });
-            }
+            next.set(payload.device_id, {
+              isComplete: true,
+              sessionId: payload.session_id,
+            });
             return next;
           });
 
