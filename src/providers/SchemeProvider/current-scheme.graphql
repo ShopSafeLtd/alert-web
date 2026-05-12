@@ -70,6 +70,7 @@ query CurrentSchemeProvider($where: UserSchemeWhereUniqueInput!) {
       optionalBusinessOnUsers
       incidentStatusEnabled
       incidentAssignmentEnabled
+      pttEnabled
       connectedToSchemes {
         id
         name

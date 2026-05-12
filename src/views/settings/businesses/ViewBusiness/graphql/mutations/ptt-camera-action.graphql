@@ -1,0 +1,3 @@
+mutation PttCameraAction($deviceId: String!, $action: String!) {
+  pttCameraAction(deviceId: $deviceId, action: $action)
+}

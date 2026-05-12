@@ -150,6 +150,7 @@ export const defaultCurrentUserSchemeAtom: UserSchemeState = {
     needJustification: false,
     oneSelectedIncidentTypeOnly: false,
     optionalBusinessOnUsers: false,
+    pttEnabled: false,
     reportOnly: false,
     requireActivityAuthorised: false,
     requireBusinessOnIncident: false,

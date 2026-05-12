@@ -76,6 +76,7 @@ import LpOffenderWatchlist from './components/LossPreventionDashboard/LpOffender
 import LpWatchlistInsights from './components/LossPreventionDashboard/LpWatchlistInsights';
 import RiskProfile from './components/LossPreventionDashboard/RiskProfile';
 import SchemeComparison from './components/LossPreventionDashboard/SchemeComparison';
+import PttSection from './components/PttSection';
 
 interface UserTable {
   groups: { id: string; name: string }[];
@@ -849,6 +850,10 @@ const ViewBusiness = ({
               /> */}
               </Card>
             </PermissionCheckWrapper>
+            <PttSection
+              businessId={businessId || ''}
+              pttGroupId={data?.business?.pttGroupId}
+            />
             <PermissionCheckWrapper
               permission={{
                 method: PermissionMethod.Read,
