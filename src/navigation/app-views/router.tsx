@@ -51,6 +51,7 @@ const PoliceVehicles = lazy(() => import('./police-vehicles/router'));
 const PoliceCrimeGroups = lazy(() => import('./police-crime-groups/router'));
 const PoliceSettings = lazy(() => import('./police-settings/router'));
 const PoliceHeatmap = lazy(() => import('./police-heatmap/router'));
+const Ptt = lazy(() => import('./ptt/router'));
 
 export const AppViews = (): JSX.Element => {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
@@ -120,6 +121,7 @@ export const AppViews = (): JSX.Element => {
           <Route element={<Scheme />} key="scheme" path="scheme-settings/*" />
           <Route element={<Article />} key="article" path="article/*" />
           <Route element={<Evidence />} key="evidence" path="evidence/*" />
+          <Route element={<Ptt />} key="ptt" path="ptt/*" />
           <Route
             element={<Checklists />}
             key="checklists"

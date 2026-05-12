@@ -1,0 +1,12 @@
+query PttEvidencePageRealtimeToken($schemeId: String!) {
+  scheme(where: { id: $schemeId }) {
+    pttRealtimeToken {
+      accessToken
+      supabaseUrl
+      anonKey
+      expiresIn
+      recordingChannel
+      presenceChannel
+    }
+  }
+}

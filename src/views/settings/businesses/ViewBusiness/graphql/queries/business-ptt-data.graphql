@@ -1,0 +1,29 @@
+query BusinessPttData($schemeId: String!, $businessId: String!, $cursor: String, $limit: Int) {
+  scheme(where: { id: $schemeId }) {
+    pttEnabled
+    pttDevices(businessId: $businessId) {
+      id
+      name
+      model
+      isEnabled
+      lastSeenAt
+      groupId
+      groupName
+    }
+    pttEvidence(businessId: $businessId, limit: $limit, cursor: $cursor) {
+      sessions {
+        sessionId
+        deviceId
+        deviceName
+        status
+        thumbnailUrl
+        startedAt
+        endedAt
+        durationMs
+        chunkCount
+        totalSizeBytes
+      }
+      nextCursor
+    }
+  }
+}

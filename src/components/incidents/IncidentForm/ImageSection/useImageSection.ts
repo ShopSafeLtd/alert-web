@@ -104,7 +104,9 @@ const useImageSection = ({ form, incidentForm, onChange }: Props): Return => {
   const [editImage, setEditImage] = useState<StateImageData | null>(null);
   const facialDetection =
     useAtomValue(currentSchemeAtom)?.facialDetection ?? true;
-  const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const [fileList, setFileList] = useState<UploadFile[]>(
+    () => (form.getFieldValue('documents') as UploadFile[] | undefined) ?? []
+  );
   const [initial, setInitial] = useState(true);
 
   useEffect(() => {

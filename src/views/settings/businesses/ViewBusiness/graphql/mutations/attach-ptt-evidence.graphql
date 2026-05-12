@@ -1,0 +1,7 @@
+mutation AttachPttEvidence($incidentId: String!, $sessionId: String!, $chunks: [AttachPttChunkInput!]!) {
+  attachPttEvidence(incidentId: $incidentId, sessionId: $sessionId, chunks: $chunks) {
+    id
+    name
+    url
+  }
+}

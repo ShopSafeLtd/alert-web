@@ -1,0 +1,31 @@
+query PttEvidenceDetail($schemeId: String!, $sessionId: String!) {
+  pttEvidenceDetail(schemeId: $schemeId, sessionId: $sessionId) {
+    session {
+      sessionId
+      deviceName
+      status
+      startedAt
+      endedAt
+      durationMs
+      thumbnailUrl
+    }
+    chunks {
+      id
+      chunkNumber
+      blobUrl
+      durationMs
+      status
+    }
+    faceCrops {
+      id
+      blobUrl
+      trackingId
+      boundingBox {
+        left
+        top
+        right
+        bottom
+      }
+    }
+  }
+}

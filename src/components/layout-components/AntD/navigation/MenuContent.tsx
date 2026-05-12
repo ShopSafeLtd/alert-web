@@ -8,6 +8,7 @@ import NavTranslations from '#/components/layout-components/AntD/navigation/NavT
 import { filterNavigationBySchemeType } from '#/configs/utils/filterNavigationBySchemeType';
 import {
   currentPermissionsAtom,
+  currentSchemeAtom,
   schemeTypeAtom,
   settingSchemeAtom,
   userNotificationsAtom,
@@ -365,6 +366,7 @@ const SideNavContent = ({
   const setMobileNavOpen = useSetAtom(mobileNavOpenAtom);
   const permissions = useAtomValue(currentPermissionsAtom);
   const schemeType = useAtomValue(schemeTypeAtom);
+  const scheme = useAtomValue(currentSchemeAtom);
   const settingScheme = useAtomValue(settingSchemeAtom);
   const currentTheme = useStoreState((state) => state.theme.currentTheme);
 
@@ -426,6 +428,11 @@ const SideNavContent = ({
       ) : (
         <div className={classes.treeMenu}>
           {filterNavigationBySchemeType(navigationConfig, schemeType)
+            .filter((el) =>
+              el.schemeFlag
+                ? !!(scheme as Record<string, unknown>)?.[el.schemeFlag]
+                : true
+            )
             .filter((el) =>
               el.permission
                 ? hasPermission({ permission: el.permission, permissions })
