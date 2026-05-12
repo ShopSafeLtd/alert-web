@@ -1,0 +1,36 @@
+query PttEvidencePage(
+  $schemeId: String!
+  $deviceId: String
+  $groupId: String
+  $since: String
+  $until: String
+  $status: String
+  $limit: Int
+  $cursor: String
+) {
+  scheme(where: { id: $schemeId }) {
+    pttEvidence(
+      deviceId: $deviceId
+      groupId: $groupId
+      since: $since
+      until: $until
+      status: $status
+      limit: $limit
+      cursor: $cursor
+    ) {
+      sessions {
+        sessionId
+        deviceId
+        deviceName
+        status
+        thumbnailUrl
+        startedAt
+        endedAt
+        durationMs
+        chunkCount
+        totalSizeBytes
+      }
+      nextCursor
+    }
+  }
+}

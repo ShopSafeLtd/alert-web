@@ -1,0 +1,9 @@
+mutation PttStartStream($deviceId: String!, $schemeId: String) {
+  pttStartStream(deviceId: $deviceId, schemeId: $schemeId) {
+    streamId
+    livekitRoom
+    livekitToken
+    livekitUrl
+    status
+  }
+}

@@ -1136,6 +1136,12 @@ export type ArticleWhereUniqueInput = {
   id?: InputMaybe<Scalars['String']>;
 };
 
+export type AttachPttChunkInput = {
+  chunkNumber: Scalars['Int'];
+  deviceName: Scalars['String'];
+  url: Scalars['String'];
+};
+
 export type AudioAnalyticsReport = {
   __typename?: 'AudioAnalyticsReport';
   averageDuration: Scalars['Float'];
@@ -1615,6 +1621,7 @@ export type Business = {
   parent?: Maybe<Business>;
   parentId?: Maybe<Scalars['String']>;
   policeArea: Array<PoliceForce>;
+  pttGroupId?: Maybe<Scalars['String']>;
   publicName: Scalars['Boolean'];
   recycled: Scalars['Boolean'];
   reference?: Maybe<Scalars['Int']>;
@@ -9834,6 +9841,7 @@ export type IntegrationTestResult = {
 
 export enum IntegrationType {
   Api = 'API',
+  PttAdmin = 'PTT_ADMIN',
   Sentrysys = 'SENTRYSYS',
   Webhook = 'WEBHOOK'
 }
@@ -12168,6 +12176,7 @@ export type Mutation = {
   approvePAPStockRemovalRequest: StockRemovalRequest;
   approvePoliceMatch: PoliceMatch;
   approveStockRemovalRequest: StockRemovalRequestApproval;
+  attachPttEvidence: Array<Document>;
   bulkVerifyAiVisionMatches: Scalars['Int'];
   centralCoopImportData: SystemTask;
   changeSchemeTier: SchemeTier;
@@ -12360,6 +12369,9 @@ export type Mutation = {
   mySafetyImportData: SystemTask;
   nextImportData: SystemTask;
   oneStopImportData: SystemTask;
+  pttCameraAction: Scalars['Boolean'];
+  pttEndStream: Scalars['Boolean'];
+  pttStartStream: PttStream;
   queueActivityCsvExport: QueuedIncidentExportResult;
   queueBusinessEngagementCsvExport: QueuedIncidentExportResult;
   queueIncidentCsvExport: QueuedIncidentExportResult;
@@ -12395,6 +12407,7 @@ export type Mutation = {
   sentrysysImportData: SystemTask;
   setDefaultTemplate?: Maybe<ReportTemplate>;
   setPassword: User;
+  setPttBusinessGroup: Scalars['Boolean'];
   setSchemeSharing: Scheme;
   setupFaceRecognition: RekCollection;
   shareData: SystemTask;
@@ -12606,6 +12619,13 @@ export type MutationApprovePoliceMatchArgs = {
 
 export type MutationApproveStockRemovalRequestArgs = {
   where: UniqueId;
+};
+
+
+export type MutationAttachPttEvidenceArgs = {
+  chunks: Array<AttachPttChunkInput>;
+  incidentId: Scalars['String'];
+  sessionId: Scalars['String'];
 };
 
 
@@ -13596,6 +13616,24 @@ export type MutationOneStopImportDataArgs = {
 };
 
 
+export type MutationPttCameraActionArgs = {
+  action: Scalars['String'];
+  deviceId: Scalars['String'];
+};
+
+
+export type MutationPttEndStreamArgs = {
+  schemeId?: InputMaybe<Scalars['String']>;
+  streamId: Scalars['String'];
+};
+
+
+export type MutationPttStartStreamArgs = {
+  deviceId: Scalars['String'];
+  schemeId?: InputMaybe<Scalars['String']>;
+};
+
+
 export type MutationQueueActivityCsvExportArgs = {
   where: ActivityExportWhere;
 };
@@ -13743,6 +13781,13 @@ export type MutationSetDefaultTemplateArgs = {
 
 export type MutationSetPasswordArgs = {
   data: SetPasswordData;
+};
+
+
+export type MutationSetPttBusinessGroupArgs = {
+  businessId: Scalars['String'];
+  pttGroupId?: InputMaybe<Scalars['String']>;
+  schemeId?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -17310,6 +17355,137 @@ export type PreSelectedGoodInput = {
   value?: InputMaybe<Scalars['Float']>;
 };
 
+export type PttBoundingBox = {
+  __typename?: 'PttBoundingBox';
+  bottom: Scalars['Float'];
+  left: Scalars['Float'];
+  right: Scalars['Float'];
+  top: Scalars['Float'];
+};
+
+export type PttDevice = {
+  __typename?: 'PttDevice';
+  groupId?: Maybe<Scalars['String']>;
+  groupName?: Maybe<Scalars['String']>;
+  hardwareId: Scalars['String'];
+  id: Scalars['String'];
+  isEnabled: Scalars['Boolean'];
+  lastSeenAt?: Maybe<Scalars['Date']>;
+  model: Scalars['String'];
+  name: Scalars['String'];
+};
+
+export type PttDeviceDetail = {
+  __typename?: 'PttDeviceDetail';
+  createdAt: Scalars['Date'];
+  currentSession?: Maybe<PttDeviceSession>;
+  groupId?: Maybe<Scalars['String']>;
+  groupName?: Maybe<Scalars['String']>;
+  hardwareId: Scalars['String'];
+  id: Scalars['String'];
+  isEnabled: Scalars['Boolean'];
+  lastSeenAt?: Maybe<Scalars['Date']>;
+  model: Scalars['String'];
+  name: Scalars['String'];
+};
+
+export type PttDeviceSession = {
+  __typename?: 'PttDeviceSession';
+  chunkCount: Scalars['Int'];
+  lastHeartbeatAt?: Maybe<Scalars['Date']>;
+  sessionId: Scalars['String'];
+  startedAt: Scalars['Date'];
+  thumbnailUrl?: Maybe<Scalars['String']>;
+  totalSizeBytes: Scalars['Float'];
+};
+
+export type PttEvidenceChunk = {
+  __typename?: 'PttEvidenceChunk';
+  blobUrl: Scalars['String'];
+  chunkNumber: Scalars['Int'];
+  durationMs?: Maybe<Scalars['Float']>;
+  fileSizeBytes: Scalars['Float'];
+  id: Scalars['String'];
+  recordedAt: Scalars['Date'];
+  sha256?: Maybe<Scalars['String']>;
+  signatureVerified?: Maybe<Scalars['Boolean']>;
+  status: Scalars['String'];
+};
+
+export type PttEvidenceDetail = {
+  __typename?: 'PttEvidenceDetail';
+  chunks: Array<PttEvidenceChunk>;
+  faceCrops: Array<PttFaceCrop>;
+  session: PttEvidenceDetailSession;
+};
+
+export type PttEvidenceDetailSession = {
+  __typename?: 'PttEvidenceDetailSession';
+  chunkCount: Scalars['Int'];
+  deviceId: Scalars['String'];
+  deviceName: Scalars['String'];
+  durationMs?: Maybe<Scalars['Float']>;
+  endedAt?: Maybe<Scalars['Date']>;
+  lastHeartbeatAt?: Maybe<Scalars['Date']>;
+  sessionId: Scalars['String'];
+  startedAt: Scalars['Date'];
+  status: Scalars['String'];
+  thumbnailSha256?: Maybe<Scalars['String']>;
+  thumbnailUrl?: Maybe<Scalars['String']>;
+  totalSizeBytes: Scalars['Float'];
+};
+
+export type PttEvidenceList = {
+  __typename?: 'PttEvidenceList';
+  nextCursor?: Maybe<Scalars['String']>;
+  sessions: Array<PttEvidenceSession>;
+};
+
+export type PttEvidenceSession = {
+  __typename?: 'PttEvidenceSession';
+  chunkCount: Scalars['Int'];
+  deviceId: Scalars['String'];
+  deviceName: Scalars['String'];
+  durationMs?: Maybe<Scalars['Float']>;
+  endedAt?: Maybe<Scalars['Date']>;
+  sessionId: Scalars['String'];
+  startedAt: Scalars['Date'];
+  status: Scalars['String'];
+  thumbnailUrl?: Maybe<Scalars['String']>;
+  totalSizeBytes: Scalars['Float'];
+};
+
+export type PttFaceCrop = {
+  __typename?: 'PttFaceCrop';
+  blobUrl: Scalars['String'];
+  boundingBox?: Maybe<PttBoundingBox>;
+  frameHeight: Scalars['Int'];
+  frameWidth: Scalars['Int'];
+  id: Scalars['String'];
+  recordedAt: Scalars['Date'];
+  trackingId?: Maybe<Scalars['Int']>;
+};
+
+export type PttRealtimeToken = {
+  __typename?: 'PttRealtimeToken';
+  accessToken: Scalars['String'];
+  anonKey: Scalars['String'];
+  expiresIn: Scalars['Int'];
+  presenceChannel: Scalars['String'];
+  recordingChannel: Scalars['String'];
+  sosAlarmsChannel: Scalars['String'];
+  supabaseUrl: Scalars['String'];
+};
+
+export type PttStream = {
+  __typename?: 'PttStream';
+  livekitRoom: Scalars['String'];
+  livekitToken: Scalars['String'];
+  livekitUrl: Scalars['String'];
+  status: Scalars['String'];
+  streamId: Scalars['String'];
+};
+
 export type Query = {
   __typename?: 'Query';
   action: Action;
@@ -17530,6 +17706,7 @@ export type Query = {
   policeTriageByStore: Array<StoreTriageStatistics>;
   policeTriageStatistics: PoliceTriageStatistics;
   previewIncidentExport: IncidentExport;
+  pttEvidenceDetail: PttEvidenceDetail;
   question: Question;
   questions: QueryQuestionsConnection;
   recidivismAverage: RecidivismAverage;
@@ -19104,6 +19281,12 @@ export type QueryPreviewIncidentExportArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where: IncidentExportInput;
+};
+
+
+export type QueryPttEvidenceDetailArgs = {
+  schemeId: Scalars['String'];
+  sessionId: Scalars['String'];
 };
 
 
@@ -22139,6 +22322,12 @@ export type Scheme = {
   policeSharing: Scalars['Boolean'];
   policeSharingGroupIds: Array<Scalars['String']>;
   policeSharingTagIds: Array<Scalars['String']>;
+  pttDevice: PttDeviceDetail;
+  pttDevices: Array<PttDevice>;
+  pttEnabled: Scalars['Boolean'];
+  pttEvidence: PttEvidenceList;
+  pttEvidenceDetail: PttEvidenceDetail;
+  pttRealtimeToken: PttRealtimeToken;
   questionGroups: Array<QuestionGroup>;
   questions: Array<Question>;
   recycledItems: Array<RecycledItem>;
@@ -22467,6 +22656,34 @@ export type SchemeOffendersArgs = {
 export type SchemeOffendersCreatedArgs = {
   endDate: Scalars['Date'];
   startDate: Scalars['Date'];
+};
+
+
+export type SchemePttDeviceArgs = {
+  deviceId: Scalars['String'];
+};
+
+
+export type SchemePttDevicesArgs = {
+  businessId?: InputMaybe<Scalars['String']>;
+  groupId?: InputMaybe<Scalars['String']>;
+};
+
+
+export type SchemePttEvidenceArgs = {
+  businessId?: InputMaybe<Scalars['String']>;
+  cursor?: InputMaybe<Scalars['String']>;
+  deviceId?: InputMaybe<Scalars['String']>;
+  groupId?: InputMaybe<Scalars['String']>;
+  limit?: InputMaybe<Scalars['Int']>;
+  since?: InputMaybe<Scalars['String']>;
+  status?: InputMaybe<Scalars['String']>;
+  until?: InputMaybe<Scalars['String']>;
+};
+
+
+export type SchemePttEvidenceDetailArgs = {
+  sessionId: Scalars['String'];
 };
 
 
