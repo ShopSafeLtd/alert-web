@@ -314,7 +314,7 @@ export function usePttRealtime(
 
     return () => {
       if (refreshTimerRef.current) clearTimeout(refreshTimerRef.current);
-      for (const t of completionTimersRef.current) clearTimeout(t);
+      for (const t of completionTimersRef.current.values()) clearTimeout(t);
       completionTimersRef.current.clear();
       void client.removeAllChannels();
       clientRef.current = null;
