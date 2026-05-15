@@ -1,0 +1,66 @@
+name: Claude Code Review (Claudius)
+on:
+  workflow_dispatch:
+    inputs:
+      correlation_id:
+        required: true
+        type: string
+      prompt:
+        required: true
+        type: string
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install Claude Code
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Run investigation
+        continue-on-error: true
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          BUG_PROMPT: ${{ inputs.prompt }}
+        run: |
+          claude --max-turns 30 -p "You are a senior engineer doing a focused bug investigation. You have a limited number of tool calls so be efficient.
+
+          Bug: ${BUG_PROMPT}
+
+          Rules:
+          - Use grep/find to locate the 2-3 most relevant files. Read only those files.
+          - Do NOT read more than 4 files total.
+          - After reading the files, immediately write your analysis. Do not do further searching.
+          - Do NOT modify any files.
+
+          Output format (required):
+          ## Root Cause
+          One sentence.
+          ## Relevant Files
+          - path/to/file.ts (lines X-Y): why relevant
+          ## Suggested Fix
+          Specific code change or next step." > /tmp/analysis.txt 2>&1
+
+      - name: Post result to Claudius
+        if: always()
+        run: |
+          if [ -f /tmp/analysis.txt ] && [ -s /tmp/analysis.txt ]; then
+            ANALYSIS=$(cat /tmp/analysis.txt)
+          else
+            ANALYSIS="Claude Code completed but produced no output."
+          fi
+          curl -sf -X POST "${{ secrets.CLAUDIUS_CALLBACK_URL }}/api/github/review-callback" \
+            -H "Content-Type: application/json" \
+            -H "Authorization: Bearer ${{ secrets.CLAUDIUS_CALLBACK_SECRET }}" \
+            --max-time 15 \
+            --data-raw "$(jq -n \
+              --arg cid "${{ inputs.correlation_id }}" \
+              --arg repo "${{ github.event.repository.name }}" \
+              --arg analysis "$ANALYSIS" \
+              '{correlation_id:$cid,repo:$repo,analysis:$analysis}')"
